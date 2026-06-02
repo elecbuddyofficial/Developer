@@ -1,4 +1,4 @@
-window.loadQuizzes('T03_Motors', [
+window.loadQuizzes("T03_Motors", [
   {
     "q": "What is the primary law governing the induction of EMF in the rotor of an induction motor?",
     "a": "Faraday's Law of Electromagnetic Induction",
@@ -68,104 +68,6 @@ window.loadQuizzes('T03_Motors', [
     "id": "T03_S1_005",
     "topic": "T03_Motors",
     "cat": "Principle"
-  },
-  {
-    "q": "What happens if the rotor of an induction motor reaches exact synchronous speed?",
-    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
-    "opts": [
-      "The motor operates at maximum efficiency",
-      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
-      "The motor draws infinite current",
-      "The motor reverses direction"
-    ],
-    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
-    "id": "T03_S1_006",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "What is the mathematical definition of fractional slip (s)?",
-    "a": "s = (Ns - N) / Ns",
-    "opts": [
-      "s = (Ns - N) / N",
-      "s = (N - Ns) / Ns",
-      "s = (Ns - N) / Ns",
-      "s = Ns / (Ns - N)"
-    ],
-    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
-    "id": "T03_S1_007",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "At the exact moment of starting (standstill), what is the value of slip?",
-    "a": "1 (or 100%)",
-    "opts": [
-      "0 (or 0%)",
-      "1 (or 100%)",
-      "0.05 (or 5%)",
-      "Infinity"
-    ],
-    "exp": "At standstill, rotor speed (N) is zero. Therefore, slip = (Ns - 0) / Ns = 1.",
-    "id": "T03_S1_008",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "What is the typical full-load slip for a standard squirrel cage motor?",
-    "a": "3% to 8%",
-    "opts": [
-      "0.1% to 0.5%",
-      "3% to 8%",
-      "10% to 15%",
-      "0%"
-    ],
-    "exp": "At full load, the rotor must slow down by 3-8% relative to the RMF to induce enough current to match the mechanical load torque.",
-    "id": "T03_S1_009",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "How does an increase in mechanical load affect slip and rotor current?",
-    "a": "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
-    "opts": [
-      "Slip decreases, causing less rotor current",
-      "Slip remains constant, but stator voltage increases",
-      "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
-      "Slip increases, but rotor current decreases"
-    ],
-    "exp": "To pull a heavier load, the motor must develop more torque. It does this by slowing down slightly (increasing slip), which induces more rotor current.",
-    "id": "T03_S1_010",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "What is the relationship between supply frequency (f) and rotor frequency (fr)?",
-    "a": "fr = s * f",
-    "opts": [
-      "fr = f / s",
-      "fr = s * f",
-      "fr = Ns / f",
-      "fr = f - s"
-    ],
-    "exp": "Rotor frequency depends on the relative speed (slip). At standstill (s=1), fr = f. At normal running (e.g., s=0.04), fr is very low (e.g., 2Hz).",
-    "id": "T03_S1_011",
-    "topic": "T03_Motors",
-    "cat": "Slip"
-  },
-  {
-    "q": "If a 50Hz motor has a slip of 4%, what is the frequency of the currents in the rotor bars?",
-    "a": "2 Hz",
-    "opts": [
-      "50 Hz",
-      "4 Hz",
-      "2 Hz",
-      "0 Hz"
-    ],
-    "exp": "fr = s * f = 0.04 * 50 = 2 Hz.",
-    "id": "T03_S1_012",
-    "topic": "T03_Motors",
-    "cat": "Slip"
   },
   {
     "q": "Why is it called an 'Induction' motor?",
@@ -418,6 +320,524 @@ window.loadQuizzes('T03_Motors', [
     "id": "T03_S1_030",
     "topic": "T03_Motors",
     "cat": "Principle"
+  },
+  {
+    "q": "Recall: What is the primary law governing the induction of EMF in the rotor of an induction motor?",
+    "a": "Faraday's Law of Electromagnetic Induction",
+    "opts": [
+      "Faraday's Law of Electromagnetic Induction",
+      "Lenz's Law",
+      "Fleming's Left Hand Rule",
+      "Ampere's Circuital Law"
+    ],
+    "exp": "Faraday's Law states that an EMF is induced in a conductor when there is a relative change in magnetic flux linkage, which occurs when the RMF cuts the stationary rotor bars.",
+    "id": "T03_S1_001_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: How far apart are the three-phase windings distributed in the stator of an induction motor?",
+    "a": "120 electrical degrees",
+    "opts": [
+      "360 electrical degrees",
+      "90 electrical degrees",
+      "180 electrical degrees",
+      "120 electrical degrees"
+    ],
+    "exp": "The stator has three distinct windings spaced exactly 120 electrical degrees apart to create a uniform Rotating Magnetic Field (RMF) when fed by a 3-phase supply.",
+    "id": "T03_S1_002_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: What is the formula to calculate synchronous speed (Ns)?",
+    "a": "Ns = 120f / P",
+    "opts": [
+      "Ns = f / 120P",
+      "Ns = 60f / P",
+      "Ns = 120f / P",
+      "Ns = 120P / f"
+    ],
+    "exp": "Ns is directly proportional to frequency (f) and inversely proportional to the number of poles (P).",
+    "id": "T03_S1_003_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: What is the synchronous speed of a 2-pole induction motor on a 60Hz supply?",
+    "a": "3600 RPM",
+    "opts": [
+      "3000 RPM",
+      "1800 RPM",
+      "1500 RPM",
+      "3600 RPM"
+    ],
+    "exp": "Ns = 120 * 60 / 2 = 3600 RPM.",
+    "id": "T03_S1_004_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: Why is the rotor of an induction motor short-circuited?",
+    "a": "To allow the induced EMF to drive a current, which then interacts with the RMF to produce torque",
+    "opts": [
+      "To eliminate the need for brushes",
+      "To prevent high voltage buildup",
+      "To provide physical strength to the rotor",
+      "To allow the induced EMF to drive a current, which then interacts with the RMF to produce torque"
+    ],
+    "exp": "Without a closed circuit, the induced EMF cannot produce a current. Torque (F=BIL) requires a current-carrying conductor in a magnetic field.",
+    "id": "T03_S1_005_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: Why is it called an 'Induction' motor?",
+    "a": "Because rotor current is not supplied directly, but is induced electromagnetically by the stator field",
+    "opts": [
+      "Because rotor current is not supplied directly, but is induced electromagnetically by the stator field",
+      "Because it uses inductors in the stator",
+      "Because it induces a high power factor",
+      "Because it runs at synchronous speed"
+    ],
+    "exp": "Unlike DC motors with commutators or sync motors with slip rings, the standard squirrel cage rotor has no electrical connection to the supply.",
+    "id": "T03_S1_013_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "Recall: What determines the direction of rotation of the Rotating Magnetic Field (RMF)?",
+    "a": "The phase sequence of the 3-phase supply",
+    "opts": [
+      "The number of poles in the stator",
+      "The frequency of the supply",
+      "The phase sequence of the 3-phase supply",
+      "The resistance of the rotor"
+    ],
+    "exp": "Swapping any two phases changes the phase sequence (e.g., RYB to YRB), which reverses the direction the RMF spins.",
+    "id": "T03_S1_014_var1",
+    "topic": "T03_Motors",
+    "cat": "Principle"
+  },
+  {
+    "q": "What happens if the rotor of an induction motor reaches exact synchronous speed?",
+    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+    "opts": [
+      "The motor operates at maximum efficiency",
+      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+      "The motor draws infinite current",
+      "The motor reverses direction"
+    ],
+    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
+    "id": "T03_S1_006",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "What is the mathematical definition of fractional slip (s)?",
+    "a": "s = (Ns - N) / Ns",
+    "opts": [
+      "s = (Ns - N) / N",
+      "s = (N - Ns) / Ns",
+      "s = (Ns - N) / Ns",
+      "s = Ns / (Ns - N)"
+    ],
+    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
+    "id": "T03_S1_007",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "At the exact moment of starting (standstill), what is the value of slip?",
+    "a": "1 (or 100%)",
+    "opts": [
+      "0 (or 0%)",
+      "1 (or 100%)",
+      "0.05 (or 5%)",
+      "Infinity"
+    ],
+    "exp": "At standstill, rotor speed (N) is zero. Therefore, slip = (Ns - 0) / Ns = 1.",
+    "id": "T03_S1_008",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "What is the typical full-load slip for a standard squirrel cage motor?",
+    "a": "3% to 8%",
+    "opts": [
+      "0.1% to 0.5%",
+      "3% to 8%",
+      "10% to 15%",
+      "0%"
+    ],
+    "exp": "At full load, the rotor must slow down by 3-8% relative to the RMF to induce enough current to match the mechanical load torque.",
+    "id": "T03_S1_009",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "How does an increase in mechanical load affect slip and rotor current?",
+    "a": "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+    "opts": [
+      "Slip decreases, causing less rotor current",
+      "Slip remains constant, but stator voltage increases",
+      "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+      "Slip increases, but rotor current decreases"
+    ],
+    "exp": "To pull a heavier load, the motor must develop more torque. It does this by slowing down slightly (increasing slip), which induces more rotor current.",
+    "id": "T03_S1_010",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "What is the relationship between supply frequency (f) and rotor frequency (fr)?",
+    "a": "fr = s * f",
+    "opts": [
+      "fr = f / s",
+      "fr = s * f",
+      "fr = Ns / f",
+      "fr = f - s"
+    ],
+    "exp": "Rotor frequency depends on the relative speed (slip). At standstill (s=1), fr = f. At normal running (e.g., s=0.04), fr is very low (e.g., 2Hz).",
+    "id": "T03_S1_011",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "If a 50Hz motor has a slip of 4%, what is the frequency of the currents in the rotor bars?",
+    "a": "2 Hz",
+    "opts": [
+      "50 Hz",
+      "4 Hz",
+      "2 Hz",
+      "0 Hz"
+    ],
+    "exp": "fr = s * f = 0.04 * 50 = 2 Hz.",
+    "id": "T03_S1_012",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: What happens if the rotor of an induction motor reaches exact synchronous speed?",
+    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+    "opts": [
+      "The motor reverses direction",
+      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+      "The motor draws infinite current",
+      "The motor operates at maximum efficiency"
+    ],
+    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
+    "id": "T03_S1_006_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: What is the mathematical definition of fractional slip (s)?",
+    "a": "s = (Ns - N) / Ns",
+    "opts": [
+      "s = (N - Ns) / Ns",
+      "s = (Ns - N) / Ns",
+      "s = (Ns - N) / N",
+      "s = Ns / (Ns - N)"
+    ],
+    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
+    "id": "T03_S1_007_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: At the exact moment of starting (standstill), what is the value of slip?",
+    "a": "1 (or 100%)",
+    "opts": [
+      "Infinity",
+      "0.05 (or 5%)",
+      "1 (or 100%)",
+      "0 (or 0%)"
+    ],
+    "exp": "At standstill, rotor speed (N) is zero. Therefore, slip = (Ns - 0) / Ns = 1.",
+    "id": "T03_S1_008_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: What is the typical full-load slip for a standard squirrel cage motor?",
+    "a": "3% to 8%",
+    "opts": [
+      "0.1% to 0.5%",
+      "0%",
+      "10% to 15%",
+      "3% to 8%"
+    ],
+    "exp": "At full load, the rotor must slow down by 3-8% relative to the RMF to induce enough current to match the mechanical load torque.",
+    "id": "T03_S1_009_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: How does an increase in mechanical load affect slip and rotor current?",
+    "a": "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+    "opts": [
+      "Slip increases, but rotor current decreases",
+      "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+      "Slip decreases, causing less rotor current",
+      "Slip remains constant, but stator voltage increases"
+    ],
+    "exp": "To pull a heavier load, the motor must develop more torque. It does this by slowing down slightly (increasing slip), which induces more rotor current.",
+    "id": "T03_S1_010_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: What is the relationship between supply frequency (f) and rotor frequency (fr)?",
+    "a": "fr = s * f",
+    "opts": [
+      "fr = f - s",
+      "fr = s * f",
+      "fr = f / s",
+      "fr = Ns / f"
+    ],
+    "exp": "Rotor frequency depends on the relative speed (slip). At standstill (s=1), fr = f. At normal running (e.g., s=0.04), fr is very low (e.g., 2Hz).",
+    "id": "T03_S1_011_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Recall: If a 50Hz motor has a slip of 4%, what is the frequency of the currents in the rotor bars?",
+    "a": "2 Hz",
+    "opts": [
+      "2 Hz",
+      "4 Hz",
+      "50 Hz",
+      "0 Hz"
+    ],
+    "exp": "fr = s * f = 0.04 * 50 = 2 Hz.",
+    "id": "T03_S1_012_var1",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: What happens if the rotor of an induction motor reaches exact synchronous speed?",
+    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+    "opts": [
+      "The motor operates at maximum efficiency",
+      "The motor reverses direction",
+      "The motor draws infinite current",
+      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero"
+    ],
+    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
+    "id": "T03_S1_006_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: What is the mathematical definition of fractional slip (s)?",
+    "a": "s = (Ns - N) / Ns",
+    "opts": [
+      "s = (N - Ns) / Ns",
+      "s = Ns / (Ns - N)",
+      "s = (Ns - N) / Ns",
+      "s = (Ns - N) / N"
+    ],
+    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
+    "id": "T03_S1_007_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: At the exact moment of starting (standstill), what is the value of slip?",
+    "a": "1 (or 100%)",
+    "opts": [
+      "0 (or 0%)",
+      "1 (or 100%)",
+      "Infinity",
+      "0.05 (or 5%)"
+    ],
+    "exp": "At standstill, rotor speed (N) is zero. Therefore, slip = (Ns - 0) / Ns = 1.",
+    "id": "T03_S1_008_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: What is the typical full-load slip for a standard squirrel cage motor?",
+    "a": "3% to 8%",
+    "opts": [
+      "10% to 15%",
+      "3% to 8%",
+      "0%",
+      "0.1% to 0.5%"
+    ],
+    "exp": "At full load, the rotor must slow down by 3-8% relative to the RMF to induce enough current to match the mechanical load torque.",
+    "id": "T03_S1_009_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: How does an increase in mechanical load affect slip and rotor current?",
+    "a": "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+    "opts": [
+      "Slip increases, but rotor current decreases",
+      "Slip decreases, causing less rotor current",
+      "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+      "Slip remains constant, but stator voltage increases"
+    ],
+    "exp": "To pull a heavier load, the motor must develop more torque. It does this by slowing down slightly (increasing slip), which induces more rotor current.",
+    "id": "T03_S1_010_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: What is the relationship between supply frequency (f) and rotor frequency (fr)?",
+    "a": "fr = s * f",
+    "opts": [
+      "fr = s * f",
+      "fr = f - s",
+      "fr = Ns / f",
+      "fr = f / s"
+    ],
+    "exp": "Rotor frequency depends on the relative speed (slip). At standstill (s=1), fr = f. At normal running (e.g., s=0.04), fr is very low (e.g., 2Hz).",
+    "id": "T03_S1_011_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Consider: If a 50Hz motor has a slip of 4%, what is the frequency of the currents in the rotor bars?",
+    "a": "2 Hz",
+    "opts": [
+      "0 Hz",
+      "4 Hz",
+      "50 Hz",
+      "2 Hz"
+    ],
+    "exp": "fr = s * f = 0.04 * 50 = 2 Hz.",
+    "id": "T03_S1_012_var2",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: What happens if the rotor of an induction motor reaches exact synchronous speed?",
+    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+    "opts": [
+      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+      "The motor operates at maximum efficiency",
+      "The motor draws infinite current",
+      "The motor reverses direction"
+    ],
+    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
+    "id": "T03_S1_006_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: What is the mathematical definition of fractional slip (s)?",
+    "a": "s = (Ns - N) / Ns",
+    "opts": [
+      "s = (Ns - N) / N",
+      "s = (Ns - N) / Ns",
+      "s = (N - Ns) / Ns",
+      "s = Ns / (Ns - N)"
+    ],
+    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
+    "id": "T03_S1_007_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: At the exact moment of starting (standstill), what is the value of slip?",
+    "a": "1 (or 100%)",
+    "opts": [
+      "0 (or 0%)",
+      "Infinity",
+      "0.05 (or 5%)",
+      "1 (or 100%)"
+    ],
+    "exp": "At standstill, rotor speed (N) is zero. Therefore, slip = (Ns - 0) / Ns = 1.",
+    "id": "T03_S1_008_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: What is the typical full-load slip for a standard squirrel cage motor?",
+    "a": "3% to 8%",
+    "opts": [
+      "3% to 8%",
+      "0.1% to 0.5%",
+      "10% to 15%",
+      "0%"
+    ],
+    "exp": "At full load, the rotor must slow down by 3-8% relative to the RMF to induce enough current to match the mechanical load torque.",
+    "id": "T03_S1_009_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: How does an increase in mechanical load affect slip and rotor current?",
+    "a": "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+    "opts": [
+      "Slip decreases, causing less rotor current",
+      "Slip increases, causing more flux cutting, which increases rotor EMF, rotor current, and torque",
+      "Slip remains constant, but stator voltage increases",
+      "Slip increases, but rotor current decreases"
+    ],
+    "exp": "To pull a heavier load, the motor must develop more torque. It does this by slowing down slightly (increasing slip), which induces more rotor current.",
+    "id": "T03_S1_010_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: What is the relationship between supply frequency (f) and rotor frequency (fr)?",
+    "a": "fr = s * f",
+    "opts": [
+      "fr = s * f",
+      "fr = f - s",
+      "fr = f / s",
+      "fr = Ns / f"
+    ],
+    "exp": "Rotor frequency depends on the relative speed (slip). At standstill (s=1), fr = f. At normal running (e.g., s=0.04), fr is very low (e.g., 2Hz).",
+    "id": "T03_S1_011_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Concept: If a 50Hz motor has a slip of 4%, what is the frequency of the currents in the rotor bars?",
+    "a": "2 Hz",
+    "opts": [
+      "4 Hz",
+      "2 Hz",
+      "0 Hz",
+      "50 Hz"
+    ],
+    "exp": "fr = s * f = 0.04 * 50 = 2 Hz.",
+    "id": "T03_S1_012_var3",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Review: What happens if the rotor of an induction motor reaches exact synchronous speed?",
+    "a": "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero",
+    "opts": [
+      "The motor draws infinite current",
+      "The motor reverses direction",
+      "The motor operates at maximum efficiency",
+      "Relative motion becomes zero, no EMF is induced, rotor current drops to zero, and torque becomes zero"
+    ],
+    "exp": "The rotor must always lag the RMF (slip) to ensure flux lines are continuously cut to induce the current required for torque.",
+    "id": "T03_S1_006_var4",
+    "topic": "T03_Motors",
+    "cat": "Slip"
+  },
+  {
+    "q": "Review: What is the mathematical definition of fractional slip (s)?",
+    "a": "s = (Ns - N) / Ns",
+    "opts": [
+      "s = (N - Ns) / Ns",
+      "s = (Ns - N) / Ns",
+      "s = Ns / (Ns - N)",
+      "s = (Ns - N) / N"
+    ],
+    "exp": "Slip is the difference between synchronous speed (Ns) and actual rotor speed (N), expressed as a fraction of synchronous speed.",
+    "id": "T03_S1_007_var4",
+    "topic": "T03_Motors",
+    "cat": "Slip"
   },
   {
     "q": "What is the typical Direct-On-Line (DOL) starting current for a standard induction motor?",
@@ -994,6 +1414,272 @@ window.loadQuizzes('T03_Motors', [
     "cat": "VFD"
   },
   {
+    "q": "Recall: What is the fundamental working principle of a Variable Frequency Drive (VFD)?",
+    "a": "It converts incoming AC to DC, then inverts it back to a synthetic AC waveform with variable voltage and frequency",
+    "opts": [
+      "It converts incoming AC to DC, then inverts it back to a synthetic AC waveform with variable voltage and frequency",
+      "It uses transformers to step down voltage",
+      "It mechanically changes the number of motor poles",
+      "It adds resistors to the stator winding"
+    ],
+    "exp": "The VFD consists of a Rectifier (AC to DC), a DC Link (filters the DC), and an Inverter (DC back to AC using PWM).",
+    "id": "T03_S3_001_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: Why must a VFD control both Voltage AND Frequency simultaneously (constant V/f ratio)?",
+    "a": "To maintain a constant magnetic flux in the air gap and prevent core saturation",
+    "opts": [
+      "To maintain a constant magnetic flux in the air gap and prevent core saturation",
+      "To convert the motor into a generator",
+      "To eliminate the need for a cooling fan",
+      "To increase the motor speed beyond sync speed"
+    ],
+    "exp": "Magnetic flux (\u03a6) is proportional to V/f. If you lower frequency to slow the motor but keep voltage high, flux becomes massive, saturating the iron core and burning out the stator.",
+    "id": "T03_S3_002_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: What technique does the VFD Inverter section use to recreate an AC waveform?",
+    "a": "Pulse Width Modulation (PWM) using IGBTs",
+    "opts": [
+      "Rheostatic control",
+      "Mechanical commutation",
+      "Pulse Width Modulation (PWM) using IGBTs",
+      "Analog amplification"
+    ],
+    "exp": "Insulated Gate Bipolar Transistors (IGBTs) switch the DC voltage on and off thousands of times per second. Varying the pulse width creates an RMS current that looks like a sine wave to the motor.",
+    "id": "T03_S3_003_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: How does a VFD achieve full starting torque at near-zero RPM?",
+    "a": "By supplying a very low frequency (e.g. 1 Hz) and proportionally low voltage, operating the motor at optimal slip",
+    "opts": [
+      "By injecting 440V instantly",
+      "By bypassing the inverter section",
+      "By adding DC injection",
+      "By supplying a very low frequency (e.g. 1 Hz) and proportionally low voltage, operating the motor at optimal slip"
+    ],
+    "exp": "At 1Hz, the RMF spins very slowly. The rotor can easily slip slightly behind this slow RMF, producing massive torque without demanding high current.",
+    "id": "T03_S3_004_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: What is the primary drawback of using VFDs on ships?",
+    "a": "They generate high-frequency electrical harmonics that can distort the ship's power supply",
+    "opts": [
+      "They require DC motors",
+      "They can only run the motor at one speed",
+      "They generate high-frequency electrical harmonics that can distort the ship's power supply",
+      "They are very inefficient"
+    ],
+    "exp": "The non-linear switching of the rectifier draws current in pulses, creating 5th, 7th, 11th, etc., harmonics. These must be mitigated using active or passive harmonic filters.",
+    "id": "T03_S3_005_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: What issue can VFDs cause to motor bearings?",
+    "a": "High-frequency PWM switching induces shaft voltages that can arc through the bearing grease, causing fluting",
+    "opts": [
+      "They spin the bearings backwards",
+      "High-frequency PWM switching induces shaft voltages that can arc through the bearing grease, causing fluting",
+      "They make the bearings run too cold",
+      "They melt the grease through radiation"
+    ],
+    "exp": "Common-mode voltage from PWM induces a voltage on the rotor. If it exceeds the dielectric breakdown of the grease film, it arcs, leaving washboard-like pits (fluting) on the bearing races.",
+    "id": "T03_S3_006_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: How can you prevent bearing fluting caused by VFDs?",
+    "a": "Install a shaft grounding ring (e.g., AEGIS ring) to safely conduct shaft currents to earth",
+    "opts": [
+      "Grease the bearings more often",
+      "Install a shaft grounding ring (e.g., AEGIS ring) to safely conduct shaft currents to earth",
+      "Lower the supply voltage",
+      "Use insulated cables"
+    ],
+    "exp": "A shaft grounding ring uses carbon microfibers riding on the shaft to provide a low-impedance path to ground, bypassing the bearings entirely.",
+    "id": "T03_S3_007_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: Why do VFD-driven motors often require an external, independently powered cooling fan?",
+    "a": "Because running the motor at low speeds drastically reduces the cooling efficiency of the shaft-mounted fan",
+    "opts": [
+      "To cool the VFD panel",
+      "Because VFDs generate heat in the surrounding air",
+      "To blow away harmonics",
+      "Because running the motor at low speeds drastically reduces the cooling efficiency of the shaft-mounted fan"
+    ],
+    "exp": "A motor running at 20% speed has 1/5th the cooling airflow. But if it's still producing high torque, it generates full heat. An independent fan ensures cooling regardless of motor speed.",
+    "id": "T03_S3_008_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: What is a 'Braking Chopper' and 'Braking Resistor' in a VFD system?",
+    "a": "Components used to dissipate regenerated energy as heat when decelerating a high-inertia load",
+    "opts": [
+      "Filters to remove harmonics",
+      "Components used to dissipate regenerated energy as heat when decelerating a high-inertia load",
+      "Components that physically brake the shaft",
+      "Devices to stop single-phasing"
+    ],
+    "exp": "When a crane lowers a load, the motor acts as a generator. The VFD's DC link voltage spikes. The chopper switches this excess DC voltage to a large resistor bank to burn it off.",
+    "id": "T03_S3_009_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: What is the alternative to a Braking Resistor for handling regenerated energy in modern cranes?",
+    "a": "An Active Front End (AFE) VFD which feeds the regenerated power back into the ship's grid",
+    "opts": [
+      "A diode rectifier",
+      "An Active Front End (AFE) VFD which feeds the regenerated power back into the ship's grid",
+      "A larger capacitor bank",
+      "A mechanical disc brake"
+    ],
+    "exp": "AFE drives use IGBTs in the rectifier section instead of diodes, allowing bidirectional power flow, saving massive amounts of energy during cargo operations.",
+    "id": "T03_S3_010_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Recall: Can a VFD drive a motor faster than its rated synchronous speed?",
+    "a": "Yes, by increasing the frequency above the baseline (e.g., to 60Hz or higher), operating in the field-weakening region",
+    "opts": [
+      "Yes, but only if voltage is increased to 1000V",
+      "No, the motor will explode",
+      "Yes, by increasing the frequency above the baseline (e.g., to 60Hz or higher), operating in the field-weakening region",
+      "No, it is physically impossible"
+    ],
+    "exp": "Above 50Hz, the VFD cannot increase voltage further (limited to mains). Thus, V/f ratio drops (field weakening). Torque decreases, but power remains constant.",
+    "id": "T03_S3_011_var1",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: What is the fundamental working principle of a Variable Frequency Drive (VFD)?",
+    "a": "It converts incoming AC to DC, then inverts it back to a synthetic AC waveform with variable voltage and frequency",
+    "opts": [
+      "It uses transformers to step down voltage",
+      "It mechanically changes the number of motor poles",
+      "It adds resistors to the stator winding",
+      "It converts incoming AC to DC, then inverts it back to a synthetic AC waveform with variable voltage and frequency"
+    ],
+    "exp": "The VFD consists of a Rectifier (AC to DC), a DC Link (filters the DC), and an Inverter (DC back to AC using PWM).",
+    "id": "T03_S3_001_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: Why must a VFD control both Voltage AND Frequency simultaneously (constant V/f ratio)?",
+    "a": "To maintain a constant magnetic flux in the air gap and prevent core saturation",
+    "opts": [
+      "To convert the motor into a generator",
+      "To eliminate the need for a cooling fan",
+      "To maintain a constant magnetic flux in the air gap and prevent core saturation",
+      "To increase the motor speed beyond sync speed"
+    ],
+    "exp": "Magnetic flux (\u03a6) is proportional to V/f. If you lower frequency to slow the motor but keep voltage high, flux becomes massive, saturating the iron core and burning out the stator.",
+    "id": "T03_S3_002_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: What technique does the VFD Inverter section use to recreate an AC waveform?",
+    "a": "Pulse Width Modulation (PWM) using IGBTs",
+    "opts": [
+      "Rheostatic control",
+      "Mechanical commutation",
+      "Analog amplification",
+      "Pulse Width Modulation (PWM) using IGBTs"
+    ],
+    "exp": "Insulated Gate Bipolar Transistors (IGBTs) switch the DC voltage on and off thousands of times per second. Varying the pulse width creates an RMS current that looks like a sine wave to the motor.",
+    "id": "T03_S3_003_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: How does a VFD achieve full starting torque at near-zero RPM?",
+    "a": "By supplying a very low frequency (e.g. 1 Hz) and proportionally low voltage, operating the motor at optimal slip",
+    "opts": [
+      "By bypassing the inverter section",
+      "By adding DC injection",
+      "By supplying a very low frequency (e.g. 1 Hz) and proportionally low voltage, operating the motor at optimal slip",
+      "By injecting 440V instantly"
+    ],
+    "exp": "At 1Hz, the RMF spins very slowly. The rotor can easily slip slightly behind this slow RMF, producing massive torque without demanding high current.",
+    "id": "T03_S3_004_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: What is the primary drawback of using VFDs on ships?",
+    "a": "They generate high-frequency electrical harmonics that can distort the ship's power supply",
+    "opts": [
+      "They generate high-frequency electrical harmonics that can distort the ship's power supply",
+      "They require DC motors",
+      "They can only run the motor at one speed",
+      "They are very inefficient"
+    ],
+    "exp": "The non-linear switching of the rectifier draws current in pulses, creating 5th, 7th, 11th, etc., harmonics. These must be mitigated using active or passive harmonic filters.",
+    "id": "T03_S3_005_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: What issue can VFDs cause to motor bearings?",
+    "a": "High-frequency PWM switching induces shaft voltages that can arc through the bearing grease, causing fluting",
+    "opts": [
+      "High-frequency PWM switching induces shaft voltages that can arc through the bearing grease, causing fluting",
+      "They spin the bearings backwards",
+      "They make the bearings run too cold",
+      "They melt the grease through radiation"
+    ],
+    "exp": "Common-mode voltage from PWM induces a voltage on the rotor. If it exceeds the dielectric breakdown of the grease film, it arcs, leaving washboard-like pits (fluting) on the bearing races.",
+    "id": "T03_S3_006_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: How can you prevent bearing fluting caused by VFDs?",
+    "a": "Install a shaft grounding ring (e.g., AEGIS ring) to safely conduct shaft currents to earth",
+    "opts": [
+      "Lower the supply voltage",
+      "Grease the bearings more often",
+      "Install a shaft grounding ring (e.g., AEGIS ring) to safely conduct shaft currents to earth",
+      "Use insulated cables"
+    ],
+    "exp": "A shaft grounding ring uses carbon microfibers riding on the shaft to provide a low-impedance path to ground, bypassing the bearings entirely.",
+    "id": "T03_S3_007_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
+    "q": "Consider: Why do VFD-driven motors often require an external, independently powered cooling fan?",
+    "a": "Because running the motor at low speeds drastically reduces the cooling efficiency of the shaft-mounted fan",
+    "opts": [
+      "To blow away harmonics",
+      "Because VFDs generate heat in the surrounding air",
+      "To cool the VFD panel",
+      "Because running the motor at low speeds drastically reduces the cooling efficiency of the shaft-mounted fan"
+    ],
+    "exp": "A motor running at 20% speed has 1/5th the cooling airflow. But if it's still producing high torque, it generates full heat. An independent fan ensures cooling regardless of motor speed.",
+    "id": "T03_S3_008_var2",
+    "topic": "T03_Motors",
+    "cat": "VFD"
+  },
+  {
     "q": "Besides VFD, what is 'Pole Changing' (Dahlander) speed control?",
     "a": "A method of changing the stator winding connections to alter the number of magnetic poles, providing 2 or 3 fixed speeds",
     "opts": [
@@ -1148,6 +1834,272 @@ window.loadQuizzes('T03_Motors', [
     "cat": "Speed"
   },
   {
+    "q": "Recall: Besides VFD, what is 'Pole Changing' (Dahlander) speed control?",
+    "a": "A method of changing the stator winding connections to alter the number of magnetic poles, providing 2 or 3 fixed speeds",
+    "opts": [
+      "Physically replacing the rotor",
+      "A method of changing the stator winding connections to alter the number of magnetic poles, providing 2 or 3 fixed speeds",
+      "Changing the supply frequency using a transformer",
+      "Adding resistance to the stator"
+    ],
+    "exp": "By switching contactors, a winding can be reconfigured from 4-pole (1500 RPM) to 8-pole (750 RPM). Commonly used on older cranes and two-speed fans.",
+    "id": "T03_S3_012_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is the Ward-Leonard system used for?",
+    "a": "Very smooth, precise, and reversible speed control of a DC drive motor by varying the field of a dedicated DC generator",
+    "opts": [
+      "Synchronizing alternators",
+      "Very smooth, precise, and reversible speed control of a DC drive motor by varying the field of a dedicated DC generator",
+      "Filtering out VFD harmonics",
+      "Starting squirrel cage motors"
+    ],
+    "exp": "Before VFDs, this was the gold standard for cranes and steering gear. An AC motor spins a DC generator, which feeds a DC motor. Controlling the tiny generator field dictates the massive DC motor output.",
+    "id": "T03_S3_013_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What happens if the DC field excitation is lost in a DC motor while it is running?",
+    "a": "Back EMF drops to zero, armature current spikes, and the motor runs away to a dangerously high speed (if unloaded)",
+    "opts": [
+      "It stops instantly",
+      "Back EMF drops to zero, armature current spikes, and the motor runs away to a dangerously high speed (if unloaded)",
+      "Nothing, it runs normally",
+      "It reverses direction"
+    ],
+    "exp": "Speed is inversely proportional to flux (N \u221d V / \u03a6). If flux (\u03a6) drops to near zero, speed approaches infinity, potentially destroying the armature via centrifugal force.",
+    "id": "T03_S3_014_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is the purpose of 'Interpoles' (Commutating poles) in a DC machine?",
+    "a": "To neutralize armature reaction in the commutating zone, preventing brush sparking",
+    "opts": [
+      "To provide cooling to the armature",
+      "To hold the stator in place",
+      "To neutralize armature reaction in the commutating zone, preventing brush sparking",
+      "To increase the main magnetic field"
+    ],
+    "exp": "Armature reaction shifts the magnetic neutral axis. Interpoles (wired in series with the armature) create a localized opposing flux to keep the neutral axis stable, ensuring spark-free commutation.",
+    "id": "T03_S3_015_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is 'Regenerative Braking' in a DC motor or VFD?",
+    "a": "Operating the motor as a generator to convert kinetic energy back into electrical energy, slowing the load",
+    "opts": [
+      "Using brake pads to stop the motor",
+      "Reversing the phases instantly",
+      "Injecting AC into a DC motor",
+      "Operating the motor as a generator to convert kinetic energy back into electrical energy, slowing the load"
+    ],
+    "exp": "When the load tries to drive the motor faster than the electrical synchronous speed (or field setting), the motor pushes power back into the supply, causing a strong braking effect.",
+    "id": "T03_S3_016_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: How does 'Dynamic Braking' differ from Regenerative Braking?",
+    "a": "In Dynamic Braking, the generated energy is dumped into a resistor bank as heat; in Regenerative, it returns to the supply grid",
+    "opts": [
+      "They are exactly the same thing",
+      "Dynamic braking is only for AC motors",
+      "Dynamic braking uses mechanical friction",
+      "In Dynamic Braking, the generated energy is dumped into a resistor bank as heat; in Regenerative, it returns to the supply grid"
+    ],
+    "exp": "Dynamic braking is cheaper because it doesn't require an Active Front End, just a chopper circuit and a large resistor bank.",
+    "id": "T03_S3_017_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is 'DC Injection Braking' on an AC squirrel cage motor?",
+    "a": "Disconnecting the AC supply and injecting a DC current into the stator to create a stationary magnetic field",
+    "opts": [
+      "Using a DC motor to slow the AC motor",
+      "Injecting DC into the rotor",
+      "Applying a DC-powered mechanical brake",
+      "Disconnecting the AC supply and injecting a DC current into the stator to create a stationary magnetic field"
+    ],
+    "exp": "The spinning rotor cuts the stationary DC magnetic field, inducing rotor currents that create a magnetic torque opposing the rotation. Provides rapid, wear-free braking.",
+    "id": "T03_S3_018_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is a major limitation of DC Injection Braking?",
+    "a": "The braking torque decreases rapidly as the motor slows down, and it cannot hold a load at standstill",
+    "opts": [
+      "It causes severe mechanical wear",
+      "It makes the motor run backwards",
+      "It requires a separate generator",
+      "The braking torque decreases rapidly as the motor slows down, and it cannot hold a load at standstill"
+    ],
+    "exp": "Since braking torque depends on relative motion (speed), as speed approaches zero, braking force approaches zero. A mechanical holding brake is still required for cranes.",
+    "id": "T03_S3_019_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What is 'Plugging' (Reverse Current Braking)?",
+    "a": "Instantly reversing two phases of the supply while the motor is running to create massive opposing torque",
+    "opts": [
+      "Unplugging the motor from the wall",
+      "Injecting DC current",
+      "Using a VFD to slow down",
+      "Instantly reversing two phases of the supply while the motor is running to create massive opposing torque"
+    ],
+    "exp": "This reverses the RMF direction. The motor is suddenly operating at a slip of almost 200%. It causes violent braking and huge electrical/mechanical stress. Rarely used on modern ships.",
+    "id": "T03_S3_020_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: When looking at a motor nameplate, what does 'S1 Duty' mean?",
+    "a": "Continuous running duty (can run indefinitely at rated load without exceeding temperature limits)",
+    "opts": [
+      "Continuous running duty (can run indefinitely at rated load without exceeding temperature limits)",
+      "Starting duty only",
+      "Intermittent periodic duty",
+      "Short-time duty (e.g., 30 mins)"
+    ],
+    "exp": "Pumps and fans are S1. A windlass motor might be S2 (30 min short-time duty), meaning it will overheat if run continuously for hours.",
+    "id": "T03_S3_021_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Recall: What does an Insulation Class of 'F' signify?",
+    "a": "The winding insulation can withstand a maximum hotspot temperature of 155\u00b0C",
+    "opts": [
+      "The motor is fireproof",
+      "It is for freezing environments",
+      "The winding insulation can withstand a maximum hotspot temperature of 155\u00b0C",
+      "It uses fiberglass insulation"
+    ],
+    "exp": "Class B = 130\u00b0C, F = 155\u00b0C, H = 180\u00b0C. Marine motors are often built to Class F but operated at Class B limits for a safety margin.",
+    "id": "T03_S3_022_var1",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: Besides VFD, what is 'Pole Changing' (Dahlander) speed control?",
+    "a": "A method of changing the stator winding connections to alter the number of magnetic poles, providing 2 or 3 fixed speeds",
+    "opts": [
+      "A method of changing the stator winding connections to alter the number of magnetic poles, providing 2 or 3 fixed speeds",
+      "Physically replacing the rotor",
+      "Adding resistance to the stator",
+      "Changing the supply frequency using a transformer"
+    ],
+    "exp": "By switching contactors, a winding can be reconfigured from 4-pole (1500 RPM) to 8-pole (750 RPM). Commonly used on older cranes and two-speed fans.",
+    "id": "T03_S3_012_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What is the Ward-Leonard system used for?",
+    "a": "Very smooth, precise, and reversible speed control of a DC drive motor by varying the field of a dedicated DC generator",
+    "opts": [
+      "Synchronizing alternators",
+      "Filtering out VFD harmonics",
+      "Starting squirrel cage motors",
+      "Very smooth, precise, and reversible speed control of a DC drive motor by varying the field of a dedicated DC generator"
+    ],
+    "exp": "Before VFDs, this was the gold standard for cranes and steering gear. An AC motor spins a DC generator, which feeds a DC motor. Controlling the tiny generator field dictates the massive DC motor output.",
+    "id": "T03_S3_013_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What happens if the DC field excitation is lost in a DC motor while it is running?",
+    "a": "Back EMF drops to zero, armature current spikes, and the motor runs away to a dangerously high speed (if unloaded)",
+    "opts": [
+      "Back EMF drops to zero, armature current spikes, and the motor runs away to a dangerously high speed (if unloaded)",
+      "Nothing, it runs normally",
+      "It reverses direction",
+      "It stops instantly"
+    ],
+    "exp": "Speed is inversely proportional to flux (N \u221d V / \u03a6). If flux (\u03a6) drops to near zero, speed approaches infinity, potentially destroying the armature via centrifugal force.",
+    "id": "T03_S3_014_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What is the purpose of 'Interpoles' (Commutating poles) in a DC machine?",
+    "a": "To neutralize armature reaction in the commutating zone, preventing brush sparking",
+    "opts": [
+      "To provide cooling to the armature",
+      "To increase the main magnetic field",
+      "To hold the stator in place",
+      "To neutralize armature reaction in the commutating zone, preventing brush sparking"
+    ],
+    "exp": "Armature reaction shifts the magnetic neutral axis. Interpoles (wired in series with the armature) create a localized opposing flux to keep the neutral axis stable, ensuring spark-free commutation.",
+    "id": "T03_S3_015_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What is 'Regenerative Braking' in a DC motor or VFD?",
+    "a": "Operating the motor as a generator to convert kinetic energy back into electrical energy, slowing the load",
+    "opts": [
+      "Injecting AC into a DC motor",
+      "Operating the motor as a generator to convert kinetic energy back into electrical energy, slowing the load",
+      "Reversing the phases instantly",
+      "Using brake pads to stop the motor"
+    ],
+    "exp": "When the load tries to drive the motor faster than the electrical synchronous speed (or field setting), the motor pushes power back into the supply, causing a strong braking effect.",
+    "id": "T03_S3_016_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: How does 'Dynamic Braking' differ from Regenerative Braking?",
+    "a": "In Dynamic Braking, the generated energy is dumped into a resistor bank as heat; in Regenerative, it returns to the supply grid",
+    "opts": [
+      "Dynamic braking is only for AC motors",
+      "Dynamic braking uses mechanical friction",
+      "In Dynamic Braking, the generated energy is dumped into a resistor bank as heat; in Regenerative, it returns to the supply grid",
+      "They are exactly the same thing"
+    ],
+    "exp": "Dynamic braking is cheaper because it doesn't require an Active Front End, just a chopper circuit and a large resistor bank.",
+    "id": "T03_S3_017_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What is 'DC Injection Braking' on an AC squirrel cage motor?",
+    "a": "Disconnecting the AC supply and injecting a DC current into the stator to create a stationary magnetic field",
+    "opts": [
+      "Using a DC motor to slow the AC motor",
+      "Injecting DC into the rotor",
+      "Disconnecting the AC supply and injecting a DC current into the stator to create a stationary magnetic field",
+      "Applying a DC-powered mechanical brake"
+    ],
+    "exp": "The spinning rotor cuts the stationary DC magnetic field, inducing rotor currents that create a magnetic torque opposing the rotation. Provides rapid, wear-free braking.",
+    "id": "T03_S3_018_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
+    "q": "Consider: What is a major limitation of DC Injection Braking?",
+    "a": "The braking torque decreases rapidly as the motor slows down, and it cannot hold a load at standstill",
+    "opts": [
+      "It makes the motor run backwards",
+      "The braking torque decreases rapidly as the motor slows down, and it cannot hold a load at standstill",
+      "It requires a separate generator",
+      "It causes severe mechanical wear"
+    ],
+    "exp": "Since braking torque depends on relative motion (speed), as speed approaches zero, braking force approaches zero. A mechanical holding brake is still required for cranes.",
+    "id": "T03_S3_019_var2",
+    "topic": "T03_Motors",
+    "cat": "Speed"
+  },
+  {
     "q": "Why is it important to know the 'Frame Number' (e.g., IEC 160) when ordering a replacement motor?",
     "a": "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing",
     "opts": [
@@ -1256,6 +2208,314 @@ window.loadQuizzes('T03_Motors', [
     ],
     "exp": "A megger test verifies the integrity of the new varnish/insulation. A reading of >1 M\u03a9 (minimum, ideally >100 M\u03a9) is required before applying 440V to prevent immediate short circuits.",
     "id": "T03_S3_030",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: Why is it important to know the 'Frame Number' (e.g., IEC 160) when ordering a replacement motor?",
+    "a": "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing",
+    "opts": [
+      "It indicates the weight",
+      "It defines the voltage",
+      "It specifies the IP rating",
+      "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing"
+    ],
+    "exp": "If you order a different frame size, the shaft won't align with the pump, and the feet won't align with the foundation bedplate.",
+    "id": "T03_S3_023_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: What is 'Soft Foot' in motor mounting?",
+    "a": "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight",
+    "opts": [
+      "Using rubber vibration dampers",
+      "The magnetic pull on the rotor",
+      "A loose bearing",
+      "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight"
+    ],
+    "exp": "Tightening a soft foot distorts the stator frame, creating an uneven air gap and destroying the alignment. It must be corrected with shims before final alignment.",
+    "id": "T03_S3_024_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: When performing precision coupling alignment with a dial indicator, what does a 'Face' reading measure?",
+    "a": "Angular misalignment (the flanges are not parallel)",
+    "opts": [
+      "Axial end play",
+      "Shaft runout",
+      "Parallel offset",
+      "Angular misalignment (the flanges are not parallel)"
+    ],
+    "exp": "The dial indicator sweeps the face of the coupling half. If the reading changes, the shafts are pointing at an angle to each other.",
+    "id": "T03_S3_025_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: What is the primary danger of OVER-GREASING a motor bearing?",
+    "a": "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+    "opts": [
+      "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+      "It washes away the old grease",
+      "It makes the motor run too fast",
+      "It causes electrical short circuits in the rotor"
+    ],
+    "exp": "A bearing housing should only be 30-50% full. Over-packing it causes immense fluid friction. Always leave the bottom relief plug open during greasing.",
+    "id": "T03_S3_026_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: If a bearing number is 6312-ZZ, what do the 'ZZ' signify?",
+    "a": "The bearing has metal shields on both sides to retain grease and keep out large dust",
+    "opts": [
+      "It is a high-speed bearing",
+      "It is self-aligning",
+      "The bearing has metal shields on both sides to retain grease and keep out large dust",
+      "It has rubber seals"
+    ],
+    "exp": "ZZ = double metal shield (non-contact). 2RS = double rubber seal (contact). Shields are better for high speeds, seals are better for dirty environments.",
+    "id": "T03_S3_027_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: What does the 'C3' suffix on a bearing number indicate?",
+    "a": "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+    "opts": [
+      "It is made of ceramic",
+      "It is a Class 3 bearing",
+      "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+      "It has 3 rows of balls"
+    ],
+    "exp": "As the motor heats up, the inner ring on the hot shaft expands faster than the outer ring. A C3 clearance prevents the bearing from seizing due to thermal expansion.",
+    "id": "T03_S3_028_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: How should a replacement bearing be fitted onto a motor shaft?",
+    "a": "By heating it evenly (e.g., induction heater or oil bath) to expand the inner race before sliding it onto the shaft",
+    "opts": [
+      "By heating it evenly (e.g., induction heater or oil bath) to expand the inner race before sliding it onto the shaft",
+      "By cooling the bearing in a freezer",
+      "By hammering the outer race",
+      "By using a hydraulic press on the outer ring"
+    ],
+    "exp": "Never hammer a bearing, especially not on the outer race, as the force transmits through the balls and damages the raceways (brinelling). Heat to ~100\u00b0C max.",
+    "id": "T03_S3_029_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Recall: Before returning a rewound motor to service, what electrical test is ABSOLUTELY mandatory?",
+    "a": "Insulation Resistance (IR) test (Megger test) between phases and to earth",
+    "opts": [
+      "High voltage AC withstand test",
+      "Insulation Resistance (IR) test (Megger test) between phases and to earth",
+      "Vibration analysis",
+      "Load test at 150% capacity"
+    ],
+    "exp": "A megger test verifies the integrity of the new varnish/insulation. A reading of >1 M\u03a9 (minimum, ideally >100 M\u03a9) is required before applying 440V to prevent immediate short circuits.",
+    "id": "T03_S3_030_var1",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: Why is it important to know the 'Frame Number' (e.g., IEC 160) when ordering a replacement motor?",
+    "a": "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing",
+    "opts": [
+      "It indicates the weight",
+      "It defines the voltage",
+      "It specifies the IP rating",
+      "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing"
+    ],
+    "exp": "If you order a different frame size, the shaft won't align with the pump, and the feet won't align with the foundation bedplate.",
+    "id": "T03_S3_023_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: What is 'Soft Foot' in motor mounting?",
+    "a": "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight",
+    "opts": [
+      "The magnetic pull on the rotor",
+      "A loose bearing",
+      "Using rubber vibration dampers",
+      "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight"
+    ],
+    "exp": "Tightening a soft foot distorts the stator frame, creating an uneven air gap and destroying the alignment. It must be corrected with shims before final alignment.",
+    "id": "T03_S3_024_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: When performing precision coupling alignment with a dial indicator, what does a 'Face' reading measure?",
+    "a": "Angular misalignment (the flanges are not parallel)",
+    "opts": [
+      "Parallel offset",
+      "Shaft runout",
+      "Axial end play",
+      "Angular misalignment (the flanges are not parallel)"
+    ],
+    "exp": "The dial indicator sweeps the face of the coupling half. If the reading changes, the shafts are pointing at an angle to each other.",
+    "id": "T03_S3_025_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: What is the primary danger of OVER-GREASING a motor bearing?",
+    "a": "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+    "opts": [
+      "It washes away the old grease",
+      "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+      "It causes electrical short circuits in the rotor",
+      "It makes the motor run too fast"
+    ],
+    "exp": "A bearing housing should only be 30-50% full. Over-packing it causes immense fluid friction. Always leave the bottom relief plug open during greasing.",
+    "id": "T03_S3_026_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: If a bearing number is 6312-ZZ, what do the 'ZZ' signify?",
+    "a": "The bearing has metal shields on both sides to retain grease and keep out large dust",
+    "opts": [
+      "It is self-aligning",
+      "It is a high-speed bearing",
+      "The bearing has metal shields on both sides to retain grease and keep out large dust",
+      "It has rubber seals"
+    ],
+    "exp": "ZZ = double metal shield (non-contact). 2RS = double rubber seal (contact). Shields are better for high speeds, seals are better for dirty environments.",
+    "id": "T03_S3_027_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: What does the 'C3' suffix on a bearing number indicate?",
+    "a": "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+    "opts": [
+      "It is a Class 3 bearing",
+      "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+      "It is made of ceramic",
+      "It has 3 rows of balls"
+    ],
+    "exp": "As the motor heats up, the inner ring on the hot shaft expands faster than the outer ring. A C3 clearance prevents the bearing from seizing due to thermal expansion.",
+    "id": "T03_S3_028_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: How should a replacement bearing be fitted onto a motor shaft?",
+    "a": "By heating it evenly (e.g., induction heater or oil bath) to expand the inner race before sliding it onto the shaft",
+    "opts": [
+      "By cooling the bearing in a freezer",
+      "By hammering the outer race",
+      "By heating it evenly (e.g., induction heater or oil bath) to expand the inner race before sliding it onto the shaft",
+      "By using a hydraulic press on the outer ring"
+    ],
+    "exp": "Never hammer a bearing, especially not on the outer race, as the force transmits through the balls and damages the raceways (brinelling). Heat to ~100\u00b0C max.",
+    "id": "T03_S3_029_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Consider: Before returning a rewound motor to service, what electrical test is ABSOLUTELY mandatory?",
+    "a": "Insulation Resistance (IR) test (Megger test) between phases and to earth",
+    "opts": [
+      "Vibration analysis",
+      "Load test at 150% capacity",
+      "High voltage AC withstand test",
+      "Insulation Resistance (IR) test (Megger test) between phases and to earth"
+    ],
+    "exp": "A megger test verifies the integrity of the new varnish/insulation. A reading of >1 M\u03a9 (minimum, ideally >100 M\u03a9) is required before applying 440V to prevent immediate short circuits.",
+    "id": "T03_S3_030_var2",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: Why is it important to know the 'Frame Number' (e.g., IEC 160) when ordering a replacement motor?",
+    "a": "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing",
+    "opts": [
+      "It defines the physical mounting dimensions, primarily the shaft centreline height (160mm) and bolt hole spacing",
+      "It indicates the weight",
+      "It specifies the IP rating",
+      "It defines the voltage"
+    ],
+    "exp": "If you order a different frame size, the shaft won't align with the pump, and the feet won't align with the foundation bedplate.",
+    "id": "T03_S3_023_var3",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: What is 'Soft Foot' in motor mounting?",
+    "a": "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight",
+    "opts": [
+      "When all four feet of the motor do not sit flat on the base, causing the motor frame to twist when bolted tight",
+      "Using rubber vibration dampers",
+      "A loose bearing",
+      "The magnetic pull on the rotor"
+    ],
+    "exp": "Tightening a soft foot distorts the stator frame, creating an uneven air gap and destroying the alignment. It must be corrected with shims before final alignment.",
+    "id": "T03_S3_024_var3",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: When performing precision coupling alignment with a dial indicator, what does a 'Face' reading measure?",
+    "a": "Angular misalignment (the flanges are not parallel)",
+    "opts": [
+      "Axial end play",
+      "Parallel offset",
+      "Angular misalignment (the flanges are not parallel)",
+      "Shaft runout"
+    ],
+    "exp": "The dial indicator sweeps the face of the coupling half. If the reading changes, the shafts are pointing at an angle to each other.",
+    "id": "T03_S3_025_var3",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: What is the primary danger of OVER-GREASING a motor bearing?",
+    "a": "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+    "opts": [
+      "It makes the motor run too fast",
+      "It causes electrical short circuits in the rotor",
+      "The grease cannot expand, causing churning, severe overheating, blown seals, and grease entering the stator windings",
+      "It washes away the old grease"
+    ],
+    "exp": "A bearing housing should only be 30-50% full. Over-packing it causes immense fluid friction. Always leave the bottom relief plug open during greasing.",
+    "id": "T03_S3_026_var3",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: If a bearing number is 6312-ZZ, what do the 'ZZ' signify?",
+    "a": "The bearing has metal shields on both sides to retain grease and keep out large dust",
+    "opts": [
+      "It is a high-speed bearing",
+      "It is self-aligning",
+      "It has rubber seals",
+      "The bearing has metal shields on both sides to retain grease and keep out large dust"
+    ],
+    "exp": "ZZ = double metal shield (non-contact). 2RS = double rubber seal (contact). Shields are better for high speeds, seals are better for dirty environments.",
+    "id": "T03_S3_027_var3",
+    "topic": "T03_Motors",
+    "cat": "Maint"
+  },
+  {
+    "q": "Concept: What does the 'C3' suffix on a bearing number indicate?",
+    "a": "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+    "opts": [
+      "The internal radial clearance is greater than standard, used for motors operating at high temperatures",
+      "It is made of ceramic",
+      "It is a Class 3 bearing",
+      "It has 3 rows of balls"
+    ],
+    "exp": "As the motor heats up, the inner ring on the hot shaft expands faster than the outer ring. A C3 clearance prevents the bearing from seizing due to thermal expansion.",
+    "id": "T03_S3_028_var3",
     "topic": "T03_Motors",
     "cat": "Maint"
   },
@@ -1428,6 +2688,258 @@ window.loadQuizzes('T03_Motors', [
     "cat": "Protect"
   },
   {
+    "q": "Recall: What is the primary function of a thermal overload relay (OLR) in a motor starter?",
+    "a": "To protect against sustained overcurrents (overheating) using a bimetallic strip",
+    "opts": [
+      "To protect against voltage drops",
+      "To protect against sustained overcurrents (overheating) using a bimetallic strip",
+      "To protect against short circuits",
+      "To monitor bearing temperature"
+    ],
+    "exp": "The OLR mimics the thermal characteristic of the motor. High current bends a bimetallic strip, eventually tripping the control circuit. It has an IDMT (Inverse Definite Minimum Time) characteristic.",
+    "id": "T03_S5_001_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: Why will a thermal overload relay NOT protect a motor against a short circuit?",
+    "a": "It responds too slowly (thermal time delay); short circuits require instantaneous clearing",
+    "opts": [
+      "It responds too slowly (thermal time delay); short circuits require instantaneous clearing",
+      "It cannot handle high voltages",
+      "It is not connected to the main power lines",
+      "It only measures voltage"
+    ],
+    "exp": "An OLR takes seconds or minutes to trip. A short circuit (thousands of amps) will melt the wires before the bimetallic strip bends. Short circuits are cleared by Fuses or Magnetic MCBs.",
+    "id": "T03_S5_002_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: What type of fuse is mandatory for 440V motor feeders on the Main Switchboard?",
+    "a": "HRC (High Rupturing Capacity) Fuses",
+    "opts": [
+      "Rewirable fuses",
+      "HRC (High Rupturing Capacity) Fuses",
+      "Automotive blade fuses",
+      "Glass cartridge fuses"
+    ],
+    "exp": "HRC fuses can safely interrupt massive fault currents (e.g., 80kA) without exploding, thanks to the arc-quenching silica sand inside.",
+    "id": "T03_S5_003_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: At what rating are motor HRC fuses typically selected compared to the Full Load Current (FLC)?",
+    "a": "1.5 to 2.5 times the motor FLC",
+    "opts": [
+      "1.5 to 2.5 times the motor FLC",
+      "Half the FLC",
+      "Exactly equal to the FLC",
+      "5 to 8 times the FLC"
+    ],
+    "exp": "The fuse must NOT blow during the massive 6x DOL starting current surge. Therefore, they are rated higher than FLC. The OLR handles the slight overloads.",
+    "id": "T03_S5_004_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: How does a 3-element overload relay provide 'Single Phasing' protection?",
+    "a": "It uses a differential mechanism that trips much faster if one bimetallic strip cools down while the others heat up",
+    "opts": [
+      "It uses a differential mechanism that trips much faster if one bimetallic strip cools down while the others heat up",
+      "It measures the phase voltage directly",
+      "It communicates with the AVR",
+      "It has a built in fuse for each phase"
+    ],
+    "exp": "If one phase is lost, its strip cools and straightens. The other two carry 2x current and bend aggressively. A mechanical slide bar detects this differential and trips rapidly.",
+    "id": "T03_S5_005_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: What is the consequence of single-phasing a motor that is currently STOPPED?",
+    "a": "The motor will hum loudly but will not rotate, and will quickly burn out if not tripped",
+    "opts": [
+      "It will start normally but run slowly",
+      "It will run in reverse",
+      "It will generate high voltage",
+      "The motor will hum loudly but will not rotate, and will quickly burn out if not tripped"
+    ],
+    "exp": "Two phases cannot create a Rotating Magnetic Field, only a pulsating field. Starting torque is strictly zero.",
+    "id": "T03_S5_006_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: What causes the 'Negative Sequence Currents' during single-phasing?",
+    "a": "The unbalanced voltage creates a counter-rotating magnetic field that induces high frequency currents in the rotor",
+    "opts": [
+      "The motor spinning backwards",
+      "The VFD injecting DC",
+      "The earth fault relay",
+      "The unbalanced voltage creates a counter-rotating magnetic field that induces high frequency currents in the rotor"
+    ],
+    "exp": "The pulsating field can be mathematically split into a forward RMF and a backward RMF. The backward RMF spins at 2x slip frequency relative to the rotor, causing immense localized heating.",
+    "id": "T03_S5_007_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: Besides the OLR, what electronic relay offers superior protection against single-phasing and phase reversal?",
+    "a": "Phase Failure / Phase Sequence Relay",
+    "opts": [
+      "Earth fault relay",
+      "Under-voltage relay",
+      "Phase Failure / Phase Sequence Relay",
+      "Reverse power relay"
+    ],
+    "exp": "This relay directly monitors the 3-phase voltage waveform. If a phase drops, or if the sequence is reversed (which would run the pump backwards), it instantly opens the control circuit.",
+    "id": "T03_S5_008_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: Why do large ER motors have PTC thermistors embedded in the stator windings?",
+    "a": "To provide direct thermal protection by measuring actual winding temperature, regardless of current draw",
+    "opts": [
+      "To measure ambient air temperature",
+      "To control the speed of the VFD",
+      "To keep the windings warm",
+      "To provide direct thermal protection by measuring actual winding temperature, regardless of current draw"
+    ],
+    "exp": "If the motor cooling fan fails, or filter is blocked, the motor will overheat even if drawing normal current. The OLR won't see this, but the thermistors will spike in resistance and trip the motor.",
+    "id": "T03_S5_009_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: What is the function of the Anti-Condensation Heater (Space Heater) in a motor?",
+    "a": "It turns on automatically when the motor STOPS, keeping windings warm to prevent moisture condensation",
+    "opts": [
+      "It warms the fuel oil for the pump",
+      "It pre-heats the bearings before starting",
+      "It turns on automatically when the motor STOPS, keeping windings warm to prevent moisture condensation",
+      "It provides braking torque"
+    ],
+    "exp": "When a hot motor stops, cooling draws in humid ER air. If it cools below the dew point, water condenses on the windings, ruining insulation. The heater prevents this.",
+    "id": "T03_S5_010_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: Where does the Anti-Condensation Heater get its power?",
+    "a": "Usually from an independent 220V supply, interlocked via a normally-closed (NC) contact of the main contactor",
+    "opts": [
+      "Usually from an independent 220V supply, interlocked via a normally-closed (NC) contact of the main contactor",
+      "From the motor's back EMF",
+      "From a built in battery",
+      "From the 440V main busbar directly"
+    ],
+    "exp": "When KM is open (motor off), the NC auxiliary contact is closed, feeding 220V to the heater. \ud83d\udd34 DANGER: This means 220V is LIVE inside the terminal box even when the 440V breaker is off!",
+    "id": "T03_S5_011_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Recall: How does a Core Balance Current Transformer (CBCT) detect an earth fault in a motor?",
+    "a": "It wraps around all 3 phase cables; if no leakage exists, the vector sum of currents is zero",
+    "opts": [
+      "It measures voltage to the hull",
+      "It detects smoke in the terminal box",
+      "It measures the resistance of the earth cable",
+      "It wraps around all 3 phase cables; if no leakage exists, the vector sum of currents is zero"
+    ],
+    "exp": "Normally, whatever current goes down R and Y returns via B. The net magnetic field is zero. If current leaks to the hull (earth), the sum is no longer zero, inducing a signal in the CBCT.",
+    "id": "T03_S5_012_var1",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: What is the primary function of a thermal overload relay (OLR) in a motor starter?",
+    "a": "To protect against sustained overcurrents (overheating) using a bimetallic strip",
+    "opts": [
+      "To protect against voltage drops",
+      "To monitor bearing temperature",
+      "To protect against short circuits",
+      "To protect against sustained overcurrents (overheating) using a bimetallic strip"
+    ],
+    "exp": "The OLR mimics the thermal characteristic of the motor. High current bends a bimetallic strip, eventually tripping the control circuit. It has an IDMT (Inverse Definite Minimum Time) characteristic.",
+    "id": "T03_S5_001_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: Why will a thermal overload relay NOT protect a motor against a short circuit?",
+    "a": "It responds too slowly (thermal time delay); short circuits require instantaneous clearing",
+    "opts": [
+      "It responds too slowly (thermal time delay); short circuits require instantaneous clearing",
+      "It only measures voltage",
+      "It is not connected to the main power lines",
+      "It cannot handle high voltages"
+    ],
+    "exp": "An OLR takes seconds or minutes to trip. A short circuit (thousands of amps) will melt the wires before the bimetallic strip bends. Short circuits are cleared by Fuses or Magnetic MCBs.",
+    "id": "T03_S5_002_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: What type of fuse is mandatory for 440V motor feeders on the Main Switchboard?",
+    "a": "HRC (High Rupturing Capacity) Fuses",
+    "opts": [
+      "HRC (High Rupturing Capacity) Fuses",
+      "Automotive blade fuses",
+      "Glass cartridge fuses",
+      "Rewirable fuses"
+    ],
+    "exp": "HRC fuses can safely interrupt massive fault currents (e.g., 80kA) without exploding, thanks to the arc-quenching silica sand inside.",
+    "id": "T03_S5_003_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: At what rating are motor HRC fuses typically selected compared to the Full Load Current (FLC)?",
+    "a": "1.5 to 2.5 times the motor FLC",
+    "opts": [
+      "1.5 to 2.5 times the motor FLC",
+      "Exactly equal to the FLC",
+      "5 to 8 times the FLC",
+      "Half the FLC"
+    ],
+    "exp": "The fuse must NOT blow during the massive 6x DOL starting current surge. Therefore, they are rated higher than FLC. The OLR handles the slight overloads.",
+    "id": "T03_S5_004_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: How does a 3-element overload relay provide 'Single Phasing' protection?",
+    "a": "It uses a differential mechanism that trips much faster if one bimetallic strip cools down while the others heat up",
+    "opts": [
+      "It measures the phase voltage directly",
+      "It communicates with the AVR",
+      "It uses a differential mechanism that trips much faster if one bimetallic strip cools down while the others heat up",
+      "It has a built in fuse for each phase"
+    ],
+    "exp": "If one phase is lost, its strip cools and straightens. The other two carry 2x current and bend aggressively. A mechanical slide bar detects this differential and trips rapidly.",
+    "id": "T03_S5_005_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
+    "q": "Consider: What is the consequence of single-phasing a motor that is currently STOPPED?",
+    "a": "The motor will hum loudly but will not rotate, and will quickly burn out if not tripped",
+    "opts": [
+      "The motor will hum loudly but will not rotate, and will quickly burn out if not tripped",
+      "It will start normally but run slowly",
+      "It will run in reverse",
+      "It will generate high voltage"
+    ],
+    "exp": "Two phases cannot create a Rotating Magnetic Field, only a pulsating field. Starting torque is strictly zero.",
+    "id": "T03_S5_006_var2",
+    "topic": "T03_Motors",
+    "cat": "Protect"
+  },
+  {
     "q": "What is a 'Double Cage' (Double Squirrel Cage) Induction Motor?",
     "a": "A motor with two sets of rotor bars: an outer high-resistance cage and an inner low-resistance cage",
     "opts": [
@@ -1596,6 +3108,258 @@ window.loadQuizzes('T03_Motors', [
     "cat": "Gap"
   },
   {
+    "q": "What does 'Ex d' indicate on a hazardous area motor's nameplate?",
+    "a": "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
+    "opts": [
+      "Intrinsically safe",
+      "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
+      "Increased safety",
+      "Non-sparking"
+    ],
+    "exp": "The heavy cast iron casing contains the blast, and the machined flanges cool the escaping gases below the ignition temperature of the surrounding explosive gas (e.g., in a pump room).",
+    "id": "T03_S5_030",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What is a 'Double Cage' (Double Squirrel Cage) Induction Motor?",
+    "a": "A motor with two sets of rotor bars: an outer high-resistance cage and an inner low-resistance cage",
+    "opts": [
+      "A motor with two sets of rotor bars: an outer high-resistance cage and an inner low-resistance cage",
+      "A motor with two stators",
+      "A slip ring motor without brushes",
+      "A motor with physical safety guards"
+    ],
+    "exp": "This clever design uses the 'skin effect' to automatically provide high torque during starting (outer cage) and high efficiency during running (inner cage) without external starters.",
+    "id": "T03_S5_013_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: Why does the rotor current flow primarily in the OUTER cage of a double cage motor during starting?",
+    "a": "At start, rotor frequency is 50Hz. High frequency pushes current to the surface (skin effect) into the high-resistance outer bars",
+    "opts": [
+      "Because the outer cage has less resistance",
+      "At start, rotor frequency is 50Hz. High frequency pushes current to the surface (skin effect) into the high-resistance outer bars",
+      "Because of centrifugal force",
+      "Because the inner cage is disconnected by a switch"
+    ],
+    "exp": "The inner cage is deeply buried, giving it massive inductive reactance (XL = 2\u03c0fL) at 50Hz. Current takes the path of least impedance: the outer cage.",
+    "id": "T03_S5_014_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: Where are Double Cage motors typically used on ships?",
+    "a": "For machinery requiring High Starting Torque without complex starters: Windlass, Mooring Winches, Bow Thrusters",
+    "opts": [
+      "For machinery requiring High Starting Torque without complex starters: Windlass, Mooring Winches, Bow Thrusters",
+      "For continuous running pumps",
+      "For the main propulsion",
+      "For small ventilation fans"
+    ],
+    "exp": "A windlass must start against massive chain tension. A double cage gives excellent DOL starting torque without the need for delicate slip rings.",
+    "id": "T03_S5_015_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What phenomenon causes 'Motor Crawling'?",
+    "a": "The 7th harmonic in the air-gap flux creates a forward-rotating field at 1/7th synchronous speed, forming a reluctance torque dip",
+    "opts": [
+      "Low supply voltage",
+      "The 7th harmonic in the air-gap flux creates a forward-rotating field at 1/7th synchronous speed, forming a reluctance torque dip",
+      "Bearing failure",
+      "Single phasing"
+    ],
+    "exp": "If the mechanical load torque is higher than this 'dip' in the motor's torque curve, the motor gets stuck at 1/7th speed (e.g., 200 RPM instead of 1450 RPM).",
+    "id": "T03_S5_016_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: How is Motor Crawling prevented during motor manufacture?",
+    "a": "By skewing the rotor slots and properly chording the stator windings to eliminate the 7th harmonic",
+    "opts": [
+      "By skewing the rotor slots and properly chording the stator windings to eliminate the 7th harmonic",
+      "By using a VFD",
+      "By greasing the bearings heavily",
+      "By making the air gap larger"
+    ],
+    "exp": "Skewing breaks up the harmonic alignment. Chording (short-pitching) the stator coils cancels out specific spatial harmonics in the flux.",
+    "id": "T03_S5_017_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: If a Surveyor asks: 'What specs do you provide when ordering a new motor?', which of these is the most complete answer?",
+    "a": "kW, Voltage, Hz, Poles/RPM, Frame Size, IP Rating, Insulation Class, Mounting type (B3/B5)",
+    "opts": [
+      "kW and Voltage only",
+      "Horsepower and brand name",
+      "kW, Voltage, Hz, Poles/RPM, Frame Size, IP Rating, Insulation Class, Mounting type (B3/B5)",
+      "Weight and color"
+    ],
+    "exp": "A motor cannot be replaced unless the physical dimensions (Frame, Mounting) and environmental limits (IP, Class) match, alongside the electrical specs.",
+    "id": "T03_S5_018_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What is the difference between a B3 and B5 motor mounting?",
+    "a": "B3 is Foot-mounted; B5 is Flange-mounted",
+    "opts": [
+      "B3 is vertical; B5 is horizontal",
+      "B3 is waterproof; B5 is not",
+      "B3 requires a VFD; B5 is DOL",
+      "B3 is Foot-mounted; B5 is Flange-mounted"
+    ],
+    "exp": "B3 has feet to bolt onto a bedplate. B5 has a circular flange on the drive end to bolt directly onto a pump casing (no feet). B35 has both.",
+    "id": "T03_S5_019_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: When a motor returns from shore after rewinding, what is the first electrical check the ETO must perform?",
+    "a": "Insulation Resistance test (Megger) between all phases and earth",
+    "opts": [
+      "Check the bearing grease",
+      "Paint the casing",
+      "Connect it to 440V and run it",
+      "Insulation Resistance test (Megger) between all phases and earth"
+    ],
+    "exp": "You must verify the shore workshop did not damage the insulation or leave moisture in the windings before applying main power.",
+    "id": "T03_S5_020_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: After rewinding, why must you measure the DC resistance of all three phases with a low-resistance bridge?",
+    "a": "To ensure Resistance Balance; all phases must be equal within 2% to prevent unbalanced magnetic pull and heating",
+    "opts": [
+      "To check if the motor is a squirrel cage",
+      "To ensure Resistance Balance; all phases must be equal within 2% to prevent unbalanced magnetic pull and heating",
+      "To check the insulation",
+      "To calculate the power factor"
+    ],
+    "exp": "If the winder used the wrong wire gauge or fewer turns on one phase, the resistance will differ, causing severe issues under load.",
+    "id": "T03_S5_021_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What tool is used to confirm the correct U-V-W connection sequence before coupling a newly installed motor?",
+    "a": "A Phase Rotation Meter",
+    "opts": [
+      "A Hydrometer",
+      "A Phase Rotation Meter",
+      "An Oscilloscope",
+      "A Megger"
+    ],
+    "exp": "Running a pump backwards can unscrew the impeller or destroy the mechanical seal instantly. You must verify the supply phase sequence matches the motor's intended rotation.",
+    "id": "T03_S5_022_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What does an IP68 rating indicate for a bilge pump motor?",
+    "a": "Dust tight (6) and suitable for continuous submersion in water (8)",
+    "opts": [
+      "Dust tight (6) and suitable for continuous submersion in water (8)",
+      "Splash proof",
+      "Ventilated enclosure",
+      "Explosion proof"
+    ],
+    "exp": "A standard engine room motor is IP44. An exposed deck motor is IP55/56. Only IP68 guarantees survival if fully submerged in the bilges.",
+    "id": "T03_S5_023_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: If a Main Cooling Sea Water (MCSW) pump motor is built with Class F insulation (155\u00b0C max), at what temperature is it typically designed to operate?",
+    "a": "Class B temperature limits (130\u00b0C) to provide a 25\u00b0C safety margin for reliability",
+    "opts": [
+      "155\u00b0C continuously",
+      "Class B temperature limits (130\u00b0C) to provide a 25\u00b0C safety margin for reliability",
+      "45\u00b0C ambient only",
+      "180\u00b0C"
+    ],
+    "exp": "Marine classification societies prefer 'Class F insulated, Class B rise'. This thermal buffer ensures long life in harsh, high-ambient engine rooms.",
+    "id": "T03_S5_024_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Recall: What does 'Ex d' indicate on a hazardous area motor's nameplate?",
+    "a": "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
+    "opts": [
+      "Non-sparking",
+      "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
+      "Increased safety",
+      "Intrinsically safe"
+    ],
+    "exp": "The heavy cast iron casing contains the blast, and the machined flanges cool the escaping gases below the ignition temperature of the surrounding explosive gas (e.g., in a pump room).",
+    "id": "T03_S5_030_var1",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Consider: What is a 'Double Cage' (Double Squirrel Cage) Induction Motor?",
+    "a": "A motor with two sets of rotor bars: an outer high-resistance cage and an inner low-resistance cage",
+    "opts": [
+      "A slip ring motor without brushes",
+      "A motor with two stators",
+      "A motor with physical safety guards",
+      "A motor with two sets of rotor bars: an outer high-resistance cage and an inner low-resistance cage"
+    ],
+    "exp": "This clever design uses the 'skin effect' to automatically provide high torque during starting (outer cage) and high efficiency during running (inner cage) without external starters.",
+    "id": "T03_S5_013_var2",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Consider: Why does the rotor current flow primarily in the OUTER cage of a double cage motor during starting?",
+    "a": "At start, rotor frequency is 50Hz. High frequency pushes current to the surface (skin effect) into the high-resistance outer bars",
+    "opts": [
+      "At start, rotor frequency is 50Hz. High frequency pushes current to the surface (skin effect) into the high-resistance outer bars",
+      "Because the outer cage has less resistance",
+      "Because the inner cage is disconnected by a switch",
+      "Because of centrifugal force"
+    ],
+    "exp": "The inner cage is deeply buried, giving it massive inductive reactance (XL = 2\u03c0fL) at 50Hz. Current takes the path of least impedance: the outer cage.",
+    "id": "T03_S5_014_var2",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Consider: Where are Double Cage motors typically used on ships?",
+    "a": "For machinery requiring High Starting Torque without complex starters: Windlass, Mooring Winches, Bow Thrusters",
+    "opts": [
+      "For the main propulsion",
+      "For machinery requiring High Starting Torque without complex starters: Windlass, Mooring Winches, Bow Thrusters",
+      "For small ventilation fans",
+      "For continuous running pumps"
+    ],
+    "exp": "A windlass must start against massive chain tension. A double cage gives excellent DOL starting torque without the need for delicate slip rings.",
+    "id": "T03_S5_015_var2",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
+    "q": "Consider: What phenomenon causes 'Motor Crawling'?",
+    "a": "The 7th harmonic in the air-gap flux creates a forward-rotating field at 1/7th synchronous speed, forming a reluctance torque dip",
+    "opts": [
+      "The 7th harmonic in the air-gap flux creates a forward-rotating field at 1/7th synchronous speed, forming a reluctance torque dip",
+      "Single phasing",
+      "Low supply voltage",
+      "Bearing failure"
+    ],
+    "exp": "If the mechanical load torque is higher than this 'dip' in the motor's torque curve, the motor gets stuck at 1/7th speed (e.g., 200 RPM instead of 1450 RPM).",
+    "id": "T03_S5_016_var2",
+    "topic": "T03_Motors",
+    "cat": "Gap"
+  },
+  {
     "q": "What is the primary difference between a Synchronous Motor and an Induction Motor?",
     "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
     "opts": [
@@ -1666,18 +3430,354 @@ window.loadQuizzes('T03_Motors', [
     "cat": "Sync"
   },
   {
-    "q": "What does 'Ex d' indicate on a hazardous area motor's nameplate?",
-    "a": "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
+    "q": "Recall: What is the primary difference between a Synchronous Motor and an Induction Motor?",
+    "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
     "opts": [
-      "Intrinsically safe",
-      "Flameproof enclosure: it can withstand an internal explosion without igniting the outside atmosphere",
-      "Increased safety",
-      "Non-sparking"
+      "An induction motor has a commutator",
+      "A synchronous motor uses only single-phase power",
+      "A synchronous motor cannot be reversed",
+      "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)"
     ],
-    "exp": "The heavy cast iron casing contains the blast, and the machined flanges cool the escaping gases below the ignition temperature of the surrounding explosive gas (e.g., in a pump room).",
-    "id": "T03_S5_030",
+    "exp": "By feeding DC into the rotor (via slip rings), a distinct North-South magnetic field is created on the rotor which physically locks onto the rotating stator field.",
+    "id": "T03_S5_025_var1",
     "topic": "T03_Motors",
-    "cat": "Gap"
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: Why is a pure Synchronous Motor NOT self-starting?",
+    "a": "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+    "opts": [
+      "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+      "Because the slip rings add too much friction",
+      "Because it uses DC power only",
+      "Because it lacks a stator"
+    ],
+    "exp": "The RMF flashes past the stationary rotor poles 50 times a second, creating rapid alternating torque that averages to zero.",
+    "id": "T03_S5_026_var1",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: How is a Synchronous Motor typically started?",
+    "a": "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+    "opts": [
+      "By using a Ward-Leonard set",
+      "By applying 1000V DC instantly",
+      "By turning it by hand",
+      "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor"
+    ],
+    "exp": "The damper winding (Amortisseur winding) allows it to accelerate to ~95% speed like a standard induction motor. Then, DC excitation is switched on to 'pull' it into synchronism.",
+    "id": "T03_S5_027_var1",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: What happens if a Synchronous Motor loses its DC field excitation while running?",
+    "a": "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+    "opts": [
+      "It generates power into the grid",
+      "It speeds up to infinity",
+      "It reverses direction",
+      "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip"
+    ],
+    "exp": "Without the strong DC field lock, the load forces the rotor to slip. The damper winding acts as a squirrel cage, but it's not rated for continuous duty and will overheat quickly.",
+    "id": "T03_S5_028_var1",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: What is a 'Self-Synchronous' (Selsyn) motor system?",
+    "a": "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+    "opts": [
+      "An automatic steering system",
+      "A VFD controlled pump",
+      "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+      "A motor that generates its own DC field"
+    ],
+    "exp": "Used for rudder angle indicators and engine telegraphs. The 3-phase stators are wired together. When the transmitter rotor is turned, induced currents force the receiver rotor to perfectly mirror its angle.",
+    "id": "T03_S5_029_var1",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Consider: What is the primary difference between a Synchronous Motor and an Induction Motor?",
+    "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+    "opts": [
+      "A synchronous motor uses only single-phase power",
+      "An induction motor has a commutator",
+      "A synchronous motor cannot be reversed",
+      "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)"
+    ],
+    "exp": "By feeding DC into the rotor (via slip rings), a distinct North-South magnetic field is created on the rotor which physically locks onto the rotating stator field.",
+    "id": "T03_S5_025_var2",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Consider: Why is a pure Synchronous Motor NOT self-starting?",
+    "a": "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+    "opts": [
+      "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+      "Because it lacks a stator",
+      "Because the slip rings add too much friction",
+      "Because it uses DC power only"
+    ],
+    "exp": "The RMF flashes past the stationary rotor poles 50 times a second, creating rapid alternating torque that averages to zero.",
+    "id": "T03_S5_026_var2",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Consider: How is a Synchronous Motor typically started?",
+    "a": "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+    "opts": [
+      "By using a Ward-Leonard set",
+      "By applying 1000V DC instantly",
+      "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+      "By turning it by hand"
+    ],
+    "exp": "The damper winding (Amortisseur winding) allows it to accelerate to ~95% speed like a standard induction motor. Then, DC excitation is switched on to 'pull' it into synchronism.",
+    "id": "T03_S5_027_var2",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Consider: What happens if a Synchronous Motor loses its DC field excitation while running?",
+    "a": "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+    "opts": [
+      "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+      "It reverses direction",
+      "It speeds up to infinity",
+      "It generates power into the grid"
+    ],
+    "exp": "Without the strong DC field lock, the load forces the rotor to slip. The damper winding acts as a squirrel cage, but it's not rated for continuous duty and will overheat quickly.",
+    "id": "T03_S5_028_var2",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Consider: What is a 'Self-Synchronous' (Selsyn) motor system?",
+    "a": "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+    "opts": [
+      "An automatic steering system",
+      "A motor that generates its own DC field",
+      "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+      "A VFD controlled pump"
+    ],
+    "exp": "Used for rudder angle indicators and engine telegraphs. The 3-phase stators are wired together. When the transmitter rotor is turned, induced currents force the receiver rotor to perfectly mirror its angle.",
+    "id": "T03_S5_029_var2",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Concept: What is the primary difference between a Synchronous Motor and an Induction Motor?",
+    "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+    "opts": [
+      "An induction motor has a commutator",
+      "A synchronous motor uses only single-phase power",
+      "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+      "A synchronous motor cannot be reversed"
+    ],
+    "exp": "By feeding DC into the rotor (via slip rings), a distinct North-South magnetic field is created on the rotor which physically locks onto the rotating stator field.",
+    "id": "T03_S5_025_var3",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Concept: Why is a pure Synchronous Motor NOT self-starting?",
+    "a": "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+    "opts": [
+      "Because the slip rings add too much friction",
+      "Because it lacks a stator",
+      "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+      "Because it uses DC power only"
+    ],
+    "exp": "The RMF flashes past the stationary rotor poles 50 times a second, creating rapid alternating torque that averages to zero.",
+    "id": "T03_S5_026_var3",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Concept: How is a Synchronous Motor typically started?",
+    "a": "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+    "opts": [
+      "By using a Ward-Leonard set",
+      "By turning it by hand",
+      "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+      "By applying 1000V DC instantly"
+    ],
+    "exp": "The damper winding (Amortisseur winding) allows it to accelerate to ~95% speed like a standard induction motor. Then, DC excitation is switched on to 'pull' it into synchronism.",
+    "id": "T03_S5_027_var3",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Concept: What happens if a Synchronous Motor loses its DC field excitation while running?",
+    "a": "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+    "opts": [
+      "It reverses direction",
+      "It speeds up to infinity",
+      "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+      "It generates power into the grid"
+    ],
+    "exp": "Without the strong DC field lock, the load forces the rotor to slip. The damper winding acts as a squirrel cage, but it's not rated for continuous duty and will overheat quickly.",
+    "id": "T03_S5_028_var3",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Concept: What is a 'Self-Synchronous' (Selsyn) motor system?",
+    "a": "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+    "opts": [
+      "A VFD controlled pump",
+      "A motor that generates its own DC field",
+      "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+      "An automatic steering system"
+    ],
+    "exp": "Used for rudder angle indicators and engine telegraphs. The 3-phase stators are wired together. When the transmitter rotor is turned, induced currents force the receiver rotor to perfectly mirror its angle.",
+    "id": "T03_S5_029_var3",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Review: What is the primary difference between a Synchronous Motor and an Induction Motor?",
+    "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+    "opts": [
+      "An induction motor has a commutator",
+      "A synchronous motor uses only single-phase power",
+      "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+      "A synchronous motor cannot be reversed"
+    ],
+    "exp": "By feeding DC into the rotor (via slip rings), a distinct North-South magnetic field is created on the rotor which physically locks onto the rotating stator field.",
+    "id": "T03_S5_025_var4",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Review: Why is a pure Synchronous Motor NOT self-starting?",
+    "a": "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+    "opts": [
+      "Because it uses DC power only",
+      "Because it lacks a stator",
+      "Because the slip rings add too much friction",
+      "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM"
+    ],
+    "exp": "The RMF flashes past the stationary rotor poles 50 times a second, creating rapid alternating torque that averages to zero.",
+    "id": "T03_S5_026_var4",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Review: How is a Synchronous Motor typically started?",
+    "a": "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+    "opts": [
+      "By using a Ward-Leonard set",
+      "By applying 1000V DC instantly",
+      "By turning it by hand",
+      "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor"
+    ],
+    "exp": "The damper winding (Amortisseur winding) allows it to accelerate to ~95% speed like a standard induction motor. Then, DC excitation is switched on to 'pull' it into synchronism.",
+    "id": "T03_S5_027_var4",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Review: What happens if a Synchronous Motor loses its DC field excitation while running?",
+    "a": "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+    "opts": [
+      "It generates power into the grid",
+      "It speeds up to infinity",
+      "It reverses direction",
+      "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip"
+    ],
+    "exp": "Without the strong DC field lock, the load forces the rotor to slip. The damper winding acts as a squirrel cage, but it's not rated for continuous duty and will overheat quickly.",
+    "id": "T03_S5_028_var4",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Review: What is a 'Self-Synchronous' (Selsyn) motor system?",
+    "a": "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+    "opts": [
+      "A motor that generates its own DC field",
+      "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+      "A VFD controlled pump",
+      "An automatic steering system"
+    ],
+    "exp": "Used for rudder angle indicators and engine telegraphs. The 3-phase stators are wired together. When the transmitter rotor is turned, induced currents force the receiver rotor to perfectly mirror its angle.",
+    "id": "T03_S5_029_var4",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: What is the primary difference between a Synchronous Motor and an Induction Motor?",
+    "a": "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)",
+    "opts": [
+      "A synchronous motor uses only single-phase power",
+      "A synchronous motor cannot be reversed",
+      "An induction motor has a commutator",
+      "A synchronous motor has a DC-excited rotor and runs exactly at Ns (zero slip)"
+    ],
+    "exp": "By feeding DC into the rotor (via slip rings), a distinct North-South magnetic field is created on the rotor which physically locks onto the rotating stator field.",
+    "id": "T03_S5_025_var5",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: Why is a pure Synchronous Motor NOT self-starting?",
+    "a": "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+    "opts": [
+      "Because it uses DC power only",
+      "The massive rotor inertia prevents it from instantly locking onto a field spinning at 1500 RPM",
+      "Because it lacks a stator",
+      "Because the slip rings add too much friction"
+    ],
+    "exp": "The RMF flashes past the stationary rotor poles 50 times a second, creating rapid alternating torque that averages to zero.",
+    "id": "T03_S5_026_var5",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: How is a Synchronous Motor typically started?",
+    "a": "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor",
+    "opts": [
+      "By using a Ward-Leonard set",
+      "By turning it by hand",
+      "By applying 1000V DC instantly",
+      "Using a squirrel-cage 'damper winding' embedded in the rotor poles to start it as an induction motor"
+    ],
+    "exp": "The damper winding (Amortisseur winding) allows it to accelerate to ~95% speed like a standard induction motor. Then, DC excitation is switched on to 'pull' it into synchronism.",
+    "id": "T03_S5_027_var5",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: What happens if a Synchronous Motor loses its DC field excitation while running?",
+    "a": "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip",
+    "opts": [
+      "It generates power into the grid",
+      "It reverses direction",
+      "It speeds up to infinity",
+      "It falls out of synchronism, runs as an induction motor on its damper windings, draws heavy current, and may trip"
+    ],
+    "exp": "Without the strong DC field lock, the load forces the rotor to slip. The damper winding acts as a squirrel cage, but it's not rated for continuous duty and will overheat quickly.",
+    "id": "T03_S5_028_var5",
+    "topic": "T03_Motors",
+    "cat": "Sync"
+  },
+  {
+    "q": "Recall: What is a 'Self-Synchronous' (Selsyn) motor system?",
+    "a": "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+    "opts": [
+      "A motor that generates its own DC field",
+      "A transmitter-receiver pair used to transmit exact angular position remotely without mechanical links",
+      "An automatic steering system",
+      "A VFD controlled pump"
+    ],
+    "exp": "Used for rudder angle indicators and engine telegraphs. The 3-phase stators are wired together. When the transmitter rotor is turned, induced currents force the receiver rotor to perfectly mirror its angle.",
+    "id": "T03_S5_029_var5",
+    "topic": "T03_Motors",
+    "cat": "Sync"
   },
   {
     "q": "A surveyor asks: 'A 440V motor is repeatedly tripping on its thermal overload relay. The load is normal. What is the most likely electrical cause?'",
