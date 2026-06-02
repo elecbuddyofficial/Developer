@@ -211,10 +211,6 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
     <span class="ic">📝</span><span class="label">Written Section</span>
     <span class="cnt" style="font-size:9px">Soon</span>
   </button>
-  <div class="sb-divider"></div>
-  <button class="sb-item" id="si-quizbank" onclick="showView('quizbank')">
-    <span class="ic">🎯</span><span class="label">Quiz Bank</span>
-  </button>
 </div>
 <div id="main">
 <div id="content">
@@ -231,7 +227,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
         <p>Comprehensive study notes, diagrams, and quizzes covering 23 core oral topics.</p>
         <div class="wc-badge">23 Topics</div>
       </div>
-      <div class="welcome-card" onclick="showView('written')" style="opacity:0.7">
+      <div class="welcome-card" onclick="showView('written')" style="opacity:0.6;cursor:default">
         <div class="wc-icon">📝</div>
         <h3>Written Preparation</h3>
         <p>Past papers, numerical solutions, and long-form answers for the written exam.</p>
@@ -269,38 +265,29 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
 <!-- ═══════════════ WRITTEN LANDING ═══════════════ -->
 <div class="view" id="view-written">
-  <div style="max-width:700px;margin:0 auto;text-align:center;padding:100px 0">
-    <div style="font-size:48px;margin-bottom:20px">📝</div>
-    <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:12px">Written Exam Section</h1>
-    <p style="font-size:15px;color:var(--text2);line-height:1.6">The written preparation module is currently under development.<br>It will feature past papers, detailed numerical solutions, and structured answers.</p>
-    <div style="display:inline-block;margin-top:24px;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;background:var(--blue-dim);color:var(--blue);border:1px solid var(--blue-border)">Coming Soon</div>
-  </div>
-</div>
-
-<!-- ═══════════════ QUIZ BANK LANDING ═══════════════ -->
-<div class="view" id="view-quizbank">
   <div style="max-width:700px;margin:0 auto">
     <div style="text-align:center;padding:32px 0 28px">
-      <div style="font-size:36px;margin-bottom:12px">🎯</div>
-      <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Quiz Bank</h1>
-      <p style="font-size:14px;color:var(--text2)">Test your knowledge across all modules</p>
+      <div style="font-size:36px;margin-bottom:12px">📝</div>
+      <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Written Exam Section</h1>
+      <p style="font-size:14px;color:var(--text2)">MMD Class 2 · Function 5 · Past Papers & Numerical Solutions</p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <div class="welcome-card" onclick="showView('quiz-picker')">
-        <div class="wc-icon">📚</div>
-        <h3>Oral Quizzes</h3>
-        <p>Drill questions by topic and category. Includes surveyor-style scenarios and troubleshooting.</p>
-        <div class="wc-badge" style="background:var(--green-dim);border-color:var(--green-border);color:var(--green)">Active</div>
+      <div class="welcome-card" style="opacity:0.6;cursor:default">
+        <div class="wc-icon">📄</div>
+        <h3>Study Notes</h3>
+        <p>Structured answers, key theory, and numerical worked examples for written exam topics.</p>
+        <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
       </div>
-      <div class="welcome-card" onclick="showView('written')" style="opacity:0.7">
-        <div class="wc-icon">📝</div>
-        <h3>Written Quizzes</h3>
-        <p>Practice numerical formulas, multiple-choice written patterns, and objective type questions.</p>
+      <div class="welcome-card" style="opacity:0.6;cursor:default">
+        <div class="wc-icon">🎯</div>
+        <h3>Practice Questions</h3>
+        <p>Past paper questions, numerical drills, and objective-type questions for written prep.</p>
         <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- ═══════════════ NOTES TOPIC PICKER ═══════════════ -->
 <div class="view" id="view-notes-picker">
@@ -448,23 +435,23 @@ var TOPICS = [
   {id:'T04',key:'T04_Switchboard',name:'Switchboard & Circuit Breakers',icon:'🎛️',notesView:'notes-t04',notesReady:true},
   {id:'T05',key:'T05_Transformers',name:'Transformers',icon:'🔄',notesView:'notes-t05',notesReady:true},
   {id:'T06',key:'T06_Sensors',name:'Sensors & Instrumentation',icon:'📡',notesView:'notes-t06',notesReady:true},
-  {id:'T07',key:'T07_Control_PLC',name:'Control Systems & PLC',icon:'🖥️',notesView:null,notesReady:false},
-  {id:'T08',key:'T08_Electronics',name:'Electronics',icon:'💡',notesView:null,notesReady:false},
-  {id:'T09',key:'T09_ShipMachinery',name:'Ship Machinery',icon:'⚓',notesView:null,notesReady:false},
-  {id:'T10',key:'T10_ICCP',name:'ICCP & Corrosion',icon:'🛡️',notesView:null,notesReady:false},
-  {id:'T11',key:'T11_PowerFactor',name:'Power Factor',icon:'📊',notesView:null,notesReady:false},
-  {id:'T12',key:'T12_Cables',name:'Cables & Wiring',icon:'🔗',notesView:null,notesReady:false},
-  {id:'T13',key:'T13_BridgeEquip1',name:'Bridge Equipment I',icon:'🧭',notesView:null,notesReady:false},
-  {id:'T14',key:'T14_BridgeEquip2',name:'Bridge Equipment II',icon:'🧭',notesView:null,notesReady:false},
-  {id:'T15',key:'T15_FireFighting',name:'Fire Fighting',icon:'🔥',notesView:null,notesReady:false},
-  {id:'T16',key:'T16_SOLAS',name:'SOLAS',icon:'📋',notesView:null,notesReady:false},
-  {id:'T17',key:'T17_MARPOL',name:'MARPOL',icon:'🌊',notesView:null,notesReady:false},
-  {id:'T18',key:'T18_ElecSurvey',name:'Electrical Survey',icon:'🔍',notesView:null,notesReady:false},
-  {id:'T19',key:'T19_Tanker',name:'Tanker Electrics',icon:'🛢️',notesView:null,notesReady:false},
-  {id:'T20',key:'T20_Construction',name:'Construction',icon:'🏗️',notesView:null,notesReady:false},
-  {id:'T21',key:'T21_LSA',name:'LSA / Safety',icon:'🆘',notesView:null,notesReady:false},
-  {id:'T22',key:'T22_Practical',name:'Practical Skills',icon:'🔧',notesView:null,notesReady:false},
-  {id:'T23',key:'T23_BatteriesDC',name:'Batteries & DC Systems',icon:'🔋',notesView:null,notesReady:false},
+  {id:'T07',key:'T07_Control_PLC',name:'Control Systems & PLC',icon:'🖥️',notesView:'notes-t07',notesReady:true},
+  {id:'T08',key:'T08_Electronics',name:'Electronics',icon:'💡',notesView:'notes-t08',notesReady:true},
+  {id:'T09',key:'T09_ShipMachinery',name:'Ship Machinery',icon:'⚓',notesView:'notes-t09',notesReady:true},
+  {id:'T10',key:'T10_ICCP',name:'ICCP & Corrosion',icon:'🛡️',notesView:'notes-t10',notesReady:true},
+  {id:'T11',key:'T11_PowerFactor',name:'Power Factor',icon:'📊',notesView:'notes-t11',notesReady:true},
+  {id:'T12',key:'T12_Cables',name:'Cables & Wiring',icon:'🔗',notesView:'notes-t12',notesReady:true},
+  {id:'T13',key:'T13_BridgeEquip1',name:'Bridge Equipment I',icon:'🧭',notesView:'notes-t13',notesReady:true},
+  {id:'T14',key:'T14_BridgeEquip2',name:'Bridge Equipment II',icon:'🧭',notesView:'notes-t14',notesReady:true},
+  {id:'T15',key:'T15_FireFighting',name:'Fire Fighting',icon:'🔥',notesView:'notes-t15',notesReady:true},
+  {id:'T16',key:'T16_SOLAS',name:'SOLAS',icon:'📋',notesView:'notes-t16',notesReady:true},
+  {id:'T17',key:'T17_MARPOL',name:'MARPOL',icon:'🌊',notesView:'notes-t17',notesReady:true},
+  {id:'T18',key:'T18_ElecSurvey',name:'Electrical Survey',icon:'🔍',notesView:'notes-t18',notesReady:true},
+  {id:'T19',key:'T19_Tanker',name:'Tanker Electrics',icon:'🛢️',notesView:'notes-t19',notesReady:true},
+  {id:'T20',key:'T20_Construction',name:'Construction',icon:'🏗️',notesView:'notes-t20',notesReady:true},
+  {id:'T21',key:'T21_LSA',name:'LSA / Safety',icon:'🆘',notesView:'notes-t21',notesReady:true},
+  {id:'T22',key:'T22_Practical',name:'Practical Skills',icon:'🔧',notesView:'notes-t22',notesReady:true},
+  {id:'T23',key:'T23_BatteriesDC',name:'Batteries & DC Systems',icon:'🔋',notesView:'notes-t23',notesReady:true},
 ];
 
 function buildNotesTopicGrid(){

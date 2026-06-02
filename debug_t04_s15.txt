@@ -1,0 +1,7 @@
+Overload Relay vs Overcurrent Relay — Difference
+
+Overload Relay vs Overcurrent Relay — Difference
+Overload relay: Thermal bimetallic type. Protects motor from sustained overload (overcurrent < 10× FLA). Slow to trip — reflects thermal heating of motor winding.
+Overcurrent relay (OCR): IDMT type. Protects against fault currents and heavy short circuits. Fast trip proportional to current magnitude.
+Key difference: Overload = thermal protection (motor). OCR = fault protection (cables, busbar). Both may be present — different trip times.
+Fuse vs OCR: Fuse is sacrificial (single-use), trips on overcurrent, protects cables. OCR resets after fault clearance, more precise, can be tested.

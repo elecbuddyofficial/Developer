@@ -1,0 +1,29 @@
+Bus Tie Breaker — Purpose and Operation
+
+Bus Tie Breaker — Purpose and Operation
+[TABLE]
+BUS TIE BREAKER — Exam Answer
+The bus tie breaker (BTB) connects two separate MSB sections (Section 1 and Section 2). It allows power to flow between sections.
+
+NORMAL OPERATION — OPEN BUS TIE:
+   Each MSB section has its own generator(s). BTB is OPEN. Sections operate independently.
+   Advantage: fault on one section does not affect other section.
+   Higher supply security — section fault is isolated.
+
+CLOSED BUS TIE — When Used:
+   Both sections connected together — all generators supply common load.
+   Used when: one generator on each section cannot handle its section load alone, or when generators being transferred between sections.
+
+SECTIONALISED OPERATION (normal for large ships):
+   Port section: Generator 1 + Generator 2 (or 3) feeding port side loads.
+   Starboard section: Generator 3 + Generator 4 feeding starboard loads.
+   BTB open: maximum fault isolation. Any busbar fault only affects one section.
+
+INTERLOCK WITH BTB:
+   Some ships: closing BTB automatically opens one generator ACB — prevents parallel overloading.
+   Others: BTB interlocked — cannot close unless generators on both sections are paralleled first.
+
+EMERGENCY USE:
+   If generator on one section fails: close BTB — power restored to that section from other section's generator.
+   ETOs must know where BTB panel is and how to close it in emergency.
+[/TABLE]

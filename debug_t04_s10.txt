@@ -1,0 +1,62 @@
+GMDSS Battery — SOLAS Requirements
+
+GMDSS Battery — SOLAS Requirements
+[TABLE]
+GMDSS BATTERY — Exact SOLAS Requirement
+SOLAS Chapter IV, Regulation 13 — Source of Energy:
+
+GMDSS radio equipment must have a dedicated reserve power source (battery) capable of operating all GMDSS equipment for:
+   1 HOUR if the ship has an uninterruptible power supply (UPS / auto-switch to battery)
+   6 HOURS if no UPS is fitted
+   (Some interpretations / older SOLAS: 8 hours — check with flag state)
+
+BATTERY TYPE: Dedicated — not used for any other purpose.
+LOCATION: In or near the radio room / GMDSS area.
+CHARGING: Automatic charging from ship's main power.
+
+WHAT GMDSS RESERVE BATTERY MUST SUPPLY:
+   VHF radio (all DSC channels), MF/HF radio (if fitted), NAVTEX receiver, EPIRB/SART charger circuits, Inmarsat terminal (if fitted).
+
+ANNUAL TEST REQUIREMENT:
+   Load test — verify battery can supply GMDSS equipment for required duration.
+   Replace battery when capacity below 80% rated.
+   Certificate of test to be maintained.
+[/TABLE]
+[TABLE]
+EXAMINER QUESTION | IDEAL ANSWER
+What is the difference between lead-acid and Ni-Cd battery? | Lead-acid: 2.0V/cell, cheap, common, SG check for state of charge, 3-7 year life, poor cold performance, high self-discharge. Ni-Cd: 1.2V/cell, expensive, 10-20 year life, excellent cold performance, lower self-discharge, tolerates overcharge better, minimal maintenance. Ni-Cd preferred for critical safety systems (GMDSS, emergency lighting) due to longer life and reliability. Lead-acid used for less critical applications (emergency generator starting, general UPS) due to lower cost.
+What is the SOLAS requirement for GMDSS battery? | SOLAS Ch IV Reg 13: GMDSS equipment must have dedicated reserve battery supplying all GMDSS equipment for 6 hours (without UPS) or 1 hour (with UPS/auto-switch). Battery dedicated — no other use. Automatic charging from main power. Annual load test required — replace when below 80% rated capacity. Supplies: VHF DSC radio, MF/HF (if fitted), NAVTEX, EPIRB/SART charger, Inmarsat. Certificate of test maintained onboard.
+How do you check the condition of a lead-acid battery? | 1. Visual: cracked case, leaks, terminal corrosion, bulging. Clean terminals with sodium bicarbonate. 2. Electrolyte level: must cover plates by 10-15mm — top up with distilled water only. 3. Specific gravity: hydrometer each cell. Fully charged: SG 1.280-1.300. Discharged: 1.100. Cells should agree within 0.050. 4. Load test: discharge at C10 rate — voltage should not fall below 1.75V/cell (lead-acid) within rated capacity time. 5. Capacity test: measure actual Ah — replace if below 80% rated.
+[/TABLE]
+[TABLE]
+7. UPS — UNINTERRUPTIBLE POWER SUPPLY
+[/TABLE]
+[TABLE]
+UPS — Working and Types
+UPS provides continuous uninterrupted AC power to critical loads even during main power failure — with ZERO switchover time.
+
+TYPES OF UPS:
+
+1. ONLINE (Double Conversion) UPS — Most reliable, most common for critical ship loads:
+   AC input → RECTIFIER → DC bus (batteries connected) → INVERTER → AC output.
+   Load is ALWAYS fed through rectifier and inverter — never from mains directly.
+   Mains failure: batteries immediately take over DC bus — inverter continues supplying load — ZERO switchover time.
+   Output is perfect — clean, regulated, isolated from mains disturbances.
+   Disadvantage: Rectifier and inverter run continuously — heat generated — less efficient (85-92%).
+
+2. OFFLINE (Standby) UPS:
+   Load normally fed directly from mains. Charger keeps batteries topped up.
+   On mains failure: switch transfers load to inverter/battery — small switchover delay (4-12ms).
+   Cheaper, simpler, more efficient when on mains.
+   Not suitable for loads that cannot tolerate any switchover gap.
+
+3. LINE INTERACTIVE UPS:
+   Auto-transformer on input handles voltage variations. Battery/inverter for power failure.
+   Better than offline, cheaper than online.
+
+BYPASS SWITCH:
+   Manual or automatic bypass allows load to be fed directly from mains — bypassing UPS electronics.
+   Used for: UPS maintenance, UPS overload, UPS fault.
+   STATIC BYPASS: Thyristor — fast automatic transfer to bypass on UPS fault — no supply interruption.
+   MAINTENANCE BYPASS: Manual switch — allows UPS to be completely isolated for maintenance while load continues from mains.
+[/TABLE]

@@ -1,0 +1,15 @@
+Overload Test Procedure — Generator OCR
+
+Overload Test Procedure — Generator OCR
+🔴 EXAM CRITICAL: Surveyor asked "how do you do an overload test?"
+Overload test = verifying that OCR trips generator ACB at the correct setpoint
+Preparation: Obtain permit to work. Inform bridge and Chief Engineer.
+TEST INJECTION METHOD (preferred — no actual overload on system):
+(a) Isolate OCR from trip circuit or use test block on relay
+(b) Inject known test current using relay test set (e.g. Omicron, FREJA)
+(c) Inject 1.05× pickup current — relay must NOT trip (below threshold)
+(d) Inject 2× pickup current — measure time to trip, compare with IDMT characteristic curve
+(e) Verify trip output operates the ACB trip coil correctly
+Record: current injected, trip time, relay setting, date, surveyor witness signature
+IDMT relay: Inverse Definite Minimum Time — trips faster for higher fault current. Verify characteristic matches relay curve.
+Alternative (load bank test): Connect calibrated load bank — increase load beyond rated — verify relay trips at setpoint

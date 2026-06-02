@@ -1,0 +1,24 @@
+Overcurrent Relay (OCR) — IDMT Characteristic
+
+Overcurrent Relay (OCR) — IDMT Characteristic
+[TABLE]
+OVERCURRENT RELAY — Exam Answer
+OCR trips the ACB when current exceeds the set threshold. IDMT (Inverse Definite Minimum Time) characteristic:
+   Higher current → shorter trip time (inverse relationship).
+   Example: 105% rated current → trip after 10 seconds. 200% rated → trip after 2 seconds. 500% rated → trip in 0.5 seconds.
+   Definite minimum time: below a minimum multiplier (typically <1.1x), OCR does not trip (allows brief overloads).
+
+OCR SETTINGS:
+   PICK-UP CURRENT (Is): Current level at which relay starts timing. Typically 105-110% of rated current.
+   TIME MULTIPLIER SETTING (TMS): Adjusts overall curve — determines trip time at given current multiple.
+   CURVE TYPE: Standard inverse, very inverse, extremely inverse — different slope characteristics.
+
+OCR TESTING — SECONDARY INJECTION:
+   ACB racked to TEST position. CT secondary leads disconnected from relay.
+   Secondary injection test set connected to relay current input terminals.
+   Inject multiples of set current (1.05x, 2x, 5x, 10x) — measure trip time at each multiple.
+   Compare with relay characteristic curve from manual.
+   Test trip coil operation — verify ACB trips on relay output.
+   Reconnect CT secondary — rack ACB to service.
+   Record all test values in maintenance log.
+[/TABLE]

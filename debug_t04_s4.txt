@@ -1,0 +1,26 @@
+Reverse Power Relay
+
+Reverse Power Relay
+[TABLE]
+REVERSE POWER RELAY — Complete Answer
+PURPOSE: Trips the generator ACB when the generator absorbs power from the busbar instead of delivering power. This means the prime mover has failed but generator remains connected — it motors (is driven) by the busbar.
+
+WHAT CAUSES REVERSE POWER:
+   Prime mover (diesel engine) fuel supply fails or trips.
+   Engine governor malfunctions and closes fuel — engine slows.
+   Coupling failure between engine and generator.
+   Generator coasts down — busbar drives it as motor.
+
+WHAT HAPPENS IF NO REVERSE POWER PROTECTION:
+   Generator motored by busbar — mechanical damage to engine (injectors, valves, pistons run without combustion — no lubrication from combustion).
+   Engine could be severely damaged.
+   Overloads running generators.
+
+RELAY SETTING: Typically 5-10% of rated generator kW in reverse direction.
+   Time delay: 3-5 seconds — prevents nuisance trip during paralleling transients.
+
+TESTING THE REVERSE POWER RELAY:
+   METHOD 1 — When VCB is racked out (test position): inject simulated reverse power signal (voltage + current at required phase angle for reverse power) into relay input. Verify relay operates at set percentage.
+   METHOD 2 — During shore power transfer: when ship switches from generators to shore power, brief reverse power may flow — relay should operate — note the reading.
+   METHOD 3 — Power relay test set: specialised equipment applies correct voltage and current phasors at required angle to simulate reverse power.
+[/TABLE]

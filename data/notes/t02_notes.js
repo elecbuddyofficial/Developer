@@ -25,8 +25,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
     <button class="anc-btn" onclick="jumpTo('t2-irm')">IRM</button>
     <button class="anc-btn" onclick="jumpTo('t2-bonding')">Tanker Bonding</button>
     <button class="anc-btn" onclick="jumpTo('t2-shaft')">Shaft Earthing</button>
-    <button class="anc-btn" onclick="jumpTo('s-written')">Written Section</button>
-  </div>
+    </div>
 
 <div class="n-h1" id="t2-qa-basics">❓ Surveyor Q&A — HV Basics</div>
 <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What are the advantages and disadvantages of a high voltage system on ships?<br><strong>Ideal Answer:</strong> <em>Advantages:</em> For the same power, higher voltage means lower current — smaller cables (less weight, less cost), lower I²R losses (less heat in cables), smaller generator windings, economical for large power transmission. <em>Disadvantages:</em> More dangerous (higher lethal risk), needs special equipment (VCB, SF6, HV cables, HV motors), needs trained personnel, higher equipment cost, needs step-down transformers for normal use, more complex protection.</div></div>
@@ -334,9 +333,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
     <tr><td>HV IR Test</td><td class="hl">⭐⭐⭐</td><td><span class="n-val">2500V</span>/<span class="n-val">5000V</span> megger to meaningfully stress insulation. Min IR = kV + 1 MΩ.</td></tr>
   </table>
   
-  <!-- ═══ WRITTEN SECTION ═══ -->
-  <div class="n-h1" id="s-written">📝 Written Section</div>
-  <div class="n-info"><div class="icon">📝</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development. It will feature past papers, detailed numerical solutions, and structured answers for this topic.</div></div>
+  <div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development. It will feature past papers, detailed numerical solutions, and structured answers for this topic.</div></div>
 
   <!-- ═══ SURVEYOR Q&A ═══ -->
   <div class="n-h1" id="s-surveyor-qa">🗣️ Surveyor Q&amp;A (Topic 2: High Voltage)</div>

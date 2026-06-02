@@ -1,0 +1,8 @@
+ESB Location — SOLAS II-1/Reg 42
+
+ESB Location — SOLAS II-1/Reg 42
+Emergency Switchboard (ESB) must be located: Above the bulkhead deck, outside machinery spaces, in a position accessible from the open deck.
+Purpose: If fire in engine room, ESB must remain accessible and functional.
+ESB fed from: Emergency generator + transitional source (battery/UPS for 30 minutes during 45-second startup gap).
+Services on ESB: Emergency lighting, fire pump, bilge pump, GMDSS, navigation lights, general alarm, steering gear control, internal communication, fixed fire fighting control.
+────────────────────────────────────────────────────────────

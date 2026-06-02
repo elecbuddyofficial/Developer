@@ -1,0 +1,7 @@
+ACB — Routine Maintenance and Isolation Procedure
+
+ACB — Routine Maintenance and Isolation Procedure
+🔴 EXAM CRITICAL: Kamath, ALL surveyors
+Routine maintenance: Clean arc chutes (remove carbon deposits with dry cloth and compressed air). Check contact erosion — measure wear indicator. Lubricate operating mechanism (manufacturer-specified grease). Test trip coils (secondary injection). Check arc extinction plates alignment.
+Secondary injection test: Inject known AC current into relay secondary coil using test set. Increase until relay trips. Compare with IDMT curve. Tests relay WITHOUT passing real fault current — safe, repeatable.
+ACB isolation procedure: (1) Obtain PTW. (2) Open ACB — visually confirm open. (3) Rack out to isolated position. (4) Apply LOTO on racking handle. (5) Test for dead at ACB terminals BOTH sides. (6) Apply earth clamps to bus side. (7) Post 'Man Working' notice.

@@ -1,0 +1,56 @@
+Includes: Batteries, UPS, Emergency Generator, Sequential Load Restoration
+
+Includes: Batteries, UPS, Emergency Generator, Sequential Load Restoration
+Function 5 | Class 2 ETO | Mumbai & Noida MMD
+Compiled from 2025-2026 Oral Question Bank — All Surveyors Combined
+[TABLE]
+COLOUR CODE LEGEND
+YELLOW = Key Exam Points    GREEN = Memory Aids    ORANGE = Cross Questions    BLUE = Comparison Tables    RED = Safety Critical
+[/TABLE]
+[TABLE]
+MOST ASKED — SWITCHBOARD & CB TOPIC
+ACB construction and arc quenching — how arc is extinguished — Deswal, Kamath, Vishwanathan
+Preferential trip sequence and timings — Sanjib, Deswal, Nair
+Under frequency protection — why and working — Vishwanathan, Kamath
+Reverse power relay — working, purpose, testing — ALL surveyors
+Emergency generator — SOLAS requirements (45 seconds) — ALL surveyors
+Sequential load restoration after blackout — with timings — Anil Deswal specific
+Battery types — lead-acid vs Ni-Cd — Sanjib, Kamath
+GMDSS battery regulation — SOLAS requirement — frequently missed
+UPS working — inverter, rectifier, bypass — Vishwanathan, Nair
+Shore connection — isolation transformer purpose — Kamath, Deswal
+Bus tie breaker — purpose and operation — multiple surveyors
+Group starter panel — what it is, colour coding — Anil Deswal
+[/TABLE]
+[TABLE]
+1. MAIN SWITCHBOARD (MSB) & AIR CIRCUIT BREAKER (ACB)
+[/TABLE]
+[TABLE]
+ACB — Construction and Working
+ACB (Air Circuit Breaker) is the main switching and protection device in the LV switchboard. Rated for full load current and short circuit breaking.
+
+CONSTRUCTION COMPONENTS:
+   1. MAIN CONTACTS: Silver-tungsten alloy — high conductivity, arc-resistant. Carry full load current normally.
+   2. ARC CONTACTS (arcing contacts): Carbon or copper-graphite — make FIRST and break LAST. Take the arc — main contacts are protected from arc damage.
+   3. ARC CHUTES: Insulating ceramic or fibre plates (arc splitter plates) above the contacts. Arc drawn into chutes, split into multiple shorter arcs, cooled and extinguished.
+   4. OPERATING MECHANISM: Spring-charged mechanism — stores energy — releases on trip or close command. Both closing spring and opening spring.
+   5. TRIP COIL (TC): Electromagnet — when energised — releases latch — opens contacts instantly.
+   6. CLOSE COIL (CC): Electromagnet — closes contacts against spring.
+   7. SHUNT TRIP: External trip signal (from protection relays) energises trip coil.
+   8. UNDERVOLTAGE TRIP (UVT / NVC): Opens ACB when control voltage is lost — fail-safe.
+
+HOW ARC IS EXTINGUISHED IN ACB:
+   Step 1: Trip signal received — operating mechanism releases — contacts START to open.
+   Step 2: Main contacts open first. ARC forms between contacts.
+   Step 3: Arc is DRIVEN by magnetic force (from arc current) into the arc chutes.
+   Step 4: In arc chutes: arc is split into many shorter series arcs by splitter plates.
+   Step 5: Each shorter arc has higher voltage drop — total arc voltage exceeds supply voltage.
+   Step 6: Arc cannot be sustained — extinguishes. Circuit is broken.
+   Step 7: Arc chute material absorbs heat. Ionised gases cool and de-ionise.
+
+ACB RATINGS:
+   In (Normal current rating): continuous current the ACB can carry.
+   Ics / Icu (Short circuit breaking capacity): maximum current ACB can interrupt safely.
+   Ue (Rated operational voltage): maximum voltage for operation.
+   Insulation voltage Ui: maximum voltage for insulation (higher than Ue).
+[/TABLE]

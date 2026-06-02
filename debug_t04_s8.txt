@@ -1,0 +1,86 @@
+Emergency Generator — Auto-Start Sequence
+
+Emergency Generator — Auto-Start Sequence
+[TABLE]
+AUTO-START SEQUENCE — Step by Step
+TRIGGER: Main power loss detected by emergency switchboard (ESB) — voltage monitoring relay.
+
+STEP 1: Voltage monitoring relay on ESB detects loss of main supply voltage.
+STEP 2: Signal sent to emergency generator starting system — automatic start initiated.
+STEP 3: Starting motor (battery-powered) cranks emergency engine.
+STEP 4: Engine fires and builds up to rated speed (5-15 seconds typically).
+STEP 5: Voltage builds to rated — frequency stable — checks complete.
+STEP 6: Emergency generator ACB closes automatically — connects to ESB busbars.
+STEP 7: Essential loads supplied — navigation lights, GMDSS, fire detection, bilge, steering.
+TOTAL TIME: Must complete steps 1-7 within 45 seconds (cargo ship) or 30 seconds (passenger ship).
+
+PERIODIC TEST REQUIREMENT:
+   SOLAS: Emergency generator tested monthly — auto-start test.
+   Load test: run under load periodically (classification: typically annually).
+   Battery for starting: tested, electrolyte level checked (lead-acid), specific gravity measured.
+   All automatic starting components verified operational.
+   Log all tests with date, time, results.
+[/TABLE]
+[TABLE]
+EXAMINER QUESTION | IDEAL ANSWER
+What are the SOLAS requirements for emergency generator? | SOLAS Ch II-1 Reg 42/43: Location above bulkhead deck, outside and not sharing boundary with main engine room. Auto-start: 45 seconds (cargo ship), 30 seconds (passenger ship) from main power loss. Fuel: 18 hours (cargo), 36 hours (passenger). Two independent starting methods (battery + one other). Starting batteries dedicated — not used for any other purpose. Supplies: navigation lights, GMDSS, fire detection, emergency bilge pump, watertight doors, emergency lighting, fire pump, steering gear.
+What is a transitional source of power? | Transitional source supplies essential loads for minimum 30 minutes while emergency generator is starting. Battery bank on ESB provides immediate power (no startup delay) — automatically switches on ESB when main power fails. Supplies: navigation lights, GMDSS, steering gear (30 minutes), internal communications, emergency lighting. Ensures no gap in essential services during the 45-second period before emergency generator comes online. Batteries charged from main switchboard during normal operation and from emergency generator when running.
+How often must the emergency generator be tested? | Monthly: auto-start test — simulate main power loss — verify generator starts and supplies ESB within 45 seconds. Verify auto-start sequence works correctly. Check battery voltage and electrolyte. Annual: load test — run emergency generator under full load for extended period. Test all connected essential loads. Classification survey: functional test in presence of surveyor. All tests logged with date, time, result, and any defects found. Defects must be rectified immediately — emergency generator is critical safety system.
+[/TABLE]
+[TABLE]
+5. SEQUENTIAL LOAD RESTORATION AFTER BLACKOUT
+[/TABLE]
+[TABLE]
+SEQUENTIAL LOAD RESTORATION — Anil Deswal Specifically Asks This
+After a blackout is restored, loads must be reconnected in a CONTROLLED SEQUENCE with time delays between each step. Connecting all loads simultaneously would overload the first generator to come online.
+
+WHY SEQUENTIAL RESTORATION?
+   Each motor has a starting current of 5-8x rated. If all start simultaneously: total starting current far exceeds generator capacity → generator trips → another blackout.
+   Sequential start with time delays allows each motor to run up before next is started — total current stays within generator capacity.
+
+BLACKOUT RESTORATION SEQUENCE (typical — exact sequence per SMS):
+   T=0: Blackout occurs. Emergency generator starts automatically.
+   T=0 to T=45 sec: Emergency generator online — essential loads only (nav lights, GMDSS, fire detection, bilge, emergency lighting).
+   T=45 sec to T=2 min: Start main generator 1. Build voltage. Verify stable.
+   T=2 min: Close main generator 1 ACB. Transfer loads from ESB to MSB.
+   T=2-3 min: Start auxiliary systems Group 1 — SEA WATER COOLING PUMP (highest priority — prevents overheating immediately).
+   T=3-4 min: LUBRICATING OIL PUMP (for main engine — prepares for restart).
+   T=4-5 min: FUEL OIL CIRCULATING PUMP + SEPARATOR/PURIFIER.
+   T=5-6 min: AUXILIARY BOILER (if needed — for steam services).
+   T=6-7 min: FRESH WATER GENERATOR (non-critical, can wait).
+   T=7-8 min: COMPRESSED AIR — MAIN AIR COMPRESSOR.
+   T=8-10 min: ACCOMMODATION — HVAC (large load, wait until generation stable).
+   T=10-15 min: GALLEY — non-essential deck equipment.
+   T=15-20 min: Start main engine after all ancillaries confirmed running.
+
+TIME DELAYS BETWEEN EACH STEP: Minimum 30 seconds to 2 minutes.
+   Allows motor starting transient to settle before next motor starts.
+   Specific timings depend on generator capacity and ship SMS procedure.
+
+PMS ROLE IN SEQUENTIAL RESTORATION:
+   Modern ships with PMS (Power Management System): PMS automatically controls sequential restoration.
+   PMS monitors load and automatically starts next generator before overload.
+   Auto-start and load-shedding integrated with sequential restoration logic.
+[/TABLE]
+[TABLE]
+EXAMINER QUESTION | IDEAL ANSWER
+Why is sequential load restoration needed after a blackout? | All motors have starting current 5-8 times rated. If all loads reconnected simultaneously: combined starting current overwhelms first generator online — generator trips — causes another blackout. Sequential restoration: start loads one by one with time delays (30 sec to 2 min between each). Each motor run-up completes before next starts — current stays within generator capacity. Priority order: cooling pumps first (prevent overheating), then lubrication, fuel, boiler, compressed air, then non-essential loads last.
+What is the priority order for load restoration after blackout? | 1. Emergency generator auto-starts — nav lights, GMDSS, fire detection, bilge, emergency lighting (0-45 sec). 2. Start main generator, close ACB, transfer to MSB. 3. Seawater cooling pump (prevent overheating immediately). 4. Lubricating oil pump (prepare engine). 5. Fuel oil circulating pump and separator. 6. Auxiliary boiler (steam services). 7. Fresh water generator. 8. Compressed air. 9. HVAC (large load — wait for stable generation). 10. Galley and non-essential equipment last. Main engine started only after all ancillaries confirmed running.
+[/TABLE]
+[TABLE]
+6. BATTERIES — TYPES, TESTING & GMDSS REQUIREMENTS
+[/TABLE]
+[TABLE]
+FEATURE | LEAD-ACID BATTERY | NICKEL-CADMIUM (Ni-Cd) BATTERY
+Chemistry | Lead plates in sulphuric acid electrolyte | Nickel oxyhydroxide + cadmium in potassium hydroxide
+Nominal cell voltage | 2.0V per cell | 1.2V per cell
+Energy density | Lower — heavier for same capacity | Higher — lighter for same capacity
+Temperature performance | Reduced capacity in cold — poor below -20 deg C | Excellent cold performance — used in arctic conditions
+Overcharge tolerance | Poor — damages plates, gassing, electrolyte loss | Good — tolerates overcharge better
+Maintenance | Electrolyte level check (distilled water top-up), specific gravity, terminal cleaning | Simpler — electrolyte rarely needs attention
+Life | 3-7 years (float service) | 10-20 years (float service)
+Self-discharge | High — loses charge when not used | Low — holds charge well
+Memory effect | None | Some — partial discharge cycles reduce capacity
+Cost | Low — cheap | High — expensive
+Typical ship use | Emergency generator starting, general UPS, GMDSS backup | Critical safety systems, GMDSS (preferred), emergency lighting, low temperature areas
+[/TABLE]

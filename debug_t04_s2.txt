@@ -1,0 +1,18 @@
+ACB Positions — Service, Test, Isolated
+
+ACB Positions — Service, Test, Isolated
+[TABLE]
+POSITION | POWER CONTACTS | CONTROL CIRCUITS | USE
+SERVICE (plugged in) | Connected to busbars | Connected | Normal operation — carries load
+TEST (racked out halfway) | Disconnected from busbars | Still connected | Relay testing without energising power circuit
+ISOLATED (fully withdrawn) | Disconnected | Disconnected | Full maintenance — no connection to switchboard
+[/TABLE]
+[TABLE]
+EXAMINER QUESTION | IDEAL ANSWER
+How does an ACB extinguish the arc when opening? | When contacts open, arc forms. Magnetic force from arc current drives arc into arc chutes. Arc chutes have insulating splitter plates that divide arc into multiple shorter series arcs. Each shorter arc has higher voltage drop — total arc voltage exceeds supply voltage — arc cannot sustain — extinguishes. Arc contacts (arcing contacts) open last after main contacts — they take the arc damage, protecting main contacts. Arc chute material absorbs and dissipates heat. The entire process takes milliseconds.
+What is the difference between ACB service and test position? | SERVICE position: ACB fully plugged into switchboard — power contacts connected to busbars — control circuits connected — carries load current. TEST position: ACB racked back halfway — power contacts DISCONNECTED from busbars (no HV/LV supply to breaker) — control circuits REMAIN connected — allows protection relay injection testing without energising power circuit. ISOLATED position: ACB fully withdrawn — both power and control circuits disconnected — for full maintenance work.
+What is the NVC (No Volt Coil) / UVT on an ACB? | NVC (No Voltage Coil) / UVT (Under-Voltage Trip) is a continuous-duty coil in the ACB operating mechanism. It holds the ACB closed while control voltage is present. If control voltage is lost: coil de-energises → latch releases → ACB trips open automatically. Purpose: fail-safe — if control power fails during operation, ACB opens safely. Also prevents ACB re-closing after blackout restoration (operator must manually reclose — prevents uncontrolled automatic restart).
+[/TABLE]
+[TABLE]
+2. PROTECTION RELAYS — OCR, REVERSE POWER, UNDER-FREQUENCY
+[/TABLE]

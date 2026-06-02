@@ -1,0 +1,10 @@
+HRC Fuse Types — Full Detail
+
+HRC Fuse Types — Full Detail
+🔴 EXAM CRITICAL: Deswal, Sanjib — difference between fuse types
+1. Rewirable (Kit-Kat) fuse: Rating unknown (depends on wire gauge used). NOT safe for high fault current. Cheapest, least reliable. Replaced by inserting new wire element.
+2. Cartridge fuse: Rating known (printed on body). NOT safe for high fault current. Reliable rating but may not clear high fault safely.
+3. HRC (High Rupturing Capacity) fuse: MOST IMPORTANT. Rating stamped on end cap. Blows in 0.25–3 cycles. SAFE for high fault current.
+HRC internals: Ceramic or glass body, silver fuse element (calibrated cross-section), silica sand filler (quenches arc), riveted brass end caps.
+HRC advantage: Current limiting (arc extinguishes before current reaches peak), no arc flash, accurate and repeatable operation.
+Used for: MSB feeder protection, motor feeder protection, HV system protection.

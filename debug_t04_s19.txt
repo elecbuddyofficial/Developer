@@ -1,0 +1,7 @@
+Dielectric Strength — Breaker Types
+
+Dielectric Strength — Breaker Types
+ACB (Air Circuit Breaker): ~2–3 kV/mm. Uses air blast for arc extinction. Rated up to ~15kV.
+MCCB (Moulded Case): Similar to ACB. 400V–1600V rated. Arc extinction by de-ion plates.
+VCB (Vacuum Circuit Breaker): ~8–10 kV/mm. Vacuum is excellent insulator. Fast arc extinction. Used for 3.3kV–33kV systems onboard.
+SF6 Circuit Breaker: ~2.5× air per atmosphere of pressure. At 4 bar: ~89 kV/mm effective. Used in HV switchgear >11kV.

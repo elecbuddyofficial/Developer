@@ -1,0 +1,7 @@
+Differential Relay — What It Is and vs Fuse
+
+Differential Relay — What It Is and vs Fuse
+Differential relay: Compares current flowing IN versus current flowing OUT of a protected zone (transformer, generator, busbar section).
+If IN ≠ OUT → fault inside the zone → relay trips. Even small fault currents can be detected — VERY sensitive.
+Used for: Large generators, large transformers, main busbar sections.
+vs Fuse: Fuse only protects against overcurrent. Differential relay detects internal faults (earth fault, winding fault) even with small fault current that wouldn't blow a fuse.

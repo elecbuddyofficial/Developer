@@ -1,0 +1,12 @@
+Fire Detector — Short Circuit vs Open Circuit vs Fire Alarm
+
+Fire Detector — Short Circuit vs Open Circuit vs Fire Alarm
+🔴 EXAM CRITICAL: "How does fire panel differentiate SC from OC from actual fire?"
+Fire detection loop uses EOL (End Of Line) resistor — creates known normal circuit resistance/current
+NORMAL: Fixed current flows through EOL resistor → panel reads HEALTHY
+FIRE/ALARM: Detector activates → current changes (increase or decrease per detector design) → panel reads FIRE ALARM
+OPEN CIRCUIT fault: Wire break → no current flows → panel reads FAULT (OC) — distinct from fire alarm
+SHORT CIRCUIT fault: Wire-to-wire short → current bypasses EOL → different current level → panel reads SC FAULT
+Result: Three distinct current levels → three distinct panel states: NORMAL / FIRE ALARM / FAULT
+Addressable systems: Each detector has unique address, sends digital ID → exact location identified immediately
+SOLAS requirement: Fire detection system must give "fault" alarm distinct from "fire" alarm when circuit breaks

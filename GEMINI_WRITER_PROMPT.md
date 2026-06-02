@@ -47,16 +47,33 @@ window.loadNotes("T07", `...HTML content here...`);
 - The outer HTML always starts with `<div class="view" id="view-notes-t07">` and ends with `</div></div>`
 
 ### 4. TOPICS array entry format — locked
-When adding a new topic to `app/index.html`, use exactly this structure:
+When adding a new topic to `app/index.html`, use exactly this structure — no more, no less:
 ```js
 {id:'T07', key:'T07_Control_PLC', name:'Control Systems & PLC', icon:'🖥️', notesView:'notes-t07', notesReady:true},
 ```
-Do not add extra fields, rename fields, or change the format.
+The only permitted fields are: `id`, `key`, `name`, `icon`, `notesView`, `notesReady`.
+**Do not add any extra fields** (`totalQ`, `questionCount`, `progress`, `status`, or anything else).
+If a new feature needs extra data per topic, discuss with Claude first — it requires changes to the agent pipeline too.
 
 ### 5. Watcher pipeline — do not disable or reroute
 The watcher (`watcher_agent.py`) runs automatically when notes files are saved. Do not add code that bypasses it, replaces it, or writes notes content directly into index.html.
 
-### 6. CSS class system — locked
+### 7. Oral and Written sections are COMPLETELY SEPARATE — never mix them
+
+**Each oral topic notes file (`data/notes/tXX_notes.js`) contains ORAL content ONLY.**
+
+Do NOT add any of the following inside an oral topic notes file:
+- A "Written Section" block, heading, or placeholder
+- Any `id="s-written"` element
+- Any anchor button pointing to `jumpTo('s-written')`
+- Any reference to "past papers", "numerical solutions", or "written exam" content
+- Any "Coming Soon" block for written material
+
+Written content belongs in the Written Section of the app — a completely separate section that does not exist yet and will be built independently. Oral topic files cover oral exam content ONLY.
+
+**If you are tempted to add a written placeholder to an oral topic file — don't. Leave it out entirely.**
+
+### 8. CSS class system — locked
 The CSS classes defined in index.html (`n-h1`, `n-h2`, `n-crit`, `n-warn`, `n-info`, `n-ok`, `n-formula`, `n-table`, `n-grid`, `n-card`, `n-steps`, `n-list`, `n-val`) are finalised. Do not rename, remove, or add new content classes. You may propose new UI/navigation classes in index.html only.
 
 ---
