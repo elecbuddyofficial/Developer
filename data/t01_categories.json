@@ -1,0 +1,18 @@
+{
+  "WP": "Working Principle",
+  "EX": "Excitation Systems",
+  "BL": "Brushless Alternator",
+  "AVR": "AVR & Voltage Regulation",
+  "RM": "Residual Magnetism & Flashing",
+  "SY": "Synchroscope & Synchronisation",
+  "LS": "Parallel Operation & Load Sharing",
+  "PR": "Protection & Safeties",
+  "MT": "Maintenance & IR Testing",
+  "AG": "Air Gap",
+  "OS": "Overspeed Trip",
+  "BT": "Blackout Test",
+  "SOL": "SOLAS & Regulations",
+  "FT": "Faults & Troubleshooting",
+  "SR": "Slip Rings & Brushes",
+  "EM": "Emergency Generator"
+}

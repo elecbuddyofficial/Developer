@@ -1,0 +1,25 @@
+window.loadNotes("T02", `<div class="view" id="view-notes-t02">
+<div class="note-doc">
+  <div style="margin-bottom:16px"><button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button></div>
+  <div class="note-title">
+    <h1>Topic 2 — High Voltage Systems</h1>
+    <div class="sub">ETO MMD Oral Examination · Function 5 · Class 2 · Mumbai &amp; Noida</div>
+    <div class="tags">
+      <span class="tag tag-blue">🔴 Exam Critical</span>
+      <span class="tag tag-orange"><span class="n-val">6.6kV</span> / <span class="n-val">11kV</span></span>
+      <span class="tag tag-purple">VCB · NER · IRM</span>
+    </div>
+  </div>
+  <div class="note-anchors">
+    <span>Jump to section</span>
+    <button class="anc-btn" onclick="jumpTo('t2-basics')">HV Basics</button>
+    <button class="anc-btn" onclick="jumpTo('t2-multiples')">Why <span class="n-val">1.1kV</span>?</button>
+    <button class="anc-btn" onclick="jumpTo('t2-ner')">NER</button>
+    <button class="anc-btn" onclick="jumpTo('t2-vcb')">VCB &amp; SF6</button>
+    <button class="anc-btn" onclick="jumpTo('t2-deadfront')">Dead Front &amp; MSB</button>
+    <button class="anc-btn" onclick="jumpTo('t2-arc')">Arc Flash</button>
+    <button class="anc-btn" onclick="jumpTo('t2-safety')">HV Working</button>
+    <button class="anc-btn" onclick="jumpTo('t2-gloves')">HV Gloves</button>
+    <button class="anc-btn" onclick="jumpTo('t2-vcb-maint')">VCB Maint.</button>
+    <button class="anc-btn" onclick="jumpTo('t2-ir')">HV IR Test</button>
+    <button class="anc-btn" onclick="ju

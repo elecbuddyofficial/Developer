@@ -1,0 +1,838 @@
+[
+  {
+    "q": "What is the fundamental principle on which an alternator works?",
+    "a": "Electromagnetic induction (Faraday's Law)",
+    "opts": [
+      "Mutual inductance",
+      "Electromagnetic induction (Faraday's Law)",
+      "Lenz's Law",
+      "Fleming's right hand rule"
+    ],
+    "exp": "Faraday's Law: EMF is induced in a conductor when there is a relative change in magnetic flux. In an alternator, the rotating DC-excited rotor field cuts the stator conductors, inducing AC EMF."
+  },
+  {
+    "q": "In a marine alternator, which part rotates and which is stationary?",
+    "a": "Rotor carries DC field winding (rotates); stator carries AC output winding (stationary)",
+    "opts": [
+      "Both rotor and stator rotate",
+      "Stator carries field winding; rotor carries output winding",
+      "Rotor carries DC field winding (rotates); stator carries AC output winding (stationary)",
+      "Both are stationary and EMF is induced by flux changes"
+    ],
+    "exp": "The rotor field (DC-excited) rotates driven by the prime mover. The stator winding is fixed and has AC induced in it. Output is taken from the stationary stator — no brushes on output side."
+  },
+  {
+    "q": "Why is an alternator rated in kVA and not kW?",
+    "a": "Winding heating depends on current (kVA), which is independent of load power factor",
+    "opts": [
+      "kVA is a larger number making the rating look impressive",
+      "Because alternators cannot supply real power",
+      "Winding heating depends on current (kVA), which is independent of load power factor",
+      "kW rating only applies to DC machines"
+    ],
+    "exp": "Winding copper losses (I²R heating) depend only on current magnitude, regardless of whether the load is resistive or reactive. Since kVA = V × I, and heating is determined by I, the alternator is rated in kVA — it doesn't know the power factor of the load."
+  },
+  {
+    "q": "What determines the output frequency of a marine alternator?",
+    "a": "f = (N × P) / 120, where N = RPM and P = number of poles",
+    "opts": [
+      "Only the excitation voltage",
+      "Only the load connected to it",
+      "f = (N × P) / 120, where N = RPM and P = number of poles",
+      "The AVR setting"
+    ],
+    "exp": "Frequency is set by mechanical speed and pole pairs. For 60 Hz at 4 poles: N = 1800 RPM. For 50 Hz at 4 poles: N = 1500 RPM. This is why governor control maintains constant frequency."
+  },
+  {
+    "q": "In a separately excited alternator, where does the field excitation come from?",
+    "a": "External DC source supplied via slip rings",
+    "opts": [
+      "The alternator supplies its own field via rectifier",
+      "External DC source supplied via slip rings",
+      "The permanent magnets on the rotor",
+      "A battery bank connected permanently"
+    ],
+    "exp": "Separately excited means DC field current is supplied from an external source (battery, rectifier) through slip rings. Problem: requires slip rings and brushes, causing maintenance issues in marine environments."
+  },
+  {
+    "q": "In a self-excited shunt alternator, what provides the initial excitation?",
+    "a": "Residual magnetism in the rotor core",
+    "opts": [
+      "A separate battery charger",
+      "The PMG unit",
+      "Residual magnetism in the rotor core",
+      "Shore supply rectifier"
+    ],
+    "exp": "Residual magnetism induces a small initial voltage → this feeds back to field winding → field builds up → voltage builds up. This 'bootstrap' process builds voltage from zero. If residual magnetism is lost, flashing is needed."
+  },
+  {
+    "q": "What are the THREE machines mounted on the same shaft in a brushless alternator system?",
+    "a": "PMG (Permanent Magnet Generator), Main Exciter, Main Alternator",
+    "opts": [
+      "AVR, Exciter, Main Alternator",
+      "PMG (Permanent Magnet Generator), Main Exciter, Main Alternator",
+      "Transformer, Rectifier, Generator",
+      "Governor, Exciter, Alternator"
+    ],
+    "exp": "All three rotate together on one shaft: (1) PMG — provides stable AC to feed AVR. (2) Main Exciter — stator is fed by AVR, rotor generates 3-phase AC. (3) Main Alternator — rotor field carries DC (from rotating rectifiers), stator gives 3-phase output."
+  },
+  {
+    "q": "What is the function of the PMG (Permanent Magnet Generator) in a brushless system?",
+    "a": "Provides independent, stable AC power supply to the AVR",
+    "opts": [
+      "Directly excites the main alternator field",
+      "Provides independent, stable AC power supply to the AVR",
+      "Acts as backup generator during blackout",
+      "Controls the speed of the prime mover"
+    ],
+    "exp": "PMG uses permanent magnets, so its output is unaffected by main alternator voltage changes. It provides a clean, stable supply to the AVR. This means the AVR functions correctly even when the main alternator is in fault condition."
+  },
+  {
+    "q": "Why is the brushless alternator called 'brushless'?",
+    "a": "No brushes or slip rings are needed to transfer current from stationary to rotating parts",
+    "opts": [
+      "It uses fewer windings than conventional alternators",
+      "No brushes or slip rings are needed to transfer current from stationary to rotating parts",
+      "The stator does not use carbon brush contacts",
+      "It eliminates the need for a commutator"
+    ],
+    "exp": "In a brushless design, the exciter field is on the stator (stationary), exciter armature is on the rotor. Rotating rectifiers on the shaft convert AC to DC without needing physical contact (no brushes/slip rings). DC goes directly to main field winding on the shaft."
+  },
+  {
+    "q": "What is the path of excitation current in a brushless alternator (correct sequence)?",
+    "a": "PMG → AVR → Exciter field stator → Exciter rotor AC → Rotating diodes → Main field rotor → Main stator output",
+    "opts": [
+      "AVR → PMG → Rotating diodes → Main field",
+      "Battery → Slip rings → Field winding → Output",
+      "PMG → AVR → Exciter field stator → Exciter rotor AC → Rotating diodes → Main field rotor → Main stator output",
+      "Governor → AVR → Stator → Rotor → Output"
+    ],
+    "exp": "This is the complete brushless excitation chain. PMG generates AC → AVR rectifies and controls → DC fed to exciter stator field → exciter rotor generates 3-phase AC → rotating rectifier diodes convert to DC → DC field on main rotor → main stator cuts field → 3-phase output."
+  },
+  {
+    "q": "Where are the rotating rectifier diodes physically located in a brushless alternator?",
+    "a": "Mounted on the rotor shaft between the exciter armature and main field winding",
+    "opts": [
+      "Inside the AVR control panel",
+      "On the stator frame near ventilation openings",
+      "Mounted on the rotor shaft between the exciter armature and main field winding",
+      "In a separate rectifier cabinet next to the alternator"
+    ],
+    "exp": "Rotating rectifiers are a diode wheel mounted directly on the rotating shaft. They spin with the shaft, converting the exciter's 3-phase AC output to DC. Being on the shaft eliminates the need for slip rings — the DC stays within the rotating assembly."
+  },
+  {
+    "q": "What happens if ONE rotating rectifier diode goes OPEN CIRCUIT while the alternator is running?",
+    "a": "Output voltage drops 15–20% with fluctuation; unbalanced excitation causes ripple",
+    "opts": [
+      "Complete loss of voltage — machine trips immediately",
+      "Output voltage drops 15–20% with fluctuation; unbalanced excitation causes ripple",
+      "No effect — remaining diodes compensate fully",
+      "Frequency drops proportionally to voltage drop"
+    ],
+    "exp": "With one open diode, one phase of the 3-phase exciter output is not rectified. The remaining diodes handle only partial DC. Result: DC ripple in field current → pulsating output voltage. Stroboscope check can detect discoloured/pitted diodes while running."
+  },
+  {
+    "q": "What happens if ONE rotating rectifier diode goes SHORT CIRCUIT while running?",
+    "a": "AC component appears in field current causing severe voltage fluctuation and field overheating",
+    "opts": [
+      "Minor voltage fluctuation, self-corrects within minutes",
+      "Generator shuts down automatically via thermal protection",
+      "AC component appears in field current causing severe voltage fluctuation and field overheating",
+      "Output becomes DC instead of AC"
+    ],
+    "exp": "A shorted diode creates a reverse current path — AC flows through the short, superimposing on the DC field. This causes both severe output voltage fluctuation and dangerous heating in the field winding. Immediate action needed: shut down and inspect."
+  },
+  {
+    "q": "How do you detect a faulty rotating diode while the alternator is running?",
+    "a": "Using a stroboscope — check for discoloured, pitted or cracked diodes; also check for unbalanced output voltage",
+    "opts": [
+      "Remove the diode cover and inspect with a torch",
+      "Using a multimeter on the AC output terminals",
+      "Using a stroboscope — check for discoloured, pitted or cracked diodes; also check for unbalanced output voltage",
+      "Inject test voltage through the slip rings"
+    ],
+    "exp": "A stroboscope freezes the apparent rotation of the diode wheel, allowing visual inspection while running. Faulty diodes show discolouration or pitting. Electrical symptoms: ripple on output voltage, unbalanced 3-phase voltage. Confirm by shutdown and diode test."
+  },
+  {
+    "q": "What is the primary function of the AVR (Automatic Voltage Regulator)?",
+    "a": "Automatically maintains alternator terminal voltage at set value by adjusting excitation current",
+    "opts": [
+      "Controls the speed of the prime mover",
+      "Automatically maintains alternator terminal voltage at set value by adjusting excitation current",
+      "Protects the alternator from short circuit",
+      "Monitors and logs alternator performance data"
+    ],
+    "exp": "AVR continuously senses output voltage, compares it to the setpoint, and adjusts field current via thyristors/transistors to keep voltage constant. If voltage drops (more load added), AVR increases field current. If voltage rises (load removed), it reduces field current."
+  },
+  {
+    "q": "According to SOLAS, what is the steady-state voltage regulation requirement for marine alternators?",
+    "a": "Within ±2.5% of rated voltage from no-load to full-load",
+    "opts": [
+      "Within ±5% of rated voltage",
+      "Within ±1% of rated voltage",
+      "Within ±2.5% of rated voltage from no-load to full-load",
+      "Within ±10% during any transient condition"
+    ],
+    "exp": "SOLAS Ch. II-1/Reg 40.3: Steady-state voltage must be maintained within ±2.5% of rated voltage under any load condition from no-load to full-load. Transient deviation must not exceed ±10% before recovering to ±2.5%."
+  },
+  {
+    "q": "What is the maximum transient voltage excursion allowed by SOLAS during sudden load changes?",
+    "a": "±10% of rated voltage, recovering within required time",
+    "opts": [
+      "±2.5% — same as steady state",
+      "±5% maximum",
+      "±10% of rated voltage, recovering within required time",
+      "±15% is acceptable for heavy loads"
+    ],
+    "exp": "SOLAS allows up to ±10% transient excursion on sudden load pickup or shedding — this accounts for the AVR response time. The voltage must then recover to within ±2.5% steady-state band. This is tested during load acceptance trials."
+  },
+  {
+    "q": "Why must the AVR be DISCONNECTED before performing a megger (IR) test on the alternator?",
+    "a": "Megger voltage (500–1000V DC) can permanently damage AVR semiconductors (thyristors, transistors, capacitors)",
+    "opts": [
+      "To prevent the AVR from showing false readings on the display",
+      "Megger voltage (500–1000V DC) can permanently damage AVR semiconductors (thyristors, transistors, capacitors)",
+      "To allow manual field control during testing",
+      "AVR will reverse the polarity of megger readings"
+    ],
+    "exp": "The megger applies 500–1000V DC to the winding. AVR contains sensitive solid-state components rated for much lower voltages. Also, the AVR may back-feed current into the winding, giving a false (higher) IR reading. Always disconnect and short AVR terminals before meggering."
+  },
+  {
+    "q": "What is the 'Voltage Adjust' trimmer in an AVR used for?",
+    "a": "Sets the output voltage setpoint (e.g., 440V) of the alternator",
+    "opts": [
+      "Sets the maximum current limit",
+      "Sets the output voltage setpoint (e.g., 440V) of the alternator",
+      "Controls the frequency trim",
+      "Adjusts the reactive load sharing between parallel generators"
+    ],
+    "exp": "The voltage adjust trimmer sets the reference setpoint that AVR tries to maintain. Turning it up → field current increases → terminal voltage rises. This is adjusted during commissioning to set exactly 440V (or 6600V on HV ships)."
+  },
+  {
+    "q": "What is the 'Droop' trimmer in the AVR used for?",
+    "a": "Sets the reactive power (kVAR) sharing between generators running in parallel",
+    "opts": [
+      "Reduces output voltage gradually under heavy load for safety",
+      "Sets the reactive power (kVAR) sharing between generators running in parallel",
+      "Adjusts governor response speed",
+      "Controls frequency droop for kW sharing"
+    ],
+    "exp": "AVR droop causes the terminal voltage to slightly decrease as reactive (kVAR) load increases. When two machines are in parallel, this ensures equal kVAR sharing. Without droop, one AVR 'wins' and supplies all reactive current — other machine runs at near unity PF or capacitive."
+  },
+  {
+    "q": "What is residual magnetism in an alternator?",
+    "a": "Small amount of magnetic flux retained in rotor core material even when field current is zero",
+    "opts": [
+      "The permanent magnetic field used in synchronous operation",
+      "Small amount of magnetic flux retained in rotor core material even when field current is zero",
+      "Static charge on stator windings after shutdown",
+      "The minimum field current required to start voltage buildup"
+    ],
+    "exp": "Rotor core material retains some magnetism after the field current is removed. This residual flux induces a small initial voltage during run-up. The self-excited alternator uses this to bootstrap its own voltage. If lost (e.g., by a large external discharge), flashing is needed."
+  },
+  {
+    "q": "An alternator runs at rated RPM but shows zero voltage on the voltmeter. What are the possible causes?",
+    "a": "Residual magnetism lost, AVR fault, rotating diode failure, PMG fault, open circuit field winding, or voltmeter fault",
+    "opts": [
+      "Only the governor has failed",
+      "Residual magnetism lost, AVR fault, rotating diode failure, PMG fault, open circuit field winding, or voltmeter fault",
+      "Always means the stator winding is burnt",
+      "Caused by wrong phase rotation only"
+    ],
+    "exp": "Systematic check: (1) Is voltmeter accurate? (2) Residual magnetism — try flashing. (3) Check AVR supply and function. (4) Check PMG output. (5) Check rotating diodes. (6) Measure field winding resistance. Multiple causes — systematic elimination is key."
+  },
+  {
+    "q": "What is the procedure for FLASHING an alternator?",
+    "a": "Bring to rated speed; connect 12–24V battery briefly (2–3 sec) to exciter field with correct polarity; check voltage builds",
+    "opts": [
+      "Apply 415V AC from shore supply to the stator terminals",
+      "Bring to rated speed; connect 12–24V battery briefly (2–3 sec) to exciter field with correct polarity; check voltage builds",
+      "Use megger at 500V to restore magnetism in rotor core",
+      "Short circuit the AVR output terminals for 5 seconds"
+    ],
+    "exp": "Flashing uses a DC battery to restore the residual magnetism in the rotor. CRITICAL: correct polarity must be maintained. Reverse polarity will destroy the residual magnetism further. Connect only 2–3 seconds — longer connection risks winding damage. Check voltage builds up as soon as battery is disconnected."
+  },
+  {
+    "q": "What is the main risk during a flashing operation?",
+    "a": "Wrong polarity destroys residual magnetism; battery sparking can ignite flammable gases",
+    "opts": [
+      "Overvoltage in the stator winding",
+      "Wrong polarity destroys residual magnetism; battery sparking can ignite flammable gases",
+      "AVR permanent damage from battery voltage",
+      "Voltmeter burning out from sudden voltage surge"
+    ],
+    "exp": "Risk 1: Reversed polarity → residual magnetism is demagnetised further → harder to restore. Risk 2: Battery spark at connection/disconnection. A fire extinguisher must be nearby. Also ensure all personnel are clear of rotating parts before starting."
+  },
+  {
+    "q": "How do you ensure an alternator is electrically safe (dead) when residual magnetism may still be present?",
+    "a": "Measure terminal voltage with an approved voltmeter before working — do not assume dead just because ACB is open",
+    "opts": [
+      "If ACB is open, machine is always dead — no further check needed",
+      "Only use it if it's been switched off for over 30 minutes",
+      "Measure terminal voltage with an approved voltmeter before working — do not assume dead just because ACB is open",
+      "Remove all three phases from the busbar simultaneously"
+    ],
+    "exp": "Residual magnetism means a small voltage IS present at stator terminals even with ACB open and no field current. This can cause shock. Always verify with a voltmeter before working on stator terminals. Earth the machine if necessary for complete safety."
+  },
+  {
+    "q": "What does a synchroscope indicate?",
+    "a": "Speed difference and phase angle difference between incoming generator and the running busbar",
+    "opts": [
+      "Only the voltage difference between two generators",
+      "The total load on the busbar",
+      "Speed difference and phase angle difference between incoming generator and the running busbar",
+      "The power factor of the incoming generator"
+    ],
+    "exp": "Synchroscope is a phase-difference measuring instrument. It shows: (1) CW rotation = incoming machine too fast. (2) CCW rotation = too slow. (3) Pointer position = phase angle between incoming and busbar. Close ACB when pointer at 12 o'clock approaching slowly CW."
+  },
+  {
+    "q": "Describe the construction of a synchroscope.",
+    "a": "Small induction motor: stator connected to busbar, rotor connected to incoming generator, pointer mounted on rotor shaft",
+    "opts": [
+      "An electronic digital phase meter",
+      "A galvanometer measuring voltage difference",
+      "Small induction motor: stator connected to busbar, rotor connected to incoming generator, pointer mounted on rotor shaft",
+      "A current transformer connected across two generators"
+    ],
+    "exp": "Synchroscope stator creates rotating magnetic field from busbar supply. Incoming generator supply feeds the rotor. Relative speed/phase difference makes rotor (and pointer) spin. At synchronism, rotor field and stator field lock → pointer stops at 12 o'clock."
+  },
+  {
+    "q": "When should the ACB be closed during synchronisation using a synchroscope?",
+    "a": "When pointer is at 12 o'clock (in phase) and approaching from slightly before 12 (CW — just fast)",
+    "opts": [
+      "When pointer is at 6 o'clock for safety margin",
+      "When pointer stops moving completely",
+      "When pointer is at 12 o'clock (in phase) and approaching from slightly before 12 (CW — just fast)",
+      "When pointer is at 3 o'clock position"
+    ],
+    "exp": "Close ACB just BEFORE the pointer reaches 12, while it moves slowly CW. This ensures the incoming generator takes load immediately (rather than motoring). If closed exactly at 12 but slightly slow (CCW), the machine will briefly motor before taking load."
+  },
+  {
+    "q": "What happens if the ACB is closed when the synchroscope pointer is at 6 o'clock (180° out of phase)?",
+    "a": "CATASTROPHIC — massive circulating current, severe mechanical shock to coupling, possible alternator winding burnout",
+    "opts": [
+      "The generator safely comes up to speed on the busbar",
+      "A minor overcurrent trip occurs",
+      "CATASTROPHIC — massive circulating current, severe mechanical shock to coupling, possible alternator winding burnout",
+      "The reverse power relay trips the circuit safely"
+    ],
+    "exp": "180° out of phase means two generators are directly opposing each other. The effective voltage causing circulating current = 2 × Vline ≈ 880V across internal impedances. Current is extremely high — enough to instantly burn windings and cause severe mechanical shock to shafts and couplings."
+  },
+  {
+    "q": "What happens if the incoming generator is running FASTER than the busbar (synchroscope rotating CW)?",
+    "a": "On closing ACB, incoming generator takes a heavy sudden load — high current surge, may trip on overcurrent",
+    "opts": [
+      "Generator immediately synchronises perfectly",
+      "On closing ACB, incoming generator takes a heavy sudden load — high current surge, may trip on overcurrent",
+      "Reverse power relay trips the incoming machine",
+      "Frequency of the busbar increases to match"
+    ],
+    "exp": "Too fast = incoming is ahead in phase. When ACB closes, the incoming generator tries to 'push' current into the busbar. It immediately takes a heavy load surge. If too fast, the surge current may trip OCR. This is why speed should be just slightly fast — not excessively so."
+  },
+  {
+    "q": "What happens if the incoming generator is running SLOWER than the busbar (synchroscope rotating CCW)?",
+    "a": "On closing ACB, the busbar motors the incoming generator — reverse power relay trips it",
+    "opts": [
+      "Nothing — generator continues at lower speed",
+      "The governor automatically speeds up",
+      "On closing ACB, the busbar motors the incoming generator — reverse power relay trips it",
+      "The busbar frequency drops to match"
+    ],
+    "exp": "Too slow = incoming is behind in phase. When ACB closes, the running generator (busbar side) back-feeds power into the incoming generator, which runs as a motor. Reverse power relay detects this backward power flow and trips the ACB."
+  },
+  {
+    "q": "The synchroscope is faulty. How will you parallel the alternator?",
+    "a": "Dark lamp method: connect 3 lamps between corresponding phases; close ACB when ALL THREE lamps are simultaneously dark",
+    "opts": [
+      "Estimate by ear — match engine speed to busbar frequency",
+      "Use voltmeter across ACB contacts; close when voltage difference is minimum",
+      "Dark lamp method: connect 3 lamps between corresponding phases; close ACB when ALL THREE lamps are simultaneously dark",
+      "Wait for superintendent to arrive with portable synchroscope"
+    ],
+    "exp": "Dark lamp: lamps glow when phases are out of sync, dim to darkness when in phase. Close when ALL three dark simultaneously. Alternative: Bright lamp (lamps connected in sequence) — close when all three equally bright. Dark lamp is more common in practice."
+  },
+  {
+    "q": "What is the phase sequence check done BEFORE paralleling two generators?",
+    "a": "Verify both generators have the same phase rotation sequence (R-Y-B) using a phase sequence meter",
+    "opts": [
+      "Check frequency only — phase sequence doesn't matter for paralleling",
+      "Verify both generators have the same phase rotation sequence (R-Y-B) using a phase sequence meter",
+      "Measure the voltage at all three phases",
+      "Check the insulation resistance of both machines"
+    ],
+    "exp": "Phase sequence MUST be identical. If wrong phase sequence is used, even when synchroscope shows 12 o'clock, there's actually a 120° voltage difference between phases — causes large circulating current when ACB is closed. Always verify phase sequence on new or rewound generators."
+  },
+  {
+    "q": "In parallel generators, what controls ACTIVE POWER (kW) sharing?",
+    "a": "Governor droop settings — governor controls prime mover speed and thus kW output",
+    "opts": [
+      "AVR voltage setting",
+      "Governor droop settings — governor controls prime mover speed and thus kW output",
+      "Frequency relay settings",
+      "Preferential trip relay"
+    ],
+    "exp": "kW (active power) sharing is purely a function of speed/frequency. The governor controls diesel engine fuel injection — more fuel = more torque = more kW. Droop setting ensures when one machine takes more kW, its speed slightly drops, prompting the governor to back off."
+  },
+  {
+    "q": "In parallel generators, what controls REACTIVE POWER (kVAR) and power factor sharing?",
+    "a": "AVR droop settings — AVR controls excitation and thus reactive current sharing",
+    "opts": [
+      "Governor speed settings",
+      "Load shedding relay",
+      "AVR droop settings — AVR controls excitation and thus reactive current sharing",
+      "Synchroscope position"
+    ],
+    "exp": "kVAR (reactive power) is controlled by excitation (field current). More excitation → higher terminal voltage → machine pushes out more reactive current (inductive kVAR). AVR droop ensures equal kVAR sharing: as one machine takes more kVAR, its voltage slightly drops, signalling AVR to reduce excitation."
+  },
+  {
+    "q": "Two generators running in parallel: G1 shows 600 kW, G2 shows 200 kW. What is the problem?",
+    "a": "Unequal active (kW) load sharing — governor droop settings differ or governor trimmer needs adjusting",
+    "opts": [
+      "AVR is faulty on G2",
+      "Unequal active (kW) load sharing — governor droop settings differ or governor trimmer needs adjusting",
+      "Phase sequence is wrong",
+      "Synchroscope has failed"
+    ],
+    "exp": "Unequal kW means governors are not equally sharing the load. Check: (1) Governor droop settings equal on both. (2) If electronic governor — check speed trimmer. (3) If mechanical — check speeder spring. Adjust trimmer on the overloaded machine to reduce its kW."
+  },
+  {
+    "q": "Two generators running in parallel: kW output is equal but current differs. What is the cause?",
+    "a": "Unequal reactive (kVAR) load sharing — AVR droop settings differ between the machines",
+    "opts": [
+      "Cable resistance difference",
+      "Governor is faulty on one machine",
+      "Unequal reactive (kVAR) load sharing — AVR droop settings differ between the machines",
+      "Both generators have different rated voltages"
+    ],
+    "exp": "Equal kW but different current means the machine with higher current is supplying more reactive power (kVAR) — it's more heavily excited. Adjust AVR droop trimmer on the over-excited machine to reduce reactive contribution until currents are equal."
+  },
+  {
+    "q": "What is 'droop' in the context of governor control?",
+    "a": "Intentional slight reduction in speed/frequency as load (kW) increases — ensures stable kW sharing between parallel machines",
+    "opts": [
+      "The physical drooping of the governor spring",
+      "Intentional slight reduction in speed/frequency as load (kW) increases — ensures stable kW sharing between parallel machines",
+      "A fault condition where governor fails to respond",
+      "Automatic shutdown when overloaded"
+    ],
+    "exp": "Without droop, two governors would fight each other (hunt). Droop: if machine A takes more load, its speed drops slightly → governor reduces fuel slightly → load redistributes. Typical droop: 3–5%. Droop = (no-load speed – full-load speed) / rated speed × 100%."
+  },
+  {
+    "q": "One generator LOSES EXCITATION while running in parallel with another. What happens?",
+    "a": "Machine runs as induction generator — absorbs reactive power from busbar, voltage drops, AVR tries to compensate, may lead to instability",
+    "opts": [
+      "Machine immediately trips on reverse power relay",
+      "It safely continues running on reduced output",
+      "Machine runs as induction generator — absorbs reactive power from busbar, voltage drops, AVR tries to compensate, may lead to instability",
+      "Frequency collapses immediately"
+    ],
+    "exp": "With lost excitation, the machine loses synchronism and operates as an induction generator. It now ABSORBS reactive power (instead of supplying). This pulls busbar voltage down. Loss-of-excitation relay (or under-voltage relay) should detect and trip. Risk: if not tripped, can cause voltage collapse."
+  },
+  {
+    "q": "What does the DIFFERENTIAL PROTECTION RELAY do on an alternator?",
+    "a": "Compares current entering and leaving the winding — any difference indicates an internal fault",
+    "opts": [
+      "Compares voltage of two generators before paralleling",
+      "Compares current entering and leaving the winding — any difference indicates an internal fault",
+      "Detects frequency differences during synchronisation",
+      "Monitors winding temperature balance"
+    ],
+    "exp": "Differential protection: current transformers at both ends of stator winding compare ingoing vs outgoing current. Normally identical. Internal fault (turn-to-turn, phase-to-earth within winding) causes an imbalance → relay trips instantaneously. Highly sensitive — fastest protection for internal faults."
+  },
+  {
+    "q": "What is the setting for the REVERSE POWER RELAY on a marine alternator?",
+    "a": "Trips at 5–10% of rated kW in reverse direction",
+    "opts": [
+      "Trips at 50% of rated kW",
+      "Trips at any detectable reverse current",
+      "Trips at 5–10% of rated kW in reverse direction",
+      "Trips at 100% reverse power — only for severe motoring"
+    ],
+    "exp": "Reverse power relay is set at 5–10% of rated kW. This is sensitive enough to detect motoring (prime mover failure) but insensitive enough to avoid nuisance trips during normal load fluctuations. Very large generators may have settings as low as 2–3%."
+  },
+  {
+    "q": "What is the function of the PREFERENTIAL TRIP relay?",
+    "a": "Automatically sheds non-essential loads in stages when generator is persistently overloaded — before tripping the generator",
+    "opts": [
+      "Instantly disconnects the most important loads",
+      "Automatically sheds non-essential loads in stages when generator is persistently overloaded — before tripping the generator",
+      "Trips the generator if voltage is too high",
+      "Prevents any additional loads from connecting"
+    ],
+    "exp": "Preferential trip protects the generator from overload without blacking out the ship. It sheds non-essential services (galley, HVAC, etc.) in timed stages while keeping essential loads (navigation, steering, safety systems) running. Much better than total blackout."
+  },
+  {
+    "q": "What is a DASHPOT and why is it used with the preferential trip relay?",
+    "a": "A pneumatic/hydraulic time-delay device — introduces time delay before shedding, allowing transient overloads to pass without unnecessary tripping",
+    "opts": [
+      "An oil reservoir for generator bearing lubrication",
+      "A pneumatic/hydraulic time-delay device — introduces time delay before shedding, allowing transient overloads to pass without unnecessary tripping",
+      "A capacitor that stores energy for instantaneous relay operation",
+      "A mechanical brake on the generator shaft"
+    ],
+    "exp": "The dashpot provides a settable time delay (typically 5–30 seconds). Without it, starting a large motor would trigger immediate load shedding. The dashpot allows the transient overload to pass. If overload persists beyond the delay → load is shed."
+  },
+  {
+    "q": "What bearing temperature values trigger ALARM and TRIP on a marine alternator?",
+    "a": "Alarm at approximately 80°C, Trip at approximately 95°C",
+    "opts": [
+      "Alarm 60°C, Trip 70°C",
+      "Alarm 80°C, Trip 150°C",
+      "Alarm at approximately 80°C, Trip at approximately 95°C",
+      "Alarm 100°C, Trip 120°C"
+    ],
+    "exp": "PT100 resistance temperature detectors in bearings: ~80°C alarm gives warning to investigate (inadequate lubrication, overload). ~95°C trip prevents bearing seizure/damage. Different ships may have slightly different values — always check ship's documentation."
+  },
+  {
+    "q": "What is the purpose of the THERMISTOR protection in an alternator stator?",
+    "a": "Embedded in stator winding — trips if winding temperature exceeds Class F insulation limit (155°C)",
+    "opts": [
+      "Monitors ambient temperature in the engine room",
+      "Embedded in stator winding — trips if winding temperature exceeds Class F insulation limit (155°C)",
+      "Controls AVR output based on temperature",
+      "Measures coolant temperature of the prime mover"
+    ],
+    "exp": "Thermistors (PTC type) are embedded directly in stator winding slots during manufacturing. Class F insulation is rated to 155°C. Trip prevents insulation degradation and winding burnout. The thermistor resistance increases sharply at the trip temperature, triggering the relay circuit."
+  },
+  {
+    "q": "What is EARTH FAULT PROTECTION on an alternator, and what percentage of stator is protected?",
+    "a": "Detects stator winding earth faults — typically 95% stator earth fault protection (5% nearest neutral is unprotected)",
+    "opts": [
+      "100% of stator is protected in all modern ships",
+      "Only the terminal box connections are protected",
+      "Detects stator winding earth faults — typically 95% stator earth fault protection (5% nearest neutral is unprotected)",
+      "Earth fault protection is optional on marine alternators"
+    ],
+    "exp": "95% protection is standard — the 5% nearest the star-point (neutral) has insufficient voltage to drive the detection relay. For 100% protection, a low-frequency injection method is used. Earth fault protection prevents single earth fault from developing into a phase-to-phase fault."
+  },
+  {
+    "q": "What does OVER-VOLTAGE RELAY protect against, and at what setting does it trip?",
+    "a": "Protects insulation from damage — trips at approximately 110% of rated voltage",
+    "opts": [
+      "Protects against reverse power — trips at 50% over",
+      "Protects insulation from damage — trips at approximately 110% of rated voltage",
+      "Only operates during synchronisation — no trip setting",
+      "Trips at 125% for continuous protection"
+    ],
+    "exp": "Over-voltage damages insulation and connected equipment. AVR should prevent this, but if AVR fails (thyristor short circuit), voltage can shoot up. Over-voltage relay trips at ~110% rated voltage. Response time is typically definite-time (short delay to avoid nuisance trips on transients)."
+  },
+  {
+    "q": "What is the minimum acceptable IR (Insulation Resistance) value for a marine alternator winding?",
+    "a": "Minimum 1 MΩ; Polarisation Index (PI) > 2 indicates good insulation",
+    "opts": [
+      "Minimum 10 kΩ is acceptable for marine service",
+      "Minimum 100 MΩ for running machines",
+      "Minimum 1 MΩ; Polarisation Index (PI) > 2 indicates good insulation",
+      "Any reading above zero is acceptable"
+    ],
+    "exp": "1 MΩ is the absolute minimum. In practice, a good dry winding reads hundreds of MΩ. PI (10-min reading / 1-min reading) > 2 = good insulation condition. PI 1–2 = fair. PI <1 = dangerous — do not run. Always discharge winding after meggering."
+  },
+  {
+    "q": "What voltage megger is used for a 440V alternator IR test?",
+    "a": "500V DC megger",
+    "opts": [
+      "250V DC — to avoid damaging the insulation",
+      "1000V DC — for thorough testing",
+      "5000V DC — to match starting voltage",
+      "500V DC megger"
+    ],
+    "exp": "Rule of thumb: megger voltage should be approximately equal to rated voltage + 250V, or use standard values: 500V for low voltage equipment (<1000V), 1000V for medium voltage, 5000V for high voltage (>11kV). 500V for 440V alternator is standard."
+  },
+  {
+    "q": "What must be done to the winding AFTER performing an IR test?",
+    "a": "Discharge the winding by connecting it to earth via a resistor — capacitive charge can cause electric shock",
+    "opts": [
+      "Re-connect to AVR immediately to restore normal operation",
+      "Discharge the winding by connecting it to earth via a resistor — capacitive charge can cause electric shock",
+      "Measure AC voltage at terminals to confirm discharge",
+      "No action needed — megger automatically discharges"
+    ],
+    "exp": "Megger charges the winding capacitance to DC test voltage (500V or more). This charge is retained after removing the megger. Short-circuiting directly causes arc — use a high resistance first, then earth. Time constant depends on winding capacitance. Always discharge before touching."
+  },
+  {
+    "q": "How do you maintain alternator insulation during cold region drydock?",
+    "a": "Use anti-condensation heaters to maintain winding temperature above dewpoint; megger frequently to monitor IR",
+    "opts": [
+      "Keep the machine running at full load throughout drydock",
+      "Wrap the machine in plastic sheeting to exclude moisture",
+      "Use anti-condensation heaters to maintain winding temperature above dewpoint; megger frequently to monitor IR",
+      "Apply oil to windings to repel moisture"
+    ],
+    "exp": "Cold air holds less moisture, but when it warms up near the winding, condensation forms. Winding heaters keep the winding slightly above ambient — prevents dew point from being reached. If IR is already low, use gentle heating to dry out before switching on. Never megger a wet winding."
+  },
+  {
+    "q": "After receiving a rewound alternator from shore — what checks must you do before commissioning?",
+    "a": "Visual check, IR test, phase rotation check, no-load voltage check, then gradual load test",
+    "opts": [
+      "Just run at full load for 30 minutes",
+      "Only check voltage output",
+      "Visual check, IR test, phase rotation check, no-load voltage check, then gradual load test",
+      "Send it back for further testing — never trust shore rewind"
+    ],
+    "exp": "Systematic commissioning: (1) Visual — winding quality, varnish, connections. (2) IR test — all phases to earth. (3) Phase rotation — must match ship's system. (4) No-load run — check voltage, frequency, noise, vibration. (5) Parallel with running generator — check load sharing. (6) Gradually apply load."
+  },
+  {
+    "q": "What checks are included in DAILY running checks on an alternator?",
+    "a": "Check voltage, current, frequency, power factor, bearing temperatures, vibration, abnormal noise",
+    "opts": [
+      "Megger test every day",
+      "Check voltage, current, frequency, power factor, bearing temperatures, vibration, abnormal noise",
+      "Strip and inspect bearings daily",
+      "Perform IR test and AVR calibration daily"
+    ],
+    "exp": "Daily checks are visual/instrument — no shutdown needed. Look at: switchboard meters (V, A, Hz, PF, kW). Listen for: abnormal noise, vibration. Touch (briefly): check bearing housing temperature. Log all readings. Any trend change warrants investigation."
+  },
+  {
+    "q": "What is the 'air gap' in an alternator?",
+    "a": "The clearance between the rotor pole face and the inner surface of the stator bore",
+    "opts": [
+      "The space between stator teeth for ventilation",
+      "The clearance between the rotor pole face and the inner surface of the stator bore",
+      "The gap in the rectifier circuit for voltage regulation",
+      "The distance between two phase windings in the stator"
+    ],
+    "exp": "The air gap is critical: too small → rotor rubs on stator (mechanical damage). Too large → increased reluctance → less efficient, lower output for same excitation. Uneven air gap → unbalanced magnetic pull → vibration and bearing wear."
+  },
+  {
+    "q": "How is the air gap of an alternator measured?",
+    "a": "Using feeler gauges inserted through stator ventilation openings — measured at 4 positions per rotor pole",
+    "opts": [
+      "Using an ultrasonic thickness gauge from outside",
+      "Using feeler gauges inserted through stator ventilation openings — measured at 4 positions per rotor pole",
+      "By measuring stator bore diameter and rotor diameter separately",
+      "Using a laser alignment tool during drydock"
+    ],
+    "exp": "Feeler gauges are inserted through ventilation slots or inspection openings. Measurements taken at minimum 4 positions around each pole (or at 90° intervals). Average of readings gives mean air gap. Compare to manufacturer's tolerance — usually ±10% variation allowed."
+  },
+  {
+    "q": "What happens if the air gap is UNEVEN around the circumference?",
+    "a": "Unbalanced magnetic pull causes rotor vibration, bearing wear, and in severe cases rotor-stator contact",
+    "opts": [
+      "Nothing — air gap unevenness is normal and acceptable",
+      "Voltage output becomes unbalanced between phases",
+      "Unbalanced magnetic pull causes rotor vibration, bearing wear, and in severe cases rotor-stator contact",
+      "Only affects power factor, no mechanical effects"
+    ],
+    "exp": "Uneven air gap means the magnetic field is stronger where the gap is smaller. This creates a net radial force pulling the rotor towards the smaller gap side (UMP — Unbalanced Magnetic Pull). This is self-aggravating — as rotor moves closer, force increases. Can lead to bearing failure or rotor/stator contact."
+  },
+  {
+    "q": "At what speed does the overspeed trip activate on a marine auxiliary diesel-alternator set?",
+    "a": "110–115% of rated speed",
+    "opts": [
+      "90% of rated speed",
+      "100% rated speed — at setpoint",
+      "110–115% of rated speed",
+      "150% — only for extreme emergency"
+    ],
+    "exp": "Overspeed trip is set to activate at 110–115% of rated speed (not 100% — that would interfere with normal speed variations). For a 1500 RPM generator, trip activates at 1650–1725 RPM. It's a mechanical or electronic trip that cuts fuel supply."
+  },
+  {
+    "q": "How do you test the overspeed trip of a marine auxiliary engine?",
+    "a": "Run off-load with ACB open, gradually increase governor speed until trip activates; note trip RPM and compare to specification",
+    "opts": [
+      "Only check by monitoring the trip in emergency — never test deliberately",
+      "Apply full rated load then suddenly remove it",
+      "Run off-load with ACB open, gradually increase governor speed until trip activates; note trip RPM and compare to specification",
+      "Simulate by injecting a signal into the electronic governor"
+    ],
+    "exp": "Method 1 (actual): ACB open, increase fuel slowly until trip fires. Verify RPM at trip. Method 2 (simulated): Electronic engines — simulate via test function. Record: date, trip speed, result in engine log. Frequency: annually or at drydock as per class/SOLAS requirement."
+  },
+  {
+    "q": "What is the purpose of a blackout test?",
+    "a": "Verify emergency generator auto-starts and supplies essential loads within 45 seconds",
+    "opts": [
+      "Test the fire detection system under power failure",
+      "Verify emergency generator auto-starts and supplies essential loads within 45 seconds",
+      "Check battery capacity for emergency lighting only",
+      "Test the preferential trip relay sequence"
+    ],
+    "exp": "SOLAS requires emergency generator to start automatically and supply essential services within 45 seconds of main power failure. The blackout test verifies this. Essential loads: emergency lighting, navigation lights, steering gear, fire pump, communications."
+  },
+  {
+    "q": "During a blackout test, what is the correct sequence of actions for the ETO?",
+    "a": "Brief staff, inform bridge, verify emergency DG ready, trip main ACBs, time DG start, verify essential loads, restore main power, reconnect in sequence",
+    "opts": [
+      "Simply trip the main breaker and observe",
+      "Brief staff, inform bridge, verify emergency DG ready, trip main ACBs, time DG start, verify essential loads, restore main power, reconnect in sequence",
+      "Only the chief engineer performs blackout test — ETO observes",
+      "Run emergency generator for 10 minutes without tripping main power"
+    ],
+    "exp": "Safety first: always inform bridge (safe navigational situation), brief all staff (machinery spaces and bridge watchkeepers). Verify emergency DG has fuel, lube oil, coolant. Trip ACBs. Start stopwatch — DG must start and supply within 45 sec. Record results in log."
+  },
+  {
+    "q": "After a blackout, in what ORDER should loads be restored when bringing main generator back on line?",
+    "a": "Navigation/steering first, then essential safety services, then machinery systems, lastly non-essential services",
+    "opts": [
+      "Restore all loads simultaneously to speed up recovery",
+      "Largest loads first to test generator capacity",
+      "Navigation/steering first, then essential safety services, then machinery systems, lastly non-essential services",
+      "Non-essential loads first — leave critical loads on emergency generator longer"
+    ],
+    "exp": "Sequence matters to avoid overloading the generator during recovery. Priority: (1) Navigation, bridge equipment, steering. (2) Fire detection, bilge pumps, safety systems. (3) Essential machinery (fuel pumps, cooling pumps). (4) Accommodation, galley, HVAC last. Introduce loads with time delays between groups."
+  },
+  {
+    "q": "Why is the main generator NOT placed at the bottom of the engine room (tank top level)?",
+    "a": "Flooding risk, excessive vibration, poor maintenance access, inadequate cooling — all prevented by elevated placement",
+    "opts": [
+      "It would be too cold at tank top level",
+      "SOLAS specifically prohibits bottom placement for weight distribution",
+      "Flooding risk, excessive vibration, poor maintenance access, inadequate cooling — all prevented by elevated placement",
+      "The prime mover would overheat if placed at tank top"
+    ],
+    "exp": "(1) Tank top floods first — submerged generator = complete power loss. (2) Tank top vibration from ME + shaft is highest. (3) Overhead crane access needed for major maintenance. (4) Better forced ventilation at upper levels. SOLAS II-1/Reg 40 mandates flood protection for main power sources."
+  },
+  {
+    "q": "Where MUST the emergency generator be located according to SOLAS?",
+    "a": "Above the bulkhead deck, OUTSIDE the main machinery space, in a separate compartment",
+    "opts": [
+      "In a waterproof enclosure at tank top level",
+      "Adjacent to the main switchboard in the ECR",
+      "Above the bulkhead deck, OUTSIDE the main machinery space, in a separate compartment",
+      "Any location that can be remotely started from bridge"
+    ],
+    "exp": "SOLAS Ch. II-1 Reg 42/43: Emergency generator must be (1) Above the bulkhead deck (so flooding of machinery space doesn't affect it). (2) Entirely outside the machinery space (so fire or flooding in ER doesn't disable it). Purpose: independent survival in any casualty."
+  },
+  {
+    "q": "A 440V motor receives only 280V. What happens to its torque?",
+    "a": "Torque reduces proportional to voltage squared: (280/440)² ≈ 0.40 — only ~40% of rated torque",
+    "opts": [
+      "Torque reduces proportionally to voltage: (280/440) = 63%",
+      "Torque increases as motor tries harder",
+      "Torque reduces proportional to voltage squared: (280/440)² ≈ 0.40 — only ~40% of rated torque",
+      "No change in torque — only speed changes"
+    ],
+    "exp": "Torque ∝ V². This is because torque depends on both the field strength and armature current — both reduced at lower voltage. With only 40% torque, an under loaded motor may run slowly; a normal-load motor will stall. This is a critical design consideration for motor starting."
+  },
+  {
+    "q": "What happens to the current drawn by a motor running on under-voltage?",
+    "a": "Current rises 2–3× rated value to compensate for reduced torque — causes severe overheating",
+    "opts": [
+      "Current reduces in proportion to voltage",
+      "Current stays constant — it's load-dependent only",
+      "Current rises 2–3× rated value to compensate for reduced torque — causes severe overheating",
+      "Current fluctuates randomly with voltage changes"
+    ],
+    "exp": "Under voltage → reduced air-gap flux → reduced back-EMF → motor draws more current to maintain torque. If motor is carrying load and voltage drops significantly, it may fail to maintain speed, slip increases dramatically, current rockets up, and thermal protection (overload relay) should trip it."
+  },
+  {
+    "q": "What causes pitting marks on alternator slip rings?",
+    "a": "High current sparking from worn, misaligned or incorrect grade brushes; contamination on ring surface",
+    "opts": [
+      "Excessive lubrication causing surface erosion",
+      "High current sparking from worn, misaligned or incorrect grade brushes; contamination on ring surface",
+      "Normal wear — pitting is expected and acceptable",
+      "Overvoltage from AVR malfunction"
+    ],
+    "exp": "Causes: (1) Brush pressure incorrect — too low allows bouncing (sparking), too high causes excessive wear. (2) Wrong brush grade — not matched to ring material. (3) Contamination — oil, water, carbon dust. (4) Mechanical misalignment — eccentric running. All cause arcing → pitting."
+  },
+  {
+    "q": "What is the correct brush pressure range for slip ring brushes?",
+    "a": "Typically 150–200 g/cm²",
+    "opts": [
+      "As tight as possible to ensure good contact",
+      "10–50 g/cm²",
+      "Typically 150–200 g/cm²",
+      "500–800 g/cm² for high current applications"
+    ],
+    "exp": "Too low pressure: brush bounces → arcing → pitting → more resistance → more heat → brush burns. Too high pressure: excessive friction → overheating → rapid brush wear → brush dust contamination. 150–200 g/cm² is the standard — check with a spring balance gauge."
+  },
+  {
+    "q": "How do you correct slip ring pitting while the machine is running?",
+    "a": "Use fine emery cloth held in an insulated holder to lightly dress the surface — reduce load to minimum first",
+    "opts": [
+      "Machine must always be stopped before any slip ring work",
+      "Remove slip ring cover and polish by hand",
+      "Use fine emery cloth held in an insulated holder to lightly dress the surface — reduce load to minimum first",
+      "Apply conductive paste to fill in the pits"
+    ],
+    "exp": "Minor pitting can be dressed in-service: reduce load, use fine emery cloth on an insulated stick/holder (NEVER bare hands near live slip rings). This smooths the surface, improving contact. Check afterward: smooth bright contact surface, sparking subsided. Severe pitting: machine lathe in drydock."
+  },
+  {
+    "q": "What actually happens when an ACB is closed on a generator that is NOT running?",
+    "a": "Running generator back-feeds through ACB — idle machine runs as induction motor (motoring), reverse power relay trips ACB",
+    "opts": [
+      "Nothing happens — no circuit without running generator",
+      "Running generator back-feeds through ACB — idle machine runs as induction motor (motoring), reverse power relay trips ACB",
+      "Both generators trip on overcurrent simultaneously",
+      "The idle generator starts automatically"
+    ],
+    "exp": "This is a classic exam trick question. Non-running generator has no voltage. When ACB closes, it's just connecting a dead winding to the live busbar. The live busbar now drives current through the idle stator winding, causing it to rotate (induction motor effect). Reverse power relay detects reverse power flow and trips the ACB — if it works correctly."
+  },
+  {
+    "q": "Which protection relay prevents an alternator from 'motoring' when connected to the busbar?",
+    "a": "Reverse power relay",
+    "opts": [
+      "Differential relay",
+      "Under-voltage relay",
+      "Reverse power relay",
+      "Over-current relay"
+    ],
+    "exp": "Reverse power relay monitors the direction of real power (kW) flow. Normal operation: power flows FROM generator TO busbar. Motoring: power flows FROM busbar TO generator. When reverse power exceeds setpoint (5–10% rated) for the set time, relay trips ACB."
+  },
+  {
+    "q": "What is the Polarisation Index (PI) and what does PI > 2 indicate?",
+    "a": "PI = IR at 10 minutes ÷ IR at 1 minute; PI > 2 = good dry insulation in good condition",
+    "opts": [
+      "PI measures the alternator's power factor improvement",
+      "PI = maximum current ÷ rated current; PI > 2 means overload capacity",
+      "PI = IR at 10 minutes ÷ IR at 1 minute; PI > 2 = good dry insulation in good condition",
+      "PI is the ratio of bearing temperature to winding temperature"
+    ],
+    "exp": "Polarisation Index distinguishes good dry insulation (resistance keeps rising over time) from contaminated/wet insulation (resistance stays constant or drops). PI > 2 = excellent. PI 1–2 = fair (investigate). PI < 1 = dangerous — do not energise. Wet windings show very low PI."
+  },
+  {
+    "q": "Why is an alternator rated with Class F insulation significant for temperature monitoring?",
+    "a": "Class F insulation is rated to 155°C — thermostat/thermistor trip settings are calibrated to this limit",
+    "opts": [
+      "Class F means the alternator can only run in F-rated (flammable) zones",
+      "Class F insulation is rated to 155°C — thermostat/thermistor trip settings are calibrated to this limit",
+      "All marine alternators use Class B — Class F is only for shore installations",
+      "Class F certification is required by MARPOL"
+    ],
+    "exp": "Insulation class defines maximum continuous temperature: Class B=130°C, Class F=155°C, Class H=180°C. Marine alternators use Class F. Thermistor trip is set just below 155°C (typically 145–150°C to give margin). Running above this degrades insulation life exponentially."
+  },
+  {
+    "q": "During a survey, the surveyor asks you to test the overcurrent relay. How do you perform this?",
+    "a": "Secondary injection test: rack ACB to TEST position, inject calculated current into CT secondary terminals, verify relay trips at set value",
+    "opts": [
+      "Overload the generator to 110% and observe relay",
+      "Short the generator terminals briefly and measure response time",
+      "Secondary injection test: rack ACB to TEST position, inject calculated current into CT secondary terminals, verify relay trips at set value",
+      "Simulate fault using an insulation tester connected to phase terminals"
+    ],
+    "exp": "Secondary injection: don't need to actually overload the machine. Disconnect CT secondary. Inject a measured AC current (using test set) that corresponds to the relay's trip setting when scaled by CT ratio. Time the relay trip. Record: set value, actual trip current, trip time. Compare to manufacturer spec."
+  },
+  {
+    "q": "What is the minimum time for the emergency generator to start and supply essential loads per SOLAS?",
+    "a": "45 seconds",
+    "opts": [
+      "5 minutes",
+      "2 minutes",
+      "45 seconds",
+      "10 minutes"
+    ],
+    "exp": "SOLAS Ch. II-1 Reg 43: Emergency generator must start automatically and supply at least the emergency loads within 45 seconds of main power failure. This is why emergency generators are kept warm (pre-heaters) and tested regularly to ensure reliable starting."
+  },
+  {
+    "q": "What is the advantage of a brushless alternator over a conventionally excited alternator for UMS ships?",
+    "a": "No brushes means no carbon dust, no brush inspection needed, no sparking — suitable for unattended operation",
+    "opts": [
+      "Brushless alternators produce higher voltage",
+      "No brushes means no carbon dust, no brush inspection needed, no sparking — suitable for unattended operation",
+      "Brushless alternators always have higher efficiency",
+      "They can operate on lower frequency for UMS operation"
+    ],
+    "exp": "UMS (Unattended Machinery Space) ships need equipment that can run reliably without continuous monitoring. Brushless: no brush replacement, no slip ring pitting, no carbon tracking, no brush gear sparking (safer in gas-risk areas). Much lower maintenance requirement — ideal for UMS."
+  },
+  {
+    "q": "What checks should be done when receiving a 'no voltage' complaint on a running alternator — in order?",
+    "a": "1. Check voltmeter accuracy, 2. Check frequency/speed, 3. Try AVR trimmer, 4. Check PMG output, 5. Flash if needed",
+    "opts": [
+      "Immediately shut down and dismantle",
+      "Only check AVR first",
+      "1. Check voltmeter accuracy, 2. Check frequency/speed, 3. Try AVR trimmer, 4. Check PMG output, 5. Flash if needed",
+      "Run at half load and restart from scratch"
+    ],
+    "exp": "Systematic: (1) Is voltmeter working? (check with handheld). (2) Is generator at speed? (check tacho). (3) Is AVR supplying field? (check AVR output). (4) Is PMG generating? (check PMG output). (5) Residual magnetism — try flashing. (6) Field winding open circuit — resistance check. (7) Rotating diodes — stroboscope."
+  }
+]

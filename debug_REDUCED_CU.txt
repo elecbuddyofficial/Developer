@@ -1,0 +1,7 @@
+d="t2-disadv-detail">⚖️ HV Advantages & Disadvantages — Full List</div>
+<div class="n-info"><div class="icon">📖</div><div class="body"><strong>Complete advantage list (P = V × I × √3 × PF):</strong> Doubling voltage halves current for the same power.</div></div>
+<div class="n-grid">
+  <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">① Reduced Current</div><div class="card-desc">Same power → smaller cable cross-sections → less weight/cost.</div></div>
+  <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">② Lower I²R Losses</div><div class="card-desc">Less current = less heat lost in cables.</div></div>
+  <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">③ Smaller Cables</div><div class="card-desc">Reduces weight and space in cable trays.</div></div>
+  <div class="n-card" style="border-color:var(--green-bo
