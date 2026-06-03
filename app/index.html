@@ -333,48 +333,67 @@ a.sb-item{text-decoration:none}
 .tfn-name{font-size:12.5px;color:var(--text);font-weight:600;line-height:1.4;margin-top:3px}
 .tfn-center{display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--text3);padding:0 4px;flex-shrink:0}
 
+
+/* Hamburger Menu Defaults */
+#mobile-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 6px;
+  margin-right: 12px;
+  margin-left: -4px;
+  cursor: pointer;
+  border-radius: var(--r8);
+  transition: background 0.2s;
+}
+#mobile-menu-btn:hover { background: rgba(255,255,255,0.05); }
+#sidebar-overlay { display: none; }
+
 /* MOBILE RESPONSIVE OVERRIDES */
 @media (max-width: 768px) {
-  /* Bottom Nav Morph */
-  #layout { flex-direction: column; }
+  #mobile-menu-btn { display: inline-flex; }
+  
+  /* Slide-out Sidebar Morph */
   #sidebar {
     position: fixed;
+    top: 56px; /* below topbar */
+    left: -280px;
     bottom: 0;
+    width: 260px;
+    height: calc(100svh - 56px);
+    z-index: 1000;
+    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: none;
+  }
+  #sidebar.open {
+    left: 0;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+  }
+  
+  #sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 56px;
     left: 0;
     right: 0;
-    width: 100%;
-    height: 64px;
-    padding: 0 8px;
-    padding-bottom: env(safe-area-inset-bottom);
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    border-right: none;
-    border-top: 1px solid var(--border2);
-    background: rgba(18, 18, 20, 0.95);
-    backdrop-filter: blur(12px);
-    z-index: 100;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
   }
-  .sb-section, .sb-divider, .sb-item .cnt, .sb-spacer { display: none; }
-  .sb-item {
-    flex-direction: column;
-    width: auto;
-    flex: 1;
-    margin: 0;
-    padding: 6px 4px;
-    background: transparent !important;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0;
-    min-height: auto;
+  #sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
   }
-  .sb-item .ic { font-size: 22px; width: auto; }
-  .sb-item .label { font-size: 11px; text-align: center; }
-  .sb-item.active { color: var(--blue); }
-  .sb-item.active .ic { transform: scale(1.1); transition: transform 0.2s; }
   
-  #main { padding-bottom: 74px; } /* clearance for bottom nav */
+  #main { padding-bottom: 0; }
   #content { padding: 16px; }
   
   /* Topbar */
@@ -427,11 +446,15 @@ a.sb-item{text-decoration:none}
 </head>
 <body>
 <div id="topbar">
+  <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
+    <svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
   <div class="logo">ETO Oral Prep <span>ETO CoC · STCW Reg. III/6</span></div>
   <div class="spacer"></div>
   <div class="tb-badge" id="topbar-badge"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic 1 of 23</div>
 </div>
 <div id="layout">
+<div id="sidebar-overlay" onclick="toggleMobileMenu()"></div>
 <div id="sidebar">
   <div class="sb-section">Navigation</div>
   <button class="sb-item active" id="si-welcome" onclick="showView('welcome')">
@@ -941,7 +964,20 @@ function goToQuizFromNotes(topicId){
   }
 }
 
+function toggleMobileMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+
+function closeMobileMenu() {
+  var sb = document.getElementById('sidebar');
+  var overlay = document.getElementById('sidebar-overlay');
+  if (sb) sb.classList.remove('open');
+  if (overlay) overlay.classList.remove('open');
+}
+
 function showView(n){
+  if(window.innerWidth <= 768) closeMobileMenu();
   if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank') {
      var tbBadge = document.getElementById('topbar-badge');
      if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> MMD Prep';
