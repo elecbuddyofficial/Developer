@@ -1,7 +1,0 @@
-btn" onclick="jumpTo('t2-irm')">IRM</button>
-    <button class="anc-btn" onclick="jumpTo('t2-bonding')">Tanker Bonding</button>
-    <button class="anc-btn" onclick="jumpTo('t2-shaft')">Shaft Earthing</button>
-
-<div class="n-h1" id="t2-qa-basics">❓ Surveyor Q&A — HV Basics</div>
-<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What are the advantages and disadvantages of a high voltage system on ships?<br><strong>Ideal Answer:</strong> <em>Advantages:</em> For the same power, higher voltage means lower current — smaller cables (less weight, less cost), lower I²R losses (less heat in cables), smaller generator windings, economical for large power transmission. <em>Disadvantages:</em> More dangerous (higher lethal risk), needs special equipment (VCB, SF6, HV cables, HV motors), needs trained personnel, higher equipment cost, needs step-down transformers for normal use, more complex protection.</div></div>
-<div class="n-warn"><div class="icon">⚠️

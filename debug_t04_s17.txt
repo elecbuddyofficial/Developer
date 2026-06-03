@@ -1,9 +1,0 @@
-PI Test — Why Wait 10 Minutes?
-
-PI Test — Why Wait 10 Minutes?
-🔴 EXAM CRITICAL: ALL surveyors — follow-up after IR test
-PI (Polarisation Index) = IR at 10 minutes ÷ IR at 1 minute.
-Why wait 10 minutes: Three types of current flow when megger voltage is applied: (1) Capacitive current — decays in seconds. (2) Absorption current — decays over minutes (due to dielectric polarisation). (3) True leakage current — remains constant.
-At 1 minute: Absorption current still significant — reading lower than true value.
-At 10 minutes: Absorption current has mostly decayed — reading approaches true insulation resistance.
-PI interpretation: >2.0 = good insulation. 1.0–2.0 = questionable. <1.0 = dangerous, do not energise.
