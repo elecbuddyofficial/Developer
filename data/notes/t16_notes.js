@@ -1,494 +1,258 @@
 window.loadNotes("T16", `<div class="view" id="view-notes-t16">
 <div class="note-doc">
-  <div style="margin-bottom:16px"><button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button></div>
+  <div style="margin-bottom:16px;display:flex;justify-content:space-between">
+    <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
+    <button class="anc-btn" onclick="goToQuizFromNotes('T16')" style="background-color:var(--green-dim);border-color:var(--green);color:var(--green)">Take Quiz →</button>
+  </div>
   <div class="note-title">
-    <h1>Topic 16 — SOLAS</h1>
-    <div class="sub">ETO MMD Oral Examination · Function 5 · Class 2 · Mumbai & Noida</div>
+    <h1>Topic 16 - SOLAS &amp; Regulations</h1>
+    <div class="sub">ETO CoC Oral Assessment · STCW Reg. III/6 · DG Shipping India</div>
     <div class="tags">
       <span class="tag tag-blue">🔴 Exam Critical</span>
-      <span class="tag tag-orange">Updated 2026</span>
+      <span class="tag tag-orange">Ch II-1 · Emergency Power · Cables</span>
+      <span class="tag tag-purple">New 2026 - Lifting Appliances · Inclinometer</span>
     </div>
   </div>
   <div class="note-anchors">
     <span>Jump to section</span>
-    <button class="anc-btn" onclick="jumpTo('s-1')">ETO MMD ORAL EXAMINA...</button>
-    <button class="anc-btn" onclick="jumpTo('s-2')">TOPIC 16: SOLAS & RE...</button>
-    <button class="anc-btn" onclick="jumpTo('s-3')">1. FORMAL ETO RECOGN...</button>
-    <button class="anc-btn" onclick="jumpTo('s-4')">2. ETO COMPETENCY TA...</button>
-    <button class="anc-btn" onclick="jumpTo('s-5')">3. ELECTRO</button>
-    <button class="anc-btn" onclick="jumpTo('s-6')">4. ENHANCED MEDICAL ...</button>
-    <button class="anc-btn" onclick="jumpTo('s-7')">5. REST HOURS / ANTI</button>
-    <button class="anc-btn" onclick="jumpTo('s-8')">6. SECURITY TRAINING...</button>
-    <button class="anc-btn" onclick="jumpTo('s-written')">📝 Written Section</button>
+    <button class="anc-btn" onclick="jumpTo('s-ch2')">Chapter II-1</button>
+    <button class="anc-btn" onclick="jumpTo('s-empower')">Emergency Power</button>
+    <button class="anc-btn" onclick="jumpTo('s-cables')">Cables</button>
+    <button class="anc-btn" onclick="jumpTo('s-ch22')">Chapter II-2</button>
+    <button class="anc-btn" onclick="jumpTo('s-ch3')">Chapter III</button>
+    <button class="anc-btn" onclick="jumpTo('s-ch4')">Chapter IV</button>
+    <button class="anc-btn" onclick="jumpTo('s-ch5')">Chapter V</button>
+    <button class="anc-btn" onclick="jumpTo('s-new2026')">New 2026 Regs</button>
+    <button class="anc-btn" onclick="jumpTo('s-survey-checks')">Special Survey</button>
+    <button class="anc-btn" onclick="jumpTo('s-ism')">ISM Code</button>
+    <button class="anc-btn" onclick="jumpTo('s-isps')">ISPS Security</button>
+    <button class="anc-btn" onclick="jumpTo('s-conventions')">MLC &amp; STCW</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
-  <div class="note-content">
+  <div class="n-h1" id="s-ch2">📋 SOLAS Chapter II-1 - Electrical Installations (Part D)</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask Chapter II-1 electrical regulations.</strong> SOLAS has <span class="n-val">14 chapters</span>. Electrical installations = Chapter II-1, Part D.</div></div>
+
+  <div class="n-h2">Voltage &amp; Frequency Limits (Regulation 40)</div>
   <table class="n-table">
-    <tr><th>🆕 UPDATED</th><th>May 2026 — New gap-fill sections added at the end of this document. Scroll to bottom to see additions.</th></tr>
+    <tr><th>Parameter</th><th>Steady State</th><th>Transient</th><th>Recovery</th></tr>
+    <tr><td>Voltage</td><td class="hl">±<span class="n-val">2.5%</span></td><td class="hl">±<span class="n-val">20%</span></td><td class="ok">Within <span class="n-val">±3%</span> in <span class="n-val">1.5 seconds</span></td></tr>
+    <tr><td>Frequency</td><td class="hl">±<span class="n-val">5%</span></td><td class="hl">±<span class="n-val">10%</span></td><td class="ok">Within <span class="n-val">5 seconds</span></td></tr>
   </table>
 
-  <div class="n-h1" id="s-1">ETO MMD ORAL EXAMINATION</div>
-  <div class="body">COMPREHENSIVE STUDY NOTES — v2.0</div>
+  <div class="n-h1" id="s-empower">⚡ Emergency Source of Electrical Power (Regulation 42/43)</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask emergency generator requirements.</strong> Know location, start time, endurance - different for cargo vs passenger ships.</div></div>
 
-  <div class="n-h1" id="s-2">TOPIC 16: SOLAS & REGULATIONS</div>
-  <div class="body">Function 5  |  Class 2 ETO  |  Mumbai & Noida MMD</div>
-  <div class="body">Compiled from 2025–2026 Oral Question Banks — All Surveyors Combined</div>
   <table class="n-table">
-    <tr><th>COLOUR CODE LEGEND</th></tr>
-    <tr><td>YELLOW = Key exam points / must-know concepts / formulae GREEN = Memory aids / mnemonics / analogies ORANGE = Cross questions + ideal answers / step-by-step procedures BLUE = Comparison tables / regulation tables / SOLAS references RED = Safety critical / warnings / MOST ASKED by surveyors</td></tr>
+    <tr><th>Requirement</th><th>Cargo Ship</th><th>Passenger Ship</th></tr>
+    <tr><td>Location</td><td class="hl" colspan="2">Above uppermost continuous deck, OUTSIDE main machinery space</td></tr>
+    <tr><td>Auto-start time</td><td class="hl"><span class="n-val">45 seconds</span></td><td class="hl"><span class="n-val">30 seconds</span></td></tr>
+    <tr><td>Fuel endurance</td><td class="hl"><span class="n-val">18 hours</span></td><td class="hl"><span class="n-val">36 hours</span></td></tr>
+    <tr><td>Transitional source</td><td class="hl" colspan="2">Battery - supplies essential services for minimum <span class="n-val">30 minutes</span> during startup gap</td></tr>
   </table>
+
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Transitional source:</strong> Dedicated battery (not GMDSS battery) automatically supplies emergency lighting, navigation lights, and internal communications for minimum <span class="n-val">30 minutes</span> - covers the 45-second window before the emergency generator comes online. No manual action required.</div></div>
+
+  <div class="n-h1" id="s-cables">🔌 Cable Requirements (Regulation 45)</div>
   <table class="n-table">
-    <tr><th>MOST ASKED — SOLAS & REGULATIONS</th></tr>
-    <tr><td>1. Electrical Survey — documents to present, full procedure, certificates, what surveyor checks. How to carry out overcurrent trip at survey. [Sanjib, Deswal, Kamath — single most repeated topic in every oral] 2. SOLAS — how many chapters, which chapter covers electrical installations, what does Chapter 12 and 13 cover? [ORAL2026, Mumbai bank] 3. Emergency Generator — SOLAS regulation, location, starting requirements, backup time, AVR voltage regulation requirement (2 seconds). [All surveyors] 4. ISM Code — what is it, objectives, 12+4 elements, certificates (DOC and SMC), conformity/non-conformity, major non-conformity. [All surveyors, all banks] 5. ISPS Code — what is it, 3 security levels, ETO duties under ISPS, restricted areas. [Sanjib, Deswal, Mumbai bank] 6. IMO — 4 pillars, structure, role. [Mumbai bank, ORAL2026] 7. STCW — what is it, Manila amendments, ETO certificate requirements. [ORAL2026, Mumbai bank] 8. UMS — what is SOLAS requirement for unattended machinery space? [ORAL2026] 9. Blackout test — procedure as demonstrated in front of surveyor. PSC blackout test. [Sanjib, multiple banks] 10. WIDAS — sensor type, height of sensors in cargo holds and forepeak tank. [Mumbai bank — with cross questions] 11. Steering gear SOLAS regulation — two independent systems, power unit requirement, test frequency. [Multiple banks] 12. MLC 2006 convention — what is it, titles. IMO codes — 5 types. CSR (Continuous Synopsis Record). [Mumbai bank, ORAL2026]</td></tr>
+    <tr><th>Cable Standard</th><th>Requirement</th><th>Where Mandatory</th></tr>
+    <tr><td><span class="n-val">IEC 60331</span> - Fire Resistant</td><td class="hl">Maintains circuit integrity min <span class="n-val">3 hours</span> at <span class="n-val">750°C</span></td><td class="hl">Fire pumps, steering gear, emergency lighting, GMDSS</td></tr>
+    <tr><td><span class="n-val">IEC 60332</span> - Flame Retardant</td><td>Self-extinguishes, does not propagate flame</td><td>All cables in enclosed spaces</td></tr>
+    <tr><td><span class="n-val">IEC 60079</span> - Explosion Protected</td><td>EEx-rated wiring</td><td>Hazardous areas - paint lockers, gas spaces</td></tr>
   </table>
+
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Regulation 45 prohibition:</strong> Fuses must NOT be fitted in any earthed conductor. Ensures hull earth connection is continuously maintained. A fuse in the earth conductor could create a dangerous open-earth condition.</div></div>
+
+  
+  <div class="n-h1" id="s-survey-checks">📋 Class Special Electrical Survey - Mandated Protocols</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>The single most heavily targeted topic in MMD orals. You must state exactly what documents you present and what is physically inspected.</strong></div></div>
+
+  <div class="n-h2">Mandatory Surveyor Documentation Portfolio</div>
+  <ul class="n-list">
+    <li><strong>Statutory Certificates:</strong> Valid Safety Equipment Certificate (SEC) or Safety Construction Certificate (SCC), GMDSS Radio Maintenance Certificate (if using shore-based Option B), and Certificate of Compliance for Dangerous Goods.</li>
+    <li><strong>Operational Records &amp; Logs:</strong> Comprehensive IR logs for all motors, generators, and distribution cables (with temperatures); battery service books (SG, electrolyte levels, capacity load data for GMDSS, emergency DG, and UPS banks); emergency generator monthly auto-start and annual full load trial records; fire detection panel logs; month-end reports countersigned by Chief Engineer.</li>
+    <li><strong>Approved Blueprints:</strong> Single-line electrical distribution diagrams, MSB structural busbar drawings, emergency switchboard schematics, and shipboard electrical load analysis calculations.</li>
+  </ul>
+
+  <div class="n-h2">Physical Survey Inspection Checkpoints</div>
+  <ul class="n-list">
+    <li><strong>Main Switchboard (MSB):</strong> Insulators checked for carbon tracking or fractures, busbar joint tightness torque values verified, phase spacing clearances inspected, and all protection relays (under-voltage, earth fault, reverse power, preferential trip) functionally tested.</li>
+    <li><strong>Generators &amp; Alternators:</strong> No-load verification, voltage build-up tracking, steady-state/transient frequency checks, automated parallel load sharing, and reverse power breaker trips.</li>
+    <li><strong>Steering Gear (SOLAS II-1/29):</strong> Changeover links between primary and auxiliary power units tested. Verify main power units put rudder from 35° one side to 30° opposing side within maximum <span class="n-val">28 seconds</span> at full ahead service speed.</li>
+  </ul>
+
+  <div class="n-h1" id="s-ch22">🔥 SOLAS Chapter II-2 - Fire Protection</div>
+  <ul class="n-list">
+    <li><strong>Regulation 9.4:</strong> Cables to essential services (fire pumps, steering gear) must be fire resistant (<span class="n-val">IEC 60331</span>)</li>
+    <li><strong>Regulation 10.2:</strong> Emergency fire pump - independently powered, outside main machinery space, minimum <span class="n-val">0.3 MPa (3 bar)</span>, two simultaneous jets</li>
+    <li><strong>Paint locker:</strong> Fixed smothering system - minimum <span class="n-val">40% CO2</span> concentration, release station outside the space</li>
+    <li><strong>2026 PFOS ban:</strong> All AFFF foam containing PFOS must be replaced with PFOS-free alternatives before first survey after January 2026</li>
+  </ul>
+
+  <div class="n-h1" id="s-ch3">🆘 SOLAS Chapter III - LSA</div>
+  <ul class="n-list">
+    <li><strong>Embarkation lighting (Reg 11.7):</strong> Each station illuminated by emergency switchboard or dedicated battery - illuminates ladder, lifeboat, sea surface</li>
+    <li><strong>EEBD (Reg 35):</strong> Emergency Escape Breathing Device - <span class="n-val">10 minutes</span> air for escape only. Minimum <span class="n-val">2 on bridge</span>, minimum <span class="n-val">2 in machinery space</span></li>
+    <li><strong>Lifeboat battery:</strong> <span class="n-val">24V DC</span>, capable of <span class="n-val">6</span> consecutive cold starting attempts, powers consumers for minimum <span class="n-val">30 minutes</span></li>
+    <li><strong>SART carriage:</strong> Minimum <span class="n-val">2 per ship</span> &gt;500 GT (SOLAS III Reg 7.1), in lifeboats or grab-bags</li>
+  </ul>
+
+  <div class="n-h1" id="s-ch4">📻 SOLAS Chapter IV - GMDSS</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Regulation 13 - Reserve Power:</strong> Dedicated GMDSS battery must supply ALL GMDSS equipment for <span class="n-val">6 hours</span> (international voyage without UPS) or <span class="n-val">1 hour</span> (with auto-switching UPS). Annual load test. Replace when capacity &lt;<span class="n-val">80%</span>. Dedicated - no other use.</div></div>
+
+  <div class="n-h1" id="s-ch5">🧭 SOLAS Chapter V - Navigation</div>
+  <ul class="n-list">
+    <li><strong>Regulation 19:</strong> RADAR, gyrocompass, echo sounder, AIS, ECDIS carriage requirements based on ship size</li>
+    <li><strong>BNWAS (Reg 19.2.2):</strong> Bridge Navigational Watch Alarm System - dormant timer <span class="n-val">3–12 minutes</span>. Progressive alarms escalating to master then engine room.</li>
+    <li><strong>VDR (Regulation 20):</strong> Cargo ships &gt;<span class="n-val">3,000 GT</span>, passenger ships &gt;<span class="n-val">150 GT</span></li>
+  </ul>
+
+  
+  <div class="n-h1" id="s-ism">⚓ ISM Code - Safety Management &amp; Audit Architecture</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Mandatory under SOLAS Chapter IX. Surveyors Kamath and Deswal screen your understanding of audit failures.</strong></div></div>
+
+  <div class="n-h2">The Role of the Designated Person Ashore (DPA)</div>
+  <p class="n-p">Enforced by <strong>ISM Code Clause 4</strong>, the DPA serves as the critical operational conduit linking individual ships to highest levels of shore-side corporate management. The DPA monitors safe operation of all fleet vessels, ensures adequate resources and technical support are delivered, and evaluates all reported accidents or near-misses. The DPA must remain reachable <span class="n-val">24/7</span> for shipboard emergencies.</p>
+
+  <div class="n-h2">Non-Conformity vs. Major Non-Conformity vs. PSC Deficiency</div>
+  <ul class="n-list">
+    <li><strong>Minor Non-Conformity:</strong> An occasional or isolated objective failure to fulfill a requirement of the Safety Management System (SMS) that does not immediately threaten ship safety. Corrective action must be closed out within an agreed timeframe (typically before the next audit cycle). <em>Example: An ETO forgets to sign a routine battery log.</em></li>
+    <li><strong>Major Non-Conformity (MNC):</strong> A severe, systematic deviation that poses an immediate, serious threat to the safety of crew, the ship, or the marine environment. <span class="bad"><strong>An MNC instantly suspends or withdraws the ship's SMC and the company's DOC</strong></span>, grounding the vessel until resolved. <em>Example: Failing to execute mandatory emergency blackout or fire drills for months.</em></li>
+    <li><strong>PSC Deficiency:</strong> A physical equipment, documentation, or operational defect logged directly by a Port State Control officer during a port inspection. Key distinction: A Non-Conformity = systemic/procedural SMS failure found during an ISM audit. A Deficiency = localized physical component failure found during a port entry inspection.</li>
+  </ul>
+
+  <div class="n-h1" id="s-isps">🛡️ ISPS Code - Maritime Security Controls (SOLAS XI-2)</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Covers international anti-terrorism, security levels, and automated tracking loops.</strong></div></div>
+
+  <div class="n-h2">MARSEC Security Levels Defined</div>
+  <ul class="n-list">
+    <li><strong>MARSEC Level 1 (Normal):</strong> Baseline appropriate safety tier maintained at all times. Enforces routine 24-hour gangway watches, basic access controls, continuous SSAS arming, and random security rounds.</li>
+    <li><strong>MARSEC Level 2 (Heightened):</strong> Activated during a documented elevated risk of a security incident. Triggers additional security patrols, tighter access restrictions, logging of all boarding personnel baggage, and enhanced CCTV monitoring focus.</li>
+    <li><strong>MARSEC Level 3 (Exceptional):</strong> Triggered when a security incident is probable or imminent. Enforces total structural ship lockdown, stops non-essential operations, restricts boarding to military/security personnel, and may involve immediate SSAS activation or refusing port entry.</li>
+  </ul>
+
+  <div class="n-h2">ETO Security Infrastructure Maintenance Scope</div>
+  <ul class="n-list">
+    <li><strong>CCTV Arrays:</strong> Verify cameras operate continuously, fields of view completely cover the gangway and all restricted access headers, and historical recording data is backed up.</li>
+    <li><strong>Access Controls:</strong> Maintain electronic card readers, PIN pads, and electromagnetic locks securing <strong>Designated Restricted Areas</strong> (Navigation Bridge, Engine Room, Steering Flat, Radio Room, Emergency Generator Room, and the ECR). Ensure mechanical emergency fail-safe overrides function instantly on fire panel trips.</li>
+    <li><strong>SSAS:</strong> Test the hidden activation pushbuttons (one on bridge, one hidden in crew spaces) every <span class="n-val">3 months</span> to confirm they dispatch silent distress messages to the company and flag state without firing any onboard alarms.</li>
+  </ul>
+
+  <div class="n-h1" id="s-conventions">🏛️ International Conventions - IMO Committees, MLC &amp; STCW</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Core legal instruments regulating technical engineering competencies, crew welfare, and toxic workspace entry.</strong></div></div>
+
+  <div class="n-h2">IMO Technical Committee Framework</div>
+  <ul class="n-list">
+    <li><strong>MSC (Maritime Safety Committee):</strong> Primary technical body handling all safety-related conventions including stability, LSA gear, fire protection, bridge navigation, and radio communications.</li>
+    <li><strong>MEPC (Marine Environment Protection Committee):</strong> Directs all environmental and pollution prevention regulations, overseeing MARPOL Annexes I–VI, ballast water treatment systems, and GHG/CII targets.</li>
+  </ul>
+
+  <div class="n-h2">MLC 2006 Seafarers' Bill of Rights &amp; Work-Rest Limits</div>
+  <p class="n-p">The Maritime Labour Convention (MLC) establishes baseline working and living requirements for seafarers via 5 main Titles:</p>
+  <ul class="n-list">
+    <li><strong>Title 1:</strong> Minimum Requirements (Minimum age 16, medical certificates, training benchmarks)</li>
+    <li><strong>Title 2:</strong> Conditions of Employment (SEAs, wages, mandatory rest curves)</li>
+    <li><strong>Title 3:</strong> Accommodation &amp; Recreation (Cabin layouts, mess room criteria, AC/ventilation - ETO owned)</li>
+    <li><strong>Title 4:</strong> Health Protection &amp; Medical Care (Onboard medical access, welfare networks, social security)</li>
+    <li><strong>Title 5:</strong> Compliance and Enforcement (Flag state oversight, port state control deficiency processing)</li>
+  </ul>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Mandatory STCW &amp; MLC Rest Hour Thresholds:</strong><br>
+  Minimum <span class="n-val">10 hours of rest</span> in any 24-hour period<br>
+  Minimum <span class="n-val">77 hours of rest</span> in any 7-day period<br>
+  Rest cannot be split into more than two segments; one segment must deliver minimum <span class="n-val">6 hours</span> continuous rest.<br>
+  Falsifying logs = off-hire detention violation.</div></div>
+
+  <div class="n-h2">Enclosed Space Toxic Gases &amp; Entry Permits</div>
+  <p class="n-p">Before entering cargo holds, ballast tanks, chain lockers, or cofferdams, a formal Permit to Work (PTW) must be cleared after atmospheric gas testing with a calibrated multi-gas meter:</p>
+  <ul class="n-list">
+    <li><strong>Oxygen (O₂):</strong> Safe threshold strictly between <span class="n-val">19.5% and 23.5%</span>. Below 19.5% = asphyxiation hazard.</li>
+    <li><strong>Hydrogen Sulphide (H₂S):</strong> Highly lethal toxic byproduct from biological decomposition; threshold limit value capped at <span class="n-val">1 ppm</span>.</li>
+    <li><strong>Carbon Monoxide (CO):</strong> Product of incomplete combustion; attaches to blood hemoglobin to induce rapid suffocation. Flammable gases must register strictly <span class="n-val">&lt;1% LEL</span>.</li>
+  </ul>
+
+  <div class="n-h1" id="s-new2026">🆕 New 2026 SOLAS Regulations</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Brand new 2026 regulations - surveyors are already asking about these.</strong> Know both: Lifting Appliances (Ch II-1/3-13) and Electronic Inclinometer requirement.</div></div>
+
+  <div class="n-h2">SOLAS II-1 Regulation 3-13 - Lifting Appliances &amp; Anchor Winches (1 January 2026)</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Scope:</strong> First mandatory global safety standard for all onboard lifting appliances (cargo cranes, engine room cranes, stores cranes) and anchor handling winches. Effective <span class="n-val">1 January 2026</span>.</div></div>
+
+  <ul class="n-list">
+    <li><strong>Load testing:</strong> Proof load test at <span class="n-val">125% SWL</span> (Safe Working Load) - witnessed by class surveyor</li>
+    <li><strong>New appliances:</strong> Tested before first use</li>
+    <li><strong>Existing appliances:</strong> Must be tested at first SAFCON renewal survey on or after <span class="n-val">1 January 2026</span></li>
+    <li><strong>SWL marking:</strong> Every appliance must be permanently marked with SWL - faded/missing markings = statutory deficiency</li>
+    <li><strong>Impact:</strong> Mechanical/electrical crane failure can now result in PSC detention - directly affects Safety Construction Certificate</li>
+  </ul>
+
+  <div class="n-h2">The Hong Kong Convention &amp; Inventory of Hazardous Materials (IHM)</div>
+  <p class="n-p">Entering into force in <strong>June 2025</strong>, the Hong Kong International Convention forces all ships &gt;500 GT to carry an active IHM log to protect shipyard recycling workers from lethal exposure to legacy compounds. The ETO must maintain <strong>Part I of the IHM</strong> to map out and trace electrical components containing hazardous materials:</p>
+  <ul class="n-list">
+    <li><strong>PCB-Filled Capacitors:</strong> Found inside older fluorescent light ballasts, motor starters, and MSB filter networks. Forbidden on new builds since the 1990s but must be logged if present.</li>
+    <li><strong>Heavy Metal Loops:</strong> Mercury switches inside automated level instruments, fluorescent/discharge tubes, and lead deposits inside starting/UPS battery banks.</li>
+    <li><strong>Submerged Transducers:</strong> Organotin Tributyltin (TBT) compounds historically bonded into acoustic faces of echo sounders or Doppler speed log transducers.</li>
+  </ul>
+
+  <div class="n-h2">SEEMP Part 3 &amp; Operational CII Ratings</div>
+  <p class="n-p">Introduced under <strong>MARPOL Annex VI</strong>, SEEMP Part 3 creates a mandatory operational carbon intensity score (grams CO₂ per cargo-carrying capacity per nautical mile). Ships receive an annual rating scaling from <strong>A (Best) to E (Worst)</strong>. Sustained D or E grades freeze commercial trading profiles and mandate a flag-state corrective action plan. The ETO directly drives fuel savings through a 7-point efficiency checklist:</p>
+  <ol class="n-steps">
+    <li><strong>LED Lighting Upgrades:</strong> Converting fluorescent and halogen lamps to high-efficiency LED chips, slashing hotel load by 30–60%.</li>
+    <li><strong>VFD Fan Adaptation:</strong> Retrofitting variable frequency drives onto sea water cooling pumps and ventilation fans. Dropping fan speed to 80% reduces power consumption by nearly <span class="n-val">50%</span> (affinity laws).</li>
+    <li><strong>Cold Ironing (Shore Power):</strong> Connecting to shore power networks at berth to shut down auxiliary diesel generators completely.</li>
+    <li><strong>Waste Heat Recovery:</strong> Maintaining exhaust gas economizer sensor feedback loops to reduce auxiliary boiler burner fuel consumption.</li>
+    <li><strong>Power Factor Correction:</strong> Calibrating automatic capacitor banks to prevent generators from delivering high apparent power (kVA) for the same useful (kW) load, which wastes fuel through thermal losses.</li>
+    <li><strong>PMS Optimization:</strong> Configuring the Power Management System to run a single generator at 75% load rather than running two parallel units at 35% each, where fuel burn is less efficient.</li>
+    <li><strong>Mechanical Load Reductions:</strong> Tracking and replacing worn motor bearings to eliminate high shaft friction current draw.</li>
+  </ol>
+
+  <div class="n-h2">Safety Override Authority &amp; Registration Protocol</div>
+  <p class="n-p">An override means manually bypassing an automated alarm or safety trip circuit to allow equipment to run despite a critical parameter fault. The ETO must never unilaterally execute a safety bypass. The <strong>Master</strong> holds ultimate authority over the ship; the <strong>Chief Engineer</strong> retains authority over engine room machinery overrides. Every active override must enforce a strict 6-point protocol:</p>
+  <ul class="n-list">
+    <li>1. Obtain direct verbal and written authorization from the Chief Engineer or Master.</li>
+    <li>2. Formally enter the bypass inside the engine room log and the <strong>Switchboard Override Register</strong> (logging date, system tag, authorizer, and reason).</li>
+    <li>3. Institute mandatory increased monitoring - watchkeeper physically assesses the overridden asset every 15–30 minutes.</li>
+    <li>4. Deploy compensatory measures, such as placing an engineer with a portable thermometer directly at a bearing if its PT100 sensor trip is bypassed.</li>
+    <li>5. Cancel the override and clear the circuit immediately once the emergency or sensor repair is completed.</li>
+    <li>6. Critical switch locks must be key-operated or physically sealed to eliminate accidental tampering. <span class="bad"><strong>Never bypass fixed CO2 lines or steering gear safeties.</strong></span></li>
+  </ul>
+
+  <div class="n-h2">MARPOL Annex VI Low-Flashpoint Fuel Certification Rules</div>
+  <ul class="n-list">
+    <li><strong>Pre-Bunkering Flashpoint Declaration:</strong> Bunker supplier must issue a formal written declaration before bunkering operations begin, certifying the fuel flashpoint satisfies the SOLAS safety minimum of <span class="n-val">≥60°C</span>.</li>
+    <li><strong>Bunker Delivery Note (BDN) Content:</strong> The BDN must explicitly state the exact measured flashpoint if below 70°C, or carry a formal text statement confirming flashpoint was measured at or above 70°C. If the BDN shows a value below 60°C, the ship must refuse the bunker batch and report a statutory violation to the flag state.</li>
+  </ul>
+
+
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>ETO responsibility for cranes:</strong> Maintain electrical systems (motors, VFDs, limit switches, electromagnetic brakes). Overload limit switches (hoist cut-out at SWL) must be functional, calibrated, and tested annually. VFD parameter backup required. Log all maintenance in PMS.</div></div>
+
+  <div class="n-h2">Electronic Inclinometer Requirement (1 January 2026)</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">Containerships and bulk carriers <span class="n-val">≥ 3,000 GT</span> must carry a mandatory electronic inclinometer connected to the VDR. Records real-time roll angles - provides hard data on ship motion to prevent parametric rolling casualties. New requirement following a series of major container ship casualties.</div></div>
+
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - SOLAS Chapters for ETO:</strong> II-1 = electrical (voltage ±2.5%, emergency DG 45s/18h) | II-2 = fire (fire resistant cables IEC 60331, PFOS ban 2026) | III = LSA (EEBD 10min, lifeboat 6 starts) | IV = GMDSS (battery 6h/1h) | V = navigation (VDR, BNWAS) | New 2026 = Lifting Appliances + Inclinometer.</div></div>
+
+  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Q&amp;A - Topic 16</div>
+
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>How many chapters in SOLAS and which covers electrical? (All surveyors)</strong><br><strong>Ideal Answer:</strong> SOLAS has <span class="n-val">14 chapters</span>. Electrical installations are in Chapter II-1, Part D. It covers: main and emergency power sources (Reg 40–45), voltage and frequency limits (Reg 40), emergency source of power (Reg 43), and cable requirements (Reg 45).</div></div>
+
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>PSC inspector wants a blackout test - describe procedure. (All surveyors)</strong><br><strong>Ideal Answer:</strong> 1. Brief all staff. 2. Inform bridge - safe navigational situation. 3. Verify emergency DG in AUTO mode. 4. Trip running main generator ACB - start timer. 5. Emergency DG must auto-start and supply emergency switchboard within <span class="n-val">45 seconds</span>. 6. Verify essential services: emergency lighting, navigation lights, fire detection, GMDSS. 7. Start main generator, synchronise, restore loads sequentially. 8. Log all times, results, and any defects. Present records to PSC inspector.</div></div>
+
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the transitional source of emergency power? (All surveyors)</strong><br><strong>Ideal Answer:</strong> A dedicated battery (SOLAS II-1/43) that automatically supplies emergency lighting, navigation lights, and internal communications for minimum <span class="n-val">30 minutes</span>. Covers the critical gap between blackout occurring and emergency generator coming online (<span class="n-val">45 seconds</span>). Automatic switchover - no manual action needed.</div></div>
+
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What does SOLAS say about cables in machinery spaces? (Vishwanathan, Kamath)</strong><br><strong>Ideal Answer:</strong> SOLAS II-2/9.4: cables to essential services (fire pumps, steering gear, emergency lighting) must be fire resistant - <span class="n-val">IEC 60331</span>, maintain circuit integrity for minimum <span class="n-val">3 hours</span> at <span class="n-val">750°C</span>. SOLAS II-1/45: all cables in enclosed spaces must be flame retardant (<span class="n-val">IEC 60332</span>). Hazardous areas: explosion protected (<span class="n-val">IEC 60079</span>). Fuses must NOT be fitted in earthed conductors.</div></div>
+
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the new SOLAS 2026 lifting appliances regulation? (New question)</strong><br><strong>Ideal Answer:</strong> SOLAS II-1 Regulation 3-13, effective <span class="n-val">1 January 2026</span>. First mandatory global standard for lifting appliances and anchor winches. Requires proof load testing at <span class="n-val">125% SWL</span> witnessed by class surveyor. All appliances must be permanently marked with SWL. Existing ships tested at first SAFCON renewal after January 2026. Crane defects can now result in PSC detention. ETO must maintain all electrical components (motors, brakes, limit switches) and test overload cut-outs annually.</div></div>
+
+  <div class="n-h1" id="s-quickrev">📊 Quick Revision - Topic 16</div>
   <table class="n-table">
-    <tr><th>1. SOLAS — STRUCTURE, CHAPTERS & ELECTRICAL RELEVANCE</th></tr>
+    <tr><th>Regulation</th><th>Frequency</th><th>Key Values</th></tr>
+    <tr><td>SOLAS II-1/40 Voltage/Frequency</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Steady ±<span class="n-val">2.5%</span>V / ±<span class="n-val">5%</span>f | Transient ±<span class="n-val">20%</span>V / ±<span class="n-val">10%</span>f | Recovery <span class="n-val">1.5s</span> / <span class="n-val">5s</span></td></tr>
+    <tr><td>SOLAS II-1/43 Emergency DG</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Cargo <span class="n-val">45s / 18h</span> | Passenger <span class="n-val">30s / 36h</span> | Above bulkhead deck, outside ER</td></tr>
+    <tr><td>Transitional source</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Battery | <span class="n-val">30 min</span> | Nav lights + emergency lighting + comms</td></tr>
+    <tr><td>Cable standards</td><td class="hl">⭐⭐⭐⭐ Vishwanathan, Kamath</td><td>IEC 60331 = fire resistant (<span class="n-val">3h/750°C</span>) | IEC 60332 = flame retardant</td></tr>
+    <tr><td>New 2026 Lifting Appliances</td><td class="hl">⭐⭐⭐⭐⭐ New reg - will be asked</td><td>SOLAS II-1/3-13 | Proof load <span class="n-val">125% SWL</span> | Class surveyor witness | Jan 2026</td></tr>
+    <tr><td>GMDSS battery (Ch IV/13)</td><td class="hl">⭐⭐⭐⭐ All surveyors</td><td><span class="n-val">6h</span> without UPS | <span class="n-val">1h</span> with UPS | Annual test | Replace &lt;<span class="n-val">80%</span></td></tr>
+    <tr><td>EEBD (Ch III)</td><td class="hl">⭐⭐⭐⭐ Multiple surveyors</td><td><span class="n-val">10 minutes</span> air | Min <span class="n-val">2 bridge</span> + <span class="n-val">2 machinery space</span></td></tr>
   </table>
-  <div class="body">1.1 What is SOLAS</div>
-  <div class="body">SOLAS (Safety of Life at Sea) is an international maritime treaty administered by the IMO (International Maritime Organization) that specifies minimum safety standards in the construction, equipment, and operation of merchant ships. The current version is SOLAS 1974, as amended, which entered into force on 25 May 1980. It applies to all ships on international voyages. SOLAS sets out regulations covering structural safety, fire protection, life-saving appliances, radio communications, navigational safety, cargo management, nuclear ship safety, and high-speed craft. Flag states enforce SOLAS on ships registered under their flag; Port State Control (PSC) officers verify compliance during port inspections.</div>
-  <div class="body">SOLAS 1974 consists of 14 chapters (as of current amendments), plus an Annex containing certificates. The number of chapters has grown over time as new regulations were added. The most commonly asked figure — total SOLAS chapters — is 14 chapters. The Convention has no separate Annexes in the MARPOL sense; additional requirements are incorporated as amendments (MSC Resolutions) and new chapters added to the main body.</div>
-  <table class="n-table">
-    <tr><th>SOLAS CHAPTER</th><th>TITLE</th><th>ETO RELEVANCE</th></tr>
-    <tr><td>Chapter I</td><td>General Provisions — survey, inspection, certificates, PSC</td><td>Surveys, certificates, PSC inspection procedures</td></tr>
-    <tr><td>Chapter II-1</td><td>Construction — Subdivision, Stability, Machinery & Electrical Installations</td><td>CRITICAL for ETO — all electrical equipment requirements, emergency power, steering gear, bilge pumping, UMS</td></tr>
-    <tr><td>Chapter II-2</td><td>Fire Protection, Fire Detection and Fire Extinction</td><td>Fire detection systems, fixed fire fighting, fire pumps, fire-resistant cables for essential services</td></tr>
-    <tr><td>Chapter III</td><td>Life-Saving Appliances and Arrangements</td><td>EPIRB, SART, lifeboat electrical, immersion suit, emergency lighting, BNWAS</td></tr>
-    <tr><td>Chapter IV</td><td>Radio Communications (GMDSS)</td><td>GMDSS equipment, battery capacity (Reg 13), NAVTEX, EPIRB, Inmarsat, VDR</td></tr>
-    <tr><td>Chapter V</td><td>Safety of Navigation</td><td>RADAR, AIS, ECDIS, echo sounder, gyrocompass, navigational lights, BNWAS, VDR</td></tr>
-    <tr><td>Chapter VI</td><td>Carriage of Cargoes</td><td>Grain loading, bulk carrier safety, cargo instrument requirements</td></tr>
-    <tr><td>Chapter VII</td><td>Carriage of Dangerous Goods</td><td>IMDG Code, IMSBC Code, IGC Code (gas carriers), IBC Code (chemical tankers)</td></tr>
-    <tr><td>Chapter VIII</td><td>Nuclear Ships</td><td>Special requirements for nuclear-powered vessels — rare on merchant fleet</td></tr>
-    <tr><td>Chapter IX</td><td>Management for Safe Operation of Ships</td><td>ISM Code — Safety Management System, DOC, SMC</td></tr>
-    <tr><td>Chapter X</td><td>Safety Measures for High-Speed Craft</td><td>HSC Code requirements</td></tr>
-    <tr><td>Chapter XI-1</td><td>Special Measures to Enhance Maritime Safety</td><td>PSC, CSR (Continuous Synopsis Record), enhanced surveys</td></tr>
-    <tr><td>Chapter XI-2</td><td>Special Measures to Enhance Maritime Security</td><td>ISPS Code, SSAS, Ship Security Plan, Ship Security Officer</td></tr>
-    <tr><td>Chapter XII</td><td>Additional Safety Measures for Bulk Carriers</td><td>Flooding detection (WIDAS), water ingress alarms for cargo holds and fore/aft peak</td></tr>
-    <tr><td>Chapter XIII</td><td>Verification of Compliance</td><td>IMO Member State Audit Scheme (IMSAS) — compliance verification</td></tr>
-    <tr><td>Chapter XIV</td><td>Safety Measures for Ships Operating in Polar Waters</td><td>Polar Code — Arctic and Antarctic operations</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>KEY EXAM POINTS — SOLAS Chapters</th></tr>
-    <tr><td>Total SOLAS chapters: 14 (as of current version including polar code Chapter XIV) ELECTRICAL INSTALLATIONS chapter: SOLAS Chapter II-1, Part D (Electrical Installations) — covers all shipboard electrical requirements. SOLAS Chapter II-1 Part D key regulations for ETO: main source of electrical power, emergency source of electrical power, precautions against shock/fire/other hazards, emergency switchboard, UMS requirements, steering gear, bilge pumping. CHAPTER 12 — Additional Safety Measures for Bulk Carriers: Flooding detectors (WIDAS) for cargo holds, fore peak, and aft peak tanks. Water ingress alarms. Structural strength requirements. CHAPTER 13 — Verification of Compliance: IMO Member State Audit Scheme (IMSAS) — verifies that flag states properly implement and enforce IMO conventions. Does not directly regulate ship operations but ensures flag state oversight quality. TRANSIENT SOURCE (SOLAS II-1, Reg 43): Transitional source of emergency power — a battery capable of supplying emergency lighting for 30 minutes while the emergency generator is starting. Provides power during the 45-second auto-start period of the emergency generator. AVR VOLTAGE REGULATION (SOLAS II-1, Reg 40): The voltage must be maintained within +/-2.5% of rated voltage under steady-state conditions. Transient recovery: after sudden load changes, voltage must recover to within 1.5% of rated within 2 seconds.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>How many chapters in SOLAS? Which chapter covers electrical installations? What does Chapter 12 and 13 cover? [ORAL2026, Mumbai bank]</td><td>SOLAS (Safety of Life at Sea) 1974, as amended, currently has 14 chapters. The chapter covering electrical installations is Chapter II-1, specifically Part D — Electrical Installations. This part covers: main source of electrical power, emergency source of electrical power, emergency switchboard, transitional source of emergency power, starting arrangements for emergency generators, precautions against shock, fire, and other hazards from electrical equipment, electrical equipment in hazardous areas, and unattended machinery space (UMS) electrical requirements. Chapter 12 covers Additional Safety Measures for Bulk Carriers — primarily requiring water ingress detection systems in cargo holds, double-bottom spaces, fore peak, and aft peak tanks on bulk carriers (WIDAS — Water Ingress Detection and Alarm System). These sensors detect flooding of spaces that could threaten the structural integrity and stability of bulk carriers. Chapter 13 covers Verification of Compliance — this establishes the IMO Member State Audit Scheme (IMSAS) which audits flag state administrations to verify they are properly implementing and enforcing IMO conventions. Chapter 13 does not regulate ships directly; it ensures that the national maritime administrations (flag states like India, Panama, Marshall Islands) are discharging their responsibilities to oversee ships registered under their flags.</td></tr>
-    <tr><td>SOLAS voltage regulation requirement — how much time to regulate and what percentage? [ORAL2026]</td><td>SOLAS Chapter II-1 Regulation 40 specifies the voltage regulation requirements for ship's generators and their Automatic Voltage Regulators (AVR). The requirements are: under steady-state conditions, the voltage must be maintained within plus or minus 2.5% of the rated voltage for all load conditions from no-load to full load; for frequency, the steady-state deviation must be within plus or minus 5% of rated frequency. For transient conditions — sudden changes in load, such as a large motor starting or a large load being switched on — the SOLAS requirement is that the voltage must recover to within plus or minus 3% of the rated voltage within 1.5 seconds. Some sources and oral candidates state the recovery is within 2 seconds — this is the common practical answer given in orals and is widely accepted. The transient voltage dip itself may go outside the 3% band momentarily during the initial transient, which is acceptable, but sustained deviation beyond 1.5 seconds is not. The ETO tests this by carrying out load throw-on and throw-off tests during commissioning and at electrical survey — a large motor is started across-the-line or a major load block is switched in, and the voltage recovery on the panel voltmeter is timed. The AVR droop setting and gain must be correctly adjusted to meet this specification. If the AVR is too slow or has incorrect gain settings, the voltage may oscillate or take too long to recover, which could indicate an AVR fault or incorrect setting.</td></tr>
-    <tr><td>What is the transient source of emergency power — SOLAS requirement? [ORAL2026]</td><td>The transitional source of emergency electrical power is required by SOLAS Chapter II-1 Regulation 43. It must be a battery capable of automatically supplying emergency lighting, the navigation lights, and the internal communication systems for a minimum of 30 minutes, independent of any other source of electrical power. The purpose of the transitional source is to provide electrical power during the period between a blackout (loss of main power) and the automatic starting and connection of the emergency generator — which SOLAS requires to start automatically and be ready to connect to the emergency switchboard within 45 seconds of loss of main power. During these 45 seconds, the transitional source battery supplies the emergency lighting circuits and navigation lights so the ship does not go dark, and the internal communication system continues working. The transitional source battery is typically located at or near the emergency switchboard and is automatically switched into service by a voltage sensing relay when the emergency switchboard loses power. It is maintained on trickle charge from the emergency switchboard under normal conditions. The ETO must test this battery periodically — confirm it accepts the load and supplies power for the required 30 minutes — and record this in the planned maintenance system.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>2. EMERGENCY GENERATOR — FULL SOLAS REQUIREMENTS</th></tr>
-  </table>
-  <div class="body">The emergency generator is the most heavily tested SOLAS topic across all question banks — it appears in virtually every oral examination. SOLAS Chapter II-1 Regulation 43 covers the emergency source of electrical power for cargo ships.</div>
-  <table class="n-table">
-    <tr><th>EMERGENCY GENERATOR — COMPLETE SOLAS REQUIREMENTS</th></tr>
-    <tr><td>LOCATION: Above the uppermost continuous deck, outside the main machinery space — forward of the main engine room on most ships. Must be accessible from the open deck. Not within the same watertight compartment as the main source of power. FUEL SUPPLY: Independent diesel fuel supply. Fuel tank must have sufficient capacity for minimum 18 hours of continuous operation at full load (SOLAS II-1/43.2.1). AUTO-START: Must start automatically on failure of main electrical supply and connect to emergency switchboard within 45 seconds of loss of main power. MANUAL START: Must also be capable of manual starting — local start provision required at the generator itself. BACKUP START: At least 3 attempts at automatic start. If auto-start fails, must have a second independent means of starting (either a second battery, or a hand-cranking facility). CAPACITY: Must supply, for the period required by SOLAS, all services essential for safety: emergency lighting at all muster/embarkation stations, passageways, stairways, navigation lights, fire detection/alarm system, GMDSS, daylight signalling lamp, emergency fire pump, steering gear if fitted at emergency source, bilge pumps in emergency, general alarm, PA system, emergency lighting in machinery space. DURATION: For cargo ships — minimum 18 hours. For passenger ships — minimum 36 hours. STARTING BATTERY: The starting battery for the emergency generator must be capable of giving at least 3 consecutive attempts at starting in cold conditions. Battery must be maintained in a fully charged state. TESTING: SOLAS requires the emergency generator to be tested under load at regular intervals — monthly test run and annual black-out test. Test run: auto-start test by simulating main power failure. Load test: connect to emergency switchboard under full load. SOLAS REGULATION REFERENCE: Chapter II-1, Regulation 43 — Emergency source of electrical power in cargo ships.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What does SOLAS say about Emergency Generator — location, backup, starting requirements, duration? [All surveyors — asked in every oral]</td><td>SOLAS Chapter II-1 Regulation 43 covers the emergency source of electrical power for cargo ships. The emergency generator must be located above the uppermost continuous deck, outside the main machinery space — it must be in a separate space not contiguous with the main machinery space so it remains accessible and functional even if the main engine room is flooded, on fire, or otherwise inaccessible. The fuel tank must have sufficient capacity for at least 18 hours of continuous operation at full load for cargo ships (36 hours for passenger ships). The emergency generator must start automatically within 45 seconds of loss of main electrical supply and connect to the emergency switchboard automatically. It must also be capable of manual starting at the local control position. There must be at least 3 consecutive automatic starting attempts; if these fail, a second independent means of starting must be available (either a second battery or hand-starting). The starting battery must be maintained in a fully charged state by a battery charger from the emergency switchboard. The emergency generator must supply: emergency lighting at all muster stations, passageways, and escape routes; navigation lights; all GMDSS communications equipment; fire detection and alarm system; general alarm; PA system; emergency fire pump; daylight signalling lamp; and the transitional source (30 minutes of battery backup during the 45-second auto-start period). As ETO, I test the emergency generator monthly under simulated blackout conditions and annually carry out a full load test, recording all results in the PMS and the ship's official log.</td></tr>
-    <tr><td>PSC wants blackout test — procedure as demonstrated in front of surveyor. [Sanjib, multiple banks]</td><td>A blackout test (emergency generator auto-start test) performed in front of a PSC or class society surveyor requires careful preparation and execution. Before the test, I inform the Master and Bridge — navigational watch is maintained. I inform all departmental heads and engineers. I reduce ship load to minimum (stop non-essential equipment: accommodation fans, deck equipment, non-essential pumps) to protect equipment from voltage transient on restoration. I place both other generators in manual mode (if three generators — the standby unit must be in manual so it does not start automatically and mask the emergency generator's performance). I confirm the emergency generator is in AUTO START mode, fuel tank is full, starting battery is fully charged, and emergency switchboard is ready. For the test: I open (trip) the ACB of the running main generator from the MSB. This simulates total main power failure. All main switchboard equipment goes dead. The time starts — the emergency generator must auto-start and close its breaker to the emergency switchboard within 45 seconds. I verify: emergency lighting comes on (via transitional battery immediately), navigation lights stay on, fire alarm system stays active, and the emergency generator starts and comes up to rated voltage and frequency. The surveyor will note the time from blackout to emergency generator supply: must be within 45 seconds. I then restore power: start one main generator, synchronise, connect to main switchboard, transfer load from emergency switchboard to main switchboard, restore all normal loads. I return the standby generator to auto mode. All results are recorded in the official log and presented to the surveyor.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>3. ELECTRICAL SURVEY — DOCUMENTS, PROCEDURE & SURVEYOR CHECKS</th></tr>
-  </table>
-  <div class="body">The electrical survey is the single most-asked topic in MMD orals across all question banks. It is a mandatory periodic survey carried out by the classification society surveyor to verify that the ship's electrical installation remains in compliance with the class rules and SOLAS requirements. The survey is typically carried out every 5 years as part of the Special Survey, with intermediate surveys at annual or 2.5-year intervals depending on the class society's continuous survey scheme.</div>
-  <table class="n-table">
-    <tr><th>DOCUMENTS TO PRESENT TO SURVEYOR — COMPLETE LIST</th></tr>
-    <tr><td>CERTIFICATES: 1. Safety Equipment Certificate (SEC) — or Safety Construction Certificate (SCC) for older ships. 2. GMDSS Radio Maintenance Certificate — if using shore-based maintenance (option B). 3. Certificate of Compliance for Dangerous Goods (if applicable). 4. Class society electrical installation certificate / equipment certificates.  RECORDS & LOGS: 5. Electrical Maintenance Log / PMS records — showing all electrical maintenance tasks completed with dates and signatures. 6. IR test records (insulation resistance test records for all motors, generators, cables) — with dates, temperature, and results. 7. Battery maintenance records — specific gravity, electrolyte levels, load test results for emergency batteries, GMDSS batteries, UPS batteries, lifeboat batteries. 8. Emergency Generator test log — monthly auto-start test records, annual load test record. 9. Fire detection system test records — weekly/monthly detector test records, alarm panel maintenance log. 10. Navigational light test records. 11. GMDSS maintenance log — battery load test, equipment test records. 12. Cable insulation test records for HV system (if fitted). 13. Motor starter test records — overload relay settings, last test dates. 14. Month-end reports signed by Chief Engineer.  DRAWINGS & MANUALS: 15. Approved electrical drawings — single-line diagram, MSB arrangement drawing, emergency switchboard drawing. 16. Equipment manuals for major electrical equipment (generators, MSB, AVR, steering gear motors). 17. Ship's electrical load analysis / power balance calculation.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>WHAT THE SURVEYOR CHECKS — MSB & ELECTRICAL EQUIPMENT</th></tr>
-    <tr><td>MAIN SWITCHBOARD: Check busbar IR (megger <span class="n-val">500V</span>), busbar joint tightness (torque check), insulator condition, phase clearances. Test all protection relays — overcurrent, earth fault, reverse power, under/overvoltage, preferential trip. ACB (AIR CIRCUIT BREAKER) SURVEY: ACB racked out to test/isolated position. Test overcurrent trip — inject secondary current via test kit, verify trip at correct setting. Test under-voltage trip — remove supply, verify trip. Test mechanical operation of springs and contacts. OVERCURRENT TRIP TEST PROCEDURE: Rack out ACB to test position. Connect secondary injection test set to CT (current transformer) secondary terminals on MSB. Inject test current at multiples of rated (typically 150%, 200%, 600% of rated) and record trip time. Compare with relay setting curve. Adjust if outside tolerance. GENERATOR TESTS: No-load run, voltage build-up check, voltage regulation test (AVR response within <span class="n-val">2 sec</span>), frequency regulation, parallel operation test, reverse power test, overcurrent test. EMERGENCY GENERATOR: Auto-start test (full blackout simulation), verify starts within 45 seconds, verify transitional battery supplies load during start period, verify emergency switchboard isolates from main supply. STEERING GEAR: Test primary and secondary steering systems. Test changeover between systems. Test failure alarms. Verify time to put rudder hard over (SOLAS: within 28 seconds, 35° to 35°, at half ship speed, SOLAS II-1/29). PREFERENTIAL TRIP TEST: Test each stage trips in correct sequence with correct time delay. Verify essential services remain live. INSULATION TESTS: IR test of all motors, generator, transformer using megger. Record all values in test record. Temperature correction applied. FIRE DETECTION: Test each zone detector, verify alarm indication on panel with correct zone, test fault conditions. NAVIGATIONAL LIGHTS: Test each light and backup, failure alarms, verify arc compliance.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Electrical survey — what documents do you present, what does the surveyor check? [Sanjib, Deswal, Kamath — every oral]</td><td>For an electrical survey, as ETO I prepare and present the following documents to the class society surveyor. Certificates: the Safety Equipment Certificate (SEC) showing the ship is certified for electrical safety, and any relevant class certificates for electrical installations. Records: the complete PMS electrical maintenance records for the survey period showing all completed jobs with dates and signatures; insulation resistance test records for all motors, generators, and cables with temperature-corrected values and dates; battery records including specific gravity readings, load test results, and electrolyte checks for emergency batteries, GMDSS batteries, and UPS; emergency generator monthly auto-start test logs and the annual load test record; and the GMDSS maintenance logbook. Drawings: the approved single-line electrical diagram, MSB arrangement drawing, and emergency switchboard diagram. The surveyor then physically inspects and tests: the main switchboard — including busbar IR test, busbar joint tightness, insulator condition, and testing of all protection relays (overcurrent, earth fault, reverse power, under-voltage, overvoltage); ACB testing by secondary injection — the ACB is racked out to test position and a test current is injected into the CT secondary to verify the overcurrent relay trips at the correct current and time; generator tests including voltage regulation (AVR response within 1.5–2 seconds), parallel operation, and reverse power protection; emergency generator full auto-start blackout simulation; steering gear test including changeover between systems and time to hard over; preferential trip sequential test; IR tests of major machines; and navigational light tests including backup supplies and failure alarms.</td></tr>
-    <tr><td>How do you carry out the overcurrent trip test at time of survey? [Sanjib, multiple banks]</td><td>The overcurrent trip test is carried out by secondary injection testing of the overcurrent relay associated with the ACB or moulded case circuit breaker being tested. The procedure is as follows. First, the ACB is racked out from the connected position to the isolated or test position — the ACB is electrically isolated from the busbars but the secondary control circuits (including the CT secondary connections) remain connected. Second, I connect a secondary injection test set (a current injection relay test instrument such as a Megger or OMICRON unit) to the secondary terminals of the current transformer associated with that breaker — typically accessible on the rear of the MSB panel. Third, I set the injection current on the test set to the required multiple of the relay pickup setting. For an IDMT (inverse definite minimum time) overcurrent relay, I test at several multiples: typically 150% of setting (slow trip, long time), 200% (moderate time), and 600% (instantaneous element). At each injection level, I start the injection and use a stopwatch to measure the trip time. The ACB trips when the relay output contact closes and energises the trip coil. I compare the measured trip times against the relay's time-current characteristic curve (from the relay calibration sheet or time-current curve in the manual). If the trip times are within the tolerance band (typically ±10% of the curve value), the relay is satisfactory. If outside tolerance, the relay setting must be adjusted and retested. All injection test results — injection current, measured trip time, relay setting, and verdict — are recorded in the survey test record and signed by both the ETO and the surveyor.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>4. ISM CODE — OBJECTIVES, ELEMENTS & CERTIFICATES</th></tr>
-  </table>
-  <div class="body">The ISM Code (International Safety Management Code) is mandatory under SOLAS Chapter IX. It was adopted by the IMO in 1993 and made mandatory for cargo ships >500 GT on international voyages from 1998. The ISM Code establishes an international standard for the safe management and operation of ships and for pollution prevention. It requires shipping companies to have a documented Safety Management System (SMS) that covers all aspects of ship operation.</div>
-  <table class="n-table">
-    <tr><th>ISM CODE — KEY EXAM POINTS</th></tr>
-    <tr><td>OBJECTIVE (ISM Clause 1.2): Ensure safety at sea, prevention of human injury or loss of life, and avoidance of damage to the environment — in particular to the marine environment — and to property. SOLAS REFERENCE: SOLAS Chapter IX — Management for the Safe Operation of Ships. TWO CERTIFICATES: DOC (Document of Compliance) issued to the COMPANY by the flag state. SMC (Safety Management Certificate) issued to the SHIP. Both required. DOC (Document of Compliance): Issued to the shipping company after auditing the company's SMS ashore. Valid for 5 years with annual verification. Covers the ship types the company operates. SMC (Safety Management Certificate): Issued to each individual ship after on-board audit. Valid for 5 years, with intermediate verification every 2.5 years. The ship must have a valid SMC at all times. NON-CONFORMITY: A situation where objective evidence shows the SMS requirements are not fulfilled. Minor deviation — does not immediately threaten safety or environment. Must be corrected within a defined time period. MAJOR NON-CONFORMITY (MNC): An identifiable deviation which poses a serious threat to the safety of persons or the ship, or a serious risk to the environment — or a situation where effective and systematic implementation of a requirement of the code has not been achieved. Results in suspension/withdrawal of DOC or SMC if not corrected immediately. IMO RESOLUTION: ISM Code adopted by IMO Resolution A.741(18), later incorporated into SOLAS Chapter IX.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>ISM CODE — 12 ELEMENTS + 4 ADDITIONAL</th><th>DESCRIPTION</th></tr>
-    <tr><td>1. General — Policy</td><td>Safety and environmental protection policy statement signed by senior management</td></tr>
-    <tr><td>2. Safety & Environmental Protection Policy</td><td>Company's commitment to safety — goals, objectives, responsibilities</td></tr>
-    <tr><td>3. Company Responsibilities & Authority</td><td>Define company's role, designate person ashore (Designated Person Ashore — DPA)</td></tr>
-    <tr><td>4. Designated Person Ashore (DPA)</td><td>Link between company and ship — access to highest management level for safety issues</td></tr>
-    <tr><td>5. Master's Responsibility & Authority</td><td>Master has overriding authority for safety — no commercial pressure override</td></tr>
-    <tr><td>6. Resources & Personnel</td><td>Ensure ships are manned with qualified, certified, medically fit seafarers</td></tr>
-    <tr><td>7. Development of Plans for Shipboard Operations</td><td>Documented procedures for key operations — mooring, anchoring, bunkering, cargo</td></tr>
-    <tr><td>8. Emergency Preparedness</td><td>Plans for responding to potential emergency situations</td></tr>
-    <tr><td>9. Reports and Analysis of Non-Conformities, Accidents, Hazardous Occurrences</td><td>Near-miss reporting, accident investigation, corrective action</td></tr>
-    <tr><td>10. Maintenance of Ship and Equipment</td><td>Planned maintenance system (PMS), identification of critical equipment</td></tr>
-    <tr><td>11. Documentation</td><td>Control of SMS documents — current versions, distribution, updates</td></tr>
-    <tr><td>12. Company Verification, Review and Evaluation</td><td>Internal audits, management review, continuous improvement</td></tr>
-    <tr><td>+4 Additional (IMO Guidelines)</td><td>Risk assessment, environmental management, energy efficiency, maritime cyber risk</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is ISM Code — objectives, certificates, non-conformity vs major non-conformity? [All surveyors — all banks]</td><td>The ISM Code (International Safety Management Code) is a mandatory international standard adopted under SOLAS Chapter IX that requires shipping companies to establish and implement a Safety Management System (SMS) covering all aspects of ship operation. The primary objectives of the ISM Code as stated in Clause 1.2 are: to ensure safety at sea, prevention of human injury or loss of life, and avoidance of damage to the marine environment and to property. The Code requires the company ashore and the ship to work within a documented SMS. Two certificates are issued under the ISM Code: the DOC (Document of Compliance) is issued to the shipping company after a flag state audit of the company's SMS ashore — it confirms the company has an acceptable SMS and is valid for 5 years with annual verification; and the SMC (Safety Management Certificate) is issued to each individual vessel after an on-board audit — it confirms the ship's SMS is being effectively implemented, valid for 5 years with an intermediate verification at 2.5 years. A non-conformity is a documented deviation from an ISM Code requirement where there is objective evidence that the requirement is not being fulfilled — but it does not immediately threaten safety. The company must take documented corrective action within an agreed timeframe. A major non-conformity (MNC) is a deviation that poses a serious threat to the safety of persons or the ship, or a serious risk to the environment, or where there is evidence that the SMS is not effectively implemented at all. An MNC requires immediate corrective action — failure to correct it results in suspension or withdrawal of the DOC or SMC, which would prevent the ship from trading.</td></tr>
-    <tr><td>What must be in the DOC certificate? What is the Designated Person Ashore? [Mumbai bank]</td><td>The DOC (Document of Compliance) is a certificate issued by the flag state administration (or a recognised organisation acting on its behalf, such as DNV, LR, or BV) to the shipping company. It certifies that the company's Safety Management System complies with the ISM Code requirements and that the company is competent to manage ships of the types specified in the certificate. The DOC must show: the company name and address; the ship types covered (e.g., container vessels, bulk carriers, tankers — the company can only operate ship types for which it holds a valid DOC); the issuing authority; the date of issue; and the validity period (5 years, with annual verification dates recorded). The Designated Person Ashore (DPA), required by ISM Code Clause 4, is a shore-based person designated by the company who has direct access to the highest level of management. The DPA is the link between the ship and the company for all matters related to the safety management system. The DPA's responsibilities include: monitoring the safety and pollution prevention aspects of the operation of each ship; ensuring that adequate resources and shore-based support are provided; receiving reports of non-conformities, hazardous occurrences, and accidents; ensuring they are investigated and corrective actions taken; and facilitating the connection between the ship's Master and the highest management of the company. The DPA must be reachable at all times — including outside office hours — for emergency situations. The DPA is not responsible for ship operations, only for ensuring the SMS is functioning.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>5. ISPS CODE — SECURITY LEVELS & ETO DUTIES</th></tr>
-  </table>
-  <div class="body">The ISPS Code (International Ship and Port Facility Security Code) was adopted by IMO in 2002 following the September 11 terrorist attacks, and became mandatory under SOLAS Chapter XI-2 from July 2004. It establishes an international framework for detecting and responding to security threats to ships and port facilities. The code applies to all SOLAS vessels on international voyages.</div>
-  <table class="n-table">
-    <tr><th>SECURITY LEVEL</th><th>DEFINITION</th><th>MEASURES IN FORCE</th><th>EXAMPLE SITUATION</th></tr>
-    <tr><td>MARSEC Level 1 (Normal)</td><td>Minimum appropriate security measures maintained at all times — routine operations</td><td>24-hour watch, access control, SSAS armed, security patrols, restricted areas enforced</td><td>Normal trading conditions — no specific threat</td></tr>
-    <tr><td>MARSEC Level 2 (Heightened)</td><td>Heightened security measures for a period due to increased risk of security incident</td><td>Additional security patrols, restricted access tightened, checking all persons boarding, increased surveillance, enhanced CCTV monitoring</td><td>Specific security threat in the trading area, terrorist activity in port region</td></tr>
-    <tr><td>MARSEC Level 3 (Exceptional)</td><td>Exceptional security measures for limited period when security incident is probable or imminent</td><td>Lock down of ship, deny boarding of all non-essential personnel, evacuation of non-essential crew, search all persons and baggage, SSAS activation possible</td><td>Specific intelligence of attack on ship; bomb threat; piracy threat in immediate vicinity</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>ETO DUTIES UNDER ISPS CODE</th></tr>
-    <tr><td>MAINTAIN ELECTRICAL SECURITY SYSTEMS: Ensure CCTV cameras are operational and recording continuously. Check all camera positions cover gangway, deck, and restricted area access points. Maintain CCTV recording system and backup storage. SSAS (Ship Security Alert System): Maintain SSAS in working order. Ensure both activation points (bridge and secondary location) are functional. Test every 3 months per SOLAS XI-2/6. Notify company in writing before testing. ACCESS CONTROL SYSTEMS: Maintain electronic access control to restricted areas (engine room, bridge, cargo control room) — card readers, PIN pads, electromagnetic locks. Ensure emergency release always functional. COMMUNICATION SYSTEMS: Ensure all internal communication (telephone, PA, bridge-to-bridge) is operational. Maintain portable VHF radios for security team use during elevated security levels. ALARM SYSTEMS: Maintain all intrusion detection alarms, motion sensors, and perimeter alarms as part of the ship security plan. Test per PMS schedule. RESTRICTED AREAS (ETO responsibility): Engine room, MSB room, CO₂ room, battery room, radio room, ECR, bridge, emergency generator room — all restricted areas per Ship Security Plan. Signs posted, access controlled, entry logged at Level 2 and above. SECURITY EQUIPMENT SURVEY PREPARATION: ETO prepares for security audit by ensuring all security-related electrical equipment (CCTV, SSAS, access control, alarms, communication) is documented, tested, and records available for auditor. DEFINITION OF ISPS LEVEL 3: A level where a security incident is probable or imminent — ship takes the most stringent protective measures possible. Source from ORAL2026: Level 3 = security incident is about to happen or is happening.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is ISPS Code — 3 security levels, ETO duties? [Sanjib, Deswal, Mumbai bank, ORAL2026]</td><td>The ISPS Code (International Ship and Port Facility Security Code) is a mandatory international framework under SOLAS Chapter XI-2 that provides standardised measures to enhance the security of ships and port facilities against threats such as terrorism, piracy, and unlawful acts. It applies to all SOLAS vessels on international voyages from July 2004. There are three maritime security levels: Level 1 (MARSEC 1) is the normal baseline level where minimum security measures are maintained at all times — routine access control, 24-hour deck watch, restricted areas enforced, and SSAS armed. Level 2 (MARSEC 2) is heightened security due to an increased risk of a security incident in the area — additional security patrols are instituted, access is more tightly controlled, all persons boarding are checked and logged, enhanced CCTV monitoring, and the Company Security Officer (CSO) and Master are in close communication. Level 3 (MARSEC 3) is exceptional measures when a security incident is probable or imminent — the ship may lock down, restrict all boarding, search all persons and baggage, activate SSAS if directed by authorities, and may refuse to enter port. As ETO, my duties under the ISPS Code include: maintaining all electronic security systems (CCTV, access control systems for restricted areas, intrusion alarms, motion sensors); maintaining the SSAS in fully operational condition and testing it every 3 months; ensuring all ship communication systems (PA, internal telephone, portable VHF) are serviceable for security operations; maintaining records of all security system tests and maintenance in the ship security records file; preparing security-related electrical equipment documentation for port state control and company security audits; and ensuring restricted areas (engine room, bridge, CO₂ room, battery room, radio room) have functional access control and are correctly signposted.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>6. IMO STRUCTURE, STCW, MLC & IMO CODES</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>IMO 4 pillars — what are they? [Mumbai bank, ORAL2026]</td><td>The IMO (International Maritime Organization) operates on the basis of four fundamental pillars that represent its core mandates and areas of work. The first pillar is Safety — the IMO develops and maintains international regulations for the safety of ships and the people on board, including SOLAS, the LSA Code, the Fire Safety Systems Code, and all related instruments. The second pillar is Security — the IMO develops measures to prevent and suppress maritime terrorism, piracy, and other unlawful acts against ships, including the ISPS Code, SUA Convention, and LRIT. The third pillar is Environmental Protection — the IMO regulates and aims to eliminate pollution from ships, including oil pollution (MARPOL Annex I), noxious liquid substances, garbage, sewage, air pollution (Annex VI), and addresses greenhouse gas emissions (Energy Efficiency Design Index, Carbon Intensity Indicator). The fourth pillar is the Rule of Law / Legal — the IMO provides the legal framework for maritime matters through conventions and instruments that are legally binding on member states, including facilitating compensation regimes, liability conventions (CLC, Fund Convention), and the law of the sea. Some sources describe this fourth pillar as Efficiency — covering the facilitation of maritime traffic (FAL Convention) and the efficiency of shipping as a transport mode. The IMO is based in London and was established by a convention adopted in 1948; it began work in 1959. India is a member state of the IMO.</td></tr>
-    <tr><td>What is STCW — Manila amendments, ETO certificate? [ORAL2026, Mumbai bank]</td><td>STCW (Standards of Training, Certification and Watchkeeping for Seafarers) is an international convention adopted by the IMO in 1978 that establishes minimum training, certification, and watchkeeping standards for seafarers. It was significantly revised by the 2010 Manila Amendments, which entered into force on 1 January 2012. The Manila Amendments introduced several important changes: new certification requirements for officers on all ship types; enhanced requirements for security-related training (PDSD — Proficiency in Designated Security Duties); new requirements for training in electro-technical operations — specifically, the introduction of Electro-Technical Officer (ETO) as a formally recognised STCW officer rank with its own certification requirements; medical fitness requirements updated; alcohol limits defined; updated competencies for tanker officers; and requirements for safety training updated. For ETO specifically, STCW Code Table A-III/6 specifies the competencies required for the certificate as Electro-Technical Officer in charge of an electro-technical watch — covering electrical, electronic, and control engineering; maintenance and repair of electrical and electronic equipment; monitoring and controlling the operation of electrical systems; and safety management. The ETO must hold a certificate of competency issued by the flag state. In India, this is the MMD Class 2 ETO CoC, which is what the MMD oral examination leads to. Additional certificates required include Basic Safety Training (BST), Advanced Fire Fighting, and relevant ship-type specific training.</td></tr>
-    <tr><td>MLC 2006 — what is it? IMO codes — 5 types? [Mumbai bank, ORAL2026]</td><td>MLC 2006 (Maritime Labour Convention 2006) is an ILO (International Labour Organization) convention, not an IMO convention — it consolidates and updates more than 65 existing ILO maritime labour instruments and is sometimes called the seafarers' bill of rights. It entered into force on 20 August 2013. MLC 2006 establishes minimum working and living standards for all seafarers on ships of 500 GT or above on international voyages. It is organised into 5 Titles: Title 1 — Minimum requirements for seafarers to work on a ship (minimum age 16, medical fitness, training and qualifications, recruitment and placement); Title 2 — Conditions of employment (employment agreements/contracts, wages, hours of work and rest, annual leave, repatriation, seafarer compensation for loss of ship); Title 3 — Accommodation, recreational facilities, food and catering; Title 4 — Health protection, medical care, welfare and social security protection; Title 5 — Compliance and enforcement (flag state responsibilities, port state control, seafarer complaints). Two MLC certificates are issued: the Maritime Labour Certificate (MLC Certificate) to ships, and the Declaration of Maritime Labour Compliance (DMLC) — Part I (flag state requirements) and Part II (how the company meets those requirements). The 5 IMO codes are: IMDG Code (dangerous goods), IMSBC Code (solid bulk cargoes), IGC Code (gas carriers), IBC Code (chemical tankers — bulk liquids), and the ISM Code (safety management). Other codes include the LSA Code, FSS Code, FTP Code, IHC Code, and MODU Code.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>7. UMS REQUIREMENTS  |  WIDAS  |  STEERING GEAR SOLAS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>UMS — what are SOLAS requirements for unattended machinery space? [ORAL2026]</td><td>UMS (Unattended Machinery Space) refers to the operation of a ship's engine room without a permanent engineer on watch — the machinery is monitored and controlled remotely from the ECR (Engine Control Room) or bridge, with an engineer on call. SOLAS Chapter II-1, Regulation 46 to 54 covers periodically unattended machinery spaces. Key SOLAS requirements for UMS: first, a comprehensive alarm system must be installed that groups all UMS machinery alarms and transmits them to the ECR, bridge, engineer's accommodation (alarms must wake a sleeping engineer), and the officer of the watch's location — this is typically the IAS (Integrated Alarm System). Second, a dead man alarm or engineer duty alarm must ensure that the duty engineer confirms his readiness at regular intervals — if not confirmed, the alarm escalates to the bridge. Third, automatic fire detection and suppression systems must be installed in the machinery space. Fourth, automatic bilge monitoring with high level alarms. Fifth, remote shutdown of machinery must be possible — ability to stop fuel oil service pumps, ventilation, etc. from outside the machinery space in emergency. Sixth, safeguards against flooding — bilge alarms, automatic bilge pumps. Seventh, emergency stops for main engine, fuel pumps, and ventilation fans must be accessible from outside the machinery space. For a UMS vessel, the chief engineer is responsible for approving UMS operation, and the ship must have documented procedures for when UMS is permitted and what actions are taken on alarms.</td></tr>
-    <tr><td>WIDAS — sensor type, height in cargo holds and forepeak tank. [Mumbai bank — with cross questions]</td><td>WIDAS (Water Ingress Detection and Alarm System) is required by SOLAS Chapter XII Regulation 12 on bulk carriers — it provides early warning of water ingress into cargo holds, double-bottom spaces, fore peak tanks, and aft peak tanks, which are critical spaces where flooding could rapidly threaten the structural integrity and stability of a bulk carrier. The sensors used in WIDAS are float-type or electrochemical (conductivity probe) water detection sensors. The float type uses a small magnetic float in a vertical guide — when water rises to the sensor level, the float rises and actuates a magnetic reed switch, triggering the alarm. The conductivity probe detects the electrical conductivity of water (seawater has high conductivity compared to dry air). Regarding sensor heights: in cargo holds, the SOLAS XII/12 requirement is that the water ingress sensor must be positioned such that it detects water accumulation at a minimum height of 0.5 metres above the double bottom (i.e., the sensor is at the lowest accessible point in the hold that would indicate dangerous flooding). In the fore peak tank, the water level alarm sensor is fitted at the maximum permissible level — typically the sensor is positioned so that an alarm is given before the tank reaches a level that would cause unsafe trim or flooding of the chain locker. The WIDAS alarm panel is typically on the bridge or in the ECR, with audible and visual alarms for each monitored space. The ETO maintains WIDAS: test each sensor periodically by simulating water contact (pour a small amount of water on the probe), verify alarm at panel, clean probe, check cable connections.</td></tr>
-    <tr><td>Steering gear SOLAS regulation — two systems, power unit, test frequency. [Multiple banks]</td><td>Steering gear is regulated by SOLAS Chapter II-1, Regulation 29 (Steering gear) and Regulation 30 (Steering gear — testing and drills). Key requirements: all ships must have a main steering gear and an auxiliary steering gear. The main steering gear must be capable of putting the rudder from 35° on one side to 30° on the other side in not more than 28 seconds with the ship at maximum service speed (ahead). On cargo ships of 10,000 GT and above, two or more identical power units must be provided for the main steering gear — so that if one unit fails, the other can continue steering. The auxiliary steering gear must be capable of being brought into operation quickly in an emergency, capable of putting the rudder hard over in not more than 60 seconds at half speed or 7 knots (whichever is greater). For ships over 10,000 GT, the auxiliary steering gear must also be power-operated. Both main and auxiliary steering gear control systems must be independent of each other. SOLAS Regulation 30 testing requirements: within 12 hours before departure, the steering gear must be checked and tested — this includes operating the steering gear from bridge and local control, checking the operation of the secondary steering system, verifying rudder angle indicators, and checking steering gear alarms. Every 3 months, a steering gear drill must be conducted. Every 12 months, a full emergency steering drill (using manual/local steering from the steering gear room) must be conducted. The ETO is responsible for the electrical aspects of steering gear maintenance: motor insulation tests, control system testing, hunting gear calibration, limit switch checks, and alarm testing.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>8. PSC INSPECTION  |  CSR  |  SAFETY EQUIPMENT SURVEY</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>PSC inspection — what is it, what do they check for electrical ETO? [Multiple banks]</td><td>PSC (Port State Control) inspection is an examination of a foreign-flagged ship conducted by the maritime authority of the port state to verify that the ship complies with international conventions (SOLAS, MARPOL, STCW, MLC, ISPS). PSC officers have the right to board and inspect any foreign vessel calling at their port. The inspection typically covers: certificates and documentation (all statutory certificates current and valid, GMDSS radio log, oil record book, garbage management plan), safety equipment (lifeboats, liferafts, fire fighting equipment), machinery and hull condition, crew qualifications (STCW certificates, GMDSS certificates), living and working conditions (MLC), and security (ISPS). From the ETO's perspective, PSC may specifically check: the GMDSS equipment operational status and maintenance records; navigational equipment (RADAR, AIS, ECDIS, echo sounder — all operational and calibrated); navigational light operation and failure alarms; emergency generator auto-start test (may request a blackout test); fire detection system test; battery maintenance records; and the ship's electrical certificates. If PSC finds significant deficiencies, they issue a deficiency notice requiring correction by a specified date. If the deficiency poses an immediate risk to safety, the ship may be detained in port until the deficiency is corrected — detention prevents the ship from sailing. Common electrical detentions include: inoperative GMDSS equipment, non-functional emergency generator, inoperative fire detection zone, expired GMDSS battery, or non-functional navigation lights.</td></tr>
-    <tr><td>What is CSR — Continuous Synopsis Record? Under which SOLAS chapter? [ORAL2026]</td><td>The CSR (Continuous Synopsis Record) is a document required by SOLAS Chapter XI-1 Regulation 5, introduced as part of the enhanced maritime security measures after 2001. The CSR provides an on-board record of the ship's history — it is a continuously updated document that must be kept on board at all times. The CSR records: the name of the state whose flag the ship is entitled to fly; the date of registration with that state; the ship's IMO identification number; the port at which the ship is registered; the name of the registered owner and their registered address; the name of the company (if different from the registered owner) and their address; the name of the bareboat charterer (if applicable); the name, nationality, and nature of each classification society with which the ship is classed; the name of the administration or recognised organisation that issued the document of compliance (DOC); the name of the authority that issued the Safety Management Certificate (SMC); and the name of the authority that issued the ISSC (International Ship Security Certificate). Whenever any of these particulars change, the flag state must issue a revised CSR within three months. The CSR must be available for inspection by any authorised officer at any time. The purpose is to ensure transparency about ship ownership, flag, and certification history — making it harder to conceal a vessel's history or switch flags to avoid compliance records.</td></tr>
-    <tr><td>Safety equipment survey — what electrical components are checked? [Multiple banks]</td><td>During the Safety Equipment Survey carried out by the class society surveyor, the electrical components that are specifically checked include the following. GMDSS equipment: operational test of all GMDSS installations (VHF DSC, MF/HF, Inmarsat-C, NAVTEX, EPIRB, SART); GMDSS battery capacity test result records; battery condition; and GMDSS maintenance logbook. LSA (Life-Saving Appliances) electrical equipment: lifeboat electrical systems (engine start battery, bilge pump, lights); liferaft batteries; SART self-test; EPIRB registration and battery expiry date; immersion suit lights; line-throwing apparatus; pyrotechnics (not electrical but checked). Fire fighting electrical equipment: fire detection system — test of each detector zone, alarm panel functions, fault indication, sounders and visual alarms; fire pump motor operation and overload protection settings; emergency fire pump auto-start test; sprinkler system flow alarms and BLIS valve tamper switch. Navigational equipment: all SOLAS-required instruments operational (RADAR, AIS, echo sounder, gyrocompass, ECDIS or paper charts, electronic position fixing); navigational lights operational with backup supply and failure alarms; BNWAS function and test record; VDR annual performance test certificate. Emergency systems: emergency generator auto-start test and 18-hour fuel capacity verification; emergency lighting in all required areas; emergency battery capacity records; transitional source battery test. As ETO I prepare for this survey by ensuring all these items are tested and records are current — typically using a survey checklist aligned to the class society's survey programme.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>9. SOLAS CABLE REGULATIONS  |  ENCLOSED SPACE  |  ADDITIONAL TOPICS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>SOLAS regulations for cables — what does SOLAS say? [ORAL2026]</td><td>SOLAS Chapter II-1 Part D and Chapter II-2 address cable and wiring requirements. The key SOLAS cable requirements relevant to the ETO are as follows. Fire resistant cables for essential services: SOLAS Chapter II-2 Regulation 9.4 requires that cables serving essential services (fire pumps, emergency lighting, steering gear, GMDSS, fire detection) must be fire-resistant cables capable of maintaining circuit integrity in a fire. This is the IEC 60331 fire resistant standard — such cables must function for a minimum period during fire exposure. Flame retardant cables: all cables in enclosed spaces must be flame retardant per IEC 60332 — they must not propagate flame along the cable run. SOLAS Chapter II-1 Regulation 45.9 specifies that wiring in hazardous areas (paint lockers, battery rooms, flammable liquid stores) must be of the appropriate ignition-protected type per IEC 60079. Cable routing: SOLAS requires that cables feeding essential services should, where practicable, be routed away from high-risk areas (galleys, laundries, machinery spaces) to minimise the risk of all redundant feeds being destroyed simultaneously. Overcurrent protection: every circuit must be protected against overcurrent by a fuse or circuit breaker of appropriate rating. SOLAS II-1/45.1 also specifies that no fuse shall be fitted in any earthed conductor. Earthed conductor protection: the earthed conductor of any circuit shall not be broken by any fuse, switch, or circuit breaker — the hull earth connection must be maintained continuously. These requirements collectively ensure that the ship's essential circuits remain operational in emergency conditions.</td></tr>
-    <tr><td>Enclosed space — gases present, permit system. [ORAL2026, Mumbai bank]</td><td>An enclosed space is defined (IMO Resolution A.1050(27)) as a space with limited openings for entry and exit, inadequate natural ventilation, and which is not designed for continuous worker occupancy. On ships, examples include: cargo holds, ballast tanks, double-bottom tanks, void spaces, chain lockers, cofferdams, duct keels, pump rooms, compressor rooms, and cargo pump rooms. The dangerous gases that may be present in enclosed spaces are: oxygen deficiency (O₂ below 19.5% is considered hazardous — normal air is 20.9%); oxygen enrichment (above 23.5% — increased fire and explosion risk); toxic gases — hydrogen sulphide (H₂S, extremely toxic, threshold limit value 1 ppm), carbon monoxide (CO, produced by incomplete combustion or rusting), carbon dioxide (CO₂, asphyxiant at high concentration), and ammonia (NH₃ on refrigeration vessels); and flammable gases — hydrocarbons from cargo residues, methane, and hydrogen. Before entering any enclosed space, a permit to work (PTW) for enclosed space entry must be issued. The permit requires: atmosphere testing with a calibrated multi-gas detector (checking O₂, flammable gas %LEL, and toxic gases H₂S and CO at minimum); continuous ventilation of the space before and during entry; a standby person stationed at the entry point who maintains communication with the person inside and can raise alarm; all entrants must be fit and trained; rescue equipment (BA set, lifeline, rescue harness, resuscitation equipment) ready at the entry point; and the atmosphere must be re-tested every 30 minutes during prolonged work periods. The ETO's role: ensure all gas detection equipment is calibrated and functional; maintain enclosed space rescue equipment.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>10. QUICK REVISION — SOLAS & REGULATIONS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>TOPIC</th><th>FREQUENCY & KEY POINTS</th></tr>
-    <tr><td>Electrical Survey Documents</td><td>⭐⭐⭐⭐⭐ SEC, PMS records, IR test records, battery logs, emg gen test log, GMDSS logbook, single-line diagram, month-end reports. Surveyor checks: ACB secondary injection, IR tests, emg gen blackout test, preferential trip, nav lights, GMDSS battery.</td></tr>
-    <tr><td>Overcurrent Trip Test Procedure</td><td>⭐⭐⭐⭐⭐ ACB racked out to test position. Secondary injection test set → CT secondary terminals. Inject at 150%, 200%, 600% rated current. Measure trip time. Compare with relay time-current curve. Record results.</td></tr>
-    <tr><td>SOLAS Chapters</td><td>⭐⭐⭐⭐⭐ 14 chapters total. Electrical = Ch II-1 Part D. Fire = Ch II-2. LSA = Ch III. GMDSS = Ch IV. Navigation = Ch V. ISM = Ch IX. ISPS = Ch XI-2. Bulk carrier flooding = Ch XII. Verification = Ch XIII. Polar = Ch XIV.</td></tr>
-    <tr><td>Emergency Generator SOLAS</td><td>⭐⭐⭐⭐⭐ Ch II-1 Reg 43. Above uppermost deck, outside ER. Auto-start within <span class="n-val">45 sec</span>. 18 hr fuel (cargo ship). 3 auto-start attempts + second independent start. Transitional source: battery <span class="n-val">30 min</span>. Monthly test + annual blackout test.</td></tr>
-    <tr><td>Voltage Regulation SOLAS</td><td>⭐⭐⭐⭐ Ch II-1 Reg 40. Steady state: ±2.5% voltage, ±5% frequency. Transient: recover to ±3% within <span class="n-val">1.5 sec</span> (practically called '2 seconds' in orals).</td></tr>
-    <tr><td>ISM Code</td><td>⭐⭐⭐⭐⭐ SOLAS Ch IX. Objective: safety + pollution prevention. DOC to company (5yr + annual). SMC to ship (5yr + 2.5yr intermediate). 12+4 elements. DPA = link to highest management. MNC = immediate threat → suspend certificate.</td></tr>
-    <tr><td>ISPS Code</td><td>⭐⭐⭐⭐ SOLAS Ch XI-2. 3 levels: 1=normal, 2=heightened risk, 3=imminent/actual incident. ETO: CCTV, SSAS (test 3-monthly), access control, communication systems, restricted area security. SSAS = silent alert to company + flag state.</td></tr>
-    <tr><td>IMO 4 Pillars</td><td>⭐⭐⭐ Safety + Security + Environmental Protection + Rule of Law (Efficiency). London-based. India is member state.</td></tr>
-    <tr><td>STCW</td><td>⭐⭐⭐ 1978 convention, 2010 Manila Amendments. ETO = STCW Table A-III/6 certification. Formalised ETO rank. Min rest hours, medical fitness, alcohol limits.</td></tr>
-    <tr><td>MLC 2006</td><td>⭐⭐⭐ ILO convention (not IMO). Seafarers' bill of rights. 5 Titles (employment, wages, accommodation, health, enforcement). MLC Certificate + DMLC (Parts I and II).</td></tr>
-    <tr><td>Blackout Test Procedure</td><td>⭐⭐⭐⭐ Inform master/bridge/crew. Reduce load. Place other gens in manual. Trip running gen ACB. Time emg gen auto-start (must be ≤<span class="n-val">45 sec</span>). Verify transitional battery, emergency lighting, nav lights, GMDSS. Record in official log.</td></tr>
-    <tr><td>WIDAS SOLAS Ch XII</td><td>⭐⭐⭐ Bulk carriers. Float switch or conductivity probe. Cargo hold sensors at 0.5m above double bottom. Forepeak at max permissible level. Alarm to bridge. ETO tests by simulating water contact.</td></tr>
-    <tr><td>Steering Gear SOLAS</td><td>⭐⭐⭐ SOLAS II-1/29. Hard over in <span class="n-val">28 sec</span> at full speed (35°→30°). Two power units on ships >10,000 GT. Auxiliary gear: hard over in <span class="n-val">60 sec</span> at half speed. Test within 12hr before departure. Drill every 3 months.</td></tr>
-    <tr><td>PSC + CSR</td><td>⭐⭐⭐ PSC = port state inspection. Detention if serious deficiency. CSR = Continuous Synopsis Record (SOLAS XI-1/5) — ship history document: flag, owner, class, DOC/SMC issuing authority. Updated within 3 months of change.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>FINAL MEMORY AID — SOLAS & REGULATIONS</th></tr>
-    <tr><td>1. SOLAS = 14 chapters. Electrical = Ch II-1 Part D. ISM = Ch IX. ISPS = Ch XI-2. Bulk carrier flooding = Ch XII. GMDSS = Ch IV. Navigation = Ch V. 2. ELECTRICAL SURVEY: SEC + PMS records + IR records + battery logs + emg gen log + GMDSS logbook + single-line drawing. ACB secondary injection test. Blackout simulation. 3. EMERGENCY GENERATOR: Above uppermost deck, outside ER. Auto-start ≤<span class="n-val">45 sec</span>. 18 hr fuel. 3 auto-start attempts. Transitional battery <span class="n-val">30 min</span>. Monthly test + annual blackout test. 4. AVR SOLAS: Steady state ±2.5% voltage. Transient recovery within <span class="n-val">1.5 sec</span> (orals: <span class="n-val">2 sec</span>) to ±3%. 5. ISM: SOLAS Ch IX. DOC to company + SMC to ship. 12+4 elements. DPA = highest management link. MNC = suspend DOC/SMC. 6. ISPS: 3 levels. Level 1=normal, 2=heightened, 3=imminent. ETO: CCTV + SSAS (test 3-monthly) + access control + comms. 7. BLACKOUT TEST: Reduce load → standby gens to manual → trip running ACB → time emg gen (≤<span class="n-val">45 sec</span>) → verify emg lighting + nav lights + GMDSS → restore and log. 8. OVERCURRENT TEST: Rack out ACB to test. Secondary inject via CT terminals. Inject 150/200/600%. Measure trip time. Compare curve. Record. 9. WIDAS: SOLAS Ch XII, bulk carriers. Float/conductivity sensors. Cargo hold = 0.5m above double bottom. Forepeak = max level. 10. MLC = ILO, 5 Titles, seafarers bill of rights. STCW = 1978/Manila 2010, ETO = Table A-III/6. ISM = IMO, SOLAS Ch IX. ISPS = IMO, SOLAS Ch XI-2.</td></tr>
-  </table>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="n-h2">GAP ADDITIONS — v2.1 (Added May 2026)</div>
-  <div class="body">Non-Conformity vs PSC Deficiency — Full Explanation</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Kamath, Deswal — 'non-conformity' asked in almost every session</div></div>
-  <div class="body">Non-conformity (ISM): A failure to comply with requirements of the Safety Management System (SMS). Found during internal or external ISM audits.</div>
-  <div class="body">Major non-conformity: An identifiable deviation posing a serious threat to the safety of persons or the environment — requires immediate corrective action. Can lead to detention or withdrawal of Document of Compliance (DOC).</div>
-  <div class="body">Minor non-conformity: An isolated or occasional failure to comply with SMS requirements — does not immediately threaten safety. Corrective action required within agreed timeframe (typically next audit).</div>
-  <div class="body">PSC Deficiency: A specific equipment, documentation, or operational failure found by Port State Control inspector during a Port State Control inspection. Different from ISM non-conformity.</div>
-  <div class="body">Key difference: Non-conformity = SMS/system level failure (ISM audit). PSC deficiency = individual item failure (port inspection). A non-conformity may or may not become a PSC deficiency.</div>
-  <div class="body">Examples of major NC: No emergency drills conducted, SMS not implemented onboard, critical safety equipment non-functional.</div>
-  <div class="body">Examples of minor NC: Drill records incomplete, some checklists not signed, maintenance overdue for non-critical item.</div>
-  <div class="body">ISM Code — 4 Pillars / Objectives</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Deswal, Sudhir — 'what is ISM? What are its objectives?'</div></div>
-  <div class="body">ISM Code (International Safety Management Code) — implemented under SOLAS Chapter IX.</div>
-  <div class="body">4 Objectives (Pillars): (1) Safety at sea, (2) Prevention of human injury or loss of life, (3) Avoidance of damage to property, (4) Protection of the marine environment.</div>
-  <div class="body">Requires every company to implement a Safety Management System (SMS) covering: safety policy, company responsibilities, designated person (DPA), ship authority, emergency preparedness, non-conformity reporting, maintenance, documentation, and audits.</div>
-  <div class="body">Designated Person Ashore (DPA): Has direct access to highest level of management. Monitors safe operation of all ships. Provides link between company and ship.</div>
-  <div class="body">ETO Duties — ISM and ISPS</div>
-  <div class="body">ISM duties as ETO: Maintain SMS records for electrical equipment (maintenance logs, test records). Report deficiencies through SMS. Conduct electrical safety risk assessments. Participate in emergency drills (fire, abandon ship, blackout drill). Raise non-conformity reports if required.</div>
-  <div class="body">ISPS duties as ETO: Maintain CCTV systems (check recording, storage, camera coverage). Maintain ship's access control systems (keycard readers, intercoms). Maintain communication systems (VHF, PA system, GMDSS). Know restricted areas on your ship — typically: bridge, engine room, steering gear room, cargo control room.</div>
-  <div class="body">ISPS levels: Level 1 = minimum security measures always in force. Level 2 = heightened threat — additional measures. Level 3 = specific threat — maximum measures including full CCTV monitoring, restricted access, increased patrols.</div>
-  <div class="body">Rest Hour Requirements — MLC/STCW</div>
-  <div class="body">STCW/MLC 2006: Minimum rest hours must be maintained and recorded.</div>
-  <div class="body">Minimum rest: 10 hours in any 24-hour period. AND 77 hours in any 7-day period.</div>
-  <div class="body">Rest may be divided into maximum 2 periods — one period must be at least 6 hours continuous.</div>
-  <div class="body">Exceptions: Emergency, drills, or essential shipboard operations may interrupt rest — must be compensated by adequate rest afterward.</div>
-  <div class="body">Records: Rest hour records kept in approved format. PSC will check. Falsifying records = serious offence.</div>
-  <div class="body">ETO role: Maintain own rest hour record. Ensure junior electrical officers also comply. Report to C/E if workload prevents adequate rest.</div>
-  <div class="body">Emergency Generator — SOLAS Regulation (Full Detail)</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Praveen Nair, Sudhir, ALL — 'SOLAS requirements for emergency generator'</div></div>
-  <div class="body">SOLAS II-1/Reg 43 — Emergency Source of Electrical Power:</div>
-  <div class="body">Auto-start: Must start automatically and carry full emergency load within 45 seconds of loss of main power.</div>
-  <div class="body">Fuel endurance: 18 hours (cargo ships). 36 hours (passenger ships). At full emergency load.</div>
-  <div class="body">Location: Above bulkhead deck. Outside machinery spaces. Accessible from open deck. In separate compartment from main machinery space.</div>
-  <div class="body">Transitional source: Battery or UPS must supply emergency power for the 45-second startup period — typically 30 minutes capacity.</div>
-  <div class="body">Emergency load includes: Emergency lighting, navigation lights, fire detection/alarm, fire pump, bilge pump, GMDSS, steering gear control, general alarm, internal communication, fixed fire fighting control panel.</div>
-  <div class="body">Testing: Monthly — trial run under load. Annual — full blackout test (transfer to emg gen under full emergency load). PSC checks test records.</div>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="body">ADDITIONAL GAP ADDITIONS — v2.2 (Added May 2026)</div>
-  <div class="body">SOLAS — Total Number of Chapters</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Gopikrishna, Sudhir — 'how many chapters in SOLAS?'</div></div>
-  <div class="body">SOLAS 1974 (as amended) has 14 Chapters:</div>
-  <div class="body">Chapter I: General Provisions (survey, certificates, port state control)</div>
-  <div class="body">Chapter II-1: Construction — Structure, Subdivision, Stability, Machinery, Electrical Installations</div>
-  <div class="body">Chapter II-2: Fire Protection, Detection and Extinction</div>
-  <div class="body">Chapter III: Life Saving Appliances and Arrangements (LSA)</div>
-  <div class="body">Chapter IV: Radio Communications (GMDSS)</div>
-  <div class="body">Chapter V: Safety of Navigation</div>
-  <div class="body">Chapter VI: Carriage of Cargoes and Oil Fuels</div>
-  <div class="body">Chapter VII: Carriage of Dangerous Goods</div>
-  <div class="body">Chapter VIII: Nuclear Ships</div>
-  <div class="body">Chapter IX: Management for Safe Operation of Ships (ISM Code)</div>
-  <div class="body">Chapter X: Safety Measures for High-Speed Craft</div>
-  <div class="body">Chapter XI-1: Special Measures to Enhance Maritime Safety</div>
-  <div class="body">Chapter XI-2: Special Measures to Enhance Maritime Security (ISPS Code)</div>
-  <div class="body">Chapter XIV: Safety Measures for Ships Operating in Polar Waters</div>
-  <div class="body">ETO focus chapters: II-1 (electrical installations), III (LSA), IV (GMDSS), IX (ISM), XI-2 (ISPS).</div>
-  <div class="body">IMO Structure — Committees and Organisation</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Sudhir, Arbind Choudhary — 'IMO structure?'</div></div>
-  <div class="body">IMO = International Maritime Organization. UN specialised agency. Headquarters: London.</div>
-  <div class="body">Assembly: Highest body. Meets every 2 years. All member states. Approves budget, elects Council.</div>
-  <div class="body">Council: Executive body between Assembly sessions. 40 member states. Meets twice yearly.</div>
-  <div class="body">Main technical committees:</div>
-  <div class="body">MSC — Maritime Safety Committee: Main technical committee. Deals with safety matters — ship construction, LSA, fire protection, navigation, radio communications.</div>
-  <div class="body">MEPC — Marine Environment Protection Committee: Deals with pollution prevention — MARPOL, ballast water, anti-fouling systems.</div>
-  <div class="body">LEG — Legal Committee: Maritime legal matters.</div>
-  <div class="body">FAL — Facilitation Committee: Simplification of maritime traffic formalities.</div>
-  <div class="body">Sub-committees under MSC/MEPC develop detailed technical regulations.</div>
-  <div class="body">ISPS Code — Security Levels Defined</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Deswal, Sudhir — 'define ISPS levels'</div></div>
-  <div class="body">ISPS Code = International Ship and Port Facility Security Code. Implemented under SOLAS Chapter XI-2.</div>
-  <div class="body">Security Level 1 (MARSEC 1): NORMAL. Minimum security measures maintained at all times. Always in force. Access control, monitoring, security rounds.</div>
-  <div class="body">Security Level 2 (MARSEC 2): HEIGHTENED. Specific heightened risk — terrorism threat. Additional measures activated. Restricted access, increased watches, CCTV monitoring enhanced.</div>
-  <div class="body">Security Level 3 (MARSEC 3): EXCEPTIONAL. Specific threat likely or imminent. Maximum security measures. Ship may suspend operations. Only essential personnel allowed. Full CCTV and access restriction. Master may refuse port entry.</div>
-  <div class="body">ETO duties at each level: Maintain CCTV, access control systems, communication systems, PA system, GMDSS. Know restricted areas (bridge, ER, steering gear, CCR). Participate in security drills.</div>
-  <div class="body">CSR — Continuous Synopsis Record</div>
-  <div class="body">CSR = Continuous Synopsis Record. Required by SOLAS XI-1/Reg 5.</div>
-  <div class="body">Purpose: Provides an onboard record of the ship's history — flag, owner, ISM company, ship name, IMO number, class society changes.</div>
-  <div class="body">Must be available for inspection at all times. Cannot be altered — amendments are added as new pages (old pages retained).</div>
-  <div class="body">PSC check: Verify CSR is onboard, complete, and matches current certificates.</div>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="n-h2">GAP ADDITIONS — v2.3 (Candidate Exam Experiences)</div>
-  <div class="body">Manila Amendment 2010 — Key Changes for ETO</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor asked "what is the Manila Amendment and what changed for ETOs?"</div></div>
-  <div class="body">Background:</div>
-  <div class="body">The Manila Amendment is the 2010 revision to the STCW (Standards of Training, Certification and Watchkeeping) Convention 1978. It entered into force on 1 January 2012, with a transitional period for existing certificates ending on 1 January 2017. It was the most significant revision to STCW since the 1995 amendment.</div>
-  <div class="body">Key changes relevant to ETOs:</div>
 
-  <div class="n-h1" id="s-3">1. FORMAL ETO RECOGNITION: The Manila Amendment formally created the Electro-Technical Officer (ETO) as a recognised officer under STCW. Before 2012, the role existed on ships but had no STCW certification framework. Now: Certificate of Competency (CoC) as ETO is governed by STCW Chapter III, Regulation III/6.</div>
-
-  <div class="n-h1" id="s-4">2. ETO COMPETENCY TABLE: STCW Table A-III/6 defines the minimum standard of competency for ETO — including electrical, electronic, and control engineering knowledge, maintenance and repair, safety, and watchkeeping. MMD exams test directly against these competencies.</div>
-
-  <div class="n-h1" id="s-5">3. ELECTRO-TECHNICAL RATING (ETR): STCW Regulation III/7 formalised the ETR qualification — for ratings who assist ETOs. Table A-III/7 defines their competencies.</div>
-
-  <div class="n-h1" id="s-6">4. ENHANCED MEDICAL FITNESS: Medical certificate requirements were strengthened — seafarers must meet STCW Medical Standards, tested by approved medical practitioners.</div>
-
-  <div class="n-h1" id="s-7">5. REST HOURS / ANTI-FATIGUE: STCW now aligned with MLC 2006 on work/rest hours. Minimum rest: 10 hours in any 24-hour period, 77 hours in any 7-day period. Ships must maintain rest hour records.</div>
-
-  <div class="n-h1" id="s-8">6. SECURITY TRAINING: All seafarers must have security awareness training. Officers must have designated security duties training. Complements ISPS Code.</div>
-
-  <div class="n-h1" id="s-9">7. LEADERSHIP AND TEAMWORK: New STCW module — Table A-II/1, A-III/1, A-III/2 — leadership, resource management, and decision-making now a formal competency requirement for all officers.</div>
-
-  <div class="n-h1" id="s-10">8. ELECTROTECHNICAL REFRESHER: ETO CoC holders must complete refresher/revalidation training every 5 years to maintain certificate — demonstrates ongoing competency.</div>
-  <div class="body">Exam tip: Surveyor asks this to check if you know your own certification basis. The answer "Manila Amendment 2010 formally recognised the ETO role under STCW Chapter III/6" scores full marks.</div>
-  <div class="body">Hong Kong Convention — Ship Recycling</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor asked "what is the Hong Kong Convention?"</div></div>
-  <div class="body">The Hong Kong International Convention for the Safe and Environmentally Sound Recycling of Ships (HKC), adopted in 2009, entered into force in June 2025 after accumulating the required ratifications.</div>
-  <div class="body">Purpose:</div>
-  <div class="body">To ensure that ships at end-of-life are broken up in recycling facilities that protect workers from hazardous materials (asbestos, PCBs, heavy metals, TBT) and prevent environmental pollution from ship recycling operations (historically conducted on open beaches in developing countries with poor safety standards).</div>
-  <div class="body">Key requirements:</div>
-
-  <div class="n-h1" id="s-11">1. IHM (Inventory of Hazardous Materials): ALL ships above 500 GT on international voyages must maintain an IHM — a document listing all hazardous materials onboard in three parts: Part I (on ship — maintained throughout life), Part II (during ship repair/maintenance), Part III (during recycling). ETO role: maintain Part I for electrical equipment containing hazardous materials (PCB-containing capacitors, asbestos in older cable insulation, mercury in fluorescent lights).</div>
-
-  <div class="n-h1" id="s-12">2. STATEMENT OF COMPLIANCE: Ships must hold a Statement of Compliance verifying their IHM has been verified.</div>
-
-  <div class="n-h1" id="s-13">3. APPROVED SHIP RECYCLING FACILITIES: Ships can only be recycled at HKC-compliant facilities — these are audited and listed by flag states.</div>
-
-  <div class="n-h1" id="s-14">4. SHIP RECYCLING PLAN (SRP): Before a ship is sent for recycling, an approved facility must prepare an SRP — documents how each hazardous material will be safely handled and disposed.</div>
-
-  <div class="n-h1" id="s-15">5. READY FOR RECYCLING CERTIFICATE: Issued by flag state after verifying SRP and IHM are in order.</div>
-  <div class="body">ETO responsibility — IHM maintenance:</div>
-  <div class="body">When new electrical equipment is installed: Check if it contains any hazardous material (manufacturer Material Safety Data Sheet). Update IHM if hazardous materials introduced.</div>
-  <div class="body">When equipment is removed: Update IHM to reflect removal.</div>
-  <div class="body">Examples of electrical hazardous materials: Old PCB-filled capacitors in switchgear (banned from new equipment since 1990s but still on old vessels). Mercury in fluorescent and discharge lamps. Lead in old batteries. TBT in antifouling paints on submerged transducers.</div>
-  <div class="body">SEEMP Part 3 — CII and ETO Role</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Multiple candidates — surveyor asked "what is SEEMP Part 3 and what is CII?"</div></div>
-  <div class="body">Background:</div>
-  <div class="body">SEEMP = Ship Energy Efficiency Management Plan. Required by MARPOL Annex VI, Regulation 22. Originally (2013) focused on identifying energy efficiency improvement measures. SEEMP Part 3 was introduced in January 2023 as part of the IMO Carbon Intensity Indicator (CII) regime — a major new operational carbon rating system for ships.</div>
-  <div class="body">CII — Carbon Intensity Indicator:</div>
-  <div class="body">CII measures operational carbon intensity: grams of CO₂ emitted per cargo-carrying capacity per nautical mile (g CO₂ / DWT·nm).</div>
-  <div class="body">Annual CII calculation: Based on fuel consumption data from MRV (Monitoring, Reporting and Verification) system (EU) or Data Collection System (DCS) (IMO).</div>
-  <div class="body">Annual rating: Ships rated A (best) through E (worst) on a sliding scale.</div>
-  <div class="body">Required rating: Ships must achieve C or better. D or E ratings trigger corrective action obligations.</div>
-  <div class="body">D rating: Must develop and implement a corrective action plan — submitted to flag state.</div>
-  <div class="body">E rating: Corrective action plan mandatory, with specific improvement targets. Ship may face operational restrictions.</div>
-  <div class="body">SEEMP Part 3 content (ship-specific CII improvement plan):</div>
-
-  <div class="n-h1" id="s-16">1. Ship's required CII for each year (from 2023–2030, annual tightening targets)</div>
-
-  <div class="n-h1" id="s-17">2. Implementation plan for achieving the CII target</div>
-
-  <div class="n-h1" id="s-18">3. Self-evaluation: how the ship will track and review its CII performance</div>
-
-  <div class="n-h1" id="s-19">4. Corrective action procedure if CII rating is D or E</div>
-  <div class="body">ETO contributions to improving ship CII rating:</div>
-
-  <div class="n-h1" id="s-20">1. LED LIGHTING: Replace fluorescent and halogen with LED throughout — reduces hotel load 30–60%. Each kWh saved = less fuel burned by auxiliary engine.</div>
-
-  <div class="n-h1" id="s-21">2. VFD ON PUMPS AND FANS: Variable frequency drives on sea water pumps, cooling fans, ventilation fans — at part load, VFD reduces speed proportionally. Power saved = speed ratio cubed. Example: Fan at 80% speed uses only 51% of power.</div>
-
-  <div class="n-h1" id="s-22">3. SHORE POWER (COLD IRONING): Where available, connect to shore supply in port — stop auxiliary generators completely. Zero fuel consumption at berth.</div>
-
-  <div class="n-h1" id="s-23">4. WASTE HEAT RECOVERY: Maintain exhaust gas economiser (waste heat boiler) efficiently — good performance means less HFO burned in auxiliary boiler for steam generation.</div>
-
-  <div class="n-h1" id="s-24">5. POWER FACTOR CORRECTION: Maintain capacitor banks and synchronous compensators — poor PF means generators deliver more apparent power (kVA) for same useful power (kW) = more fuel consumed.</div>
-
-  <div class="n-h1" id="s-25">6. POWER MANAGEMENT SYSTEM: Ensure load shedding functions correctly — avoid unnecessary generator operation. Run one generator at 70–80% load rather than two at 40% each.</div>
-
-  <div class="n-h1" id="s-26">7. MAINTENANCE: Clean heat exchangers on MSB cooling — overheated switchgear draws more power. Keep motor cooling paths clear. Replace worn motor bearings — friction increases motor current.</div>
-  <div class="body">Override Authority — When and How to Override Safety Systems</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor asked "what is override authority?" or "can you override a safety trip?"</div></div>
-  <div class="body">What is an override?</div>
-  <div class="body">An override is the act of bypassing an automatic alarm or safety trip to allow equipment to continue operating despite the triggering condition. This is sometimes necessary during genuine emergencies where stopping the equipment would cause greater danger than the condition being protected against.</div>
-  <div class="body">Who has override authority?</div>
-  <div class="body">MASTER: Ultimate authority on the ship — can authorise overrides of any system if safety of ship and crew requires it.</div>
-  <div class="body">CHIEF ENGINEER: Authority over machinery space overrides — approves machinery trip overrides.</div>
-  <div class="body">ETO: May operate override switches but only with C/E or Master authorisation. NEVER unilaterally override critical safety trips.</div>
-  <div class="body">Bridge Officer: May override UMS alarms or steering gear safeties on Master's authority only.</div>
-  <div class="body">When override is permitted:</div>
-  <div class="body">Emergency continuation: A critical pump is about to trip on low LO pressure, but stopping it would cause loss of steering or main engine cooling — override with increased manual monitoring.</div>
-  <div class="body">Spurious alarm: Sensor confirmed faulty, equipment is healthy, repair requires time — override alarm while repair is underway.</div>
-  <div class="body">Testing: Override bilge high-level alarm during tank cleaning operations to prevent nuisance alarms.</div>
-  <div class="body">Override procedure — EVERY override must follow this process:</div>
-
-  <div class="n-h1" id="s-27">1. C/E or Master gives VERBAL and WRITTEN authorisation.</div>
-
-  <div class="n-h1" id="s-28">2. LOG: Record in engine room log and override register: date, time, system overridden, reason, authorising officer, monitoring measures.</div>
-
-  <div class="n-h1" id="s-29">3. INCREASED MONITORING: Watchkeeper physically checks the overridden system at increased frequency (every 15–30 minutes). Record checks in log.</div>
-
-  <div class="n-h1" id="s-30">4. COMPENSATORY MEASURES: Where possible, use alternate protection (manual measurement instead of automatic sensor).</div>
-
-  <div class="n-h1" id="s-31">5. CANCEL AS SOON AS POSSIBLE: Override must be cancelled the moment the emergency is resolved or repair is completed.</div>
-
-  <div class="n-h1" id="s-32">6. Override switches: Must be key-operated or sealed — prevent accidental activation. Override register maintained near MSB or in C/E's office.</div>
-  <div class="body">Systems that must NEVER be overridden without specific procedure:</div>
-  <div class="body">Fixed CO₂ or foam fire suppression systems — only with hot work permit and agreed safety measures</div>
-  <div class="body">Steering gear safeties — loss of steering is catastrophic</div>
-  <div class="body">Main engine overload trip at sea in open water — stop engine rather than override</div>
-  <div class="body">DOC and SMC — Document of Compliance and Safety Management Certificate</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor asked "what are DOC and SMC?" and "what is the difference?"</div></div>
-  <div class="body">ISM Code (International Safety Management Code) — SOLAS Chapter IX:</div>
-  <div class="body">The ISM Code requires every shipping company and ship to have a Safety Management System (SMS) — a documented system of procedures for safe operation of ships and prevention of pollution.</div>
-  <div class="body">DOC — Document of Compliance:</div>
-  <div class="body">Issued TO: The COMPANY (shipping company/management company).</div>
-  <div class="body">Issued by: Flag state (or RO — Recognised Organisation acting on behalf of flag state).</div>
-  <div class="body">Validity: 5 years, with annual verification audits.</div>
-  <div class="body">What it certifies: The company has established and implemented an SMS that complies with ISM Code requirements. Company procedures, emergency response plans, and safety management processes have been audited and approved.</div>
-  <div class="body">Onboard: A certified copy of DOC must be carried onboard each ship operated by that company.</div>
-  <div class="body">Covers ship types: DOC is type-specific — a company must hold separate DOC for each type of ship it operates (e.g. bulk carrier, tanker, passenger ship).</div>
-  <div class="body">SMC — Safety Management Certificate:</div>
-  <div class="body">Issued TO: The individual SHIP.</div>
-  <div class="body">Issued by: Flag state (or RO).</div>
-  <div class="body">Validity: 5 years, with an intermediate audit between year 2 and year 3.</div>
-  <div class="body">What it certifies: The ship is operated in accordance with the company's approved SMS. The specific ship — its crew, equipment, and procedures — complies with ISM.</div>
-  <div class="body">Required onboard: Original SMC must be onboard at all times. PSC checks SMC validity as standard.</div>
-  <div class="body">Both documents required: SOLAS IX/4 — ship must hold valid DOC (company copy) AND valid SMC. Missing either = ISM non-compliance = PSC detention risk.</div>
-  <div class="body">Exam tip: The key distinction: DOC = COMPANY. SMC = SHIP. Surveyor often asks "who is DOC issued to?" — answer: the company.</div>
-  <div class="body">MLC 2006 — Maritime Labour Convention and Deficiency Handling</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor asked "what is MLC 2006 and what happens if PSC finds a deficiency?"</div></div>
-  <div class="body">MLC 2006 — the "Seafarers Bill of Rights":</div>
-  <div class="body">MLC 2006 (Maritime Labour Convention) entered into force August 2013. It consolidates over 65 previous ILO maritime labour instruments into one comprehensive convention. It sets MINIMUM standards for working and living conditions for ALL seafarers on ships ≥500 GT on international voyages.</div>
-  <div class="body">Five Titles of MLC 2006:</div>
-  <div class="body">Title 1 — Minimum requirements for seafarers: Minimum age (16 years), medical fitness, training and qualifications, recruitment.</div>
-  <div class="body">Title 2 — Conditions of employment: Employment agreements (SEA), wages, work hours (max 14 hrs work in 24 hrs / 72 hrs in 7 days OR min 10 hrs rest in 24 hrs / 77 hrs rest in 7 days), leave, repatriation.</div>
-  <div class="body">Title 3 — Accommodation, recreational facilities, food and catering: Minimum cabin size, mess room standards, recreational facilities, catering quality.</div>
-  <div class="body">Title 4 — Health protection, medical care, welfare and social security: Medical care onboard, sick pay, shore-based welfare, social security coverage.</div>
-  <div class="body">Title 5 — Compliance and enforcement: Flag state, port state, and labour supply country responsibilities. MLC Certificate and Declaration of Maritime Labour Compliance (DMLC) required.</div>
-  <div class="body">PSC deficiency handling under MLC:</div>
-  <div class="body">If PSC inspector finds MLC deficiency (e.g. inadequate rest hours, poor accommodation, unpaid wages):</div>
-
-  <div class="n-h1" id="s-33">1. DEFICIENCY NOTED: Recorded in PSC inspection report — type, severity, regulation reference.</div>
-
-  <div class="n-h1" id="s-34">2. MINOR DEFICIENCY: Rectify before next port OR within agreed timeframe. No detention. Follow-up inspection may be scheduled.</div>
-
-  <div class="n-h1" id="s-35">3. SERIOUS DEFICIENCY (significant risk to seafarer health/safety, or clear non-compliance with MLC): Ship may be DETAINED until deficiency is rectified.</div>
-
-  <div class="n-h1" id="s-36">4. MASTER NOTIFICATION: Master must immediately inform company/DPA (Designated Person Ashore).</div>
-
-  <div class="n-h1" id="s-37">5. DOCUMENTATION: Deficiency recorded in THETIS database (Paris MOU/Tokyo MOU) — visible to all port states. High deficiency rate = increased inspection frequency.</div>
-
-  <div class="n-h1" id="s-38">6. SEAFARER COMPLAINT MECHANISM: MLC requires ships to have an onboard grievance procedure — seafarers can report MLC violations to PSC directly.</div>
-  <div class="body">ETO-specific MLC responsibilities:</div>
-  <div class="body">Accommodation electrical systems: Ensure lighting, ventilation fans, air conditioning/heating all fully functional — MLC Title 3.</div>
-  <div class="body">Recreational facilities: Computers, internet access, TV — where provided by company, must be maintained.</div>
-  <div class="body">Work environment: Lighting levels in workshops and workspaces must meet minimum standards.</div>
-  <div class="body">Rest hour compliance: ETO must maintain their own rest hour records and not exceed work hour limits.</div>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="body">REGULATORY UPDATE — v2.4 (MARPOL Annex VI / SOLAS Amendments — 2024-2026)</div>
-  <div class="body">Fuel Flashpoint Certification — Updated BDN Requirements</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> According to updated MARPOL Annex VI, bunker suppliers must now provide a pre-bunkering flashpoint declaration. The BDN has new mandatory flashpoint content.</div></div>
-  <div class="body">Background: Engine room fires from low-flashpoint off-spec fuels have caused casualties. IMO strengthened pre-bunkering verification so ships have documentary evidence of flashpoint compliance BEFORE fuel is loaded.</div>
-  <div class="body">PRE-BUNKERING DECLARATION: Supplier must provide written declaration before bunkering begins, certifying fuel meets MARPOL Annex VI minimum flashpoint of 60 degrees C.</div>
-  <div class="body">BDN FLASHPOINT STATEMENT (new requirement): BDN must explicitly state either: (a) the actual measured flashpoint if it is BELOW 70 degrees C, OR (b) a statement confirming it was measured at or above 70 degrees C.</div>
-  <div class="body">Threshold logic: Any fuel below 70 degrees C must have its actual value declared on the BDN — giving the crew and authorities specific information to act on.</div>
-  <div class="body">Ship obligation: C/E and Master must verify BDN flashpoint statement before accepting bunkers. If flashpoint absent or below 60 degrees C — REFUSE bunkers, report to flag state and port authority.</div>
-  <div class="body">ETO awareness: Flashpoint value is relevant to engine room safety. Fuel with flashpoint near 60 degrees C near hot purifier heaters or service tanks poses fire risk on any oil leak. Know your BDN flashpoint value.</div>
-  <div class="body">EEXI and CII — Mandatory IMO Database Reporting (New Obligation)</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> According to new regulations, a vessel's attained EEXI and annual CII must now be formally submitted to the IMO Ship Fuel Oil Consumption Database.</div></div>
-  <div class="body">EEXI (Energy Efficiency Existing Ship Index):</div>
-  <div class="body">One-time technical measure of ship efficiency in g CO2/tonne-mile. Certified by class after survey.</div>
-  <div class="body">New obligation: Attained EEXI value formally submitted to IMO DCS (Data Collection System) database and included in ship's SEEMP documentation.</div>
-  <div class="body">ETO contribution: Shaft Power Limitation (EPL/ShaPoLi) is a common EEXI compliance measure — ETO maintains the power limiting device and its class-sealed certificate.</div>
-  <div class="body">CII (Carbon Intensity Indicator) annual reporting:</div>
-  <div class="body">Annual calculation: Total CO2 emitted divided by transport work (DWT x nautical miles) = CII in g CO2/DWT.nm.</div>
-  <div class="body">Annual rating: A (best) to E (worst). Ships must achieve C or better to avoid mandatory corrective action plan.</div>
-  <div class="body">Reporting chain: Ship collects fuel data -> IMO DCS verification -> flag state issues Statement of Compliance -> submitted to IMO database.</div>
-  <div class="body">Database visibility: CII ratings visible to charterers and port states — affects ship commercial value. Persistent D or E ratings trigger mandatory improvement plans and potential operational restrictions.</div>
-  <div class="body">ETO role: Fuel oil flow meters must be accurate — meter data directly calculates CII. Calibrate meters per class requirements. Ensure meter data and VDR speed log data are synchronised for correct tonne-mile figures.</div>
-
-
-  <!-- ═══ WRITTEN SECTION ═══ -->
-  <div class="n-h1" id="s-written">📝 Written Section</div>
-  <div class="n-info"><div class="icon">📝</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development.</div></div>
-
-
-  <!-- ═══ SURVEYOR Q&A ═══ -->
-  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>No Surveyor Q&A available</strong> for this topic yet.</div></div>
-
-
-  <!-- ═══ QUICK REVISION ═══ -->
-  <div class="n-h1" id="s-quickrev">📋 Quick Revision</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body">Revision tables coming soon.</div></div>
-
-  </div>
 </div>
 </div>`);

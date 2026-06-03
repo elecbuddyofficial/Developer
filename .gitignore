@@ -1,3 +1,33 @@
+# Secrets & environment
+*.env
 config.env
+.env.local
+.env.*
+
+# Python scripts (dev tools only)
 __pycache__/
 *.pyc
+*.pyo
+*.py
+
+# Source material (large binary files - never push)
+Oral Material/
+Written Material/
+
+# Dev tools (separate repos)
+notebooklm-mcp/
+roomi-notebooklm/
+
+# Claude Code internals
+.agents/
+.claude/
+
+# Dev state & temp files
+_*.json
+_*.txt
+quiz_loop_state.json
+data/Temp/
+
+# OS
+.DS_Store
+Thumbs.db

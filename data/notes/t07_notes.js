@@ -1,306 +1,429 @@
 window.loadNotes("T07", `<div class="view" id="view-notes-t07">
 <div class="note-doc">
-  <div style="margin-bottom:16px"><button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button></div>
+  <div style="margin-bottom:16px; display:flex; justify-content:space-between;">
+    <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
+    <button class="anc-btn" onclick="goToQuizFromNotes('T07')" style="background-color:var(--green-dim);border-color:var(--green);color:var(--green)">Take Quiz →</button>
+  </div>
   <div class="note-title">
-    <h1>Topic 07 — Control PLC</h1>
-    <div class="sub">ETO MMD Oral Examination · Function 5 · Class 2 · Mumbai & Noida</div>
+    <h1>Topic 07 - Control Systems & PLC</h1>
+    <div class="sub">ETO CoC Oral Assessment · STCW Reg. III/6 · DG Shipping India</div>
     <div class="tags">
       <span class="tag tag-blue">🔴 Exam Critical</span>
-      <span class="tag tag-orange">Updated 2026</span>
+      <span class="tag tag-orange">PID & Cascade</span>
+      <span class="tag tag-purple">PLC Programming</span>
     </div>
   </div>
   <div class="note-anchors">
     <span>Jump to section</span>
-    <button class="anc-btn" onclick="jumpTo('s-1')">ETO MMD ORAL EXAMINA...</button>
-    <button class="anc-btn" onclick="jumpTo('s-2')">TOPIC 7: CONTROL SYS...</button>
-    <button class="anc-btn" onclick="jumpTo('s-written')">📝 Written Section</button>
+    <button class="anc-btn" onclick="jumpTo('s-openclosed')">Open vs Closed</button>
+    <button class="anc-btn" onclick="jumpTo('s-pid')">PID Controller</button>
+    <button class="anc-btn" onclick="jumpTo('s-cascade')">Cascade Control</button>
+    <button class="anc-btn" onclick="jumpTo('s-plc')">PLC & Ladder</button>
+    <button class="anc-btn" onclick="jumpTo('s-timers')">Timers & Counters</button>
+    <button class="anc-btn" onclick="jumpTo('s-systems')">Specific Systems</button>
+    <button class="anc-btn" onclick="jumpTo('s-pms')">PMS & SCADA</button>
+    <button class="anc-btn" onclick="jumpTo('s-valves')">Control Valves</button>
+    <button class="anc-btn" onclick="jumpTo('s-gap')">Gap Additions</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
-  <table class="n-table">
-    <tr><th>🆕 UPDATED</th><th>May 2026 — New gap-fill sections added at the end of this document. Scroll to bottom to see additions.</th></tr>
-  </table>
+  
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> PID controller (P, I, D actions, offset, integral windup), Open vs Closed loop, PLC scan cycle and memory types, Ladder logic, Cascade control (Boiler/HFO), 3-element feedwater control, PMS sequential load restoration, and PLC timer types.</div></div>
 
-  <div class="n-h1" id="s-1">ETO MMD ORAL EXAMINATION</div>
-  <div class="body">COMPREHENSIVE STUDY NOTES — v2.0</div>
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="n-h1" id="s-openclosed">1. Open Loop vs Closed Loop Control</div>
+  <div class="n-grid">
+    <div class="n-card">
+      <div class="card-title">OPEN LOOP CONTROL</div>
+      <div class="card-desc">
+        <ul class="n-list">
+          <li><strong>Principle:</strong> Output has NO effect on the control action. No feedback from output to input.</li>
+          <li><strong>Flow:</strong> Input → Controller → Actuator → Process → Output (output not measured).</li>
+          <li><strong>Disadvantage:</strong> Cannot correct for disturbances - output may drift.</li>
+          <li><strong>Advantage:</strong> Simple, cheap, stable.</li>
+          <li><strong>Ship Examples:</strong> Timers, manual fixed settings, electric kettle timer, fixed pump speed.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="n-card">
+      <div class="card-title">CLOSED LOOP CONTROL</div>
+      <div class="card-desc">
+        <ul class="n-list">
+          <li><strong>Principle:</strong> Output continuously MEASURED and FED BACK to controller.</li>
+          <li><strong>Action:</strong> Controller compares output with setpoint → calculates ERROR → adjusts output.</li>
+          <li><strong>Advantage:</strong> Self-correcting against disturbances.</li>
+          <li><strong>Ship Examples:</strong> AVR (voltage control), autopilot, boiler pressure, fuel oil temp, HVAC.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Key Terms:</strong><br>
+  <strong>Setpoint (SP):</strong> Desired value we want.<br>
+  <strong>Process Variable (PV):</strong> Actual measured value.<br>
+  <strong>Manipulated Variable (MV):</strong> Controller output - what is adjusted.<br>
+  <strong>Error (e):</strong> <span class="n-val">e = SP - PV</span></div></div>
 
-  <div class="n-h1" id="s-2">TOPIC 7: CONTROL SYSTEMS & PLC</div>
-  <div class="body">Function 5 | Class 2 ETO | Mumbai & Noida MMD</div>
-  <div class="body">Compiled from 2025-2026 Oral Question Bank — All Surveyors Combined</div>
-  <table class="n-table">
-    <tr><th>COLOUR CODE LEGEND</th></tr>
-    <tr><td>YELLOW = Key Exam Points    GREEN = Memory Aids    ORANGE = Cross Questions    BLUE = Comparison Tables    RED = Safety Critical</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>MOST ASKED — CONTROL SYSTEMS & PLC</th></tr>
-    <tr><td>PID controller — P, I, D actions, offset, integral windup — Deswal, Kamath, Vishwanathan, Sanjib Open loop vs closed loop — difference with examples — ALL surveyors PLC scan cycle — Input scan, program, output scan — Kamath, Vishwanathan PLC memory types — ROM, RAM, EEPROM, battery backup — Sanjib, Deswal Ladder logic — what it is, contacts and coils — Vishwanathan, Kamath Cascade control system — what it is and where used — Anil Deswal specific Boiler 3-element feedwater control — Deswal, Sanjib Sequential load restoration — blackout sequence with timings — Anil Deswal PMS functions — auto-start, load shed — Kamath, Vishwanathan Fuel oil temperature control loop — Nair, Deswal SCADA and IAS — Vishwanathan PLC timer types — TON, TOF, RTO — Kamath</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>1. OPEN LOOP vs CLOSED LOOP CONTROL</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>OPEN LOOP vs CLOSED LOOP — Key Exam Answer</th></tr>
-    <tr><td>OPEN LOOP CONTROL:    Output has NO effect on the control action. No feedback from output to input.    Input → Controller → Actuator → Process → Output  (output not measured, not fed back)    Cannot correct for disturbances — output may drift. Simple, cheap, stable.    SHIP EXAMPLES: Timers, manual fixed settings, electric kettle timer, fixed pump speed setting.  CLOSED LOOP CONTROL (FEEDBACK CONTROL):    Output continuously MEASURED and FED BACK to controller.    Controller compares output with setpoint → calculates ERROR → adjusts output to minimise error.    ERROR = SP (Setpoint) - PV (Process Variable).    KEY TERMS:      SP (Setpoint): Desired value we want.      PV (Process Variable): Actual measured value.      MV (Manipulated Variable): Controller output — what is adjusted.      Error: e = SP - PV.    SHIP EXAMPLES: AVR (voltage control), autopilot, boiler pressure control, fuel oil temperature, HVAC.  NEGATIVE FEEDBACK: Output fed back in opposition to input — reduces error — stabilises system. Most common in control systems. POSITIVE FEEDBACK: Output fed back in same direction as input — amplifies deviation — destabilising. NOT used in control — used in oscillators.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>MEMORY AID — Open vs Closed Loop</th></tr>
-    <tr><td>Open loop: 'Fire and forget' — like posting a letter, you send it and never know if received. Closed loop: 'Fire and verify' — like a phone call, you speak and confirm understanding. Error = SP - PV. Zero error = process at setpoint = controller satisfied.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is the difference between open loop and closed loop control?</td><td>Open loop: no feedback — output does not affect control action — cannot correct disturbances — simple but inaccurate. Closed loop: output measured and fed back — error (SP-PV) calculated — controller adjusts to minimise error — self-correcting — more complex but accurate. Ship examples: open loop = timer, fixed setting. Closed loop = AVR (voltage feedback), autopilot (heading feedback), boiler pressure control (pressure feedback), fuel oil temperature control (temperature feedback).</td></tr>
-    <tr><td>What is setpoint, process variable, and manipulated variable?</td><td>Setpoint (SP): the desired value we want the process to be at (e.g., fuel oil temperature = <span class="n-val">120 deg C</span>). Process Variable (PV): the actual measured value of the process (actual temperature = <span class="n-val">115 deg C</span>). Error = SP - PV = 120 - 115 = +<span class="n-val">5 deg C</span> (positive error = below setpoint). Manipulated Variable (MV): the controller output — what is adjusted to correct the error (e.g., steam valve opening %) — increased to add more heat and reduce error.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>2. PID CONTROLLER — P, I, D ACTIONS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>PID FORMULA — Must Know</th></tr>
-    <tr><td>MV(t) = Kp x e(t)  +  Ki x INTEGRAL(e dt)  +  Kd x (de/dt)  +  Bias  Where: e = error = SP - PV. Kp = Proportional gain. Ki = Integral gain. Kd = Derivative gain. MV = Manipulated Variable (controller output). Bias = manual reset / steady state value.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>P — PROPORTIONAL ACTION</th></tr>
-    <tr><td>MV = Kp x e    (output proportional to current error)  What it does: Produces output proportional to current error magnitude. Large error = large correction.  PROPORTIONAL BAND (PB): Range of error over which controller output changes from 0% to 100%.    PB = (1/Kp) x 100%.    Narrow PB (high Kp): aggressive — large output for small error — may oscillate.    Wide PB (low Kp): sluggish — small output even for large error — stable but slow.  OFFSET PROBLEM: P-only controller CANNOT eliminate steady-state error (offset).    When process settles: some residual error must exist to maintain controller output that balances load.    Example: boiler SP = <span class="n-val">10 bar</span>. P-only settles at <span class="n-val">9.8 bar</span> → <span class="n-val">0.2 bar</span> offset remains permanently.    SOLUTION: Add Integral action.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>I — INTEGRAL ACTION (RESET)</th></tr>
-    <tr><td>MV = Ki x INTEGRAL(e dt)    (output proportional to accumulated error over time)  What it does: Integrates (accumulates) error over time. Even small constant error eventually produces large output — keeps increasing until error = ZERO.  PRIMARY PURPOSE: ELIMINATES STEADY-STATE OFFSET — the main role of integral action.    Error = 0: integral output stays constant (satisfied).    Error > 0: integral keeps increasing → pushes PV toward SP → eventually error = 0.  INTEGRAL TIME (Ti / Reset Rate):    Short Ti: fast integral action — may cause oscillation.    Long Ti: slow integral — takes long to eliminate offset.  INTEGRAL WINDUP: If process is limited (valve fully open), integral keeps accumulating — when limitation removed → large overshoot.    Prevention: anti-windup circuits clamp integral when output saturated.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>D — DERIVATIVE ACTION (RATE)</th></tr>
-    <tr><td>MV = Kd x (de/dt)    (output proportional to RATE OF CHANGE of error)  What it does: Responds to HOW FAST error is changing — not its magnitude.    Error increasing rapidly: large derivative output opposes rapid change.    Error stable (not changing): derivative output = zero.    Error decreasing: derivative reduces output (anticipates approach to setpoint).  PURPOSE: DAMPING / ANTICIPATION — reduces overshoot, improves stability.    Called: RATE action, ANTICIPATORY action, PREDICTIVE action.  PROBLEM: Sensitive to NOISE — high frequency noise → large de/dt → large output spikes.    Solution: Apply derivative to PV only (not to error) — 'derivative on measurement'.    Also: derivative filter limits high-frequency amplification.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>ACTION</th><th>RESPONDS TO</th><th>ELIMINATES</th><th>PROBLEMS</th><th>ADJUSTED BY</th></tr>
-    <tr><td>P (Proportional)</td><td>Current error magnitude</td><td>Reduces error (but not to zero)</td><td>Leaves steady-state offset</td><td>Kp or PB (proportional band)</td></tr>
-    <tr><td>I (Integral)</td><td>Accumulated error over time</td><td>Steady-state offset (drives error to ZERO)</td><td>Integral windup, can destabilise</td><td>Ti (reset time) or Ki</td></tr>
-    <tr><td>D (Derivative)</td><td>Rate of change of error</td><td>Overshoot, improves damping</td><td>Noise amplification, setpoint step spikes</td><td>Td (rate time) or Kd</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>MEMORY AID — PID</th></tr>
-    <tr><td>P = PRESENT error. I = PAST errors (accumulated). D = FUTURE error (predicted from trend). P alone: fast but leaves offset. PI: eliminates offset. PID: eliminates offset AND reduces overshoot. Boiler pressure: PI sufficient (slow process, no noise). Autopilot: PD (fast response). Temperature: PID. Integral: only action that can drive error to ZERO. Always needed for exact setpoint control.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What does P, I, and D do in a PID controller?</td><td>P (Proportional): output proportional to current error — responds immediately — fast but leaves steady-state offset. I (Integral): accumulates error over time — keeps increasing output until error = ZERO — eliminates offset — can cause overshoot if too aggressive — main purpose is offset elimination. D (Derivative): responds to rate of change of error — anticipates trend — reduces overshoot — sensitive to noise. Combined: P gives speed, I eliminates offset, D improves damping.</td></tr>
-    <tr><td>What is offset in a proportional controller and how is it eliminated?</td><td>Offset (steady-state error) is the permanent residual error remaining when P-only controller stabilises. It exists because some error must be present to maintain controller output that balances the process load (e.g., valve open enough to maintain flow = error of <span class="n-val">0.2 bar</span> at setpoint <span class="n-val">10 bar</span>). Integral (I) action eliminates offset: accumulates error over time, continuously increases output until error = zero. Adding I to P (PI controller) completely eliminates steady-state offset — controller eventually drives PV exactly to SP.</td></tr>
-    <tr><td>What is integral windup and how is it prevented?</td><td>Integral windup: when process output is limited (e.g., valve fully open but error persists), integral term keeps accumulating — when limitation removed → very large overshoot. Prevention: anti-windup circuits clamp or back-calculate integral when output reaches saturation limits. Also: output limits, conditional integration (only integrate when output is not saturated). Modern digital controllers have built-in anti-windup logic.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>3. CASCADE CONTROL SYSTEM</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>CASCADE CONTROL — Complete Exam Answer (Anil Deswal Specific)</th></tr>
-    <tr><td>CASCADE CONTROL uses TWO controllers — one inside the other — where the output of the OUTER (primary/master) controller becomes the SETPOINT of the INNER (secondary/slave) controller.  WHY CASCADE?    Single loop control: disturbances in inner loop take a long time to affect primary measurement → slow response.    Cascade: inner controller corrects inner loop disturbances quickly — before they affect outer variable.    Result: FASTER overall response and BETTER disturbance rejection.  CASCADE STRUCTURE:    PRIMARY CONTROLLER (OUTER LOOP):      Measures the main controlled variable (e.g., TEMPERATURE of steam or process).      Compares with setpoint. Output = setpoint command to secondary controller.     SECONDARY CONTROLLER (INNER LOOP):      Measures intermediate variable (e.g., FLOW of steam or fuel).      Receives setpoint from primary controller.      Directly manipulates the final control element (e.g., steam valve).      Responds faster to disturbances — inner loop corrects before outer is affected.  SHIP EXAMPLES OF CASCADE CONTROL:    1. BOILER STEAM TEMPERATURE CONTROL:      Outer loop: steam temperature controller (slow — thermal process). Output = steam flow setpoint.      Inner loop: steam flow controller (fast). Controls steam valve based on flow setpoint.      Benefit: if supply pressure varies → inner loop corrects flow immediately → steam temperature barely changes.     2. FUEL OIL TEMPERATURE CONTROL (with cascade):      Outer loop: HFO temperature controller. Output = steam flow setpoint.      Inner loop: steam flow controller. Controls steam valve.      Benefit: steam pressure drop → inner loop maintains steam flow → HFO temperature stays stable.     3. CARGO PUMP DISCHARGE PRESSURE:      Outer loop: vessel tank level controller. Output = pump flow setpoint.      Inner loop: pump flow controller. Controls pump speed (VFD).  CASCADE vs SIMPLE FEEDBACK:    Simple: single sensor → single controller → single valve. Disturbances must propagate to primary variable before correction.    Cascade: two sensors, two controllers, one valve. Inner disturbances corrected immediately — outer loop barely notices.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is cascade control and where is it used on ships?</td><td>Cascade control: two controllers — outer (primary/master) measures main variable, inner (secondary/slave) measures intermediate variable. Outer controller output becomes inner controller setpoint. Inner loop responds fast to disturbances before they affect outer variable. Ship examples: (1) Boiler steam temperature (outer) controlling steam flow (inner) — steam pressure variations corrected by inner loop before temperature is affected. (2) HFO temperature (outer) controlling steam flow (inner). (3) Tank level (outer) controlling cargo pump flow (inner). Better disturbance rejection and faster response than single-loop control.</td></tr>
-    <tr><td>Why is cascade control better than simple feedback control?</td><td>Simple feedback: disturbance must propagate all the way to the primary measurement before correction begins. For slow processes (temperature), this delay means significant deviation before correction. Cascade: inner controller monitors and corrects an intermediate variable (e.g., flow) much faster — before disturbance affects the primary variable. Example: steam supply pressure drops. Simple: HFO temperature drops, controller eventually opens valve more. Cascade: inner flow controller immediately opens valve to maintain flow — HFO temperature barely changes. Faster response, better disturbance rejection, reduced process variability.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>4. PLC — PROGRAMMABLE LOGIC CONTROLLER</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>PLC SCAN CYCLE — Must Know</th></tr>
-    <tr><td>PLC operates in a continuous repetitive SCAN CYCLE:  STEP 1 — INPUT SCAN: Read all physical inputs → store in INPUT IMAGE REGISTER (memory snapshot). STEP 2 — PROGRAM EXECUTION: Execute user program top-to-bottom using input image register values. Write results to OUTPUT IMAGE REGISTER. STEP 3 — OUTPUT SCAN: Write output image register values to physical output modules — update actual outputs. STEP 4 — HOUSEKEEPING: Update communications, check watchdog timer, update internal timers/counters, diagnostics. Then REPEAT from Step 1.  SCAN TIME: Typically <span class="n-val">1-50ms</span> for marine PLCs.    Short scan = faster response. Long scan = slower.  WATCHDOG TIMER: If scan does not complete within set maximum time → PLC detects hang → goes to SAFE STATE → trips.    Prevents PLC from freezing without outputs knowing — outputs go to safe state (fail-safe) on watchdog timeout.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>PLC MEMORY TYPES — All Types</th></tr>
-    <tr><td>1. ROM (Read Only Memory) — NON-VOLATILE:    Stores PLC operating system (firmware). Cannot be changed by user. NOT lost on power failure.  2. RAM (Random Access Memory) — VOLATILE:    Stores: user program (during editing), process data (current I/O states, timer values, counters, PID values).    LOST on power failure — must have battery backup.  3. EEPROM / Flash — NON-VOLATILE:    Stores user program permanently. Retains without power or battery.    Can be electrically erased and reprogrammed.  4. BATTERY-BACKED RAM:    RAM with lithium battery maintaining power. Retains data on power loss.    Battery must be replaced periodically (typically every 2-5 years).    If battery fails: program and retain data lost on next power failure — CRITICAL.  5. DATA REGISTERS:    Stores: I/O image table, timer presets/values, counter values, PID parameters, internal coil states.</td></tr>
-  </table>
-  <div class="body">PLC Modules — All Types</div>
-  <table class="n-table">
-    <tr><th>MODULE</th><th>FUNCTION</th><th>EXAMPLES</th></tr>
-    <tr><td>CPU</td><td>Executes user program, contains memory, clock</td><td>Intel/ARM processor, ROM+RAM+EEPROM</td></tr>
-    <tr><td>Digital Input (DI)</td><td>Reads ON/OFF signals from field — provides isolation via optocoupler</td><td><span class="n-val">24V</span> DC contacts, switches, proximity sensors</td></tr>
-    <tr><td>Digital Output (DO)</td><td>Drives ON/OFF field devices — relay or transistor outputs</td><td>Contactors, solenoids, indicator lamps</td></tr>
-    <tr><td>Analogue Input (AI)</td><td>Converts <span class="n-val">4-20mA</span> or <span class="n-val">0-10V</span> to digital via ADC</td><td>Pressure transmitters, temperature transmitters</td></tr>
-    <tr><td>Analogue Output (AO)</td><td>Converts digital to <span class="n-val">4-20mA</span> or <span class="n-val">0-10V</span> via DAC</td><td>Control valves, VFD setpoint, pump speed</td></tr>
-    <tr><td>Communication</td><td>Fieldbus interface for data exchange</td><td>Modbus RTU/TCP, Profibus, Profinet, EtherNet/IP</td></tr>
-    <tr><td>Power Supply</td><td>Provides regulated <span class="n-val">24V</span> DC or <span class="n-val">5V</span> DC to PLC modules</td><td>Redundant PSU on critical systems</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is a PLC and what is the scan cycle?</td><td>PLC (Programmable Logic Controller) is an industrial computer that controls machines by repeatedly reading inputs, executing user program, and controlling outputs. Scan cycle: (1) Input scan — read all physical inputs into image register. (2) Program execution — run user program using input image, write to output image. (3) Output scan — write output image to physical outputs. (4) Housekeeping — communications, watchdog update. Repeat. Scan time: <span class="n-val">1-50ms</span>. Watchdog: if scan doesn't complete in time, PLC fails to safe state.</td></tr>
-    <tr><td>What are the types of memory in a PLC?</td><td>ROM: stores operating system — non-volatile, cannot change. RAM: volatile — stores user program and process data — LOST on power failure — needs battery backup. EEPROM/Flash: non-volatile — stores user program permanently — survives power loss. Battery-backed RAM: RAM with lithium battery — retains on power loss — battery must be replaced every 2-5 years — failure means program lost on next power failure. Data registers: I/O image, timer/counter values, PID parameters.</td></tr>
-    <tr><td>What is a watchdog timer in a PLC?</td><td>Watchdog timer is a hardware timer that the PLC CPU must reset (kick) at the end of every scan cycle. If the CPU hangs, crashes, or the scan cycle takes too long: watchdog timer times out without being reset — hardware circuit detects this — forces PLC into safe state (outputs de-energised or go to safe position). Prevents the PLC from freezing with outputs in an unknown or dangerous state. Critical safety feature — ensures any software fault results in fail-safe behaviour rather than unknown output states.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>5. LADDER DIAGRAM & PLC PROGRAMMING LANGUAGES</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>LADDER DIAGRAM — Exam Answer</th></tr>
-    <tr><td>Ladder Diagram (LD) is a graphical PLC programming language that looks like relay logic diagrams.  STRUCTURE:    Power rails on left and right (like ladder sides).    RUNGS connecting the rails (like ladder steps).    Each rung has: CONTACTS on left (input conditions) and COIL on right (output).    When all contact conditions in a rung are TRUE (circuit complete): output coil ACTIVATES.  CONTACT TYPES:    NORMALLY OPEN (NO) contact: passes power when its bit is TRUE (1). Symbol: two vertical lines [  ].    NORMALLY CLOSED (NC) contact: passes power when its bit is FALSE (0). Symbol: two lines with diagonal [ / ]. Inverts logic.  COIL TYPES:    OUTPUT COIL: Activates when rung is TRUE. Deactivates when rung is FALSE.    SET COIL (latch): Activates and stays ON even if rung goes FALSE. Needs RESET coil to turn off.    RESET COIL: Turns off a latched SET coil.  SHIP APPLICATION EXAMPLE — MOTOR INTERLOCK:    Rung 1: [Inlet valve open contact] [OLR healthy contact] [Start button contact] ---- (Motor run coil)    Reading: Motor runs ONLY IF inlet valve is open AND overload relay is healthy AND start button pressed.    This is a series interlock — all conditions must be true.  WHY LADDER PREFERRED FOR SHIP ELECTRICIANS:    Resembles relay circuit diagrams that electricians already know.    Easy to visualise on screen — contacts light up when TRUE during runtime (online monitoring).    Can monitor and force inputs/outputs during troubleshooting without stopping PLC.</td></tr>
-  </table>
-  <div class="body">IEC 61131-3 Programming Languages — All Five</div>
-  <table class="n-table">
-    <tr><th>LANGUAGE</th><th>TYPE</th><th>DESCRIPTION</th><th>USED FOR</th></tr>
-    <tr><td>Ladder Diagram (LD)</td><td>Graphical</td><td>Relay-style diagrams. Contacts (inputs) and coils (outputs) on rungs.</td><td>Sequential logic, interlocking, motor controls — familiar to electricians</td></tr>
-    <tr><td>Function Block Diagram (FBD)</td><td>Graphical</td><td>Blocks (PID, timers, logic) connected by signal lines — shows data flow.</td><td>PID control, analogue processing, complex calculations</td></tr>
-    <tr><td>Structured Text (ST)</td><td>Text</td><td>High-level language (Pascal-like) — IF/THEN, FOR loops, CASE.</td><td>Complex algorithms, calculations, data manipulation</td></tr>
-    <tr><td>Instruction List (IL)</td><td>Text</td><td>Low-level assembly-like language. Deprecated in IEC Ed.3.</td><td>Legacy systems only</td></tr>
-    <tr><td>Sequential Function Chart (SFC)</td><td>Graphical</td><td>State machine — steps and transitions. Shows sequence.</td><td>Complex sequences: cargo loading, startup sequences</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is ladder diagram programming?</td><td>Ladder diagram (LD) is a graphical PLC programming language resembling relay logic. Program consists of rungs between power rails. Each rung has contacts (input conditions — normally open or normally closed) and a coil (output). When all contacts on a rung are satisfied (rung energised), output coil activates. Normally open: passes power when bit is TRUE. Normally closed: passes power when bit is FALSE. Used for: motor interlocking, sequential logic, safety circuits. Familiar to electricians from relay diagrams — most common language on ships.</td></tr>
-    <tr><td>What is the difference between a normally open and normally closed contact in a PLC?</td><td>Normally Open (NO) contact: passes power through the rung when its corresponding memory bit is TRUE (1). Like a normally open relay contact — closed when energised. Normally Closed (NC) contact: passes power when its bit is FALSE (0) — blocks when bit is TRUE. Like a normally open relay contact that is inverted. Use: NO for start buttons (press = TRUE = pass), NC for stop buttons (not pressed = TRUE = pass). NC contacts in ladder implement safety interlocks — fault or trip signal opens the NC contact — breaks the rung — stops the motor.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>6. PLC TIMERS & COUNTERS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>PLC TIMER TYPES — All Types Must Know</th></tr>
-    <tr><td>TON — ON-DELAY TIMER:    Input goes ON → timer starts counting → after preset time: output turns ON.    Input goes OFF before preset: timer resets to zero, output stays OFF.    SHIP EXAMPLE: Engine room fan must run 5 minutes BEFORE lube oil pump allowed to start.    Fan start → TON starts (preset <span class="n-val">5 min</span>) → after <span class="n-val">5 min</span> → LO pump start permitted.  TOF — OFF-DELAY TIMER:    Input goes ON: output ON immediately.    Input goes OFF → timer starts → after preset time: output turns OFF.    SHIP EXAMPLE: Cooling fan keeps running 10 minutes AFTER engine stops to cool down.    Engine stop → TOF starts (preset <span class="n-val">10 min</span>) → fan continues → after <span class="n-val">10 min</span> → fan stops.  RTO — RETENTIVE ON-DELAY TIMER (Accumulating Timer):    Accumulates time even when input turns OFF and ON again — adds up elapsed time.    Must be MANUALLY RESET by RESET instruction.    SHIP EXAMPLE: Total running hours for maintenance scheduling — counts cumulative running time.    Also: filter replacement interval timer — counts actual hours of service regardless of start/stops.  TP — PULSE TIMER:    Input goes ON: output ON for EXACTLY preset time then OFF regardless of input.    SHIP EXAMPLE: Single-shot pulse to solenoid valve — open for exactly 2 seconds then close.</td></tr>
-  </table>
-  <div class="body">PLC Counter Types</div>
-  <div class="body">CTU (Count Up): Increments by 1 on each rising edge of input. Output activates when count reaches preset.</div>
-  <div class="body">CTD (Count Down): Starts at preset and decrements. Output activates when count reaches zero.</div>
-  <div class="body">CTUD (Count Up/Down): Has both up and down inputs. Used for bidirectional position counting.</div>
-  <div class="body">Ship use: count pump starts (maintenance alarm after set number), count alarm occurrences, batch counting.</div>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is the difference between TON and TOF timer?</td><td>TON (On-Delay): input goes ON, timer starts, after preset time output goes ON. If input goes OFF before preset, timer resets and output stays OFF. Used to delay starting an action. Ship use: delay starting pump 2 until pump 1 has been running 30 seconds. TOF (Off-Delay): input goes ON, output goes ON immediately. Input goes OFF, timer starts, after preset time output goes OFF. Used to keep something running after trigger is removed. Ship use: keep cooling fan running 10 minutes after engine stops.</td></tr>
-    <tr><td>What is a retentive timer and where is it used on ships?</td><td>Retentive timer (RTO) accumulates elapsed time even when enable input turns OFF and ON repeatedly. Unlike TON which resets when input goes OFF, RTO keeps the accumulated time across multiple ON periods. When total accumulated time reaches preset, output activates. Must be manually reset with RESET instruction. Ship use: track total running hours of machinery for PMS (planned maintenance system) — counts cumulative running time for maintenance scheduling regardless of how many start/stop cycles occur.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>7. SPECIFIC SHIP CONTROL SYSTEMS</th></tr>
-  </table>
-  <div class="body">Fuel Oil Temperature Control</div>
-  <table class="n-table">
-    <tr><th>FUEL OIL TEMP CONTROL — Complete Loop</th></tr>
-    <tr><td>PURPOSE: Heat HFO to correct viscosity (<span class="n-val">120-150 deg C</span>) for good atomisation at engine injectors.  CONTROL LOOP:    SENSOR: PT100 or Type K thermocouple measures HFO temperature after heater.    TRANSMITTER: <span class="n-val">4-20mA</span> output to temperature controller.    CONTROLLER: PI controller (temperature is slow — no need for derivative — would amplify noise).    I/P CONVERTER: Converts <span class="n-val">4-20mA</span> controller output to <span class="n-val">3-15 psi</span> pneumatic signal.    CONTROL VALVE: Pneumatic steam control valve on steam supply to HFO heater.    HEATER: Steam heats HFO to target temperature.    FEEDBACK: Temperature reading back to controller.  FAIL-SAFE: Steam valve is FAIL CLOSE — if instrument air or signal lost: steam shuts off.    Prevents HFO overheating and system fire risk.  CASCADE OPTION: Outer controller = HFO temperature. Inner controller = steam flow.    Steam pressure fluctuations corrected by inner loop — HFO temperature more stable.</td></tr>
-  </table>
-  <div class="body">3-Element Boiler Feedwater Control</div>
-  <table class="n-table">
-    <tr><th>3-ELEMENT CONTROL — Why and How</th></tr>
-    <tr><td>PROBLEM with SINGLE-ELEMENT (level only) control:    When steam demand suddenly increases: steam bubbles form in drum → water APPEARS to rise (swell).    Controller sees high level → CLOSES feedwater valve → WRONG ACTION (drum is actually losing water).    When demand drops: bubble volume shrinks → water level SHRINKS → controller opens valve → wrong again.    SWELL/SHRINK effect makes single-element control unreliable during load changes.  THREE-ELEMENT SOLUTION:    ELEMENT 1: STEAM FLOW (feedforward — primary demand signal).    ELEMENT 2: FEEDWATER FLOW (feedforward — confirms feedwater responding).    ELEMENT 3: DRUM WATER LEVEL (feedback — long-term trim correction).  HOW IT WORKS:    Steam flow increases (load increases) → controller IMMEDIATELY opens feedwater valve proportionally.    (No waiting for level to drop — feedforward action gives instant response.)    Feedwater flow confirms feedwater valve is responding — any difference from steam flow is corrected.    Drum level provides slow trim correction — compensates for any long-term drift.  RESULT: No swell/shrink effect. Fast response. Accurate level control across all load changes.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Explain fuel oil temperature control system.</td><td>HFO heated to <span class="n-val">120-150 deg C</span> for correct viscosity. PT100/thermocouple measures temperature → <span class="n-val">4-20mA</span> to PI controller → I/P converter converts to <span class="n-val">3-15 psi</span> → pneumatic steam control valve on HFO heater → steam heats fuel → temperature feedback to controller. PI controller (not PID) — temperature is slow process, derivative not needed and would amplify noise. Steam valve fail-close for safety. Cascade option: outer temperature controller, inner steam flow controller — better disturbance rejection.</td></tr>
-    <tr><td>What is 3-element boiler feedwater control and why is it needed?</td><td>Single-element (level only) control fails during load changes: increased steam demand causes bubbles (swell) making level appear high — controller closes feedwater valve (wrong). 3-element: steam flow (feedforward — main demand), feedwater flow (feedforward confirmation), drum level (feedback trim). Steam demand increases → feedwater valve opens immediately (no waiting for level response). Feedwater flow confirms response. Drum level trims for long-term accuracy. Eliminates swell/shrink effect, faster response, accurate control at all loads.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>8. POWER MANAGEMENT SYSTEM (PMS) & SCADA/IAS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>POWER MANAGEMENT SYSTEM — Complete Functions</th></tr>
-    <tr><td>PMS automatically manages generator loading and start/stop to maintain power supply and prevent overloading.  FUNCTIONS: 1. LOAD MONITORING: Continuously monitors total load on running generators (kW and kVA). 2. AUTO-START: When load approaches limit of running generators → automatically starts standby generator and parallels it. 3. AUTO-STOP: When load reduces sufficiently → opens breaker and stops one generator (fuel saving). 4. LOAD SHEDDING: If a generator trips unexpectedly → immediately sheds non-essential loads to keep remaining generators within capacity.    Priority 1: Never shed — navigation, steering, fire pump, GMDSS, bilge.    Priority 2: Shed first — galley, HVAC, non-essential deck equipment. 5. BLACKOUT PREVENTION: Staged load shedding before OCR trips generator — avoids total blackout. 6. HEAVY CONSUMER MANAGEMENT: Bow thruster, large compressors — PMS checks adequate generation before allowing start. 7. LOAD OPTIMISATION: Runs generators at optimal loading (70-80% of rating) for best efficiency and lowest fuel consumption. 8. SEQUENTIAL LOAD RESTORATION: After blackout — controls automatic sequential restoration with correct time delays.  SEQUENTIAL RESTORATION TIMINGS (PMS controlled):    T=0: Blackout. Emergency generator starts (auto — within <span class="n-val">45 sec</span>).    T=<span class="n-val">1-2 min</span>: Start first main generator. Synchronise and close ACB.    T=<span class="n-val">2-3 min</span>: Start seawater cooling pump (highest priority — prevents overheating).    T=<span class="n-val">3-4 min</span>: Start lube oil pump and separator.    T=<span class="n-val">4-5 min</span>: Start fuel oil circulating pump and purifier.    T=<span class="n-val">5-7 min</span>: Start auxiliary boiler if needed. Fresh water generator.    T=<span class="n-val">7-9 min</span>: Start compressed air. Second main generator if needed.    T=<span class="n-val">9-12 min</span>: HVAC, accommodation, galley — non-essential loads last.    T=<span class="n-val">12-20 min</span>: Main engine preparation and start.    TIME DELAYS between each step: 30 seconds to 2 minutes — allows motor run-up before next start.</td></tr>
-  </table>
-  <div class="body">SCADA and IAS — Ship Automation</div>
-  <table class="n-table">
-    <tr><th>IAS (INTEGRATED AUTOMATION SYSTEM)</th></tr>
-    <tr><td>IAS combines alarm monitoring, process control, performance monitoring, and remote control in one networked system.  COMPONENTS:    Distributed PLCs throughout ship (engine room, cargo, deck, accommodation).    High-speed data network connecting all PLCs.    Operator workstations in ECR and bridge.    Historian server — stores historical process data.    Alarm management server — processes and prioritises alarms.  FUNCTIONS:    Real-time monitoring of all parameters on graphical mimics.    Alarm display, acknowledgement, and logging with timestamps.    Trend display — plot any parameter vs time.    Remote setpoint adjustment and control.    Data logging for port state, classification, performance analysis.    UMS support — alarms to bridge and cabins, engineer alarm system.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is a Power Management System (PMS)?</td><td>PMS automatically manages generator loading. Functions: continuous load monitoring, auto-start standby generator when load approaches limit, auto-stop generator when load reduces (fuel saving), load shedding if generator trips (shed non-essential loads immediately to protect remaining generators), blackout prevention (staged shedding before OCR trips), heavy consumer management (bow thruster can only start if sufficient generation), optimal loading (70-80% of rating for best efficiency), sequential load restoration after blackout with correct time delays between each step.</td></tr>
-    <tr><td>What is sequential load restoration and why are time delays needed?</td><td>After blackout: loads reconnected one by one in priority order with time delays (<span class="n-val">30 sec</span> to <span class="n-val">2 min</span>). Why delays: each motor starting current = 5-8x rated. All starting simultaneously would overload first generator online → another blackout. Time delays let each motor run up to speed before next is started — keeps total current within generator capacity. Priority: seawater cooling pump first (prevent overheating), then LO, fuel/purifier, boiler, compressed air, HVAC, galley last. Main engine only after all ancillaries confirmed running.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>9. CONTROL VALVES, I/P CONVERTERS & FAIL-SAFE</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>CONTROL VALVE — Types and Fail-Safe</th></tr>
-    <tr><td>Control valve is the FINAL CONTROL ELEMENT — converts controller <span class="n-val">4-20mA</span> output to physical valve position via actuator.  I/P CONVERTER (Current to Pressure):    Converts <span class="n-val">4-20mA</span> controller output to <span class="n-val">3-15 psi</span> pneumatic signal for pneumatic actuator.    <span class="n-val">4mA</span> → <span class="n-val">3 psi</span> (<span class="n-val">0.2 bar</span>) = valve minimum. <span class="n-val">20mA</span> → <span class="n-val">15 psi</span> (<span class="n-val">1.0 bar</span>) = valve maximum.    Working: coil generates electromagnetic force proportional to current → flapper/nozzle controls bleed of instrument air → output pressure proportional to current.  VALVE POSITIONER:    Compares demanded position (from I/P output) with actual valve stem position.    Corrects any error — eliminates hysteresis and friction effects.    Gives accurate position control — used on all critical control valves.  FAIL-SAFE VALVE POSITIONS:    FAIL CLOSE (Air to Open — ATO): Air pressure opens valve. On air/signal failure: spring closes valve.      Used: fuel supply valves (stop fuel on failure = safety), steam supply to heaters (prevent overheating).     FAIL OPEN (Air to Close — ATC): Air pressure closes valve. On failure: spring opens valve.      Used: cooling water valves (keep cooling on failure = safe), condenser cooling.     SELECTION: Choose the SAFE POSITION for each specific application.    Ask: What happens if valve fails open? What if it fails closed? Choose the safer failure mode.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is an I/P converter and how does it work?</td><td>I/P (current to pressure) converter converts <span class="n-val">4-20mA</span> controller output to proportional pneumatic pressure (<span class="n-val">3-15 psi</span>) to operate a pneumatic control valve. <span class="n-val">4mA</span> = <span class="n-val">3 psi</span> (valve minimum), <span class="n-val">20mA</span> = <span class="n-val">15 psi</span> (valve maximum). Working: coil with current creates electromagnetic force → moves flapper/nozzle assembly → controls bleed of instrument air (typically <span class="n-val">6 bar</span> supply) → output pressure proportional to current. Valve positioner further improves accuracy by comparing demanded vs actual stem position.</td></tr>
-    <tr><td>What is fail-open and fail-close in a control valve?</td><td>Fail close (ATO — Air to Open): air pressure opens valve, spring closes on air/signal failure. Used: fuel supply valves (close on failure = stop fuel = safe), steam heater valves (prevent overheating). Fail open (ATC — Air to Close): air holds valve closed, spring opens on failure. Used: cooling water valves (open on failure = maintain cooling = safe). Selection depends on what is safer for each application: ask 'if this valve fails open, is that safe? If it fails closed, is that safe?' Choose the less dangerous failure mode.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>10. QUICK REVISION — CONTROL SYSTEMS & PLC</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>TOPIC</th><th>FREQUENCY & KEY POINTS</th></tr>
-    <tr><td>Open vs closed loop</td><td>⭐⭐⭐⭐⭐ Open: no feedback, cannot correct. Closed: feedback, Error=SP-PV, self-correcting. Negative feedback = stable.</td></tr>
-    <tr><td>PID — P I D actions</td><td>⭐⭐⭐⭐⭐ P=current error (fast, offset). I=accumulated error (eliminates offset). D=rate of change (reduces overshoot, noise sensitive).</td></tr>
-    <tr><td>Integral — offset elimination</td><td>⭐⭐⭐⭐⭐ P alone cannot eliminate offset. Integral continuously corrects until error=ZERO. Anti-windup needed when output saturates.</td></tr>
-    <tr><td>Cascade control</td><td>⭐⭐⭐⭐⭐ Outer (primary) measures main var. Inner (secondary) measures intermediate. Outer output = inner setpoint. Faster disturbance rejection.</td></tr>
-    <tr><td>PLC scan cycle</td><td>⭐⭐⭐⭐⭐ Input scan → Program execute → Output scan → Housekeeping → repeat. <span class="n-val">1-50ms</span>. Watchdog = safe state on hang.</td></tr>
-    <tr><td>PLC memory</td><td>⭐⭐⭐⭐ ROM(OS), RAM(volatile-data), EEPROM/Flash(non-volatile program), Battery RAM(backup). Battery failure = data loss on power cut.</td></tr>
-    <tr><td>Ladder diagram</td><td>⭐⭐⭐⭐ Rung with contacts (NO/NC) and coil. All contacts TRUE = coil activates. NO = passes when bit TRUE. NC = passes when bit FALSE.</td></tr>
-    <tr><td>3-element boiler control</td><td>⭐⭐⭐⭐ Steam flow (FF) + Feedwater flow (FF) + Level (FB trim). Feedforward prevents swell/shrink. Faster than single-element.</td></tr>
-    <tr><td>PMS functions</td><td>⭐⭐⭐⭐ Load monitor, auto-start/stop, load shed on trip, heavy consumer management, sequential restoration, optimal loading 70-80%.</td></tr>
-    <tr><td>TON vs TOF timer</td><td>⭐⭐⭐⭐ TON: delay ON (input ON then delay then output ON). TOF: delay OFF (input OFF then delay then output OFF).</td></tr>
-    <tr><td>Fuel oil temperature control</td><td>⭐⭐⭐⭐ PT100 → PI controller → I/P converter → pneumatic steam valve → HFO heater. Fail-close steam valve. PI not PID (temperature = slow).</td></tr>
-    <tr><td>Sequential restoration timings</td><td>⭐⭐⭐⭐ SW cooling pump (T=<span class="n-val">2-3min</span>) → LO/separator (T=<span class="n-val">3-4min</span>) → fuel/purifier (T=<span class="n-val">4-5min</span>) → boiler (T=<span class="n-val">5-7min</span>) → HVAC last. <span class="n-val">30sec</span>-<span class="n-val">2min</span> delays.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>FINAL MEMORY AID — Control Systems & PLC</th></tr>
-    <tr><td>OPEN LOOP: No feedback, fire and forget. CLOSED LOOP: Feedback, Error=SP-PV, self-correcting. PID: P=present (fast, offset). I=past accumulated (eliminates offset, windup). D=future trend (damps overshoot, noise). CASCADE: Two controllers. Outer output = inner setpoint. Faster disturbance rejection. Boiler temp (outer) + steam flow (inner). PLC SCAN: Input scan → Program execute → Output scan → Housekeeping → repeat. Watchdog = safe on hang. PLC MEMORY: ROM(OS), RAM(volatile), EEPROM(non-volatile), Battery RAM(replace every 2-5yr). LADDER: Contacts (NO/NC) + coils on rungs. All contacts TRUE = coil activates. TIMERS: TON = delay ON. TOF = delay OFF. RTO = retentive (running hours). TP = pulse. 3-ELEMENT BOILER: Steam FF + FW FF + Level trim. Feedforward prevents swell/shrink. PMS: Monitors load, auto-start/stop, load shed on trip, sequential restoration with time delays. SEQUENTIAL: SW cooling (T=<span class="n-val">2-3min</span>) → LO (T=<span class="n-val">3-4min</span>) → fuel (T=<span class="n-val">4-5min</span>) → HVAC last. <span class="n-val">30sec</span>-<span class="n-val">2min</span> between each. FAIL-SAFE: Fail close = fuel, steam valves. Fail open = cooling water valves.</td></tr>
-  </table>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="n-h2">GAP ADDITIONS — v2.1 (Added May 2026)</div>
-  <div class="body">Foundation Fieldbus (FF) — vs HART vs Modbus</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Praveen Nair, Sudhir — new trending topic 2025-26</div></div>
-  <div class="body">Foundation Fieldbus (FF): Fully digital, multi-drop field network. Devices powered over the bus. Bi-directional communication. H1 speed: <span class="n-val">31.25 kbps</span>. Supports peer-to-peer communication (devices can share data without PLC).</div>
-  <div class="body">HART (Highway Addressable Remote Transducer): Digital signal superimposed on standard 4–<span class="n-val">20mA</span> analog loop. Point-to-point (one transmitter per loop typically). Works with existing 4–<span class="n-val">20mA</span> wiring.</div>
-  <div class="body">Why <span class="n-val">250Ω</span> resistor with HART: HART signal is a 1.2/2.2 kHz AC signal riding on the 4–<span class="n-val">20mA</span> DC current. The <span class="n-val">250Ω</span> resistor converts this current signal to a voltage (1–<span class="n-val">5V</span>) that the HART communicator can detect and read. Without <span class="n-val">250Ω</span> — no voltage drop — HART communicator cannot decode the signal.</div>
-  <div class="body">Modbus (RTU/TCP): Master-slave serial protocol. RS485 physical layer. Simple, robust, widely used for PLC-to-PLC and PLC-to-instrument. Master polls slaves — no peer-to-peer. Speed: 9600–<span class="n-val">115200 bps</span>.</div>
-  <div class="body">Comparison: HART = existing <span class="n-val">4-20mA</span> wiring, simple retrofit. Modbus = multi-drop, simple but master-slave only. FF = full digital, peer-to-peer, most capable, most complex.</div>
-  <div class="body">SIPART PS2 Calibration — Run 1 to Run 5</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Praveen Nair, Sudhir — SIPART-specific cross questions</div></div>
-  <div class="body">SIPART PS2: Intelligent electro-pneumatic positioner for control valves. Communicates via HART or Profibus.</div>
-  <div class="body">Run 1: Initialisation — positioner determines valve travel (full close to full open). Measures total stroke.</div>
-  <div class="body">Run 2: Determines leakage (seat tightness) — how well valve closes.</div>
-  <div class="body">Run 3: Response time measurement — speed of valve movement up and down.</div>
-  <div class="body">Run 4: Friction analysis — positioner measures static and sliding friction.</div>
-  <div class="body">Run 5: Fine-tuning of control parameters based on Run 1-4 results.</div>
-  <div class="body">33° and 90° rotation settings: For rotary valves (butterfly/ball) — set angle to match valve type. 33° = most butterfly valves. 90° = full quarter-turn ball valves.</div>
-  <div class="body">────────────────────────────────────────────────────────────</div>
-  <div class="n-h2">GAP ADDITIONS — v2.3 (Candidate Exam Experiences)</div>
-  <div class="body">Relay Logic vs Ladder Logic — Key Differences</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> Surveyor — "difference between relay logic and ladder logic"</div></div>
-  <div class="body">Relay Logic (Hardwired):</div>
-  <div class="body">Physical relays, contactors, timers, pushbuttons wired together to create control circuits</div>
-  <div class="body">Fixed logic — to change behaviour, must physically rewire components</div>
-  <div class="body">Advantages: Simple, robust, no software dependency, no programming knowledge required</div>
-  <div class="body">Disadvantages: Bulky, difficult to modify, hard to troubleshoot complex logic, many components</div>
-  <div class="body">Ladder Logic (PLC):</div>
-  <div class="body">Software representation of relay logic — resembles ladder diagram on screen</div>
-  <div class="body">PLC scans input contacts, evaluates logic rungs, updates outputs in a program cycle</div>
-  <div class="body">Advantages: Easy to modify (software only), compact hardware, built-in diagnostics, easy to backup/copy</div>
-  <div class="body">Disadvantages: Programming knowledge required, software dependency, cyber security consideration</div>
-  <div class="body">Similarity: Same symbols — NO contact, NC contact, coil — just in software instead of hardware</div>
-  <div class="body">Ship application: Older ships use relay panels. Modern ships use PLC/DCS with ladder/function block programming.</div>
-  <div class="body">Latching Circuit — Operation</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> "Explain a latching (seal-in) circuit"</div></div>
-  <div class="body">Latching circuit: maintains energised state after the initiating signal is removed</div>
-  <div class="body">How it works: (1) Press START (momentary) → coil K1 energises. (2) Aux contact K1-A (NO) closes in parallel with START button → seals in circuit. (3) Release START → K1-A keeps coil energised. (4) Press STOP (NC in series) → coil drops → K1-A opens → unlatched.</div>
-  <div class="body">Uses: Motor starters (stays running after start pressed). Alarm circuits (latches until reset). Fire/gas trips (must be manually reset).</div>
-  <div class="body">PLC implementation: SET coil (latch) and RESET coil — SET holds output ON, RESET cancels. Software equivalent of relay latching.</div>
-  <div class="body">Safety: Latching fire/gas alarm confirms condition occurred — cannot be cleared by momentary signal. Must acknowledge and manually reset.</div>
-  <div class="body">Analog to Digital Converter (ADC) — How It Works</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> "What is an ADC and how does it work?"</div></div>
-  <div class="body">ADC = Analog to Digital Converter: converts continuous analog voltage into a digital number</div>
-  <div class="body">Why needed: Sensors output analog signals (4–<span class="n-val">20mA</span>, 0–<span class="n-val">10V</span>). PLC/computer inputs are digital.</div>
-  <div class="body">Resolution: 8-bit = 256 steps. 12-bit = 4096 steps. 16-bit = 65536 steps.</div>
-  <div class="body">Example: 4–<span class="n-val">20mA</span> into 12-bit ADC. <span class="n-val">4mA</span>=0, <span class="n-val">20mA</span>=4095. Reading of 2048 = <span class="n-val">12mA</span> = 50% of signal span.</div>
-  <div class="body">Sampling rate: Must be ≥2× signal frequency (Nyquist theorem) for accurate conversion.</div>
-  <div class="body">Ship application: All analog sensors (pressure, temperature, level, flow) connect via ADC modules in PLC/DCS.</div>
-  <div class="body">DAC (Digital to Analog): Reverse — converts digital control signal to analog 4–<span class="n-val">20mA</span> for actuators (control valves, VFD speed reference).</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Feedback Types:</strong><br>
+  <strong>Negative Feedback:</strong> Output fed back in opposition to input - reduces error - stabilises system. Most common in control systems.<br>
+  <strong>Positive Feedback:</strong> Output fed back in same direction as input - amplifies deviation - destabilising. NOT used in control - used in oscillators.</div></div>
+
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Open loop: 'Fire and forget' - like posting a letter. Closed loop: 'Fire and verify' - like a phone call. Zero error = process at setpoint = controller satisfied.</div></div>
 
 
-  <!-- ═══ WRITTEN SECTION ═══ -->
-  <div class="n-h1" id="s-written">📝 Written Section</div>
-  <div class="n-info"><div class="icon">📝</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development.</div></div>
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="n-h1" id="s-pid">2. PID Controller - P, I, D Actions</div>
+  
+  <div class="n-formula">MV(t) = Kp × e(t) + Ki × ∫e dt + Kd × (de/dt) + Bias<div class="label">e = error (SP - PV) · Kp = Proportional gain · Ki = Integral gain · Kd = Derivative gain · MV = Manipulated Variable · Bias = steady state value</div></div>
+
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>P - PROPORTIONAL ACTION:</strong> Output proportional to current error. Large error = large correction.<br>
+  <strong>Proportional Band (PB):</strong> Range of error over which controller output changes from <span class="n-val">0%</span> to <span class="n-val">100%</span>. PB = (1/Kp) × <span class="n-val">100%</span>. Narrow PB (high Kp) = aggressive. Wide PB (low Kp) = sluggish.<br>
+  <strong>Offset Problem:</strong> P-only controller CANNOT eliminate steady-state error (offset). Some error must exist to maintain controller output that balances load. <strong>Solution:</strong> Add Integral action.</div></div>
+
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>I - INTEGRAL ACTION (RESET):</strong> Integrates (accumulates) error over time. Even small constant error eventually produces large output - keeps increasing until error = ZERO.<br>
+  <strong>Primary Purpose:</strong> ELIMINATES STEADY-STATE OFFSET.<br>
+  <strong>Integral Windup:</strong> If process is limited (valve fully open), integral keeps accumulating - when limitation removed → large overshoot. <strong>Prevention:</strong> anti-windup circuits clamp integral when output saturated.</div></div>
+
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>D - DERIVATIVE ACTION (RATE):</strong> Responds to HOW FAST error is changing. Anticipates approach to setpoint.<br>
+  <strong>Purpose:</strong> DAMPING / ANTICIPATION - reduces overshoot, improves stability.<br>
+  <strong>Problem:</strong> Sensitive to NOISE - high frequency noise → large de/dt → large output spikes. <strong>Solution:</strong> Apply derivative to PV only (not to error) or use derivative filter.</div></div>
+
+  <table class="n-table">
+    <tr><th>ACTION</th><th>RESPONDS TO</th><th>ELIMINATES</th><th>PROBLEMS</th></tr>
+    <tr><td><strong>P (Proportional)</strong></td><td>Current error magnitude</td><td>Reduces error (not to zero)</td><td>Leaves steady-state offset</td></tr>
+    <tr><td><strong>I (Integral)</strong></td><td>Accumulated error over time</td><td class="ok">Steady-state offset</td><td>Integral windup, oscillation</td></tr>
+    <tr><td><strong>D (Derivative)</strong></td><td>Rate of change of error</td><td class="ok">Overshoot</td><td class="bad">Noise amplification</td></tr>
+  </table>
+
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> <strong>P</strong> = PRESENT error. <strong>I</strong> = PAST errors (accumulated). <strong>D</strong> = FUTURE error (predicted from trend). P alone: fast but leaves offset. PI: eliminates offset. PID: eliminates offset AND reduces overshoot.</div></div>
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="n-h1" id="s-cascade">3. Cascade Control System</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Anil Deswal specific:</strong> Know the difference between Cascade and simple feedback.</div></div>
+
+  <p class="n-p"><strong>Cascade Control</strong> uses TWO controllers - one inside the other - where the output of the OUTER (primary/master) controller becomes the SETPOINT of the INNER (secondary/slave) controller.</p>
+
+  <ol class="n-steps">
+    <li><strong>Primary Controller (Outer Loop):</strong> Measures the main controlled variable (e.g., TEMPERATURE). Compares with setpoint. Output = setpoint command to secondary controller.</li>
+    <li><strong>Secondary Controller (Inner Loop):</strong> Measures intermediate variable (e.g., FLOW). Receives setpoint from primary controller. Directly manipulates the final control element (e.g., steam valve).</li>
+    <li><strong>Advantage:</strong> Inner controller corrects inner loop disturbances quickly - before they affect outer variable, resulting in faster response and better disturbance rejection.</li>
+  </ol>
+
+  <table class="n-table">
+    <tr><th>SHIP EXAMPLES OF CASCADE CONTROL</th></tr>
+    <tr><td><strong>1. Boiler Steam Temperature:</strong> Outer loop: steam temperature controller (slow). Inner loop: steam flow controller (fast). If supply pressure varies, inner loop corrects flow immediately before temperature changes.</td></tr>
+    <tr><td><strong>2. Fuel Oil Temperature:</strong> Outer loop: HFO temperature controller. Inner loop: steam flow controller. Controls steam valve.</td></tr>
+    <tr><td><strong>3. Cargo Pump Discharge Pressure:</strong> Outer loop: vessel tank level controller. Inner loop: pump flow controller. Controls pump VFD speed.</td></tr>
+  </table>
+
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="n-h1" id="s-plc">4. PLC & Ladder Diagram</div>
+
+  <div class="n-h2">PLC Scan Cycle</div>
+  <ol class="n-steps">
+    <li><strong>Input Scan:</strong> Read all physical inputs → store in INPUT IMAGE REGISTER (memory snapshot).</li>
+    <li><strong>Program Execution:</strong> Execute user program top-to-bottom using input image register values. Write results to OUTPUT IMAGE REGISTER.</li>
+    <li><strong>Output Scan:</strong> Write output image register values to physical output modules - update actual outputs.</li>
+    <li><strong>Housekeeping:</strong> Update communications, check watchdog timer, internal diagnostics. Repeat from Step 1.</li>
+  </ol>
+  
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Scan time</strong> is typically <span class="n-val">1-50ms</span>. <strong>Watchdog Timer:</strong> If scan does not complete within set maximum time, PLC detects hang and goes to SAFE STATE (outputs de-energised). Critical safety feature.</div></div>
+
+  <table class="n-table">
+    <tr><th>PLC MEMORY TYPES</th><th>FUNCTION</th></tr>
+    <tr><td><strong>ROM</strong> (Non-volatile)</td><td>Stores PLC operating system (firmware). Not lost on power failure.</td></tr>
+    <tr><td><strong>RAM</strong> (Volatile)</td><td>Stores user program & process data. <strong>LOST</strong> on power failure - needs battery backup.</td></tr>
+    <tr><td><strong>EEPROM / Flash</strong></td><td>Stores user program permanently. Survives power loss. Electrically erasable.</td></tr>
+    <tr><td><strong>Battery-Backed RAM</strong></td><td>RAM with lithium battery (replace every 2-5 years). If battery fails, data lost on next power failure.</td></tr>
+  </table>
+
+  <div class="n-h2">Ladder Diagram & IEC Languages</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Ladder Diagram (LD):</strong> Resembles relay logic. Rungs connect power rails. <strong>Normally Open (NO):</strong> [ ] passes power when bit is TRUE (1). <strong>Normally Closed (NC):</strong> [ / ] passes power when bit is FALSE (0). Output coil activates when rung is TRUE.</div></div>
+
+  <table class="n-table">
+    <tr><th>IEC 61131-3 LANGUAGE</th><th>TYPE</th><th>DESCRIPTION & USE</th></tr>
+    <tr><td><strong>Ladder Diagram (LD)</strong></td><td>Graphical</td><td>Relay-style diagrams. Used for sequential logic, motor interlocking.</td></tr>
+    <tr><td><strong>Function Block Diagram (FBD)</strong></td><td>Graphical</td><td>Blocks connected by signal lines. Used for PID, analogue processing.</td></tr>
+    <tr><td><strong>Structured Text (ST)</strong></td><td>Text</td><td>High-level Pascal-like language. Used for complex algorithms.</td></tr>
+    <tr><td><strong>Sequential Function Chart (SFC)</strong></td><td>Graphical</td><td>State machine (steps/transitions). Used for startup sequences.</td></tr>
+  </table>
+
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="n-h1" id="s-timers">5. PLC Timers & Counters</div>
+
+  <table class="n-table">
+    <tr><th>TIMER</th><th>OPERATION</th><th>SHIP EXAMPLE</th></tr>
+    <tr><td><strong>TON (On-Delay)</strong></td><td>Input ON → starts counting → output turns ON after preset. (Resets if input goes OFF)</td><td>Engine room fan runs <span class="n-val">5 min</span> BEFORE LO pump allowed to start.</td></tr>
+    <tr><td><strong>TOF (Off-Delay)</strong></td><td>Input ON → output ON immediately. Input OFF → starts counting → output turns OFF after preset.</td><td>Cooling fan keeps running <span class="n-val">10 min</span> AFTER engine stops.</td></tr>
+    <tr><td class="hl"><strong>RTO (Retentive)</strong></td><td>Accumulates time even when input turns OFF/ON. Must be MANUALLY RESET.</td><td>Total running hours for maintenance scheduling.</td></tr>
+    <tr><td><strong>TP (Pulse)</strong></td><td>Input ON → output ON for EXACTLY preset time then OFF.</td><td>Single-shot pulse to open solenoid valve for exactly <span class="n-val">2 seconds</span>.</td></tr>
+  </table>
+
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="n-h1" id="s-systems">6. Specific Ship Control Systems</div>
+
+  <div class="n-h2">Fuel Oil Temperature Control Loop</div>
+  <ul class="n-list">
+    <li><strong>Sensor:</strong> PT100 measures HFO temperature after heater (target <span class="n-val">120-150 °C</span>).</li>
+    <li><strong>Transmitter:</strong> <span class="n-val">4-20mA</span> output to PI controller. (Derivative not needed, would amplify noise).</li>
+    <li><strong>I/P Converter:</strong> Converts <span class="n-val">4-20mA</span> to <span class="n-val">3-15 psi</span> pneumatic signal.</li>
+    <li><strong>Control Valve:</strong> Pneumatic steam control valve on heater.</li>
+    <li><strong>Fail-Safe:</strong> Steam valve is <strong>FAIL CLOSE</strong> (Air to Open) - if air/signal lost, steam shuts off to prevent fire risk.</li>
+  </ul>
+
+  <div class="n-h2">3-Element Boiler Feedwater Control</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Problem with Single-Element (Level Only):</strong> When steam demand increases suddenly, bubbles form causing "swell". Controller sees high level and wrongly CLOSES feedwater valve.</div></div>
+  <ol class="n-steps">
+    <li><strong>Element 1 (Steam Flow):</strong> Feedforward - primary demand signal. Instantly opens feedwater valve proportionally when load increases.</li>
+    <li><strong>Element 2 (Feedwater Flow):</strong> Feedforward - confirms feedwater valve is responding correctly.</li>
+    <li><strong>Element 3 (Drum Water Level):</strong> Feedback - slow trim correction for any long-term drift.</li>
+  </ol>
+  <div class="n-ok"><div class="icon">💡</div><div class="body">Result: Eliminates swell/shrink effect, giving fast response and accurate control.</div></div>
+
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="n-h1" id="s-pms">7. PMS & SCADA / IAS</div>
+
+  <div class="n-h2">Power Management System (PMS) Functions</div>
+  <ul class="n-list">
+    <li><strong>Load Monitoring:</strong> Continuously monitors kW and kVA on running generators.</li>
+    <li><strong>Auto-Start/Stop:</strong> Starts standby generator when approaching limits; stops one generator when load reduces (fuel saving).</li>
+    <li><strong>Load Shedding:</strong> If generator trips, immediately sheds non-essential loads (e.g. galley, HVAC) to protect remaining generators. Never sheds Priority 1 (steering, fire pump).</li>
+    <li><strong>Blackout Prevention:</strong> Staged load shedding before Overcurrent Relay trips generator.</li>
+    <li><strong>Load Optimisation:</strong> Runs generators at <span class="n-val">70-80%</span> rating for best efficiency.</li>
+  </ul>
+
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Sequential Load Restoration (After Blackout):</strong><br>
+  T=0: Blackout. Emergency generator starts (within <span class="n-val">45 sec</span>).<br>
+  T=<span class="n-val">1-2 min</span>: First main generator online.<br>
+  T=<span class="n-val">2-3 min</span>: Seawater cooling pump (highest priority).<br>
+  T=<span class="n-val">3-4 min</span>: LO pump and separator.<br>
+  T=<span class="n-val">4-5 min</span>: Fuel oil pump and purifier.<br>
+  T=<span class="n-val">5-7 min</span>: Auxiliary boiler.<br>
+  T=<span class="n-val">9-12 min</span>: HVAC, accommodation, galley last.<br>
+  <strong>Why Delays (<span class="n-val">30s</span> to <span class="n-val">2m</span>)?</strong> Motor starting currents are 5-8x rated. Simultaneous starts would overload generator.</div></div>
+
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <div class="n-h1" id="s-valves">8. Control Valves & I/P Converters</div>
+
+  <p class="n-p"><strong>I/P Converter (Current to Pressure):</strong> Converts <span class="n-val">4-20mA</span> to <span class="n-val">3-15 psi</span> pneumatic signal. <span class="n-val">4mA</span> = <span class="n-val">3 psi</span> (valve minimum), <span class="n-val">20mA</span> = <span class="n-val">15 psi</span> (valve maximum). Coil generates electromagnetic force proportional to current to control air bleed.</p>
+
+  <table class="n-table">
+    <tr><th>FAIL-SAFE VALVE POSITIONS</th><th>OPERATION</th><th>USED FOR</th></tr>
+    <tr><td><strong>FAIL CLOSE</strong> (Air to Open)</td><td>Air pressure opens. Spring closes on failure.</td><td class="ok">Fuel supply valves, steam heaters (prevents fire)</td></tr>
+    <tr><td><strong>FAIL OPEN</strong> (Air to Close)</td><td>Air pressure closes. Spring opens on failure.</td><td class="ok">Cooling water valves (keeps cooling on)</td></tr>
+  </table>
+
+
+  <!-- ═══ SECTION 9 ═══ -->
+  <div class="n-h1" id="s-gap">9. Gap Additions (v2.1 & v2.3)</div>
+
+  <div class="n-grid-3">
+    <div class="n-card">
+      <div class="card-title">Foundation Fieldbus (FF)</div>
+      <div class="card-desc">Fully digital, multi-drop. Devices powered over bus. Bi-directional. Supports peer-to-peer sharing. Speed: <span class="n-val">31.25 kbps</span>.</div>
+    </div>
+    <div class="n-card">
+      <div class="card-title">HART</div>
+      <div class="card-desc">Digital signal superimposed on <span class="n-val">4-20mA</span> loop. Uses existing wiring. Needs <span class="n-val">250Ω</span> resistor to convert current to <span class="n-val">1-5V</span> for communicator detection.</div>
+    </div>
+    <div class="n-card">
+      <div class="card-title">Modbus</div>
+      <div class="card-desc">Master-slave serial protocol (RS485). No peer-to-peer. Speed: 9600-<span class="n-val">115200 bps</span>.</div>
+    </div>
+  </div>
+
+  <div class="n-h2">SIPART PS2 Calibration (Run 1 to 5)</div>
+  <ul class="n-list">
+    <li><strong>Run 1:</strong> Initialisation - determines total valve travel.</li>
+    <li><strong>Run 2:</strong> Leakage (seat tightness).</li>
+    <li><strong>Run 3:</strong> Response time measurement (speed).</li>
+    <li><strong>Run 4:</strong> Friction analysis (static/sliding).</li>
+    <li><strong>Run 5:</strong> Fine-tuning of control parameters.</li>
+  </ul>
+
+  <div class="n-h2">Relay Logic vs Ladder Logic</div>
+  <ul class="n-list">
+    <li><strong>Relay Logic (Hardwired):</strong> Physical components wired together. Bulky, hard to troubleshoot/modify.</li>
+    <li><strong>Ladder Logic (Software):</strong> Software representation. Easy to modify, built-in diagnostics. Requires programming knowledge.</li>
+  </ul>
+
+  <div class="n-h2">Latching Circuit (Seal-In)</div>
+  <p class="n-p">Maintains energised state after momentary START signal is removed via a parallel NO auxiliary contact. Requires NC STOP button to unlatch. In PLC, uses SET and RESET coils.</p>
+
+  <div class="n-h2">ADC (Analog to Digital Converter)</div>
+  <p class="n-p">Converts continuous analog (<span class="n-val">4-20mA</span>) to digital number. 12-bit = 4096 steps. E.g., <span class="n-val">4mA</span>=0, <span class="n-val">20mA</span>=4095, <span class="n-val">12mA</span>=2048. DAC does the reverse.</p>
 
 
   <!-- ═══ SURVEYOR Q&A ═══ -->
-  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>No Surveyor Q&A available</strong> for this topic yet.</div></div>
+  
+  <!-- ═══ T07 GAPS ADDED ═══ -->
+
+  <div class="n-h1" id="s-plc-hardware">🖥️ PLC Hardware Modules</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyors ask the I/O module types and their functions.</strong></div></div>
+  <table class="n-table">
+    <tr><th>Module</th><th>Function</th><th>Shipboard Examples</th></tr>
+    <tr><td><strong>CPU</strong></td><td>Executes user program logic, manages memory and clocks</td><td>Microprocessor unit with ROM, RAM, EEPROM firmware</td></tr>
+    <tr><td><strong>Digital Input (DI)</strong></td><td>Reads ON/OFF field signals</td><td>Optocoupler isolation for limit switches, proximity sensors, push buttons</td></tr>
+    <tr><td><strong>Digital Output (DO)</strong></td><td>Drives ON/OFF equipment</td><td>Relay or transistor outputs powering contactors and solenoids</td></tr>
+    <tr><td><strong>Analogue Input (AI)</strong></td><td>Converts continuous signals via internal ADC</td><td>4-20 mA from pressure/temperature transmitters, 0-10V position</td></tr>
+    <tr><td><strong>Analogue Output (AO)</strong></td><td>Converts digital logic via internal DAC</td><td>4-20 mA reference lines feeding VFDs and control valve positioners</td></tr>
+    <tr><td><strong>Communication</strong></td><td>Serial or Ethernet network links</td><td>Modbus RTU/TCP, Profibus, Foundation Fieldbus interfaces</td></tr>
+    <tr><td><strong>Power Supply</strong></td><td>Delivers stable internal voltages</td><td>Regulated 24V/5V DC - often redundant on safety-critical networks</td></tr>
+  </table>
+
+  <div class="n-h1" id="s-ias-scada">🌐 IAS/SCADA Architecture</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Vishwanathan asks IAS hardware layers and the Historian server role.</strong></div></div>
+  <div class="n-grid">
+    <div class="n-card" style="border-color:var(--blue-border)"><div class="card-title" style="color:var(--blue)">Hardware Layers</div><div class="card-desc"><ul class="n-list"><li><strong>Distributed PLCs:</strong> Controller nodes across ER, cargo decks, purifier spaces</li><li><strong>Data Network:</strong> Redundant fiber or industrial Ethernet backbone</li><li><strong>Workstations:</strong> Graphic terminals in ECR and bridge</li><li><strong>Historian Server:</strong> Logs historical parameter trends vs time - used for trend analysis and SEEMP Part III CII data collection</li></ul></div></div>
+    <div class="n-card" style="border-color:var(--orange-border)"><div class="card-title" style="color:var(--orange)">Operational Functions</div><div class="card-desc"><ul class="n-list"><li><strong>Graphical mimics:</strong> Live pipeline flows, temperatures, tank levels</li><li><strong>Alarm management:</strong> Processes, categorises, timestamps alarms</li><li><strong>Remote setpoint adjustment:</strong> ECR adjustment of PID parameters and actuator positions</li><li><strong>UMS routing:</strong> Channels health alarms to cabin panels in UMS mode</li></ul></div></div>
+  </div>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> IAS = Historian + Mimics + Alarms + Remote trim + UMS extension. Modbus RTU = RS-485, 247 slaves, master/slave. Foundation Fieldbus = peer-to-peer, devices can control loops without central PLC. SIPART PS2 calibration: Run 1 to Run 5 = find stops, measure friction, optimise control.</div></div>
+
+  <div class="n-h1" id="s-valve-positioner">🔧 Valve Positioner - Physics &amp; Correction</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why a valve positioner is needed beyond an I/P converter:</strong> An I/P converter translates a 4–20 mA signal into 3–15 psi air. But the valve stem may not reach the exact commanded position due to: (1) <strong>Stiction:</strong> Static friction in valve packing - the stem doesn't move until sufficient pressure differential overcomes it. (2) <strong>Hysteresis:</strong> The stem position lags behind the control signal, following different paths on increasing vs decreasing signals due to friction and mechanical clearances.<br>
+  A valve positioner forms a local mechanical feedback loop directly with the valve stem. It continuously compares the commanded position (from the I/P signal) with the actual stem position (from a feedback linkage or potentiometer). Any difference → positioner adjusts the pneumatic output to the actuator until error = zero. Overcomes stiction and hysteresis completely. Essential for precision flow control loops.</div></div>
+
+<div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body">These are exact question formats from MMD orals. Study the key points.</div></div>
+
+  <div class="n-h2">General Control Systems</div>
+  <table class="n-table">
+    <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
+    <tr>
+      <td>What is the difference between open loop and closed loop control?</td>
+      <td>Open loop has no feedback; cannot correct disturbances. Closed loop measures output and feeds back to calculate error (<span class="n-formula">SP-PV</span>) to self-correct.</td>
+    </tr>
+    <tr>
+      <td>What is offset in a proportional controller and how is it eliminated?</td>
+      <td>Offset is permanent residual error. It is eliminated by adding Integral (I) action which accumulates error over time until error is zero.</td>
+    </tr>
+    <tr>
+      <td>What does P, I, and D do?</td>
+      <td>P: fast response to current error. I: eliminates offset. D: anticipates trend to reduce overshoot.</td>
+    </tr>
+    <tr>
+      <td>What is integral windup?</td>
+      <td>When output is saturated (e.g. valve fully open), integral continues to accumulate, causing large overshoot when condition resolves. Prevented by anti-windup circuits.</td>
+    </tr>
+    <tr>
+      <td>What is cascade control and where is it used?</td>
+      <td>Two controllers: outer (primary) output becomes inner (secondary) setpoint. Inner corrects disturbances quickly. Used for boiler steam temperature (inner=steam flow) or HFO temperature.</td>
+    </tr>
+    <tr>
+      <td>What is 3-element boiler feedwater control?</td>
+      <td>Uses Steam Flow (feedforward), Feedwater Flow (feedforward), and Drum Level (feedback trim). Prevents "swell/shrink" effect during rapid load changes.</td>
+    </tr>
+  </table>
+
+  <div class="n-h2">PLC & Hardware</div>
+  <table class="n-table">
+    <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
+    <tr>
+      <td>What is a PLC scan cycle?</td>
+      <td>1. Input scan, 2. Program execution, 3. Output scan, 4. Housekeeping. Takes <span class="n-val">1-50ms</span>.</td>
+    </tr>
+    <tr>
+      <td>What are the types of memory in a PLC?</td>
+      <td>ROM (OS firmware), RAM (user program/data, volatile, needs battery), EEPROM (permanent user program).</td>
+    </tr>
+    <tr>
+      <td>What is a watchdog timer in a PLC?</td>
+      <td>Hardware timer reset every scan. If CPU hangs, watchdog times out and forces outputs to safe state.</td>
+    </tr>
+    <tr>
+      <td>What is ladder diagram programming?</td>
+      <td>Graphical language resembling relay logic. Rungs have NO/NC contacts and output coils.</td>
+    </tr>
+    <tr>
+      <td>What is a retentive timer (RTO)?</td>
+      <td>Accumulates elapsed time across multiple ON periods. Needs manual reset. Used for total running hours.</td>
+    </tr>
+    <tr>
+      <td>What is an I/P converter?</td>
+      <td>Converts <span class="n-val">4-20mA</span> to <span class="n-val">3-15 psi</span> pneumatic signal for control valves.</td>
+    </tr>
+    <tr>
+      <td>What is fail-open and fail-close?</td>
+      <td>Fail close: spring closes on air loss (e.g., fuel valves for safety). Fail open: spring opens on air loss (e.g., cooling water).</td>
+    </tr>
+  </table>
 
 
   <!-- ═══ QUICK REVISION ═══ -->
-  <div class="n-h1" id="s-quickrev">📋 Quick Revision</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body">Revision tables coming soon.</div></div>
+  
+  <div class="n-h1" id="s-cyber">🔐 IACS UR E26/E27 - Maritime Cybersecurity (Mandatory 2024)</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Brand new mandatory regulation - surveyors asking this from 2024.</strong> All ships contracted on or after <span class="n-val">1 July 2024</span>. PLC, SCADA, and IAS systems are directly in scope.</div></div>
+  <div class="n-grid">
+    <div class="n-card" style="border-color:var(--blue-border)"><div class="card-title" style="color:var(--blue)">UR E26 - Ship Level</div><div class="card-desc">Treats ship as complete entity. 17 requirements across 5 NIST functions: Identify, Protect, Detect, Respond, Recover. Requires Cyber Security Design Description (CSDD) from shipyard.</div></div>
+    <div class="n-card" style="border-color:rgba(167,139,250,.3)"><div class="card-title" style="color:var(--purple)">UR E27 - Equipment Level</div><div class="card-desc">Targets individual OT/CBS equipment. 30 core capabilities + 11 additional for systems on untrusted networks. Suppliers must prove compliance before equipment installed.</div></div>
+  </div>
+  <div class="n-h2">OT System Categories</div>
+  <table class="n-table">
+    <tr><th>Category</th><th>Consequence of Failure</th><th>Examples</th><th>Security Level</th></tr>
+    <tr><td class="ok"><strong>I</strong></td><td>Localised inconvenience only</td><td>Crew entertainment, admin IT</td><td>Physical/logical isolation, basic access control</td></tr>
+    <tr><td class="hl"><strong>II</strong></td><td>Performance degradation, no immediate safety risk</td><td>Cargo control, ballast water</td><td>Mandatory firewalls, security zones, log audits</td></tr>
+    <tr><td class="bad"><strong>III - Essential</strong></td><td>Immediate risk to life, safety, or environment</td><td>Propulsion, steering, ECDIS, RADAR, DP</td><td>Cryptographic isolation, secure boot, real-time anomaly detection</td></tr>
+  </table>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>PA/GA in scope:</strong> Public Address/General Alarm systems are SOLAS statutory requirements. Must now have user authentication and integrity protection - unauthorized access could trigger false abandon-ship alarms. Even seemingly non-critical systems are in scope if connected to safety-critical networks.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is IACS UR E26 vs E27? (New 2024 - will be asked at every oral from 2025 onwards)</strong><br><strong>Ideal Answer:</strong> UR E26 = ship-level cyber resilience - secure integration of IT and OT throughout ship's lifecycle. 17 requirements across 5 NIST functions. Mandatory for ships contracted on or after <span class="n-val">1 July 2024</span>. UR E27 = individual equipment level - OEM must build 30 specific security capabilities into each Computer-Based System before installation. 11 additional if system connects to untrusted networks. Both mandatory. Class surveys verify compliance.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>A technician wants to connect to the PLC for diagnostics - what cybersecurity protocol do you follow?</strong><br><strong>Ideal Answer:</strong> Under IACS UR E27, check system category - most PLCs are Category III. Protocol: (1) Scan technician laptop/USB for malware. (2) Verify identity and authorization. (3) Physical approval - turn key-switch or unlock port. (4) For remote access: enforce MFA. (5) Monitor all actions in immutable audit log. (6) Rotate any credentials after session. (7) Verify no unauthorized changes to PLC program after session.</div></div>
+
+<div class="n-h1" id="s-quickrev">📊 Quick Revision - Surveyor Frequency Guide</div>
+  <table class="n-table">
+    <tr><th>Topic</th><th>Frequency</th><th>Key Points to Memorise</th></tr>
+    <tr>
+      <td>PID Actions</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Every surveyor</td>
+      <td>P=present(offset), I=past(eliminates offset), D=future(damps overshoot).</td>
+    </tr>
+    <tr>
+      <td>Open vs Closed Loop</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Every surveyor</td>
+      <td>Open=no feedback. Closed=feedback, Error=SP-PV, self-correcting.</td>
+    </tr>
+    <tr>
+      <td>Cascade Control</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Anil Deswal</td>
+      <td>Outer output = inner setpoint. Fast disturbance rejection. Boiler steam temp.</td>
+    </tr>
+    <tr>
+      <td>PLC Scan & Memory</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Kamath, Vishwanathan</td>
+      <td>Input→Program→Output. Watchdog=safe state. Battery RAM=data loss if dead.</td>
+    </tr>
+    <tr>
+      <td>3-Element Boiler Control</td>
+      <td class="hl">⭐⭐⭐⭐ Deswal, Sanjib</td>
+      <td>Steam Flow + FW Flow (feedforward) + Level (trim). Prevents swell/shrink.</td>
+    </tr>
+    <tr>
+      <td>PMS Functions</td>
+      <td class="hl">⭐⭐⭐⭐ Kamath, Vishwanathan</td>
+      <td>Auto-start/stop, load shed, blackout prevention, sequential restoration.</td>
+    </tr>
+    <tr>
+      <td>Timers (TON, TOF, RTO)</td>
+      <td class="hl">⭐⭐⭐⭐ Kamath</td>
+      <td>TON=delay ON. TOF=delay OFF. RTO=retentive (running hours).</td>
+    </tr>
+    <tr>
+      <td>Sequential Restoration</td>
+      <td class="hl">⭐⭐⭐⭐ Anil Deswal</td>
+      <td>SW cooling (<span class="n-val">2-3m</span>) → LO → Fuel → Boiler → HVAC. <span class="n-val">30s-2m</span> delays.</td>
+    </tr>
+    <tr>
+      <td>Fail-Safe Valves</td>
+      <td class="hl">⭐⭐⭐⭐ All</td>
+      <td>Fail close = fuel/steam. Fail open = cooling water.</td>
+    </tr>
+  </table>
 
   </div>
-</div>
 </div>`);

@@ -1,9 +1,12 @@
 window.loadNotes("T18", `<div class="view" id="view-notes-t18">
 <div class="note-doc">
-  <div style="margin-bottom:16px"><button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button></div>
+  <div style="margin-bottom:16px; display:flex; justify-content:space-between;">
+    <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
+    <button class="anc-btn" onclick="goToQuizFromNotes('T18')" style="background-color:var(--green-dim);border-color:var(--green);color:var(--green)">Take Quiz →</button>
+  </div>
   <div class="note-title">
-    <h1>Topic 18 — ElecSurvey</h1>
-    <div class="sub">ETO MMD Oral Examination · Function 5 · Class 2 · Mumbai & Noida</div>
+    <h1>Topic 18 - ELECTRICAL SURVEY</h1>
+    <div class="sub">ETO CoC Oral Assessment · STCW Reg. III/6 · DG Shipping India</div>
     <div class="tags">
       <span class="tag tag-blue">🔴 Exam Critical</span>
       <span class="tag tag-orange">Updated 2026</span>
@@ -11,203 +14,284 @@ window.loadNotes("T18", `<div class="view" id="view-notes-t18">
   </div>
   <div class="note-anchors">
     <span>Jump to section</span>
-    <button class="anc-btn" onclick="jumpTo('s-1')">ETO MMD ORAL EXAMINA...</button>
-    <button class="anc-btn" onclick="jumpTo('s-2')">TOPIC 18: ELECTRICAL...</button>
-    <button class="anc-btn" onclick="jumpTo('s-written')">📝 Written Section</button>
+    <button class="anc-btn" onclick="jumpTo('s-surveytypes')">Survey Types</button>
+    <button class="anc-btn" onclick="jumpTo('s-preparation')">Preparation & Docs</button>
+    <button class="anc-btn" onclick="jumpTo('s-msb')">MSB Survey</button>
+    <button class="anc-btn" onclick="jumpTo('s-acb')">ACB Trips & UVT</button>
+    <button class="anc-btn" onclick="jumpTo('s-overspeed')">Overspeed Tests</button>
+    <button class="anc-btn" onclick="jumpTo('s-rpr')">Reverse Power Trip</button>
+    <button class="anc-btn" onclick="jumpTo('s-mechecks')">Main Engine Checks</button>
+    <button class="anc-btn" onclick="jumpTo('s-shoresupply')">Drydock Shore Supply</button>
+    <button class="anc-btn" onclick="jumpTo('s-shore-sync')">Shore Sync</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
 
-  <div class="n-h1" id="s-1">ETO MMD ORAL EXAMINATION</div>
-  <div class="body">COMPREHENSIVE STUDY NOTES — v2.0</div>
-
-  <div class="n-h1" id="s-2">TOPIC 18: ELECTRICAL SURVEY</div>
-  <div class="body">Function 5  |  Class 2 ETO  |  Mumbai & Noida MMD</div>
-  <div class="body">Compiled from 2025–2026 Oral Question Banks — All Surveyors Combined</div>
-  <table class="n-table">
-    <tr><th>COLOUR CODE LEGEND</th></tr>
-    <tr><td>YELLOW = Key exam points / must-know concepts / formulae GREEN = Memory aids / mnemonics / analogies ORANGE = Cross questions + ideal answers / step-by-step procedures BLUE = Comparison tables / regulation tables / SOLAS references RED = Safety critical / warnings / MOST ASKED by surveyors</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>MOST ASKED — ELECTRICAL SURVEY</th></tr>
-    <tr><td>1. Electrical survey — complete preparation, all documents and certificates, what the surveyor checks physically. [Sanjib, Deswal, Kamath — the most asked topic in every single oral] 2. MSB survey — what is dead front panel? MSB safeties — insulation mat, earthing, 0.6m clearance, earth fault indicator, bus tie. [All surveyors] 3. ACB survey — complete isolation procedure, testing of overcurrent trip (secondary injection), reverse power trip, under-voltage trip. How to carry out trip tests. [All surveyors] 4. Overspeed trip test — how to test for DG and M/E? Procedure. [Deswal, Mumbai bank — specific repeated question] 5. Reverse power trip — construction, working, how to test at sea vs at shore. [Multiple surveyors] 6. Blackout test — full procedure demonstrated in front of surveyor (covered in Topic 16, cross-referenced here). [Sanjib, all banks] 7. UVT coil — what is it, how does under-voltage trip work? [Multiple banks, multiple surveyors] 8. Main engine checks during electrical survey — what documents are electrical for ME? [Multiple banks] 9. Dead front panel — exact definition, why used, voltage limits for AC and DC. [ORAL2026, Mumbai bank] 10. MSB survey preparation before dry dock — step by step. Emergency shore supply during dry dock — requirement. [Multiple banks] 11. Working on live MSB — when required and how? [ORAL2026] 12. Survey types — annual, intermediate, special, continuous survey — what happens at each for electrical equipment. [Multiple banks]</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>1. SURVEY TYPES — ANNUAL, INTERMEDIATE, SPECIAL & CONTINUOUS</th></tr>
-  </table>
-  <div class="body">Class society surveys are periodic inspections that verify a ship's continued compliance with class rules and statutory (SOLAS/MARPOL) requirements. The electrical survey is part of the ship's overall classification survey programme. Understanding which survey is which — and what electrical work is associated with each — is essential for the ETO.</div>
-  <table class="n-table">
-    <tr><th>SURVEY TYPE</th><th>INTERVAL</th><th>ELECTRICAL CONTENT</th><th>CLASS SOCIETY REQUIREMENT</th></tr>
-    <tr><td>Annual Survey</td><td>Every 12 months (±3 month window)</td><td>Visual inspection of accessible electrical equipment; check certificates validity; test emergency generator; check navigational equipment operation; verify fire detection system; check navigational lights and failure alarms. Less intensive than intermediate or special.</td><td>Mandatory for all classed vessels. Ship may not trade if annual survey overdue. Surveyor comes aboard.</td></tr>
-    <tr><td>Intermediate Survey</td><td>Every 2.5 years (between 2nd and 3rd annual survey in 5-yr cycle)</td><td>More detailed than annual: spot checks of MSB insulation; test of selected protection relays; ACB spot checks; battery condition checks; wiring spot inspections in engine room and accommodation. Class-specific scope.</td><td>Equivalent to 3rd annual survey in many class societies' programmes. May replace with continuous survey items.</td></tr>
-    <tr><td>Special Survey (Class Renewal Survey)</td><td>Every 5 years</td><td>Full electrical survey: all ACB secondary injection tests; all generator tests (voltage regulation, reverse power, overcurrent, parallel operation); all IR tests of motors, generators, cables; full MSB inspection including busbar torque check; battery load tests; full navigational equipment tests; emergency generator blackout test; steering gear full test; preferential trip test.</td><td>Most comprehensive survey. Ship typically in drydock. New class certificate issued. All major discrepancies must be rectified.</td></tr>
-    <tr><td>Continuous Survey (CMS)</td><td>Rolling programme — items surveyed on a 5-year cycle, ~20% per year</td><td>Each electrical item assigned a survey year. Annual survey covers 20% of the full scope rather than everything at once. Allows survey without requiring drydock for every item.</td><td>Optional alternative to special survey for many class societies. Common on modern trading vessels. Requires strict PMS tracking.</td></tr>
-    <tr><td>Safety Equipment Survey</td><td>Periodic (usually coincides with annual/intermediate)</td><td>Fire detection test; GMDSS equipment test; GMDSS battery load test; navigational lights; EPIRB and SART checks; emergency lighting; BNWAS test; immersion suit lights; lifeboat electrical.</td><td>Part of statutory survey under SOLAS. Certificates: Safety Equipment Certificate (SEC).</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>KEY EXAM POINTS — Survey Framework</th></tr>
-    <tr><td>SOLAS CHAPTER for electrical surveys: SOLAS Chapter I (General Provisions) covers the survey framework and PSC inspection rights. SOLAS Chapter II-1 specifies the technical standards that the survey verifies. CLASS SOCIETY vs FLAG STATE: The flag state (India — DG Shipping) sets statutory requirements. The class society (DNV, LR, BV, ClassNK, etc.) verifies both class rules AND statutory requirements on behalf of the flag state through a recognised organisation agreement. IACS (International Association of Classification Societies): The umbrella body to which major class societies belong. Sets unified requirements (URs) that all member societies follow — URs appear in class society rules. SURVEY WINDOW: Annual surveys have a ±3 month window (may be done 3 months before or 3 months after the anniversary date). Missing the window results in class suspension. ETO PREPARATION: Before any survey, check all PMS tasks are up to date and signed off, all test records are complete, all certificates are current, all equipment is fully operational, all spare parts for survey items are available.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>2. COMPLETE ELECTRICAL SURVEY — PREPARATION & DOCUMENTS</th></tr>
-  </table>
-  <div class="body">2.1 Documents and Certificates to Present to Surveyor</div>
-  <div class="body">The electrical survey is the most tested topic in the entire MMD oral examination — asked in virtually every Class 2 ETO oral across all surveyors. The candidate must know precisely what documents to present and what the surveyor physically inspects. The answer must be comprehensive and structured. Below is the complete list used in practice.</div>
-  <table class="n-table">
-    <tr><th>DOCUMENTS TO PRESENT — COMPLETE MASTER LIST</th></tr>
-    <tr><td>CERTIFICATES (statutory and class): 1. Safety Equipment Certificate (SEC) — statutory certificate issued by flag state/RO. Covers all safety equipment including electrical. Verify validity and endorsements. 2. Safety Construction Certificate (SCC) — covers structural, machinery, and electrical construction standards. May be combined with SEC for cargo ships. 3. IAPP Certificate (International Air Pollution Prevention) — covers MARPOL Annex VI including ODS Record Book — relevant for AC/refrigeration systems. 4. Class Electrical Installation Certificate — class society's certificate confirming electrical installation meets class rules. Check it is current and not expired. 5. GMDSS Radio Station Licence — issued by flag state telecom authority. Verify it is valid and covers all GMDSS equipment fitted. 6. Voyage Data Recorder (VDR) Annual Performance Test Certificate — issued annually by approved service provider. 7. GMDSS Equipment Service Records / Maintenance Certificate (if using shore-based maintenance Option B).  MAINTENANCE RECORDS (PMS): 8. PMS electrical maintenance records for survey period — all completed jobs with dates and CE/ETO signatures. 9. Insulation resistance (IR) test records — all motors, generators, cables. With dates, temperatures, and corrected values. 10. Battery maintenance records — specific gravity, electrolyte level checks, load test results for: emergency batteries, GMDSS batteries, UPS batteries, lifeboat batteries, emergency generator starting battery. 11. Emergency generator test log — monthly auto-start test records, annual load test records with durations and voltages. 12. Fire detection system maintenance log — detector test records, panel alarm test records, dates of any replacements. 13. Navigational equipment maintenance records — RADAR, AIS, ECDIS, echo sounder, gyrocompass service records. 14. Navigational light test records — last test date, bulb replacements, backup supply test. 15. ACB maintenance records — last racking-out, contact inspection, trip test results. 16. Motor starter overload relay setting records — confirm settings match motor nameplate data. 17. ODS Record Book — refrigerant top-ups, type, quantity (for Annex VI compliance). 18. Month-end electrical reports signed by Chief Engineer.  DRAWINGS AND TECHNICAL DOCUMENTS: 19. Single-line electrical diagram (approved) — showing generators, MSB, emergency switchboard, all feeders. 20. MSB arrangement drawing — showing busbar configuration, ACB positions, relay settings. 21. Emergency switchboard arrangement drawing. 22. Ship's electrical load analysis / power balance calculation. 23. Equipment manuals for: generators, MSB, AVR, GMDSS equipment, VDR, AIS, RADAR. 24. Main engine NOx Technical File (for Annex VI compliance).</td></tr>
-  </table>
-  <div class="body">2.2 Physical Checks and Tests the Surveyor Carries Out</div>
-  <div class="body">After reviewing documents, the class society surveyor proceeds to physically inspect and test the electrical equipment. The ETO must be able to demonstrate all tests personally and explain the pass/fail criteria for each.</div>
-  <table class="n-table">
-    <tr><th>TEST / CHECK</th><th>PROCEDURE SUMMARY</th><th>PASS CRITERION</th><th>FREQUENCY</th></tr>
-    <tr><td>MSB Busbar IR Test</td><td>Megger <span class="n-val">500V</span> DC applied between each phase busbar and earth with all ACBs open. Test L1-E, L2-E, L3-E and phase-to-phase.</td><td>Minimum 1 MΩ (well-maintained MSB should show >100 MΩ)</td><td>Special Survey / as required</td></tr>
-    <tr><td>MSB Busbar Torque Check</td><td>All busbar joint bolts torqued to manufacturer's specification using calibrated torque wrench. All insulator surface condition inspected.</td><td>No loose joints, clean insulator surfaces, no carbon tracking</td><td>Special Survey</td></tr>
-    <tr><td>ACB Secondary Injection (Overcurrent Trip)</td><td>ACB racked to test position. Secondary injection set connected to CT secondary. Inject 150%, 200%, 600% rated current. Time each trip.</td><td>Trip times within ±10% of relay time-current characteristic curve</td><td>Special Survey / 5-year</td></tr>
-    <tr><td>Reverse Power Trip Test</td><td>Generator run separately, connect reverse power test set to CT/VT secondaries, inject reverse power signal. OR at sea: reduce governor to reduce load, measure trip activation.</td><td>Trip at set reverse power level (typically 5–15% of rated KW)</td><td>Special Survey</td></tr>
-    <tr><td>Under-Voltage Trip (UVT) Test</td><td>Reduce supply voltage to ACB shunt trip coil below threshold OR inject low-voltage signal to UVT relay. ACB must trip.</td><td>Trip at 70–80% of rated voltage (within relay setting)</td><td>Special Survey</td></tr>
-    <tr><td>Over-Voltage Trip Test</td><td>Use AVR test point to raise generator voltage above overvoltage trip setpoint. Generator ACB must trip.</td><td>Trip within ±5% of setpoint (typically 110–115% rated voltage)</td><td>Annual / Special</td></tr>
-    <tr><td>Emergency Generator Blackout Test</td><td>Simulate main power failure by tripping running generator ACB. Time emergency generator auto-start and connection.</td><td>Auto-start and connect to emergency switchboard within 45 seconds (SOLAS II-1/43)</td><td>Annual</td></tr>
-    <tr><td>Generator Voltage Regulation Test</td><td>Apply sudden large load (e.g., start large motor) and time voltage recovery.</td><td>Voltage recovers to within ±3% of rated within 1.5 seconds (SOLAS II-1/40)</td><td>Annual / Special</td></tr>
-    <tr><td>Preferential Trip Test</td><td>With two generators in parallel, simulate overload. Verify Stage 1, 2, 3 loads trip in sequence with correct time delays.</td><td>Correct shedding sequence, time delays within spec (typically Stage 1: 5s, Stage 2: 15s, Stage 3: 25s)</td><td>Annual</td></tr>
-    <tr><td>Motor IR Tests</td><td>Megger <span class="n-val">500V</span> DC on each motor. Test phase-to-earth and phase-to-phase.</td><td>Minimum 1 MΩ corrected to <span class="n-val">40°C</span> (better practice: ≥ rated kV + 1 MΩ)</td><td>Special Survey / annually</td></tr>
-    <tr><td>Navigational Lights Test</td><td>Test each light and backup supply. Test failure alarm on bridge.</td><td>All lights operational, backup functions, failure alarm activates</td><td>Annual</td></tr>
-    <tr><td>Fire Detection System Test</td><td>Test each zone: activate test detector, verify correct zone alarm on panel.</td><td>Correct zone alarm, audible/visual alarm, time delay correct</td><td>Annual</td></tr>
-    <tr><td>Steering Gear Test</td><td>Test main and auxiliary systems, changeover, time to hard-over.</td><td>Main: hard-over (35° to 30°) in ≤<span class="n-val">28 sec</span> at full speed. Auxiliary: ≤<span class="n-val">60 sec</span> at half speed</td><td>Annual</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Electrical survey — complete preparation, documents, what does surveyor check? [Sanjib, Deswal, Kamath — every oral]</td><td>For an electrical survey, my preparation as ETO begins several weeks before the survey date. I first check all PMS electrical maintenance records and ensure every scheduled task has been completed and signed off — any outstanding items are completed or a valid deferral is documented. I compile the following documents for presentation to the class society surveyor. Certificates: Safety Equipment Certificate (SEC), Safety Construction Certificate (SCC), IAPP Certificate, Class Electrical Installation Certificate, GMDSS Radio Station Licence, and the VDR Annual Performance Test Certificate. Maintenance records: complete PMS records for the survey period with all CE and ETO signatures; insulation resistance test records for all motors and generators including date, temperature, and temperature-corrected values; battery maintenance records including specific gravity, load test results for emergency, GMDSS, and UPS batteries; emergency generator monthly auto-start test logs and the annual load test record; fire detection system test records; navigational light test records; ACB maintenance records; and motor starter overload relay setting records. Technical drawings: the approved single-line electrical diagram, MSB arrangement drawing, and emergency switchboard drawing. Month-end reports signed by the Chief Engineer. The surveyor then physically inspects and tests: the MSB — busbar IR test (megger <span class="n-val">500V</span> DC), busbar joint torque check, insulator condition; all generator ACBs — secondary injection overcurrent trip test, reverse power trip test, under-voltage trip test; emergency generator blackout test (simulate power failure, verify auto-start within 45 seconds); voltage regulation test (load throw-on, verify recovery within 1.5 seconds); preferential trip sequential test; IR tests of major motors; fire detection zone tests; navigational light tests; and steering gear tests. I must be present throughout and demonstrate each test personally.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>3. MSB SURVEY — DEAD FRONT PANEL & MSB SAFETIES</th></tr>
-  </table>
-  <div class="body">3.1 Dead Front Panel — Definition and Voltage Limits</div>
-  <div class="body">Dead front panel is one of the most specifically asked questions in the electrical survey context — surveyors and examiners ask it consistently, and candidates have reported that standard notes sometimes give incorrect answers. The correct, accepted definition from ORAL2026 and question bank cross-referencing is: a dead front panel is a switchboard or control panel design where no live conductors, busbars, or circuit breakers are accessible from the front of the panel during normal operation — the operating handles, buttons, and indicators are on the front face, but the live parts are behind barriers, shutters, or an insulating face plate. The panel can be operated from the front without risk of contact with live conductors. The term 'dead front' specifically means the front face presents NO live metal — all accessible surfaces from the operating position are at earth potential or safely insulated.</div>
-  <div class="body">A critical distinction for MSB survey: a panel is considered dead front when it is designed so that circuit breakers CANNOT be opened or withdrawn while the front panel door or cover is open, OR the design ensures that even with the front door open, no live parts are exposed to touch. As stated in the question bank note: 'Bina circuit break kiye open nhi kar sakte' — without circuit break, you cannot open the panel. This is the safety interlock principle. The voltage limits applicable to dead front panels (relevant for ETO oral): for dead front panels, accessible metalwork must be at earth potential. The standard insulation requirement is that the front panel face must be tested to withstand the applicable test voltage — for <span class="n-val">440V</span> AC systems, the test voltage is typically <span class="n-val">2000V</span> AC (per IEC 60092-302). For DC systems, the maximum allowable voltage for accessible conductors in dead front construction is typically <span class="n-val">50V</span> DC (SELV — Safety Extra Low Voltage) or the panel must have additional protection.</div>
-  <table class="n-table">
-    <tr><th>MSB SAFETIES — COMPLETE LIST</th></tr>
-    <tr><td>DEAD FRONT CONSTRUCTION: No live conductors accessible from front during normal operation. Operating handles/buttons are on front face; live busbars and connections are behind barriers. Cannot open panel without isolating circuit (interlock). MSB must be dead front by class rules. INSULATING MAT: Rubber insulating mat in front of the MSB (full length of the switchboard). Must be voltage-rated for the system voltage — for <span class="n-val">440V</span> system: minimum Class 2 mat rated for 17,<span class="n-val">000V</span> AC. Must be inspected for cuts, holes, or oil contamination. Replaced when damaged. MINIMUM CLEARANCE: Minimum 0.6 metres clearance between the front face of MSB and any obstruction — aft opening door, ladder, or equipment. This ensures safe working space for the operator. Class rules and SOLAS II-1/45.5 specify this minimum working space. EARTHING CABLE (HULL EARTHING): MSB frame and all panel metalwork must be bonded to ship's hull (earth) by a copper earth cable of adequate cross-section. Earth continuity checked — low resistance path to hull. EARTH FAULT INDICATOR: An insulation monitoring device continuously monitors the <span class="n-val">440V</span> system insulation to earth. Gives visual and audible alarm when insulation resistance drops below the setpoint (typically 25–50 kΩ). First earth fault = alarm, no trip (insulated neutral advantage). BUS TIE BREAKER: The MSB bus section coupler (bus tie ACB) allows the two bus sections to be connected or isolated. Mechanical and electrical interlocks prevent closing bus tie when both bus section generators are running in parallel on separate sections (prevents paralleling without synchronisation). Reviewed during survey. FORWARD AND AFT SAFETY BARRIERS: Physical barriers/gates at each end of the MSB walkway — prevents accidental entry from non-working positions. VENTILATION: The MSB room must be adequately ventilated to remove heat generated by the busbars and switchgear. Ventilation ducting, fans, and air filters inspected at survey. FIRE DETECTION: Fixed fire detector in MSB room (heat or multi-sensor type). Checked during safety equipment survey.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is dead front panel? Exact definition? Voltage limits for AC and DC? [ORAL2026, Mumbai bank — surveyor rejected standard note answer]</td><td>A dead front panel is a switchboard or control panel construction in which no live electrical conductors, busbars, or uninsulated live parts are accessible or exposed at the front face of the panel during normal operation. The operator interacts only with operating handles, push buttons, indicator lights, and meters — all of which are either at earth potential or are securely insulated from live parts. The critical feature is that the front face is 'dead' — meaning if you touch any part of the front face or operating mechanism, you cannot contact a live conductor. This is achieved by placing all live components (busbars, cable terminations, fuse links) behind insulating barriers, shutters, or enclosed metal compartments. The safety interlock principle ensures the panel cannot be opened for live working without first isolating the circuit — 'without circuit break, the panel cannot be opened.' This is why MSBs are designed as dead front: operators can change breaker positions, read instruments, and operate switches while standing in front of the panel at <span class="n-val">440V</span> or higher, without personal protective equipment for every routine operation, because no live metal is within reach. Regarding voltage limits: for dead front panels in marine applications per IEC 60092-302, the accessible metalwork (front panel surface, operating handles, door frames) must be at earth potential. The minimum creepage and clearance distances for <span class="n-val">440V</span> AC require test voltage compliance to <span class="n-val">2000V</span> AC for the insulating face. For DC circuits in dead front panels: any voltage above <span class="n-val">50V</span> DC (Safety Extra Low Voltage — SELV) requires the same dead front insulation barriers as AC systems. Systems up to <span class="n-val">50V</span> DC may be accessible in open construction. Above <span class="n-val">50V</span> DC, dead front construction is required for safety.</td></tr>
-    <tr><td>MSB safeties — list all. What is the 0.6 m clearance? [All surveyors]</td><td>The MSB (Main Switchboard) has several built-in safety features to protect the operator from electrical hazards. First, dead front construction — no live conductors are accessible from the front operating face; only insulated handles, buttons, and meters are exposed. Second, a rubber insulating mat rated for the system voltage (for <span class="n-val">440V</span> system: minimum Class 2 mat rated for 17,<span class="n-val">000V</span> AC) runs the full length of the MSB in front — the operator always stands on this mat, providing insulation from earth. Third, minimum working clearance of 0.6 metres between the front face of the MSB and any obstruction such as the aft bulkhead door, ladders, or other equipment — this is a class rule and SOLAS requirement ensuring the operator has adequate working space and an unobstructed escape route. If the aft door swings into this space, it must be designed to open outward or a physical stop must be fitted. Fourth, hull earthing cable — the MSB frame and all metalwork is bonded to the ship's hull by a copper earth cable providing a low-resistance fault return path. Fifth, an earth fault indicator (insulation monitoring device) continuously monitors the <span class="n-val">440V</span> system insulation to earth and gives an alarm on the first earth fault — the insulated neutral system means the first fault does not trip the supply, giving time to locate and rectify. Sixth, forward and aft barriers/gates at the ends of the MSB walkway prevent accidental entry from non-operational areas. Seventh, the bus tie breaker has mechanical and electrical interlocks preventing unsafe parallel operation or bus section misconnection. Eighth, the MSB room has adequate ventilation for heat removal and a fire detector connected to the main detection panel.</td></tr>
-    <tr><td>Working on live MSB when required — how? [ORAL2026]</td><td>Working on live parts of the MSB should be avoided whenever possible — the correct procedure is always to isolate, lock out, and tag out before working. However, there are exceptional situations when working on a live MSB may be necessary — for example, during fault tracing when the fault can only be identified with the system energised, or when a critical metering circuit or protection relay must be tested while the generator is running. When working on a live MSB as a last resort, the following precautions are mandatory: a risk assessment and permit to work (PTW for electrical work) must be issued; at least two persons must be present — one working, one standing by to raise alarm; rubber insulating mat must be in place and confirmed in good condition; rubber insulating gloves rated for the system voltage (for <span class="n-val">440V</span>: Class 0 minimum, rated <span class="n-val">1000V</span> AC) must be worn; insulated tools must be used (IEC 60900 certified <span class="n-val">1000V</span> insulated hand tools); no metal watches, rings, or other jewellery; the working area must be clearly identified and bystanders kept clear; and a second person must be immediately available to operate the emergency stop and call for medical assistance. Dead front construction provides a degree of protection — the operator does not normally contact live conductors during routine ACB operations — but when opening panel covers or working at terminals, full live-working precautions apply. PPE for live working: Class 0 rubber insulating gloves, insulating face shield or arc flash rated visor, insulating footwear, and flame-resistant clothing.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>4. ACB SURVEY — TRIP TESTS, UVT COIL & MAINTENANCE</th></tr>
-  </table>
-  <div class="body">4.1 ACB — All Trips and Their Working</div>
-  <div class="body">The Air Circuit Breaker (ACB) on the generator has multiple protective trips, each serving a different purpose. The ETO must know the working and test method for all of them — this is a direct examination requirement across all question banks. The main trips on a generator ACB are: overcurrent trip (OCR), reverse power trip (RPR), under-voltage trip (UVT), over-voltage trip, under-frequency trip, and earth fault trip. Each is tested differently.</div>
-  <table class="n-table">
-    <tr><th>TRIP TYPE</th><th>WORKING PRINCIPLE</th><th>SETTING</th><th>TEST METHOD</th></tr>
-    <tr><td>Overcurrent Trip (OCR)</td><td>IDMT relay — current transformer measures stator current. When current exceeds pickup setting, relay timer starts. Trip time inversely proportional to overcurrent magnitude (the higher the overcurrent, the faster the trip).</td><td>Typically 110% of rated current for generator protection. Instantaneous element at 600–800%.</td><td>Secondary injection: rack out ACB. Inject test current via CT secondary at 150%, 200%, 600% rated. Measure and record trip times against relay curve.</td></tr>
-    <tr><td>Reverse Power Trip (RPR)</td><td>Measures real power (KW) flowing into the generator from the busbars — indicates generator is being motorised (prime mover failed but ACB still closed). Watt-metric relay senses power direction reversal.</td><td>Typically 5–15% of rated generator KW in reverse direction.</td><td>At sea: reduce governor to decrease engine speed on one generator; as load drops to zero and reverses, RPR should trip. At shore: inject reverse power signal via test set to the relay input.</td></tr>
-    <tr><td>Under-Voltage Trip (UVT)</td><td>The UVT coil (shunt trip coil) is a continuous duty coil energised by the generator voltage. If generator voltage falls below ~70–80% of rated (due to AVR fault, excitation loss), the coil de-energises, releasing a latch that trips the ACB mechanically. UVT is also the safety mechanism — opening the supply to the coil at the safety switch trips the ACB.</td><td>70–80% of rated voltage (e.g., for <span class="n-val">440V</span> system: ~308–<span class="n-val">352V</span> trip threshold)</td><td>Reduce voltage at UVT coil supply (use variac or test switch) until coil releases and ACB trips. Verify trip voltage is within setting.</td></tr>
-    <tr><td>Over-Voltage Trip</td><td>Overvoltage relay senses generator terminal voltage. When voltage rises above setpoint (AVR failure causing overvoltage), relay trips ACB and simultaneously trips the excitation circuit.</td><td>Typically 110–115% of rated voltage.</td><td>Use AVR test/trimmer to raise generator voltage above setpoint (without load). Verify relay trips at correct voltage.</td></tr>
-    <tr><td>Under-Frequency Trip</td><td>Frequency relay senses generator output frequency. Trip activates when frequency drops below setpoint — indicates prime mover overload or fuel supply issue.</td><td>Typically 95% of rated frequency (<span class="n-val">57 Hz</span> for <span class="n-val">60 Hz</span> system).</td><td>Reduce governor speed setting until frequency drops below threshold. Verify trip.</td></tr>
-    <tr><td>Earth Fault Trip</td><td>Earth fault relay monitors current through the neutral earth connection (CT on neutral). Activates when fault current exceeds setting — indicates phase-to-earth fault in generator or connected circuit.</td><td>Typically 10–30% of rated generator current for earth fault level.</td><td>Inject current into neutral CT secondary to simulate earth fault current above setting. Verify trip.</td></tr>
-  </table>
-  <div class="body">4.2 UVT Coil — Working and Significance</div>
-  <div class="body">The UVT (Under-Voltage Trip) coil is a critical but often misunderstood component of the ACB. It is a continuous-duty electromagnetic coil connected across the generator terminal voltage (or via a control transformer deriving voltage from the generator terminals). As long as the generator is producing rated voltage, the coil is energised — it holds a mechanical latch in the ACB in the tripped position PREVENTED from releasing, or more precisely, it holds the ACB in the CLOSED position by maintaining the latch. When voltage falls below ~70–80% of rated, the electromagnetic force of the coil drops below the spring force holding the latch, and the latch releases — the ACB trips under its stored spring energy.</div>
-  <div class="body">The UVT coil also serves as the fundamental safety mechanism for the ACB: the manual safety release switch in the ACB trip circuit is wired in series with the UVT coil supply. When this switch is opened (for safety isolation), the UVT coil is de-energised regardless of generator voltage — the ACB trips immediately. This is why the UVT coil is sometimes called the shunt trip coil in some designs — however, technically a shunt trip coil is a separate momentary-energised coil that actively trips the breaker when a fault signal is applied, while the UVT coil is a continuous-duty holding coil. Both may be fitted on the same ACB.</div>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>UVT coil — what is it, working, where used? [Multiple banks, multiple surveyors]</td><td>The UVT (Under-Voltage Trip) coil is a continuous-duty electromagnetic coil fitted on the generator ACB (Air Circuit Breaker). It is connected across the generator terminal voltage — either directly or through a control voltage transformer — and remains permanently energised whenever the generator is producing rated voltage. Its function is to hold the ACB closed (or more precisely, to prevent the stored-energy spring mechanism from tripping the breaker). As long as the generator voltage is above approximately 70–80% of rated voltage, the UVT coil produces sufficient electromagnetic force to maintain the mechanical latch holding the ACB closed. If the generator voltage drops below this threshold — for example due to AVR failure, loss of excitation, or engine stopping — the coil current decreases, the electromagnetic force falls below the spring force, the latch releases, and the ACB trips open. This protects the ship's busbars from being supplied by a generator producing abnormally low voltage, which would cause all connected motors and equipment to draw excessive current and potentially stall or be damaged. The UVT coil also provides the fundamental electrical safety lockout for the ACB: the coil supply is routed through a trip switch (the ACB safety switch or lockout relay) that can be opened manually or by protection relays to immediately de-energise the coil and trip the ACB regardless of generator voltage. When an ETO isolates a generator for maintenance, one of the first steps is to open this trip switch — the UVT coil de-energises and the ACB trips, preventing the generator from accidentally being connected to the busbars.</td></tr>
-    <tr><td>ACB survey — complete isolation procedure, how to test reverse power trip in drydock? [Multiple surveyors]</td><td>For ACB survey in drydock, the complete procedure is as follows. First, the generator under test must be stopped and isolated from the main busbars. The ACB is then racked out to the TEST position — this mechanically disconnects the main power contacts from the busbars while keeping the secondary control circuits (CT secondary terminals, protection relay connections, trip circuits) connected. A safety lockout tag is placed on the racking-out mechanism and the ACB handle, and a 'Do Not Close' tag is placed on the generator local start panel. For overcurrent trip testing: I connect the secondary injection test set (relay test instrument) to the CT secondary terminals accessible at the rear of the ACB cell. I inject test currents at multiples of the relay setting — typically 150%, 200%, and 600% — and measure the trip time with a stopwatch at each injection level. Results are compared against the relay's time-current characteristic curve and recorded. For reverse power trip testing in drydock: since the generator is stopped, a simulation method is used. The primary method is to inject a reverse power signal to the watt-metric relay input using the test set — the test set introduces current and voltage signals phase-shifted to simulate reverse power flow through the CT/VT circuits. If this test set is not available, the alternative at-sea test method for reverse power is: run two generators in parallel, reduce fuel to one generator using its governor until the KW decreases to zero and continues into reverse (negative KW), and observe that the reverse power relay trips the ACB — this is the reverse power trip test at sea. For under-voltage trip: reduce the UVT coil supply voltage using a variac or test switch until the coil releases and the ACB trips; record the voltage at which trip occurred.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>5. OVERSPEED TRIP TEST — DG AND MAIN ENGINE</th></tr>
-  </table>
-  <div class="body">Overspeed protection is a mandatory safety system for diesel generators and the main engine, required by SOLAS and class rules. Overspeed occurs when engine speed exceeds the maximum safe operating RPM — typically 10–15% above rated speed — due to sudden loss of load (generator ACB trips while engine is at full load) or fuel injection failure (injector sticking open). The overspeed trip must stop the engine immediately to prevent mechanical failure (connecting rod, crankshaft, turbocharger overspeed). Testing the overspeed trip is specifically asked by Deswal, Kamath, and appears in the Mumbai question bank as both M/E and A/E overspeed test procedures.</div>
-  <table class="n-table">
-    <tr><th>OVERSPEED TRIP TEST PROCEDURES</th></tr>
-    <tr><td>AUXILIARY ENGINE (DIESEL GENERATOR) OVERSPEED TRIP TEST: METHOD 1 — Mechanical Overspeed Governor Test (controlled speed increase): STEP 1: Run the generator on load. Inform CE and Bridge. Reduce all non-essential loads to minimum. STEP 2: In manual governor mode, slowly increase the governor speed setpoint to bring the engine speed up gradually above the rated speed. STEP 3: Continue increasing speed slowly until the mechanical overspeed trip mechanism activates — typically at 10–15% above rated RPM (e.g., for a 720 RPM rated generator, overspeed trip should activate at approximately 792–828 RPM). STEP 4: The overspeed trip mechanism (centrifugal fly-weight mechanism on the governor, or electronic overspeed relay) shuts the fuel rack to zero — engine speed drops and the engine stops or drops to idle. STEP 5: Record the actual trip RPM from the RPM counter. Verify it is within the specified trip range. If outside range, adjust the overspeed trip setpoint (mechanical stop on governor or setpoint on electronic governor). STEP 6: Reset the overspeed trip and restore the engine to normal operation.  MAIN ENGINE OVERSPEED TRIP TEST: METHOD — Electronic Override Test (during sea trial or special drydock test): NOTE: The M/E overspeed trip cannot be tested by actually overspeeding the engine in normal operation — the mechanical consequences would be severe. Instead, it is tested by simulating an overspeed signal to the electronic control system. STEP 1: With the main engine stopped or at dead slow, activate the overspeed trip test function on the engine management system (EMS) — most modern two-stroke engines have a dedicated overspeed test switch or menu. STEP 2: The test function simulates the electronic overspeed signal to the fuel control system and shut-off valve without actually running at overspeed. Verify the fuel shut-off valve closes (zero fuel rack), the engine telegraph reads stop, and the overspeed alarm activates at the bridge and ECR. STEP 3: For mechanical overspeed governor test on M/E at drydock (shaft uncoupled): bring engine to low RPM on air run, increase speed slowly to verify mechanical trip activates at specified RPM. STEP 4: Reset the system. Record the test and trip RPM in the PMS.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Overspeed trip test — how do you test for DG and M/E? [Deswal, Mumbai bank — M/E and A/E specifically]</td><td>The overspeed trip test procedure differs between the diesel generator (auxiliary engine) and the main engine. For the diesel generator overspeed trip test: I run the generator in manual governor mode (no load or minimum load to reduce risk). I slowly increase the governor speed setpoint from the ECR governor control — raising the engine RPM gradually above the rated speed while monitoring the RPM counter and tachometer. The rated RPM for a typical 720 RPM generator is noted. As speed increases through 10–15% above rated (approximately 792–828 RPM for a 720 RPM engine), the mechanical overspeed trip — a centrifugal fly-weight device on the governor shaft — activates and physically pushes the fuel rack to the zero position, cutting fuel. The engine stops or drops to idle. I record the actual trip RPM, compare with the specified trip range, and adjust if necessary. After the test I reset the trip mechanism and restore normal operation. For the main engine overspeed trip test: I do NOT actually overspeed the main engine in normal operation as the consequences would be catastrophic. Instead, the test is carried out using the engine management system's built-in overspeed test function — this simulates an overspeed signal electronically without physically exceeding the safe RPM. I select the overspeed test function on the EMS, and the system activates the fuel shut-off solenoid valve and trips the engine as it would in a real overspeed event. I verify that the fuel rack goes to zero, the overspeed alarm activates at bridge and ECR, and the engine speed indicator responds correctly. During drydock with the propeller shaft disconnected (or during sea trials), a mechanical overspeed test may be conducted by running the main engine at low power and gradually increasing until the mechanical governor trip activates.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>6. REVERSE POWER TRIP — CONSTRUCTION, WORKING & TESTING</th></tr>
-  </table>
-  <div class="body">The reverse power relay (RPR) protects the prime mover (diesel engine) from being motored — driven as a motor — by the busbar power when its own output drops to zero or reverses. This occurs when the engine's fuel supply fails (stuck fuel regulator, fuel pump failure) while the generator ACB remains closed and connected to the busbars. Without the reverse power trip, the generator would draw power from the busbars and motor the engine — within seconds the engine would be spinning at synchronous speed with no combustion, causing thermal damage to pistons, damage to the governor, and potential mechanical failure.</div>
-  <table class="n-table">
-    <tr><th>REVERSE POWER TRIP — KEY EXAM POINTS</th></tr>
-    <tr><td>WHAT IT PROTECTS: Protects the prime mover (diesel engine driving the generator) from being motored by busbar power when engine load drops to zero and reverses. WORKING: A wattmeter relay (directional power relay) connected to CT (current transformer) and VT (voltage transformer) on the generator terminals continuously measures the real power (KW) output. In normal operation, generator outputs KW to busbars (positive direction). When engine fuel fails, generator draws KW from busbars (negative — reverse direction). The relay detects this polarity reversal and trips the generator ACB. SETTING: Typically 5–15% of rated generator KW in reverse. Too sensitive and droop-induced momentary power reversal during parallel operation will cause nuisance trips. Too insensitive and engine damage may occur. TIME DELAY: A small time delay (1–5 seconds) is built into the reverse power relay to prevent nuisance tripping during synchronising transients or sudden load changes where momentary reverse power may occur. TEST AT SEA (preferred, most realistic): Run two generators in parallel. Reduce the governor on one generator slowly — KW output drops to zero, then goes slightly negative. The reverse power relay should trip that generator's ACB at the set reverse power level. This is the most practical test. TEST AT SHORE / DRYDOCK (secondary injection): With generator ACB in test position, inject current and voltage signals to the RPR relay input terminals via a relay test set. Phase-shift the injected signals to simulate reverse power flow. Verify relay output activates at the correct power level and direction. WHAT IF BOTH REVERSE POWER AND UNDER-VOLTAGE FAIL: If both RPR and UVT fail, the only remaining protection is the overcurrent relay (if motoring draws excessive current) and eventually the governor mechanical limits. In practice, if asked 'what if these also fail?', the answer is: under-frequency relay would then activate as engine speed drops, and as a last resort the main engine emergency stop should be operated manually.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Reverse power trip — construction, working, how to test at sea and in drydock. [Multiple surveyors]</td><td>The reverse power relay (directional power relay) is a protective relay that detects when real power (KW) is flowing into the generator from the busbars — indicating the generator is being driven as a motor by the busbar power rather than generating power into it. This condition occurs when the prime mover's fuel supply fails while the generator ACB remains closed and connected to the energised busbars. Construction: the relay uses a current transformer on the generator stator circuit and a voltage transformer on the generator terminals. The relay's operating element compares the phase relationship between the current and voltage — in a generator supplying power, current and voltage are in phase (lagging slightly for reactive power), while in a motoring condition the current phase reverses relative to voltage, indicating power flowing into the machine. The relay element is a directional watt-metric type — it produces an output only when the power direction exceeds the reverse power threshold in the reverse direction. A time delay element (typically 1–5 seconds) prevents nuisance tripping during synchronising transients. Test at sea (preferred method): with two generators running in parallel, I reduce the governor on one generator — watching the KW meter on that generator — until the KW drops to zero and goes slightly negative. The reverse power relay should activate and trip the ACB at the set level (e.g., 5% reverse KW). The other generator immediately picks up the full load. Test at drydock (secondary injection): the ACB is racked out to test position and a relay test set injects current and voltage signals to the relay's CT and VT input terminals with the current phase-shifted to simulate reverse power flow. The relay output is monitored to verify activation at the correct KW level.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>7. MAIN ENGINE CHECKS DURING ELECTRICAL SURVEY</th></tr>
-  </table>
-  <div class="body">During an electrical survey, the surveyor may ask what electrical checks are carried out on the main engine and what electrical documents relate to the main engine. This covers the ME's automation, safety trips, and instrumentation — all ETO's responsibility.</div>
-  <table class="n-table">
-    <tr><th>MAIN ENGINE — ELECTRICAL DOCUMENTS & CHECKS AT SURVEY</th></tr>
-    <tr><td>NOx TECHNICAL FILE: MARPOL Annex VI document certifying the main engine's NOx emissions meet the applicable Tier I/II/III limits. Must be onboard and presented to surveyor. ENGINE AUTOMATION TEST RECORDS: Records of all ME safety trip tests — overspeed trip, high bearing temperature trip, low lube oil pressure trip, high cooling water temperature trip, scavenge fire detector. Test dates and results must be in PMS. TACHOMETER AND SPEED SENSOR CALIBRATION: Records of speed sensor calibration — ME RPM indicator calibrated against known speed reference. GOVERNOR TEST RECORDS: Governor response test — step change in load, verify speed recovery within specification. Governor droop setting records. TELEGRAPH TEST: Test engine room telegraph system — verify bridge and ECR telegraph indicators match for all positions (full ahead through full astern, stop). Log results. SHAFTING EARTHING BRUSH: Inspect and test shaft earthing brush — measure resistance bridge-shaft to confirm < <span class="n-val">1 Ω</span>. Relevant to ICCP system (Topic 10). FUEL OIL QUALITY RECORDS: Bunker delivery notes (BDNs) — fuel sulphur content certificates maintained for MARPOL Annex VI compliance. Retained minimum 3 years. EMERGENCY STOPS: Test emergency fuel cut-off from ECR and bridge. Test fuel valve solenoid operation. Verify all alarm systems active.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What main engine documents are checked during electrical survey? ME checks electrically? [Multiple banks]</td><td>During an electrical survey, the main engine has several electrical documents and checks that fall within the ETO's scope. First, the NOx Technical File — a MARPOL Annex VI document that certifies the main engine's fuel injection timing, combustion settings, and demonstrated NOx emissions meet the applicable IMO Tier limits (Tier I, II, or III depending on engine build year and operating area). This file is issued by the engine manufacturer, approved by the flag state or class society, and must be available onboard at all times for PSC inspection. Second, the main engine automation test records in the PMS — these include records of all engine safety trip tests: overspeed trip simulation test, high bearing temperature trip test (at each bearing), low lube oil pressure trip test, high cooling water temperature trip test. All these tests must be conducted periodically and results recorded with CE/ETO signatures. Third, the engine room telegraph test records — the Chadburn telegraph system (or electronic telegraph) is tested for all positions (dead slow, slow, half, full ahead and astern, stop) and the bridge/ECR agreement verified. Fourth, the fuel oil quality records — Bunker Delivery Notes (BDNs) showing the sulphur content of each fuel batch received. These must be retained for at least 3 years and are checked by MARPOL Annex VI PSC inspectors. Fifth, the shaft earthing brush maintenance records — resistance measurement results. Sixth, engine governor test records — governor droop setting and load step response time. Seventh, for ME with electronically controlled fuel injection (e.g., Maersk MAN engines): electronic control unit (ECU) records, injection timing records, and cylinder condition monitoring records.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>8. EMERGENCY SHORE SUPPLY DURING DRYDOCK</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Emergency shore supply during dry dock — requirement and procedure. [Multiple banks]</td><td>During dry dock, the ship's generators are typically shut down for maintenance and inspection. The ship's electrical power requirements must be met by a shore supply from the dry dock's shore power system. Before connecting shore supply, the following checks and procedures apply. First, verify that the shore supply voltage and frequency match the ship's system — for a <span class="n-val">60 Hz</span>, <span class="n-val">440V</span> ship: shore supply must be <span class="n-val">440V</span>, <span class="n-val">60 Hz</span>. A step-up or step-down transformer may be required if shore supply is at a different voltage. A frequency converter is required if shore frequency differs. Second, verify phase sequence — use a phase sequence meter to confirm the shore supply phase sequence (R-Y-B) matches the ship's system. Incorrect phase sequence will cause all three-phase motors to run in reverse. Third, check the shore supply cable rating and termination — shore supply cable must be rated for the maximum load on the ship during dry dock operations. Connect via the ship's shore connection box (IEC 60309 socket/plug), ensuring correct cable gland and watertight sealing. Fourth, before closing the shore supply breaker: ensure the ship's main generator ACBs are open; isolate the main generators by opening their local MCCBs; confirm the ICCP system is switched off; verify the emergency generator is on standby in manual mode for backup. Fifth, close the shore supply breaker progressively — start with minimal load and verify correct voltage and frequency at the main switchboard before adding loads. Sixth, ensure the shore earth is connected and a galvanic isolator is fitted between shore earth and ship's earth to prevent stray current corrosion via the hull earthing. Seventh, log the shore supply connection in the electrical log with date, time, voltage, and frequency.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>9. ADDITIONAL SURVEY CROSS-QUESTIONS FROM BANKS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>ACB — complete isolation procedure for maintenance. [Multiple surveyors]</td><td>To isolate an ACB for maintenance, the complete procedure is as follows. First, inform the Chief Engineer and Bridge — if this is a generator ACB, ensure another generator is running and carrying the load, or the emergency generator is ready. Issue a Task Risk Assessment and a Permit to Work (PTW) for electrical isolation. Second, reduce load on the generator to be isolated — transfer load to the other generator(s) by adjusting governor and AVR settings. Third, open the generator ACB by pressing the OPEN pushbutton at the MSB. Confirm the KW and KVA meters drop to zero and the ACB position indicator shows OPEN. Fourth, stop the prime mover (diesel engine) — put the engine stop command from ECR and confirm engine is not running. Fifth, apply LOTO (Lock Out Tag Out): rack out the ACB from the CONNECTED position to the TEST or WITHDRAWN position using the racking mechanism. This mechanically disconnects the main current-carrying contacts from the busbars. Lock the racking mechanism with a padlock and attach a SAFETY TAG reading 'Do Not Close — Work In Progress — ETO Name and Date'. Apply a second lock tag at the local engine start panel. Sixth, confirm isolation: check that the generator busbar voltmeter reads zero (no back-feed). Use a voltage indicator stick or approved voltage tester to verify the ACB main terminals are dead. Seventh, discharge stored energy — the ACB has stored spring energy for the closing mechanism. Follow manufacturer's procedure to safely discharge the closing spring energy before opening the ACB housing. Eighth, proceed with maintenance. After completion, remove all tags and locks, rack the ACB back in, close only after confirming all tools are removed, all work is complete, and the generator is ready to be returned to service.</td></tr>
-    <tr><td>In safety equipment survey what electrical components are checked? [Multiple banks]</td><td>During the Safety Equipment Survey (coinciding with annual or periodic statutory survey), the class surveyor or flag state surveyor checks the following electrical components. GMDSS equipment: functional test of all VHF DSC radios (Channel 70 distress test), MF/HF radio operational check, Inmarsat-C send and receive test, NAVTEX receiver operational, VDR annual performance test certificate (must be current), AIS operational with correct vessel data. EPIRB: check registration is current and matches vessel, verify battery expiry date has not passed, check hydrostatic release unit (HRU) condition and expiry, self-test function. SART: self-test each SART, verify battery expiry date. Navigation lights: test each required navigational light (masthead, sidelights, stern, anchor, NUC, RAM), test backup supply for each, verify failure alarm on bridge activates. Emergency lighting: check all required emergency lighting locations are illuminated with emergency supply (remove main supply and verify emergency lighting activates). Fire detection system: activate each detector zone using test aerosol or heat gun, verify correct zone alarm on main fire detection panel, check audible and visual alarms at panel and in accommodation. BNWAS: test escalation sequence — allow dormant period to expire, verify bridge alarm, master alarm, and engineering alarm in correct sequence. Emergency generator: full auto-start test (blackout simulation), verify start within 45 seconds, verify emergency switchboard supplies correct loads. Battery conditions: visual check of all safety batteries (GMDSS, emergency, lifeboat), specific gravity check or sealed battery voltage check. All findings recorded in the safety equipment survey record.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>10. QUICK REVISION — ELECTRICAL SURVEY</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>TOPIC</th><th>FREQUENCY & KEY POINTS</th></tr>
-    <tr><td>Survey Documents — Complete List</td><td>⭐⭐⭐⭐⭐ Certificates: SEC, SCC, IAPP, Class Electrical Certificate, GMDSS Radio Licence, VDR Performance Test Cert. Records: PMS, IR tests (dates+temp), battery records, emg gen log, fire detection log, nav light records, ACB records, ODS Record Book, month-end reports. Drawings: single-line, MSB arrangement, load analysis.</td></tr>
-    <tr><td>What Surveyor Physically Tests</td><td>⭐⭐⭐⭐⭐ Busbar IR (<span class="n-val">500V</span> megger). Busbar torque. ACB secondary injection (150/200/600% rated). Reverse power trip. UVT test. Emg gen blackout test (≤<span class="n-val">45 sec</span>). Voltage regulation (recover ≤<span class="n-val">1.5 sec</span>). Preferential trip sequence. Motor IR. Navigational lights + backup + failure alarm. Fire detection zones. Steering gear.</td></tr>
-    <tr><td>Dead Front Panel</td><td>⭐⭐⭐⭐⭐ No live conductors accessible at front face during normal operation. Operator touches only insulated handles/buttons. Cannot open panel without isolating circuit (interlock). AC system: <span class="n-val">440V</span> system front face tested at <span class="n-val">2000V</span>. DC: ><span class="n-val">50V</span> requires dead front construction. 'Dead' = front surface is dead (earth potential or insulated).</td></tr>
-    <tr><td>MSB Safeties</td><td>⭐⭐⭐⭐⭐ Dead front. Rubber insulating mat (Class 2, rated 17kV for <span class="n-val">440V</span> system). 0.6m minimum clearance (SOLAS, class rule). Hull earthing cable. Earth fault indicator (insulation monitor). Bus tie breaker interlocks. Forward/aft barriers. MSB room ventilation + fire detection.</td></tr>
-    <tr><td>UVT Coil</td><td>⭐⭐⭐⭐⭐ Continuous-duty coil, energised by generator terminal voltage. Holds ACB closed as long as voltage is >70–80% rated. Below threshold → coil releases → ACB trips spring. Safety lockout: de-energise coil supply → immediate ACB trip. Purpose: protect busbars from generator below rated voltage.</td></tr>
-    <tr><td>ACB Trip Types</td><td>⭐⭐⭐⭐ OCR (overcurrent, IDMT, CT secondary injection test). RPR (reverse power, wattmeter relay, test by reducing governor). UVT (under-voltage, continuous coil, test by reducing coil voltage). OVT (over-voltage, AVR test). UFT (under-frequency, reduce governor). Earth fault (neutral CT, secondary injection).</td></tr>
-    <tr><td>Overcurrent Trip Test</td><td>⭐⭐⭐⭐⭐ Rack out ACB to test position. Secondary injection set → CT secondary terminals. Inject 150/200/600% rated. Measure trip time. Compare with relay time-current curve. Record result.</td></tr>
-    <tr><td>Reverse Power Trip Test</td><td>⭐⭐⭐⭐ Setting: 5–15% rated KW reverse. At sea: reduce governor → KW drops to zero, reverses → ACB trips. Drydock: secondary injection via relay test set, phase-shift signals to simulate reverse power.</td></tr>
-    <tr><td>Overspeed Trip Test — DG</td><td>⭐⭐⭐⭐ Manual governor, slowly increase RPM above rated. Fly-weight centrifugal mechanism activates at 10–15% above rated. Fuel rack to zero → engine stops. Record actual trip RPM. Adjust if outside spec.</td></tr>
-    <tr><td>Overspeed Trip Test — ME</td><td>⭐⭐⭐⭐ Cannot physically overspeed in normal operation. Use EMS overspeed test function (electronic simulation). Or during drydock shaft-uncoupled run. Verify fuel shut-off activates, alarm at bridge and ECR.</td></tr>
-    <tr><td>Survey Types</td><td>⭐⭐⭐ Annual (12 monthly, visual + spot checks). Intermediate (2.5 yr, more detailed). Special/Class Renewal (5 yr, full scope, drydock). Continuous (rolling 20% per year). Safety Equipment Survey (periodic, statutory).</td></tr>
-    <tr><td>Emergency Shore Supply Drydock</td><td>⭐⭐⭐ Check voltage, frequency, phase sequence match. Transformer/frequency converter if different. Generator ACBs open, ICCP off, emg gen on manual standby. Shore earth via galvanic isolator. Log connection.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>FINAL MEMORY AID — ELECTRICAL SURVEY</th></tr>
-    <tr><td>1. DOCUMENTS: Certificates (SEC, SCC, IAPP, Class Elec Cert, GMDSS Licence, VDR Annual Cert) + PMS records + IR test records + battery records + emg gen log + month-end reports + single-line drawing. 2. SURVEYOR TESTS: Busbar IR → ACB secondary injection (OCR) → RPR test → UVT test → emg gen blackout (≤<span class="n-val">45 sec</span>) → voltage regulation (≤<span class="n-val">1.5 sec</span>) → preferential trip → motor IR → nav lights → fire detection → steering gear. 3. DEAD FRONT PANEL: No live metal at front face. Operator interacts only with insulated controls. Cannot open without isolating (interlock). Front face tested at <span class="n-val">2000V</span> AC (for <span class="n-val">440V</span> system). 4. MSB SAFETIES: Dead front + rubber mat (Class 2, 17kV rated) + 0.6m clearance + hull earth cable + earth fault indicator + bus tie interlock + forward/aft barriers. 5. UVT COIL: Continuous-duty coil, holds ACB closed at rated voltage. Releases when voltage < 70–80% → ACB trips. Opening coil supply = immediate trip = safety isolation. 6. ACB TRIPS: OCR (secondary injection, IDMT curve). RPR (reduce governor at sea, or injection at drydock). UVT (reduce coil voltage). OVT (raise AVR). UFT (reduce governor frequency). 7. OVERSPEED DG: Slowly raise governor RPM → fly-weight trips at 110–115% rated → record trip RPM → reset → restore. 8. OVERSPEED ME: EMS simulation test (electronic, no actual overspeed). Verify fuel shut-off + alarms. 9. REVERSE POWER: 5–15% rated KW reverse. At sea: reduce governor to negative KW. Drydock: phase-shifted secondary injection. 10. SHORE SUPPLY DRYDOCK: Voltage + frequency + phase sequence match. Generator ACBs open. ICCP off. Galvanic isolator on shore earth. Log all.</td></tr>
-  </table>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Dead front panel exact definition. ACB isolation procedure and secondary injection test. UVT coil function. Reverse power trip test at sea vs shore. Documents for survey.</div></div>
 
 
-  <!-- ═══ WRITTEN SECTION ═══ -->
-  <div class="n-h1" id="s-written">📝 Written Section</div>
-  <div class="n-info"><div class="icon">📝</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development.</div></div>
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="n-h1" id="s-surveytypes">1. Survey Types - Annual, Intermediate, Special & Continuous</div>
+  
+  <ul class="n-list">
+    <li><strong>Annual Survey:</strong> Every 12 months (±3 mo). Visual inspection, check certificates, test emg gen, nav lights, fire detection.</li>
+    <li><strong>Intermediate Survey:</strong> Every 2.5 years. More detailed, spot checks of MSB insulation, relay tests, battery condition.</li>
+    <li><strong>Special Survey (Class Renewal):</strong> Every 5 years (drydock). Full scope: all ACB tests (secondary injection), generator tests, IR of all motors/cables, MSB torque checks.</li>
+    <li><strong>Continuous Survey (CMS):</strong> Rolling programme (20% per year). Replaces Special Survey by spreading work over 5 years.</li>
+    <li><strong>Safety Equipment Survey:</strong> Part of statutory SOLAS survey (SEC). Covers GMDSS, EPIRB, SART, fire detection, emergency lighting, lifeboat electrics.</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="n-h1" id="s-preparation">2. Complete Electrical Survey - Preparation & Documents</div>
+  
+  <div class="n-p">The surveyor requires specific documents to verify compliance before physical testing.</div>
+  
+  <table class="n-table">
+    <tr><th>DOCUMENT CATEGORY</th><th>SPECIFIC ITEMS</th></tr>
+    <tr><td><strong>Certificates</strong></td><td>SEC, SCC, IAPP (with ODS Record Book), Class Electrical Cert, GMDSS Licence, VDR Annual Cert.</td></tr>
+    <tr><td><strong>Records (PMS)</strong></td><td>IR test records (with temp correction), battery logs, emergency gen log (monthly starts + annual blackout), fire detection test log, nav lights test log, ACB maintenance records.</td></tr>
+    <tr><td><strong>Drawings & Data</strong></td><td>Single-line diagram, MSB arrangement drawing, load analysis, NOx Technical File (main engine).</td></tr>
+  </table>
+
+  <div class="n-h2">High-Voltage Minimum Acceptable IR Evaluation</div>
+  <p class="n-p">While a standard 440V distribution line utilizes a fixed floor limit of 1 MΩ, high-voltage marine installations require dynamic insulation baselines solved using the class engineering formula:</p>
+  <div class="n-formula">Minimum IR (MΩ) = Rated System Voltage (kV) + 1<div class="label">Class-mandated lower limit insulation resistance formula for High Voltage machinery</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Practical Field Examples:</strong><br>
+  For a <strong>3.3 kV system</strong>: Minimum IR = 3.3 + 1 = <span class="n-val">4.3 MΩ</span><br>
+  For a <strong>6.6 kV system</strong>: Minimum IR = 6.6 + 1 = <span class="n-val">7.6 MΩ</span><br>
+  Any asset logging below these mathematical margins fails survey and must remain locked out. New or recently rewound machinery must easily exceed <span class="n-val">100 MΩ</span>.</div></div>
+
+  
+  <div class="n-p"><strong>Physical Checks by Surveyor:</strong> MSB Busbar IR (<span class="n-val">500V</span> DC megger), Busbar Torque check, ACB secondary injection (OCR), Reverse Power Trip, UVT, Emergency Gen Blackout (auto-start in ≤45s), Voltage Regulation (load throw-on, recover in ≤1.5s), Preferential Trip Sequence, Navigational Lights, Fire Detection Zones, Steering gear times.</div>
+
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="n-h1" id="s-msb">3. MSB Survey - Dead Front Panel & MSB Safeties</div>
+  
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Dead Front Panel Definition:</strong> A switchboard where no live conductors or busbars are accessible from the front during normal operation. Operating handles and buttons are exposed, but all live parts are behind insulated barriers. You CANNOT open the panel to access live parts without isolating the circuit (interlock). <br><strong>Voltage limits:</strong> For <span class="n-val">440V</span> AC, front face tested to withstand <span class="n-val">2000V</span>. For DC, anything > <span class="n-val">50V</span> requires dead front construction.</div></div>
+
+  <div class="n-h2">High-Potential (Hi-Pot) Switchboard Testing Metrics</div>
+  <p class="n-p">During manufacturing type-testing or major drydock switchboard overhauls, surveyors mandate a high-potential (Hi-Pot) dielectric strength validation to ensure the structural busbar insulation can withstand transient spikes without flashover. The applied AC test voltage follows a strict regulatory equation:</p>
+  <div class="n-formula">V_test = (2 × V_rated) + 1000 V AC<div class="label">Dielectric strength withstand test voltage formula - maintained for 1 minute</div></div>
+  <p class="n-p"><strong>Standard 440V Shipboard Allocation:</strong> Applying the equation yields V_test = (2 × 440) + 1000 = <span class="n-val">1880 V AC</span>, normalized in field practice to a round <span class="n-val">2000 V AC for exactly 1 minute</span> between all distinct phase bars and the hull earth frame. For HV 6.6 kV installations, the test field scales up to <span class="n-val">14,200 V AC</span>. Prior to firing a Hi-Pot test, all sensitive electronics, control transformers, and PLC monitor links must be fully isolated to prevent instantaneous semiconductor rupture.</p>
+
+  
+  <div class="n-h2">MSB Safeties (Complete List)</div>
+  <ul class="n-list">
+    <li><strong>Dead Front Construction:</strong> Insulated front, no live metal exposed.</li>
+    <li><strong>Rubber Insulating Mat:</strong> Runs full length. Rated for system voltage (e.g. Class 2, 17kV for <span class="n-val">440V</span>).</li>
+    <li><strong>0.6m Minimum Clearance:</strong> Clear working space in front (SOLAS requirement).</li>
+    <li><strong>Earth Fault Indicator:</strong> Insulation monitor triggers alarm on first earth fault (insulated neutral system).</li>
+    <li><strong>Hull Earthing Cable:</strong> MSB frame bonded to ship's hull.</li>
+    <li><strong>Bus Tie Interlock:</strong> Prevents unsynchronized closing of bus sections.</li>
+    <li><strong>Barriers & Ventilation:</strong> End gates/barriers, adequate MSB room ventilation, fixed fire detector.</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="n-h1" id="s-acb">4. ACB Survey - Trip Tests, UVT Coil & Isolation</div>
+  
+  <table class="n-table">
+    <tr><th>ACB TRIP</th><th>WORKING & TEST METHOD</th></tr>
+    <tr><td><strong>Overcurrent (OCR)</strong></td><td>IDMT relay. <strong>Test:</strong> Secondary injection. Rack ACB to TEST. Inject 150%, 200%, 600% rated current via CT secondary. Compare trip time to curve.</td></tr>
+    <tr><td><strong>Reverse Power (RPR)</strong></td><td>Wattmetric relay prevents motoring (5-15% rated KW). <strong>Test (Sea):</strong> Reduce governor until KW goes negative. <strong>Test (Shore):</strong> Inject phase-shifted signals to simulate reverse power.</td></tr>
+    <tr><td><strong>Under-Voltage (UVT)</strong></td><td>Continuous-duty holding coil. <strong>Test:</strong> Reduce coil supply voltage (Variac) until ACB trips (70-80% rated).</td></tr>
+    <tr><td><strong>Over-Voltage (OVT)</strong></td><td>110-115% rated. <strong>Test:</strong> Use AVR trimmer to raise voltage until trip.</td></tr>
+    <tr><td><strong>Under-Frequency</strong></td><td>95% rated (<span class="n-val">57Hz</span>). <strong>Test:</strong> Reduce governor speed.</td></tr>
+  </table>
+
+  <div class="n-h2">Undervoltage Release (UVR) Mechanical Coil Physics</div>
+  <p class="n-p">The under-voltage protection inside a main Air Circuit Breaker (ACB) functions via a dedicated <strong>continuous-duty holding coil</strong> linked directly across the supply control bus. This mechanism serves as a critical mechanical fail-safe:</p>
+  <ul class="n-list">
+    <li><strong>The Holding Latency:</strong> As long as network voltage stays healthy, the continuous coil remains energized, generating an electromagnetic pulling force that counteracts internal mechanical springs to allow the main ACB contacts to latch closed.</li>
+    <li><strong>The Drop-Out Boundary:</strong> If system distribution levels collapse below <span class="n-val">70–80% of rated voltage</span>, the magnetic flux drops until the internal springs instantly overcome the coil's pull. This physically slams the ACB open, preventing high current induction damage across downstream motor loads.</li>
+    <li><strong>Interlock Safety Functions:</strong> Opening the continuous power supply line to the UVR coil via emergency stop buttons or generator protection locks executes an <strong>instantaneous emergency breaker trip</strong>. This makes the UVR superior to a standard shunt trip coil, which requires active power to execute a trip and would fail completely during a total dead-bus blackout.</li>
+  </ul>
+
+  <div class="n-h2">Drydock Reverse Power Relay (RPR) Calibration Protocol</div>
+  <p class="n-p">While an RPR is easily tested at sea by throttling down a generator's governor speed reference until it absorbs active power from the busbar, verifying the relay inside a shipyard drydock requires a specialized secondary injection test set:</p>
+  <ol class="n-steps">
+    <li>Isolate and rack out the generator's ACB to the test position, and isolate the secondary control line voltage transformers.</li>
+    <li>Connect a three-phase secondary injection relay test kit directly to the voltage and current sensing input terminals at the rear of the RPR panel.</li>
+    <li>Inject a nominal reference 3-phase voltage wave (e.g., 110V AC) matching normal operational baselines.</li>
+    <li><strong>The Phase-Shift Injection Trick:</strong> Adjust the test set to inject a current wave shifted exactly <span class="n-val">180° out of phase (cosφ = −1)</span> relative to the voltage wave. This phase reversal forces the internal directional wattmetric element to read the power vector as negative.</li>
+    <li>Gradually scale up the injected current amplitude until it crosses the programmed trip setpoint threshold (typically <span class="n-val">5–15% of rated current</span> for diesel units).</li>
+    <li>Start a stopwatch the instant the current threshold is crossed. Verify the relay output contacts snap closed to close the ACB trip loop within <span class="n-val">3 to 5 seconds</span>. Document the precise settings, measured currents, and delay times for class registration.</li>
+  </ol>
+
+  
+  <div class="n-h2">UVT Coil Details</div>
+  <div class="n-p">The Under-Voltage Trip (UVT) coil is a <strong>continuous-duty electromagnetic holding coil</strong> powered by generator voltage. It maintains a latch holding the ACB closed. If voltage falls below 70-80%, the coil's magnetic force weakens, the latch releases, and the ACB trips. <br><strong>Safety Function:</strong> The ACB manual safety trip switch simply opens the supply to this coil, instantly tripping the ACB.</div>
+
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="n-h1" id="s-overspeed">5. Overspeed Trip Test - DG and Main Engine</div>
+  
+  <ul class="n-list">
+    <li><strong>Diesel Generator (DG):</strong> Tested manually. With DG on no-load, slowly increase governor speed setpoint above rated RPM. The mechanical centrifugal fly-weight activates at <strong>10–15% above rated speed</strong>, cutting fuel. Record actual trip RPM.</li>
+    <li><strong>Main Engine (ME):</strong> NEVER physically overspeed the ME in normal operation. Tested using the <strong>Electronic Engine Management System (EMS)</strong> overspeed simulation test function. Verify fuel shut-off activates and alarms sound at ECR/Bridge. (Mechanical test only done during sea trials or uncoupled in drydock).</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="n-h1" id="s-rpr">6. Reverse Power Trip - Construction & Working</div>
+  
+  <div class="n-p"><strong>Purpose:</strong> Protects the prime mover from being "motored" by the busbars if fuel supply fails while ACB is closed. If motored, the engine spins without combustion, causing thermal/mechanical damage.</div>
+  <div class="n-p"><strong>Construction:</strong> Directional power (watt-metric) relay uses CT (current) and VT (voltage) inputs. Compares phase angles. If current phase reverses (indicating power flowing INTO generator), relay trips after a small time delay (1-5s to prevent nuisance trips during synchronisation).</div>
+  <div class="n-p"><strong>Setting:</strong> 5–15% of rated KW in reverse direction.</div>
+
+
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="n-h1" id="s-mechecks">7. Main Engine Checks During Electrical Survey</div>
+  
+  <ul class="n-list">
+    <li><strong>NOx Technical File:</strong> Presented to verify MARPOL Annex VI Tier compliance.</li>
+    <li><strong>Automation Tests:</strong> Records of ME safety trips (overspeed, bearing temp, LO pressure, jacket water temp).</li>
+    <li><strong>Speed/Tachometer Calibration:</strong> RPM indicator accuracy checks.</li>
+    <li><strong>Governor Tests:</strong> Droop settings and load step response records.</li>
+    <li><strong>Telegraph System:</strong> Bridge and ECR telegraph agreement tests.</li>
+    <li><strong>Shaft Earthing:</strong> Inspect shaft earthing brush and measure resistance (< <span class="n-val">1 Ω</span>).</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 8 ═══ -->
+  <div class="n-h1" id="s-shoresupply">8. Emergency Shore Supply During Drydock</div>
+  
+  <div class="n-p"><strong>Connecting Shore Power Procedure:</strong></div>
+  <ul class="n-list">
+    <li><strong>Match Parameters:</strong> Verify shore voltage and frequency match the ship (<span class="n-val">440V</span>, <span class="n-val">60Hz</span>). If not, use transformer/frequency converter.</li>
+    <li><strong>Phase Sequence:</strong> Use a phase sequence meter to ensure R-Y-B matches. Incorrect sequence runs 3-phase motors backwards.</li>
+    <li><strong>Isolate Ship Power:</strong> Ensure main generator ACBs are OPEN. Lockout generator MCCBs. Turn OFF the ICCP system. Ensure Emg Gen is on manual standby.</li>
+    <li><strong>Connect:</strong> Connect heavy duty shore cable to shore connection box. Close shore breaker progressively on low load.</li>
+    <li><strong>Earth:</strong> Connect shore earth using a galvanic isolator to prevent stray current corrosion. Log the connection.</li>
+  </ul>
 
 
   <!-- ═══ SURVEYOR Q&A ═══ -->
-  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>No Surveyor Q&A available</strong> for this topic yet.</div></div>
+  
+  <div class="n-h1" id="s-ism">📋 ISM Code &amp; SMS</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask ISM Code certificates and ETO duties under SMS.</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>ISM Code (SOLAS Ch IX):</strong> International Safety Management Code. Establishes a Safety Management System (SMS) for safety and pollution prevention. <strong>DOC</strong> (Document of Compliance) issued to the COMPANY - valid <span class="n-val">5 years</span> with annual verification. <strong>SMC</strong> (Safety Management Certificate) issued to the SHIP - valid <span class="n-val">5 years</span> with intermediate verification at <span class="n-val">2.5 years</span>. <strong>DPA</strong> (Designated Person Ashore) = direct link between ship and highest management.</div></div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Major Non-Conformity (MNC):</strong> Immediate threat to safety or environment - SUSPENDS ship's certification. Ship cannot trade until MNC is closed. Examples: non-functional fire detection, expired GMDSS certificates, no emergency generator auto-start.</div></div>
+  <div class="n-h2">ETO SMS Duties</div>
+  <ul class="n-list">
+    <li>Execute and record all PMS (Planned Maintenance System) tasks on time</li>
+    <li>Defect reporting to Chief Engineer - log all deficiencies in SMS</li>
+    <li>Near-miss and incident reporting - even if no injury/damage</li>
+    <li>Issue and receive Permits to Work (PTW) - Electrical Isolation Permit (EIP)</li>
+    <li>Maintain GMDSS logbook and test records</li>
+    <li>Ensure all surveys and certificates are current and presented correctly</li>
+  </ul>
+
+  <div class="n-h1" id="s-ptw">🔐 Permit to Work (PTW) System</div>
+  <table class="n-table">
+    <tr><th>Permit Type</th><th>Required For</th><th>Key Requirement</th></tr>
+    <tr><td><strong>Electrical Isolation Permit (EIP)</strong></td><td>Any electrical maintenance on live or isolated equipment</td><td class="hl">LOTO (Lock Out Tag Out) + test de-energised before work begins</td></tr>
+    <tr><td><strong>Hot Work Permit</strong></td><td>Welding, cutting, grinding near flammable materials</td><td class="hl">Gas-free certificate + fire watch + CO2 ready</td></tr>
+    <tr><td><strong>Enclosed Space Entry</strong></td><td>Entry to any enclosed space (pump rooms, tanks, voids)</td><td class="hl">Gas tests (O2 &gt;20.9%, toxic gases &lt; TLV) + standby person</td></tr>
+    <tr><td><strong>Working at Height</strong></td><td>Work above <span class="n-val">2 metres</span></td><td class="hl">Harness + fall arrest + safety observer</td></tr>
+    <tr><td><strong>Isolation of Safety Systems</strong></td><td>Disabling smoke detectors, sprinklers during maintenance</td><td class="hl">Chief Engineer approval + fire watch in affected area</td></tr>
+  </table>
+
+  <div class="n-h1" id="s-survey">🔍 Electrical Survey - What Surveyors Check</div>
+  <div class="n-h2">Documents to Present</div>
+  <ul class="n-list">
+    <li>Safety Equipment Certificate (SEC) and Safety Construction Certificate (SCC)</li>
+    <li>IAPP Certificate (MARPOL air pollution compliance)</li>
+    <li>GMDSS Radio Station Licence + test records</li>
+    <li>VDR Annual Performance Test Certificate</li>
+    <li>PMS maintenance records (IR tests, battery logs, ACB maintenance)</li>
+    <li>MSB single-line diagram and approved drawings</li>
+  </ul>
+  <div class="n-h2">Physical Tests Conducted at Survey</div>
+  <table class="n-table">
+    <tr><th>Test</th><th>Method</th><th>Acceptance</th></tr>
+    <tr><td>MSB Busbar IR</td><td><span class="n-val">500V DC</span> megger, all ACBs open</td><td class="hl">Min <span class="n-val">1 MΩ</span></td></tr>
+    <tr><td>ACB Overcurrent Trip</td><td>Secondary injection at <span class="n-val">150%, 200%, 600%</span> rated</td><td class="hl">Trip times match IDMT curve</td></tr>
+    <tr><td>Reverse Power Relay</td><td>Injection test or governor reduction at sea</td><td class="hl">Trips at <span class="n-val">5–15%</span> rated kW</td></tr>
+    <tr><td>Under-Voltage Trip (UVT)</td><td>Reduce supply to shunt coil</td><td class="hl">Trips at <span class="n-val">70–80%</span> rated voltage</td></tr>
+    <tr><td>Emergency DG Blackout Test</td><td>Simulate main power failure</td><td class="hl">Auto-starts and supplies ESB within <span class="n-val">45 seconds</span></td></tr>
+    <tr><td>Steering gear timing</td><td>Hard over to hard over</td><td class="hl">Within <span class="n-val">28 seconds</span> at max speed</td></tr>
+  </table>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> ISM = DOC (company 5yr) + SMC (ship 5yr). PTW types: EIP, Hot Work, Enclosed Space, Height, Safety System Isolation. Survey documents: SEC + SCC + GMDSS licence + VDR certificate + PMS records.</div></div>
+
+
+  <div class="n-h1" id="s-shore-sync">🔌 Shore Power - Phase-Sequence &amp; Trapped-Key Safeties</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyors Kamath and Anil Deswal drill candidates on shore connection safety sequences and phase rotation hazards.</strong></div></div>
+
+  <div class="n-h2">Phase-Sequence Indicator Verification Loop</div>
+  <p class="n-p">Before closing the shore connection breaker to power the ship's switchboard from a shipyard terminal, the ETO must verify that the incoming shore lines match the vessel's internal <strong>clockwise phase rotation sequence (L1-L2-L3 / R-Y-B)</strong>. Connecting lines with a reversed phase rotation will instantly force all 3-phase auxiliary machinery motors (engine room ventilation fans, sea water cooling pumps, steering motors) to spin backwards on startup, causing immediate mechanical damage and loss of cooling.</p>
+  <p class="n-p">The ETO validates rotation using a bridge-rectified rotative <strong>Phase Sequence Indicator</strong> or a digital synchroscope linked to the shore box tapping. If the indicator flags a reversed rotation state, the main breaker must remain locked out; the ETO must isolate the terminal box and manually swap any two incoming shore-side phase cable connections to restore standard clockwise orientation.</p>
+
+  <div class="n-h2">Trapped-Key (Castell Key) Interlock Circuits</div>
+  <p class="n-p">Because the ship's on-board generators utilize a floating neutral network (IT system) while shore-side terminal grids are solidly tied to earth (TN-S layout), <strong>under no circumstances are a ship generator and a shore line permitted to run in parallel</strong>. Paralleling them passes high earth loop currents that throw false insulation alarms and strip hull plates via accelerated galvanic corrosion.</p>
+  <p class="n-p">To enforce this safety rule, a physical <strong>Trapped-Key (Castell Key) interlocking mechanism</strong> is installed between the ship's generator breakers and the shore reception breaker:</p>
+  <ul class="n-list">
+    <li>To close the Shore Connection Breaker, you must first physically open all main generator ACBs and turn their mechanical interlocking keys.</li>
+    <li>Turning the key locks the generator ACB open and frees the key from the lock cylinder.</li>
+    <li>Take the isolated key to the Shore Supply cubicle and insert it into the receiver lock. Only when this specific key is inserted and turned will the shore breaker's mechanical closing latch release. This hardware loop completely prevents accidental out-of-phase paralleling.</li>
+  </ul>
+
+<div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
+
+  <table class="n-table">
+    <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
+    <tr>
+      <td>What is a dead front panel?</td>
+      <td>A panel where no live conductors are accessible from the front during normal operation. You interact only with insulated controls. It has interlocks preventing opening while live. For <span class="n-val">440V</span> AC, the front face withstands a <span class="n-val">2000V</span> test.</td>
+    </tr>
+    <tr>
+      <td>How do you isolate an ACB for maintenance?</td>
+      <td>Inform Bridge/CE. Transfer load, open ACB, stop engine. Rack out ACB to TEST or WITHDRAWN position. Apply Lock-Out/Tag-Out (LOTO). Verify zero voltage with tester. Discharge closing spring energy safely.</td>
+    </tr>
+    <tr>
+      <td>Explain how to test the Reverse Power Trip.</td>
+      <td>At sea: Run 2 generators in parallel. Reduce governor of test generator until KW drops to 0 and goes negative (5-15%). ACB should trip. <br>In Drydock: Rack ACB to test. Inject phase-shifted current/voltage via secondary injection test set to simulate reverse power.</td>
+    </tr>
+    <tr>
+      <td>What is the UVT coil and how does it work?</td>
+      <td>The Under-Voltage Trip is a continuous-duty holding coil powered by generator voltage. It holds the ACB latch closed. If voltage falls below 70-80%, magnetic force drops, spring releases, and ACB trips. Safety switches open the UVT circuit to trip the ACB.</td>
+    </tr>
+    <tr>
+      <td>How do you test the overspeed trip on the Main Engine vs DG?</td>
+      <td>For DG: Manually increase governor speed until centrifugal trip activates at 10-15% above rated RPM. <br>For ME: Do not physically overspeed. Use EMS built-in electronic simulation test to verify fuel shut-off and alarms.</td>
+    </tr>
+  </table>
 
 
   <!-- ═══ QUICK REVISION ═══ -->
-  <div class="n-h1" id="s-quickrev">📋 Quick Revision</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body">Revision tables coming soon.</div></div>
+  <div class="n-h1" id="s-quickrev">📊 Quick Revision - Surveyor Frequency Guide</div>
+  <table class="n-table">
+    <tr><th>Topic</th><th>Frequency</th><th>Key Points to Memorise</th></tr>
+    <tr>
+      <td>ACB Overcurrent Test</td>
+      <td class="hl">⭐⭐⭐⭐⭐ All Surveyors</td>
+      <td>Secondary injection, 150/200/600%, IDMT curve.</td>
+    </tr>
+    <tr>
+      <td>Dead Front Panel</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Sanjib, Kamath</td>
+      <td>No live parts in front, <span class="n-val">2000V</span> test for AC, SELV for DC.</td>
+    </tr>
+    <tr>
+      <td>UVT Coil</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Deswal, Mumbai</td>
+      <td>Continuous holding coil, trips at 70-80% voltage.</td>
+    </tr>
+    <tr>
+      <td>Reverse Power Trip</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Sanjib, Deswal</td>
+      <td>Prevents motoring, 5-15% reverse KW, test by governor reduction.</td>
+    </tr>
+    <tr>
+      <td>Shore Power Drydock</td>
+      <td class="hl">⭐⭐⭐⭐ Kamath, Mumbai</td>
+      <td>Phase sequence check, generators isolated, ICCP OFF.</td>
+    </tr>
+  </table>
 
   </div>
-</div>
 </div>`);

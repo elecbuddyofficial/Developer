@@ -1,9 +1,12 @@
 window.loadNotes("T20", `<div class="view" id="view-notes-t20">
 <div class="note-doc">
-  <div style="margin-bottom:16px"><button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button></div>
+  <div style="margin-bottom:16px; display:flex; justify-content:space-between;">
+    <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
+    <button class="anc-btn" onclick="goToQuizFromNotes('T20')" style="background-color:var(--green-dim);border-color:var(--green);color:var(--green)">Take Quiz →</button>
+  </div>
   <div class="note-title">
-    <h1>Topic 20 — Construction</h1>
-    <div class="sub">ETO MMD Oral Examination · Function 5 · Class 2 · Mumbai & Noida</div>
+    <h1>Topic 20 - Ship Construction</h1>
+    <div class="sub">ETO CoC Oral Assessment · STCW Reg. III/6 · DG Shipping India</div>
     <div class="tags">
       <span class="tag tag-blue">🔴 Exam Critical</span>
       <span class="tag tag-orange">Updated 2026</span>
@@ -11,185 +14,210 @@ window.loadNotes("T20", `<div class="view" id="view-notes-t20">
   </div>
   <div class="note-anchors">
     <span>Jump to section</span>
-    <button class="anc-btn" onclick="jumpTo('s-1')">ETO MMD ORAL EXAMINA...</button>
-    <button class="anc-btn" onclick="jumpTo('s-2')">TOPIC 20: SHIP CONST...</button>
-    <button class="anc-btn" onclick="jumpTo('s-written')">📝 Written Section</button>
+    <button class="anc-btn" onclick="jumpTo('s-hull')">Hogging & Sagging</button>
+    <button class="anc-btn" onclick="jumpTo('s-stability')">Stability & GM</button>
+    <button class="anc-btn" onclick="jumpTo('s-structure')">Ship Structure</button>
+    <button class="anc-btn" onclick="jumpTo('s-motorframe')">Motor Frame No.</button>
+    <button class="anc-btn" onclick="jumpTo('s-esb')">ESB & 2 ACBs</button>
+    <button class="anc-btn" onclick="jumpTo('s-seqstart')">Sequential Start</button>
+    <button class="anc-btn" onclick="jumpTo('s-container')">CSC & Container Fire</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
 
-  <div class="n-h1" id="s-1">ETO MMD ORAL EXAMINATION</div>
-  <div class="body">COMPREHENSIVE STUDY NOTES — v2.0</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> IEC motor frame number decoding. Sequential starting timings. ESB connected equipment. Hogging vs sagging. Stability GM limits. Container CSC convention.</div></div>
 
-  <div class="n-h1" id="s-2">TOPIC 20: SHIP CONSTRUCTION & STABILITY</div>
-  <div class="body">HOGGING/SAGGING  |  STABILITY  |  FRAME NUMBER  |  EMERGENCY SWITCHBOARD  |  SEQUENTIAL STARTING  |  CSC</div>
-  <div class="body">Function 5  |  Class 2 ETO  |  Mumbai & Noida MMD</div>
-  <div class="body">Compiled from 2025–2026 Oral Question Banks — All Surveyors Combined</div>
+
+  <!-- ═══ SECTION 1 ═══ -->
+  <div class="n-h1" id="s-hull">1. Hogging, Sagging, Shear Force & Bending Moment</div>
+  
+  <ul class="n-list">
+    <li><strong>Sagging:</strong> Centre buoyancy < centre weight. Ship bends like a hammock (ends up, middle down). Can happen with wave trough amidships. <strong>Keel is in TENSION, deck in COMPRESSION.</strong></li>
+    <li><strong>Hogging:</strong> Centre buoyancy > centre weight. Ship bends like a bridge arch (ends down, middle up). Can happen with wave crest amidships. <strong>Keel is in COMPRESSION, deck in TENSION.</strong></li>
+    <li><strong>Shear Force (SF):</strong> Internal vertical sliding force at a cross-section due to weight/buoyancy imbalance. Max at bulkheads.</li>
+    <li><strong>Bending Moment (BM):</strong> Rotational bending force. Maximum where Shear Force is zero (typically amidships). Loading computers calculate SF and BM to prevent hull failure.</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 2 ═══ -->
+  <div class="n-h1" id="s-stability">2. Stability - GM, KG, KB, BM, GZ Curve</div>
+  
   <table class="n-table">
-    <tr><th>COLOUR CODE LEGEND</th></tr>
-    <tr><td>YELLOW = Key exam points / must-know concepts / formulae GREEN = Memory aids / mnemonics / analogies ORANGE = Cross questions + ideal answers / step-by-step procedures BLUE = Comparison tables / regulation tables / SOLAS references RED = Safety critical / warnings / MOST ASKED by surveyors</td></tr>
+    <tr><th>TERM</th><th>DEFINITION</th></tr>
+    <tr><td><strong>K (Keel)</strong></td><td>Baseline reference point at the bottom of the ship.</td></tr>
+    <tr><td><strong>B (Centre of Buoyancy)</strong></td><td>Geometric centre of underwater volume. Upward buoyancy force acts here.</td></tr>
+    <tr><td><strong>G (Centre of Gravity)</strong></td><td>Point through which total ship weight acts downwards.</td></tr>
+    <tr><td><strong>M (Metacentre)</strong></td><td>Point about which ship rotates at small heel angles.</td></tr>
+    <tr><td><strong>GM (Metacentric Height)</strong></td><td>Distance between G and M. (GM = KM - KG). <strong>Minimum GM = 0.15m</strong> for cargo ships. Positive GM = Stable (righting moment). Negative GM = Unstable (capsizing moment).</td></tr>
   </table>
+  <div class="n-h2">GZ Curve (Righting Lever)</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>The GZ lever</strong> is the horizontal distance between the vertical lines of action of buoyancy (B) and gravity (G) at a given angle of heel. It represents the ship's actual ability to resist capsizing at that specific angle - not just at small angles like GM does.<br><br>
+  <strong>Reading the GZ curve:</strong><br>
+  • <strong>Positive GZ (curve above zero):</strong> The ship has a righting moment - it will return to upright.<br>
+  • <strong>Angle of Vanishing Stability:</strong> The angle where the GZ curve crosses zero again - beyond this point the ship cannot recover and will capsize.<br>
+  • <strong>Area under the curve:</strong> Represents the total energy needed to capsize the ship. A larger area = greater reserve of stability.<br>
+  • <strong>Minimum requirements (SOLAS A.749):</strong> GZ ≥ <span class="n-val">0.20 m</span> at 30° heel · Angle of max GZ ≥ <span class="n-val">25°</span> · Righting lever area 0°–30° ≥ <span class="n-val">0.055 m·rad</span><br><br>
+  <strong>Key difference from GM:</strong> GM tells you stability at small angles only. GZ curve tells you stability across the full range of heel angles - this is what matters in heavy weather.</div></div>
+
+
+
+  <!-- ═══ SECTION 3 ═══ -->
+  <div class="n-h1" id="s-structure">3. Ship Structure - Bulkhead & Load Line</div>
+  
+  <ul class="n-list">
+    <li><strong>Bulkhead:</strong> Vertical partition. <strong>Watertight</strong> prevents flooding spread (Collision bulkhead is 5-8% from bow). <strong>Fire</strong> (A-Class <span class="n-val">60 min</span>, B-Class <span class="n-val">30 min</span>). <strong>Structural</strong> adds strength. Thickness is 8-16mm.</li>
+    <li><strong>Keel:</strong> Backbone of ship. Types: Flat plate (modern), Bar keel (old), Bilge keel (anti-rolling fins on side).</li>
+    <li><strong>Load Line (Plimsoll Mark):</strong> Indicates max loading depth. TF (Tropical Fresh), F (Fresh), T (Tropical), S (Summer - Standard Reference), W (Winter), WNA (Winter North Atlantic - harshest).</li>
+    <li><strong>Ship Frame Number:</strong> Transverse ribs numbered from aft to bow. Identifies exact locations for cables/pipes (e.g. "Frame 80 Port").</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 4 ═══ -->
+  <div class="n-h1" id="s-motorframe">4. Motor Frame Number (IEC Standard)</div>
+  
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> The IEC motor frame number directly indicates the <strong>shaft centre height in millimetres</strong> from the mounting base.</div></div>
+  
+  <ul class="n-list">
+    <li><strong>Example:</strong> IEC 132M B3 means the shaft center is <strong>132 mm</strong> above the base. M = Medium length body. B3 = Foot mounted.</li>
+    <li><strong>Why is it important?</strong> When ordering a replacement motor, matching the frame number guarantees the motor will fit the existing foundation footprint, bolt holes, and coupling height perfectly without modifications.</li>
+    <li><strong>Suffixes:</strong> S (Short shaft), L (Long body), B5 (Flange mount).</li>
+  </ul>
+
+
+  <!-- ═══ SECTION 5 ═══ -->
+  <div class="n-h1" id="s-esb">5. Emergency Switchboard (ESB) & 2 ACBs</div>
+  
+  <div class="n-p"><strong>Equipment Connected to ESB (SOLAS II-1/42):</strong></div>
+  <ul class="n-list">
+    <li>Navigation Lights & Emergency Lighting (muster, escape, engine room)</li>
+    <li>GMDSS Radio Equipment</li>
+    <li>Fire Detection & General Alarm / PA System</li>
+    <li>Steering Gear (One power unit)</li>
+    <li>Emergency Fire Pump & 1 Bilge Pump</li>
+    <li>Watertight Door Controls</li>
+  </ul>
+  
+  <div class="n-h2">Purpose of Two ACBs Supplying ESB</div>
+  <div class="n-p">The ESB has one ACB from the Main Switchboard (normal supply) and one ACB from the Emergency Generator (emergency supply). <strong>They are mechanically and electrically interlocked</strong> so only one can close at a time. This prevents paralleling the Emg Gen with the MSB (which could cause damage due to out-of-sync phases) and prevents backfeeding the MSB during a blackout.</div>
+
+
+  <!-- ═══ SECTION 6 ═══ -->
+  <div class="n-h1" id="s-seqstart">6. Sequential Starting After Blackout (Timings)</div>
+  
+  <div class="n-p">Sequential starting prevents a second blackout by staggering the starting currents of large motors. The PMS usually handles this automatically.</div>
+  
   <table class="n-table">
-    <tr><th>MOST ASKED — SHIP CONSTRUCTION & STABILITY</th></tr>
-    <tr><td>1. Hogging and sagging — definition, what causes each, effect on ship structure. [ORAL2026, multiple banks] 2. Stability terms — GM, KG, KB, KM, BM, metacentre, GZ curve. What is adequate GM? [Mumbai bank] 3. Shear force and bending moment — what is each, how related. [Mumbai bank] 4. Keel — types, how measured, calculation. [Mumbai bank] 5. Bulkhead — what is it, thickness, types (watertight, fire, collision). [Mumbai bank] 6. Frame number — what does it indicate on a motor, how to decode? [Multiple banks — very repeatedly asked] 7. Emergency switchboard — what equipment is connected, purpose of two ACBs supplying ESB. [ORAL2026] 8. Sequential starting after blackout — procedure with timings for restarting loads. [Mumbai bank] 9. Container — CSC convention (Convention for Safe Containers), TEU/FEU, container fire causes. [Mumbai bank] 10. Cargo hold electrical safeties. [Multiple banks] 11. Load line zones — Plimsoll mark, what marks mean. [Mumbai bank] 12. Parametric rolling — what is it, ETO relevance. [Mumbai bank]</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>1. HOGGING, SAGGING, SHEAR FORCE & BENDING MOMENT</th></tr>
-  </table>
-  <div class="body">1.1 Hogging and Sagging</div>
-  <div class="body">Hogging and sagging describe the longitudinal bending deformation of a ship's hull caused by the distribution of weight and buoyancy forces along the ship's length. These are fundamental structural concepts that an ETO must understand because excessive hogging or sagging leads to structural stress in the hull plating, frames, and girders, and in extreme cases can cause hull failure.</div>
-  <div class="body">Sagging occurs when the centre of the ship is supported by less buoyancy than its ends — the ship bends concave upward, like a hammock. This happens when: heavy cargo or ballast is concentrated amidships, the ship rides a wave trough amidships (wave crest at bow and stern), or the ship is loaded in port with heavy tanks at mid-length. The keel is in tension (stretched) and the deck plating is in compression during sagging. Hogging occurs when the centre of the ship has more buoyancy support than the ends — the ship bends concave downward, like a bridge arching up. This happens when: the bow and stern are heavily loaded (or the ship rides over a wave crest amidships), or the ship is in ballast with heavy ballast tanks at the ends. The keel is in compression and the deck plating is in tension during hogging. Both conditions create longitudinal bending stress — the hull girder (the ship's main structural beam) must be strong enough to resist these bending moments throughout the ship's operational life.</div>
-  <table class="n-table">
-    <tr><th>KEY EXAM POINTS — Hogging, Sagging & Structural Forces</th></tr>
-    <tr><td>SAGGING: Centre buoyancy < centre weight. Ship bends like a hammock (ends up, middle down). Wave trough amidships. Keel in TENSION, deck in COMPRESSION. HOGGING: Centre buoyancy > centre weight. Ship bends like a bridge arch (ends down, middle up). Wave crest amidships or heavy end loading. Keel in COMPRESSION, deck in TENSION. SHEAR FORCE: The internal force perpendicular to the ship's longitudinal axis at any cross-section. Caused by unequal distribution of weight and buoyancy along ship length. Shear force is maximum at points where weight distribution changes abruptly (e.g., at bulkhead positions). BENDING MOMENT: The internal bending force (moment) at any cross-section. Related to shear force — bending moment is maximum where shear force is zero (typically amidships for a standard loaded ship). Sagging = hogging bending moment (negative). Hogging = hogging bending moment (positive). ETO RELEVANCE: Large bending moments create stress on deck plating and keel where electrical cables and conduit runs are located. Severe structural deformation can damage cable penetrations, cable runs along deck, and instrument tubing. The loading computer (used by the Chief Officer) calculates shear forces and bending moments — ETO should understand why the loading computer is an electrical instrument requiring maintenance. PARAMETRIC ROLLING: A phenomenon where a ship's rolling becomes resonant with the wave encounter frequency — particularly on container vessels and large cargo ships in head seas with long wavelengths. The ship's stability (GM) varies periodically as the bow and stern rise and fall over successive wave crests, driving an amplifying rolling oscillation. Can cause massive cargo loss from container ships. Not a direct ETO responsibility but ETO should know the term.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is hogging and sagging? [ORAL2026]</td><td>Hogging and sagging are the two modes of longitudinal bending deformation of a ship's hull. Sagging is when the ship bends so that the middle section is lower than the ends — the ship's profile curves concave upward like a sagging rope. This occurs when weight is concentrated amidships relative to buoyancy, or when the ship rides in a wave trough at the midship section while the bow and stern ride over wave crests. In sagging, the keel (bottom structure) is in tension (stretched) and the upper deck plating is in compression. Hogging is the opposite — the middle of the ship is higher than the ends, like a hump. This occurs when buoyancy is concentrated amidships, or when the ship rides over a wave crest at midship while the ends are in troughs, or when the bow and stern are more heavily loaded than the midship section. In hogging, the keel is in compression and the deck plating is in tension. Both conditions create internal bending stresses in the hull structure. The hull girder — the ship treated as a structural beam — must resist both hogging and bending moments within the allowable stress limits specified by the classification society. Excessive hogging or sagging beyond design limits can cause permanent deformation, cracking of weld seams, buckling of deck plating, or in extreme cases, structural failure. On modern ships, a loading instrument (loading computer) continuously calculates shear forces and bending moments based on the actual cargo and ballast distribution, warning the officer if limits are being approached.</td></tr>
-    <tr><td>Shear force and bending moment — what are they? [Mumbai bank]</td><td>Shear force and bending moment are the two fundamental internal structural forces that act on the ship's hull girder due to the non-uniform distribution of weight (gravity) and buoyancy along the ship's length. Shear force at any cross-section of the ship is the algebraic sum of all vertical forces (weight and buoyancy) acting on one side of that section — it represents the tendency for one part of the ship to slide vertically relative to the other at that section. Shear force is greatest at positions where the loading changes abruptly, such as at watertight bulkheads, ends of cargo holds, and positions where ballast tanks begin or end. The bending moment at any cross-section is the algebraic sum of all the moments of forces (weight and buoyancy) about that section — it represents the tendency of the ship to bend or rotate about that cross-section. The bending moment is maximum at the position where the shear force is zero (this is a fundamental relationship from structural mechanics: bending moment is maximum where shear force passes through zero). For a standard loaded cargo ship, the bending moment is typically maximum amidships. The relationship between the two: shear force is the derivative of the bending moment — where shear force is large, bending moment is changing rapidly; where shear force is zero, bending moment is at a peak or trough. The classification society sets maximum permissible still-water bending moments and shear forces for each ship — these form the limits on the loading computer used by the Chief Officer to plan cargo and ballast loading.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>2. STABILITY — GM, KG, KB, BM, GZ CURVE</th></tr>
-  </table>
-  <div class="body">Ship stability is the ability of a ship to return to its upright position after being inclined by an external force (waves, wind, cargo shift). It is governed by the relative positions of the Centre of Gravity (G) and the Metacentre (M). The ETO is not a stability officer but must understand basic stability concepts as they affect electrical system operation — particularly emergency generator operation, power supply during heavy rolling, and the consequence of flooding on electrical spaces.</div>
-  <table class="n-table">
-    <tr><th>TERM</th><th>DEFINITION</th><th>SIGNIFICANCE</th></tr>
-    <tr><td>K (Keel)</td><td>The baseline reference point — bottom of the ship's keel</td><td>All heights measured upward from K</td></tr>
-    <tr><td>B (Centre of Buoyancy)</td><td>The geometric centre of the underwater volume of the hull — where the resultant upward buoyancy force acts</td><td>Moves as ship heels or trims. KB = height of B above K</td></tr>
-    <tr><td>G (Centre of Gravity)</td><td>The point through which the total weight of the ship and its contents acts downward</td><td>Fixed for a given loading condition. KG = height of G above K</td></tr>
-    <tr><td>M (Metacentre)</td><td>The point about which the ship rotates at small angles of heel — intersection of the line of action of buoyancy at heel with the ship's centreline</td><td>KM = KB + BM. Must be above G for initial stability.</td></tr>
-    <tr><td>BM (Metacentric Radius)</td><td>Height of M above B — depends on ship's waterplane area and displacement. BM = I/V where I = 2nd moment of area of waterplane, V = displacement volume.</td><td>Wider beam = larger BM. Ships with large beam have high BM.</td></tr>
-    <tr><td>GM (Metacentric Height)</td><td>Distance between G and M. GM = KM - KG</td><td>If GM positive: G below M = stable. If GM negative: G above M = unstable. Minimum GM for cargo ships: 0.15m (class/flag requirement)</td></tr>
-    <tr><td>GZ (Righting Lever)</td><td>Perpendicular distance between the line of action of gravity (through G) and buoyancy (through B) at a given angle of heel. GZ = GM × sin θ for small angles.</td><td>GZ curve shows range of stability. Max GZ and range of stability indicate ship's ability to recover from large heel angles.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>KEY EXAM POINTS — Stability</th></tr>
-    <tr><td>POSITIVE STABILITY (G below M): When heeled, the buoyancy force line of action creates a righting moment — ship returns upright. This is the normal safe condition. NEGATIVE STABILITY (G above M, negative GM): When heeled, the buoyancy force line creates a capsizing moment — ship continues to heel and may capsize. Emergency: reduce weight high up, add ballast low down. MINIMUM GM: Class rules and flag state requirements specify minimum GM. For general cargo/container ships: typically GM ≥ 0.15m (intact stability criteria per IMO Intact Stability Code, IS Code 2008). FREE SURFACE EFFECT: Liquid in a partially filled tank has a free surface that shifts when the ship heels — this reduces effective GM by an amount called the Free Surface Correction (FSC). Important for ballast tanks: more tanks partially filled = lower effective GM. Solution: fill or empty tanks completely, avoid slack tanks. ETO RELEVANCE: Heavy electrical equipment (large transformers, MSB, generators) should be located as low as possible in the ship to keep KG low. When installing new electrical equipment, the stability booklet must be consulted to verify the added weight does not adversely affect stability. LIST: Permanent heel due to unequal transverse weight distribution. Remedy: ballast the high side or remove weight from the low side. Different from loll (where GM is zero or negative). TRIM: Difference between forward and aft drafts. Positive trim = stern deeper than bow (trim by stern — normal operating condition). Negative trim = bow deeper (trim by head — avoided, reduces manoeuvring ability and propeller efficiency).</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is GM? Minimum value? What happens if GM is negative? [Mumbai bank]</td><td>GM (Metacentric Height) is the distance between the ship's Centre of Gravity (G) and the Metacentre (M) — measured vertically. It is calculated as GM = KM − KG, where KM is the height of the metacentre above the keel (KM = KB + BM) and KG is the height of the centre of gravity above the keel. A positive GM means the metacentre is above the centre of gravity — when the ship is inclined, the buoyancy force shifts outboard of the gravity force, creating a righting moment that returns the ship to upright. This is the stable condition. The magnitude of GM determines the stiffness of the initial stability — a large positive GM means the ship is stiff and will have a short, quick rolling period; a small positive GM means the ship is tender and rolls slowly and smoothly. For most cargo ships, the IMO Intact Stability Code 2008 (A.749(18)) requires a minimum intact GM of 0.15 metres under all loading conditions. Class societies and flag states enforce this. If GM becomes negative — meaning the centre of gravity is above the metacentre — the ship is in an unstable condition. When inclined, instead of a righting moment, the ship experiences a capsizing moment that drives it to heel further. A ship with negative GM will loll to a large angle where it finds transient stability from the GZ curve, but this is a dangerous condition. Negative GM can develop if: very heavy cargo or liquids are loaded high up; large quantities of free surface effect from slack tanks; icing on upper deck structures in polar waters; or removal of ballast without corresponding reduction in high weights. Remedy: reduce topweight (discharge high cargo), fill slack ballast tanks completely, add low ballast.</td></tr>
-    <tr><td>Keel — what is it, types, how measured? [Mumbai bank]</td><td>The keel is the primary longitudinal structural member running along the centreline at the bottom of the ship from bow to stern — it is sometimes called the backbone of the ship. It provides longitudinal rigidity and distributes bending loads along the hull. Types of keel: flat plate keel (most common on modern ships) — a horizontal flat steel plate on the centreline of the outer bottom, thicker than adjacent plating; bar keel (older ships) — a solid or hollow bar of steel running along the centreline, protruding below the hull; bilge keel — external longitudinal fins welded to the hull bilge area (intersection of bottom and side plating) on each side — these are not load-bearing structural keels but are anti-rolling devices that increase hydrodynamic damping of rolling motion. How measured: the draft of the ship is measured from the keel bottom (the lowest point of the hull) to the waterline — called the keel draft. In drydock, the keel block distance is measured — the blocks on which the ship rests must distribute the keel load evenly. The keel clearance is the distance from the keel to the seabed in shallow water — critical for passage planning and verified from the official chart. KG (height of centre of gravity above keel) is a key stability parameter measured in metres from the keel baseline. Keel draft: the actual depth of water below the keel. Keel plate thickness is specified by classification society rules based on the ship's length, beam, and structural design.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>3. SHIP STRUCTURE — BULKHEAD, LOAD LINE & STRUCTURAL TERMS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Bulkhead — what is it, types, thickness? [Mumbai bank]</td><td>A bulkhead is a vertical partition (wall) inside a ship dividing the hull into separate compartments. Bulkheads serve structural, safety, and operational purposes. Types of bulkheads: watertight bulkhead — designed and tested to resist water pressure on either side, preventing flooding from spreading from one compartment to adjacent ones. SOLAS Chapter II-1 requires a minimum number of watertight bulkheads based on ship length — a collision bulkhead at the bow (at 5–8% of ship length from the forward perpendicular), an after peak bulkhead, and enough intermediate bulkheads for the required degree of subdivision. Fire subdivision bulkhead (A-class or B-class) — a thermally insulated steel bulkhead that prevents fire and heat from spreading between fire zones for a specified period. A-class: steel structure, insulated to prevent temperature rise above <span class="n-val">140°C</span> for 60 minutes (A-60) on the unexposed side. B-class: steel or aluminium structure for 30 minutes protection. Structural bulkhead — provides longitudinal or transverse strength to the hull. Deep tank bulkhead — watertight partition of a deep tank (fuel oil, ballast, cargo liquid) capable of withstanding the liquid head pressure. Regarding thickness: bulkhead plating thickness is specified by the classification society rules based on the bulkhead's height, type (watertight vs structural), and position in the ship. A typical watertight bulkhead plating for a cargo ship might be 8–14mm steel plate, stiffened by vertical or horizontal steel frames welded to the plating. The collision bulkhead is typically heavier — 12–16mm — as it must resist the force of a collision. The ETO's relevance: cable penetrations through watertight bulkheads must maintain watertight integrity (MCT system — covered in Topic 12).</td></tr>
-    <tr><td>Load line marks — what do they mean? Plimsoll mark? [Mumbai bank]</td><td>The load line (Plimsoll mark) is a set of marks on the ship's side amidships that indicate the maximum permissible loading depths in different sea areas and seasons. The Load Line Convention (International Convention on Load Lines 1966, as amended by Protocol 1988) governs these marks. The marks are: a disc with a horizontal line through its centre — the deck line is the reference; above the disc, zone marks indicate maximum draft in specific conditions. The abbreviations and their meanings are: TF = Tropical Fresh Water (maximum draft — least buoyancy, warm and fresh water); F = Fresh Water (rivers, harbours with fresh water — fresh water is less dense than salt, so more displacement for same weight = deeper draft); T = Tropical Salt Water; S = Summer Salt Water (the standard reference condition); W = Winter Salt Water (more conservative — cold weather sea states, higher waves); WNA = Winter North Atlantic (most conservative — harsh winter North Atlantic conditions, smallest loading). The ship must never be loaded beyond the applicable mark for the zone and season being operated in. The marks are assigned by the classification society on behalf of the flag state and are inscribed on the hull plating. The ETO's relevance: the draft and freeboard affect the ship's electrical systems indirectly — operation in heavy weather (winter North Atlantic) means higher rolling, more mechanical stress on equipment, more water ingress risk at deck fittings, and higher demands on power systems for heating and auxiliary machinery.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>4. MOTOR FRAME NUMBER — WHAT IT MEANS & HOW TO DECODE</th></tr>
-  </table>
-  <div class="body">The frame number (or frame designation) of an electric motor is a standardised alphanumeric code that describes the physical dimensions and mounting configuration of the motor. It is used by engineers to ensure a replacement motor will fit the same mounting footprint, coupling dimensions, and shaft size as the original. The frame number appears on the motor nameplate and is standardised by NEMA (National Electrical Manufacturers Association) in North America and IEC (International Electrotechnical Commission) internationally. This is a very repeatedly asked question across multiple surveyors — the examiner specifically wants to know what information the frame number conveys.</div>
-  <table class="n-table">
-    <tr><th>MOTOR FRAME NUMBER — COMPLETE EXPLANATION</th></tr>
-    <tr><td>WHAT IT IS: A standardised alphanumeric code on the motor nameplate that defines the physical dimensions of the motor — specifically the mounting dimensions, shaft height, shaft diameter, and bolt pattern. IEC FRAME NUMBER (international standard, used on ship's motors): A number that directly indicates the shaft centre height in millimetres. For example: IEC Frame 180 = shaft centre height of 180 mm from the base mounting surface. IEC Frame 100 = shaft centre height of 100 mm. The frame number is the shaft centre height in mm. NEMA FRAME NUMBER (American standard — may be seen on some equipment): Divided by 4 to get shaft centre height in inches. For example: NEMA Frame 184 = 184/4 = 46 mm shaft height... wait — NEMA: shaft height (in inches) = frame number / 4. So Frame 184 = 184 / 4 = 46... NEMA uses older formulae. The key answer for MMD oral (as Maersk is European/international): IEC frame = shaft centre height in mm. WHAT ELSE THE FRAME DESIGNATOR TELLS YOU: Suffix letters indicate special configurations. 'M' or 'L' after the number indicates the axial distance from drive end to first shaft shoulder. 'S' = short shaft. 'LG' = long shaft. Letter 'B' with a number indicates foot arrangement or mounting type (B3 = floor mount, B5 = flange mount, B14 = face mount). FACTOR OF SAFETY IN MOTOR: The ratio of the maximum allowable stress to the working stress of the motor's structural components. For motor frames, typically 2.5–4.0. Ensures the motor can handle occasional overload conditions without structural failure. HOW TO DECODE A FRAME NUMBER (example: IEC 132M): 132 = shaft centre height in mm (132 mm from base to shaft centre). M = medium length body (the motor body length variant). This means any IEC 132M motor from any manufacturer will have the same shaft height (132 mm) and same mounting bolt pattern — making direct replacement straightforward.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>MEMORY AID — Motor Frame Number</th></tr>
-    <tr><td>IEC Frame Number = Shaft Centre Height in Millimetres IEC 90 = shaft 90mm high. IEC 132 = shaft 132mm high. IEC 180 = shaft 180mm high. Suffix: M = medium body. L = long body. S = short shaft. B3 = foot mount. B5 = flange mount. Why important: when ordering replacement motor, MUST match frame number → motor physically fits same mounting, same shaft height, same coupling → no need to modify foundations or couplings.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Frame number of motor — what is it, what does it indicate, how do you decode it? [Multiple banks — very repeatedly asked]</td><td>The frame number (frame designation) of an electric motor is a standardised code on the motor nameplate that specifies the physical dimensions of the motor — primarily the shaft centre height, the mounting foot bolt pattern spacing, and the shaft diameter. It is essential for ensuring a replacement motor will physically fit the same mounting position without requiring structural modifications. For IEC motors (the international standard used on most ship's motors): the frame number directly indicates the shaft centre height in millimetres. For example, an IEC frame 132 motor has its shaft centre at exactly 132 mm above the mounting surface (the base of the feet). An IEC frame 180 motor has a shaft centre height of 180 mm. This is the key information the surveyor wants: IEC frame number = shaft centre height in mm. The suffix letters after the number give additional information: 'M' indicates a medium-length motor body, 'L' indicates a long body (same shaft height but physically longer motor for more power output), and 'S' indicates short shaft. The IEC motor mounting type (how it is fixed to the foundation) is indicated by a 'B' code: B3 = horizontal foot-mounted on base plate (most common in engine room), B5 = flange-mounted (no feet, mounted via a face flange), B14 = small face mount. When ordering a replacement motor, I provide the complete frame designation — for example 'IEC 132M B3' — to ensure the replacement fits the existing mounting footprint, shaft height matches the existing coupling, and no foundation modification is required. The factor of safety in motor construction refers to the ratio of the ultimate strength of the motor frame structure to the working stress — typically 2.5 to 4, providing a margin for overload and mechanical shock.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>5. EMERGENCY SWITCHBOARD — EQUIPMENT CONNECTED & TWO ACBs</th></tr>
-  </table>
-  <div class="body">The Emergency Switchboard (ESB) is a separate switchboard supplied by the emergency generator (and, during normal operation, by the main switchboard through an automatic changeover arrangement) to ensure that essential services remain powered during a blackout. SOLAS Chapter II-1 Regulation 42 specifies which services must be connected to the emergency source of power. The arrangement and equipment connected to the ESB is a specific question from ORAL2026.</div>
-  <table class="n-table">
-    <tr><th>EQUIPMENT CONNECTED TO EMERGENCY SWITCHBOARD</th></tr>
-    <tr><td>NAVIGATION LIGHTS: All SOLAS-required navigational lights (masthead, sidelights, stern, anchor) EMERGENCY LIGHTING: All muster stations, embarkation stations, corridors, escape routes, stairways, machinery spaces, steering gear room, fire pump room FIRE DETECTION AND ALARM SYSTEM: Main fire detection panel and all alarm sounders/beacons throughout accommodation and service spaces GENERAL ALARM: General emergency alarm system PUBLIC ADDRESS (PA) SYSTEM: Internal communication for emergency announcements GMDSS EQUIPMENT: All GMDSS radio installations (VHF, MF/HF, Inmarsat, NAVTEX) and their battery chargers STEERING GEAR: One steering gear power unit (SOLAS requires steering gear to be operable from emergency source on cargo ships of certain sizes) EMERGENCY FIRE PUMP: Motor of the emergency fire pump (located outside main ER) SPRINKLER PUMP (if fitted): Alarm and possibly the pump motor BILGE PUMPS: At least one bilge pump capable of operation from emergency source DAYLIGHT SIGNALLING LAMP WATERTIGHT DOOR CONTROLS: Indication and control systems for watertight doors EMERGENCY GENERATOR ROOM LIGHTING AND VENTILATION TRANSITIONAL BATTERY CHARGER: Charger for the 30-minute transitional source battery COMMUNICATIONS: Internal telephones at key positions</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is the purpose of two circuit breakers giving supply to the Emergency Switchboard? [ORAL2026]</td><td>The Emergency Switchboard (ESB) has two separate ACBs (Air Circuit Breakers) providing its supply — one from the main switchboard (normal supply) and one from the emergency generator (emergency supply). The purpose of having two separate breakers is to ensure complete electrical separation and automatic changeover between the two supplies. Under normal operating conditions, the ESB is supplied from the main switchboard via the first ACB — the emergency generator is standing by in auto-start mode. When the main power fails (blackout), the first ACB trips (either automatically on loss of voltage, or it is tripped by the main switchboard undervoltage) and the second ACB closes to connect the emergency generator output to the ESB after the generator has started and built up to rated voltage within 45 seconds. The two-breaker arrangement provides an essential safety function: it prevents any possibility of the emergency generator being backfed from the main switchboard or of the two supplies being paralleled simultaneously — which could cause fault current issues or damage the emergency generator if its phase angle does not match the main switchboard at the moment of reconnection. The mechanical and electrical interlocks between the two ACBs ensure that only one can be closed at a time (open transition changeover). This is a fundamental requirement of SOLAS II-1 Regulation 43: the emergency source must be capable of immediate automatic connection to the emergency switchboard on failure of main power supply, and must be maintained as an independent source.</td></tr>
-    <tr><td>Which equipment is connected to the emergency switchboard? [ORAL2026]</td><td>The Emergency Switchboard (ESB) supplies all essential services that must remain operational during a blackout or main power failure, as required by SOLAS Chapter II-1 Regulation 42. The main services connected to the ESB on a cargo ship are: navigation lights (all SOLAS-required lights — masthead, sidelights, stern, anchor); emergency lighting throughout the ship — all muster stations, embarkation stations (lifeboat deck), escape routes, corridors, stairways, engine room, and steering gear room; the fire detection and alarm system (main detection panel and all zone sounders); the general alarm system; the public address and internal communication system; all GMDSS equipment (VHF, MF/HF, Inmarsat-C, NAVTEX) and their battery chargers; the emergency fire pump motor (the dedicated fire pump located outside the main machinery space); steering gear power unit (on cargo ships >500 GT per SOLAS II-1/29); the daylight signalling lamp; bilge pump (at least one); sprinkler system pump or alarm; watertight door controls and status indication; and the charging circuit for the transitional source battery (the 30-minute battery backup). The emergency generator itself and all auxiliary services needed to start and run it (fuel pump, cooling fan, starting battery charger) are also connected to the ESB. During normal operation, these loads are supplied from the main switchboard via the ESB's normal supply ACB — there is no need to actually lose power before these services are energised.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>6. SEQUENTIAL STARTING AFTER BLACKOUT — PROCEDURE & TIMINGS</th></tr>
-  </table>
-  <div class="body">Sequential starting (sequential load restoration) is the controlled, timed reconnection of machinery and equipment to the ship's busbars after a blackout (complete loss of power) has been restored. If all loads were reconnected simultaneously after a blackout, the combined starting current surge from all motors restarting at once would immediately overload the restored generator and cause a second blackout. Sequential starting prevents this by reconnecting loads in priority order with time delays between each group, allowing the generator time to recover voltage and frequency between successive motor starts.</div>
-  <table class="n-table">
-    <tr><th>SEQUENTIAL STARTING PROCEDURE — WITH TIMINGS</th></tr>
-    <tr><td>BLACKOUT OCCURS: Main power fails. Transitional source battery (<span class="n-val">30 min</span>) supplies emergency lighting and navigation lights immediately. T = 0 to <span class="n-val">45 sec</span>: Emergency generator auto-starts and connects to emergency switchboard. Emergency lighting, navigation lights, GMDSS, fire detection, general alarm, steering gear all restored from ESB. T = <span class="n-val">45 sec</span> to <span class="n-val">2 min</span>: First main generator is started and brought up to rated voltage and frequency. Main ACB is closed — main switchboard is restored. T = <span class="n-val">2 min</span>: ESSENTIAL SERVICES Group 1 — Automatically or manually reconnected first: main sea water cooling pump (largest cooling demand), main lubricating oil pump, main engine cooling fresh water pump, bilge pump. These are essential for safe engine room operation. T = 3–<span class="n-val">5 min</span>: ESSENTIAL SERVICES Group 2 — Fuel oil service pump, boiler feed pump, steering gear motor (if not already on ESB), air compressor, fire pump test (verify still available). T = 5–<span class="n-val">10 min</span>: AUXILIARY SERVICES Group 1 — Accommodation ventilation fans, provision room refrigeration compressors, accommodation services, laundry equipment. T = 10–<span class="n-val">15 min</span>: Start second generator if needed — bring online and parallel if total load demand exceeds single generator capacity. T = 10–<span class="n-val">20 min</span>: AUXILIARY SERVICES Group 2 — Non-essential deck equipment, workshop machinery, bow thruster (only if needed for manoeuvring and sufficient power confirmed), cargo refrigeration. KEY RULE: Never reconnect a large motor (><span class="n-val">50 kW</span>) until the generator voltmeter and frequency meter show stable rated values. Monitor generator current after each group reconnection — if current approaches 90% of rated, wait before reconnecting the next group. PMS (Power Management System): On modern vessels, the sequential starting is managed automatically by the PMS. However, the ETO must know the manual procedure for when the PMS is not operational.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>Sequential starting after power restore in detail with timings. [Mumbai bank]</td><td>Sequential starting is the controlled, timed reconnection of ship machinery and loads after a blackout has been restored, to prevent a second blackout from the combined starting current surge. The procedure works as follows. Immediately on blackout: the transitional source battery supplies emergency lighting and navigation lights (up to 30 minutes). Within 45 seconds: the emergency generator auto-starts and connects to the emergency switchboard, restoring GMDSS, fire detection, navigation lights, steering gear, and emergency lighting. Once the main generator is started (typically within 2 minutes of the blackout event) and its ACB is closed restoring the main switchboard, sequential starting begins. The first loads reconnected (within 2–3 minutes of main power restoration) are the most critical cooling and lubrication services: sea water cooling pump, lubricating oil pump, and fresh water cooling pump — these protect the main engine from damage if the main engine was running when the blackout occurred, or prepare it for restart. Next, within 3–5 minutes, fuel oil service pump, boiler feed pump, and air compressor are reconnected. Then, in 5–10 minute intervals, larger auxiliary loads are reconnected one group at a time — ventilation fans, refrigeration compressors, deck equipment. Large motors (bow thruster, cargo pumps) are reconnected last, only after confirming the generator is carrying all previous loads stably. The typical time delay between each group is 30–60 seconds minimum, giving the generator AVR time to restore voltage and the governor time to restore frequency after each motor start. On modern ships with a Power Management System (PMS), the sequential starting programme is pre-programmed and executes automatically in the correct priority sequence — the ETO monitors and can override if needed.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>7. CONTAINER SHIP — CSC CONVENTION, FIRE & CARGO HOLD SAFETIES</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>CSC — Convention for Safe Containers. What is it? TEU and FEU? [Mumbai bank]</td><td>The CSC (International Convention for Safe Containers) is an international treaty adopted in 1972 (effective 1977) under the auspices of the United Nations/UNCTAD and IMO, which establishes safety requirements for the structural integrity of freight containers to protect persons handling and transporting them. The convention requires that all containers used in international transport must be approved and have a valid CSC Safety Approval Plate affixed to them. The CSC plate shows: the country of approval, approval reference number, date of manufacture, maximum gross weight (the maximum allowable total weight of container + contents), allowable stacking weight (how many loaded containers can be stacked on top), and the date by which the container must be reexamined (typically every 30 months or 5 years depending on the approval type). The convention requires periodic structural examination and testing of containers — racking test, stacking test, lifting test, floor strength test — to verify continued structural integrity. Containers failing to meet CSC requirements cannot legally be loaded aboard ships. TEU (Twenty-foot Equivalent Unit) is the standard unit of container capacity measurement, based on the dimensions of a standard 20-foot ISO shipping container (approximately 6.1m × 2.4m × 2.6m external). One TEU = one standard 20-foot container. FEU (Forty-foot Equivalent Unit) = one standard 40-foot container = 2 TEU. A vessel described as having a capacity of 10,000 TEU can carry the equivalent of ten thousand 20-foot containers. Most modern container ships actually carry more 40-foot (FEU) containers than 20-foot, so TEU capacity represents total carrying ability regardless of actual container mix.</td></tr>
-    <tr><td>Why does a container vessel catch fire? Container fire — class and action? [Mumbai bank]</td><td>Container vessels catch fire for several reasons related to the nature of containerised cargo. The most common causes are: misdeclared dangerous goods — shippers declaring flammable, self-reactive, or spontaneously combustible cargo (such as calcium hypochlorite, lithium batteries, ammonium nitrate, or organic peroxides) as non-hazardous general cargo to avoid dangerous goods fees and restrictions. These materials can self-heat and ignite spontaneously, especially in hot conditions inside a container. Lithium battery fires are an increasing problem — both for cargo (electric vehicle batteries, consumer electronics) and for equipment carried on deck. Reefer (refrigerated container) electrical faults — thermostat failures, compressor winding failures, or short circuits in the refrigeration unit can cause fire inside or below the container. Combustible material placed near heat-generating equipment. Friction or mechanical damage during voyage causing cargo internal ignition. Container fires are classified by the material burning — most commonly: Class A (solid combustibles — wood, cardboard, synthetic goods) or Class B (flammable liquids or gases from chemical cargo). Electrical fires (Class E) from reefer units. Action as ETO: activate general alarm and notify Bridge immediately. If reefer fire — isolate the reefer socket from the distribution panel (remove power). For a fire in the hold, the fixed CO₂ or nitrogen smothering system for cargo holds is activated — this requires: closing all hold ventilation (fans and dampers), confirming no personnel in the hold, releasing the fixed gas system from outside the hold. Water mist may be available for deck fires. Reefer fires on deck: use CO₂ portable extinguisher on the unit itself after cutting power. Always follow the ship's fire muster card and report to the officer in charge.</td></tr>
-    <tr><td>Cargo hold electrical safeties — what are they? [Multiple banks]</td><td>Cargo holds on general cargo ships, bulk carriers, and container vessels have several electrical safety considerations. First, all electrical equipment installed in or adjacent to cargo holds must be appropriate for the cargo being carried — if flammable cargo is loaded, the hold area may be classified as a hazardous zone requiring Ex-rated equipment. For standard general cargo holds, the IP rating of any lighting and junction boxes must be adequate for the dusty and humid environment (minimum IP55). Second, cargo hold ventilation fans — the fans and their motor starters are checked to ensure correct direction of rotation (fans must be switched off and direction confirmed before loading hygroscopic or moisture-sensitive cargo); fan motors are protected against moisture ingress. Third, cargo hold lighting is Ex-protected or intrinsically safe if carrying flammable cargo (solvents, calcium carbide, dangerous goods in bulk). Fourth, temperature monitoring sensors — RTD or thermocouple sensors in the cargo hold bilge area monitor for spontaneous heating of cargo (particularly coal on bulk carriers, grain, and some chemicals); high temperature alarms alert the watch officer. Fifth, bilge level alarms (water ingress detection — on bulk carriers this is the WIDAS system per SOLAS Chapter XII). Sixth, hatch cover electrical actuators and limit switches — electric-driven hatch covers have limit switches that confirm full open/close; electrical hydraulic pump units must be checked for insulation and starter condition. Seventh, any reefer plugs/sockets in the cargo hold must be tested and maintained per the reefer socket maintenance procedure.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>8. ADDITIONAL STRUCTURAL & STABILITY TOPICS</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>EXAMINER QUESTION</th><th>IDEAL ANSWER</th></tr>
-    <tr><td>What is the frame number scheme of the ship — what does the frame number of a ship's structure indicate? [Separate from motor frame number — multiple banks have asked both]</td><td>The structural frame number (shipyard frame number) is the numerical designation of transverse structural frames that run across the ship from port to starboard at regular intervals, forming the ship's ribs. Frame numbers are assigned from the aft end — Frame 0 is typically at the aft perpendicular (transom) and numbers increase towards the bow. Frame spacing is standardised — typically 600mm to 800mm for cargo ships (the actual spacing is specified in the ship's construction drawings). The frame number system allows precise identification of any location along the ship's length: for example, 'Frame 80 port side at 1.5m above keel' precisely identifies a point for cable routing, structural repair, or equipment installation. Electrical cable runs, pipe routes, and structural penetrations are all described using frame numbers in the ship's drawings. When a structural defect or corrosion is found, it is reported by frame number to the class surveyor. For the ETO: when routing cables through the hull or locating electrical equipment, the ship's general arrangement drawing shows frame numbers — these are used in equipment installation specifications and in reporting any found defects to the classification society. The ship's frame numbering starts at the aft end — this is the opposite of the motor frame number which is a dimensional standard. Context matters: when an examiner asks 'what is a frame number?', they may mean either the ship's structural frame number (location reference) or the motor frame number (dimensional standard) — be ready to clarify and answer both.</td></tr>
-    <tr><td>Efficiency number on motor — what does it mean? Factor of safety? [Multiple banks]</td><td>The efficiency of a motor is the ratio of useful mechanical output power to the total electrical input power, expressed as a percentage: Efficiency (η%) = (Output power / Input power) × 100. For example, a motor with 90% efficiency means that for every 100W of electrical power drawn from the supply, 90W is converted to useful mechanical shaft output and 10W is lost as heat (in stator copper losses I²R, rotor copper losses, iron core losses, friction and windage, stray losses). The efficiency value is found on the motor nameplate — modern high-efficiency motors (IEC IE3 class — Premium Efficiency) achieve 90–97% efficiency at full load. The factor of safety in a motor refers to the ratio of the motor's structural and thermal design limits to the nominal operating conditions — it provides a margin to handle occasional overloads, starting conditions, and mechanical shocks without immediate failure. Typically the mechanical frame factor of safety is 2.5–4 for the mounting feet and housing structure. The thermal factor of safety relates to how much above the rated operating temperature the insulation can withstand before permanent degradation — a Class F motor used at Class B conditions has a significant thermal safety factor (<span class="n-val">155°C</span> class limit vs <span class="n-val">130°C</span> class B operating temperature). When ordering a replacement motor, the efficiency class (IE1, IE2, IE3, IE4) affects the motor's electrical consumption and heat generation — a higher efficiency class motor may be physically different in size (more copper and iron) and must be confirmed to fit the same frame.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>9. SHIPYARD TERMS — TONNAGE, DISPLACEMENT & TYPES</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>TERM</th><th>DEFINITION</th><th>WHERE USED</th></tr>
-    <tr><td>Displacement</td><td>Total weight of water displaced by the ship = ship's total weight (in tonnes). Archimedes: weight of ship = weight of water displaced.</td><td>Stability calculations, load line, naval architecture</td></tr>
-    <tr><td>Deadweight (DWT)</td><td>Weight of cargo, fuel, stores, water, ballast, crew, and provisions the ship can carry. DWT = Displacement at load draft − Lightship weight.</td><td>Commercial — how much a ship can carry and earn freight</td></tr>
-    <tr><td>Gross Tonnage (GT)</td><td>A measure of the total internal volume of a ship, calculated per ITC 1969 (International Tonnage Convention). Not a weight measure.</td><td>Port dues, Suez/Panama Canal fees, SOLAS applicability thresholds, crew certificates</td></tr>
-    <tr><td>Net Tonnage (NT)</td><td>A measure of the earning capacity of the ship — volume of cargo and passenger spaces only.</td><td>Port dues, light dues, harbour fees</td></tr>
-    <tr><td>TEU / FEU</td><td>Twenty-foot Equivalent Unit / Forty-foot Equivalent Unit — standardised container capacity measure.</td><td>Container ship capacity ratings</td></tr>
-    <tr><td>Block Coefficient (Cb)</td><td>Ratio of ship's displacement volume to the volume of a rectangular box of length × breadth × draft. Cb = 0.5–0.6 for fast ships (fine form), 0.8–0.9 for bulk carriers (full form).</td><td>Ship design — affects speed, fuel consumption, cargo capacity</td></tr>
-    <tr><td>Freeboard</td><td>Vertical distance from waterline to the main deck edge. Greater freeboard = greater reserve buoyancy = safer in heavy seas.</td><td>Load line assignment, SOLAS, stability</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>10. QUICK REVISION — SHIP CONSTRUCTION & STABILITY</th></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>TOPIC</th><th>FREQUENCY & KEY POINTS</th></tr>
-    <tr><td>Hogging & Sagging</td><td>⭐⭐⭐⭐⭐ Sagging: centre unsupported, ends up — keel in TENSION. Hogging: centre supported/loaded, ends down — keel in COMPRESSION. Wave crest amidships = hogging. Wave trough amidships = sagging.</td></tr>
-    <tr><td>Shear Force & Bending Moment</td><td>⭐⭐⭐⭐ Shear force = perpendicular internal force at any cross-section. Bending moment = rotational internal moment. BM is max where SF = 0 (typically amidships). Related by: SF = dBM/dx.</td></tr>
-    <tr><td>GM & Stability</td><td>⭐⭐⭐⭐ GM = KM − KG. Positive GM = stable (G below M). Negative GM = unstable. Min GM = 0.15m (IMO IS Code 2008). Free surface reduces effective GM. List = unequal transverse loading.</td></tr>
-    <tr><td>Keel</td><td>⭐⭐⭐ Backbone of ship. Types: flat plate keel (modern), bar keel (older), bilge keel (anti-rolling fins). Draft measured from keel. KG = centre of gravity height above keel.</td></tr>
-    <tr><td>Bulkhead</td><td>⭐⭐⭐ Vertical partition. Types: watertight (SOLAS II-1 minimum number), fire (A-class <span class="n-val">60 min</span>, B-class <span class="n-val">30 min</span>), structural, collision (bow, 5–8% from FP). Thickness 8–16mm per class rules.</td></tr>
-    <tr><td>Load Line (Plimsoll)</td><td>⭐⭐⭐ TF > F > T > S > W > WNA (decreasing depth allowed). S = Summer reference. Load Line Convention 1966. Draft from keel to waterline must not exceed applicable mark.</td></tr>
-    <tr><td>Motor Frame Number (IEC)</td><td>⭐⭐⭐⭐⭐ IEC frame number = shaft centre height in mm. IEC 132 = shaft 132mm above base. Suffix M = medium body, L = long body. B3 = foot mount, B5 = flange mount. Used to ensure replacement motor fits same mounting without modification.</td></tr>
-    <tr><td>Emergency Switchboard</td><td>⭐⭐⭐⭐ Connected: nav lights, emergency lighting, fire detection, gen alarm, PA, GMDSS, steering gear, emg fire pump, bilge pump, watertight door controls, daylight signalling lamp. Two ACBs: normal supply from MSB + emg gen. Interlock prevents simultaneous closure.</td></tr>
-    <tr><td>Sequential Starting</td><td>⭐⭐⭐⭐ After blackout restore: Emg gen (<span class="n-val">45 sec</span>) → ESB loads. Main gen restored → Group 1: SW pump, LO pump, FW pump (<span class="n-val">2 min</span>). Group 2: fuel pump, boiler, air compressor (3–<span class="n-val">5 min</span>). Group 3: aux ventilation, reefer (5–<span class="n-val">10 min</span>). Large loads last. 30–<span class="n-val">60 sec</span> between groups.</td></tr>
-    <tr><td>CSC Convention</td><td>⭐⭐⭐ International Convention for Safe Containers (1972). CSC plate on all international containers: approval number, manufacture date, max gross weight, stacking weight, re-examination date. TEU = 20ft container unit. FEU = 40ft = 2 TEU.</td></tr>
-    <tr><td>Container Fire</td><td>⭐⭐⭐ Causes: misdeclared DG, lithium batteries, reefer electrical faults, spontaneous combustion. Class A (solid), B (liquid/gas), E (electrical reefer). Action: alarm, isolate reefer power, close hold vents, activate CO₂/N₂ fixed system, follow muster card.</td></tr>
-    <tr><td>Parametric Rolling</td><td>⭐⭐ Resonant rolling when roll period matches wave encounter frequency. Container vessels in head seas with long wavelength. Not direct ETO responsibility but should know the term.</td></tr>
-  </table>
-  <table class="n-table">
-    <tr><th>FINAL MEMORY AID — SHIP CONSTRUCTION & STABILITY</th></tr>
-    <tr><td>1. SAGGING: hammock shape, keel in tension. HOGGING: bridge arch, keel in compression. Shear force max at bulkhead positions. Bending moment max where SF = 0 (amidships). 2. GM = KM − KG. Positive = stable. Negative = unstable (capsize risk). Min 0.15m. Free surface reduces GM. List = transverse weight imbalance. 3. MOTOR FRAME NUMBER (IEC): Frame number = shaft centre height in mm. IEC 132 = 132mm shaft height. B3 = foot mount. B5 = flange. MUST match when ordering replacement. 4. ESB EQUIPMENT: Nav lights + emg lighting + fire detection + gen alarm + PA + GMDSS + steering gear + emg fire pump + bilge pump. Two ACBs = MSB normal supply + emg gen supply. INTERLOCKED — only one closed at a time. 5. SEQUENTIAL STARTING: Emg gen (0–<span class="n-val">45 sec</span>) → cooling/LO pumps (<span class="n-val">2 min</span>) → fuel/boiler/air (3–<span class="n-val">5 min</span>) → aux services (5–<span class="n-val">10 min</span>) → large loads last. 30–<span class="n-val">60 sec</span> delay between groups. 6. CSC: Container Safety Convention. Approval plate on every container. Max gross weight. Re-exam every 30 months or 5 years. TEU = 20ft. FEU = 40ft = 2 TEU. 7. BULKHEAD: Watertight (SOLAS II-1), fire (A-60/B-30), collision (bow, 5–8% FP). Thickness 8–16mm. Cable penetration via MCT/Roxtec maintains integrity. 8. LOAD LINE: TF>F>T>S>W>WNA. S = Summer standard. Load Line Convention 1966. Draft from keel must not exceed applicable mark for zone and season.</td></tr>
+    <tr><th>TIME AFTER BLACKOUT</th><th>ACTION / EQUIPMENT STARTED</th></tr>
+    <tr><td><strong>0 – 45 seconds</strong></td><td>Emg Gen auto-starts and connects to ESB. ESB loads restored.</td></tr>
+    <tr><td><strong>45 sec – 2 minutes</strong></td><td>Main Gen starts, voltage builds, MSB ACB closes. Main power restored.</td></tr>
+    <tr><td><strong>2 minutes</strong></td><td><strong>Group 1 (Essential):</strong> Sea Water pump, Lube Oil pump, Fresh Water pump, Bilge pump. (Critical for engine safety).</td></tr>
+    <tr><td><strong>3 – 5 minutes</strong></td><td><strong>Group 2 (Essential):</strong> Fuel Oil service pump, Boiler feed, Air compressor.</td></tr>
+    <tr><td><strong>5 – 10 minutes</strong></td><td><strong>Group 3 (Auxiliary):</strong> Engine room vent fans, Provision reefer.</td></tr>
+    <tr><td><strong>> 10 minutes</strong></td><td>Large loads (Cargo pumps, Bow thruster) started manually once stable.</td></tr>
   </table>
 
 
-  <!-- ═══ WRITTEN SECTION ═══ -->
-  <div class="n-h1" id="s-written">📝 Written Section</div>
-  <div class="n-info"><div class="icon">📝</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development.</div></div>
+  <!-- ═══ SECTION 7 ═══ -->
+  <div class="n-h1" id="s-container">7. Container Ship - CSC Convention & Fires</div>
+  
+  <ul class="n-list">
+    <li><strong>CSC (Convention for Safe Containers):</strong> Requires structural approval plates on all shipping containers. Shows max gross weight, stacking weight, and next inspection date (30mo or 5yr).</li>
+    <li><strong>TEU/FEU:</strong> Twenty-foot Equivalent Unit. Forty-foot Equivalent Unit (2 TEU).</li>
+    <li><strong>Container Fires:</strong> Often caused by misdeclared dangerous goods (lithium batteries, self-heating chemicals) or reefer electrical faults.</li>
+    <li><strong>Action for Reefer Fire:</strong> Isolate power socket immediately. If inside hold, close vents and deploy fixed CO2. If on deck, use portable extinguisher.</li>
+  </ul>
 
 
   <!-- ═══ SURVEYOR Q&A ═══ -->
-  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>No Surveyor Q&A available</strong> for this topic yet.</div></div>
+  
+  <div class="n-h1" id="s-drydock">🏗️ Drydock - Electrical Preparations</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyors ask ETO drydock preparations checklist.</strong></div></div>
+  <div class="n-h2">Before Docking</div>
+  <ol class="n-steps">
+    <li>Take <strong>baseline IR readings</strong> of all motors and cables - record for comparison after flooding</li>
+    <li>Switch <strong>ICCP to MANUAL/OFF</strong> - running in air creates fire hazard (anodes arc in air)</li>
+    <li>Energise all <strong>anti-condensation heaters</strong> from shore power - keep windings <span class="n-val">5–10°C</span> above ambient, prevent moisture absorption during the docked period</li>
+    <li>Arrange shore power connection - verify voltage, frequency, phase sequence before closing shore ACB</li>
+    <li>Inspect <strong>shaft earthing brush</strong> for wear - replace if below minimum length</li>
+    <li>Check hull transducers (echo sounder, Doppler log) - report to surveyor if damaged</li>
+  </ol>
+  <div class="n-h2">During Drydock</div>
+  <ul class="n-list">
+    <li>Assist surveyor: present all maintenance records, PMS logs, IR test records</li>
+    <li>Witness tests: blackout test, steering gear timing, fire detection tests</li>
+    <li>Replace Ag/AgCl ICCP reference electrodes (every <span class="n-val">2.5 years</span>)</li>
+    <li>Inspect and clean all bilge level sensors and alarms</li>
+    <li>Megger test all deck cables, motors, and hull cable penetrations</li>
+  </ul>
+  <div class="n-h2">After Flooding - Before Undocking</div>
+  <ol class="n-steps">
+    <li>Re-take IR readings of all motors - compare with pre-drydock baseline</li>
+    <li>Commission ICCP in manual mode - verify reference electrode readings before switching to auto</li>
+    <li>Test emergency generator - auto-start within <span class="n-val">45 seconds</span></li>
+    <li>Test all navigation lights - both main and emergency supply</li>
+    <li>Restore all systems to normal - remove all PTWs and permits</li>
+  </ol>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Drydock sequence: Baseline IR → ICCP OFF → heaters ON → shore power → shaft brush. After flood: re-IR → ICCP manual → commission tests → remove PTWs.</div></div>
+
+<div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
+
+  <table class="n-table">
+    <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
+    <tr>
+      <td>What does an IEC Motor Frame Number indicate? Give an example.</td>
+      <td>It indicates the shaft center height in millimeters from the mounting base. E.g., IEC 132 means the shaft is 132mm high. It ensures replacement motors fit the same bolt pattern and coupling height without structural modification.</td>
+    </tr>
+    <tr>
+      <td>Explain the procedure and timings for sequential starting after a blackout.</td>
+      <td>Emg Gen connects within 45s. Main Gen restores MSB within 2 min. At 2 min, Group 1 starts (SW, LO, FW pumps). At 3-5 min, Group 2 starts (Fuel, Boiler, Air Compressors). At 5-10 min, Aux loads start. Staggering prevents high starting currents from causing a 2nd blackout.</td>
+    </tr>
+    <tr>
+      <td>What is Hogging and Sagging?</td>
+      <td>Sagging: Ship ends are supported, middle sags down. Keel is in tension, deck in compression. Hogging: Middle is supported, ends drop. Keel is in compression, deck in tension. They cause bending moments in the hull girder.</td>
+    </tr>
+    <tr>
+      <td>Why does the Emergency Switchboard have two ACBs?</td>
+      <td>One from the MSB, one from the Emg Gen. They are mechanically and electrically interlocked to prevent simultaneous closure. This ensures no paralleling of unsynchronized sources and prevents backfeeding the MSB during a blackout.</td>
+    </tr>
+    <tr>
+      <td>What is GM and what happens if it is negative?</td>
+      <td>GM is Metacentric Height (distance from center of gravity to metacentre). Minimum required is 0.15m. If negative, the ship is unstable and will develop a capsizing moment instead of a righting moment, causing it to loll or capsize.</td>
+    </tr>
+  </table>
 
 
   <!-- ═══ QUICK REVISION ═══ -->
-  <div class="n-h1" id="s-quickrev">📋 Quick Revision</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body">Revision tables coming soon.</div></div>
+  <div class="n-h1" id="s-quickrev">📊 Quick Revision - Surveyor Frequency Guide</div>
+  <table class="n-table">
+    <tr><th>Topic</th><th>Frequency</th><th>Key Points to Memorise</th></tr>
+    <tr>
+      <td>Motor Frame Number (IEC)</td>
+      <td class="hl">⭐⭐⭐⭐⭐ All Surveyors</td>
+      <td>Shaft height in mm. Ensures perfect physical replacement match.</td>
+    </tr>
+    <tr>
+      <td>Sequential Starting</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Mumbai Bank</td>
+      <td>45s (Emg), 2m (MSB/Cooling), 3-5m (Fuel/Air). Prevents overload.</td>
+    </tr>
+    <tr>
+      <td>ESB Two ACBs</td>
+      <td class="hl">⭐⭐⭐⭐⭐ Sanjib, ORAL2026</td>
+      <td>Interlocked. Prevents paralleling and MSB backfeed.</td>
+    </tr>
+    <tr>
+      <td>Hogging / Sagging</td>
+      <td class="hl">⭐⭐⭐⭐ Kamath, Deswal</td>
+      <td>Sagging: Keel tension. Hogging: Keel compression.</td>
+    </tr>
+    <tr>
+      <td>GM Minimum Value</td>
+      <td class="hl">⭐⭐⭐⭐ Mumbai Bank</td>
+      <td>0.15 meters. GM = KM - KG.</td>
+    </tr>
+  </table>
 
   </div>
-</div>
 </div>`);
