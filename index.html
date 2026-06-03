@@ -201,7 +201,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
   .feat-grid{grid-template-columns:1fr}
   .story-sidebar{grid-template-columns:1fr}
   .topics-grid{grid-template-columns:1fr 1fr}
-  .hero-btns{flex-direction:column;width:100%;max-width:320px}
+  .hero-btns{flex-direction:column;width:100%;max-width:320px;margin:0 auto}
   .btn-xl{width:100%;justify-content:center}
   .hero-stats{gap:16px;padding:20px}
   .disc{flex-direction:column;gap:10px}
@@ -212,6 +212,19 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
 }
 @media(max-width:380px){
   .topics-grid{grid-template-columns:1fr}
+}
+
+/* ─── SVG ICONS ─── */
+.svg-ic {
+  width: 1.2em;
+  height: 1.2em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: text-bottom;
+  display: inline-block;
 }
 </style>
 </head>
@@ -225,6 +238,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
   <nav id="topbar" aria-label="Primary navigation">
     <div class="tb-logo" aria-label="ETO Oral Prep">ETO Oral Prep <span>ETO CoC · STCW Reg. III/6</span></div>
     <div class="tb-spacer"></div>
+    <a href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="font-size:13px;color:var(--orange);text-decoration:none;margin-right:16px;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg> Support</a>
     <a href="#access" class="tb-nav-link" style="font-size:13px;color:var(--t2);text-decoration:none;margin-right:20px;white-space:nowrap;transition:color .2s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t2)'">Get the App</a>
     <a href="app/index.html" class="tb-cta" role="button">Open App →</a>
   </nav>
@@ -258,7 +272,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
     </p>
 
     <nav class="hero-btns" aria-label="Primary actions">
-      <a href="app/index.html" class="btn-xl btn-primary">📚 Start Studying</a>
+      <a href="app/index.html" class="btn-xl btn-primary"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg> Start Studying</a>
       <a href="#story" class="btn-xl btn-ghost">Read the Story</a>
     </nav>
 
@@ -302,9 +316,13 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
           <p>Then I built notes around those topics. Organized around exactly what surveyors actually ask. <em>The notes I wish I had when I was preparing.</em></p>
           <p>These notes may not be 100% accurate - always cross-reference with actual technical data. But they give you a starting point, a framework, and the confidence of knowing you haven't missed anything obvious.</p>
           <p>This is my contribution back to the <strong>ETCO community</strong>. If it helps even one cadet walk into that oral with more confidence, it was worth every hour building it.</p>
+          <div style="margin-top:24px;padding:20px;background:rgba(245, 158, 11, 0.05);border:1px solid rgba(245, 158, 11, 0.2);border-radius:12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px">
+            <p style="margin:0;font-size:15px;color:var(--t2);flex:1;min-width:250px">The app will remain 100% free, but if you feel like donating to the cause, you can always support me by clicking the button.</p>
+            <a href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 24px;border-radius:8px;background:var(--orange);color:#fff;text-decoration:none;font-weight:700;box-shadow:0 4px 12px rgba(245, 158, 11, 0.3);transition:transform 0.2s"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg> Donate</a>
+          </div>
         </div>
         <div class="story-author">
-          <div class="story-avatar" aria-hidden="true">⚡</div>
+          <div class="story-avatar" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></g></svg></div>
           <div>
             <p class="story-name">A Fellow ETO Cadet</p>
             <p class="story-role">ETO CoC · STCW Reg. III/6 · India</p>
@@ -345,7 +363,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
 <section class="section" style="padding-top:0" aria-label="Important disclaimer">
   <div class="section-inner">
     <div class="disc" role="note">
-      <span class="disc-icon" aria-hidden="true">⚠️</span>
+      <span class="disc-icon" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m21.73 18l-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3M12 9v4m0 4h.01"/></svg></span>
       <div>
         <p class="disc-head">Important - Please Cross-Reference Everything</p>
         <p class="disc-body">These notes are <strong>community-built by a cadet</strong> - not an official publication. They may contain inaccuracies or gaps. Use this app as a <strong>starting point and a framework</strong> for your studies. Always verify with official technical manuals, SOLAS/MARPOL regulations, your college notes, and actual equipment documentation. The goal is to give you a foundation and show you what to study - the depth is on you.</p>
@@ -363,37 +381,37 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
     </div>
     <div class="feat-grid" role="list">
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">📄</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></g></svg></div>
         <h3 class="feat-name">Structured Study Notes</h3>
         <p class="feat-text">Colour-coded notes for all 23 oral topics. Tables, formulas, surveyor alert callouts, and step-by-step procedures - formatted for fast scanning during revision sessions.</p>
         <span class="feat-tag tag-b">23 Topics</span>
       </article>
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">🎯</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
         <h3 class="feat-name">Quiz Practice</h3>
         <p class="feat-text">700+ MCQ questions built from real surveyor Q&A patterns. Drill by topic or category with instant feedback and detailed explanations after every single answer.</p>
         <span class="feat-tag tag-g">700+ Questions</span>
       </article>
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">🧭</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5m0-4a6 6 0 0 1 6 6v3M4 15v-3a6 6 0 0 1 6-6"/><rect width="20" height="4" x="2" y="15" rx="1"/></g></svg></div>
         <h3 class="feat-name">Surveyor Intelligence</h3>
         <p class="feat-text">Critical sections are tagged with real oral exam question patterns so you know which topics are most frequently tested and where to focus your prep time.</p>
         <span class="feat-tag tag-o">Real Patterns</span>
       </article>
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">📱</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></g></svg></div>
         <h3 class="feat-name">Works Everywhere</h3>
         <p class="feat-text">Fully responsive. Study on your phone between watches, on a tablet in your cabin, or on a laptop at the study table. No app store. No installation. Just open and study.</p>
         <span class="feat-tag tag-p">Mobile Ready</span>
       </article>
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">⚡</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m15 10l5 5l-5 5"/><path d="M4 4v7a4 4 0 0 0 4 4h12"/></g></svg></div>
         <h3 class="feat-name">Jump Navigation</h3>
         <p class="feat-text">Every topic has section anchors so you can jump directly to the sub-topic you need. No endless scrolling - sidebar and bottom nav keep every topic one tap away.</p>
         <span class="feat-tag tag-b">Fast Navigation</span>
       </article>
       <article class="feat" role="listitem">
-        <div class="feat-ic" aria-hidden="true">🆓</div>
+        <div class="feat-ic" aria-hidden="true"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 8a4.8 8 0 0 1 4.5-5 2.5 2.5 0 0 1 0 5"/></g></svg></div>
         <h3 class="feat-name">Completely Free</h3>
         <p class="feat-text">No login. No subscription. No paywall. Open the app and start studying immediately. Built by the community, for the community - that's the only way this should exist.</p>
         <span class="feat-tag tag-g">Always Free</span>
@@ -407,34 +425,76 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
   <div class="section-inner">
     <div class="section-head center">
       <div class="section-label" aria-hidden="true">Coverage</div>
-      <h2 id="topics-heading" class="section-title">All 23 Oral Topics</h2>
-      <p class="section-sub">Every topic that can appear in your ETO CoC oral assessment - covered with structured notes and quiz questions.</p>
+      <h2 id="topics-heading" class="section-title">What we offer</h2>
+      <p class="section-sub">Everything you need to prepare for your ETO CoC assessment.</p>
     </div>
-    <nav class="topics-grid" aria-label="Study topics">
-      <a href="app/index.html" class="tp" aria-label="Topic 1: Alternator and Generator"><span class="tp-ic" aria-hidden="true">⚡</span><span class="tp-info"><span class="tp-name">Alternator &amp; Generator</span></span><span class="tp-num">T01</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 2: High Voltage Systems"><span class="tp-ic" aria-hidden="true">⚡</span><span class="tp-info"><span class="tp-name">High Voltage Systems</span></span><span class="tp-num">T02</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 3: Electric Motors"><span class="tp-ic" aria-hidden="true">⚙️</span><span class="tp-info"><span class="tp-name">Electric Motors</span></span><span class="tp-num">T03</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 4: Switchboard and Circuit Breakers"><span class="tp-ic" aria-hidden="true">🎛️</span><span class="tp-info"><span class="tp-name">Switchboard &amp; Circuit Breakers</span></span><span class="tp-num">T04</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 5: Transformers"><span class="tp-ic" aria-hidden="true">🔄</span><span class="tp-info"><span class="tp-name">Transformers</span></span><span class="tp-num">T05</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 6: Sensors and Instrumentation"><span class="tp-ic" aria-hidden="true">📡</span><span class="tp-info"><span class="tp-name">Sensors &amp; Instrumentation</span></span><span class="tp-num">T06</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 7: Control Systems and PLC"><span class="tp-ic" aria-hidden="true">🖥️</span><span class="tp-info"><span class="tp-name">Control Systems &amp; PLC</span></span><span class="tp-num">T07</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 8: Electronics"><span class="tp-ic" aria-hidden="true">💡</span><span class="tp-info"><span class="tp-name">Electronics</span></span><span class="tp-num">T08</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 9: Ship Machinery"><span class="tp-ic" aria-hidden="true">⚓</span><span class="tp-info"><span class="tp-name">Ship Machinery</span></span><span class="tp-num">T09</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 10: ICCP and Corrosion"><span class="tp-ic" aria-hidden="true">🛡️</span><span class="tp-info"><span class="tp-name">ICCP &amp; Corrosion</span></span><span class="tp-num">T10</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 11: Power Factor"><span class="tp-ic" aria-hidden="true">📊</span><span class="tp-info"><span class="tp-name">Power Factor</span></span><span class="tp-num">T11</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 12: Cables and Wiring"><span class="tp-ic" aria-hidden="true">🔗</span><span class="tp-info"><span class="tp-name">Cables &amp; Wiring</span></span><span class="tp-num">T12</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 13: Bridge Equipment Part 1"><span class="tp-ic" aria-hidden="true">🧭</span><span class="tp-info"><span class="tp-name">Bridge Equipment I</span></span><span class="tp-num">T13</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 14: Bridge Equipment Part 2"><span class="tp-ic" aria-hidden="true">🧭</span><span class="tp-info"><span class="tp-name">Bridge Equipment II</span></span><span class="tp-num">T14</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 15: Fire Fighting"><span class="tp-ic" aria-hidden="true">🔥</span><span class="tp-info"><span class="tp-name">Fire Fighting</span></span><span class="tp-num">T15</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 16: SOLAS"><span class="tp-ic" aria-hidden="true">📋</span><span class="tp-info"><span class="tp-name">SOLAS</span></span><span class="tp-num">T16</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 17: MARPOL"><span class="tp-ic" aria-hidden="true">🌊</span><span class="tp-info"><span class="tp-name">MARPOL</span></span><span class="tp-num">T17</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 18: Electrical Survey"><span class="tp-ic" aria-hidden="true">🔍</span><span class="tp-info"><span class="tp-name">Electrical Survey</span></span><span class="tp-num">T18</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 19: Tanker Electrics"><span class="tp-ic" aria-hidden="true">🛢️</span><span class="tp-info"><span class="tp-name">Tanker Electrics</span></span><span class="tp-num">T19</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 20: Ship Construction"><span class="tp-ic" aria-hidden="true">🏗️</span><span class="tp-info"><span class="tp-name">Ship Construction</span></span><span class="tp-num">T20</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 21: LSA and Safety"><span class="tp-ic" aria-hidden="true">🆘</span><span class="tp-info"><span class="tp-name">LSA / Safety</span></span><span class="tp-num">T21</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 22: Practical Skills"><span class="tp-ic" aria-hidden="true">🔧</span><span class="tp-info"><span class="tp-name">Practical Skills</span></span><span class="tp-num">T22</span></a>
-      <a href="app/index.html" class="tp" aria-label="Topic 23: Batteries and DC Systems"><span class="tp-ic" aria-hidden="true">🔋</span><span class="tp-info"><span class="tp-name">Batteries &amp; DC Systems</span></span><span class="tp-num">T23</span></a>
-    </nav>
+    
+    <div style="display:flex;flex-direction:column;gap:32px">
+      <!-- ORAL PREP BOX -->
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);overflow:hidden">
+        <div style="padding:clamp(20px, 4vw, 32px);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.02)">
+          <div>
+            <h3 style="font-size:22px;font-weight:800;color:var(--t1)">ETO Oral Prep</h3>
+            <p style="font-size:14px;color:var(--t2);margin-top:4px">All 23 topics with structured notes and quiz questions.</p>
+          </div>
+          <a href="app/index.html" class="access-link" style="margin:0">Open App →</a>
+        </div>
+        <div style="padding:clamp(20px, 4vw, 32px)">
+          <div style="display:flex;flex-direction:column;gap:12px;color:var(--t2);font-size:15px;line-height:1.6">
+            <p>The Oral Exam section provides a comprehensive, structured study environment for all core MMD oral topics.</p>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-top:8px">
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span> 
+                <span><strong>23 Core Topics</strong> categorized perfectly (Alternators, High Voltage, Motors, Switchboards, MARPOL, etc.)</span>
+              </li>
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span> 
+                <span><strong>Detailed Study Notes</strong> built with tables, diagrams, and specific surveyor callouts.</span>
+              </li>
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span> 
+                <span><strong>700+ Quiz Questions</strong> based on real surveyor exam patterns with detailed explanations.</span>
+              </li>
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span> 
+                <span><strong>Progress Tracking</strong> to monitor your readiness and drill your weak areas.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- WRITTEN PREP BOX -->
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);overflow:hidden;opacity:0.5">
+        <div style="padding:clamp(20px, 4vw, 32px);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.02)">
+          <div>
+            <h3 style="font-size:22px;font-weight:800;color:var(--t1)">Written Exam Prep</h3>
+            <p style="font-size:14px;color:var(--t2);margin-top:4px">Past papers, numerical solutions, and long-form answers.</p>
+          </div>
+          <span style="display:inline-flex;align-items:center;padding:8px 16px;border-radius:var(--r8);background:var(--s3);color:var(--t1);font-size:13px;font-weight:700;border:1px solid var(--border2)">Coming Soon</span>
+        </div>
+        <div style="padding:clamp(20px, 4vw, 32px)">
+          <div style="display:flex;flex-direction:column;gap:12px;color:var(--t2);font-size:15px;line-height:1.6">
+            <p>A structured approach to passing the ETO Written Examination with absolute confidence.</p>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-top:8px">
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
+                <span>Past question papers categorized by topic.</span>
+              </li>
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
+                <span>Step-by-step numerical solutions.</span>
+              </li>
+              <li style="display:flex;align-items:flex-start;gap:10px">
+                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
+                <span>Long-form descriptive answers and circuit diagrams.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -460,7 +520,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
 
       <!-- PHONE -->
       <div class="access-card mobile">
-        <div class="access-card-icon">📱</div>
+        <div class="access-card-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></g></svg></div>
         <h3 class="access-card-title">Phone — Add to Home Screen</h3>
         <p class="access-card-sub">Add the app to your home screen so it opens like a native app — full screen, no browser bars, one tap to open.</p>
 
@@ -520,7 +580,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
     <div class="cta-wrap">
       <h2 id="cta-heading" class="cta-title">Ready to start?<br><span>Your oral is waiting.</span></h2>
       <p class="cta-sub">Open the app, pick a topic, and start building your knowledge base. The surveyor table is a lot less scary when you actually know your stuff.</p>
-      <a href="app/index.html" class="btn-xl btn-primary" style="font-size:16px;height:56px;padding:0 44px" role="button">📚 Open Study App →</a>
+      <a href="app/index.html" class="btn-xl btn-primary" style="font-size:16px;height:56px;padding:0 44px" role="button"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg> Open Study App →</a>
       <p class="cta-note">Free forever · No login required · Works on all devices<br>Always cross-reference with official technical manuals and regulations</p>
     </div>
   </div>

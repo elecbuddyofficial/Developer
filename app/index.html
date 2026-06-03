@@ -410,36 +410,52 @@ a.sb-item{text-decoration:none}
 }
 
 .sb-spacer{flex:1}
+
+/* ─── SVG ICONS ─── */
+.svg-ic {
+  width: 1.2em;
+  height: 1.2em;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: text-bottom;
+  display: inline-block;
+}
 </style>
 </head>
 <body>
 <div id="topbar">
   <div class="logo">ETO Oral Prep <span>ETO CoC · STCW Reg. III/6</span></div>
   <div class="spacer"></div>
-  <div class="tb-badge" id="topbar-badge">📖 Topic 1 of 23</div>
+  <div class="tb-badge" id="topbar-badge"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic 1 of 23</div>
 </div>
 <div id="layout">
 <div id="sidebar">
   <div class="sb-section">Navigation</div>
   <button class="sb-item active" id="si-welcome" onclick="showView('welcome')">
-    <span class="ic">🏠</span><span class="label">Home</span>
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg></span><span class="label">Home</span>
   </button>
   <div class="sb-divider"></div>
   <button class="sb-item" id="si-oral" onclick="showView('oral')">
-    <span class="ic">📚</span><span class="label">Oral Exam Section</span>
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg></span><span class="label">Oral Exam Section</span>
   </button>
   <button class="sb-item" id="si-written" onclick="showView('written')">
-    <span class="ic">📝</span><span class="label">Written Section</span>
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg></span><span class="label">Written Section</span>
     <span class="cnt" style="font-size:9px">Soon</span>
   </button>
   <button class="sb-item" id="si-quiz-bank" onclick="showView('quiz-bank');initQuizBank()">
-    <span class="ic">🎯</span><span class="label">Quiz Bank</span>
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></span><span class="label">Quiz Bank</span>
   </button>
   <div id="topic-side-list"></div>
   <div class="sb-spacer"></div>
+  <a class="sb-item" href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="color:var(--orange);font-weight:700;background:rgba(245, 158, 11, 0.05);border:1px solid rgba(245, 158, 11, 0.2)">
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg></span><span class="label">Support Project</span>
+  </a>
   <div class="sb-divider"></div>
   <a class="sb-item" href="../index.html" title="About this app">
-    <span class="ic">ℹ️</span><span class="label">About</span>
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></g></svg></span><span class="label">About</span>
   </a>
 </div>
 <div id="main">
@@ -452,13 +468,13 @@ a.sb-item{text-decoration:none}
     <p>ETO CoC Oral Assessment Preparation. Your complete guide to passing the Oral and Written examinations.</p>
     <div class="welcome-grid">
       <div class="welcome-card" onclick="showView('oral')">
-        <div class="wc-icon">📚</div>
+        <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg></div>
         <h3>Oral Preparation</h3>
         <p>Comprehensive study notes, diagrams, and quizzes covering 23 core oral topics.</p>
         <div class="wc-badge">23 Topics</div>
       </div>
       <div class="welcome-card" onclick="showView('written')" style="opacity:0.6;cursor:default">
-        <div class="wc-icon">📝</div>
+        <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg></div>
         <h3>Written Preparation</h3>
         <p>Past papers, numerical solutions, and long-form answers for the written exam.</p>
         <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
@@ -472,7 +488,7 @@ a.sb-item{text-decoration:none}
 <div class="view" id="view-oral">
   <div style="max-width:700px;margin:0 auto">
     <div style="text-align:center;padding:32px 0 28px">
-      <div style="font-size:36px;margin-bottom:12px">📚</div>
+      <div style="font-size:36px;margin-bottom:12px"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg></div>
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Oral Exam Section</h1>
       <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · 23 Topics</p>
     </div>
@@ -484,7 +500,7 @@ a.sb-item{text-decoration:none}
         <div class="wc-badge">2 topics ready</div>
       </div>
       <div class="welcome-card" onclick="showView('quiz-picker')">
-        <div class="wc-icon">🎯</div>
+        <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
         <h3>Quiz Practice</h3>
         <p>Drill questions by topic and category. Instant feedback with explanations after each answer.</p>
         <div class="wc-badge" style="background:var(--green-dim);border-color:var(--green-border);color:var(--green)">333 questions</div>
@@ -497,7 +513,7 @@ a.sb-item{text-decoration:none}
 <div class="view" id="view-written">
   <div style="max-width:700px;margin:0 auto">
     <div style="text-align:center;padding:32px 0 28px">
-      <div style="font-size:36px;margin-bottom:12px">📝</div>
+      <div style="font-size:36px;margin-bottom:12px"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg></div>
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Written Exam Section</h1>
       <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · Past Papers & Numerical Solutions</p>
     </div>
@@ -509,7 +525,7 @@ a.sb-item{text-decoration:none}
         <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
       </div>
       <div class="welcome-card" style="opacity:0.6;cursor:default">
-        <div class="wc-icon">🎯</div>
+        <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
         <h3>Practice Questions</h3>
         <p>Past paper questions, numerical drills, and objective-type questions for written prep.</p>
         <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
@@ -535,7 +551,7 @@ a.sb-item{text-decoration:none}
   <div style="max-width:860px">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
       <button class="anc-btn" onclick="showView('oral')" style="border-color:var(--blue);color:var(--blue)">← Oral Section</button>
-      <h2 style="font-size:18px;font-weight:800;color:var(--text)">🎯 Quiz Practice - Select Topic</h2>
+      <h2 style="font-size:18px;font-weight:800;color:var(--text)"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Practice - Select Topic</h2>
     </div>
     <div id="quiz-topic-grid" class="qcat-grid"></div>
   </div>
@@ -545,7 +561,7 @@ a.sb-item{text-decoration:none}
 <div class="view" id="view-quiz-bank">
   <div id="quiz-bank-inner">
     <div class="qb-header">
-      <h2>🎯 Quiz Bank</h2>
+      <h2><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank</h2>
       <p>Pick a section, filter by topic and category, choose how many questions — then go.</p>
     </div>
 
@@ -553,9 +569,9 @@ a.sb-item{text-decoration:none}
     <div class="qb-row">
       <div class="qb-label">Section</div>
       <div class="qb-seg" id="qb-sections">
-        <button class="qb-seg-btn active" data-sec="oral" onclick="qbSetSection('oral')">📚 Oral</button>
-        <button class="qb-seg-btn disabled" data-sec="written" title="Coming soon">📝 Written <span style="font-size:10px;opacity:.7">Soon</span></button>
-        <button class="qb-seg-btn disabled" data-sec="combined" title="Coming soon">⚡ Combined <span style="font-size:10px;opacity:.7">Soon</span></button>
+        <button class="qb-seg-btn active" data-sec="oral" onclick="qbSetSection('oral')"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg> Oral</button>
+        <button class="qb-seg-btn disabled" data-sec="written" title="Coming soon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg> Written <span style="font-size:10px;opacity:.7">Soon</span></button>
+        <button class="qb-seg-btn disabled" data-sec="combined" title="Coming soon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg> Combined <span style="font-size:10px;opacity:.7">Soon</span></button>
       </div>
     </div>
 
@@ -622,7 +638,7 @@ a.sb-item{text-decoration:none}
       <span id="quiz-topic-label" style="font-size:13px;color:var(--text2)">T01 - Alternator</span>
     </div>
     <div class="quiz-topic-header">
-      <div class="icon">🎯</div>
+      <div class="icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
       <div>
         <h2 id="quiz-topic-h2">Topic 1 - Alternator Quiz</h2>
         <p id="quiz-topic-desc">Select a category to drill, or run all questions in random order.</p>
@@ -692,7 +708,7 @@ window.loadNotes = function(topicId, htmlContent) {
 window.fetchTopicData = function(topicId, topicKey) {
     var tNum = parseInt(topicId.substring(1), 10);
     var tbBadge = document.getElementById('topbar-badge');
-    if (tbBadge) tbBadge.textContent = '📖 Topic ' + tNum + ' of 23';
+    if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of 23';
 
     // Inject Script tags dynamically
     if (!window.NOTE_HTML[topicId]) {
@@ -820,18 +836,18 @@ var CAT_NAMES={
   /* T04 - Switchboard */
   ACB:"ACB Construction & Arc Quench",POS:"ACB Positions",OCR:"Overcurrent Relay (IDMT)",RPR:"Reverse Power Relay",UFP:"Under-Frequency Protection",BTB:"Bus Tie Breaker",GSP:"Group Starter Panel",EDG:"Emergency Generator",BAT:"Battery Testing & Types",GMD:"GMDSS Battery (SOLAS)",UPS:"UPS Systems",SHC:"Shore Connection",PRT:"Preferential Trip",MSB:"MSB Safeties",MNT:"ACB Maintenance"
 };
-var CAT_ICONS={WP:"⚡",HV:"⚡",VCB:"🔘",NER:"🔌",MSB:"📦",SAF:"🔐",GLV:"🧤",IR:"🔍",IRM:"📡",BON:"🔗",SHF:"🔩",EX:"🔋",BL:"🔄",AVR:"🎛️",RM:"🔦",SY:"🔁",LS:"⚖️",PR:"🛡️",MT:"🔧",AG:"📐",OS:"🚀",BT:"⬛",SOL:"📋",FT:"🔍",SR:"💡",EM:"🔌",ACB:"⚡",POS:"📍",OCR:"⏱️",RPR:"🔄",UFP:"📉",BTB:"🔀",GSP:"🎛️",EDG:"🔋",BAT:"🔋",GMD:"📡",UPS:"🔌",SHC:"🏗️",PRT:"⚖️",MNT:"🔧"};
+var CAT_ICONS={WP:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,HV:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,VCB:"🔘",NER:"🔌",MSB:"📦",SAF:"🔐",GLV:"🧤",IR:"🔍",IRM:"📡",BON:"🔗",SHF:"🔩",EX:"🔋",BL:"🔄",AVR:"🎛️",RM:"🔦",SY:"🔁",LS:"⚖️",PR:"🛡️",MT:"🔧",AG:"📐",OS:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></g></svg>`,BT:"⬛",SOL:"📋",FT:"🔍",SR:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 14c.2-1 .7-1.7 1.5-2.5c1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5c.7.7 1.3 1.5 1.5 2.5m0 4h6m-5 4h4"/></svg>`,EM:"🔌",ACB:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,POS:"📍",OCR:"⏱️",RPR:"🔄",UFP:"📉",BTB:"🔀",GSP:"🎛️",EDG:"🔋",BAT:"🔋",GMD:"📡",UPS:"🔌",SHC:"🏗️",PRT:"⚖️",MNT:"🔧"};
 
 // ═══ TOPICS MASTER LIST ═══════════════════════════════════════════════════════
 var TOPICS = [
-  {id:'T01',key:'T01_Alternator',name:'Alternator & Generator',icon:'⚡',notesView:'notes-t01',notesReady:true},
-  {id:'T02',key:'T02_HV',name:'High Voltage Systems',icon:'⚡',notesView:'notes-t02',notesReady:true},
+  {id:'T01',key:'T01_Alternator',name:'Alternator & Generator',icon:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,notesView:'notes-t01',notesReady:true},
+  {id:'T02',key:'T02_HV',name:'High Voltage Systems',icon:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,notesView:'notes-t02',notesReady:true},
   {id:'T03',key:'T03_Motors',name:'Electric Motors',icon:'⚙️',notesView:'notes-t03',notesReady:true},
   {id:'T04',key:'T04_Switchboard',name:'Switchboard & Circuit Breakers',icon:'🎛️',notesView:'notes-t04',notesReady:true},
   {id:'T05',key:'T05_Transformers',name:'Transformers',icon:'🔄',notesView:'notes-t05',notesReady:true},
   {id:'T06',key:'T06_Sensors',name:'Sensors & Instrumentation',icon:'📡',notesView:'notes-t06',notesReady:true},
   {id:'T07',key:'T07_Control_PLC',name:'Control Systems & PLC',icon:'🖥️',notesView:'notes-t07',notesReady:true},
-  {id:'T08',key:'T08_Electronics',name:'Electronics',icon:'💡',notesView:'notes-t08',notesReady:true},
+  {id:'T08',key:'T08_Electronics',name:'Electronics',icon:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 14c.2-1 .7-1.7 1.5-2.5c1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5c.7.7 1.3 1.5 1.5 2.5m0 4h6m-5 4h4"/></svg>`,notesView:'notes-t08',notesReady:true},
   {id:'T09',key:'T09_ShipMachinery',name:'Ship Machinery',icon:'⚓',notesView:'notes-t09',notesReady:true},
   {id:'T10',key:'T10_ICCP',name:'ICCP & Corrosion',icon:'🛡️',notesView:'notes-t10',notesReady:true},
   {id:'T11',key:'T11_PowerFactor',name:'Power Factor',icon:'📊',notesView:'notes-t11',notesReady:true},
@@ -909,7 +925,7 @@ function goToQuizFromNotes(topicId){
   var qh2 = document.getElementById('quiz-topic-h2');
   if (qh2) qh2.textContent = 'Topic ' + tNum + ' - ' + t.name + ' Quiz';
   var tbBadge = document.getElementById('topbar-badge');
-  if (tbBadge) tbBadge.textContent = '📖 Topic ' + tNum + ' of 23';
+  if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of 23';
   
   if (!window.QD || !window.QD[t.key]) {
       let quizScript = document.createElement('script');
@@ -928,7 +944,7 @@ function goToQuizFromNotes(topicId){
 function showView(n){
   if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank') {
      var tbBadge = document.getElementById('topbar-badge');
-     if (tbBadge) tbBadge.textContent = '📖 MMD Prep';
+     if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> MMD Prep';
      // Hide topic sidebar list when leaving notes
      var tsl = document.getElementById('topic-side-list');
      if (tsl) tsl.style.display = 'none';
@@ -1094,7 +1110,7 @@ function showScore(){
   var updBar=document.getElementById('qtgp-'+ACTIVE_TOPIC);
   if(updBar){var np=getProgress(ACTIVE_TOPIC);var nc=np>=80?'var(--green)':np>=50?'var(--orange)':'var(--blue)';updBar.style.width=np+'%';updBar.style.background=nc;}
   var col=pct>=70?'var(--green)':pct>=50?'var(--orange)':'var(--red)';
-  var emoji=pct>=80?'🎉':pct>=60?'👍':'📚';
+  var emoji=pct>=80?'🎉':pct>=60?'👍':`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg>`;
   document.getElementById('quiz-active').innerHTML='<div class="score-screen"><div class="score-emoji">'+emoji+'</div><div class="score-pct" style="color:'+col+'">'+pct+'%</div><div class="score-sub">'+QZ.correct+' correct of '+tot+' &nbsp;·&nbsp; '+esc(QZ.catName)+'</div><div class="score-breakdown"><div class="score-stat"><div class="n" style="color:var(--green)">'+QZ.correct+'</div><div class="l">Correct</div></div><div class="score-stat"><div class="n" style="color:var(--red)">'+(tot-QZ.correct)+'</div><div class="l">Wrong/Skipped</div></div><div class="score-stat"><div class="n" style="color:var(--blue)">'+tot+'</div><div class="l">Total</div></div></div><div class="score-actions"><button class="btn btn-green" onclick="startQuiz(QZ.catName,QZ.qs)">Try Again</button><button class="btn btn-ghost" onclick="exitQuiz()">Categories</button></div></div>';
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1330,7 +1346,7 @@ function qbUpdateSummary() {
   if (QB.allTopics) { el.textContent = 'All 23 Topics'; return; }
   var sel = TOPICS.filter(function(t){ return QB.topics[t.id]; });
   if (sel.length === 0) { el.textContent = 'All 23 Topics'; QB.allTopics = true; return; }
-  if (sel.length <= 3) el.textContent = sel.map(function(t){ return t.icon + ' ' + t.id; }).join(', ');
+  if (sel.length <= 3) el.innerHTML = sel.map(function(t){ return t.icon + ' ' + t.id; }).join(', ');
   else el.textContent = sel.length + ' topics selected';
 }
 
@@ -1462,14 +1478,14 @@ function qbStart() {
   for(var i=shuffled.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=shuffled[i];shuffled[i]=shuffled[j];shuffled[j]=tmp;}
   var final = QB.count === 0 ? shuffled : shuffled.slice(0, QB.count);
   var topicCount = QB.allTopics ? TOPICS.length : Object.values(QB.topics).filter(Boolean).length;
-  var label = '🎯 Quiz Bank (' + topicCount + ' topic' + (topicCount !== 1 ? 's' : '') + ')';
+  var label = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank (' + topicCount + ' topic' + (topicCount !== 1 ? 's' : '') + ')';
   ACTIVE_TOPIC = 'QUIZ_BANK';
   document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
   document.querySelectorAll('.sb-item').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('si-quiz-bank').classList.add('active');
   document.getElementById('quiz-topic-label').textContent = label;
   document.getElementById('quiz-topic-h2').textContent = label;
-  document.getElementById('topbar-badge').textContent = '🎯 Quiz Bank';
+  document.getElementById('topbar-badge').innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank';
   startQuiz(label, final);
   document.getElementById('view-quiz').classList.add('active');
   document.getElementById('quiz-home').style.display = 'none';
