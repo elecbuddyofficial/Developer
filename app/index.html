@@ -1062,7 +1062,14 @@ function prevQ(){
   document.getElementById('prevBtn').style.display=QZ.history.length?'inline-block':'none';
 }
 function nextQ(){renderQ()}
-function exitQuiz(){document.getElementById('quiz-home').style.display='block';document.getElementById('quiz-active').style.display='none';}
+function exitQuiz(){
+  if(ACTIVE_TOPIC === 'QUIZ_BANK'){
+    showView('quiz-bank');
+  } else {
+    document.getElementById('quiz-home').style.display='block';
+    document.getElementById('quiz-active').style.display='none';
+  }
+}
 // Progress logic
 function saveProgress(topic, cat, score, total) {
   var p = JSON.parse(localStorage.getItem('eto_progress') || '{}');
