@@ -573,8 +573,21 @@ a.sb-item{text-decoration:none}
 
     <!-- Categories -->
     <div class="qb-row">
-      <div class="qb-label">Category <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)" id="qb-cat-hint"> — all selected</span></div>
-      <div class="qb-cats" id="qb-cat-pills"><p class="qb-cats-empty">Loading...</p></div>
+      <div class="qb-label">Category</div>
+      <div class="qb-dropdown" id="qb-cat-dropdown">
+        <div class="qb-dropdown-trigger" onclick="qbToggleCatDropdown()">
+          <span id="qb-cat-summary">All Categories</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="qb-dropdown-panel" id="qb-cat-panel">
+          <div style="padding:10px 14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--surface2);z-index:2">
+            <input type="text" id="qb-cat-search" placeholder="Search categories..." oninput="qbFilterCats()" style="width:100%;padding:8px 12px;border-radius:var(--r6);border:1px solid var(--border2);background:var(--surface);color:var(--text);font-size:13px;outline:none" autocomplete="off">
+          </div>
+          <div id="qb-cat-list">
+            <p class="qb-cats-empty" style="padding:14px;color:var(--text3)">Loading...</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Question count -->
@@ -1215,11 +1228,42 @@ function initQuizBank() {
   });
   qbBuildDropdown();
   qbEnsureLoaded();
-  // Close dropdown on outside click — register only once
+  // Close dropdowns on outside click
   if (!_qbClickHandler) {
-    _qbClickHandler = function(e){ if(!e.target.closest('#qb-topic-dropdown'))qbCloseDropdown(); };
+    _qbClickHandler = function(e){ 
+      if(!e.target.closest('#qb-topic-dropdown')) qbCloseDropdown(); 
+      if(!e.target.closest('#qb-cat-dropdown')) qbCloseCatDropdown(); 
+    };
     document.addEventListener('click', _qbClickHandler);
   }
+}
+
+// ── Category Dropdown ──
+var QB_catDropOpen = false;
+function qbToggleCatDropdown() {
+  QB_catDropOpen ? qbCloseCatDropdown() : qbOpenCatDropdown();
+}
+function qbOpenCatDropdown() {
+  QB_catDropOpen = true;
+  document.getElementById('qb-cat-dropdown').querySelector('.qb-dropdown-trigger').classList.add('open');
+  document.getElementById('qb-cat-panel').classList.add('open');
+  var searchInput = document.getElementById('qb-cat-search');
+  if (searchInput) { searchInput.value = ''; qbFilterCats(); searchInput.focus(); }
+}
+function qbCloseCatDropdown() {
+  QB_catDropOpen = false;
+  var dropdown = document.getElementById('qb-cat-dropdown');
+  if (dropdown) dropdown.querySelector('.qb-dropdown-trigger').classList.remove('open');
+  var panel = document.getElementById('qb-cat-panel');
+  if (panel) panel.classList.remove('open');
+}
+function qbFilterCats() {
+  var term = document.getElementById('qb-cat-search').value.toLowerCase();
+  var items = document.querySelectorAll('.qb-cat-item-row');
+  items.forEach(function(item) {
+    var txt = item.textContent.toLowerCase();
+    item.style.display = txt.indexOf(term) > -1 ? 'flex' : 'none';
+  });
 }
 
 function qbSetSection(sec) {
@@ -1311,8 +1355,8 @@ function qbGetPool() {
 }
 
 function qbUpdateCatPills() {
-  var pills = document.getElementById('qb-cat-pills');
-  var hint = document.getElementById('qb-cat-hint');
+  var list = document.getElementById('qb-cat-list');
+  var summary = document.getElementById('qb-cat-summary');
   var pool = [];
   var topics = QB.allTopics ? TOPICS : TOPICS.filter(function(t){ return QB.topics[t.id]; });
   topics.forEach(function(t) {
@@ -1320,41 +1364,61 @@ function qbUpdateCatPills() {
     pool = pool.concat(qs);
   });
   if (pool.length === 0) {
-    pills.innerHTML = '<p class="qb-cats-empty">Loading...</p>';
+    list.innerHTML = '<p style="padding:14px;color:var(--text3)">Loading...</p>';
+    summary.textContent = 'Loading...';
     return;
   }
   var catCounts = {};
   pool.forEach(function(q) { catCounts[q.cat] = (catCounts[q.cat] || 0) + 1; });
-  var sortedCats = Object.keys(catCounts).sort(function(a,b){ return catCounts[b] - catCounts[a]; });
-  pills.innerHTML = '';
-  // "All" pill
-  var allBtn = document.createElement('button');
-  allBtn.className = 'qb-cat-pill all-cat' + (QB.allCats ? ' active' : '');
-  allBtn.textContent = 'All Categories';
-  allBtn.onclick = function() {
+  var sortedCats = Object.keys(catCounts).sort(function(a,b){ 
+    var nameA = qbCatName(a).toLowerCase();
+    var nameB = qbCatName(b).toLowerCase();
+    return nameA.localeCompare(nameB);
+  });
+  
+  list.innerHTML = '';
+  // "All" row
+  var allBtn = document.createElement('div');
+  allBtn.className = 'qb-drop-item qb-drop-all qb-cat-item-row' + (QB.allCats ? ' checked' : '');
+  allBtn.innerHTML = '<span class="chk">' + (QB.allCats ? '✓' : '') + '</span>All Categories';
+  allBtn.onclick = function(e) {
+    e.stopPropagation();
     QB.allCats = true; QB.cats = {};
-    hint.textContent = ' — all selected';
     qbUpdateCatPills(); qbUpdatePreview();
   };
-  pills.appendChild(allBtn);
+  list.appendChild(allBtn);
+  var div = document.createElement('div'); div.className = 'qb-drop-divider qb-cat-item-row'; list.appendChild(div);
+  
   sortedCats.forEach(function(cat) {
-    var btn = document.createElement('button');
+    var btn = document.createElement('div');
     var sel = !QB.allCats && QB.cats[cat];
-    btn.className = 'qb-cat-pill' + (sel ? ' active' : '');
-    btn.title = cat; // show raw code as tooltip
-    btn.textContent = qbCatName(cat) + ' (' + catCounts[cat] + ')';
-    btn.onclick = function() {
+    btn.className = 'qb-drop-item qb-cat-item-row' + (sel ? ' checked' : '');
+    btn.title = cat;
+    btn.innerHTML = '<span class="chk">' + (sel ? '✓' : '') + '</span>' + qbCatName(cat) + ' <span style="opacity:0.5;margin-left:auto;font-size:11px">' + catCounts[cat] + '</span>';
+    btn.onclick = function(e) {
+      e.stopPropagation();
       QB.allCats = false;
       QB.cats[cat] = !QB.cats[cat];
-      if (!Object.values(QB.cats).some(Boolean)) { QB.allCats = true; hint.textContent = ' — all selected'; }
-      else {
-        var selNames = Object.keys(QB.cats).filter(function(k){ return QB.cats[k]; }).map(qbCatName);
-        hint.textContent = ' — ' + (selNames.length <= 2 ? selNames.join(', ') : selNames.length + ' selected');
-      }
+      if (!Object.values(QB.cats).some(Boolean)) { QB.allCats = true; }
       qbUpdateCatPills(); qbUpdatePreview();
     };
-    pills.appendChild(btn);
+    list.appendChild(btn);
   });
+  
+  // Update Summary Text
+  if (QB.allCats) { 
+    summary.textContent = 'All Categories'; 
+  } else {
+    var selNames = Object.keys(QB.cats).filter(function(k){ return QB.cats[k]; }).map(qbCatName);
+    if (selNames.length === 0) {
+      summary.textContent = 'All Categories'; 
+      QB.allCats = true;
+    } else if (selNames.length <= 2) {
+      summary.textContent = selNames.join(', ');
+    } else {
+      summary.textContent = selNames.length + ' categories selected';
+    }
+  }
 }
 
 function qbSetCount(n) {
