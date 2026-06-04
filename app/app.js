@@ -46,6 +46,11 @@ window.fetchTopicData = function(topicId, topicKey) {
         quizScript.src = '../data/quizzes/' + topicId.toLowerCase() + '_quiz.js';
         document.head.appendChild(quizScript);
     }
+    
+    // URL Routing
+    if (!window._isRouting) {
+        window.history.pushState(null, '', '#notes=' + topicId);
+    }
 };
 
 // Build scrollable dimmed topic list in sidebar
@@ -249,6 +254,11 @@ function goToQuizFromNotes(topicId){
       buildCatGrid();
       showView('quiz');
   }
+  
+  // URL Routing
+  if (!window._isRouting) {
+      window.history.pushState(null, '', '#quiz=' + topicId);
+  }
 }
 
 function toggleMobileMenu() {
@@ -279,9 +289,13 @@ function showView(n){
   if(n==='oral'){var so=document.getElementById('si-oral');if(so)so.classList.add('active');}
   if(n==='notes-picker')buildNotesTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
-  if(n==='quiz')
-
-buildCatGrid();
+  if(n==='quiz') buildCatGrid();
+  
+  // URL Routing
+  if (!window._isRouting) {
+      if (n === 'welcome') window.history.pushState(null, '', window.location.pathname);
+      else window.history.pushState(null, '', '#' + n);
+  }
 }
 function jumpTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})}
 function buildCatGrid(){
@@ -301,7 +315,19 @@ function buildCatGrid(){
   var topicProgCol=topicProg>=80?'var(--green)':topicProg>=50?'var(--orange)':'var(--blue)';
   var ab=document.createElement('button');ab.className='qcat-btn all-btn';
   ab.innerHTML='<div class="cat-name">🎲 All Categories - Mixed</div><div class="cat-count">'+qs.length+' questions</div><div class="cat-bar"><div class="cat-fill" style="width:'+topicProg+'%;background:'+topicProgCol+'"></div></div>';
-  ab.onclick=function(){startQuiz('All Topics',qs)};grid.appendChild(ab);
+  ab.onclick=function(){
+      var catId = 'All Topics';
+      var dName = 'All Categories - Mixed';
+      var saved = localStorage.getItem(getQuizStateKey(catId));
+      if (saved) {
+          showCustomConfirm("Resume Quiz", "You have an unfinished quiz in 'All Categories'.", "Resume Quiz", "Start Fresh", 
+              function(){ startQuiz(catId, dName, qs, JSON.parse(saved)); },
+              function(){ startQuiz(catId, dName, qs); });
+      } else {
+          startQuiz(catId, dName, qs);
+      }
+  };
+  grid.appendChild(ab);
   
   var savedP=JSON.parse(localStorage.getItem('eto_progress')||'{}');
   var catScores=(savedP[ACTIVE_TOPIC]&&savedP[ACTIVE_TOPIC].cats)||{};
@@ -309,17 +335,164 @@ function buildCatGrid(){
     var n=cats[cat]||0;if(!n)return;
     var btn=document.createElement('button');btn.className='qcat-btn';
     var catProg=catScores[cat]||0;
+    
+    var activeProg = getActiveQuizCompletion(ACTIVE_TOPIC, cat);
+    if (activeProg > catProg) catProg = activeProg;
+    
     var catCol=catProg>=80?'var(--green)':catProg>=50?'var(--orange)':'var(--blue)';
     var dName = typeof CAT_NAMES !== 'undefined' && CAT_NAMES[cat] ? CAT_NAMES[cat] : cat;
     var dIcon = typeof CAT_ICONS !== 'undefined' && CAT_ICONS[cat] ? CAT_ICONS[cat] : '📘';
     btn.innerHTML='<div class="cat-name">'+dIcon+'&nbsp;'+dName+'</div><div class="cat-count">'+n+' questions</div><div class="cat-bar"><div class="cat-fill" style="width:'+catProg+'%;background:'+catCol+'"></div></div>';
-    btn.onclick=function(){var f=qs.filter(function(q){return q.cat===cat});startQuiz(dName,f)};
+    btn.onclick=function(){
+        var f=qs.filter(function(q){return q.cat===cat});
+        var saved = localStorage.getItem(getQuizStateKey(cat));
+        if (saved) {
+            showCustomConfirm("Resume Quiz", "You have an unfinished quiz in '"+dName+"'.", "Resume Quiz", "Start Fresh",
+                function(){ startQuiz(cat, dName, f, JSON.parse(saved)); },
+                function(){ startQuiz(cat, dName, f); });
+        } else {
+            startQuiz(cat, dName, f);
+        }
+    };
     grid.appendChild(btn);
   });
+  
+  var rst=document.createElement('div');
+  rst.style.textAlign='center';
+  rst.style.marginTop='20px';
+  rst.innerHTML='<button style="background:none;border:none;color:var(--text3);text-decoration:underline;cursor:pointer;font-family:inherit;padding:10px;">Reset Topic Progress</button>';
+  rst.onclick=function(){
+      showCustomConfirm("Reset Progress", "Are you sure you want to reset all progress and saved quizzes for this topic back to 0%?", "Yes, Reset", "Cancel",
+          function(){
+              var p = JSON.parse(localStorage.getItem('eto_progress')||'{}');
+              delete p[ACTIVE_TOPIC];
+              localStorage.setItem('eto_progress', JSON.stringify(p));
+              for (var i = localStorage.length - 1; i >= 0; i--) {
+                  var k = localStorage.key(i);
+                  if (k && k.startsWith('eto_qz_state_' + ACTIVE_TOPIC + '_')) {
+                      localStorage.removeItem(k);
+                  }
+              }
+              buildCatGrid();
+          }, null);
+  };
+  grid.appendChild(rst);
 }
-var QZ={qs:[],i:0,correct:0,catName:'',answered:false,history:[]};
-function startQuiz(catName,qs){
-  QZ.qs=shuffle(qs.slice());QZ.i=0;QZ.correct=0;QZ.catName=catName;QZ.answered=false;QZ.history=[];
+
+function showCustomConfirm(title, msg, confirmText, cancelText, onConfirm, onCancel) {
+  var overlay = document.createElement('div');
+  overlay.className = 'custom-modal-overlay';
+  overlay.style.position = 'fixed';
+  overlay.style.top = '0'; overlay.style.left = '0'; overlay.style.width = '100%'; overlay.style.height = '100%';
+  overlay.style.backgroundColor = 'rgba(0,0,0,0.6)';
+  overlay.style.backdropFilter = 'blur(4px)';
+  overlay.style.zIndex = '9999';
+  overlay.style.display = 'flex';
+  overlay.style.alignItems = 'center';
+  overlay.style.justifyContent = 'center';
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.2s';
+  
+  var modal = document.createElement('div');
+  modal.className = 'custom-modal';
+  modal.style.backgroundColor = 'var(--surface)';
+  modal.style.border = '1px solid var(--border)';
+  modal.style.borderRadius = '12px';
+  modal.style.padding = '24px';
+  modal.style.width = '90%';
+  modal.style.maxWidth = '400px';
+  modal.style.boxShadow = '0 20px 40px rgba(0,0,0,0.4)';
+  modal.style.transform = 'translateY(20px)';
+  modal.style.transition = 'transform 0.2s';
+  
+  var h = document.createElement('h3');
+  h.style.marginTop = '0';
+  h.style.color = 'var(--text)';
+  h.style.fontSize = '18px';
+  h.textContent = title;
+  
+  var p = document.createElement('p');
+  p.style.color = 'var(--text2)';
+  p.style.fontSize = '14px';
+  p.style.marginBottom = '24px';
+  p.style.lineHeight = '1.5';
+  p.textContent = msg;
+  
+  var btnBox = document.createElement('div');
+  btnBox.style.display = 'flex';
+  btnBox.style.flexDirection = 'column';
+  btnBox.style.gap = '10px';
+  
+  var confirmBtn = document.createElement('button');
+  confirmBtn.className = 'btn btn-green';
+  confirmBtn.textContent = confirmText;
+  confirmBtn.onclick = function() { close(); if(onConfirm) onConfirm(); };
+  
+  var cancelBtn = document.createElement('button');
+  cancelBtn.className = 'btn btn-ghost';
+  if (cancelText === 'Start Fresh') {
+      cancelBtn.style.color = 'var(--orange)';
+      cancelBtn.style.borderColor = 'var(--orange)';
+  }
+  cancelBtn.textContent = cancelText;
+  cancelBtn.onclick = function() { close(); if(onCancel) onCancel(); };
+  
+  var xBtn = document.createElement('button');
+  xBtn.innerHTML = '×';
+  xBtn.style.position = 'absolute';
+  xBtn.style.top = '12px'; xBtn.style.right = '16px';
+  xBtn.style.background = 'none'; xBtn.style.border = 'none';
+  xBtn.style.color = 'var(--text3)'; xBtn.style.fontSize = '24px';
+  xBtn.style.cursor = 'pointer';
+  xBtn.onclick = close;
+  
+  btnBox.appendChild(confirmBtn);
+  btnBox.appendChild(cancelBtn);
+  
+  modal.appendChild(xBtn);
+  modal.appendChild(h);
+  modal.appendChild(p);
+  modal.appendChild(btnBox);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  
+  setTimeout(function() {
+      overlay.style.opacity = '1';
+      modal.style.transform = 'translateY(0)';
+  }, 10);
+  
+  function close() {
+      overlay.style.opacity = '0';
+      modal.style.transform = 'translateY(20px)';
+      setTimeout(function() {
+          if(overlay.parentNode) overlay.parentNode.removeChild(overlay);
+      }, 200);
+  }
+}
+
+function getQuizStateKey(catId) {
+  if (ACTIVE_TOPIC === 'QUIZ_BANK') return null;
+  return 'eto_qz_state_' + ACTIVE_TOPIC + '_' + catId;
+}
+function saveActiveQuiz() {
+  var key = getQuizStateKey(QZ.catId);
+  if (key) localStorage.setItem(key, JSON.stringify(QZ));
+}
+function clearActiveQuiz(catId) {
+  var key = getQuizStateKey(catId);
+  if (key) localStorage.removeItem(key);
+}
+
+var QZ={qs:[],i:0,correct:0,catId:'',catName:'',answered:false,history:[]};
+function startQuiz(catId,catName,qs,savedState){
+  if (savedState) {
+      QZ = savedState;
+      if(!QZ.catId) QZ.catId = catId;
+      if(!QZ.catName) QZ.catName = catName;
+  } else {
+      QZ.qs=shuffle(qs.slice());QZ.i=0;QZ.correct=0;QZ.catId=catId;QZ.catName=catName;QZ.answered=false;QZ.history=[];
+      clearActiveQuiz(catId);
+  }
   document.getElementById('quiz-home').style.display='none';
   document.getElementById('quiz-active').style.display='block';
   renderQ();
@@ -364,10 +537,12 @@ function chooseAnswer(chosen,correct,btn){
   document.getElementById('qexp').classList.add('show');
   document.getElementById('nextBtn').style.display='inline-block';
   document.getElementById('prevBtn').style.display='inline-block';
+  saveActiveQuiz();
 }
 function skipQ(){
   QZ.history.push({q:QZ.qs[QZ.i],chosen:null,correct:false,skipped:true});
   QZ.i++;renderQ();
+  saveActiveQuiz();
 }
 function prevQ(){
   if(!QZ.history.length)return;
@@ -399,6 +574,7 @@ function prevQ(){
   document.getElementById('qhint').textContent=prev.skipped?'Skipped':(prev.correct?'✓ Correct':'✗ Incorrect');
   document.getElementById('nextBtn').style.display='inline-block';
   document.getElementById('prevBtn').style.display=QZ.history.length?'inline-block':'none';
+  saveActiveQuiz();
 }
 function nextQ(){renderQ()}
 function exitQuiz(){
@@ -413,28 +589,186 @@ function exitQuiz(){
 function saveProgress(topic, cat, score, total) {
   var p = JSON.parse(localStorage.getItem('eto_progress') || '{}');
   if(!p[topic]) p[topic] = {cats:{}, best:0};
-  var pct = Math.round(score/total*100);
-  if(!p[topic].cats[cat] || p[topic].cats[cat] < pct) {
-    p[topic].cats[cat] = pct;
+  
+  // Do not record "All Topics" standalone quizzes in the individual category progress
+  if (cat !== 'All Topics' && cat !== 'All Categories - Mixed') {
+      var pct = Math.round(score/total*100);
+      if(!p[topic].cats[cat] || p[topic].cats[cat] < pct) {
+        p[topic].cats[cat] = pct;
+      }
   }
-  var sum = 0; var cnt = 0;
-  for(var k in p[topic].cats) { sum += p[topic].cats[k]; cnt++; }
-  p[topic].best = cnt > 0 ? Math.round(sum/cnt) : 0;
+  
+  // Robust cleanup of historical bug data
+  var rev = {};
+  if (typeof CAT_NAMES !== 'undefined') {
+      Object.keys(CAT_NAMES).forEach(function(k) { rev[CAT_NAMES[k]] = k; });
+  }
+  
+  var t = TOPICS.find(function(x) { return x.id === topic; });
+  var validCatCount = 1; 
+  if (t && window.QD && window.QD[t.key]) {
+      var cMap = {};
+      window.QD[t.key].forEach(function(q) { cMap[q.cat || 'Uncategorized'] = true; });
+      validCatCount = Object.keys(cMap).length;
+      
+      // Migrate bad display-name keys to true IDs, and remove mixed keys
+      Object.keys(p[topic].cats).forEach(function(k) {
+          if (k === 'All Topics' || k === 'All Categories - Mixed') {
+              delete p[topic].cats[k];
+          } else if (!cMap[k]) {
+              if (rev[k] && cMap[rev[k]]) {
+                  var oldScore = p[topic].cats[k];
+                  var newId = rev[k];
+                  if (!p[topic].cats[newId] || p[topic].cats[newId] < oldScore) p[topic].cats[newId] = oldScore;
+              }
+              delete p[topic].cats[k];
+          }
+      });
+  }
+  
+  var sum = 0;
+  for(var k in p[topic].cats) {
+      if (k !== 'All Topics' && k !== 'All Categories - Mixed') sum += p[topic].cats[k];
+  }
+  
+  p[topic].best = Math.round(sum / validCatCount);
   localStorage.setItem('eto_progress', JSON.stringify(p));
 }
+
+function getActiveQuizCompletion(topic, cat) {
+    var key = 'eto_qz_state_' + topic + '_' + cat;
+    var saved = localStorage.getItem(key);
+    if (saved) {
+        try {
+            var st = JSON.parse(saved);
+            if (st && st.qs && st.qs.length) {
+                return Math.round((st.i / st.qs.length) * 100);
+            }
+        } catch(e){}
+    }
+    return 0;
+}
+
 function getProgress(topic) {
   var p = JSON.parse(localStorage.getItem('eto_progress') || '{}');
-  return p[topic] ? p[topic].best : 0;
+  var pData = p[topic] || {cats:{}, best:0};
+  
+  var changed = false;
+  var rev = {};
+  if (typeof CAT_NAMES !== 'undefined') {
+      Object.keys(CAT_NAMES).forEach(function(k) { rev[CAT_NAMES[k]] = k; });
+  }
+  
+  if (pData.cats) {
+      Object.keys(pData.cats).forEach(function(k) {
+          if (k === 'All Topics' || k === 'All Categories - Mixed') {
+              delete pData.cats[k];
+              changed = true;
+          } else if (rev[k]) {
+              var oldScore = pData.cats[k];
+              var newId = rev[k];
+              if (!pData.cats[newId] || pData.cats[newId] < oldScore) pData.cats[newId] = oldScore;
+              delete pData.cats[k];
+              changed = true;
+          }
+      });
+  }
+  
+  var t = TOPICS.find(function(x) { return x.id === topic; });
+  var trueTopicPct = pData.best || 0;
+  
+  if (t && window.QD && window.QD[t.key]) {
+      var cMap = {};
+      window.QD[t.key].forEach(function(q) { 
+          var c = q.cat || 'Uncategorized';
+          cMap[c] = (cMap[c] || 0) + 1;
+      });
+      
+      var totalTopicQs = 0;
+      var totalCompletedQs = 0;
+      
+      Object.keys(cMap).forEach(function(cat) {
+          var catTotal = cMap[cat];
+          totalTopicQs += catTotal;
+          
+          if (pData.cats[cat] === undefined && !cMap[cat]) {
+              delete pData.cats[cat]; changed = true;
+          }
+          
+          var catPct = pData.cats[cat] || 0;
+          var activePct = getActiveQuizCompletion(topic, cat);
+          if (activePct > catPct) catPct = activePct;
+          
+          totalCompletedQs += Math.round((catPct / 100) * catTotal);
+      });
+      
+      trueTopicPct = totalTopicQs > 0 ? Math.round((totalCompletedQs / totalTopicQs) * 100) : 0;
+      
+      var mixedActive = getActiveQuizCompletion(topic, 'All Topics');
+      if (mixedActive > trueTopicPct) trueTopicPct = mixedActive;
+      
+      if (pData.best !== trueTopicPct) {
+          pData.best = trueTopicPct;
+          changed = true;
+      }
+  }
+  
+  if (changed) {
+      p[topic] = pData;
+      localStorage.setItem('eto_progress', JSON.stringify(p));
+  }
+  
+  return trueTopicPct;
 }
 function showScore(){
   var tot=QZ.qs.length,pct=tot?Math.round(QZ.correct/tot*100):0;
-  saveProgress(ACTIVE_TOPIC, QZ.catName, QZ.correct, tot);
-  // Refresh topic grid progress bar live
+  saveProgress(ACTIVE_TOPIC, QZ.catId, QZ.correct, tot);
+  clearActiveQuiz(QZ.catId);
+  
   var updBar=document.getElementById('qtgp-'+ACTIVE_TOPIC);
-  if(updBar){var np=getProgress(ACTIVE_TOPIC);var nc=np>=80?'var(--green)':np>=50?'var(--orange)':'var(--blue)';updBar.style.width=np+'%';updBar.style.background=nc;}
-  var col=pct>=70?'var(--green)':pct>=50?'var(--orange)':'var(--red)';
-  var emoji=pct>=80?'🎉':pct>=60?'👍':`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg>`;
-  document.getElementById('quiz-active').innerHTML='<div class="score-screen"><div class="score-emoji">'+emoji+'</div><div class="score-pct" style="color:'+col+'">'+pct+'%</div><div class="score-sub">'+QZ.correct+' correct of '+tot+' &nbsp;·&nbsp; '+esc(QZ.catName)+'</div><div class="score-breakdown"><div class="score-stat"><div class="n" style="color:var(--green)">'+QZ.correct+'</div><div class="l">Correct</div></div><div class="score-stat"><div class="n" style="color:var(--red)">'+(tot-QZ.correct)+'</div><div class="l">Wrong/Skipped</div></div><div class="score-stat"><div class="n" style="color:var(--blue)">'+tot+'</div><div class="l">Total</div></div></div><div class="score-actions"><button class="btn btn-green" onclick="startQuiz(QZ.catName,QZ.qs)">Try Again</button><button class="btn btn-ghost" onclick="exitQuiz()">Categories</button></div></div>';
+  if(updBar){
+      var np=getProgress(ACTIVE_TOPIC);
+      var nc=np>=80?'var(--green)':np>=50?'var(--orange)':'var(--blue)';
+      updBar.style.width=np+'%';
+      updBar.style.background=nc;
+  }
+  
+  var tier = pct >= 90 ? 'perfect' : pct >= 60 ? 'good' : 'bad';
+  var hColor = tier === 'perfect' ? '#FFD700' : tier === 'good' ? 'var(--green)' : 'var(--orange)';
+  var ill = tier === 'perfect' ? '🏆' : tier === 'good' ? '🚀' : '💪';
+  var hText = tier === 'perfect' ? 'Flawless!' : tier === 'good' ? 'Great Job!' : "Don't Give Up!";
+  var sText = tier === 'perfect' ? 'You crushed every single question!' : tier === 'good' ? 'You are making steady progress.' : 'Mistakes are proof that you are trying.';
+  
+  var btnHtml = '';
+  if (tier === 'bad') {
+    btnHtml = '<button class="duo-btn duo-btn-primary needs-practice" onclick="startQuiz(\''+esc(QZ.catId)+'\', \''+esc(QZ.catName)+'\', QZ.qs)">Try Again</button>' +
+              '<button class="duo-btn duo-btn-secondary" onclick="exitQuiz()">Categories</button>';
+  } else {
+    btnHtml = '<button class="duo-btn duo-btn-primary" onclick="exitQuiz()">Continue</button>' +
+              '<button class="duo-btn duo-btn-secondary" onclick="startQuiz(\''+esc(QZ.catId)+'\', \''+esc(QZ.catName)+'\', QZ.qs)">Try Again</button>';
+  }
+  
+  var html = '<div class="duo-score-container">' +
+    '<div class="duo-score-ill">' + ill + '</div>' +
+    '<div class="duo-score-header">' +
+      '<h2 style="color:' + hColor + '">' + hText + '</h2>' +
+      '<p>' + sText + '</p>' +
+    '</div>' +
+    '<div class="duo-score-stats">' +
+      '<div class="duo-score-stat-box" style="border-color:var(--green)">' +
+        '<div class="n" style="color:var(--green)">' + QZ.correct + '</div><div class="l">Correct</div>' +
+      '</div>' +
+      '<div class="duo-score-stat-box" style="border-color:' + (tier === 'perfect' ? 'var(--border)' : 'var(--orange)') + '">' +
+        '<div class="n" style="color:var(--orange)">' + (tot - QZ.correct) + '</div><div class="l">Missed</div>' +
+      '</div>' +
+      '<div class="duo-score-stat-box" style="border-color:var(--blue)">' +
+        '<div class="n" style="color:var(--blue)">' + pct + '%</div><div class="l">Score</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="duo-score-actions">' + btnHtml + '</div>' +
+  '</div>';
+  
+  document.getElementById('quiz-active').innerHTML = html;
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 
@@ -809,7 +1143,7 @@ function qbStart() {
   document.getElementById('quiz-topic-label').textContent = label;
   document.getElementById('quiz-topic-h2').textContent = label;
   document.getElementById('topbar-badge').innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank';
-  startQuiz(label, final);
+  startQuiz('All Topics', label, final);
   document.getElementById('view-quiz').classList.add('active');
   document.getElementById('quiz-home').style.display = 'none';
   document.getElementById('quiz-active').style.display = 'block';
@@ -823,3 +1157,32 @@ document.getElementById('content').addEventListener('scroll', function() {
         btn.style.display = 'none';
     }
 });
+
+// ═══════════════════════════════════════════════════════
+// ROUTING (Refresh & Back Button Support)
+// ═══════════════════════════════════════════════════════
+window._isRouting = false;
+
+function handleHashRouting() {
+  var hash = window.location.hash.substring(1);
+  window._isRouting = true;
+  
+  if (!hash) {
+      showView('welcome');
+  } else if (hash.startsWith('notes=')) {
+      var topicId = hash.split('=')[1];
+      var t = TOPICS.find(function(x) { return x.id === topicId; });
+      if (t) fetchTopicData(t.id, t.key);
+  } else if (hash.startsWith('quiz=')) {
+      var topicId = hash.split('=')[1];
+      goToQuizFromNotes(topicId);
+  } else {
+      showView(hash);
+      if (hash === 'quiz-bank') initQuizBank();
+  }
+  
+  setTimeout(function() { window._isRouting = false; }, 50);
+}
+
+window.addEventListener('DOMContentLoaded', handleHashRouting);
+window.addEventListener('popstate', handleHashRouting);

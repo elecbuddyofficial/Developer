@@ -307,3 +307,4 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </div>
 </div>
 </div>
+`);
