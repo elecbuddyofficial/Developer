@@ -5,14 +5,12 @@
   padding: 16px 20px;
   margin: 18px 0;
   border: 1px solid;
-  transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: border-color 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
-.w-box:hover {
-  transform: translateY(-3px);
-}
+.w-box:hover { border-color: var(--border2); }
 
 .w-box-label {
   font-size: .75rem;
@@ -35,23 +33,23 @@
 
 /* Box Styles */
 .w-box-reg { background: rgba(59,130,246,.04); border-color: rgba(59,130,246,.15); }
-.w-box-reg:hover { border-color: rgba(59,130,246,.3); box-shadow: 0 10px 24px rgba(59,130,246,.08); }
+.w-box-reg:hover { border-color: rgba(59,130,246,.3);  }
 .w-box-reg .w-box-label { color: var(--blue); }
 
 .w-box-exam { background: rgba(239,68,68,.04); border-color: rgba(239,68,68,.15); }
-.w-box-exam:hover { border-color: rgba(239,68,68,.3); box-shadow: 0 10px 24px rgba(239,68,68,.1); }
+.w-box-exam:hover { border-color: rgba(239,68,68,.3);  }
 .w-box-exam .w-box-label { color: var(--red); }
 
 .w-box-key { background: rgba(245,158,11,.04); border-color: rgba(245,158,11,.15); }
-.w-box-key:hover { border-color: rgba(245,158,11,.3); box-shadow: 0 10px 24px rgba(245,158,11,.08); }
+.w-box-key:hover { border-color: rgba(245,158,11,.3);  }
 .w-box-key .w-box-label { color: var(--orange); }
 
 .w-box-memory { background: rgba(34,197,94,.04); border-color: rgba(34,197,94,.15); }
-.w-box-memory:hover { border-color: rgba(34,197,94,.3); box-shadow: 0 10px 24px rgba(34,197,94,.08); }
+.w-box-memory:hover { border-color: rgba(34,197,94,.3);  }
 .w-box-memory .w-box-label { color: var(--green); }
 
 .w-box-note { background: rgba(139,92,246,.04); border-color: rgba(139,92,246,.15); }
-.w-box-note:hover { border-color: rgba(139,92,246,.3); box-shadow: 0 10px 24px rgba(139,92,246,.08); }
+.w-box-note:hover { border-color: rgba(139,92,246,.3);  }
 .w-box-note .w-box-label { color: var(--purple); }
 
 /* Typography */
@@ -81,8 +79,8 @@
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
 .w-steps li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  
+  
   border-color: rgba(59,130,246,0.3);
 }
 .w-steps li::before { 
@@ -114,7 +112,7 @@
   transition: transform 0.2s ease, background 0.2s ease, border-radius 0.2s ease; 
 }
 .w-list li:hover, .w-keylist li:hover {
-  transform: translateX(4px);
+  
   background: rgba(255,255,255,0.02);
   border-radius: 4px;
 }
@@ -155,7 +153,7 @@
 .w-jumpnav { display: flex; flex-wrap: wrap; gap: 8px; padding: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--border2); border-radius: var(--r12); margin-bottom: 2rem; box-shadow: inset 0 2px 12px rgba(0,0,0,0.1); }
 .w-jumpnav-label { font-size: 11px; font-weight: 800; color: var(--text3); letter-spacing: 1px; width: 100%; display: block; margin-bottom: 4px; }
 .w-jump-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); border-radius: 100px; padding: 6px 14px; font-size: .8rem; cursor: pointer; transition: all .2s; font-weight: 600; }
-.w-jump-btn:hover { background: rgba(59,130,246,.1); color: var(--text); border-color: var(--blue); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(59,130,246,0.15); }
+.w-jump-btn:hover { background: rgba(59,130,246,.1); color: var(--text); border-color: var(--blue);   }
 
 /* Injection */
 .w-inject[data-status="empty"] { display: none; }

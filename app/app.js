@@ -345,6 +345,9 @@ function closeMobileMenu() {
 }
 
 function showView(n){
+  // Always hide back-to-top on navigation
+  var btt=document.getElementById('back-to-top');
+  if(btt){btt.style.opacity='0';btt.style.visibility='hidden';}
   if(window.innerWidth <= 768) closeMobileMenu();
   if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker') {
      var tbBadge = document.getElementById('topbar-badge');
@@ -1231,7 +1234,10 @@ document.getElementById('content').addEventListener('scroll', function() {
         self._rafScroll=null;
         var btn=document.getElementById('back-to-top');
         if(!btn) return;
-        btn.style.display=self.scrollTop>300?'flex':'none';
+        // Hysteresis: show at >300, hide at <220 - prevents flicker near threshold
+        var st=self.scrollTop;
+        if(st>300){btn.style.opacity='1';btn.style.visibility='visible';}
+        else if(st<220){btn.style.opacity='0';btn.style.visibility='hidden';}
     });
 });
 
