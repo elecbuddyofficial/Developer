@@ -1090,7 +1090,7 @@ function qbEnsureLoaded() {
   toLoad.forEach(function(t) {
     if (!window.QD || !window.QD[t.key]) {
       var s = document.createElement('script');
-      s.src = '../data/quizzes/' + t.id.toLowerCase() + '_quiz.js';
+      s.src = '../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js';
       s.onload = function() { qbUpdateCatPills(); qbUpdatePreview(); };
       document.head.appendChild(s);
     }

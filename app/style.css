@@ -522,7 +522,7 @@ to{opacity:1;transform:scale(1)}}
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 1px;
-    transition: all 0.2s;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, opacity 0.2s;
 }
 .duo-btn-primary {
     background: var(--green);
@@ -552,8 +552,4 @@ to{opacity:1;transform:scale(1)}}
 }
 .duo-btn-secondary:active {
     background: var(--border2);
-}
-
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
 }
