@@ -150,7 +150,7 @@ window.loadWrittenNotes("W04", `
   </div>
 
   <div class="n-h2">C) Hazards Associated with Enclosed Spaces - Detailed</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--red-border)">
       <div class="card-title" style="color:var(--red)">1. Oxygen Deficiency (Most Common Fatal Hazard)</div>
       <div class="card-desc">
@@ -582,7 +582,7 @@ window.loadWrittenNotes("W04", `
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Q: a) State essential electrical services on board that are able to be operable under fire conditions (5). b) Explain how electric cables for the essential services in part (a) pass through bulkheads whilst maintaining gas tight and watertight integrity (5). c) State the requirements for the cables which supply electrically driven emergency fire pumps (6). - 16 marks</div></div>
 
   <div class="n-h2">A) Essential Electrical Services - Must Remain Under Fire Conditions (5 marks)</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Navigation & Lifesaving</div>
       <div class="card-desc">

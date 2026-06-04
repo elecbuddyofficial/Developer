@@ -58,7 +58,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   <div class="n-h1" id="f-sprinkler">💦 1. AUTOMATIC WATER SPRINKLER SYSTEM</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS/Regulation:</strong> SOLAS Chapter II-2, Reg 12 - Mandatory for passenger vessels throughout accommodation; cargo ships in specific areas.</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">System Components</div>
       <ul class="n-list" style="margin-top:8px">
@@ -143,7 +143,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </ul>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">How the System Works</div>
       <ul class="n-list" style="margin-top:8px">
@@ -221,7 +221,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </table>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Fighting a Galley Fire - General Procedure</div>
       <ol class="n-steps" style="margin-top:8px">
@@ -250,7 +250,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   </div>
 
   <div class="n-h2">Finding Missing Personnel in Smoke-Filled Accommodation</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Before Entering</div>
       <ul class="n-list" style="margin-top:8px">
@@ -312,7 +312,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   <div class="n-h1" id="f-hold">📦 4. CARGO HOLD FIRE DETECTION SYSTEM</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS/Regulation:</strong> SOLAS Chapter II-2, Reg 10 - Fixed fire detection and alarm systems in cargo holds mandatory.</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Why Special System Needed for Cargo Holds</div>
       <ul class="n-list" style="margin-top:8px">
@@ -391,7 +391,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   <div class="n-h1" id="f-cables">⚡ 5. ELECTRIC CABLE INSULATION &amp; FIRE</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS/Regulation:</strong> SOLAS Chapter II-2, Reg 3 - Cable specifications; IEC 60332 fire test standards for shipboard cables.</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--red-border)">
       <div class="card-title" style="color:var(--red)">Hazards Associated with Cable Insulation in Fire</div>
       <ul class="n-list" style="margin-top:8px">
@@ -453,7 +453,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   <div class="n-h1" id="f-foam-ext">🧯 6. 136-LITRE NON-PORTABLE FOAM FIRE EXTINGUISHER</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS/Regulation:</strong> SOLAS Chapter II-2 - Portable and non-portable extinguishers required in machinery spaces and high-risk areas.</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Components</div>
       <ul class="n-list" style="margin-top:8px">
@@ -488,7 +488,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </ol>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Key Figures &amp; Application</div>
       <ul class="n-list" style="margin-top:8px">
@@ -535,7 +535,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </ul>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Information Available in the Plan (1-3)</div>
       <ul class="n-list" style="margin-top:8px">
@@ -579,7 +579,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
   <div class="n-h1" id="f-pax">🛳️ 8. FIRE PROTECTION - PASSENGER VESSEL ACCOMMODATION</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS/Regulation:</strong> SOLAS Chapter II-2, Reg 7, 9, 10, 12 - Comprehensive fire protection requirements for passenger vessels.</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Detection Systems</div>
       <ul class="n-list" style="margin-top:8px">
@@ -681,7 +681,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </ol>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">How Foam is Produced - The Process</div>
       <ul class="n-list" style="margin-top:8px">
@@ -738,7 +738,7 @@ window.loadWrittenNotes("W07", `<div class="view" id="view-notes-w07">
     </ul>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Three Mechanisms of Fire Suppression</div>
       <ul class="n-list" style="margin-top:8px">

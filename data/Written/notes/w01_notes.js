@@ -117,7 +117,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
     </table>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--blue-border)">
       <div class="card-title" style="color:var(--blue)">(a) Zener Diode - 3 marks</div>
       <div class="card-desc">
@@ -379,7 +379,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
     </ul>
 
     <p class="n-p" style="margin-top:16px;"><strong>Rotating Diode Failure Effects:</strong></p>
-    <div class="n-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="n-grid">
       <div class="n-card" style="border-color:var(--orange-border); border-width:2px; box-shadow:none;">
         <div class="card-title" style="color:var(--orange)">a) Open Circuit Rotating Diode</div>
         <div class="card-desc">
@@ -885,7 +885,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li>BYPASS CONTACTOR: closed when motor reaches full speed - thyristors then taken out of circuit to avoid thermal losses</li>
     </ul>
 
-    <div class="n-grid" style="grid-template-columns:1fr 1fr; margin-top:12px;">
+    <div class="n-grid" style="margin-top:12px">
       <div class="n-card" style="border-color:var(--green-border)">
         <div class="card-title" style="color:var(--green)">Advantages of Soft Starter</div>
         <ul class="n-list" style="margin-top:8px">

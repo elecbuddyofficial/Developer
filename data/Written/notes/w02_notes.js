@@ -183,7 +183,7 @@ window.loadWrittenNotes("W02", `<div class="view" id="view-notes-w02">
   
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Q: Explain crawling and cogging. List factors that determine starting torque. - <em>Asked 6+ times.</em></div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">CRAWLING</div>
       <div class="card-desc">
@@ -250,7 +250,7 @@ window.loadWrittenNotes("W02", `<div class="view" id="view-notes-w02">
   <div class="n-h1" id="s2-transformer-parallel">🔌 7. 3-PHASE TRANSFORMERS - PARALLEL &amp; BANK VS UNIT</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Q: Discuss essential conditions to operate transformers in parallel. Advantages of bank of three single-phase vs unit 3-phase? (10). - <em>Asked 5+ times.</em></div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">ESSENTIAL Conditions (Must Match)</div>
       <ul class="n-list" style="margin-top:8px">

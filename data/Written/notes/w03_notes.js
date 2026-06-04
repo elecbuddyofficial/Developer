@@ -64,7 +64,7 @@ window.loadWrittenNotes("W03", `
     <strong>Purpose:</strong> To provide an international standard for safe management and operation of ships and for pollution prevention.
   </div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Vessels ISM Applies To</div>
       <div class="card-desc">
@@ -94,7 +94,7 @@ window.loadWrittenNotes("W03", `
 
   <div class="n-h2">ISM Code - All 16 Clauses at a Glance</div>
   <div class="n-card">
-    <div class="n-grid" style="grid-template-columns:1fr 1fr; border:none; padding:0; background:none;">
+    <div class="n-grid" style="border:none; padding:0; background:none">
       <ul class="n-list">
         <li><strong>1.</strong> General - Definitions and objectives</li>
         <li><strong>2.</strong> Safety and Environmental Protection Policy</li>
@@ -176,7 +176,7 @@ window.loadWrittenNotes("W03", `
   </div>
 
   <div class="n-h2">E & F) Advantages & Post-Drill Requirements</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--green-border)">
       <div class="card-title" style="color:var(--green)">Importance/Advantages of Drills</div>
       <div class="card-desc">
@@ -215,7 +215,7 @@ window.loadWrittenNotes("W03", `
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Asked in:</strong> 2023/APR/Q7 | 2024/DEC/Q8 | 2025/SEP/Q7 (6-7 marks) | 2023/NOV/Q9 | 2025/DEC/Q9 (4 marks)<br>
   <strong>Regulation/Clause:</strong> Management Review = ISM Clause 12 | Master's Review = ISM Clause 6</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Management Review (Clause 12) - Company Level</div>
       <div class="card-desc">
@@ -300,7 +300,7 @@ window.loadWrittenNotes("W03", `
   </div>
 
   <div class="n-h2">ISM Requirement - What & Why to Report</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">What MUST Be Reported</div>
       <div class="card-desc">
@@ -394,7 +394,7 @@ window.loadWrittenNotes("W03", `
   </div>
 
   <div class="n-h2">PMS, Spares & Contingency</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Planned Maintenance System (PMS)</div>
       <div class="card-desc">
@@ -580,7 +580,7 @@ window.loadWrittenNotes("W03", `
     </table>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">How DOC is Obtained</div>
       <div class="card-desc">

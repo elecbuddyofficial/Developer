@@ -129,7 +129,7 @@ window.loadWrittenNotes("W06", `
   </div>
 
   <div class="n-h2">C) How Oil Density and Temperature Affect Separation</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--green-border)">
       <div class="card-title" style="color:var(--green)">Effect of Temperature</div>
       <div class="card-desc">
@@ -296,7 +296,7 @@ window.loadWrittenNotes("W06", `
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Q: NLS are divided into categories. State number of categories and what each signifies (8). State requirement of P&A Manual and information available (8). 16 marks.</div></div>
 
   <div class="n-h2">A) Four Categories of NLS - Detailed</div>
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--red-border)">
       <div class="card-title" style="color:var(--red)">Category X - Most Hazardous</div>
       <div class="card-desc">
@@ -576,7 +576,7 @@ window.loadWrittenNotes("W06", `
     </ul>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card">
       <div class="card-title">Nearest Land</div>
       <div class="card-desc">
@@ -679,7 +679,7 @@ window.loadWrittenNotes("W06", `
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Q: Briefly describe environmental impact of NOx and SOx and allowable limitations as per Annex VI in ECAs and outside (8). Briefly describe methods to control NOx emissions (8). 16 marks - 2024/AUG/Q9</div></div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr">
+  <div class="n-grid">
     <div class="n-card" style="border-color:var(--orange-border)">
       <div class="card-title" style="color:var(--orange)">A) Environmental Impact of NOx (Nitrogen Oxides)</div>
       <div class="card-desc">

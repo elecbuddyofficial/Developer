@@ -93,7 +93,7 @@ window.loadWrittenNotes("W05", `<div class="view" id="view-notes-w05">
     <p class="n-p">The <strong>Declaration of Maritime Labour Compliance (DMLC)</strong> is a document required for all ships of <strong><span class="n-val">500 GT</span></strong> and above engaged in international voyages. It proves the ship complies with MLC 2006. It has two parts:</p>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr; margin-top:16px;">
+  <div class="n-grid" style="margin-top:16px">
     <div class="n-card" style="border-color:var(--blue-border)">
       <div class="card-title" style="color:var(--blue)">DMLC Part I (Flag State)</div>
       <div class="card-desc">
@@ -224,7 +224,7 @@ window.loadWrittenNotes("W05", `<div class="view" id="view-notes-w05">
     <p class="n-p">Flag states must establish limits based on EITHER maximum hours of work OR minimum hours of rest. (Most ships use minimum hours of rest).</p>
   </div>
 
-  <div class="n-grid" style="grid-template-columns:1fr 1fr; margin-top:16px;">
+  <div class="n-grid" style="margin-top:16px">
     <div class="n-card" style="border-color:var(--orange-border)">
       <div class="card-title" style="color:var(--orange)">If using MAXIMUM Hours of Work</div>
       <ul class="n-list" style="margin-top:8px;">
