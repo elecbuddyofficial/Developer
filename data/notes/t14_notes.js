@@ -18,15 +18,19 @@ window.loadNotes("T14", `<div class="view" id="view-notes-t14">
     <button class="anc-btn" onclick="jumpTo('s-temp')">Temperature Sensors</button>
     <button class="anc-btn" onclick="jumpTo('s-pressure')">Pressure/DP Cell</button>
     <button class="anc-btn" onclick="jumpTo('s-speed')">Speed Sensors</button>
+    <button class="anc-btn" onclick="jumpTo('s-viscotherm')">Viscotherm</button>
+    <button class="anc-btn" onclick="jumpTo('s-gas-cargo')">Gas &amp; Cargo</button>
     <button class="anc-btn" onclick="jumpTo('s-echo')">Echo Sounder</button>
     <button class="anc-btn" onclick="jumpTo('s-gyro')">Gyrocompass</button>
     <button class="anc-btn" onclick="jumpTo('s-vdr')">VDR</button>
-    <button class="anc-btn" onclick="jumpTo('s-gas-cargo')">Gas &amp; Cargo</button>
     <button class="anc-btn" onclick="jumpTo('s-ecdis-widas')">ECDIS &amp; WIDAS</button>
     <button class="anc-btn" onclick="jumpTo('s-solas-2026')">2026 SOLAS</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-temp">🌡️ Temperature Sensors - RTD, Thermocouple, Thermistor</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask RTD vs thermocouple difference and what PT100 means.</strong> Know the working principle, typical applications, and specific values for each.</div></div>
@@ -43,7 +47,7 @@ window.loadNotes("T14", `<div class="view" id="view-notes-t14">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>PT100 means:</strong> Platinum (Pt) sensing element with exactly <span class="n-val">100 Ω</span> resistance at <span class="n-val">0°C</span>. Resistance increases by <span class="n-val">0.385 Ω</span> per °C (Positive Temperature Coefficient). Requires external excitation current (<span class="n-val">1–5 mA</span>). Standard ship installation uses <strong>3-wire connection</strong> to cancel lead resistance errors. Very accurate, linear - preferred for precision temperature measurement.</div></div>
 
   <div class="n-h2">Thermocouple - Detail</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Seebeck Effect:</strong> Two dissimilar metals joined at a hot junction (measuring point) and cold junction (reference). Temperature difference creates a small EMF (millivolts). Type K (Chromel-Alumel): sensitivity ~<span class="n-val">40–50 µV/°C</span>, range up to <span class="n-val">1350°C</span>. Self-powered - no excitation needed. Requires cold junction compensation for accuracy. Used for main engine exhaust and boiler combustion where temperatures far exceed RTD range.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Seebeck Effect:</strong> Two dissimilar metals joined at a hot junction (measuring point) and cold junction (reference). Temperature difference creates a small EMF (millivolts). Type K (Chromel-Alumel): sensitivity <span class="n-val">~40–50 µV/°C</span>, range up to <span class="n-val">1350°C</span>. Self-powered - no excitation needed. Requires cold junction compensation for accuracy. Used for main engine exhaust and boiler combustion where temperatures far exceed RTD range.</div></div>
 
   <div class="n-h2">Thermistor - Detail</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>NTC (Negative Temperature Coefficient):</strong> Semiconductor - resistance decreases sharply by <span class="n-val">3–5%</span> per °C rise. Highly sensitive but non-linear. Limited range <span class="n-val">-50 to +150°C</span>. Used embedded in motor windings for winding temperature protection - trips motor before insulation damage. Also used in bilge level alarms (float-free thermistor type).</div></div>
@@ -77,7 +81,7 @@ window.loadNotes("T14", `<div class="view" id="view-notes-t14">
   <div class="n-h1" id="s-speed">⚡ Speed Sensors - Doppler Log &amp; Tachometer</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Magnetic Pickup Tachometer:</strong> Fixed magnet and coil mounted <span class="n-val">1–3 mm</span> from toothed flywheel. Passing teeth alter magnetic flux → induces voltage pulses. Formula: Speed = (pulse frequency × 60) / number of teeth. Turbocharger sensor counts blade passing at <span class="n-val">10,000–30,000+ RPM</span> - triggers overspeed alarm at <span class="n-val">110–120%</span> rated speed.</div></div>
 
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Doppler Log - Working:</strong> Measures ship speed via Doppler Effect (frequency shift of reflected wave). Transmits ultrasonic pulses (<span class="n-val">100–300 kHz</span>) at ~<span class="n-val">30°</span> angle from vertical. Echo reflects from seabed (bottom tracking, SOG, depth up to ~<span class="n-val">200 m</span>) or subsurface water layer (water tracking, STW, layer ~<span class="n-val">10–20 m</span> deep). Uses 4 transducers in Janus configuration - cancels sound velocity errors due to temperature/salinity changes.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Doppler Log - Working:</strong> Measures ship speed via Doppler Effect (frequency shift of reflected wave). Transmits ultrasonic pulses (<span class="n-val">100–300 kHz</span>) at <span class="n-val">~30°</span> angle from vertical. Echo reflects from seabed (bottom tracking, SOG, depth up to <span class="n-val">~200 m</span>) or subsurface water layer (water tracking, STW, layer <span class="n-val">~10–20 m</span> deep). Uses 4 transducers in Janus configuration - cancels sound velocity errors due to temperature/salinity changes.</div></div>
 
   <div class="n-formula">Δf = (2 × f × v × cos θ) / c<div class="label">Δf = frequency shift · f = transmitted frequency · v = ship speed · θ = beam angle (~30°) · c = sound speed in water (~1500 m/s)</div></div>
 
@@ -89,6 +93,12 @@ window.loadNotes("T14", `<div class="view" id="view-notes-t14">
     <li><strong>Tachogenerators:</strong> Small, brush-equipped AC or DC generator coupled to the engine shaft, outputting voltage directly proportional to RPM. Replaced in modern setups by non-contact magnetic pickup arrays to eliminate mechanical wear.</li>
     <li><strong>Shaft Encoders:</strong> High-resolution optical or magnetic slotted discs tracking precise angular positions and speed components. Used for continuous feedback calculations inside Controllable Pitch Propeller (CPP) hubs and azimuth thruster controls.</li>
   </ul>
+
+  <!-- GAP: Viscotherm -->
+  <div class="n-h1" id="s-viscotherm">🛢️ Viscotherm - Fuel Oil Viscosity Controller</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Explain the working of a viscotherm and why viscosity control is essential for HFO.</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> Maintains HFO (Heavy Fuel Oil) at the correct viscosity (typically <span class="n-val">10–17 cSt</span>) for proper atomisation and combustion in the main engine. HFO must be heated (usually to <span class="n-val">100–150°C</span>) to reduce its viscosity.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working Principle:</strong> Uses a vibrating rod or torsional vibration element immersed in the fuel flow. The damping effect of the oil on the rod's vibration is directly proportional to the viscosity (higher viscosity = more damping = lower amplitude). The controller compares measured viscosity to the setpoint (e.g. 12 cSt). If viscosity is too high (cold), it opens the steam heating valve. If too low (hot), it reduces heating. This ensures continuous correct viscosity regardless of fuel grade changes.</div></div>
 
   <!-- GAP: Gas Detection, UTI, Cargo Gauging -->
   <div class="n-h1" id="s-gas-cargo">🛢️ Gas Detection, UTI Devices &amp; Cargo Gauging</div>
@@ -227,5 +237,7 @@ window.loadNotes("T14", `<div class="view" id="view-notes-t14">
     <tr><td>Thermistor</td><td class="hl">⭐⭐⭐⭐ Vishwanathan</td><td>NTC semiconductor | <span class="n-val">3-5%/°C</span> decrease | Motor winding protection</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

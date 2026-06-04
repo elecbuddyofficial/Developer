@@ -19,12 +19,17 @@ window.loadNotes("T15", `<div class="view" id="view-notes-t15">
     <button class="anc-btn" onclick="jumpTo('s-co2')">CO2 System</button>
     <button class="anc-btn" onclick="jumpTo('s-foam')">Foam Systems</button>
     <button class="anc-btn" onclick="jumpTo('s-sprinkler')">Sprinkler</button>
+    <button class="anc-btn" onclick="jumpTo('s-watermist')">Water Mist</button>
     <button class="anc-btn" onclick="jumpTo('s-detection')">Detection</button>
+    <button class="anc-btn" onclick="jumpTo('s-testing')">Detector Testing</button>
     <button class="anc-btn" onclick="jumpTo('s-pumps')">Fire Pumps</button>
     <button class="anc-btn" onclick="jumpTo('s-hold-roro')">Hold &amp; RoRo 2026</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-classes">🔥 Fire Classes &amp; Extinguishers</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask fire classes.</strong> Know galley fire class (F) and why water is NEVER used on it. Know electrical fire rule (CO2, not water).</div></div>
@@ -49,7 +54,7 @@ window.loadNotes("T15", `<div class="view" id="view-notes-t15">
   <div class="n-h1" id="s-co2">💨 Fixed CO2 Total Flooding System</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask CO2 system procedure.</strong> Know the sequence, two-valve system, pre-alarm, and why headcount is mandatory.</div></div>
 
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle:</strong> Displaces oxygen in protected space below <span class="n-val">15%</span> - starves fire. Minimum concentration for engine room flooding: <span class="n-val">34%</span> by volume. Stored as liquid at ~<span class="n-val">57 bar</span>. Expansion ratio: <span class="n-val">1:450</span> (1 litre liquid → 450 litres gas). Cylinders weighed annually - recharge if weight falls below <span class="n-val">90%</span> of full charge.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle:</strong> Displaces oxygen in protected space below <span class="n-val">15%</span> - starves fire. Minimum concentration for engine room flooding: <span class="n-val">34%</span> by volume. Stored as liquid at <span class="n-val">~57 bar</span>. Expansion ratio: <span class="n-val">1:450</span> (1 litre liquid → 450 litres gas). Cylinders weighed annually - recharge if weight falls below <span class="n-val">90%</span> of full charge.</div></div>
 
   <div class="n-h2">CO2 Release Procedure (Two-Valve System)</div>
   <ol class="n-steps">
@@ -93,6 +98,10 @@ window.loadNotes("T15", `<div class="view" id="view-notes-t15">
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>BLIS (Stop Valve Tamper Alarm):</strong> Triggers supervisory fault alarm on fire panel if the main sprinkler isolation valve is accidentally closed - prevents the system from being unknowingly out of service. Testing: open end-of-line test cock at far end of zone → triggers paddle flow detector → activates zone flow alarm on panel.</div></div>
 
+  <!-- GAP: Water Mist System -->
+  <div class="n-h1" id="s-watermist">💦 High-Pressure Water Mist (HI-FOG)</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Discharges water at very high pressure (<span class="n-val">70–200 bar</span>) through fine nozzles. Atomises water into extremely fine droplets (<span class="n-val">50–200 µm</span>). Rapid evaporation absorbs massive heat (high latent heat of vaporisation) and the steam volume expansion (<span class="n-val">1700x</span>) displaces oxygen locally. Safer for manned spaces than CO2. Effective on Class A, B, and F fires.</div></div>
+
   <div class="n-h1" id="s-detection">🔍 Fire Detection - Types &amp; Working</div>
   <table class="n-table">
     <tr><th>Detector</th><th>Principle</th><th>Best For</th></tr>
@@ -123,6 +132,23 @@ window.loadNotes("T15", `<div class="view" id="view-notes-t15">
   <div class="n-h3">The Universal Condensation Drain Box</div>
   <p class="n-p">On tube-type sampling lines and accommodation zones exposed to extreme thermal differentials (warm internal living spaces vs cold exterior hull plating), moisture condensation naturally forms inside the pipe runs. A <strong>Universal Drain Box (Moisture Trap)</strong> is fitted at the lowest physical point of the network. If unmaintained, accumulated water will bridge detector pins - causing intermittent false fire alarms, wire corrosion, or terminal PCB failures. ETOs must drain these traps during weekly safety rounds and periodically replace the built-in felt absorbent filters.</p>
 
+  <!-- GAP: Detector Testing Procedures -->
+  <div class="n-h1" id="s-testing">🧪 Fire Detector Testing Procedures</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Surveyors ask specifically how to test UV and Heat detectors. NEVER use a lighter.</strong></div></div>
+  <div class="n-h2">UV Flame Detector Testing</div>
+  <ol class="n-steps">
+    <li>Inform bridge/CCR - put fire panel in TEST mode to prevent false alarms.</li>
+    <li>Use a CALIBRATED UV TEST LAMP (supplied by manufacturer). DO NOT use naked flame (creates real fire risk, especially in engine room).</li>
+    <li>Clean detector window (oil film blocks UV). Hold test lamp at prescribed distance (150-300mm).</li>
+    <li>Verify alarm on panel. Reset and log.</li>
+  </ol>
+  <div class="n-h2">Heat Detector Testing</div>
+  <ol class="n-steps">
+    <li>Inform bridge/CCR - put fire panel in TEST mode.</li>
+    <li>Use APPROVED HEAT GUN or calibrated hot air blower. DO NOT use hair dryer or naked flame (can melt/damage the detector).</li>
+    <li>For Fixed Temp: Heat slowly until alarm activates (verify temp is within ±10% of setpoint).</li>
+    <li>For Rate-of-Rise (ROR): Heat rapidly (alarm should trigger within 10-15s).</li>
+  </ol>
 
   <div class="n-h1" id="s-pumps">💧 Fire Pumps - SOLAS Requirements</div>
   <table class="n-table">
@@ -194,5 +220,7 @@ window.loadNotes("T15", `<div class="view" id="view-notes-t15">
     <tr><td>ROR vs fixed temp detector</td><td class="hl">⭐⭐⭐ Vishwanathan</td><td>ROR = earliest warning (<span class="n-val">8°C/min</span>) | Fixed = preset threshold. UV = millisecond response, test with UV lamp only.</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

@@ -23,12 +23,24 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <button class="anc-btn" onclick="jumpTo('s-amplifiers')">Amplifiers</button>
     <button class="anc-btn" onclick="jumpTo('s-digital')">Logic & Digital</button>
     <button class="anc-btn" onclick="jumpTo('s-smps')">SMPS</button>
-    <button class="anc-btn" onclick="jumpTo('s-gap')">Gap Additions</button>
+    <button class="anc-btn" onclick="jumpTo('s-vfd-igbt')">VFD IGBT</button>
+    <button class="anc-btn" onclick="jumpTo('s-ex-zones')">Hazardous Areas</button>
+    <button class="anc-btn" onclick="jumpTo('s-grid-bias')">Grid Bias</button>
+    <button class="anc-btn" onclick="jumpTo('s-emf-pd')">EMF vs PD</button>
+    <button class="anc-btn" onclick="jumpTo('s-components')">Components</button>
+    <button class="anc-btn" onclick="jumpTo('s-diode-apps')">Diode Apps</button>
+    <button class="anc-btn" onclick="jumpTo('s-transistor-matrix')">Transistor Matrix</button>
+    <button class="anc-btn" onclick="jumpTo('s-opamp-iv')">Op-Amp I/V</button>
+    <button class="anc-btn" onclick="jumpTo('s-is-entity')">Intrinsic Safety</button>
+    <button class="anc-btn" onclick="jumpTo('s-electronics-formulae')">Key Formulae</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Thyristor (SCR) working and commutation, IGBT vs Thyristor, MOSFET working, Diode testing, Rectifiers and ripple factor, Amplifier classes (A, B, C, D), Cycloconverter, Optocoupler, Zener diode applications.</div></div>
 
@@ -67,7 +79,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <tr><td><strong>3-Phase Bridge</strong></td><td>6 diodes</td><td class="ok">0.042 (4.2%)</td><td class="ok">95.4%</td><td>VFD DC link, large rectifiers</td></tr>
   </table>
 
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Ripple Factor (<span class="n-formula">γ = Vrms_ripple / Vdc_output</span>):</strong> Measures quality of DC. Lower ripple factor = smoother DC = smaller filter capacitor needed. 3-phase bridge provides <span class="n-val">300Hz</span> ripple on <span class="n-val">50Hz</span> supply, which is very smooth.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Ripple Factor (<code style="color:var(--cyan)">γ = Vrms_ripple / Vdc_output</code>):</strong> Measures quality of DC. Lower ripple factor = smoother DC = smaller filter capacitor needed. 3-phase bridge provides <span class="n-val">300Hz</span> ripple on <span class="n-val">50Hz</span> supply, which is very smooth.</div></div>
   
   <div class="n-p"><strong>Full Wave Bridge Working:</strong> 4 diodes (D1-D4). Positive half cycle: D1 & D3 conduct. Negative half cycle: D2 & D4 conduct. Current always flows in same direction through the load. Average output = <span class="n-val">0.9 × Vrms</span>.</div>
 
@@ -82,7 +94,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
         <ul class="n-list">
           <li><strong>Terminals:</strong> Base, Collector, Emitter.</li>
           <li><strong>Control:</strong> CURRENT controlled (<span class="n-val">IC = hFE × IB</span>).</li>
-          <li><strong>Regions:</strong> Cutoff (OFF, VBE &lt; <span class="n-val">0.6V</span>), Active (Amplifier), Saturation (ON, VCE ~ <span class="n-val">0.2V</span>).</li>
+          <li><strong>Regions:</strong> Cutoff (OFF, VBE &lt; <span class="n-val">0.6V</span>), Active (Amplifier), Saturation (ON, VCE <span class="n-val">~0.2V</span>).</li>
           <li><strong>Testing (NPN):</strong> B-E and B-C forward = <span class="n-val">0.5-0.7V</span>. C-E = OL.</li>
           <li><strong>Usage:</strong> Amplifiers, relay drivers.</li>
         </ul>
@@ -164,7 +176,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Crossover Distortion:</strong> In Class B, both transistors turn OFF briefly near <span class="n-val">0V</span> crossing. Fixed by Class AB (adding small forward bias <span class="n-val">0.6V</span>).</div></div>
 
   <div class="n-h2">Operational Amplifier (Op-Amp)</div>
-  <div class="n-p">High-gain differential amplifier. Inverting (<span class="n-formula">Gain = -Rf/Rin</span>), Non-inverting (<span class="n-formula">Gain = 1 + Rf/Rin</span>), Comparator (outputs HIGH/LOW). Used in AVR error amplifiers, PID logic, and <span class="n-val">4-20mA</span> signal conditioning.</div>
+  <div class="n-p">High-gain differential amplifier. Inverting (<code style="color:var(--cyan)">Gain = -Rf/Rin</code>), Non-inverting (<code style="color:var(--cyan)">Gain = 1 + Rf/Rin</code>), Comparator (outputs HIGH/LOW). Used in AVR error amplifiers, PID logic, and <span class="n-val">4-20mA</span> signal conditioning.</div>
 
 
   <!-- ═══ SECTION 8 ═══ -->
@@ -213,11 +225,10 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
 
 
   <!-- ═══ SECTION 10 ═══ -->
-  <div class="n-h1" id="s-gap">10. Gap Additions (v2.1 to v2.3)</div>
-
-  <div class="n-h2">Thyristor vs IGBT in VFDs</div>
+  <div class="n-h1" id="s-vfd-igbt">10. Thyristor vs IGBT in VFDs</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Can SCR replace IGBT in a VFD Inverter?</strong> NO. SCR requires natural commutation (AC zero crossing) to turn off. Inverter runs on DC - SCR would latch ON forever. IGBT is gate-controlled OFF.</div></div>
 
+  <div class="n-h1" id="s-ex-zones">11. Hazardous Area Equipment (Ex)</div>
   <div class="n-h2">Zener Barrier (Intrinsic Safety)</div>
   <div class="n-p">Limits energy entering hazardous area to prevent ignition. Uses (1) Zener diode to clamp voltage, (2) Resistor to limit current, (3) Fuse to protect zener. Uses Ex i (Intrinsically Safe) protection concept.</div>
 
@@ -228,15 +239,34 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <li><strong>Ex i (Intrinsically Safe):</strong> Limits circuit energy below ignition threshold. (Sensors in Zone 0/1).</li>
   </ul>
 
-  <div class="n-h2">Components & Properties</div>
+  <div class="n-h1" id="s-grid-bias">12. Grid Bias Voltage</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Grid Bias:</strong> A fixed DC voltage applied to the control grid of a vacuum tube (valve) to set its quiescent operating point (Q-point). Keep the tube conducting continuously for linear amplification.</div></div>
   <ul class="n-list">
-    <li><strong>555 Timer:</strong> Used for astable (oscillator), monostable (one-shot delay), bistable.</li>
-    <li><strong>Capacitor in AC:</strong> Current LEADS voltage by 90°. Higher frequency = lower reactance. Blocks DC. Always discharge before touching!</li>
-    <li><strong>Surge Arrester:</strong> MOV clamps transient overvoltages, shunting to earth. Arc arrestor uses spark gaps (radio antennas).</li>
-    <li><strong>Doping:</strong> N-type (pentavalent = extra electrons). P-type (trivalent = holes).</li>
-    <li><strong>RMS Value:</strong> Equivalent DC heating value. <span class="n-formula">Vrms = 0.707 × Vpeak</span>. <span class="n-val">440V</span> RMS = <span class="n-val">622V</span> Peak.</li>
-    <li><strong>Phase Advancer:</strong> Injects AC EMF into rotor of wound-rotor motor to improve PF, instead of drawing reactive power from grid.</li>
-    <li><strong>Ebonite:</strong> Hard vulcanised rubber, good insulator but brittle with UV. Used in older switchboards.</li>
+    <li><strong>Modern Equivalent:</strong> Transistor biasing networks (e.g., voltage divider bias) serve the same function.</li>
+    <li><strong>Ship Application:</strong> Older radar and radio transmitters used valve technology where grid bias supplies were critical.</li>
+  </ul>
+
+  <div class="n-h1" id="s-emf-pd">13. EMF vs Potential Difference</div>
+  <div class="n-grid">
+    <div class="n-card" style="border-color:var(--blue-border)">
+      <div class="card-title" style="color:var(--blue)">Electromotive Force (EMF)</div>
+      <div class="card-desc">Energy per unit charge provided by source. Measured at <strong>OPEN CIRCUIT</strong> (no current flowing).</div>
+    </div>
+    <div class="n-card" style="border-color:var(--blue-border)">
+      <div class="card-title" style="color:var(--blue)">Potential Difference (PD)</div>
+      <div class="card-desc">Terminal Voltage. Voltage across source <strong>WHEN CURRENT FLOWS</strong>. Drops due to internal resistance.<br><code style="color:var(--cyan)">PD = EMF - (I × r_internal)</code></div>
+    </div>
+  </div>
+
+  <div class="n-h1" id="s-components">14. Additional Components &amp; Properties</div>
+  <ul class="n-list">
+    <li><strong>555 Timer:</strong> Versatile IC. Used for astable (oscillator/flasher), monostable (one-shot delay), bistable (flip-flop).</li>
+    <li><strong>Capacitor in AC:</strong> Current LEADS voltage by 90° (CIVIL). Higher frequency = lower reactance. Blocks DC. <strong>SAFETY:</strong> Always discharge before touching!</li>
+    <li><strong>Surge Arrester:</strong> Protective device (MOV) that clamps transient overvoltages to a safe level, shunting to earth. Arc arrestor uses spark gaps (radio antennas).</li>
+    <li><strong>Doping:</strong> Adding impurities. N-type (pentavalent = extra electrons). P-type (trivalent = holes).</li>
+    <li><strong>RMS Value:</strong> Equivalent DC heating value. <code style="color:var(--cyan)">Vrms = 0.707 × Vpeak</code>. <span class="n-val">440V</span> RMS = <span class="n-val">622V</span> Peak. Insulation must withstand peak!</li>
+    <li><strong>Phase Advancer:</strong> Injects AC EMF into rotor of wound-rotor motor to improve PF locally, instead of drawing reactive power from grid.</li>
+    <li><strong>Ebonite:</strong> Hard vulcanised rubber, excellent insulator but brittle with UV. Used in older switchboard handles.</li>
     <li><strong>Impulse Voltage Generator:</strong> Produces high-voltage <span class="n-val">1.2/50 µs</span> lightning impulse waveform for testing insulation (Marx generator).</li>
   </ul>
 
@@ -339,6 +369,26 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
       <td>Difference between Ex d and Ex i?</td>
       <td>Ex d contains the explosion. Ex i limits electrical energy below ignition threshold to prevent spark.</td>
     </tr>
+    <tr>
+      <td>What is grid bias voltage?</td>
+      <td>Fixed DC voltage applied to control grid of a vacuum tube to set its operating point.</td>
+    </tr>
+    <tr>
+      <td>Difference between EMF and potential difference?</td>
+      <td>EMF is open-circuit energy. PD is terminal voltage when current flows (drops due to internal resistance).</td>
+    </tr>
+    <tr>
+      <td>What is a phase advancer?</td>
+      <td>Injects AC EMF into rotor of wound-rotor motor to improve power factor locally.</td>
+    </tr>
+    <tr>
+      <td>What is RMS value?</td>
+      <td>Equivalent DC heating value. Vrms = 0.707 × Vpeak. Important because insulation must withstand the peak voltage.</td>
+    </tr>
+    <tr>
+      <td>What happens with a capacitor in an AC circuit?</td>
+      <td>Current LEADS voltage by 90°. Higher frequency = lower reactance. Blocks DC.</td>
+    </tr>
   </table>
 
 
@@ -388,5 +438,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

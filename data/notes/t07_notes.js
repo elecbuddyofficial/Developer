@@ -13,7 +13,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
       <span class="tag tag-purple">PLC Programming</span>
     </div>
   </div>
-  <div class="note-anchors">
+    <div class="note-anchors">
     <span>Jump to section</span>
     <button class="anc-btn" onclick="jumpTo('s-openclosed')">Open vs Closed</button>
     <button class="anc-btn" onclick="jumpTo('s-pid')">PID Controller</button>
@@ -25,10 +25,17 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <button class="anc-btn" onclick="jumpTo('s-valves')">Control Valves</button>
     <button class="anc-btn" onclick="jumpTo('s-gap')">Gap Additions</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
+    <button class="anc-btn" onclick="jumpTo('s-plc-hardware')">PLC Hardware</button>
+    <button class="anc-btn" onclick="jumpTo('s-ias-scada')">IAS/SCADA</button>
+    <button class="anc-btn" onclick="jumpTo('s-valve-positioner')">Valve Positioner</button>
+    <button class="anc-btn" onclick="jumpTo('s-cyber')">Cybersecurity</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
   
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> PID controller (P, I, D actions, offset, integral windup), Open vs Closed loop, PLC scan cycle and memory types, Ladder logic, Cascade control (Boiler/HFO), 3-element feedwater control, PMS sequential load restoration, and PLC timer types.</div></div>
 
@@ -235,7 +242,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     </div>
     <div class="n-card">
       <div class="card-title">Modbus</div>
-      <div class="card-desc">Master-slave serial protocol (RS485). No peer-to-peer. Speed: 9600-<span class="n-val">115200 bps</span>.</div>
+      <div class="card-desc">Master-slave serial protocol (RS485). No peer-to-peer. Speed: <span class="n-val">9600-115200 bps</span>.</div>
     </div>
   </div>
 
@@ -290,7 +297,10 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why a valve positioner is needed beyond an I/P converter:</strong> An I/P converter translates a 4–20 mA signal into 3–15 psi air. But the valve stem may not reach the exact commanded position due to: (1) <strong>Stiction:</strong> Static friction in valve packing - the stem doesn't move until sufficient pressure differential overcomes it. (2) <strong>Hysteresis:</strong> The stem position lags behind the control signal, following different paths on increasing vs decreasing signals due to friction and mechanical clearances.<br>
   A valve positioner forms a local mechanical feedback loop directly with the valve stem. It continuously compares the commanded position (from the I/P signal) with the actual stem position (from a feedback linkage or potentiometer). Any difference → positioner adjusts the pneumatic output to the actuator until error = zero. Overcomes stiction and hysteresis completely. Essential for precision flow control loops.</div></div>
 
-<div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
+
+  <!-- ═══ CYBERSECURITY ═══ -->
+  
+  <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Questions &amp; Ideal Answers</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body">These are exact question formats from MMD orals. Study the key points.</div></div>
 
   <div class="n-h2">General Control Systems</div>
@@ -298,7 +308,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
     <tr>
       <td>What is the difference between open loop and closed loop control?</td>
-      <td>Open loop has no feedback; cannot correct disturbances. Closed loop measures output and feeds back to calculate error (<span class="n-formula">SP-PV</span>) to self-correct.</td>
+      <td>Open loop has no feedback; cannot correct disturbances. Closed loop measures output and feeds back to calculate error (<code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:13px">SP-PV</code>) to self-correct.</td>
     </tr>
     <tr>
       <td>What is offset in a proportional controller and how is it eliminated?</td>
@@ -356,9 +366,9 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </table>
 
 
-  <!-- ═══ QUICK REVISION ═══ -->
-  
-  <div class="n-h1" id="s-cyber">🔐 IACS UR E26/E27 - Maritime Cybersecurity (Mandatory 2024)</div>
+
+  </div>
+<div class="n-h1" id="s-cyber">🔐 IACS UR E26/E27 - Maritime Cybersecurity (Mandatory 2024)</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Brand new mandatory regulation - surveyors asking this from 2024.</strong> All ships contracted on or after <span class="n-val">1 July 2024</span>. PLC, SCADA, and IAS systems are directly in scope.</div></div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--blue-border)"><div class="card-title" style="color:var(--blue)">UR E26 - Ship Level</div><div class="card-desc">Treats ship as complete entity. 17 requirements across 5 NIST functions: Identify, Protect, Detect, Respond, Recover. Requires Cyber Security Design Description (CSDD) from shipyard.</div></div>
@@ -375,7 +385,10 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is IACS UR E26 vs E27? (New 2024 - will be asked at every oral from 2025 onwards)</strong><br><strong>Ideal Answer:</strong> UR E26 = ship-level cyber resilience - secure integration of IT and OT throughout ship's lifecycle. 17 requirements across 5 NIST functions. Mandatory for ships contracted on or after <span class="n-val">1 July 2024</span>. UR E27 = individual equipment level - OEM must build 30 specific security capabilities into each Computer-Based System before installation. 11 additional if system connects to untrusted networks. Both mandatory. Class surveys verify compliance.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>A technician wants to connect to the PLC for diagnostics - what cybersecurity protocol do you follow?</strong><br><strong>Ideal Answer:</strong> Under IACS UR E27, check system category - most PLCs are Category III. Protocol: (1) Scan technician laptop/USB for malware. (2) Verify identity and authorization. (3) Physical approval - turn key-switch or unlock port. (4) For remote access: enforce MFA. (5) Monitor all actions in immutable audit log. (6) Rotate any credentials after session. (7) Verify no unauthorized changes to PLC program after session.</div></div>
 
-<div class="n-h1" id="s-quickrev">📊 Quick Revision - Surveyor Frequency Guide</div>
+
+  <!-- ═══ QUICK REVISION ═══ -->
+  
+  <div class="n-h1" id="s-quickrev">📊 Quick Revision - Surveyor Frequency Guide</div>
   <table class="n-table">
     <tr><th>Topic</th><th>Frequency</th><th>Key Points to Memorise</th></tr>
     <tr>
@@ -425,5 +438,10 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     </tr>
   </table>
 
-  </div>
-</div>`);
+
+  <!-- ═══ SURVEYOR Q&A ═══ -->
+
+    </div>
+</div>
+</div>
+`);

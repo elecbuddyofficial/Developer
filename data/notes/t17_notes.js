@@ -21,9 +21,13 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
     <button class="anc-btn" onclick="jumpTo('s-annexVI')">Annex VI - Air Pollution</button>
     <button class="anc-btn" onclick="jumpTo('s-cii')">CII &amp; SEEMP</button>
     <button class="anc-btn" onclick="jumpTo('s-new2024')">2024-2026 Updates</button>
+    <button class="anc-btn" onclick="jumpTo('s-altfuels')">Alternative Fuels</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-annexI">🛢️ MARPOL Annex I - Oil Pollution Prevention</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask OWS working, 15 ppm limit, discharge criteria, and ORB entries.</strong></div></div>
@@ -55,7 +59,12 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
   <p class="n-p">The Oil Content Monitor (OCM) relies on an infrared absorption or light-scattering optical sensor to sample effluent transparency. <strong>Critical Safety Risk:</strong> Over time, a microscopic film of oil or iron rust scale deposits onto the internal quartz sensor window. This coating shunts and dampens the infrared light absorption path, tricking the OCM into recording a <strong>false low reading (well below 15 ppm)</strong> even when highly contaminated bilge water is being pumped overboard. This creates a severe MARPOL non-compliance risk that can trigger criminal prosecution.</p>
   <p class="n-p">To mitigate this, the ETO must physically clean the sensor cell window monthly using an approved chemical solvent and cloth. System maintenance parameters: replace coalescing filter cartridges every <span class="n-val">6–12 months</span> depending on bilge sludge contamination, periodically flush the separation chamber, and verify that the 3-way solenoid valve drops immediately to its fail-safe recirculating port during a local power failure.</p>
 
-
+  <div class="n-h2">SOPEP vs SMPEP - Emergency Plans</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Surveyors frequently ask the difference between SOPEP and SMPEP.</strong></div></div>
+  <ul class="n-list">
+    <li><strong>SOPEP (Shipboard Oil Pollution Emergency Plan):</strong> Required under MARPOL Annex I for all ships <span class="n-val">&gt; 400 GT</span> and oil tankers <span class="n-val">&gt; 150 GT</span>. Covers oil pollution ONLY. Procedures for reporting oil spills, notification contacts, containment measures.</li>
+    <li><strong>SMPEP (Shipboard Marine Pollution Emergency Plan):</strong> Required for chemical/NLS tankers under MARPOL Annex II. Covers Noxious Liquid Substances (NLS) IN ADDITION to oil. SMPEP is a SUPERSET of SOPEP. Tankers carry SMPEP which essentially replaces SOPEP.</li>
+  </ul>
   
   <div class="n-h1" id="s-bwmc">🧬 Ballast Water Management Convention (BWMC)</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyors Kamath and Praveen Nair frequently drill the ETO on the differences between D-1 and D-2 criteria and treatment system logs.</strong></div></div>
@@ -105,8 +114,8 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
   <table class="n-table">
     <tr><th>Tier</th><th>Engine Build Year</th><th>NOx Reduction</th><th>Technology</th></tr>
     <tr><td>Tier I</td><td>Before 2011</td><td>Baseline</td><td>Engine tuning</td></tr>
-    <tr><td>Tier II</td><td>2011+</td><td class="hl">~<span class="n-val">15.4%</span> below Tier I</td><td>Optimised combustion</td></tr>
-    <tr><td>Tier III</td><td class="hl">2016+ in NOx ECAs</td><td class="hl">~<span class="n-val">80%</span> below Tier I</td><td class="hl">SCR (Selective Catalytic Reduction) or dual-fuel</td></tr>
+    <tr><td>Tier II</td><td>2011+</td><td class="hl"><span class="n-val">~15.4%</span> below Tier I</td><td>Optimised combustion</td></tr>
+    <tr><td>Tier III</td><td class="hl">2016+ in NOx ECAs</td><td class="hl"><span class="n-val">~80%</span> below Tier I</td><td class="hl">SCR (Selective Catalytic Reduction) or dual-fuel</td></tr>
   </table>
 
   <div class="n-h2">Onboard Incinerator Thermal Restrictions (Regulation 16)</div>
@@ -133,6 +142,18 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
   <div class="n-formula">CII = Annual CO₂ emissions / (DWT × Distance sailed)<div class="label">Units: g CO₂ / DWT·nm · Rating: A (best) → E (worst)</div></div>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>SEEMP Part III - mandatory corrective action:</strong> If a ship receives a <strong>D rating for 3 consecutive years</strong> OR an <strong>E rating for 1 year</strong> → a Corrective Action Plan (CAP) must be developed, verified, and submitted before a Statement of Compliance is issued. Ships without compliance cannot trade.</div></div>
+
+  <div class="n-h2">SEEMP Part 3 - ETO Role in CII Compliance</div>
+  <p class="n-p">The ETO directly contributes to improving a ship's CII rating through 7 key practical efficiency actions:</p>
+  <ol class="n-steps">
+    <li><strong>LED Lighting Conversion:</strong> Replacing 40W fluorescent tubes with 10W LEDs saves significant hotel load (~36 tonnes HFO/year on a large vessel).</li>
+    <li><strong>VFD on Pumps/Fans:</strong> Reducing centrifugal pump/fan speed by 20% reduces power by nearly 50% (cube law).</li>
+    <li><strong>Power Factor Correction:</strong> Improving PF (e.g. from 0.75 to 0.95) reduces generator reactive current and I²R thermal losses.</li>
+    <li><strong>Shore Power (Cold Ironing):</strong> Stopping auxiliary engines in port drops fuel consumption to 0% at berth.</li>
+    <li><strong>Waste Heat Recovery:</strong> Cleaning exhaust economiser tubes increases steam generation, reducing oil-fired boiler use.</li>
+    <li><strong>Accurate Energy Monitoring:</strong> Maintaining accurate flow meters and energy sensors required for IMO Data Collection System (DCS).</li>
+    <li><strong>PMS Optimisation:</strong> Configuring the Power Management System to avoid unnecessary parallel running at low combined loads.</li>
+  </ol>
 
   <div class="n-h2">Ozone Depletion Potential (ODP) &amp; Refrigerant Environmental Metrics</div>
   <p class="n-p">Under <strong>MARPOL Annex VI Regulation 12</strong>, the intentional venting or atmospheric release of ozone-depleting substances during refrigeration or AC plant maintenance is strictly prohibited. ETOs must track refrigerant specifications using two environmental baselines:</p>
@@ -199,7 +220,7 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
     <tr><th>Hazard</th><th>Value</th><th>Implication</th></tr>
     <tr><td>TLV (Time-Weighted Average)</td><td class="bad"><span class="n-val">25 ppm</span></td><td>Warning alarm setpoint</td></tr>
     <tr><td>IDLH (Immediately Dangerous)</td><td class="bad"><span class="n-val">300 ppm</span></td><td class="bad">Immediately life-threatening</td></tr>
-    <tr><td>Evacuation alarm</td><td class="bad">~<span class="n-val">50 ppm</span></td><td class="bad">Evacuate space immediately</td></tr>
+    <tr><td>Evacuation alarm</td><td class="bad"><span class="n-val">~50 ppm</span></td><td class="bad">Evacuate space immediately</td></tr>
     <tr><td>Detection type</td><td class="hl">Continuous electrochemical NH₃ sensors</td><td>ETO maintains calibration</td></tr>
     <tr><td>Safeties</td><td class="hl">Remote solenoid isolation valves + SCBA at entry points</td><td>Mandatory</td></tr>
   </table>
@@ -224,5 +245,7 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
     <tr><td>Sample size increase</td><td class="hl">⭐⭐⭐⭐ New regulation</td><td><span class="n-val">400 mL</span> → <span class="n-val">600 mL</span> MARPOL retained sample</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

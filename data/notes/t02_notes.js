@@ -9,37 +9,53 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
     <div class="sub">ETO CoC Oral Assessment · STCW Reg. III/6 · DG Shipping India</div>
     <div class="tags">
       <span class="tag tag-blue">🔴 Exam Critical</span>
-      <span class="tag tag-orange"><span class="n-val">6.6kV</span> / <span class="n-val">11kV</span></span>
+      <span class="tag tag-orange">6.6kV / <span class="n-val">11kV</span></span>
       <span class="tag tag-purple">VCB · NER · IRM</span>
     </div>
   </div>
   <div class="note-anchors">
     <span>Jump to section</span>
     <button class="anc-btn" onclick="jumpTo('t2-basics')">HV Basics</button>
-    <button class="anc-btn" onclick="jumpTo('t2-multiples')">Why <span class="n-val">1.1kV</span>?</button>
+    <button class="anc-btn" onclick="jumpTo('t2-multiples')">Why 1.1kV?</button>
     <button class="anc-btn" onclick="jumpTo('t2-ner')">NER</button>
     <button class="anc-btn" onclick="jumpTo('t2-vcb')">VCB &amp; SF6</button>
+    <button class="anc-btn" onclick="jumpTo('t2-sf6-full')">SF6 Hazards</button>
     <button class="anc-btn" onclick="jumpTo('t2-deadfront')">Dead Front &amp; MSB</button>
+    <button class="anc-btn" onclick="jumpTo('t2-msb-clearances')">MSB Clearances</button>
+    <button class="anc-btn" onclick="jumpTo('t2-busbars')">Busbars</button>
     <button class="anc-btn" onclick="jumpTo('t2-arc')">Arc Flash</button>
     <button class="anc-btn" onclick="jumpTo('t2-safety')">HV Working</button>
     <button class="anc-btn" onclick="jumpTo('t2-gloves')">HV Gloves</button>
+    <button class="anc-btn" onclick="jumpTo('t2-glove-rules')">Glove Rules</button>
     <button class="anc-btn" onclick="jumpTo('t2-vcb-maint')">VCB Maint.</button>
     <button class="anc-btn" onclick="jumpTo('t2-ir')">HV IR Test</button>
+    <button class="anc-btn" onclick="jumpTo('t2-ir-formula')">Min IR Formula</button>
     <button class="anc-btn" onclick="jumpTo('t2-irm')">IRM</button>
     <button class="anc-btn" onclick="jumpTo('t2-bonding')">Tanker Bonding</button>
     <button class="anc-btn" onclick="jumpTo('t2-shaft')">Shaft Earthing</button>
-    </div>
+    <button class="anc-btn" onclick="jumpTo('t2-streaming')">Cargo Hose IR</button>
+    <button class="anc-btn" onclick="jumpTo('t2-megger-special')">Megger Rules</button>
+    <button class="anc-btn" onclick="jumpTo('t2-vcb-timing')">VCB Timing</button>
+    <button class="anc-btn" onclick="jumpTo('t2-hvsc-advanced')">HVSC Standards</button>
+    <button class="anc-btn" onclick="jumpTo('s-surveyor-qa')">Surveyor Q&amp;A</button>
+    <button class="anc-btn" onclick="jumpTo('t2-quickrev')">Quick Revision</button>
+  </div>
+
+  <div class="note-content">
+
+
+  
 
 <div class="n-h1" id="t2-qa-basics">❓ Surveyor Q&A - HV Basics</div>
 <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What are the advantages and disadvantages of a high voltage system on ships?<br><strong>Ideal Answer:</strong> <em>Advantages:</em> For the same power, higher voltage means lower current - smaller cables (less weight, less cost), lower I²R losses (less heat in cables), smaller generator windings, economical for large power transmission. <em>Disadvantages:</em> More dangerous (higher lethal risk), needs special equipment (VCB, SF6, HV cables, HV motors), needs trained personnel, higher equipment cost, needs step-down transformers for normal use, more complex protection.</div></div>
-<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is considered high voltage on a ship?<br><strong>Ideal Answer:</strong> Per IEC 60092: high voltage is above <span class="n-val">1000V</span> AC or <span class="n-val">1500V</span> DC. Typical HV on ships: <span class="n-val">3.3 kV</span>, <span class="n-val">6.6 kV</span> (most common), <span class="n-val">11 kV</span> (very large ships). LV is <span class="n-val">1000V</span> AC and below - includes the standard ship supply of <span class="n-val">440V</span>. Ships needing more than 3-<span class="n-val">5 MW</span> total electrical power typically use HV systems - VLCCs, large bulk carriers, LNG carriers, cruise ships.</div></div>
+<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is considered high voltage on a ship?<br><strong>Ideal Answer:</strong> Per IEC 60092: high voltage is above <span class="n-val">1000V</span> AC or <span class="n-val">1500V</span> DC. Typical HV on ships: <span class="n-val">3.3 kV</span>, <span class="n-val">6.6 kV</span> (most common), <span class="n-val">11 kV</span> (very large ships). LV is <span class="n-val">1000V</span> AC and below - includes the standard ship supply of <span class="n-val">440V</span>. Ships needing more than <span class="n-val">3-5 MW</span> total electrical power typically use HV systems - VLCCs, large bulk carriers, LNG carriers, cruise ships.</div></div>
 
 <div class="n-h2">Power Equation - The Heart of HV Justification</div>
 <div class="n-formula">P = √3 × V × I × PF<div class="label">Doubling V halves I for the same power output</div></div>
 <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Worked example:</strong> <span class="n-val">6.6kV</span> at <span class="n-val">1000A</span> delivers the SAME power as <span class="n-val">440V</span> at 15,<span class="n-val">000A</span>. The cable sized for <span class="n-val">1000A</span> vs 15,<span class="n-val">000A</span> represents a massive copper, weight and cost saving. This is the single biggest exam justification for HV.</div></div>
-<div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> "Higher Volts = Lower Amps = Thinner Cables = Lighter Ship." HV is chosen when load exceeds 3-<span class="n-val">5 MW</span>.</div></div>
+<div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> "Higher Volts = Lower Amps = Thinner Cables = Lighter Ship." HV is chosen when load exceeds <span class="n-val">3-5 MW</span>.</div></div>
 
-<div class="n-h1" id="t2-qa-formfactor">❓ Form Factor & Q&A - <span class="n-val">1.1 kV</span> Series</div>
+<div class="n-h1" id="t2-qa-formfactor">❓ Form Factor & Q&A <span class="n-val">-1.1 kV</span> Series</div>
 <div class="n-formula">Form Factor = V<sub>rms</sub> / V<sub>avg</sub> = (0.707 × V<sub>peak</sub>) / (0.637 × V<sub>peak</sub>) = 1.11<div class="label">≈ 1.1 - the base of the IEC standard HV voltage series</div></div>
 <div class="n-info"><div class="icon">📖</div><div class="body"><strong>IEC Standard Voltage Series:</strong> 1.1, 3.3, 6.6, 11, 33, 66, 110, 132, 220, <span class="n-val">400 kV</span>. Successive levels relate by ratios of approximately √3 (1.732) and 2. On ships: <strong>3.3 = 3×1.1</strong>, <strong>6.6 = 6×1.1</strong>, <strong>11 = 10×1.1</strong>.</div></div>
 <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Praveen Nair):</strong> Why are HV voltages on ships multiples of <span class="n-val">1.1 kV</span> (3.3, 6.6, 11)?<br><strong>Ideal Answer:</strong> Form factor of a sinusoidal AC waveform = V<sub>rms</sub>/V<sub>avg</sub> = 1.11 (≈1.1). This <span class="n-val">1.1 kV</span> forms the base of the IEC standard voltage series. 3.3 = 3×1.1, 6.6 = 6×1.1, 11 = 10×1.1. Standardisation simplifies transformer design and insulation coordination across the voltage series, and ensures global interoperability of HV equipment.</div></div>
@@ -52,9 +68,9 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <div class="n-card" style="border-color:var(--blue-border)"><div class="card-title" style="color:var(--blue)">I<sub>max</sub> = <span class="n-val">5A</span></div><div class="card-val">762 Ω</div><div class="card-desc">3810 / 5 = 762 ohms</div></div>
   <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">Typical Range</div><div class="card-val">300-800 Ω</div><div class="card-desc">For <span class="n-val">6.6kV</span> systems</div></div>
 </div>
-<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Vishwanathan, Deswal):</strong> Why is the HV system not fully floating like LV ships?<br><strong>Ideal Answer:</strong> On HV, a fully floating system would let healthy phase voltage rise to √3 × normal phase voltage during an earth fault (<span class="n-val">6.6kV</span> → <span class="n-val">11.4kV</span>), severely stressing insulation. There is also a ferroresonance risk - dangerous overvoltages. NER limits earth fault current to a safe value (5-<span class="n-val">30A</span>) AND provides a defined earth reference to limit these overvoltages.</div></div>
+<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Vishwanathan, Deswal):</strong> Why is the HV system not fully floating like LV ships?<br><strong>Ideal Answer:</strong> On HV, a fully floating system would let healthy phase voltage rise to √3 × normal phase voltage during an earth fault (<span class="n-val">6.6kV</span> → <span class="n-val">11.4kV</span>), severely stressing insulation. There is also a ferroresonance risk - dangerous overvoltages. NER limits earth fault current to a safe value (<span class="n-val">5-30A</span>) AND provides a defined earth reference to limit these overvoltages.</div></div>
 <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Kamath):</strong> What is the common/neutral point in an HV system and how is NER connected?<br><strong>Ideal Answer:</strong> The neutral (star point) is where the three phase windings of the generator/transformer secondary meet. In a star-connected generator the neutral terminal is directly available - NER connects between neutral and ship's hull (earth). In a delta-connected HV generator there is no neutral point, so a zig-zag (earthing) transformer is used to create an artificial neutral for the NER connection. The NER is mounted in the HV switchboard room or near the generator neutral terminal in a protected, restricted-access enclosure.</div></div>
-<div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - NER:</strong> "The compromise between solid earth (too much current) and floating (too much voltage)." R = V<sub>phase</sub>/I<sub>max</sub>, where V<sub>phase</sub> = V<sub>line</sub>/√3. Limits current to 5-<span class="n-val">30A</span> - enough to detect the fault, not enough to cause major damage.</div></div>
+<div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - NER:</strong> "The compromise between solid earth (too much current) and floating (too much voltage)." R = V<sub>phase</sub>/I<sub>max</sub>, where V<sub>phase</sub> = V<sub>line</sub>/√3. Limits current to <span class="n-val">5-30A</span> - enough to detect the fault, not enough to cause major damage.</div></div>
 
 <div class="n-h1" id="t2-qa-vcb">❓ VCB / SF6 - Q&A & Arc Detail</div>
 <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Arc energy ∝ V².</strong> At <span class="n-val">6.6kV</span> the arc is (6600/440)² = 225× more energetic than at <span class="n-val">440V</span>. This is the core reason ACB (air) fails at HV.</div></div>
@@ -66,8 +82,8 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <li>Arc extinguished at first current zero crossing - typically within ½ cycle (10 ms at <span class="n-val">50 Hz</span>).</li>
   <li><strong>Limitation:</strong> Vacuum integrity cannot be verified without special equipment; bottle has finite life.</li>
 </ul>
-<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> Why is VCB used on HV and not ACB?<br><strong>Ideal Answer:</strong> Arc energy ∝ V² - at <span class="n-val">6.6kV</span> the arc is ~225× more energetic than at <span class="n-val">440V</span>. Air in an ACB ionises under the intense HV arc and becomes conducting, so it cannot quench it - continued arcing causes fire and explosion (ACB limited to ~<span class="n-val">1000V</span>). A VCB opens contacts in vacuum; the small metal-vapour arc dissipates instantly at the first current zero (~10 ms) since there are no air molecules to sustain ionisation. SF6 uses an electronegative gas that absorbs free electrons to stop the arc.</div></div>
-<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is SF6 gas and what are its properties?<br><strong>Ideal Answer:</strong> SF6 (Sulphur Hexafluoride, 1 S + 6 F) - colourless, odourless, non-toxic when pure, non-flammable. Dielectric strength 2.5× air at atmospheric pressure (5-8× at ~<span class="n-val">4 bar</span>). Electronegative - absorbs free electrons to stop the arc. Environmental concern: GWP = 23,500, atmospheric life 3200 years. Arc decomposition products (HF, SOF2, SO2F2) are toxic - ventilate before entry after any arcing. Still widely used as no satisfactory alternative exists at very high voltage.</div></div>
+<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> Why is VCB used on HV and not ACB?<br><strong>Ideal Answer:</strong> Arc energy ∝ V² - at <span class="n-val">6.6kV</span> the arc is ~225× more energetic than at <span class="n-val">440V</span>. Air in an ACB ionises under the intense HV arc and becomes conducting, so it cannot quench it - continued arcing causes fire and explosion (ACB limited to <span class="n-val">~1000V</span>). A VCB opens contacts in vacuum; the small metal-vapour arc dissipates instantly at the first current zero (~10 ms) since there are no air molecules to sustain ionisation. SF6 uses an electronegative gas that absorbs free electrons to stop the arc.</div></div>
+<div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is SF6 gas and what are its properties?<br><strong>Ideal Answer:</strong> SF6 (Sulphur Hexafluoride, 1 S + 6 F) - colourless, odourless, non-toxic when pure, non-flammable. Dielectric strength 2.5× air at atmospheric pressure (5-8× at <span class="n-val">~4 bar</span>). Electronegative - absorbs free electrons to stop the arc. Environmental concern: GWP = 23,500, atmospheric life 3200 years. Arc decomposition products (HF, SOF2, SO2F2) are toxic - ventilate before entry after any arcing. Still widely used as no satisfactory alternative exists at very high voltage.</div></div>
 <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Voltage ranges:</strong> ACB up to <span class="n-val">1000V</span> (LV only) · VCB up to <span class="n-val">36 kV</span> · SF6 up to <span class="n-val">800 kV</span>. SF6 also provides excellent insulation between open contacts.</div></div>
 <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - SF6 dielectric:</strong> "2.5× air at <span class="n-val">1 bar</span>, 5-8× air at <span class="n-val">4 bar</span>." Electronegative = "electron-eater" - it gobbles free electrons so the arc cannot survive.</div></div>
 
@@ -97,7 +113,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">② Lower I²R Losses</div><div class="card-desc">Less current = less heat lost in cables.</div></div>
   <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">③ Smaller Cables</div><div class="card-desc">Reduces weight and space in cable trays.</div></div>
   <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">④ Smaller Generator</div><div class="card-desc">Less copper in windings for same rating.</div></div>
-  <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">⑤ Economical Transmission</div><div class="card-desc">Essential for very large ships &gt; 3-<span class="n-val">5 MW</span>.</div></div>
+  <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">⑤ Economical Transmission</div><div class="card-desc">Essential for very large ships &gt; <span class="n-val">3-5 MW</span>.</div></div>
 </div>
 <div class="n-h2">Disadvantages - 7 Points</div>
 <ul class="n-list">
@@ -138,7 +154,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <tr><td>Maintenance</td><td>Moderate - chute clean</td><td class="ok">Low - sealed bottle</td><td>Low-moderate - gas monitor</td></tr>
   <tr><td>Dielectric strength</td><td class="bad">Low (air)</td><td class="ok">High (vacuum)</td><td class="ok">Very high (2.5× air)</td></tr>
   <tr><td>Environmental</td><td class="ok">None</td><td class="ok">None</td><td class="bad">GWP 23,500</td></tr>
-  <tr><td>Ship application</td><td>MSB/ESB - LV</td><td class="hl">HV SB 3.3-<span class="n-val">11kV</span></td><td>HV, some large ships</td></tr>
+  <tr><td>Ship application</td><td>MSB/ESB - LV</td><td class="hl">HV SB 3.<span class="n-val">3-11kV</span></td><td>HV, some large ships</td></tr>
 </table>
 <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - VCB:</strong> "No air, no arc." Advantages: no arc products, no quench medium maintenance, compact, fast. Disadvantages: vacuum can't be verified without special gear, bottle has finite life.</div></div>
 
@@ -150,7 +166,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   </div>
 
   <div class="n-h1" id="t2-basics">⚡ High Voltage Systems - Basics</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Definition (IEC 60092):</strong> High Voltage is above <span class="n-val">1000V</span> AC or <span class="n-val">1500V</span> DC. Typical HV on ships: <strong><span class="n-val">3.3 kV</span></strong>, <strong><span class="n-val">6.6 kV</span></strong> (most common), <strong><span class="n-val">11 kV</span></strong>. HV is justified when total electrical power demand exceeds approximately 3-<span class="n-val">5 MW</span>.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Definition (IEC 60092):</strong> High Voltage is above <span class="n-val">1000V</span> AC or <span class="n-val">1500V</span> DC. Typical HV on ships: <strong><span class="n-val">3.3 kV</span></strong>, <strong><span class="n-val">6.6 kV</span></strong> (most common), <strong><span class="n-val">11 kV</span></strong>. HV is justified when total electrical power demand exceeds approximately <span class="n-val">3-5 MW</span>.</div></div>
   <div class="n-h2">Advantages vs Disadvantages</div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--green-border)">
@@ -195,7 +211,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
       <div class="card-desc">First fault gives no trip. But on HV, healthy phase voltage rises to <strong>√3 × phase voltage</strong> during fault (e.g., to <span class="n-val">11.4kV</span> on <span class="n-val">6.6kV</span> system) → severely stresses insulation.</div>
     </div>
   </div>
-  <div class="n-ok"><div class="icon">✅</div><div class="body"><strong>With NER Solution:</strong> Connects HV generator neutral to earth through a resistor. Limits earth fault current to safe value (e.g., 5-<span class="n-val">30A</span>) while providing defined earth reference to limit overvoltages.</div></div>
+  <div class="n-ok"><div class="icon">✅</div><div class="body"><strong>With NER Solution:</strong> Connects HV generator neutral to earth through a resistor. Limits earth fault current to safe value (e.g., <span class="n-val">5-30A</span>) while providing defined earth reference to limit overvoltages.</div></div>
   <div class="n-h2">NER Calculation Example</div>
   <div class="n-formula">R_NER = V_phase / I_fault_max<div class="label">V_phase = Line Voltage / √3</div></div>
   <p class="n-p">For a <span class="n-val">6.6kV</span> system with max allowed fault current of <span class="n-val">10A</span>:<br>
@@ -274,7 +290,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <div class="n-h2">Routine Maintenance</div>
   <ul class="n-list">
     <li><strong>Visual:</strong> Check vacuum bottle for cracks, mechanism for wear.</li>
-    <li><strong>Vacuum Integrity Test:</strong> Apply 30-<span class="n-val">40kV</span> across open contacts to confirm vacuum still exists.</li>
+    <li><strong>Vacuum Integrity Test:</strong> Apply <span class="n-val">30-40kV</span> across open contacts to confirm vacuum still exists.</li>
     <li><strong>Ductor Test (Contact Resistance):</strong> Measure closed contact resistance using micro-ohmmeter (typically &lt; 100 μΩ). High resistance = worn/oxidised contacts.</li>
     <li><strong>Timing Test:</strong> Measure open/close speed and contact bounce.</li>
   </ul>
@@ -291,7 +307,7 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <div class="n-h1" id="t2-irm">📡 Insulation Resistance Monitor (IRM)</div>
   <p class="n-p">Ship uses IT (Insulated Neutral) system. IRM continuously monitors insulation impedance to earth.</p>
   <ul class="n-list">
-    <li>Injects low-level voltage (1-<span class="n-val">5V</span>) between neutral and hull.</li>
+    <li>Injects low-level voltage (<span class="n-val">1-5V</span>) between neutral and hull.</li>
     <li>If insulation deteriorates, leakage current increases → impedance drops below threshold (~50-100 kΩ) → <strong>ALARM</strong>.</li>
     <li>IRM doesn't identify the specific faulty circuit. ETO must switch off non-essential circuits sequentially until alarm clears.</li>
   </ul>
@@ -381,24 +397,6 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   <strong>Contact bounce (extended duration):</strong> Indicates worn contacts or weakened contact pressure spring - contacts do not seat firmly and bounce. Replace contacts or adjust spring tension.<br>
   <strong>Remedy:</strong> Lubricate mechanism per maker manual, measure spring compression against specification, replace springs if below specified pre-load. Log all timing results for trend analysis.</div></div>
 
-<div class="n-h1" id="t2-quickrev">📊 Quick Revision - High Voltage</div>
-  <table class="n-table">
-    <tr><th>Topic</th><th>Frequency</th><th>Key Exam Phrases</th></tr>
-    <tr><td>HV Advantages</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Lower current, smaller cables, less I²R loss, saves weight.</td></tr>
-    <tr><td>Why VCB not ACB</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Air ionises at HV (arc too energetic). Vacuum extinguishes arc at first zero crossing.</td></tr>
-    <tr><td>NER</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Limits earth fault current. R = V_phase / I_fault.</td></tr>
-    <tr><td>Dead Front Panel</td><td class="hl">⭐⭐⭐⭐⭐</td><td>No live parts accessible from front. Enclosed barriers.</td></tr>
-    <tr><td>HV Work Procedure</td><td class="hl">⭐⭐⭐⭐⭐</td><td>PTW → Isolate → LOTO → Wait 5min → Test Dead → Earth.</td></tr>
-    <tr><td>Arc Flash</td><td class="hl">⭐⭐⭐⭐</td><td>Explosive energy release &gt;20,000°C. Blast = pressure wave.</td></tr>
-    <tr><td>HV Gloves</td><td class="hl">⭐⭐⭐⭐</td><td>Class 2 = Yellow (<span class="n-val">17kV</span>) for <span class="n-val">6.6kV</span> ships. Tested every 6 months.</td></tr>
-    <tr><td>SF6 Gas</td><td class="hl">⭐⭐⭐⭐</td><td>Electronegative, dielectric 2.5x air. High GWP. Toxic arc byproducts.</td></tr>
-    <tr><td><span class="n-val">1.1kV</span> Multiples</td><td class="hl">⭐⭐⭐⭐</td><td>Form factor = 1.11. IEC standard series. Transformer ratios.</td></tr>
-    <tr><td>VCB Rack Out</td><td class="hl">⭐⭐⭐⭐</td><td>Trip first (interlock). Service → Test → Isolated.</td></tr>
-    <tr><td>HV IR Test</td><td class="hl">⭐⭐⭐</td><td><span class="n-val">2500V</span>/<span class="n-val">5000V</span> megger to meaningfully stress insulation. Min IR = kV + 1 MΩ.</td></tr>
-  </table>
-  
-  <div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development. It will feature past papers, detailed numerical solutions, and structured answers for this topic.</div></div>
-
   <!-- ═══ SURVEYOR Q&A ═══ -->
   
   <div class="n-h1" id="t2-hvsc-advanced">🔌 HVSC Advanced - IEC/IEEE 80005-1:2019 Specific Values</div>
@@ -428,11 +426,22 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
     <p>Air has lower dielectric strength. At <span class="n-val">6.6kV</span>, an arc drawn in air during contact separation would be massive and difficult to extinguish, requiring enormous arc chutes. A vacuum provides excellent dielectric strength (no ionizable gas), extinguishing the arc quickly at the first zero-crossing of the AC current, allowing the breaker to be compact and maintenance-free.</p>
   </div></div>
 
+<div class="n-h1" id="t2-quickrev">📊 Quick Revision - High Voltage</div>
+  <table class="n-table">
+    <tr><th>Topic</th><th>Frequency</th><th>Key Exam Phrases</th></tr>
+    <tr><td>HV Advantages</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Lower current, smaller cables, less I²R loss, saves weight.</td></tr>
+    <tr><td>Why VCB not ACB</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Air ionises at HV (arc too energetic). Vacuum extinguishes arc at first zero crossing.</td></tr>
+    <tr><td>NER</td><td class="hl">⭐⭐⭐⭐⭐</td><td>Limits earth fault current. R = V_phase / I_fault.</td></tr>
+    <tr><td>Dead Front Panel</td><td class="hl">⭐⭐⭐⭐⭐</td><td>No live parts accessible from front. Enclosed barriers.</td></tr>
+    <tr><td>HV Work Procedure</td><td class="hl">⭐⭐⭐⭐⭐</td><td>PTW → Isolate → LOTO → Wait 5min → Test Dead → Earth.</td></tr>
+    <tr><td>Arc Flash</td><td class="hl">⭐⭐⭐⭐</td><td>Explosive energy release &gt;20,000°C. Blast = pressure wave.</td></tr>
+    <tr><td>HV Gloves</td><td class="hl">⭐⭐⭐⭐</td><td>Class 2 = Yellow (<span class="n-val">17kV</span>) for <span class="n-val">6.6kV</span> ships. Tested every 6 months.</td></tr>
+    <tr><td>SF6 Gas</td><td class="hl">⭐⭐⭐⭐</td><td>Electronegative, dielectric 2.5x air. High GWP. Toxic arc byproducts.</td></tr>
+    <tr><td><span class="n-val">1.1kV</span> Multiples</td><td class="hl">⭐⭐⭐⭐</td><td>Form factor = 1.11. IEC standard series. Transformer ratios.</td></tr>
+    <tr><td>VCB Rack Out</td><td class="hl">⭐⭐⭐⭐</td><td>Trip first (interlock). Service → Test → Isolated.</td></tr>
+    <tr><td>HV IR Test</td><td class="hl">⭐⭐⭐</td><td><span class="n-val">2500V</span>/<span class="n-val">5000V</span> megger to meaningfully stress insulation. Min IR = kV + 1 MΩ.</td></tr>
+  </table>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Coming Soon:</strong> The written preparation module is currently under development. It will feature past papers, detailed numerical solutions, and structured answers for this topic.  </div>
 </div>
 </div>
-
-</div></div>
-
-
-<!-- BACK TO TOP BUTTON -->
 `);

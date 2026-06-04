@@ -18,17 +18,28 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <button class="anc-btn" onclick="jumpTo('s-principle')">Principle</button>
     <button class="anc-btn" onclick="jumpTo('s-types')">Types</button>
     <button class="anc-btn" onclick="jumpTo('s-values')">Key Values</button>
+    <button class="anc-btn" onclick="jumpTo('s-potentials')">Protection Potentials</button>
+    <button class="anc-btn" onclick="jumpTo('s-electrodes')">Ref Electrodes</button>
+    <button class="anc-btn" onclick="jumpTo('s-comparison')">ICCP vs Anodes</button>
     <button class="anc-btn" onclick="jumpTo('s-operation')">Operation</button>
+    <button class="anc-btn" onclick="jumpTo('s-stray')">Stray Current</button>
+    <button class="anc-btn" onclick="jumpTo('s-faults')">ICCP Faults</button>
     <button class="anc-btn" onclick="jumpTo('s-bonding')">Bonding</button>
-    <button class="anc-btn" onclick="jumpTo('s-mgps')">MGPS</button>
+    <button class="anc-btn" onclick="jumpTo('s-shaft-detail')">Shaft Earthing</button>
+    <button class="anc-btn" onclick="jumpTo('s-mgps')">MGPS Basic</button>
+    <button class="anc-btn" onclick="jumpTo('s-mgps-detail')">MGPS Detailed</button>
     <button class="anc-btn" onclick="jumpTo('s-drydock')">Dry Dock</button>
+    <button class="anc-btn" onclick="jumpTo('s-commissioning')">Drydock Re-comm</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
+  <div class="note-content">
+
+
   <div class="n-h1" id="s-principle">⚡ Cathodic Protection - Principle</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask ICCP working, reference electrode, and port switch-off rule.</strong> Know protection potential range, why switched off at berth, and dry dock maintenance.</div></div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why hulls corrode:</strong> Seawater is an electrolyte (conductivity ~<span class="n-val">50 mS/cm</span>). Hull steel develops anodic areas (corrode: Fe→Fe²⁺+2e⁻) and cathodic areas (protected) due to grain variations, welds, surface differences. <strong>Cathodic protection</strong> forces the entire hull to act as a cathode by externally supplying electrons - suppresses anodic dissolution completely.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why hulls corrode:</strong> Seawater is an electrolyte (conductivity <span class="n-val">~50 mS/cm</span>). Hull steel develops anodic areas (corrode: Fe→Fe²⁺+2e⁻) and cathodic areas (protected) due to grain variations, welds, surface differences. <strong>Cathodic protection</strong> forces the entire hull to act as a cathode by externally supplying electrons - suppresses anodic dissolution completely.</div></div>
 
   <div class="n-h1" id="s-types">🔋 Types of Cathodic Protection</div>
   <table class="n-table">
@@ -64,7 +75,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
 
   <div class="n-h1" id="s-operation">⚙️ ICCP System Operation</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>How ICCP works:</strong> Controller converts AC → adjustable DC. (+) terminal → MMO/Ti anodes (flush below waterline, HDPE insulated housings, wired in parallel). (−) terminal → hull. DC flows from anodes through seawater to hull → drives hull potential negative. Ag/AgCl reference electrodes measure hull-to-seawater potential → controller maintains <span class="n-val">-850 mV</span> automatically.</div></div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Switch OFF at berth - mandatory.</strong><br><strong>Canal transits (Suez/Panama) - also switch OFF:</strong> Close proximity of lock walls and shallow banks alters the electrochemical environment. Class society and manufacturer guidelines typically mandate ICCP switched OFF during canal transits to prevent localised over-protection or stray current faults to lock infrastructure. Stray current flows through mooring wires and seawater into jetty pilings and nearby vessels. <span class="n-val">10 A</span> DC dissolves ~<span class="n-val">10 kg</span> steel per year. Also causes false reference readings → over-protection and paint damage.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Switch OFF at berth - mandatory.</strong><br><strong>Canal transits (Suez/Panama) - also switch OFF:</strong> Close proximity of lock walls and shallow banks alters the electrochemical environment. Class society and manufacturer guidelines typically mandate ICCP switched OFF during canal transits to prevent localised over-protection or stray current faults to lock infrastructure. Stray current flows through mooring wires and seawater into jetty pilings and nearby vessels. <span class="n-val">10 A</span> DC dissolves <span class="n-val">~10 kg</span> steel per year. Also causes false reference readings → over-protection and paint damage.</div></div>
   <div class="n-h2">Voltage Trends Over Time</div>
   <ul class="n-list">
     <li><strong>After dry dock:</strong> Low voltage - fresh paint, minimal bare steel exposure</li>
@@ -85,7 +96,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
 
   <div class="n-h1" id="s-mgps">🌊 MGPS - Marine Growth Prevention System</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>MGPS ≠ ICCP.</strong> MGPS = internal seawater pipes. ICCP = external hull. Surveyors ask the difference.</div></div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>MGPS Working:</strong> Prevents bio-fouling inside sea chests and seawater cooling pipes. Low DC (<span class="n-val">0.5–4V</span>, <span class="n-val">0.5–4A</span>) through copper anodes in sea chest → Cu²⁺ ions at ~<span class="n-val">2 ppb</span> → toxic to marine larvae, prevents attachment. Aluminium anodes paired with copper create anti-fouling coating on internal pipe surfaces.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>MGPS Working:</strong> Prevents bio-fouling inside sea chests and seawater cooling pipes. Low DC (<span class="n-val">0.5–4V</span>, <span class="n-val">0.5–4A</span>) through copper anodes in sea chest → Cu²⁺ ions at <span class="n-val">~2 ppb</span> → toxic to marine larvae, prevents attachment. Aluminium anodes paired with copper create anti-fouling coating on internal pipe surfaces.</div></div>
 
   <div class="n-h1" id="s-drydock">🏗️ Dry Dock Maintenance</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>ICCP OFF before dry docking - mandatory.</strong> Running anodes in air creates arcing/fire. Commission in MANUAL after flooding - verify reference potentials before switching to auto.</div></div>
@@ -98,7 +109,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <li>Inspect shaft earthing brush for wear. Test rudder bonding: &lt;<span class="n-val">1 Ω</span></li>
     <li>After flooding: commission in manual mode first, verify potentials, then switch to auto</li>
   </ol>
-  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - A-R-A-C:</strong> Anodes (MMO/Ti, parallel) | Reference (Ag/AgCl, sense hull potential) | Auto controller | Cable connections (+ to anodes, − to hull).<br><strong>Numbers: "Eight-Fifty in the Middle"</strong> - <span class="n-val">-850 mV</span> target | <span class="n-val">-800 mV</span> minimum | <span class="n-val">-1100 mV</span> over-protection limit.</div></div>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - A-R-A-C:</strong> Anodes (MMO/Ti, parallel) | Reference (Ag/AgCl, sense hull potential) | Auto controller | Cable connections (+ to anodes, − to hull).<br><strong>Numbers: "Eight-Fifty in the Middle"</strong> <span class="n-val">--850 mV</span> target | <span class="n-val">-800 mV</span> minimum | <span class="n-val">-1100 mV</span> over-protection limit.</div></div>
 
   
   <!-- ═══ EXPANDED CONTENT ═══ -->
@@ -143,7 +154,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
   2. At berth: mooring wires, gangways, shore power cables, and seawater all provide alternative metallic paths to the jetty's steel piling.<br>
   3. ICCP current strays into these alternative paths instead of returning normally.<br>
   4. When stray current EXITS from the jetty metalwork back into seawater to complete the circuit → that exit point becomes the ANODE → rapid anodic dissolution = corrosion of jetty steel.<br>
-  5. <span class="n-val">10 amps</span> of stray DC = dissolves ~<span class="n-val">10 kg</span> of steel per year. A typical ICCP outputs 5-100A.<br>
+  5. <span class="n-val">10 amps</span> of stray DC = dissolves <span class="n-val">~10 kg</span> of steel per year. A typical ICCP outputs 5-100A.<br>
   6. Shore power connection additionally links ship hull to terminal earthing system - creates unpredictable current paths and false reference electrode readings.</div></div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Double problem at berth:</strong> (1) Stray current corrodes jetty infrastructure and nearby vessels. (2) Nearby metallic structures cause ship's reference electrode to read falsely → controller may over-protect the hull → hydrogen evolution + paint disbondment on own hull. Must switch OFF and fit galvanic isolator on shore earth conductor.</div></div>
 
@@ -152,7 +163,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <li><strong>Switch OFF and isolate</strong> before docking - lock out power, log time. Fire hazard from arcing without seawater.</li>
     <li><strong>Visual anode inspection</strong> - check MMO/Ti anodes for physical damage, substrate corrosion. Verify HDPE housing intact (prevents direct hull short-circuit).</li>
     <li><strong>Anode continuity test</strong> - multimeter: cable continuity controller to anode terminals. Verify infinite resistance between anode body and hull (HDPE isolation intact).</li>
-    <li><strong>Replace all Ag/AgCl reference electrodes</strong> - gel electrolyte depletes after ~<span class="n-val">2.5 years</span>. Apply thread sealant for watertight seal. Record new serial numbers.</li>
+    <li><strong>Replace all Ag/AgCl reference electrodes</strong> - gel electrolyte depletes after <span class="n-val">~2.5 years</span>. Apply thread sealant for watertight seal. Record new serial numbers.</li>
     <li><strong>Junction box and cable inspection</strong> - check cable glands for water ingress. Clean terminals. Megger test cables (&gt;1 MΩ). Replace cracked or oxidised cables.</li>
     <li><strong>Sacrificial anode and bonding checks</strong> - replace hull/rudder sacrificial anodes if &gt;<span class="n-val">50-60%</span> consumed. Inspect shaft earthing brush (length, spring tension). Test rudder bonding strap: resistance &lt;<span class="n-val">1 Ω</span>.</li>
     <li><strong>After flooding</strong> - switch on in MANUAL mode at minimum output. Gradually increase while verifying reference electrode readings. Switch to AUTO mode when readings are stable. Log all commissioning parameters.</li>
@@ -163,7 +174,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
   <div class="n-h2">Working Principle</div>
   <ul class="n-list">
     <li><strong>Electrolytic process:</strong> Low DC voltage (<span class="n-val">0.5–4V</span>) and current (<span class="n-val">0.5–4A</span> per anode) passed between copper anodes in sea chest and surrounding pipework (cathode)</li>
-    <li><strong>Copper dissolution:</strong> Copper anodes slowly dissolve releasing Cu²⁺ ions at ~<span class="n-val">2 ppb</span> (parts per billion) - highly toxic to marine larvae at attachment stage, below environmental discharge limits</li>
+    <li><strong>Copper dissolution:</strong> Copper anodes slowly dissolve releasing Cu²⁺ ions at <span class="n-val">~2 ppb</span> (parts per billion) - highly toxic to marine larvae at attachment stage, below environmental discharge limits</li>
     <li><strong>Aluminium anodes:</strong> Often paired with copper. Dissolving Al³⁺ ions create thin anti-corrosive coating on internal surfaces of copper alloy heat exchanger tubes</li>
     <li><strong>Controller:</strong> Simple fixed-current controller - distinct from ICCP's closed-loop feedback system</li>
     <li><strong>Anode life:</strong> MGPS copper anodes consumed - typically last <span class="n-val">1–3 years</span>, replaced at drydock</li>
@@ -189,13 +200,37 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
   </ol>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - why shaft brush matters:</strong> Propeller is bronze, hull is steel = bimetallic couple. Oil film in bearings = electrical insulator. Without shaft brush: shaft at different potential = stray currents arc through bearing oil film = bearing pitting = bearing failure. Shaft brush = continuous metallic path bypassing the oil film insulator.</div></div>
 
+  <div class="n-h1" id="s-faults">🔌 ICCP Fault-Finding Principles</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Deswal and Sanjib ask ICCP faults in depth.</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Systematic Diagnosis:</strong> The ICCP system is a closed loop. Faults must be isolated to either the <strong>Power Circuit</strong> or the <strong>Sensing Circuit</strong>.</div></div>
+  <div class="n-grid">
+    <div class="n-card" style="border-color:var(--orange-border)">
+      <div class="card-title" style="color:var(--orange)">POWER CIRCUIT FAULTS</div>
+      <div class="card-desc">
+        <em>Path: Controller → Anodes → Seawater → Hull → Controller</em><br><br>
+        <strong>Symptom:</strong> High Voltage, Zero/Low Current.<br>
+        <strong>Cause:</strong> Open circuit in anode feed. Disconnected cable, corroded deck junction box, or sheared anode.<br>
+        <strong>Action:</strong> Check continuity from controller to anode terminals.
+      </div>
+    </div>
+    <div class="n-card" style="border-color:var(--red-border)">
+      <div class="card-title" style="color:var(--red)">SENSING CIRCUIT FAULTS</div>
+      <div class="card-desc">
+        <em>Path: Reference Electrode → Controller</em><br><br>
+        <strong>Symptom:</strong> Erratic potential display, controller swings between min and max output.<br>
+        <strong>Cause:</strong> Reference electrode failure (gel depleted, junction contaminated) or broken sense cable.<br>
+        <strong>Action:</strong> Switch to MANUAL mode. Measure potential with portable Ag/AgCl reference.
+      </div>
+    </div>
+  </div>
+
 <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Q&amp;A - Topic 10</div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Explain ICCP working in detail.</strong><br><strong>Ideal Answer:</strong> Controller converts AC → adjustable DC. (+) to inert MMO/Ti anodes (flush below waterline, parallel wiring). (−) to hull. DC flows through seawater → drives hull potential negative. Ag/AgCl reference electrodes continuously measure hull-to-seawater potential → controller adjusts output to maintain <span class="n-val">-850 mV</span> setpoint vs Ag/AgCl automatically.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the reference electrode? Material? Why replaced at dry dock?</strong><br><strong>Ideal Answer:</strong> Sensing element of ICCP control loop - measures hull-to-seawater electrochemical potential for automatic control, preventing both under and over-protection. Material: silver wire coated with silver chloride (Ag/AgCl) in gel electrolyte, porous ceramic housing. Replaced every <span class="n-val">~2.5 years</span> because internal gel depletes and porous junction contaminates → reading drift → incorrect protection.</div></div>
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why switch off ICCP at berth? What happens if not?</strong><br><strong>Ideal Answer:</strong> Stray current corrosion. DC strays through mooring wires, shore connections and seawater into jetty pilings and nearby vessels - <span class="n-val">10A</span> dissolves <span class="n-val">~10 kg</span> steel/year. Also: nearby metalwork causes false reference readings → over-protection → hydrogen evolution and paint disbondment on own hull. Switch off is mandatory per SMS and class rules.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why switch off ICCP at berth? What happens if not?</strong><br><strong>Ideal Answer:</strong> Stray current corrosion. DC strays through mooring wires, shore connections and seawater into jetty pilings and nearby vessels <span class="n-val">-10A</span> dissolves <span class="n-val">~10 kg</span> steel/year. Also: nearby metalwork causes false reference readings → over-protection → hydrogen evolution and paint disbondment on own hull. Switch off is mandatory per SMS and class rules.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>ICCP panel voltage - will it increase or decrease after 6 months?</strong><br><strong>Ideal Answer:</strong> Increase. After dry dock, fresh paint gives &gt;95% coverage - small bare steel area, low current demand. Over 6 months, paint abrades from anchor work, tidal scrubbing, wear → more bare steel exposed → controller outputs more current at higher voltage to maintain <span class="n-val">-850 mV</span> setpoint.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>ICCP panel shows high voltage but zero current. What is the fault?</strong><br><strong>Ideal Answer:</strong> Open circuit in anode feed. Controller pushes voltage but circuit is broken - no current flows. Causes: disconnected cable, corroded junction box, or anode sheared from hull. <strong>Critical scenario - if this occurs during drydock:</strong> If the ICCP was accidentally left running while the ship is out of the water, air cannot act as an ionic electrolyte. Current drops to zero, voltage spikes. System must be shut down immediately to prevent high-voltage arcing near fresh paint vapours and solvents. Always switch OFF before docking. Action at sea: switch to manual, reduce output, use multimeter to check continuity from controller through deck junction boxes to each anode.</div></div>
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is MGPS? Difference from ICCP?</strong><br><strong>Ideal Answer:</strong> MGPS (Marine Growth Prevention System) prevents bio-fouling inside sea chests and seawater cooling pipes. Low DC (<span class="n-val">0.5–4V</span>, <span class="n-val">0.5–4A</span>) through copper anodes → Cu²⁺ ions at ~<span class="n-val">2 ppb</span> - toxic to marine larvae. ICCP protects external hull using MMO/Ti anodes. MGPS = internal pipes. ICCP = external hull.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is MGPS? Difference from ICCP?</strong><br><strong>Ideal Answer:</strong> MGPS (Marine Growth Prevention System) prevents bio-fouling inside sea chests and seawater cooling pipes. Low DC (<span class="n-val">0.5–4V</span>, <span class="n-val">0.5–4A</span>) through copper anodes → Cu²⁺ ions at <span class="n-val">~2 ppb</span> - toxic to marine larvae. ICCP protects external hull using MMO/Ti anodes. MGPS = internal pipes. ICCP = external hull.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Bonding vs earthing - what is the difference?</strong><br><strong>Ideal Answer:</strong> Bonding connects all metallic components at identical electrical potential - prevents bimetallic galvanic corrosion, no current flows normally. Earthing provides fault current path to trip breaker on insulation failure. Bonding = corrosion prevention. Earthing = safety. Shaft bonding brush and rudder bonding cable: resistance target <span class="n-val">&lt; 1 Ω</span>.</div></div>
 
   <div class="n-h1" id="s-quickrev">📊 Quick Revision - Topic 10</div>
@@ -211,5 +246,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><td>Dry dock maintenance</td><td class="hl">⭐⭐⭐ Deswal, Kamath</td><td>OFF before docking | Replace Ag/AgCl | Commission manual after flooding</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

@@ -22,11 +22,15 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
     <button class="anc-btn" onclick="jumpTo('s-release')">Release Mech & Rescue Boat</button>
     <button class="anc-btn" onclick="jumpTo('s-eebd')">EEBD & SCBA</button>
     <button class="anc-btn" onclick="jumpTo('s-updates')">New LSA Amendments (2026+)</button>
+    <button class="anc-btn" onclick="jumpTo('s-epirb-sart')">EPIRB &amp; SART</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Lifeboat battery CCA rating & commissioning. Battery room safeties. Pyrotechnics list & expiry. EEBD operation. New 1.3 m/s lowering speed limit. On-load vs Off-load release.</div></div>
 
@@ -46,7 +50,7 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
   <!-- ═══ SECTION 2 ═══ -->
   <div class="n-h1" id="s-battery">2. Lifeboat Battery - Specs, Ordering & Commissioning</div>
   
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> The <strong>CCA (Cold Cranking Amps)</strong> rating is heavily asked. It defines how many amps the battery can deliver for 30 seconds at -<span class="n-val">18°C</span> without voltage dropping below <span class="n-val">14.4V</span>. Crucial for cold weather (Arctic) operation.</div></div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Exam Critical:</strong> The <strong>CCA (Cold Cranking Amps)</strong> rating is heavily asked. It defines how many amps the battery can deliver for 30 seconds at <span class="n-val">-18°C</span> without voltage dropping below <span class="n-val">14.4V</span>. Crucial for cold weather (Arctic) operation.</div></div>
   
   <ul class="n-list">
     <li><strong>Ordering Specs:</strong> Voltage (<span class="n-val">24V</span>), Capacity (Ah), CCA rating, Type (VRLA/NiCd), Dimensions, Class Approval certificate.</li>
@@ -77,12 +81,18 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
 
 
   <!-- ═══ SECTION 4 ═══ -->
-  <div class="n-h1" id="s-liferaft">4. Liferaft - HRU & Packs</div>
+  <div class="n-h1" id="s-liferaft">4. Liferaft, Immersion Suit &amp; HRU</div>
   
   <ul class="n-list">
     <li><strong>HRU (Hydrostatic Release Unit):</strong> Water pressure activates a knife at 1.5–4m depth, cutting the securing strap. The raft floats up, pulling the painter line to inflate via CO2. Expiry is 2 years.</li>
-    <li><strong>SOLAS Pack A:</strong> Offshore/Ocean pack. Comprehensive survival gear (more water, rations, pyrotechnics, fishing kit). Required for international voyages.</li>
-    <li><strong>SOLAS Pack B:</strong> Coastal/Inshore pack. Reduced survival gear.</li>
+    <li><strong>SOLAS Pack A (Offshore):</strong> Full survival equipment for ships &gt;20nm from land. Includes: seasick pills (6/person), Thermal Protective Aids (TPA - 10% capacity or 2), 10,000 kJ rations/person, 1.5L water/person + desalting kits, flares (4 parachute, 6 hand, 2 smoke), first aid kit, jackknife, radar reflector.</li>
+    <li><strong>SOLAS Pack B (Inshore):</strong> Reduced survival gear for ships &lt;20nm from land. Fewer rations, water, and flares.</li>
+  </ul>
+
+  <div class="n-h2">Immersion Suit</div>
+  <ul class="n-list">
+    <li><strong>Donning &amp; Specs:</strong> Must be donned within 2 minutes (including lifejacket). Must maintain body core temp &gt;34°C after 6 hours in water at 0-2°C.</li>
+    <li><strong>Tests:</strong> Check for cracks/holes (inflate by mouth). Check zip operation, reflective tape, and face seal. Serviced at approved station every 3 years.</li>
   </ul>
 
 
@@ -114,21 +124,36 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
   
   <table class="n-table">
     <tr><th>EQUIPMENT</th><th>DETAILS</th></tr>
-    <tr><td><strong>EEBD</strong></td><td>Emergency Escape Breathing Device. For ESCAPE ONLY, not firefighting. Min 10 minutes air. Hood over head. Single use/person. Min 2 on bridge, 2 in ER.</td></tr>
-    <tr><td><strong>SCBA</strong></td><td>Self-Contained Breathing Apparatus. For firefighting. Min 30 minutes air. Positive pressure. Check pressure (>90%) and low-pressure alarm (55 bar) before use.</td></tr>
+    <tr><td><strong>EEBD</strong></td><td>Emergency Escape Breathing Device. For ESCAPE ONLY, not firefighting. Min 10 minutes air. Hood over head. Single use/person. Locations: ER, ECR, Bridge, escape routes. Min 2 per space where crew work.</td></tr>
+    <tr><td><strong>SCBA</strong></td><td>Self-Contained Breathing Apparatus. For firefighting. Min 30 minutes air (some 45-60m). Positive pressure. Check cylinder pressure (&gt;90% of 200-300 bar) and low-pressure alarm (~55 bar) before use. At least 2 per cargo ship.</td></tr>
     <tr><td><strong>Embarkation Light</strong></td><td>Supplied by Emergency Switchboard. Must illuminate the embarkation station, the ladder, and the sea surface to ensure safe boarding during a blackout.</td></tr>
   </table>
 
 
   <!-- ═══ SECTION 8 ═══ -->
-  <div class="n-h1" id="s-updates">8. LSA Code Amendments & System Updates (2026+)</div>
+  <div class="n-h1" id="s-updates">8. LSA Updates &amp; Detailed Systems (2026+)</div>
   
+  <div class="n-h2">Lifeboat Sprinkler (Fire Protection) System</div>
+  <p class="n-p">Required on tankers and gas carriers. Allows the totally enclosed lifeboat to pass through burning oil (withstands 8 mins of fire).</p>
   <ul class="n-list">
-    <li><strong>Lowering Speed Limit (1.3 m/s):</strong> Maximum permitted lowering speed for survival craft is capped at 1.3 m/s (78 m/min) to prevent hard water impacts and hook release issues.</li>
+    <li><strong>Operation:</strong> Bottom-mounted sea cock opens automatically when waterborne. Engine-driven pump supplies spray nozzles covering the entire GRP hull with a continuous water film.</li>
+    <li><strong>Limitation:</strong> Can only operate when water-borne. Indefinite duration (uses seawater).</li>
+    <li><strong>ETO/Engine Maintenance:</strong> Visual inspection of nozzles and piping. Quarterly flow test in water. Clean salt-blocked nozzles.</li>
+  </ul>
+
+  <div class="n-h2">Lifeboat Air Bottle Maintenance</div>
+  <ul class="n-list">
+    <li><strong>Pressure Check:</strong> Monthly check of pressure gauge (&gt;90% of rated pressure).</li>
+    <li><strong>Recharging:</strong> MUST use Breathing Quality air compressor (Class E). NEVER industrial air (oil aerosol is toxic).</li>
+    <li><strong>Hydrostatic Test:</strong> Cylinder pressure tested every 5 years at 1.5x working pressure.</li>
+  </ul>
+
+  <div class="n-h2">LSA Code Amendments (2026 and Beyond)</div>
+  <ul class="n-list">
+    <li><strong>Lowering Speed Limit (1.3 m/s):</strong> Maximum permitted lowering speed for survival craft is explicitly capped at 1.3 m/s (78 m/min) to prevent hard water impacts and hook release issues. ETO must verify davit centrifugal brake or VFD settings.</li>
     <li><strong>Hook Safety Design:</strong> Single fall hooks CANNOT support a load unless completely and correctly reset. A partially engaged hook will not hold weight, preventing accidental drops.</li>
-    <li><strong>Lifeboat Sprinkler System:</strong> Sea cock intake → engine-driven pump → spray nozzles covering the entire GRP hull. Protects lifeboat while escaping through burning oil. Only operates when waterborne.</li>
-    <li><strong>Lifeboat Ventilation (Jan 2029):</strong> Totally enclosed lifeboats must have a dedicated ventilation system (min 5 m³/hr/person) independent of the main engine to prevent heatstroke and CO2 buildup.</li>
-    <li><strong>Lifejacket Testing (Jan 2026):</strong> New lifejackets must pass in-water tests (24hr buoyancy retention and 5-second self-righting for unconscious persons).</li>
+    <li><strong>Lifeboat Ventilation (Jan 2029):</strong> Totally enclosed lifeboats must have a dedicated ventilation system (min 5 m³/hr/person) independent of the main engine to prevent heatstroke and CO2 buildup. ETO must maintain the battery-backed fan motor.</li>
+    <li><strong>Lifejacket Testing (Jan 2026):</strong> New lifejackets must pass in-water tests: 24hr buoyancy retention (min 150 N) and 5-second self-righting for an unconscious person.</li>
   </ul>
 
 
@@ -139,10 +164,10 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
   <table class="n-table">
     <tr><th>Item</th><th>EPIRB</th><th>SART</th></tr>
     <tr><td>Function</td><td>Global distress alerting via satellite</td><td class="ok">Local homing - rescuing ship's X-band radar</td></tr>
-    <tr><td>Frequency</td><td class="hl"><span class="n-val">406 MHz</span> (satellite) + <span class="n-val">121.5 MHz</span> (aircraft)</td><td class="hl"><span class="n-val">9 GHz</span> (X-band radar)</td></tr>
-    <tr><td>Range</td><td>Global via COSPAS-SARSAT satellites</td><td class="hl">~<span class="n-val">5 nm</span> (ship) / <span class="n-val">10 nm</span> (aircraft)</td></tr>
+    <tr><td>Frequency</td><td class="hl"><span class="n-val">406 MHz</span> (satellite) <span class="n-val">+121.5 MHz</span> (aircraft)</td><td class="hl"><span class="n-val">9 GHz</span> (X-band radar)</td></tr>
+    <tr><td>Range</td><td>Global via COSPAS-SARSAT satellites</td><td class="hl"><span class="n-val">~5 nm</span> (ship) / <span class="n-val">10 nm</span> (aircraft)</td></tr>
     <tr><td>Activation</td><td>Manual OR HRU (floats free at <span class="n-val">1–4 m</span>)</td><td>Manual or automatic on immersion</td></tr>
-    <tr><td>Battery life</td><td class="hl">Min <span class="n-val">48 hours</span> continuous</td><td class="hl"><span class="n-val">96 hours</span> standby + <span class="n-val">8 hours</span> transmitting</td></tr>
+    <tr><td>Battery life</td><td class="hl">Min <span class="n-val">48 hours</span> continuous</td><td class="hl"><span class="n-val">96 hours</span> standby <span class="n-val">+8 hours</span> transmitting</td></tr>
     <tr><td>Carriage (SOLAS)</td><td class="hl">Min <span class="n-val">1 per ship</span> - Category I float-free</td><td class="hl">Min <span class="n-val">2 per ship</span> &gt;<span class="n-val">500 GT</span></td></tr>
     <tr><td>HRU replacement</td><td class="hl">Every <span class="n-val">2 years</span></td><td> - </td></tr>
     <tr><td>Battery replacement</td><td class="hl">Every <span class="n-val">5 years</span></td><td class="hl">Per manufacturer schedule</td></tr>
@@ -208,5 +233,7 @@ window.loadNotes("T21", `<div class="view" id="view-notes-t21">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

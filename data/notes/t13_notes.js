@@ -21,6 +21,11 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <button class="anc-btn" onclick="jumpTo('s-sart')">SART</button>
     <button class="anc-btn" onclick="jumpTo('s-vhf')">VHF &amp; NAVTEX</button>
     <button class="anc-btn" onclick="jumpTo('s-battery')">GMDSS Battery</button>
+    <button class="anc-btn" onclick="jumpTo('s-radar-full')">RADAR Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-gmdss-full')">GMDSS Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-epirb-sart-full')">EPIRB/SART Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-gmdss-2024')">2024 GMDSS</button>
+    <button class="anc-btn" onclick="jumpTo('s-ais')">AIS</button>
     <button class="anc-btn" onclick="jumpTo('s-doppler')">Doppler</button>
     <button class="anc-btn" onclick="jumpTo('s-echosounder')">Echo Sounder</button>
     <button class="anc-btn" onclick="jumpTo('s-gyro')">Gyrocompass</button>
@@ -30,6 +35,9 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-radar">📡 RADAR - Working Principle &amp; Bands</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask RADAR working, X-band vs S-band difference, and SOLAS carriage requirements.</strong></div></div>
@@ -80,7 +88,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>2024 GMDSS Update:</strong> As of <span class="n-val">January 1, 2024</span>, VHF-EPIRBs are no longer accepted. All ships must carry <span class="n-val">406 MHz</span> satellite EPIRBs. Inmarsat now one of several recognised satellite providers (Iridium also approved).</div></div>
 
   <div class="n-h1" id="s-epirb">🆘 EPIRB</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Transmits coded global distress signal containing ship's GPS position and unique <span class="n-val">15-digit hexadecimal</span> ID code to COSPAS-SARSAT satellite network. Frequencies: <span class="n-val">406 MHz</span> (global satellite alerting) + <span class="n-val">121.5 MHz</span> (aircraft homing). Activation: manual OR automatic via HRU (Hydrostatic Release Unit) - float-free when submerged to <span class="n-val">1–4 metres</span>.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Transmits coded global distress signal containing ship's GPS position and unique <span class="n-val">15-digit hexadecimal</span> ID code to COSPAS-SARSAT satellite network. Frequencies: <span class="n-val">406 MHz</span> (global satellite alerting) <span class="n-val">+121.5 MHz</span> (aircraft homing). Activation: manual OR automatic via HRU (Hydrostatic Release Unit) - float-free when submerged to <span class="n-val">1–4 metres</span>.</div></div>
 
   <table class="n-table">
     <tr><th>Specification</th><th>Value</th></tr>
@@ -127,7 +135,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <li>Log start and end voltages. Restore charger. Record next test due date.</li>
   </ol>
 
-  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> EPIRB = <span class="n-val">406 MHz</span> satellite + <span class="n-val">121.5 MHz</span> aircraft | <span class="n-val">48 hr</span> battery | float-free at <span class="n-val">1–4 m</span>. SART = <span class="n-val">9 GHz</span> | <span class="n-val">12 dots</span> on radar | <span class="n-val">5 nm</span> ship range. VHF Ch <span class="n-val">70</span> = DSC only. Ch <span class="n-val">16</span> = voice/watch. NAVTEX = <span class="n-val">518 kHz</span>.</div></div>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> EPIRB = <span class="n-val">406 MHz</span> satellite <span class="n-val">+121.5 MHz</span> aircraft | <span class="n-val">48 hr</span> battery | float-free at <span class="n-val">1–4 m</span>. SART = <span class="n-val">9 GHz</span> | <span class="n-val">12 dots</span> on radar | <span class="n-val">5 nm</span> ship range. VHF Ch <span class="n-val">70</span> = DSC only. Ch <span class="n-val">16</span> = voice/watch. NAVTEX = <span class="n-val">518 kHz</span>.</div></div>
 
   
   <!-- ═══ T13 EXPANDED FROM DOCX ═══ -->
@@ -170,7 +178,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <tr><td>Inmarsat-C or Iridium</td><td class="hl">A3</td><td>Satellite messaging and position reporting</td><td>Recognised MSS</td></tr>
     <tr><td>NAVTEX Receiver</td><td class="hl">All ocean-going</td><td>Navigational warnings, weather, SAR info</td><td><span class="n-val">518 kHz</span> English / <span class="n-val">490 kHz</span> national</td></tr>
     <tr><td>EPIRB (<span class="n-val">406 MHz</span>)</td><td class="hl">All SOLAS vessels (min 1)</td><td>Global float-free satellite distress alert</td><td>HRU float-free <span class="n-val">1–4 m</span>, <span class="n-val">48 hr</span> battery</td></tr>
-    <tr><td>SART (<span class="n-val">9 GHz</span>)</td><td class="hl">&gt;500 GT (min 2)</td><td>Local radar homing - 12 dots on radar</td><td><span class="n-val">5 nm</span> ship, <span class="n-val">96 hr</span> standby + <span class="n-val">8 hr</span> transmit</td></tr>
+    <tr><td>SART (<span class="n-val">9 GHz</span>)</td><td class="hl">&gt;500 GT (min 2)</td><td>Local radar homing - 12 dots on radar</td><td><span class="n-val">5 nm</span> ship, <span class="n-val">96 hr</span> standby <span class="n-val">+8 hr</span> transmit</td></tr>
     <tr><td>3 × Portable VHF</td><td class="hl">All SOLAS</td><td>Survival craft comms</td><td><span class="n-val">8 hr</span> battery life</td></tr>
     <tr><td>GMDSS Battery</td><td class="hl">All - SOLAS Ch IV Reg 13</td><td>Reserve power for all GMDSS equipment</td><td><span class="n-val">6 hr</span> without UPS / <span class="n-val">1 hr</span> with UPS</td></tr>
   </table>
@@ -180,20 +188,39 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
   <table class="n-table">
     <tr><th>Specification</th><th>EPIRB</th><th>SART</th></tr>
     <tr><td>Function</td><td>Global distress alerting to satellites</td><td class="ok">Local radar homing for rescue vessels</td></tr>
-    <tr><td>Frequency</td><td class="hl"><span class="n-val">406 MHz</span> satellite + <span class="n-val">121.5 MHz</span> aircraft homing</td><td class="hl"><span class="n-val">9 GHz</span> X-band radar only</td></tr>
-    <tr><td>Range</td><td>Global via COSPAS-SARSAT</td><td class="hl">~<span class="n-val">5 nm</span> ship radar / <span class="n-val">10 nm</span> aircraft</td></tr>
+    <tr><td>Frequency</td><td class="hl"><span class="n-val">406 MHz</span> satellite <span class="n-val">+121.5 MHz</span> aircraft homing</td><td class="hl"><span class="n-val">9 GHz</span> X-band radar only</td></tr>
+    <tr><td>Range</td><td>Global via COSPAS-SARSAT</td><td class="hl"><span class="n-val">~5 nm</span> ship radar / <span class="n-val">10 nm</span> aircraft</td></tr>
     <tr><td>How activated</td><td>Manual OR automatic HRU (float-free at <span class="n-val">1–4 m</span>)</td><td>Manual or automatic on immersion</td></tr>
-    <tr><td>Battery</td><td class="hl">Min <span class="n-val">48 hours</span> continuous</td><td class="hl"><span class="n-val">96 hours</span> standby + <span class="n-val">8 hours</span> transmitting</td></tr>
+    <tr><td>Battery</td><td class="hl">Min <span class="n-val">48 hours</span> continuous</td><td class="hl"><span class="n-val">96 hours</span> standby <span class="n-val">+8 hours</span> transmitting</td></tr>
     <tr><td>Carriage (SOLAS)</td><td class="hl">Min <span class="n-val">1 per ship</span></td><td class="hl">Min <span class="n-val">2 per ship</span> &gt;500 GT (SOLAS III Reg 7.1)</td></tr>
     <tr><td>HRU replacement</td><td class="hl">Every <span class="n-val">2 years</span></td><td> - </td></tr>
     <tr><td>Battery replacement</td><td class="hl">Every <span class="n-val">5 years</span></td><td>Per manufacturer schedule</td></tr>
     <tr><td>Radar display pattern</td><td> - </td><td class="ok"><span class="n-val">12 dots</span> in radial line from SART position</td></tr>
   </table>
-  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> EPIRB = <span class="n-val">406 MHz</span> global satellite + <span class="n-val">121.5 MHz</span> aircraft | Float-free <span class="n-val">1–4 m</span> | <span class="n-val">48 hr</span> battery. SART = <span class="n-val">9 GHz</span> radar | <span class="n-val">12 dots</span> on screen | <span class="n-val">5 nm</span> ship range. VHF Ch <span class="n-val">70</span> = DSC only. Ch <span class="n-val">16</span> = voice. NAVTEX = <span class="n-val">518 kHz</span> English.</div></div>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> EPIRB = <span class="n-val">406 MHz</span> global satellite <span class="n-val">+121.5 MHz</span> aircraft | Float-free <span class="n-val">1–4 m</span> | <span class="n-val">48 hr</span> battery. SART = <span class="n-val">9 GHz</span> radar | <span class="n-val">12 dots</span> on screen | <span class="n-val">5 nm</span> ship range. VHF Ch <span class="n-val">70</span> = DSC only. Ch <span class="n-val">16</span> = voice. NAVTEX = <span class="n-val">518 kHz</span> English.</div></div>
 
 
 
   <!-- ═══ T13 GAPS ADDED FROM DOCX ═══ -->
+
+  <div class="n-h1" id="s-gmdss-2024">📅 2024 GMDSS Regulatory Update</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Old answers about Inmarsat exclusivity and mandatory NBDP are NOW INCORRECT.</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Change 1: RMSS Replaces "Inmarsat"</strong><br>Inmarsat is no longer the ONLY approved provider. Replaced by RMSS (Recognised Mobile Satellite Service). Iridium is now an approved RMSS alongside Inmarsat. Advantage: Iridium has true polar coverage (LEO).</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Change 2: NBDP No Longer Mandatory</strong><br>NBDP (Telex) is NO LONGER a mandatory GMDSS requirement for Sea Areas A3 and A4. It was removed because modern DSC and satellite comms made it redundant.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Change 3: VHF-EPIRB No Longer Accepted</strong><br>VHF-EPIRBs are no longer accepted for ANY sea area (even A1). All ships must now carry a 406 MHz Cospas-Sarsat satellite EPIRB.</div></div>
+
+  <div class="n-h1" id="s-ais">🚢 AIS - Class A vs Class B</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL (Vishwanathan): "What is SOLAS requirement for AIS?"</strong></div></div>
+  <table class="n-table">
+    <tr><th>Parameter</th><th>Class A (SOLAS Mandatory)</th><th>Class B (Voluntary)</th></tr>
+    <tr><td>Carriage</td><td class="hl">All passenger ships, cargo &gt;300 GT (intl) or &gt;500 GT</td><td>Smaller vessels not under SOLAS</td></tr>
+    <tr><td>Transmit Power</td><td class="hl"><span class="n-val">12.5W</span></td><td><span class="n-val">2W</span></td></tr>
+    <tr><td>Reporting Interval</td><td class="hl"><span class="n-val">2–10 seconds</span> (underway), <span class="n-val">3 minutes</span> (anchor)</td><td><span class="n-val">30 seconds</span> (underway)</td></tr>
+  </table>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>AIS Data Types:</strong><br>
+  • <strong>Dynamic Data:</strong> MMSI, position (GPS lat/long), SOG, COG, heading, ROT, navigational status.<br>
+  • <strong>Static Data:</strong> Ship name, call sign, IMO number, ship type, dimensions, draught.<br>
+  <strong>Rule:</strong> AIS must remain ON continuously. Master may switch off only if navigation safety is compromised (e.g., piracy threat) and must log the reason.</div></div>
 
   <div class="n-h1" id="s-doppler">⏱️ Doppler Speed Log - Janus Configuration</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Deswal and Vishwanathan ask the Janus configuration physics and frequency shift calculation.</strong></div></div>
@@ -235,7 +262,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <li><strong>Stage 3 (Crew spaces):</strong> Emergency buzzers in engine room and common crew areas - summons assistance</li>
   </ul>
   <div class="n-h2">VDR - 12 Mandatory Inputs (IEC 61996)</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Orange crash capsule:</strong> Withstands <span class="n-val">260°C for 10 hours</span> + <span class="n-val">6000 m</span> water pressure. Ships &gt;3000 GT = full VDR. Ships &gt;500 GT built before 2002 = Simplified VDR (SVDR). 12 mandatory inputs: (1) Date/Time UTC, (2) GPS Position, (3) STW, (4) SOG, (5) Gyro Heading, (6) Bridge Audio, (7) VHF Radio Audio, (8) RADAR Display, (9) AIS Data, (10) ECDIS Display, (11) Rudder Order/Response, (12) Engine Telegraph Order/Response.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Orange crash capsule:</strong> Withstands <span class="n-val">260°C for 10 hours</span> <span class="n-val">+6000 m</span> water pressure. Ships &gt;3000 GT = full VDR. Ships &gt;500 GT built before 2002 = Simplified VDR (SVDR). 12 mandatory inputs: (1) Date/Time UTC, (2) GPS Position, (3) STW, (4) SOG, (5) Gyro Heading, (6) Bridge Audio, (7) VHF Radio Audio, (8) RADAR Display, (9) AIS Data, (10) ECDIS Display, (11) Rudder Order/Response, (12) Engine Telegraph Order/Response.</div></div>
   <div class="n-h2">SSAS - Covert Ship Security Alert</div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>SSAS (SOLAS XI-2, ISPS Code) - anti-piracy covert distress system:</strong> Hidden pushbutton (minimum 2 onboard: bridge + secret crew space) transmits SILENT satellite alert to Company Security Officer (CSO) and flag state. NO sirens, buzzers, or screen alerts onboard - hijackers cannot know alert was sent. Tested quarterly using special test codes that simulate transmission without triggering real military response.</div></div>
 
@@ -268,7 +295,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is GMDSS - list all equipment. (All surveyors)</strong><br><strong>Ideal Answer:</strong> GMDSS ensures any ship in distress can alert rescue authorities. Equipment by sea area: VHF DSC (Ch 70 alerts, Ch 16 voice - all areas), MF/HF radio (A2/A3/A4), Inmarsat-C (A3), NAVTEX (<span class="n-val">518/490 kHz</span>), EPIRB (<span class="n-val">406 MHz</span> float-free), SART (<span class="n-val">9 GHz</span>, 2 per ship &gt;500 GT), 3 portable VHF, AIS, VDR. All backed by dedicated GMDSS battery (SOLAS Ch IV Reg 13).</div></div>
 
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Difference between SART and EPIRB? How many? Frequency? Range? (Sanjib, Kamath)</strong><br><strong>Ideal Answer:</strong> EPIRB = global distress alerting to shore via satellite. <span class="n-val">406 MHz</span> satellite + <span class="n-val">121.5 MHz</span> aircraft homing. Global range. Min <span class="n-val">1</span> per ship, float-free bracket on bridge wing. Battery <span class="n-val">48 hours</span>. SART = short-range homing by rescuing ships. <span class="n-val">9 GHz</span> X-band. Creates <span class="n-val">12-dot</span> line on radar. Range ~<span class="n-val">5 nm</span> ship, <span class="n-val">10 nm</span> aircraft. Min <span class="n-val">2</span> per ship &gt;500 GT, in lifeboats/grab-bags.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Difference between SART and EPIRB? How many? Frequency? Range? (Sanjib, Kamath)</strong><br><strong>Ideal Answer:</strong> EPIRB = global distress alerting to shore via satellite. <span class="n-val">406 MHz</span> satellite <span class="n-val">+121.5 MHz</span> aircraft homing. Global range. Min <span class="n-val">1</span> per ship, float-free bracket on bridge wing. Battery <span class="n-val">48 hours</span>. SART = short-range homing by rescuing ships. <span class="n-val">9 GHz</span> X-band. Creates <span class="n-val">12-dot</span> line on radar. Range <span class="n-val">~5 nm</span> ship, <span class="n-val">10 nm</span> aircraft. Min <span class="n-val">2</span> per ship &gt;500 GT, in lifeboats/grab-bags.</div></div>
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>How do you perform GMDSS battery load test? (Vishwanathan, Nair)</strong><br><strong>Ideal Answer:</strong> Performed annually in port. Isolate battery charger. Power ALL GMDSS equipment from battery. Monitor for SOLAS duration: <span class="n-val">6 hours</span> (without UPS) or <span class="n-val">1 hour</span> (with UPS). Voltage must stay &gt;<span class="n-val">90%</span> of nominal. Log start/end voltages. Replace battery when capacity &lt;<span class="n-val">80%</span> rated.</div></div>
 
@@ -284,5 +311,7 @@ window.loadNotes("T13", `<div class="view" id="view-notes-t13">
     <tr><td>GMDSS battery test</td><td class="hl">⭐⭐⭐⭐ Vishwanathan, Nair</td><td>Annual | <span class="n-val">6 hr</span> without UPS | &gt;<span class="n-val">90%</span> voltage | replace at &lt;<span class="n-val">80%</span> capacity</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

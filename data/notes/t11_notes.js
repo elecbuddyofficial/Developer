@@ -20,11 +20,24 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
     <button class="anc-btn" onclick="jumpTo('s-lowpf')">Low PF Effects</button>
     <button class="anc-btn" onclick="jumpTo('s-correction')">PF Correction</button>
     <button class="anc-btn" onclick="jumpTo('s-harmonics')">Harmonics</button>
+    <button class="anc-btn" onclick="jumpTo('s-triangle-detail')">Triangle Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-droop')">Droop</button>
+    <button class="anc-btn" onclick="jumpTo('s-lossexcitation')">Loss Excitation</button>
+    <button class="anc-btn" onclick="jumpTo('s-pfcorrect')">PF Correct Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-harmonics-detail')">Harmonics Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-preftrip')">Pref Trip</button>
+    <button class="anc-btn" onclick="jumpTo('s-shorepower')">Shore Power</button>
+    <button class="anc-btn" onclick="jumpTo('s-formfactor')">Form Factor</button>
+    <button class="anc-btn" onclick="jumpTo('s-reactive')">Reactive Pwr</button>
+    <button class="anc-btn" onclick="jumpTo('s-avrsolas')">AVR SOLAS</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-sync-start')">Sync Motor</button>
     <button class="anc-btn" onclick="jumpTo('s-kirchhoff')">Kirchhoff</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <!-- ═══ SECTION 1 ═══ -->
   <div class="n-h1" id="s-triangle">📐 Power Triangle</div>
@@ -131,7 +144,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   
   <!-- ═══ T11 EXPANDED FROM DOCX ═══ -->
 
-  <div class="n-h1" id="s-triangle">📐 Power Triangle - Full Detail</div>
+  <div class="n-h1" id="s-triangle-detail">📐 Power Triangle - Full Detail</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Every surveyor asks PF on your ship, why lagging, and why kVA not kW.</strong> Know all three formulas and the power triangle by heart. Vishwanathan, Sanjib, Kamath.</div></div>
   <div class="n-formula">PF = kW / kVA = cos φ<div class="label">φ = phase angle between voltage and current waveforms</div></div>
   <table class="n-table">
@@ -196,7 +209,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   </table>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Synchronous condenser working (Kamath, Sanjib, Upendra Kumar):</strong> A synchronous motor connected to the busbars running with NO mechanical load on its shaft. When overexcited (DC field current increased above normal), it generates leading reactive current (kVAR) into the busbars - exactly cancelling the lagging kVAR drawn by induction motors. The amount of leading kVAR is varied by adjusting the excitation current - continuous, smooth control. Construction: identical to a synchronous motor but shaft is not connected to any driven equipment.</div></div>
 
-  <div class="n-h1" id="s-harmonics">〰️ Harmonics &amp; THD</div>
+  <div class="n-h1" id="s-harmonics-detail">〰️ Harmonics &amp; THD</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Sources of harmonics on ships:</strong> Non-linear loads distort the sinusoidal current waveform. VFDs (rectifier stages) are the largest source - generate 5th and 7th harmonics primarily. Also: battery chargers, UPS inverters, fluorescent lighting ballasts, rectifiers.</div></div>
   <table class="n-table">
     <tr><th>Harmonic</th><th>Order</th><th>Source</th><th>Effect</th></tr>
@@ -215,6 +228,41 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   </ul>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> PF triangle: kW (work) + kVAR (magnetism) = kVA (total). Ship = 0.8 lagging (motors). kW unequal → governor droop. kVAR unequal → AVR droop. Loss of excitation = reversed kVAR meter. THD limit = 5% total, 3% per harmonic. VFD = 5th + 7th harmonics → filter them.</div></div>
 
+
+  <div class="n-h1" id="s-preftrip">🛑 Preferential Trip System</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>What it is:</strong> Also called sequential load shedding. An automatic protection system that disconnects non-essential loads in a predetermined sequence when the main generator is overloaded.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Purpose:</strong> Prevents the remaining generator(s) from tripping on overcurrent during an overload (e.g., after restoring power from blackout with only one generator). Losing some non-essential loads (galley, HVAC) is better than a total blackout.</div></div>
+  <ul class="n-list">
+    <li><strong>SOLAS Requirement:</strong> Chapter II-1 Reg 42/43 requires arrangements to ensure continuity of essential services in an emergency.</li>
+    <li><strong>Sequence Example:</strong> Trip 1 (5s) Galley/Laundry → Trip 2 (10s) AC compressors → Trip 3 (15s) Cargo vent fans.</li>
+    <li><strong>Essential Loads (Never Tripped):</strong> Steering gear, nav lights, comms, fire pumps, emergency lighting.</li>
+  </ul>
+
+  <div class="n-h1" id="s-shorepower">🔌 Shore Power Connection (Cold Ironing)</div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Electrical Checks Before Connection (Deswal asks):</strong><br>1. Verify shore voltage matches ship (e.g. 440V or 6.6kV).<br>2. Verify shore frequency matches ship (e.g. 60Hz or 50Hz).<br>3. Check cable rating, connection polarity, and condition of shore connection box.<br>4. Ensure ship's generators are standby with ACBs OPEN before shore breaker is closed.<br>5. Verify Phase Sequence using a phase sequence meter.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Power Factor Implication:</strong> Shore utility charges for reactive power (kVAR) in addition to kW. This creates an incentive to improve PF while on shore power, unlike onboard where the shipowner just absorbs the poor PF losses internally.</div></div>
+
+  <div class="n-h1" id="s-formfactor">📐 Form Factor</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Form Factor = RMS value / Average value.</strong> For a pure sine wave: π/(2√2) ≈ <strong>1.11</strong>.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Significance:</strong> Transformers are designed based on this 1.11 factor. If supply is distorted by harmonics, the form factor increases above 1.11 → transformer core flux is higher than designed → increased iron losses → severe overheating. Also appears in generator EMF equation: E = 4.44 × f × N × Φm (where 4.44 = 4 × 1.11).</div></div>
+
+  <div class="n-h1" id="s-reactive">🔄 Reactive Power — Where Does It Go?</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL (Kamath): "Where does reactive power go?"</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">Reactive power (kVAR) is <strong>NOT</strong> lost or dissipated as heat. It oscillates between the source and the load at twice the supply frequency. It is returned to the source every half cycle.</div></div>
+  <ul class="n-list">
+    <li><strong>In an induction motor:</strong> kVAR sustains the rotating magnetic field enabling torque. No kVAR = no magnetic field = no torque.</li>
+    <li><strong>In a transformer:</strong> kVAR maintains the core magnetisation.</li>
+    <li><strong>Answer in one sentence:</strong> "Reactive power goes to the motor to sustain its magnetic field — it is returned to the source every half cycle, not consumed."</li>
+  </ul>
+
+  <div class="n-h1" id="s-avrsolas">📜 SOLAS Regulation for AVR</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>SOLAS II-1/Reg 40.3:</strong> Automatic Voltage Regulator must maintain voltage within <strong>±2.5%</strong> of rated voltage under any load from no-load to full-load.</div></div>
+  <ul class="n-list">
+    <li><strong>Transient voltage:</strong> Must recover to ±2.5% within 1.5 seconds of sudden full-load pickup or rejection.</li>
+    <li><strong>Why remove AVR during IR test:</strong> AVR contains semiconductors (thyristors, transistors, capacitors) sensitive to DC test voltage. Megger at 500V-1000V DC will permanently destroy them. Also prevents test voltage injecting back into winding giving false readings.</li>
+  </ul>
+
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Loss of Excitation Trip Sequence:</strong> If asked which trip activates FIRST when excitation is lost in parallel: The <strong>Under-excitation relay (Loss of Field relay)</strong> activates FIRST, detecting the massive reactive power absorption. If it fails, the resulting reverse kVAR overload would trip the healthy generator on overcurrent or trigger a preferential trip.</div></div>
 
 <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Q&amp;A - Topic 11</div>
 
@@ -263,5 +311,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
     <tr><td>VFD harmonics</td><td class="hl">⭐⭐⭐⭐ Vishwanathan, Kamath</td><td>5th, 7th, 11th harmonics | Passive filters, AFE, 12-pulse rectifier</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

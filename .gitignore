@@ -31,3 +31,24 @@ data/Temp/
 # OS
 .DS_Store
 Thumbs.db
+
+# Dev artifacts & reports
+*.png
+*.txt
+*.md
+debug*.txt
+*_report.*
+gap_report.*
+duplicate_report.*
+format_report.*
+category_report.*
+temp_*.txt
+preview_*.html
+test*.js
+test*.html
+extract_js_test.js
+icons*.json
+skills-lock.json
+app/index_backup.html
+data/written_data.js
+data/written_notes_data.js

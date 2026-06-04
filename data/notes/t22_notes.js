@@ -30,6 +30,9 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
 
   <div class="note-content">
 
+
+  
+
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Cold ironing procedure & interlocks. Low IR troubleshooting step-by-step. Cable ordering specs. MCA 6-Step Framework for answering emergency scenarios. Electrical shock response.</div></div>
 
   <!-- ═══ SECTION 1 ═══ -->
@@ -48,16 +51,15 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Phase sequence check without indicator:</strong> Use a portable phase sequence meter, OR connect minimal load (1 fan motor) and observe rotation. If reversed, swap two phases.</div></div>
 
-  <ul class="n-list">
-    <li><strong>Full Connection Procedure:</strong>
-      1. Confirm shore specs (voltage, freq). <br>
-      2. Switch off ICCP. <br>
-      3. Connect cable (earth first). <br>
-      4. Measure voltage and verify phase sequence. <br>
-      5. Start shore breaker (generator interlock must be clear). <br>
-      6. Synchronise if required, transfer load, trip ship generators.
-    </li>
-  </ul>
+  <div class="n-h2">Connection Procedure</div>
+  <ol class="n-steps">
+    <li><strong>Pre-arrival:</strong> Confirm shore voltage, frequency, and connector type. Check ship shore connection box ratings.</li>
+    <li><strong>Reduce Ship Load:</strong> Transfer non-essential loads off or to minimum to reduce inrush.</li>
+    <li><strong>Connect Cable (De-energised):</strong> Earth FIRST. Never connect a live cable.</li>
+    <li><strong>Measure Voltage &amp; Phase Sequence:</strong> Verify shore voltage matches ship (±5%). Verify phase sequence matches ship. (Wrong sequence = motors run backwards).</li>
+    <li><strong>Synchronise:</strong> Close shore connection breaker at MSB. Use synchroscope to match phase angle. (Generator interlock must be clear if direct transfer not allowed).</li>
+    <li><strong>Transfer Load &amp; Isolate:</strong> Increase shore load, trip generator, and isolate. Log time and parameters.</li>
+  </ol>
 
 
   <!-- ═══ SECTION 2 ═══ -->
@@ -72,8 +74,18 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
 
   <!-- ═══ SECTION 3 ═══ -->
   
-  <div class="n-h1" id="s-blackout">🌑 Blackout Recovery Sequence</div>
+  <div class="n-h1" id="s-blackout">🌑 Blackout Recovery &amp; Testing</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Praveen Nair and Deswal screen for specific restoration timings and load sequence. Always start with Emergency Switchboard confirmation.</strong></div></div>
+  
+  <div class="n-h2">Blackout Test Procedure (SOLAS/Class)</div>
+  <ul class="n-list">
+    <li><strong>Preparation:</strong> Inform bridge. Verify Emergency Generator (EG) in AUTO. Ensure UPS systems charged.</li>
+    <li><strong>Test:</strong> Trip running generators from MSB. Start timing. EG must auto-start and reach rated speed/voltage.</li>
+    <li><strong>Timing (SOLAS Limit):</strong> Within <strong>45 seconds</strong>, ESB must be connected and emergency loads (lighting, fire pump, steering, GMDSS) energized.</li>
+    <li><strong>Run &amp; Restore:</strong> Run on emergency power for 30 min. Start main generator, synchronise onto ESB, transfer load, and trip EG.</li>
+  </ul>
+
+  <div class="n-h2">Real Blackout Recovery Sequence</div>
   <ol class="n-steps">
     <li><strong>Immediate:</strong> Confirm essential emergency services (Nav lights, bridge comms, emergency gen) are on Emergency Switchboard (ESB). Verify ESB has auto-started.</li>
     <li><strong>Assessment:</strong> Identify trip cause - overload, earth fault, or relay malfunction. Note last kW reading and active relay flag on MSB.</li>
@@ -84,7 +96,7 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
       → LO / Fuel pumps (3 min delay)<br>
       → Boiler / Air compressors (5 min delay)<br>
       → HVAC and non-essential loads last</li>
-    <li><strong>Documentation:</strong> Log time, cause, and restoration steps in electrical log. Review load shedding parameters and preferential trip settings with Chief Engineer to prevent recurrence.</li>
+    <li><strong>Documentation:</strong> Log time, cause, and restoration steps in electrical log.</li>
   </ol>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why sequential loading:</strong> If all loads are restored simultaneously, the combined inrush current (especially motor starting surges 6–8× FLC) can exceed generator rating and trigger an immediate secondary blackout. Delays allow the generator to stabilise at each loading step.</div></div>
 
@@ -101,13 +113,17 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
 
 
   <!-- ═══ SECTION 4 ═══ -->
-  <div class="n-h1" id="s-duties">4. ETO Duties, PMS, & Drydock</div>
+  <div class="n-h1" id="s-duties">4. ETO Duties, PMS, &amp; Drydock</div>
   
+  <div class="n-h2">Daily ETO Routine</div>
   <ul class="n-list">
-    <li><strong>Daily Duties:</strong> Review alarm panel, MSB rounds (kW, PF, earth faults), running machinery check, Fire/GMDSS/Nav panels, Reefer temps, PMS tasks, Log entries.</li>
+    <li><strong>Morning Rounds:</strong> Review alarm printer overnight logs. Walk-around MSB (check kW, PF, Earth Fault lamps - all 3 bright = healthy). Inspect running generators (sounds/temps). Check Fire/GMDSS/Nav panels are healthy. Check Reefer temps. Verify battery chargers (float voltage).</li>
     <li><strong>PMS (Planned Maintenance System):</strong> Complete tasks on schedule, record work/findings, manage defects, requisition spares, risk assessments.</li>
-    <li><strong>Drydock Alternator Protection:</strong> When isolated for weeks, <strong>Stator Heater (anti-condensation heater)</strong> must be energised from shore supply to keep windings 5-10°C above ambient. Prevents moisture absorption. Megger periodically. PI test before re-energising.</li>
+    <li><strong>End-of-day:</strong> Record all jobs, tests, and materials in the Electrical Log. Hand over to UMS watch.</li>
   </ul>
+
+  <div class="n-h2">Drydock Alternator Protection</div>
+  <div class="n-p">When isolated for weeks, <strong>Stator Heater (anti-condensation heater)</strong> must be energised from shore supply to keep windings 5-10°C above ambient. Prevents moisture absorption. Megger periodically. PI test before re-energising.</div>
 
 
   <!-- ═══ SECTION 5 ═══ -->
@@ -266,5 +282,7 @@ window.loadNotes("T22", `<div class="view" id="view-notes-t22">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

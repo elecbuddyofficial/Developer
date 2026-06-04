@@ -21,11 +21,15 @@ window.loadNotes("T20", `<div class="view" id="view-notes-t20">
     <button class="anc-btn" onclick="jumpTo('s-esb')">ESB & 2 ACBs</button>
     <button class="anc-btn" onclick="jumpTo('s-seqstart')">Sequential Start</button>
     <button class="anc-btn" onclick="jumpTo('s-container')">CSC & Container Fire</button>
+    <button class="anc-btn" onclick="jumpTo('s-drydock')">Drydock Preps</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> IEC motor frame number decoding. Sequential starting timings. ESB connected equipment. Hogging vs sagging. Stability GM limits. Container CSC convention.</div></div>
 
@@ -219,5 +223,7 @@ window.loadNotes("T20", `<div class="view" id="view-notes-t20">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

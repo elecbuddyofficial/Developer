@@ -21,11 +21,15 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
     <button class="anc-btn" onclick="jumpTo('s-solas')">SOLAS Acceptance (50% rule)</button>
     <button class="anc-btn" onclick="jumpTo('s-room')">Battery Room Safety</button>
     <button class="anc-btn" onclick="jumpTo('s-ups')">UPS Systems</button>
+    <button class="anc-btn" onclick="jumpTo('s-lithium')">Li-Ion &amp; ESS</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Why SG changes in Lead-Acid but not in NiCd/Alkaline. CCA vs Ah rating differences. Battery room safeties (ex-lighting, ventilation). The "50% capacity" SOLAS question.</div></div>
 
@@ -77,8 +81,12 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
     <li><strong>Capacity:</strong> Ah rating at specific C-rate.</li>
     <li><strong>Starting Performance:</strong> CCA rating at -18°C (if for starting).</li>
     <li><strong>Dimensions:</strong> L × W × H (must fit the tray).</li>
-    <li><strong>Terminal Type & Layout:</strong> Top-post, stud, left-positive/right-negative.</li>
+    <li><strong>Terminal Type &amp; Layout:</strong> Top-post, stud, left-positive/right-negative. (Crucial so cables reach).</li>
+    <li><strong>Maintenance Type:</strong> Flooded vs Sealed (VRLA).</li>
+    <li><strong>Temperature Range:</strong> Min expected ambient temp.</li>
     <li><strong>Marine Approval:</strong> IMO SOLAS compliant, Class-approved.</li>
+    <li><strong>Shelf Life:</strong> For SART/EPIRB batteries.</li>
+    <li><strong>Hazmat Shipping:</strong> NiCd/Li-ion have shipping restrictions (IATA/IMDG).</li>
   </ol>
 
 
@@ -87,6 +95,14 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
   
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Question:</strong> The emergency battery is at 50% capacity - can you accept it?</div></div>
   <div class="n-p"><strong>NO.</strong> SOLAS II-1/Reg 43 requires the emergency battery to supply ALL emergency loads for the FULL required duration (e.g., 30 minutes for cargo ships). A battery at 50% capacity can only supply half the required duration. If a blackout occurs, it will fail prematurely, leaving the ship without critical services. <strong>It MUST be replaced before sailing.</strong></div>
+  
+  <div class="n-h2">Capacity Thresholds &amp; Actions</div>
+  <ul class="n-list">
+    <li><strong>80–100%:</strong> Acceptable. Monitor normally.</li>
+    <li><strong>50–80%:</strong> Flag for early replacement. Ship may sail, but order urgently. Notify class.</li>
+    <li><strong>Below 50%:</strong> MUST REPLACE before sailing. Unfit for SOLAS purpose.</li>
+  </ul>
+  <div class="n-p"><strong>How it's tested:</strong> Annual discharge test. Fully charge, discharge at rated current, measure time until 10.5V cut-off. Ah delivered = current × time.</div>
 
 
   <!-- ═══ SECTION 6 ═══ -->
@@ -94,11 +110,13 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
   
   <div class="n-p">Battery rooms are hazardous areas because charging Lead-Acid and NiCd batteries produces <strong>Hydrogen gas</strong> (explosive above 4% in air).</div>
   <ul class="n-list">
-    <li><strong>Ventilation:</strong> Dedicated extraction (natural or forced) with inlet low and exhaust high (hydrogen rises).</li>
-    <li><strong>Lighting:</strong> MUST be Ex-certified (Ex d or Ex e). Switch located OUTSIDE the room.</li>
-    <li><strong>Floor:</strong> Acid/Alkali resistant floor or drip tray.</li>
-    <li><strong>Safety Gear:</strong> Eyewash station, PPE (apron, goggles, gloves). No smoking/naked flames.</li>
-    <li><strong>Extinguisher:</strong> CO2 or Dry Powder. NEVER use water (reacts with acid).</li>
+    <li><strong>Ventilation:</strong> Dedicated extraction (natural or forced) with inlet low and exhaust high (hydrogen rises). Must prevent accumulation &gt;25% LEL.</li>
+    <li><strong>Lighting:</strong> MUST be Ex-certified (Ex d or Ex e). Switch located OUTSIDE the room. No other non-Ex equipment inside.</li>
+    <li><strong>Floor:</strong> Acid/Alkali resistant floor, tiles, or drip tray.</li>
+    <li><strong>Safety Gear:</strong> Eyewash station at entrance, PPE (apron, goggles, acid gloves).</li>
+    <li><strong>Extinguisher:</strong> CO2 or Dry Powder. NEVER use water (reacts violently with acid).</li>
+    <li><strong>Fire Door &amp; Signage:</strong> A-class self-closing door. Marked: "BATTERY ROOM - NO NAKED FLAMES".</li>
+    <li><strong>Tools:</strong> Use insulated tools only. Remove metallic jewelry.</li>
   </ul>
 
 
@@ -110,8 +128,13 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
     <li><strong>Offline UPS (Standby):</strong> Runs on mains, switches to inverter on failure (10-20ms gap).</li>
     <li><strong>Line-Interactive:</strong> Continuously conditions raw AC power via a transformer tap-switching mechanism (Automatic Voltage Regulation - AVR). Provides better voltage stabilisation than offline units and protects against voltage sags/surges without switching to battery. Switches to battery only on total mains failure. Common for bridge instrument panels.</li>
     <li><strong>Battery Type:</strong> Mostly VRLA (Valve-Regulated Lead-Acid) / AGM. Maintenance-free.</li>
-    <li><strong>Maintenance:</strong> Check float voltage (13.5-13.8V). Perform quarterly discharge test (simulate mains failure). Replace every 3-5 years before they fail.</li>
-    <li><strong>Annual Manual Bypass Test:</strong> Operate the manual bypass switch to transfer the critical load to raw AC mains. Allows internal UPS servicing, component inspection, and dusting without dropping navigation or GMDSS equipment.</li>
+    <li><strong>Maintenance Routine:</strong> 
+      1. Visual check for swelling/leaks. 
+      2. Check float voltage (13.5-13.8V for 12V VRLA). 
+      3. Quarterly discharge test (simulate failure and verify backup time). 
+      4. Annual bypass test (transfer load to AC mains to service UPS internally).
+    </li>
+    <li><strong>Replacement:</strong> Replace VRLA batteries every 3-5 years BEFORE they fail.</li>
     <li><strong>Thermal Degradation Rule (10°C Law):</strong> Battery life is strictly tied to ambient temperature. <strong>For every 10°C rise above 25°C, battery life is halved.</strong> A VRLA battery rated 5 years at 25°C will last only 2.5 years in a battery room running at 35°C. Ensure battery room AC is operational - ETO must verify this on PMS.</li>
   </ul>
 
@@ -216,5 +239,7 @@ window.loadNotes("T23", `<div class="view" id="view-notes-t23">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

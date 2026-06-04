@@ -18,18 +18,21 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
     <button class="anc-btn" onclick="jumpTo('s-ch2')">Chapter II-1</button>
     <button class="anc-btn" onclick="jumpTo('s-empower')">Emergency Power</button>
     <button class="anc-btn" onclick="jumpTo('s-cables')">Cables</button>
+    <button class="anc-btn" onclick="jumpTo('s-survey-checks')">Special Survey</button>
     <button class="anc-btn" onclick="jumpTo('s-ch22')">Chapter II-2</button>
     <button class="anc-btn" onclick="jumpTo('s-ch3')">Chapter III</button>
     <button class="anc-btn" onclick="jumpTo('s-ch4')">Chapter IV</button>
     <button class="anc-btn" onclick="jumpTo('s-ch5')">Chapter V</button>
-    <button class="anc-btn" onclick="jumpTo('s-new2026')">New 2026 Regs</button>
-    <button class="anc-btn" onclick="jumpTo('s-survey-checks')">Special Survey</button>
     <button class="anc-btn" onclick="jumpTo('s-ism')">ISM Code</button>
     <button class="anc-btn" onclick="jumpTo('s-isps')">ISPS Security</button>
     <button class="anc-btn" onclick="jumpTo('s-conventions')">MLC &amp; STCW</button>
+    <button class="anc-btn" onclick="jumpTo('s-new2026')">New 2026 Regs</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-ch2">📋 SOLAS Chapter II-1 - Electrical Installations (Part D)</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask Chapter II-1 electrical regulations.</strong> SOLAS has <span class="n-val">14 chapters</span>. Electrical installations = Chapter II-1, Part D.</div></div>
@@ -93,7 +96,7 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
   <div class="n-h1" id="s-ch3">🆘 SOLAS Chapter III - LSA</div>
   <ul class="n-list">
     <li><strong>Embarkation lighting (Reg 11.7):</strong> Each station illuminated by emergency switchboard or dedicated battery - illuminates ladder, lifeboat, sea surface</li>
-    <li><strong>EEBD (Reg 35):</strong> Emergency Escape Breathing Device - <span class="n-val">10 minutes</span> air for escape only. Minimum <span class="n-val">2 on bridge</span>, minimum <span class="n-val">2 in machinery space</span></li>
+    <li><strong>EEBD (Reg 35):</strong> Emergency Escape Breathing Device <span class="n-val">-10 minutes</span> air for escape only. Minimum <span class="n-val">2 on bridge</span>, minimum <span class="n-val">2 in machinery space</span></li>
     <li><strong>Lifeboat battery:</strong> <span class="n-val">24V DC</span>, capable of <span class="n-val">6</span> consecutive cold starting attempts, powers consumers for minimum <span class="n-val">30 minutes</span></li>
     <li><strong>SART carriage:</strong> Minimum <span class="n-val">2 per ship</span> &gt;500 GT (SOLAS III Reg 7.1), in lifeboats or grab-bags</li>
   </ul>
@@ -114,6 +117,13 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
 
   <div class="n-h2">The Role of the Designated Person Ashore (DPA)</div>
   <p class="n-p">Enforced by <strong>ISM Code Clause 4</strong>, the DPA serves as the critical operational conduit linking individual ships to highest levels of shore-side corporate management. The DPA monitors safe operation of all fleet vessels, ensures adequate resources and technical support are delivered, and evaluates all reported accidents or near-misses. The DPA must remain reachable <span class="n-val">24/7</span> for shipboard emergencies.</p>
+
+  <div class="n-h2">DOC vs SMC (Document of Compliance &amp; Safety Management Certificate)</div>
+  <table class="n-table">
+    <tr><th>Document</th><th>Issued To</th><th>Validity</th><th>Certifies</th></tr>
+    <tr><td><strong>DOC</strong></td><td class="hl">The COMPANY</td><td>5 years (annual audit)</td><td>Company SMS complies with ISM Code. Copy kept onboard.</td></tr>
+    <tr><td><strong>SMC</strong></td><td class="hl">The SHIP</td><td>5 years (intermediate audit)</td><td>Ship and crew operate per approved SMS. Original kept onboard.</td></tr>
+  </table>
 
   <div class="n-h2">Non-Conformity vs. Major Non-Conformity vs. PSC Deficiency</div>
   <ul class="n-list">
@@ -138,6 +148,9 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
     <li><strong>Access Controls:</strong> Maintain electronic card readers, PIN pads, and electromagnetic locks securing <strong>Designated Restricted Areas</strong> (Navigation Bridge, Engine Room, Steering Flat, Radio Room, Emergency Generator Room, and the ECR). Ensure mechanical emergency fail-safe overrides function instantly on fire panel trips.</li>
     <li><strong>SSAS:</strong> Test the hidden activation pushbuttons (one on bridge, one hidden in crew spaces) every <span class="n-val">3 months</span> to confirm they dispatch silent distress messages to the company and flag state without firing any onboard alarms.</li>
   </ul>
+
+  <div class="n-h2">CSR - Continuous Synopsis Record</div>
+  <p class="n-p">Required by SOLAS XI-1/Reg 5. Provides an onboard record of the ship's history: flag, owner, ISM company, ship name, IMO number, class society changes. Must be available for inspection at all times. Cannot be altered - amendments are added as new pages.</p>
 
   <div class="n-h1" id="s-conventions">🏛️ International Conventions - IMO Committees, MLC &amp; STCW</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Core legal instruments regulating technical engineering competencies, crew welfare, and toxic workspace entry.</strong></div></div>
@@ -171,6 +184,9 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
     <li><strong>Carbon Monoxide (CO):</strong> Product of incomplete combustion; attaches to blood hemoglobin to induce rapid suffocation. Flammable gases must register strictly <span class="n-val">&lt;1% LEL</span>.</li>
   </ul>
 
+  <div class="n-h2">Manila Amendment 2010 (STCW)</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Key change for ETOs:</strong> The Manila Amendment formally created the Electro-Technical Officer (ETO) as a recognised officer under STCW Chapter III, Regulation III/6. It established the minimum standard of competency (Table A-III/6) and introduced mandatory security training, leadership/teamwork modules, and 5-year refresher training.</div></div>
+
   <div class="n-h1" id="s-new2026">🆕 New 2026 SOLAS Regulations</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Brand new 2026 regulations - surveyors are already asking about these.</strong> Know both: Lifting Appliances (Ch II-1/3-13) and Electronic Inclinometer requirement.</div></div>
 
@@ -193,8 +209,8 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
     <li><strong>Submerged Transducers:</strong> Organotin Tributyltin (TBT) compounds historically bonded into acoustic faces of echo sounders or Doppler speed log transducers.</li>
   </ul>
 
-  <div class="n-h2">SEEMP Part 3 &amp; Operational CII Ratings</div>
-  <p class="n-p">Introduced under <strong>MARPOL Annex VI</strong>, SEEMP Part 3 creates a mandatory operational carbon intensity score (grams CO₂ per cargo-carrying capacity per nautical mile). Ships receive an annual rating scaling from <strong>A (Best) to E (Worst)</strong>. Sustained D or E grades freeze commercial trading profiles and mandate a flag-state corrective action plan. The ETO directly drives fuel savings through a 7-point efficiency checklist:</p>
+  <div class="n-h2">SEEMP Part 3, EEXI &amp; Operational CII Ratings</div>
+  <p class="n-p">Introduced under <strong>MARPOL Annex VI</strong>, SEEMP Part 3 creates a mandatory operational carbon intensity score (grams CO₂ per cargo-carrying capacity per nautical mile). Ships receive an annual rating scaling from <strong>A (Best) to E (Worst)</strong>. Sustained D or E grades freeze commercial trading profiles and mandate a flag-state corrective action plan. Additionally, a vessel's attained <strong>EEXI</strong> (Energy Efficiency Existing Ship Index - a one-time technical rating) and annual <strong>CII</strong> must now be formally submitted to the IMO Ship Fuel Oil Consumption Database. The ETO directly drives fuel savings through a 7-point efficiency checklist:</p>
   <ol class="n-steps">
     <li><strong>LED Lighting Upgrades:</strong> Converting fluorescent and halogen lamps to high-efficiency LED chips, slashing hotel load by 30–60%.</li>
     <li><strong>VFD Fan Adaptation:</strong> Retrofitting variable frequency drives onto sea water cooling pumps and ventilation fans. Dropping fan speed to 80% reduces power consumption by nearly <span class="n-val">50%</span> (affinity laws).</li>
@@ -238,7 +254,7 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the transitional source of emergency power? (All surveyors)</strong><br><strong>Ideal Answer:</strong> A dedicated battery (SOLAS II-1/43) that automatically supplies emergency lighting, navigation lights, and internal communications for minimum <span class="n-val">30 minutes</span>. Covers the critical gap between blackout occurring and emergency generator coming online (<span class="n-val">45 seconds</span>). Automatic switchover - no manual action needed.</div></div>
 
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What does SOLAS say about cables in machinery spaces? (Vishwanathan, Kamath)</strong><br><strong>Ideal Answer:</strong> SOLAS II-2/9.4: cables to essential services (fire pumps, steering gear, emergency lighting) must be fire resistant - <span class="n-val">IEC 60331</span>, maintain circuit integrity for minimum <span class="n-val">3 hours</span> at <span class="n-val">750°C</span>. SOLAS II-1/45: all cables in enclosed spaces must be flame retardant (<span class="n-val">IEC 60332</span>). Hazardous areas: explosion protected (<span class="n-val">IEC 60079</span>). Fuses must NOT be fitted in earthed conductors.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What does SOLAS say about cables in machinery spaces? (Vishwanathan, Kamath)</strong><br><strong>Ideal Answer:</strong> SOLAS II-2/9.4: cables to essential services (fire pumps, steering gear, emergency lighting) must be fire resistant <span class="n-val">-IEC 60331</span>, maintain circuit integrity for minimum <span class="n-val">3 hours</span> at <span class="n-val">750°C</span>. SOLAS II-1/45: all cables in enclosed spaces must be flame retardant (<span class="n-val">IEC 60332</span>). Hazardous areas: explosion protected (<span class="n-val">IEC 60079</span>). Fuses must NOT be fitted in earthed conductors.</div></div>
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the new SOLAS 2026 lifting appliances regulation? (New question)</strong><br><strong>Ideal Answer:</strong> SOLAS II-1 Regulation 3-13, effective <span class="n-val">1 January 2026</span>. First mandatory global standard for lifting appliances and anchor winches. Requires proof load testing at <span class="n-val">125% SWL</span> witnessed by class surveyor. All appliances must be permanently marked with SWL. Existing ships tested at first SAFCON renewal after January 2026. Crane defects can now result in PSC detention. ETO must maintain all electrical components (motors, brakes, limit switches) and test overload cut-outs annually.</div></div>
 
@@ -251,8 +267,10 @@ window.loadNotes("T16", `<div class="view" id="view-notes-t16">
     <tr><td>Cable standards</td><td class="hl">⭐⭐⭐⭐ Vishwanathan, Kamath</td><td>IEC 60331 = fire resistant (<span class="n-val">3h/750°C</span>) | IEC 60332 = flame retardant</td></tr>
     <tr><td>New 2026 Lifting Appliances</td><td class="hl">⭐⭐⭐⭐⭐ New reg - will be asked</td><td>SOLAS II-1/3-13 | Proof load <span class="n-val">125% SWL</span> | Class surveyor witness | Jan 2026</td></tr>
     <tr><td>GMDSS battery (Ch IV/13)</td><td class="hl">⭐⭐⭐⭐ All surveyors</td><td><span class="n-val">6h</span> without UPS | <span class="n-val">1h</span> with UPS | Annual test | Replace &lt;<span class="n-val">80%</span></td></tr>
-    <tr><td>EEBD (Ch III)</td><td class="hl">⭐⭐⭐⭐ Multiple surveyors</td><td><span class="n-val">10 minutes</span> air | Min <span class="n-val">2 bridge</span> + <span class="n-val">2 machinery space</span></td></tr>
+    <tr><td>EEBD (Ch III)</td><td class="hl">⭐⭐⭐⭐ Multiple surveyors</td><td><span class="n-val">10 minutes</span> air | Min <span class="n-val">2 bridge</span> <span class="n-val">+2 machinery space</span></td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

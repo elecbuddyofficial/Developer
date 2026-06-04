@@ -22,10 +22,14 @@ window.loadNotes("T19", `<div class="view" id="view-notes-t19">
     <button class="anc-btn" onclick="jumpTo('s-misc')">Auto-Tension, Hose IR, Anti-Heeling</button>
     <button class="anc-btn" onclick="jumpTo('s-updates')">New 2026 Additions</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
+    <button class="anc-btn" onclick="jumpTo('s-gasdetect')">Gas Detection</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Ex d / Ex e / Ex i protection. IG system trips with exact values. Bow thruster interlocks and CPP pitch. Static electricity prevention. Pump room light gasket inspection. LPG compressor room safety (New 2026).</div></div>
 
@@ -144,15 +148,51 @@ window.loadNotes("T19", `<div class="view" id="view-notes-t19">
 
 
   <!-- ═══ SECTION 7 ═══ -->
-  <div class="n-h1" id="s-updates">7. New 2026 Additions (IGF Code, LPG, UTI)</div>
+  <div class="n-h1" id="s-updates">7. Tanker Operations &amp; New 2026 Additions</div>
   
+  <div class="n-h2">Framo Hydraulic Powerpack - Pre-Start Interlocks</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Deswal, Praveen Nair - tanker-specific question</strong></div></div>
+  <p class="n-p">Provides hydraulic power to submerged cargo pumps on product/chemical tankers.</p>
   <ul class="n-list">
-    <li><strong>LPG Compressor Room:</strong> Zone 1. NO portable electrical equipment unless Ex certified. Ex d / Ex e equipment used. Mechanical ventilation interlock trips power if ventilation fails. Fixed gas detection trips power at 40% LEL.</li>
-    <li><strong>IGF Code 2026 Update 1:</strong> Bunkering checklists must now explicitly agree and record min/max transfer pressure, min/max transfer temp, and relief valve settings BEFORE gas transfer.</li>
-    <li><strong>IGF Code 2026 Update 2:</strong> A 5kg Dry Chemical Powder (DCP) extinguisher is now mandatory inside every Fuel Preparation Room.</li>
-    <li><strong>IGF Code 2026 Update 3:</strong> Ammonia (NH3) legally permitted as fuel on Type 2G ships. It is toxic (TLV 25 ppm, IDLH 300 ppm). Requires continuous NH3 detection and remote solenoid isolation.</li>
-    <li><strong>UTI Tape:</strong> Ullage, Temperature, Interface. Senses oil/water interface via capacitance change. Must be Ex i certified.</li>
-    <li><strong>Framo Hydraulic Powerpack:</strong> Pre-start: IG system operating, tank atmosphere safe, hydraulic oil level/temp OK. Electrical: Motor thermistors normal, overload reset.</li>
+    <li><strong>Pre-start interlocks:</strong> (1) IGS operational (cargo tanks under positive pressure). (2) Tank atmosphere safe. (3) Hydraulic oil level OK. (4) Hydraulic oil temp within 30-60°C. (5) Isolation valves correct.</li>
+    <li><strong>Electrical interlocks:</strong> Motor overload reset, motor thermistors normal, earth fault cleared.</li>
+    <li><strong>ETO Scope:</strong> Electrical interlocks, motor protection, HPU control panel. (Hydraulic system is C/E scope).</li>
+  </ul>
+
+  <div class="n-h2">UTI Tape &amp; Cargo Tank Pressure Sensor</div>
+  <ul class="n-list">
+    <li><strong>UTI Tape (Ullage, Temperature, Interface):</strong> Uses capacitance sensor to detect oil/water interface. ETO maintains calibration and ensures Ex i certification is valid.</li>
+    <li><strong>Cargo Tank Pressure Sensor Testing:</strong> Isolate sensor (3-valve manifold), vent pressure. Connect calibrated dead-weight tester/hand pump. Apply known pressures (0-100%). Confirm high/low alarm setpoints trigger. Record in maintenance log.</li>
+  </ul>
+
+  <div class="n-h2">LPG Compressor Room - Electrical Safety</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: What are the electrical requirements for LPG compressor room?</strong></div></div>
+  <p class="n-p">Classified as <strong>Zone 1</strong>. All equipment MUST be Ex-certified:</p>
+  <ul class="n-list">
+    <li><strong>Ex Types:</strong> Ex d (flameproof) for motors, Ex e (increased safety) for lighting, Ex i (intrinsically safe) for sensors.</li>
+    <li><strong>Rules:</strong> NO PORTABLE ELECTRICAL EQUIPMENT unless Ex-certified. Light switches mounted outside or Ex e rated. All cable glands must be Ex-certified (double-sealed).</li>
+    <li><strong>Ventilation Interlock:</strong> Minimum 20 air changes/hour. Failure of ventilation trips power to compressor room.</li>
+    <li><strong>Gas Detection:</strong> Trips power automatically to non-essential equipment at ~40% LEL.</li>
+  </ul>
+
+  <div class="n-h2">Deck Electrical Safety - Tankers</div>
+  <ul class="n-list">
+    <li><strong>Deck Zones:</strong> Zone 0 (inside tanks), Zone 1 (within 3m of openings/vents, pump rooms), Zone 2 (3-5m from Zone 1).</li>
+    <li><strong>Deck Lighting:</strong> Must be Ex e or Ex d floodlights. Steel conduit for cables (no flexible conduit).</li>
+    <li><strong>Bonding Cable:</strong> Ship-to-shore bonding cable MUST be connected before any cargo hose to equalise static potential and prevent sparks.</li>
+  </ul>
+
+  <div class="n-h2">Reefer Container - ETO Monitoring Routines</div>
+  <ul class="n-list">
+    <li><strong>Routine Checks (Every 6-12h):</strong> Check setpoint vs actual supply temp. Check return air temp (2-5°C above supply). Check compressor current draw. Check for alarms (high pressure, compressor fault, defrost running).</li>
+    <li><strong>Troubleshooting Temp Excursion:</strong> Check compressor running. Clean condenser if dirty (should be warm, 40-50°C). Check sight glass for bubbles (low charge). Check door seals.</li>
+  </ul>
+
+  <div class="n-h2">IGF Code 2026 Amendments - Gas-Fuelled Ships</div>
+  <ul class="n-list">
+    <li><strong>Change 1 - Bunkering Checklist:</strong> Must now explicitly document and agree on min/max transfer pressures, min/max transfer temperatures, and relief valve settings BEFORE bunkering begins.</li>
+    <li><strong>Change 2 - Fuel Prep Room Extinguisher:</strong> Mandatory 5 kg Dry Chemical Powder (DCP) extinguisher placed inside each fuel preparation room. ETO maintains and records in PMS.</li>
+    <li><strong>Change 3 - Ammonia as Fuel:</strong> Permitted on Type 2G/2PG ships. Toxic hazard (TLV 25 ppm, IDLH 300 ppm). Requires continuous NH3 detection and remote solenoid isolation.</li>
   </ul>
 
 
@@ -200,7 +240,7 @@ window.loadNotes("T19", `<div class="view" id="view-notes-t19">
   <p class="n-p">Because clean distillate cargo serves as an electrical insulator, accumulated surface charge cannot easily bleed down to the hull earth plate. The static charge decays exponentially over time based on the fluid's specific dielectric relaxation constant (τ = ε/σ).</p>
   <p class="n-p"><strong>The Core Safety Mandate:</strong> This is why introducing any metallic object - such as dropping a steel ullage sounding tape, portable UTI probe, or chemical sampling can - directly into a cargo tank is strictly forbidden for a minimum of <span class="n-val">30 minutes after loading stops</span>. Dropping a conductor into a highly charged space reduces the dielectric gap, instantly triggering a high-energy static spark that can detonate explosive hydrocarbon vapours if the space is not properly inerted.</p>
 
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Methanol toxicity vs flammability gap:</strong> TLV = <span class="n-val">200 ppm</span>. Lethal doses accumulate long before standard LEL alarms trigger (set at <span class="n-val">20% LEL</span> = ~<span class="n-val">6,000 ppm</span>). Toxic concentrations occur at much lower levels than explosive concentrations - toxic threat comes first.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Methanol toxicity vs flammability gap:</strong> TLV = <span class="n-val">200 ppm</span>. Lethal doses accumulate long before standard LEL alarms trigger (set at <span class="n-val">20% LEL</span> = <span class="n-val">~6,000 ppm</span>). Toxic concentrations occur at much lower levels than explosive concentrations - toxic threat comes first.</div></div>
   <div class="n-h2">Ammonia - Toxic at Very Low Concentrations</div>
   <table class="n-table">
     <tr><th>Level</th><th>Concentration</th><th>Action</th></tr>
@@ -240,5 +280,7 @@ window.loadNotes("T19", `<div class="view" id="view-notes-t19">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

@@ -22,10 +22,18 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
     <button class="anc-btn" onclick="jumpTo('s-insclass')">Insulation Classes</button>
     <button class="anc-btn" onclick="jumpTo('s-selection')">Cable Selection</button>
     <button class="anc-btn" onclick="jumpTo('s-neutral')">Insulated Neutral</button>
+    <button class="anc-btn" onclick="jumpTo('s-cable-detail')">Cable Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-iec-standards')">IEC Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-megger-full')">Megger Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-pi-full')">PI Detail</button>
+    <button class="anc-btn" onclick="jumpTo('s-insclass-full')">Insclass Detail</button>
     <button class="anc-btn" onclick="jumpTo('s-penetrations')">Penetrations</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <div class="n-h1" id="s-layers">🔌 Cable Construction - Layers</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>All surveyors ask cable layers, megger procedure, and AVR disconnection before test.</strong></div></div>
@@ -136,7 +144,7 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
     <li><strong>Outer sheath:</strong> LSZH, LSF, or PVC</li>
     <li><strong>Fire performance:</strong> Flame retardant (<span class="n-val">IEC 60332</span>) or Fire Resistant (<span class="n-val">IEC 60331</span>)</li>
     <li><strong>Applicable standard:</strong> e.g. <span class="n-val">IEC 60092-353</span></li>
-    <li><strong>Length:</strong> Measured length + <span class="n-val">10–15%</span> allowance</li>
+    <li><strong>Length:</strong> Measured length <span class="n-val">+10–15%</span> allowance</li>
     <li><strong>Glands:</strong> Watertight A2 type per <span class="n-val">BS 6121</span></li>
   </ul>
 
@@ -216,7 +224,14 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
     <tr><td><span class="n-val">&lt; 1.5</span></td><td class="bad">Poor - moisture/contamination</td><td class="bad">Do NOT energise - dry out first</td></tr>
     <tr><td><span class="n-val">≈ 1.0</span></td><td class="bad">Very poor/Dangerous</td><td class="bad">Conductive moisture path - do NOT energise</td></tr>
   </table>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why PI works:</strong> Good dry insulation has significant dielectric absorption - IR continues to rise over 10 minutes as molecules align to electric field (PI &gt; 2). Wet/contaminated insulation has dominant steady-state conductive leakage - IR stays flat (PI ≈ 1). A single 1-minute IR reading misses this. PI only useful for HV and large machine windings - thin LV insulation has negligible absorption.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL (All Surveyors): "What is the significance of waiting 10 minutes?"</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>When megger voltage is applied, three currents flow:</strong></div></div>
+  <ul class="n-list">
+    <li><strong>1. Capacitive charging current:</strong> Decays within the first few seconds. Due to the cable's inherent capacitance charging up.</li>
+    <li><strong>2. Absorption current:</strong> Decays over minutes. Due to dielectric polarisation of insulation molecules aligning with the electric field.</li>
+    <li><strong>3. True leakage current:</strong> Remains constant throughout. This is the current that actually flows through impurities/defects in the insulation.</li>
+  </ul>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why wait 10 minutes?</strong> At 1 minute, the absorption current is still significant, so the IR reading appears lower than the true insulation resistance. By 10 minutes, the absorption current has largely decayed, leaving only the true leakage current. This gives a highly accurate IR value. If the insulation is wet/dirty, the conductive leakage current dominates from the start, and the IR stays flat (PI ≈ 1). A high PI means insulation polarises well (clean/dry). PI is only useful for HV and large machine windings (thin LV insulation has negligible absorption).</div></div>
 
   <div class="n-h1" id="s-insclass-full">🌡️ Insulation Classes - All Values</div>
   <table class="n-table">
@@ -280,5 +295,7 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
     <tr><td>Low insulation alarm action</td><td class="hl">⭐⭐⭐⭐ Sanjib, Deswal</td><td>MSB indicator → isolate one by one → megger separately → dry out → retest</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);

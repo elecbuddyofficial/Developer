@@ -22,12 +22,18 @@ window.loadNotes("T18", `<div class="view" id="view-notes-t18">
     <button class="anc-btn" onclick="jumpTo('s-rpr')">Reverse Power Trip</button>
     <button class="anc-btn" onclick="jumpTo('s-mechecks')">Main Engine Checks</button>
     <button class="anc-btn" onclick="jumpTo('s-shoresupply')">Drydock Shore Supply</button>
+    <button class="anc-btn" onclick="jumpTo('s-ism')">ISM &amp; SMS</button>
+    <button class="anc-btn" onclick="jumpTo('s-ptw')">Permit to Work</button>
+    <button class="anc-btn" onclick="jumpTo('s-survey')">Survey Checks</button>
     <button class="anc-btn" onclick="jumpTo('s-shore-sync')">Shore Sync</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
 
   <div class="note-content">
+
+
+  
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most Asked Topics:</strong> Dead front panel exact definition. ACB isolation procedure and secondary injection test. UVT coil function. Reverse power trip test at sea vs shore. Documents for survey.</div></div>
 
@@ -293,5 +299,7 @@ window.loadNotes("T18", `<div class="view" id="view-notes-t18">
     </tr>
   </table>
 
-  </div>
-</div>`);
+      </div>
+</div>
+</div>
+`);

@@ -18,15 +18,40 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <button class="anc-btn" onclick="jumpTo('s-omd')">OMD</button>
     <button class="anc-btn" onclick="jumpTo('s-visco')">Viscotherm</button>
     <button class="anc-btn" onclick="jumpTo('s-steering')">Steering Gear</button>
+    <button class="anc-btn" onclick="jumpTo('s-steering-alarms')">Steering Alarms</button>
     <button class="anc-btn" onclick="jumpTo('s-boiler')">Boiler BMS</button>
+    <button class="anc-btn" onclick="jumpTo('s-boiler-alarms')">Boiler Alarms</button>
     <button class="anc-btn" onclick="jumpTo('s-embrake')">EM Brake</button>
     <button class="anc-btn" onclick="jumpTo('s-thruster')">Bow Thruster</button>
     <button class="anc-btn" onclick="jumpTo('s-purifier')">Purifier</button>
     <button class="anc-btn" onclick="jumpTo('s-reefer')">Refrigeration</button>
+    <button class="anc-btn" onclick="jumpTo('s-reefer-lo')">Reefer LO</button>
+    <button class="anc-btn" onclick="jumpTo('s-tev')">TEV</button>
     <button class="anc-btn" onclick="jumpTo('s-engine')">Main Engine</button>
+    <button class="anc-btn" onclick="jumpTo('s-dashpot-gov')">Dashpot/Gov</button>
+    <button class="anc-btn" onclick="jumpTo('s-gov-types')">Governor Types</button>
+    <button class="anc-btn" onclick="jumpTo('s-overspeed-test')">Overspeed Test</button>
+    <button class="anc-btn" onclick="jumpTo('s-lo-alarm')">LO Alarm</button>
+    <button class="anc-btn" onclick="jumpTo('s-tc-rpm')">TC RPM Sensor</button>
+    <button class="anc-btn" onclick="jumpTo('s-jcw')">JCW System</button>
+    <button class="anc-btn" onclick="jumpTo('s-autotension')">Auto-Tension</button>
+    <button class="anc-btn" onclick="jumpTo('s-salinometer')">Salinometer</button>
+    <button class="anc-btn" onclick="jumpTo('s-antiheeling')">Anti-Heeling</button>
+    <button class="anc-btn" onclick="jumpTo('s-bilge-inj')">Bilge Valve</button>
+    <button class="anc-btn" onclick="jumpTo('s-smoke-density')">Smoke Meter</button>
+    <button class="anc-btn" onclick="jumpTo('s-deadship')">Dead Ship</button>
+    <button class="anc-btn" onclick="jumpTo('s-ums-prearrival')">UMS/Pre-Arrival</button>
+    <button class="anc-btn" onclick="jumpTo('s-drydock')">Drydock Duties</button>
+    <button class="anc-btn" onclick="jumpTo('s-lifeboat-air')">Lifeboat Air</button>
+    <button class="anc-btn" onclick="jumpTo('s-crane-safeties')">Crane Safeties</button>
+    <button class="anc-btn" onclick="jumpTo('s-crane-speed')">Crane Speed</button>
+    <button class="anc-btn" onclick="jumpTo('s-lifting2026')">Lifting 2026</button>
     <button class="anc-btn" onclick="jumpTo('s-surveyorqa')">Surveyor Q&amp;A</button>
     <button class="anc-btn" onclick="jumpTo('s-quickrev')">Quick Revision</button>
   </div>
+
+  <div class="note-content">
+
 
   <!-- ═══ SECTION 1 ═══ -->
   <div class="n-h1" id="s-omd">🔍 Oil Mist Detector (OMD)</div>
@@ -79,7 +104,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <div class="n-card"><div class="card-title">Auxiliary Engine Target</div><div class="card-val"><span class="n-val">14–20 cSt</span></div><div class="card-desc">AE injectors have less robust fuel systems - operate at slightly higher viscosity.</div></div>
   </div>
 
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Why viscosity NOT temperature control?</strong> Different HFO grades have different viscosity-temperature relationships. RMG 380 requires ~<span class="n-val">130–140°C</span> to reach <span class="n-val">14 cSt</span>. RME 180 only needs ~<span class="n-val">100–110°C</span> to reach <span class="n-val">14 cSt</span>. If temperature-controlled to 130°C when running RME 180 - fuel reaches only <span class="n-val">65–70 cSt</span> - far too viscous for good atomisation. Viscosity controller measures the actual injection property and compensates automatically for any fuel grade change.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Why viscosity NOT temperature control?</strong> Different HFO grades have different viscosity-temperature relationships. RMG 380 requires <span class="n-val">~130–140°C</span> to reach <span class="n-val">14 cSt</span>. RME 180 only needs <span class="n-val">~100–110°C</span> to reach <span class="n-val">14 cSt</span>. If temperature-controlled to 130°C when running RME 180 - fuel reaches only <span class="n-val">65–70 cSt</span> - far too viscous for good atomisation. Viscosity controller measures the actual injection property and compensates automatically for any fuel grade change.</div></div>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>PI controller - why not PID?</strong> Proportional action gives immediate response. Integral action eliminates steady-state offset. Derivative (D) is not used because viscosity changes are slow and the rotating spindle signal contains mechanical vibration noise from fuel pumps - derivative action would amplify this noise causing erratic valve hunting.</div></div>
 
@@ -122,7 +147,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <tr><th>#</th><th>Trip</th><th>Reset</th><th>Notes</th></tr>
     <tr><td>1</td><td><strong>Low-low water level</strong></td><td class="bad">Lockout - manual</td><td>Immediate trip, no delay. Prevents dry firing and tube explosion.</td></tr>
     <tr><td>2</td><td><strong>Flame failure</strong></td><td class="bad">Lockout - manual</td><td>Fuel solenoid closes. Must identify and fix cause before reset.</td></tr>
-    <tr><td>3</td><td><strong>High steam pressure</strong></td><td class="bad">Manual reset</td><td>Set ~<span class="n-val">3–5%</span> above working pressure. Before mechanical safety valve lifts.</td></tr>
+    <tr><td>3</td><td><strong>High steam pressure</strong></td><td class="bad">Manual reset</td><td>Set <span class="n-val">~3–5%</span> above working pressure. Before mechanical safety valve lifts.</td></tr>
     <tr><td>4</td><td>Low fuel oil pressure</td><td class="hl">Auto</td><td>Insufficient fuel supply for atomisation.</td></tr>
     <tr><td>5</td><td>Low atomising steam pressure</td><td class="hl">Auto</td><td>Steam-atomised burners only. Poor atomisation = unburnt fuel hazard.</td></tr>
     <tr><td>6</td><td>High flue gas temperature</td><td class="hl">Auto</td><td>Soot fire or excess combustion indication.</td></tr>
@@ -183,7 +208,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Critical Speed:</strong> During run-up, purifier passes through resonant frequency of rotating assembly. Vibration amplitude peaks briefly at this speed - can trigger vibration trip if sensor too sensitive. Solution: pass through critical speed quickly - do not dwell at that RPM. Vibration trip is time-delayed or inhibited during start-up run-through period.</div></div>
 
-  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Purifier = no brake, ever - <span class="n-val">9000 RPM</span> mass shatters if braked. Free rundown takes <span class="n-val">20–40 min</span>. Critical speed = pass through fast, don't dwell.</div></div>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Purifier = no brake, ever <span class="n-val">-9000 RPM</span> mass shatters if braked. Free rundown takes <span class="n-val">20–40 min</span>. Critical speed = pass through fast, don't dwell.</div></div>
 
   <!-- ═══ SECTION 8 ═══ -->
   <div class="n-h1" id="s-reefer">❄️ Refrigeration - LP/HP Cutouts &amp; Oil Differential</div>
@@ -208,7 +233,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <tr><td><strong>TRIP</strong> (full stop)</td><td>Lube oil low-LOW pressure | Overspeed | Crankcase explosion | HT water high-HIGH temperature</td><td class="bad">NO - Hardware interlock, cannot override</td></tr>
   </table>
 
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Overspeed trip:</strong> Trips engine when RPM exceeds ~<span class="n-val">110–115%</span> of rated speed. INDEPENDENT of governor - separate mechanical or electronic speed sensing. If governor fails and engine overspeeds, overspeed trip acts as final safety. Test: monthly or per PMS schedule.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Overspeed trip:</strong> Trips engine when RPM exceeds <span class="n-val">~110–115%</span> of rated speed. INDEPENDENT of governor - separate mechanical or electronic speed sensing. If governor fails and engine overspeeds, overspeed trip acts as final safety. Test: monthly or per PMS schedule.</div></div>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Bridge slow-down override:</strong> Temporarily cancels the slow-down alarm - engineer must still investigate immediately. Override is only for emergency navigation situations where losing propulsion is more dangerous than the engine fault.</div></div>
 
@@ -288,16 +313,188 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <li>Full stroke steering gear test port-to-starboard, power unit auto-changeover test, verify nav lights and CCTV</li>
   </ol>
 
+  <!-- ═══ MISSING V2.1 GAPS ═══ -->
+  <div class="n-h1" id="s-boiler-alarms">Boiler Electrical Alarms &amp; Troubleshoot</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Sudhir — 'what is your role in boiler fault?'</strong></div></div>
+  <ul class="n-list">
+    <li><strong>ETO owns:</strong> All sensors (PT100, pressure/DP transmitters, level gauges), solenoid valves, ignition transformer, FD fan motor, BMS PLC.</li>
+    <li><strong>C/E owns:</strong> Mechanical issues — tube leaks, pump failures, combustion tuning.</li>
+    <li><strong>Flame failure alarm:</strong> Check UV/IR flame detector (clean lens), check ignition transformer voltage, check solenoid valve (test with 24V), check BMS controller output.</li>
+    <li><strong>High/low water level alarm:</strong> Check DP transmitter calibration, reference leg isolation valve open, drain valve closed, compare with sight glass.</li>
+    <li><strong>FD fan motor fault:</strong> Check overload relay reset, thermistor resistance (normal: 100–200&Omega;, tripped: &gt;3k&Omega;), starter contactors, duct pressure switch.</li>
+    <li><strong>BMS power fault:</strong> Check 24V DC supply rail, MCB/fuse, supply cable earth fault.</li>
+  </ul>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>FD fan motor vs normal motor:</strong> FD fan has high inertia → uses star-delta or soft starter. Normal motor may use DOL.</div></div>
+
+  <div class="n-h1" id="s-tc-rpm">Turbocharger RPM Sensor</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Type:</strong> Magnetic pickup (variable reluctance) sensor — most common. Some high-speed TCs use eddy current or optical.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Ferromagnetic toothed wheel (phonic wheel) on TC shaft rotates past sensor tip. Each tooth passing changes magnetic flux through sensor coil — induces voltage pulse. Frequency of pulses = RPM of TC.</div></div>
+  <div class="n-p"><strong>Calibration:</strong> Count teeth &times; pulses per tooth &times; conversion factor = RPM. Usually preconfigured in tachometer.<br>
+  <strong>Faults:</strong> Oil on sensor tip → weak signal. Air gap too large (&gt;<span class="n-val">2mm</span>) → no signal. Broken tooth → erratic RPM. Cable fault → zero reading. Clean tip, check gap during maintenance.</div>
+
+  <div class="n-h1" id="s-antiheeling">Anti-Heeling System</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> Transfers ballast between port and starboard tanks to maintain ship upright during one-sided cargo loading/discharging.</div></div>
+  <ul class="n-list">
+    <li><strong>ETO controls:</strong> Motor-driven centrifugal pump (transfers ballast). Remote valve actuators on cross-flooding valves. Heel angle sensor (inclinometer) input to control panel.</li>
+    <li><strong>Safeties ETO must know:</strong> Pump motor overload protection, tank overfill alarm, remote stop from bridge and CCR, limit switches on valves.</li>
+    <li><strong>Monitoring:</strong> Check heel angle display matches inclinometer. Check transfer pump current. Verify tank level sensors.</li>
+  </ul>
+
+  <div class="n-h1" id="s-tev">TEV — Thermostatic Expansion Valve</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Function:</strong> Regulates refrigerant flow into evaporator to maintain constant superheat at evaporator outlet.</div></div>
+  <div class="n-p"><strong>Working:</strong> Sensor bulb on suction line detects superheat temperature. Bellows transmit pressure to valve needle. High superheat → valve opens more → more flow → superheat reduced. Low superheat → valve closes → less flow.</div>
+  <div class="n-p"><strong>Typical setpoint:</strong> <span class="n-val">4–6&deg;C</span> above saturation temperature at evaporator pressure.<br>
+  <strong>ETO check:</strong> Measure suction line temperature and pressure → calculate actual superheat → compare to set value. Adjust TEV if needed.</div>
+
+  <div class="n-h1" id="s-lo-alarm">Lube Oil Low Pressure Alarm — ETO Action</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: 'Generators running, suddenly LO low pressure alarm — ETO action?'</strong></div></div>
+  <ol class="n-steps">
+    <li>Do NOT immediately stop engine. Inform C/E and bridge.</li>
+    <li>Check local LO pressure gauge — confirm alarm is genuine (not sensor fault).</li>
+    <li>Check LO pump running (listen, check ammeter, check local pressure).</li>
+    <li>Check LO sump level — if low, immediate risk of bearing damage.</li>
+    <li>Check LO pump inlet strainer — blocked strainer = low pressure.</li>
+    <li>If pressure keeps dropping → prepare to switch to manual emergency stop to prevent bearing damage. Log all actions.</li>
+  </ol>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>ETO Scope:</strong> Check LO pressure sensor calibration, level sensor, pump motor running (electrical). C/E handles mechanical cause.</div></div>
+
+  <!-- ═══ MISSING V2.2 GAPS ═══ -->
+  <div class="n-h1" id="s-crane-safeties">Crane Safeties — ALL Types</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Deswal, Gopikrishna — 'all crane safeties' asked frequently.</strong></div></div>
+  <div class="n-h2">Mechanical Safeties</div>
+  <ul class="n-list">
+    <li><strong>Overload/Overhoist limit:</strong> Trips hoist motor when SWL exceeded or hook reaches top.</li>
+    <li><strong>Slack rope safety:</strong> Trips if wire becomes slack (rope jumps off drum).</li>
+    <li><strong>Collision safety (anti-collision):</strong> Prevents crane jibs colliding on multi-crane ships.</li>
+    <li><strong>Anemometer cut-out:</strong> Trips crane if wind speed exceeds safe limit.</li>
+    <li><strong>Level luffing:</strong> Keeps hook at constant height while jib moves in/out.</li>
+  </ul>
+  <div class="n-h2">Electrical Safeties</div>
+  <ul class="n-list">
+    <li><strong>Electromagnetic brake:</strong> Fail-safe (spring-applied, electrically released). If power fails → brake applies automatically.</li>
+    <li><strong>Motor overload relay:</strong> Protects hoist/slew/travel motors.</li>
+    <li><strong>Limit switches:</strong> Travel limits for slewing, luffing, hoisting in all directions.</li>
+    <li><strong>Interlocks:</strong> Cannot operate hoist and slew simultaneously in some cranes.</li>
+    <li><strong>Emergency stop:</strong> Accessible from crane cab and ground level.</li>
+  </ul>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>'Load hoisted mid-air, crane stopped, power cut — what holds the load?'</strong><br>Electromagnetic brake — spring-applied, fail-safe.</div></div>
+
+  <div class="n-h1" id="s-steering-alarms">Steering Gear Alarms &amp; Trips</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Gopikrishna, Sudhir — very commonly asked.</strong></div></div>
+  <div class="n-grid">
+    <div class="n-card" style="border-color:var(--orange-border)">
+      <div class="card-title" style="color:var(--orange)">ALARMS (Warning Only - No Trip)</div>
+      <div class="card-desc">
+        1. Hydraulic oil low level<br>
+        2. Hydraulic oil high temperature<br>
+        3. Phase failure (loss of one phase to motor)<br>
+        4. Pump motor overload (before trip)<br>
+        5. Control power failure
+      </div>
+    </div>
+    <div class="n-card" style="border-color:var(--red-border)">
+      <div class="card-title" style="color:var(--red)">TRIPS (Automatic Shutdown)</div>
+      <div class="card-desc">
+        1. Motor overload trip (sustained overcurrent)<br>
+        2. Hydraulic oil high pressure trip (electrical)<br>
+        3. Rudder hunting trip (continuous oscillation)<br>
+        4. Power unit isolation (emergency shutdown)
+      </div>
+    </div>
+  </div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS Requirement:</strong> Steering gear must have independent power from emergency source. Two separate power circuits. Audible alarm on bridge for any fault.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Resetting hydraulic lock (Hunting):</strong> Switch to NFU (Non-Follow-Up) control. Move tiller manually. Identify cause. Reset trip. Return to FU mode.</div></div>
+
+  <div class="n-h1" id="s-gov-types">Governor Types</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad — 'types of governors? which type on main engine?'</strong></div></div>
+  <ol class="n-steps">
+    <li><strong>MECHANICAL (Centrifugal/Flyball):</strong> Rotating flyweights driven by engine. Speed increases → flyweights fly out → fuel rack reduces. Used on older ME/AE.</li>
+    <li><strong>HYDRAULIC-MECHANICAL (Woodward):</strong> Flyball + hydraulic servo amplifier. More precise. Used on most diesel generators.</li>
+    <li><strong>ELECTRONIC (PID-based):</strong> Speed sensor (magnetic pickup) → electronic controller → actuator on fuel rack. Most precise. Used on modern DGs and electronically controlled MEs.</li>
+  </ol>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Summary Answer:</strong> "DG typically uses hydraulic-mechanical Woodward governor. ME uses electronic governor on modern ships."</div></div>
+
+  <div class="n-h1" id="s-overspeed-test">Overspeed Relay Test Procedure</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad — 'how do you test overspeed relay?'</strong></div></div>
+  <ul class="n-list">
+    <li><strong>Method 1 (Setpoint reduction):</strong> Reduces governor speed setpoint → engine speed falls. <strong>(Tests governor, NOT overspeed relay).</strong></li>
+    <li><strong>Method 2 (Mechanical lift test — CORRECT):</strong> While engine runs at governed speed → manually lift the overspeed trip lever → confirm trip activates → engine shuts down. Reset manually after test.</li>
+    <li><strong>Method 3 (Electronic test):</strong> Press 'Overspeed test' button on governor panel → simulates overspeed signal → confirm relay trips.</li>
+  </ul>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Why two systems?</strong> Governor adjusts fuel to maintain speed. Overspeed trip is a BACKUP — activates if governor fails and speed runs away. Testing one does not test the other.</div></div>
+
+  <!-- ═══ MISSING V2.3 GAPS ═══ -->
+  <div class="n-h1" id="s-reefer-lo">Reefer Compressor LO Pressure Sensor</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: How ETO measures and calibrates the reefer compressor LO pressure sensor.</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why it's critical:</strong> Protects bearings. If LO pressure drops below min (typically <span class="n-val">1.5–2 bar</span>), compressor must trip immediately to prevent seizure.</div></div>
+  <ol class="n-steps">
+    <li>Permit to work — notify C/E, stop compressor, allow LO pressure to equalise to zero.</li>
+    <li>Isolate sensor at 3-valve manifold: close PROCESS ISOLATION valve, open EQUALISING BYPASS valve to vent residual pressure.</li>
+    <li>Connect calibrated reference gauge (digital calibrator) to test tapping.</li>
+    <li>Apply increasing test pressures in steps (0%, 25%, 50%, 75%, 100%). Compare panel reading with reference (Acceptable error: &plusmn;2%).</li>
+    <li>If deviation exists: use HART communicator or trim screws to adjust zero and span.</li>
+    <li><strong>Test TRIP SETPOINT:</strong> Slowly reduce test pressure — note exact pressure when trip alarm activates (typically alarm <span class="n-val">2 bar</span>, trip <span class="n-val">1.5 bar</span>).</li>
+    <li>Restore manifold (close equalise, open isolation) and document test.</li>
+  </ol>
+
+  <div class="n-h1" id="s-bilge-inj">Bilge Injection Valve</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "what is it and when do you use it?"</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> A large-bore valve (100–150 mm) fitted to the SUCTION SIDE of the main sea water cooling pump. Used for ONE purpose: emergency dewatering of the engine room when normal bilge pumps cannot cope.</div></div>
+  <div class="n-p"><strong>Capacities:</strong> Dedicated bilge pump = <span class="n-val">10–50 m³/hr</span>. Main SW cooling pump = <span class="n-val">200–600 m³/hr</span>.<br>
+  <strong>Procedure:</strong> Inform C/E and Master. Close SW cooling pump discharge to coolers (to avoid pumping bilge water through engine cooling systems). Open injection valve.</div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>NEVER use for normal bilge pumping</strong> — it uses the main cooling pump, which cannot simultaneously cool the engine while pumping the bilge. Valve is sealed shut normally.</div></div>
+
+  <div class="n-h1" id="s-smoke-density">Smoke Density Meter</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "how does a smoke density meter work?"</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working Principle (Optical Transmission):</strong> LED/halogen lamp on one side of exhaust duct projects a beam to a photocell on the opposite side. Measures opacity %. 0% = clear, 100% = black smoke (alarm at 30–40%). Ensures MARPOL Annex VI compliance.</div></div>
+  <ul class="n-list">
+    <li><strong>Air Purge System:</strong> Compressed air continuously purges across optical windows to prevent soot deposits. <em>Critical: without purge, readings are false high.</em></li>
+    <li><strong>Clean Air Reference:</strong> Autozeros against clean air to compensate for lamp aging.</li>
+    <li><strong>ETO Maintenance:</strong> Verify purge pressure (0.3–0.5 bar) — most common failure mode. Clean lenses monthly when purge is off. Calibration check quarterly.</li>
+  </ul>
+
+  <div class="n-h1" id="s-drydock">Drydock Duties &amp; Working Aloft</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "what are your duties during drydock?"</strong></div></div>
+  <ul class="n-list">
+    <li><strong>Baseline IR:</strong> Megger test all motors/cables before entering dock. Repeat post-drydock to detect damage.</li>
+    <li><strong>ICCP System:</strong> Set MANUAL/OFF before docking. Clean reference electrodes, inspect cables/anodes.</li>
+    <li><strong>Shaft Earthing:</strong> Inspect carbon brush (&gt;50% length), spring pressure, clean slip ring.</li>
+    <li><strong>Hull Transducers:</strong> Inspect echo sounder/Doppler log fittings, antifouling, zinc anodes.</li>
+    <li><strong>Sacrificial Anodes:</strong> Record remaining mass. Renew below 50%.</li>
+    <li><strong>Fire Detection &amp; Nav Lights:</strong> Full system tests witnessed by class surveyor.</li>
+  </ul>
+  <div class="n-h2">Working Aloft Safety Requirements</div>
+  <div class="n-p"><strong>WAP (Working Aloft Permit):</strong> Required for mast/radar work. Minimum two persons. Weather check (&lt;10 knots wind). Full-body harness with two lanyards (100% tied off). Tool control (lanyards, exclusion zone below). <strong>Electrical Isolation:</strong> Radar scanner isolated, nav lights locked off, antennas discharged.</div>
+
+  <div class="n-h1" id="s-lifeboat-air">Air Bottle in Lifeboat / Sprinkler System</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "what is the compressed air bottle in the lifeboat for?"</strong></div></div>
+  <ol class="n-steps">
+    <li><strong>ENGINE STARTING AIR:</strong> Backup starting method if electric starter fails. Compressed air (200–300 bar) piped directly to engine starting air valve.</li>
+    <li><strong>BREATHING AIR SUPPLY:</strong> For fire-protected lifeboats on tankers. When launched through burning oil with hatches closed, occupants need breathable air. Provides supply for minimum <span class="n-val">10 minutes</span> (40 L/min per person).</li>
+  </ol>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Maintenance:</strong> Check pressure gauge monthly. Recharge ONLY using Class E (breathing quality) air compressor. 5-year hydrostatic test.</div></div>
+  <div class="n-h2">Lifeboat Sprinkler (Water Spray)</div>
+  <div class="n-p"><strong>Purpose:</strong> Protects enclosed lifeboat from radiant heat/burning oil on sea surface. Engine-driven pump draws sea water through hull cock and sprays entire outer hull surface with continuous water film. Required by SOLAS LSC 4.4.</div>
+
+  <div class="n-h1" id="s-crane-speed">ER Crane — Speed Adjustment</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "how do you adjust the speed of the ER crane?"</strong></div></div>
+  <ul class="n-list">
+    <li><strong>Type 1 - Pole Changing (Dahlander):</strong> Fixed at two steps (e.g. 8-pole low / 4-pole high). No fine adjustment possible. Check contactors/IR.</li>
+    <li><strong>Type 2 - Rotor Resistance (Slip Ring):</strong> Speed varies by switching resistance in rotor circuit (more resistance = higher slip = lower speed). ETO adjusts by changing tap connections at the resistance bank.</li>
+    <li><strong>Type 3 - VFD (Variable Frequency Drive):</strong> Variable speed 0–100%. ETO adjusts via VFD keypad parameters (Max Frequency, Min Frequency, Accel/Decel ramp times).</li>
+    <li><strong>Type 4 - Hydraulic:</strong> Motor speed is fixed. Speed controlled by hydraulic proportional valve (mechanical job).</li>
+  </ul>
+
 <div class="n-h1" id="s-surveyorqa">🎤 Surveyor Q&amp;A - Topic 9</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body">These questions are confirmed from 2024–2026 MMD oral examinations. Deswal, Kamath, Sanjib, Vishwanathan, Nair, Wad, Gupta all ask from this topic.</div></div>
 
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the principle of the OMD? (Deswal, Kamath, Sanjib)</strong><br><strong>Ideal Answer:</strong> Photoelectric light extinction (opacity). Rotary valve draws crankcase gas from each unit sequentially through a measuring tube. Light source shines on photocell - oil mist scatters and absorbs light, reducing output proportional to concentration. Reference tube (sealed clean air, identical path length) gives differential reading compensating for lamp aging. Alarm at <span class="n-val">2.5 mg/L</span> - <span class="n-val">20×</span> below LEL of <span class="n-val">50 mg/L</span>. SOLAS Ch II-1 Reg 16 mandatory for engines &gt; <span class="n-val">2250 kW</span>.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>What is the principle of the OMD? (Deswal, Kamath, Sanjib)</strong><br><strong>Ideal Answer:</strong> Photoelectric light extinction (opacity). Rotary valve draws crankcase gas from each unit sequentially through a measuring tube. Light source shines on photocell - oil mist scatters and absorbs light, reducing output proportional to concentration. Reference tube (sealed clean air, identical path length) gives differential reading compensating for lamp aging. Alarm at <span class="n-val">2.5 mg/L</span> <span class="n-val">-20×</span> below LEL of <span class="n-val">50 mg/L</span>. SOLAS Ch II-1 Reg 16 mandatory for engines &gt; <span class="n-val">2250 kW</span>.</div></div>
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why is the reference tube needed in the OMD? (Kamath)</strong><br><strong>Ideal Answer:</strong> The reference tube is sealed with clean air at the same optical path length as the measuring tube. As the light source ages, its intensity decreases - measuring absolute light would cause drift and false alarms. Because both tubes experience identical lamp degradation, the differential output between them remains stable and accurate regardless of lamp aging or contamination.</div></div>
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>OMD alarm at sea - what do you do? (Sanjib, Nair)</strong><br><strong>Ideal Answer:</strong> 1. Verify alarm genuine - check reading and identify elevated unit. 2. Reduce to dead slow, notify bridge/CE/OOW. 3. If persists or increases - stop engine. 4. Post watch. 5. Wait minimum <span class="n-val">20 minutes</span> after stopping - atmosphere may still contain mist above LEL. 6. Inspect bearings, piston crowns, liners. 7. Identify root cause before restart. Never open crankcase immediately.</div></div>
 
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why viscosity control not temperature control for HFO? (Kamath, Gupta, Deswal)</strong><br><strong>Ideal Answer:</strong> Different HFO grades have different viscosity-temperature relationships. RMG 380 needs ~<span class="n-val">130–140°C</span> for <span class="n-val">14 cSt</span>; RME 180 only needs ~<span class="n-val">100–110°C</span> for <span class="n-val">14 cSt</span>. Temperature control set to 130°C with RME 180 gives <span class="n-val">65–70 cSt</span> - far too viscous for good atomisation. Viscosity controller measures the actual injection property and compensates automatically for any fuel grade change without manual adjustment.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why viscosity control not temperature control for HFO? (Kamath, Gupta, Deswal)</strong><br><strong>Ideal Answer:</strong> Different HFO grades have different viscosity-temperature relationships. RMG 380 needs <span class="n-val">~130–140°C</span> for <span class="n-val">14 cSt</span>; RME 180 only needs <span class="n-val">~100–110°C</span> for <span class="n-val">14 cSt</span>. Temperature control set to 130°C with RME 180 gives <span class="n-val">65–70 cSt</span> - far too viscous for good atomisation. Viscosity controller measures the actual injection property and compensates automatically for any fuel grade change without manual adjustment.</div></div>
 
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Why alarm not trip for steering motor overload? (Vishwanathan, Nair)</strong><br><strong>Ideal Answer:</strong> SOLAS Ch II-1 Reg 29 requires alarm on overload, NOT automatic trip. Loss of steering at sea is more dangerous than a burning motor. Alarm alerts EOOW and bridge - crew can investigate and switch to emergency steering while maintaining control. Automatic trip = immediate loss of steering = far greater danger to vessel and crew.</div></div>
 
@@ -343,5 +540,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <tr><td>ME slow-down vs trip + bridge override</td><td class="hl">⭐⭐⭐⭐ Nair, Kamath</td><td>Slow-down = bridge can override | Trip = cannot override | Overspeed independent of governor</td></tr>
   </table>
 
+    </div>
 </div>
-</div>`);
+</div>
+`);
