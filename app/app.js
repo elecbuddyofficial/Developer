@@ -1263,3 +1263,11 @@ function handleHashRouting() {
 
 window.addEventListener('DOMContentLoaded', handleHashRouting);
 window.addEventListener('popstate', handleHashRouting);
+
+// ── Service Worker registration ───────────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('./sw.js')
+      .catch(function() {}); // fail silently
+  });
+}
