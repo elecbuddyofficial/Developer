@@ -1,0 +1,108 @@
+/**
+ * THEME 1 — Ocean Dark (Default)
+ * Deep navy, electric blue accents, coral-red critical
+ * Inspired by: deep sea navigation charts, ship bridge at night
+ */
+
+:root {
+  --theme-name: "Ocean Dark";
+
+  /* Backgrounds */
+  --bg-base:         #080c14;
+  --bg-surface:      #0e1623;
+  --bg-card:         #111d2e;
+  --bg-card-hover:   #162338;
+  --bg-nav:          #0a1220;
+  --bg-input:        #0e1623;
+  --bg-tag:          #0e2040;
+
+  /* Borders */
+  --border-default:  #1e3050;
+  --border-focus:    #3b82f6;
+  --border-crit:     #ef4444;
+
+  /* Text */
+  --text-primary:    #e2e8f0;
+  --text-secondary:  #94a3b8;
+  --text-muted:      #4a5568;
+  --text-inverse:    #0a0d14;
+
+  /* Primary — Electric Blue */
+  --primary:         #3b82f6;
+  --primary-dim:     #1e3a5f;
+  --primary-hover:   #60a5fa;
+  --primary-text:    #93c5fd;
+
+  /* Critical — Coral Red */
+  --crit:            #ef4444;
+  --crit-dim:        #3b1212;
+  --crit-text:       #fca5a5;
+
+  /* Warning — Amber */
+  --warn:            #f59e0b;
+  --warn-dim:        #3b2800;
+  --warn-text:       #fcd34d;
+
+  /* Success — Emerald */
+  --ok:              #10b981;
+  --ok-dim:          #064e3b;
+  --ok-text:         #6ee7b7;
+
+  /* Accent — Orange (values/numbers) */
+  --accent:          #f97316;
+  --accent-dim:      #3b1a00;
+  --accent-text:     #fdba74;
+
+  /* Tags */
+  --tag-purple:      #a855f7;
+  --tag-purple-dim:  #2e1a4a;
+  --tag-teal:        #14b8a6;
+  --tag-teal-dim:    #0a2e2b;
+
+  /* Formula block */
+  --formula-bg:      #0a1628;
+  --formula-border:  #1e3050;
+  --formula-text:    #93c5fd;
+
+  /* Table */
+  --table-header:    #0e1e36;
+  --table-row-alt:   #0a1628;
+  --table-value-bg:  #1a2e10;
+  --table-value-text:#6ee7b7;
+
+  /* Section borders (left border on headers) */
+  --section-border:  #3b82f6;
+
+  /* Nav */
+  --nav-active-bg:   #1e3a5f;
+  --nav-active-text: #60a5fa;
+  --nav-text:        #94a3b8;
+
+  /* Scrollbar */
+  --scrollbar-thumb: #1e3050;
+  --scrollbar-track: #080c14;
+
+  /* Progress bar */
+  --progress-fill:   #3b82f6;
+  --progress-bg:     #1e3050;
+
+  /* Support button */
+  --support-bg:      #2d1a00;
+  --support-text:    #f97316;
+  --support-border:  #f97316;
+
+  /* Shadows */
+  --shadow-card:     0 4px 24px rgba(0,0,0,0.5);
+  --shadow-focus:    0 0 0 2px rgba(59,130,246,0.4);
+
+  /* Border radius */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  18px;
+  --radius-pill: 999px;
+
+  /* Typography */
+  --font-main:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}

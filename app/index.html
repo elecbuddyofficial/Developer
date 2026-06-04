@@ -3,15 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ETO MMD Oral Prep</title>
+<title>ETO MMD Exam Prep</title>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="written.css">
 </head>
 <body>
 <div id="topbar">
   <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu">
     <svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18"/></svg>
   </button>
-  <div class="logo">ETO Oral Prep <span>ETO CoC · STCW Reg. III/6</span></div>
+  <div class="logo">ETO <b style="color:var(--text); font-weight:inherit;">Exam</b> Prep <span>ETO CoC · STCW Reg. III/6</span></div>
   <div class="spacer"></div>
   <div class="tb-badge" id="topbar-badge"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic 1 of 23</div>
 </div>
@@ -28,7 +29,6 @@
   </button>
   <button class="sb-item" id="si-written" onclick="showView('written')">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg></span><span class="label">Written Section</span>
-    <span class="cnt" style="font-size:9px">Soon</span>
   </button>
   <button class="sb-item" id="si-quiz-bank" onclick="showView('quiz-bank');initQuizBank()">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></span><span class="label">Quiz Bank</span>
@@ -37,6 +37,9 @@
   <div class="sb-spacer"></div>
   <a class="sb-item" href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="color:var(--orange);font-weight:700;background:rgba(245, 158, 11, 0.05);border:1px solid rgba(245, 158, 11, 0.2)">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg></span><span class="label">Support Project</span>
+  </a>
+  <a class="sb-item" href="mailto:jojiblesson@gmail.com?subject=App%20Feedback%20%2F%20Request%20%2F%20Bug%20Report" style="color:var(--blue);font-weight:700;background:rgba(59, 130, 246, 0.05);border:1px solid rgba(59, 130, 246, 0.2);margin-top:8px;">
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg></span><span class="label">Request Content / Report Bug</span>
   </a>
   <div class="sb-divider"></div>
   <a class="sb-item" href="../index.html" title="About this app">
@@ -58,11 +61,11 @@
         <p>Comprehensive study notes, diagrams, and quizzes covering 23 core oral topics.</p>
         <div class="wc-badge">23 Topics</div>
       </div>
-      <div class="welcome-card" onclick="showView('written')" style="opacity:0.6;cursor:default">
+      <div class="welcome-card" onclick="showView('written')">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"/><path d="M14 2v5a1 1 0 0 0 1 1h5M10 9H8m8 4H8m8 4H8"/></g></svg></div>
         <h3>Written Preparation</h3>
         <p>Past papers, numerical solutions, and long-form answers for the written exam.</p>
-        <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
+        <div class="wc-badge" style="background:var(--blue-dim);color:var(--blue);border:none">8 Topics Ready</div>
       </div>
     </div>
   </div>
@@ -103,11 +106,11 @@
       <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · Past Papers & Numerical Solutions</p>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-      <div class="welcome-card" style="opacity:0.6;cursor:default">
+      <div class="welcome-card" onclick="showView('written-notes-picker')">
         <div class="wc-icon">📄</div>
         <h3>Study Notes</h3>
         <p>Structured answers, key theory, and numerical worked examples for written exam topics.</p>
-        <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
+        <div class="wc-badge">8 topics ready</div>
       </div>
       <div class="welcome-card" style="opacity:0.6;cursor:default">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
@@ -119,6 +122,30 @@
   </div>
 </div>
 
+
+<!-- ═══════════════ WRITTEN NOTES PICKER ═══════════════ -->
+<div class="view" id="view-written-notes-picker">
+  <div style="max-width:860px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+      <button class="anc-btn" onclick="showView('written')" style="border-color:var(--blue);color:var(--blue)">← Written Section</button>
+      <h2 style="font-size:18px;font-weight:800;color:var(--text)">📄 Written Notes - Select Topic</h2>
+    </div>
+    <div id="written-topic-grid" class="qcat-grid"></div>
+    <div style="margin-top: 32px; padding: 24px; background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(185, 28, 28, 0.05) 100%); border: 1px solid rgba(239, 68, 68, 0.15); border-radius: 16px; backdrop-filter: blur(8px); box-shadow: 0 10px 30px -5px rgba(220, 38, 38, 0.08), 0 4px 10px -5px rgba(0,0,0,0.3);">
+      <h3 style="margin: 0 0 14px 0; font-size: 15px; font-weight: 600; color: #f87171; display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: 0.5px;">
+        <div style="display:flex; align-items:center; justify-content:center; width:28px; height:28px; background:rgba(239, 68, 68, 0.2); border-radius:50%; color:#fca5a5;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </div>
+        Important Note
+      </h3>
+      <ul style="margin: 0; padding-left: 28px; display: flex; flex-direction: column; gap: 10px; font-size: 14.5px; line-height: 1.6; color: #fecaca; font-weight: 400;">
+        <li>This material is based upon questions from <strong style="color: #fee2e2; font-weight: 600;">December 2025 &ndash; January 2023</strong>. The new 2026 questions are not included, but will be included in future updates.</li>
+        <li>The Section II problems are currently all worked out manually; they will be updated as soon as they are digitized.</li>
+        <li>Diagrams are temporarily omitted, but are actively planned for inclusion in future revisions.</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ NOTES TOPIC PICKER ═══════════════ -->
 <div class="view" id="view-notes-picker">
@@ -276,6 +303,6 @@
 <button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0, behavior:'smooth'})" style="display:none; position:fixed; bottom:30px; right:30px; z-index:999; background:var(--blue); color:#fff; border:none; width:48px; height:48px; border-radius:50%; font-size:24px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); align-items:center; justify-content:center; transition:opacity 0.2s; padding-bottom:4px;">↑</button>
 
 
-<script src="app.js"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>

@@ -12,44 +12,60 @@ window.loadNotes = function(topicId, htmlContent) {
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
     let so = document.getElementById('si-oral'); if(so) so.classList.add('active');
-    let injectedView = document.getElementById('notes-container').children[0];
+    let injectedView = document.getElementById('notes-container').querySelector('.view');
     if(injectedView) injectedView.classList.add('active');
     buildTopicSideList(topicId);
     injectTopicFooterNav(topicId);
     document.getElementById('content').scrollTo({top:0, behavior:'instant'});
 };
 
+window.loadWrittenNotes = function(topicCode, html) {
+    window.NOTE_HTML[topicCode] = html;
+    document.getElementById('notes-container').innerHTML = html;
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+    let sw = document.getElementById('si-written'); if(sw) sw.classList.add('active');
+    let injectedView = document.getElementById('notes-container').querySelector('.view');
+    if(injectedView) injectedView.classList.add('active');
+    buildTopicSideList(topicCode);
+    injectTopicFooterNav(topicCode);
+    document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+};
+
 window.fetchTopicData = function(topicId, topicKey) {
     var tNum = parseInt(topicId.substring(1), 10);
     var tbBadge = document.getElementById('topbar-badge');
-    if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of 23';
+    var isW = topicId.startsWith('W');
+    var total = isW ? WRITTEN_TOPICS.filter(function(t){return t.notesReady;}).length : TOPICS.length;
+    if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of ' + total;
 
     // Inject Script tags dynamically
     if (!window.NOTE_HTML[topicId]) {
         let noteScript = document.createElement('script');
-        noteScript.src = '../data/notes/' + topicId.toLowerCase() + '_notes.js';
+        let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
+        noteScript.src = pathStr + topicId.toLowerCase() + '_notes.js';
         document.head.appendChild(noteScript);
     } else {
         document.getElementById('notes-container').innerHTML = window.NOTE_HTML[topicId];
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
         let so = document.getElementById('si-oral'); if(so) so.classList.add('active');
-        let injectedView = document.getElementById('notes-container').children[0];
+        let injectedView = document.getElementById('notes-container').querySelector('.view');
         if(injectedView) injectedView.classList.add('active');
         buildTopicSideList(topicId);
         injectTopicFooterNav(topicId);
         document.getElementById('content').scrollTo({top:0, behavior:'instant'});
     }
 
-    if (!window.QD[topicKey]) {
+    if (!window.QD[topicKey] && !topicId.startsWith('W')) {
         let quizScript = document.createElement('script');
-        quizScript.src = '../data/quizzes/' + topicId.toLowerCase() + '_quiz.js';
+        quizScript.src = '../data/Orals/quizzes/' + topicId.toLowerCase() + '_quiz.js';
         document.head.appendChild(quizScript);
     }
     
     // URL Routing
     if (!window._isRouting) {
-        window.history.pushState(null, '', '#notes=' + topicId);
+        try { window.history.pushState(null, '', '#notes=' + topicId); } catch(e) {}
     }
 };
 
@@ -60,12 +76,16 @@ function buildTopicSideList(activeId) {
     panel.style.display = 'block';
     panel.innerHTML = '';
     var activeBtn = null;
-    TOPICS.forEach(function(t, idx) {
+    var isW = activeId.startsWith('W');
+    var arr = isW ? WRITTEN_TOPICS : TOPICS;
+    arr.forEach(function(t, idx) {
+        if (isW && !t.notesReady) return;
+        var prefix = isW ? 'W' : 'T';
         var btn = document.createElement('button');
         btn.className = 'tl-item' + (t.id === activeId ? ' tl-active' : '');
         btn.innerHTML = '<span class="tl-ic">' + t.icon + '</span>'
             + '<span class="tl-label">' + t.name + '</span>'
-            + '<span class="tl-num">T' + String(idx+1).padStart(2,'0') + '</span>';
+            + '<span class="tl-num">' + prefix + String(idx+1).padStart(2,'0') + '</span>';
         btn.onclick = function() {
             document.getElementById('content').scrollTo({top:0, behavior:'instant'});
             window.fetchTopicData(t.id, t.key);
@@ -81,10 +101,28 @@ function buildTopicSideList(activeId) {
 
 // Inject previous/next footer nav + mobile topic strip
 function injectTopicFooterNav(topicId) {
-    var idx = TOPICS.findIndex(function(t) { return t.id === topicId; });
+    var isW = topicId.startsWith('W');
+    var arr = isW ? WRITTEN_TOPICS : TOPICS;
+    var idx = arr.findIndex(function(t) { return t.id === topicId; });
     if (idx < 0) return;
-    var prev = idx > 0 ? TOPICS[idx-1] : null;
-    var next = idx < TOPICS.length-1 ? TOPICS[idx+1] : null;
+    
+    var prev = null, next = null, dispIdx = 0, total = 0;
+    
+    if (isW) {
+        var readyTopics = arr.filter(function(t) { return t.notesReady; });
+        total = readyTopics.length;
+        var rIdx = readyTopics.findIndex(function(t) { return t.id === topicId; });
+        if (rIdx >= 0) {
+            dispIdx = rIdx;
+            prev = rIdx > 0 ? readyTopics[rIdx-1] : null;
+            next = rIdx < readyTopics.length-1 ? readyTopics[rIdx+1] : null;
+        }
+    } else {
+        dispIdx = idx;
+        total = arr.length;
+        prev = idx > 0 ? arr[idx-1] : null;
+        next = idx < arr.length-1 ? arr[idx+1] : null;
+    }
 
     // ── Footer prev/next ──
     var prevHtml = prev
@@ -103,7 +141,7 @@ function injectTopicFooterNav(topicId) {
 
     var footerHtml = '<div class="topic-footer-nav">'
         + prevHtml
-        + '<span class="tfn-center">'+(idx+1)+' / '+TOPICS.length+'</span>'
+        + '<span class="tfn-center">'+(dispIdx+1)+' / '+total+'</span>'
         + nextHtml
         + '</div>';
 
@@ -112,10 +150,12 @@ function injectTopicFooterNav(topicId) {
 
     // ── Mobile horizontal topic strip (injected at top of note-doc) ──
     var stripHtml = '<div class="mobile-topic-strip" id="mobile-topic-strip">';
-    TOPICS.forEach(function(t, i) {
+    var prefix = isW ? 'W' : 'T';
+    arr.forEach(function(t, i) {
+        if (isW && !t.notesReady) return;
         stripHtml += '<button class="mts-btn'+(t.id===topicId?' mts-active':'')+'"'
             + ' onclick="document.getElementById(\'content\').scrollTo({top:0,behavior:\'instant\'});fetchTopicData(\''+t.id+'\',\''+t.key+'\')">'
-            + t.icon+' T'+String(i+1).padStart(2,'0')
+            + t.icon+' '+prefix+String(i+1).padStart(2,'0')
             + '</button>';
     });
     stripHtml += '</div>';
@@ -180,6 +220,16 @@ var TOPICS = [
   {id:'T23',key:'T23_BatteriesDC',name:'Batteries & DC Systems',icon:'🔋',notesView:'notes-t23',notesReady:true},
 ];
 
+var WRITTEN_TOPICS = [
+  {id:'W01',key:'W01_Written',name:'Electrical Topics',icon:'⚡',notesView:'notes-w01',notesReady:true},
+  {id:'W02',key:'W02_Written',name:'Section II Theory',icon:'⚙️',notesView:'notes-w02',notesReady:true},
+  {id:'W03',key:'W03_Written',name:'ISM Code Full Notes',icon:'📋',notesView:'notes-w03',notesReady:true},
+  {id:'W04',key:'W04_Written',name:'SOLAS Full Notes',icon:'🚢',notesView:'notes-w04',notesReady:true},
+  {id:'W05',key:'W05_Written',name:'MLC 2006 Full Notes',icon:'⚓',notesView:'notes-w05',notesReady:true},
+  {id:'W06',key:'W06_Written',name:'MARPOL Full Notes',icon:'📝',notesView:'notes-w06',notesReady:true},
+  {id:'W07',key:'W07_Written',name:'Fire Safety & Fighting',icon:'🔥',notesView:'notes-w07',notesReady:true},
+];
+
 function buildNotesTopicGrid(){
   var g=document.getElementById('notes-topic-grid');
   if(!g)return; g.innerHTML='';
@@ -190,6 +240,27 @@ function buildNotesTopicGrid(){
     var qs=QD&&QD[t.key]?QD[t.key].length:0;
     btn.innerHTML='<div class="cat-name">'+t.icon+' '+t.id+' - '+t.name+'</div>'
       +'<div class="cat-count">'+(t.notesReady?'Notes ready':'Coming soon')+(qs?' · '+qs+' quiz questions':'')+'</div>'
+      +'<div class="cat-bar"><div class="cat-fill" style="width:'+(t.notesReady?'100':'0')+'%"></div></div>';
+    if(t.notesReady && t.notesView){
+      btn.onclick=function(){window.fetchTopicData(t.id, t.key);};
+      btn.style.cursor='pointer';
+    } else {
+      btn.disabled=true;
+    }
+    g.appendChild(btn);
+  });
+}
+
+function buildWrittenTopicGrid(){
+  var g=document.getElementById('written-topic-grid');
+  if(!g)return; g.innerHTML='';
+  WRITTEN_TOPICS.forEach(function(t){
+    var btn=document.createElement('button');
+    btn.className='qcat-btn'+(t.notesReady?'':' disabled-topic');
+    if(!t.notesReady) btn.style.opacity='0.4';
+    var qs=QD&&QD[t.key]?QD[t.key].length:0;
+    btn.innerHTML='<div class="cat-name">'+t.icon+' '+t.id+' - '+t.name+'</div>'
+      +'<div class="cat-count">'+(t.notesReady?'Notes ready':'Coming soon')+'</div>'
       +'<div class="cat-bar"><div class="cat-fill" style="width:'+(t.notesReady?'100':'0')+'%"></div></div>';
     if(t.notesReady && t.notesView){
       btn.onclick=function(){window.fetchTopicData(t.id, t.key);};
@@ -220,7 +291,7 @@ function buildQuizTopicGrid(){
     // Lazy-load quiz data to show real count
     if(!qCount){
       var s=document.createElement('script');
-      s.src='../data/quizzes/'+t.id.toLowerCase()+'_quiz.js';
+      s.src='../data/Orals/quizzes/'+t.id.toLowerCase()+'_quiz.js';
       s.onload=function(){
         var el=document.getElementById('qtgc-'+t.id);
         if(el&&QD&&QD[t.key])el.textContent=QD[t.key].length+' questions';
@@ -244,7 +315,7 @@ function goToQuizFromNotes(topicId){
   
   if (!window.QD || !window.QD[t.key]) {
       let quizScript = document.createElement('script');
-      quizScript.src = '../data/quizzes/' + t.id.toLowerCase() + '_quiz.js';
+      quizScript.src = '../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js';
       quizScript.onload = function() {
           buildCatGrid();
           showView('quiz');
@@ -257,7 +328,7 @@ function goToQuizFromNotes(topicId){
   
   // URL Routing
   if (!window._isRouting) {
-      window.history.pushState(null, '', '#quiz=' + topicId);
+      try { window.history.pushState(null, '', '#quiz=' + topicId); } catch(e) {}
   }
 }
 
@@ -275,7 +346,7 @@ function closeMobileMenu() {
 
 function showView(n){
   if(window.innerWidth <= 768) closeMobileMenu();
-  if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank') {
+  if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker') {
      var tbBadge = document.getElementById('topbar-badge');
      if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> MMD Prep';
      // Hide topic sidebar list when leaving notes
@@ -287,14 +358,18 @@ function showView(n){
   var v=document.getElementById('view-'+n);if(v)v.classList.add('active');
   var s=document.getElementById('si-'+n);if(s)s.classList.add('active');
   if(n==='oral'){var so=document.getElementById('si-oral');if(so)so.classList.add('active');}
+  if(n==='written-notes-picker'){var sw=document.getElementById('si-written');if(sw)sw.classList.add('active');}
   if(n==='notes-picker')buildNotesTopicGrid();
+  if(n==='written-notes-picker')buildWrittenTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
   if(n==='quiz') buildCatGrid();
   
   // URL Routing
   if (!window._isRouting) {
-      if (n === 'welcome') window.history.pushState(null, '', window.location.pathname);
-      else window.history.pushState(null, '', '#' + n);
+      try {
+        if (n === 'welcome') window.history.pushState(null, '', window.location.pathname);
+        else window.history.pushState(null, '', '#' + n);
+      } catch(e) {}
   }
 }
 function jumpTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})}

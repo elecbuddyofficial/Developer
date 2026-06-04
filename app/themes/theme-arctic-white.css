@@ -1,0 +1,86 @@
+/**
+ * THEME 5 — Arctic White (Light Mode)
+ * Clean whites, slate accents, accessibility-first
+ * Inspired by: official maritime documents, SOLAS handbook, clean study rooms
+ */
+
+:root {
+  --theme-name: "Arctic White";
+
+  --bg-base:         #f8fafc;
+  --bg-surface:      #ffffff;
+  --bg-card:         #ffffff;
+  --bg-card-hover:   #f1f5f9;
+  --bg-nav:          #1e293b;
+  --bg-input:        #f8fafc;
+  --bg-tag:          #eff6ff;
+
+  --border-default:  #e2e8f0;
+  --border-focus:    #2563eb;
+  --border-crit:     #dc2626;
+
+  --text-primary:    #0f172a;
+  --text-secondary:  #475569;
+  --text-muted:      #94a3b8;
+  --text-inverse:    #ffffff;
+
+  --primary:         #2563eb;
+  --primary-dim:     #eff6ff;
+  --primary-hover:   #1d4ed8;
+  --primary-text:    #1d4ed8;
+
+  --crit:            #dc2626;
+  --crit-dim:        #fef2f2;
+  --crit-text:       #991b1b;
+
+  --warn:            #d97706;
+  --warn-dim:        #fffbeb;
+  --warn-text:       #92400e;
+
+  --ok:              #16a34a;
+  --ok-dim:          #f0fdf4;
+  --ok-text:         #15803d;
+
+  --accent:          #ea580c;
+  --accent-dim:      #fff7ed;
+  --accent-text:     #c2410c;
+
+  --tag-purple:      #7c3aed;
+  --tag-purple-dim:  #f5f3ff;
+  --tag-teal:        #0d9488;
+  --tag-teal-dim:    #f0fdfa;
+
+  --formula-bg:      #f1f5f9;
+  --formula-border:  #e2e8f0;
+  --formula-text:    #1d4ed8;
+
+  --table-header:    #f8fafc;
+  --table-row-alt:   #f1f5f9;
+  --table-value-bg:  #ecfdf5;
+  --table-value-text:#065f46;
+
+  --section-border:  #2563eb;
+  --nav-active-bg:   #1d4ed8;
+  --nav-active-text: #ffffff;
+  --nav-text:        #94a3b8;
+
+  --scrollbar-thumb: #cbd5e1;
+  --scrollbar-track: #f8fafc;
+  --progress-fill:   #2563eb;
+  --progress-bg:     #e2e8f0;
+  --support-bg:      #fff7ed;
+  --support-text:    #ea580c;
+  --support-border:  #ea580c;
+
+  --shadow-card:     0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-focus:    0 0 0 3px rgba(37,99,235,0.2);
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  18px;
+  --radius-pill: 999px;
+
+  --font-main:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}

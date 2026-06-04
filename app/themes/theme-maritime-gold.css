@@ -1,0 +1,86 @@
+/**
+ * THEME 2 — Maritime Gold
+ * Dark slate hull, warm amber/gold accents, brass instrument feel
+ * Inspired by: brass compass, ship's telegraph, navigation instruments
+ */
+
+:root {
+  --theme-name: "Maritime Gold";
+
+  --bg-base:         #0a0905;
+  --bg-surface:      #14120a;
+  --bg-card:         #1c1a0e;
+  --bg-card-hover:   #242218;
+  --bg-nav:          #100e08;
+  --bg-input:        #1c1a0e;
+  --bg-tag:          #2a2410;
+
+  --border-default:  #3a3010;
+  --border-focus:    #d4a017;
+  --border-crit:     #dc2626;
+
+  --text-primary:    #f5e6c8;
+  --text-secondary:  #a89060;
+  --text-muted:      #5a4a28;
+  --text-inverse:    #0a0905;
+
+  --primary:         #d4a017;
+  --primary-dim:     #3a2a00;
+  --primary-hover:   #f0c030;
+  --primary-text:    #fcd34d;
+
+  --crit:            #dc2626;
+  --crit-dim:        #3b0e0e;
+  --crit-text:       #fca5a5;
+
+  --warn:            #b45309;
+  --warn-dim:        #3b1a00;
+  --warn-text:       #fbbf24;
+
+  --ok:              #65a30d;
+  --ok-dim:          #1a2e04;
+  --ok-text:         #bef264;
+
+  --accent:          #e07b39;
+  --accent-dim:      #3b1800;
+  --accent-text:     #fdba74;
+
+  --tag-purple:      #9333ea;
+  --tag-purple-dim:  #2a1040;
+  --tag-teal:        #0d9488;
+  --tag-teal-dim:    #0a2420;
+
+  --formula-bg:      #14100a;
+  --formula-border:  #3a2a00;
+  --formula-text:    #fcd34d;
+
+  --table-header:    #1c1808;
+  --table-row-alt:   #141008;
+  --table-value-bg:  #2a2400;
+  --table-value-text:#fcd34d;
+
+  --section-border:  #d4a017;
+  --nav-active-bg:   #3a2a00;
+  --nav-active-text: #fcd34d;
+  --nav-text:        #a89060;
+
+  --scrollbar-thumb: #3a3010;
+  --scrollbar-track: #0a0905;
+  --progress-fill:   #d4a017;
+  --progress-bg:     #3a2a00;
+  --support-bg:      #1c1400;
+  --support-text:    #d4a017;
+  --support-border:  #d4a017;
+
+  --shadow-card:     0 4px 24px rgba(0,0,0,0.6);
+  --shadow-focus:    0 0 0 2px rgba(212,160,23,0.4);
+
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  18px;
+  --radius-pill: 999px;
+
+  --font-main:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}

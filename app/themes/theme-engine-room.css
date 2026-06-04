@@ -1,0 +1,86 @@
+/**
+ * THEME 3 — Engine Room
+ * Industrial charcoal, warning orange, steel grey highlights
+ * Inspired by: engine room consoles, steel plating, high-temp warnings
+ */
+
+:root {
+  --theme-name: "Engine Room";
+
+  --bg-base:         #0d0d0d;
+  --bg-surface:      #161616;
+  --bg-card:         #1e1e1e;
+  --bg-card-hover:   #272727;
+  --bg-nav:          #111111;
+  --bg-input:        #1a1a1a;
+  --bg-tag:          #2a1a00;
+
+  --border-default:  #333333;
+  --border-focus:    #f97316;
+  --border-crit:     #ef4444;
+
+  --text-primary:    #e8e8e8;
+  --text-secondary:  #888888;
+  --text-muted:      #444444;
+  --text-inverse:    #0d0d0d;
+
+  --primary:         #f97316;
+  --primary-dim:     #2a1400;
+  --primary-hover:   #fb923c;
+  --primary-text:    #fdba74;
+
+  --crit:            #ef4444;
+  --crit-dim:        #300a0a;
+  --crit-text:       #fca5a5;
+
+  --warn:            #eab308;
+  --warn-dim:        #2a2000;
+  --warn-text:       #fde047;
+
+  --ok:              #22c55e;
+  --ok-dim:          #0a2010;
+  --ok-text:         #86efac;
+
+  --accent:          #fb923c;
+  --accent-dim:      #2a1400;
+  --accent-text:     #fed7aa;
+
+  --tag-purple:      #c084fc;
+  --tag-purple-dim:  #280a40;
+  --tag-teal:        #2dd4bf;
+  --tag-teal-dim:    #0a2a28;
+
+  --formula-bg:      #111111;
+  --formula-border:  #333333;
+  --formula-text:    #fdba74;
+
+  --table-header:    #1a1a1a;
+  --table-row-alt:   #141414;
+  --table-value-bg:  #2a1800;
+  --table-value-text:#fbbf24;
+
+  --section-border:  #f97316;
+  --nav-active-bg:   #2a1400;
+  --nav-active-text: #fb923c;
+  --nav-text:        #888888;
+
+  --scrollbar-thumb: #333333;
+  --scrollbar-track: #0d0d0d;
+  --progress-fill:   #f97316;
+  --progress-bg:     #2a1400;
+  --support-bg:      #1a0e00;
+  --support-text:    #f97316;
+  --support-border:  #f97316;
+
+  --shadow-card:     0 4px 24px rgba(0,0,0,0.7);
+  --shadow-focus:    0 0 0 2px rgba(249,115,22,0.4);
+
+  --radius-sm:  4px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-pill: 999px;
+
+  --font-main:  'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}
