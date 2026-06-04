@@ -357,16 +357,17 @@ a.sb-item{text-decoration:none}
     will-change: transform;
     position: fixed;
     top: 56px; /* below topbar */
-    left: -280px;
+    left: 0;
     bottom: 0;
     width: 260px;
     height: calc(100svh - 56px);
     z-index: 1000;
-    transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateX(-280px);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: none;
   }
   #sidebar.open {
-    left: 0;
+    transform: translateX(0);
     box-shadow: 4px 0 24px rgba(0,0,0,0.5);
   }
   
