@@ -1225,12 +1225,14 @@ function qbStart() {
 }
 
 document.getElementById('content').addEventListener('scroll', function() {
-    var btn = document.getElementById('back-to-top');
-    if (this.scrollTop > 300) {
-        btn.style.display = 'flex';
-    } else {
-        btn.style.display = 'none';
-    }
+    var self=this;
+    if(self._rafScroll) return;
+    self._rafScroll=requestAnimationFrame(function(){
+        self._rafScroll=null;
+        var btn=document.getElementById('back-to-top');
+        if(!btn) return;
+        btn.style.display=self.scrollTop>300?'flex':'none';
+    });
 });
 
 // ═══════════════════════════════════════════════════════
