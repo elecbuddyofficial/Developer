@@ -246,23 +246,23 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-formula">HFO Separator &rarr; Cooling Pumps &rarr; FW Generator &rarr; Starting Air Compressor &rarr; L.O. Pump &rarr; Main Engine Start</div>
   <div class="n-info"><div class="icon">📖</div><div class="body">This specific sequence ensures fuel preparation, system cooling, and control air are established before starting the heavy lube oil pumps, which allows the main engine to be safely pre-lubricated and started.</div></div>
 
-  <div class="n-h2" id="s-blackout">🔌 Blackout Test — Full Procedure</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>SOLAS requirement:</strong> Emergency generator must auto-start and supply essential loads within <span class="n-val">45 seconds</span> (cargo ships) or <span class="n-val">30 seconds</span> (passenger ships). PSC inspectors test this — know every step.</div></div>
+  <div class="n-h2" id="s-blackout">🔌 Blackout Test - Full Procedure</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>SOLAS requirement:</strong> Emergency generator must auto-start and supply essential loads within <span class="n-val">45 seconds</span> (cargo ships) or <span class="n-val">30 seconds</span> (passenger ships). PSC inspectors test this - know every step.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Preparation (before tripping):</strong><br>
-  1. Inform bridge — obtain permission — confirm ship is NOT manoeuvring, berthing, or in restricted waters.<br>
+  1. Inform bridge - obtain permission - confirm ship is NOT manoeuvring, berthing, or in restricted waters.<br>
   2. Inform chief engineer and all ER staff. Brief every person on their manual-start station.<br>
   3. Confirm emergency generator is in <strong>AUTO start</strong> mode. Check fuel level and starting battery charge.<br>
-  4. Note all equipment currently running — reference list for post-restoration checks.<br>
+  4. Note all equipment currently running - reference list for post-restoration checks.<br>
   5. Verify emergency switchboard (ESB) is healthy and transfer breaker is in AUTO.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Test Execution:</strong><br>
-  6. Trip all main generator ACBs — simulate complete blackout.<br>
+  6. Trip all main generator ACBs - simulate complete blackout.<br>
   7. Start timer immediately.<br>
   8. Verify: emergency generator auto-cranks, fires, and builds voltage.<br>
   9. Verify: ESB incomer breaker closes automatically within <span class="n-val">45 seconds</span>.<br>
   10. Check essential loads supplied: emergency lighting, navigation lights, GMDSS, fire detection, steering gear power.<br>
-  11. <strong>If auto-start fails:</strong> immediately initiate manual start per ER manual procedure — do not wait.</div></div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Restoration — Sequential Load Pickup (critical — do NOT restore all at once):</strong><br>
-  12. Start main generator 1 — allow voltage and frequency to stabilise at rated values.<br>
+  11. <strong>If auto-start fails:</strong> immediately initiate manual start per ER manual procedure - do not wait.</div></div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Restoration - Sequential Load Pickup (critical - do NOT restore all at once):</strong><br>
+  12. Start main generator 1 - allow voltage and frequency to stabilise at rated values.<br>
   13. Synchronise and close main ACB onto dead busbar (or onto ESB via tie-breaker).<br>
   14. Transfer essential loads from ESB back to MSB.<br>
   15. Restore auxiliaries in strict sequence with <span class="n-val">30-second to 2-minute delays</span> between each:<br>

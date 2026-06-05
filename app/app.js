@@ -2,12 +2,21 @@
 window.QD = {}; // Quiz Data Store
 window.NOTE_HTML = {}; // HTML Store
 
+// ── Search Index ──────────────────────────────────────────
+var SEARCH_INDEX = [];
+var SEARCH_INDEX_BUILT = {};
+var SEARCH_INDEX_DONE = 0;
+var SEARCH_INDEX_TOTAL = 0;
+
 window.loadQuizzes = function(topicKey, data) {
     window.QD[topicKey] = data;
 };
 
 window.loadNotes = function(topicId, htmlContent) {
     window.NOTE_HTML[topicId] = htmlContent;
+    buildSearchIndexForTopic(topicId, htmlContent);
+    // Skip display update if this was a background index load (not user-requested)
+    if (window._bgIndexing && topicId !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = htmlContent;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
@@ -17,10 +26,20 @@ window.loadNotes = function(topicId, htmlContent) {
     buildTopicSideList(topicId);
     injectTopicFooterNav(topicId);
     document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+    if(window._pendingScroll){
+        var _s=window._pendingScroll; window._pendingScroll=null;
+        setTimeout(function(){
+            var el=document.getElementById(_s);
+            if(el){var c=document.getElementById('content');c.scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});}
+        },200);
+    }
 };
 
 window.loadWrittenNotes = function(topicCode, html) {
     window.NOTE_HTML[topicCode] = html;
+    buildSearchIndexForTopic(topicCode, html);
+    // Skip display update if this was a background index load (not user-requested)
+    if (window._bgIndexing && topicCode !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = html;
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
@@ -30,9 +49,17 @@ window.loadWrittenNotes = function(topicCode, html) {
     buildTopicSideList(topicCode);
     injectTopicFooterNav(topicCode);
     document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+    if(window._pendingScroll){
+        var _s=window._pendingScroll; window._pendingScroll=null;
+        setTimeout(function(){
+            var el=document.getElementById(_s);
+            if(el){var c=document.getElementById('content');c.scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});}
+        },200);
+    }
 };
 
 window.fetchTopicData = function(topicId, topicKey) {
+    window._activeTopicId = topicId;
     var tNum = parseInt(topicId.substring(1), 10);
     var tbBadge = document.getElementById('topbar-badge');
     var isW = topicId.startsWith('W');
@@ -44,6 +71,10 @@ window.fetchTopicData = function(topicId, topicKey) {
         let noteScript = document.createElement('script');
         let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
         noteScript.src = pathStr + topicId.toLowerCase() + '_notes.js';
+        noteScript.onerror = function() {
+            var c = document.getElementById('notes-container');
+            if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes for ' + esc(topicId) + '. Please try again.</div>';
+        };
         document.head.appendChild(noteScript);
     } else {
         document.getElementById('notes-container').innerHTML = window.NOTE_HTML[topicId];
@@ -65,7 +96,7 @@ window.fetchTopicData = function(topicId, topicKey) {
     
     // URL Routing
     if (!window._isRouting) {
-        try { window.history.pushState(null, '', '#notes=' + topicId); } catch(e) {}
+        try { if (window.location.protocol !== 'file:') window.history.pushState(null, '', '#notes=' + topicId); } catch(e) {}
     }
 };
 
@@ -171,18 +202,6 @@ function injectTopicFooterNav(topicId) {
 }
 
 var ACTIVE_TOPIC='T01';
-function setQuizTopic(t){
-  ACTIVE_TOPIC=t;
-  document.getElementById('qt-t01').style.background=t==='T01'?'var(--blue)':'';
-  document.getElementById('qt-t01').style.color=t==='T01'?'#fff':'';
-  document.getElementById('qt-t01').className=t==='T01'?'btn':'btn btn-ghost';
-  document.getElementById('qt-t02').style.background=t==='T02'?'var(--blue)':'';
-  document.getElementById('qt-t02').style.color=t==='T02'?'#fff':'';
-  document.getElementById('qt-t02').className=t==='T02'?'btn':'btn btn-ghost';
-  
-
-buildCatGrid();
-}
 var CAT_NAMES={
   /* T01 - Alternator */
   WP:"Working Principle",EX:"Excitation Systems",BL:"Brushless Alternator",AVR:"AVR & Voltage Regulation",RM:"Residual Magnetism & Flashing",SY:"Synchroscope & Synchronisation",LS:"Parallel & Load Sharing",PR:"Protection & Safeties",MT:"Maintenance & IR Testing",AG:"Air Gap",OS:"Overspeed Trip",BT:"Blackout Test",SOL:"SOLAS & Regulations",FT:"Faults & Troubleshooting",SR:"Slip Rings & Brushes",EM:"Emergency Generator",
@@ -328,7 +347,7 @@ function goToQuizFromNotes(topicId){
   
   // URL Routing
   if (!window._isRouting) {
-      try { window.history.pushState(null, '', '#quiz=' + topicId); } catch(e) {}
+      try { if (window.location.protocol !== 'file:') window.history.pushState(null, '', '#quiz=' + topicId); } catch(e) {}
   }
 }
 
@@ -625,7 +644,7 @@ function skipQ(){
 function prevQ(){
   if(!QZ.history.length)return;
   var prev=QZ.history.pop();
-  // Always decrement QZ.i — both answered and skipped questions incremented it
+  // Always decrement QZ.i - both answered and skipped questions incremented it
   if(QZ.i>0)QZ.i--;
   // Undo score only if the popped answer was a correct answered question
   if(prev.chosen&&prev.correct){QZ.correct--;}
@@ -848,7 +867,7 @@ function showScore(){
   
   document.getElementById('quiz-active').innerHTML = html;
 }
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;')}
 
 
 buildCatGrid();
@@ -857,7 +876,7 @@ buildCatGrid();
 // QUIZ BANK
 // ═══════════════════════════════════════════════════════
 
-// Full category name lookup — covers all short codes used across 23 topics
+// Full category name lookup - covers all short codes used across 23 topics
 var QB_CAT_NAMES = {
   // T01 Alternator
   WP:'Working Principle',BL:'Brushless Alternator',PR:'Protection & Safeties',AVR:'AVR (Voltage Regulator)',
@@ -1065,7 +1084,7 @@ function qbBuildDropdown() {
     var sel = !QB.allTopics && QB.topics[t.id];
     var row = document.createElement('div');
     row.className = 'qb-drop-item' + (sel ? ' checked' : '');
-    row.innerHTML = '<span class="chk">' + (sel ? '✓' : '') + '</span>' + t.icon + ' ' + t.id + ' — ' + t.name;
+    row.innerHTML = '<span class="chk">' + (sel ? '✓' : '') + '</span>' + t.icon + ' ' + t.id + ' - ' + t.name;
     row.onclick = function(e) {
       e.stopPropagation();
       QB.allTopics = false;
@@ -1218,8 +1237,8 @@ function qbStart() {
   document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
   document.querySelectorAll('.sb-item').forEach(function(b){ b.classList.remove('active'); });
   document.getElementById('si-quiz-bank').classList.add('active');
-  document.getElementById('quiz-topic-label').textContent = label;
-  document.getElementById('quiz-topic-h2').textContent = label;
+  document.getElementById('quiz-topic-label').innerHTML = label;
+  document.getElementById('quiz-topic-h2').innerHTML = label;
   document.getElementById('topbar-badge').innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank';
   startQuiz('All Topics', label, final);
   document.getElementById('view-quiz').classList.add('active');
@@ -1242,6 +1261,256 @@ document.getElementById('content').addEventListener('scroll', function() {
 });
 
 // ═══════════════════════════════════════════════════════
+// NOTES SEARCH
+// ═══════════════════════════════════════════════════════
+
+function buildSearchIndexForTopic(topicId, html) {
+    if (SEARCH_INDEX_BUILT[topicId]) return;
+    SEARCH_INDEX_BUILT[topicId] = true;
+    var isW = topicId.startsWith('W');
+    var topicArr = isW ? WRITTEN_TOPICS : TOPICS;
+    var topicObj = topicArr.find(function(t){ return t.id === topicId; });
+    var topicName = topicObj ? topicObj.name : topicId;
+    try {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+        var sections = doc.querySelectorAll('[id^="s-"]');
+        sections.forEach(function(sec) {
+            var heading = sec.textContent.trim().replace(/\s+/g,' ');
+            var next = sec.nextElementSibling;
+            var snippet = next ? next.textContent.trim().replace(/\s+/g,' ').substring(0,120) : '';
+            SEARCH_INDEX.push({
+                topicId: topicId,
+                topicName: topicName,
+                scope: isW ? 'written' : 'oral',
+                sectionId: sec.id,
+                heading: heading,
+                snippet: snippet
+            });
+        });
+    } catch(e){}
+    SEARCH_INDEX_DONE++;
+}
+
+function _srEscape(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function _srHighlight(text, query) {
+    var safe = _srEscape(text);
+    if (!query) return safe;
+    var re = new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    return safe.replace(re, function(m){ return '<mark class="sr-mark">'+m+'</mark>'; });
+}
+
+function searchNotes(query, scope) {
+    if (!query || query.trim().length < 2) return [];
+    var q = query.trim().toLowerCase();
+    var oral = [], written = [];
+    for (var i = 0; i < SEARCH_INDEX.length; i++) {
+        var item = SEARCH_INDEX[i];
+        if (scope && item.scope !== scope) continue;
+        var hl = item.heading.toLowerCase().indexOf(q);
+        var sl = item.snippet.toLowerCase().indexOf(q);
+        if (hl !== -1 || sl !== -1) {
+            var r = { item: item, score: hl !== -1 ? 0 : 1 };
+            if (item.scope === 'oral') oral.push(r);
+            else written.push(r);
+        }
+    }
+    oral.sort(function(a,b){ return a.score - b.score; });
+    written.sort(function(a,b){ return a.score - b.score; });
+    if (scope) return (oral.length ? oral : written).slice(0, 9);
+    // "All" mode - balance oral and written so neither crowds the other out
+    var cap = 5;
+    var oTop = oral.slice(0, cap);
+    var wTop = written.slice(0, cap);
+    var spare = 10 - oTop.length - wTop.length;
+    if (spare > 0) {
+        if (oral.length > cap) oTop = oTop.concat(oral.slice(cap, cap + spare));
+        else if (written.length > cap) wTop = wTop.concat(written.slice(cap, cap + spare));
+    }
+    return oTop.concat(wTop);
+}
+
+function searchAndRender(query, scope) {
+    var cId = scope === 'oral' ? 'oral-search-results' : 'written-search-results';
+    var clrId = scope === 'oral' ? 'oral-search-clear' : 'written-search-clear';
+    var container = document.getElementById(cId);
+    var clrBtn = document.getElementById(clrId);
+    if (!container) return;
+    if (clrBtn) clrBtn.style.display = query ? 'flex' : 'none';
+    if (!query || query.trim().length < 2) {
+        container.style.display = 'none';
+        container.innerHTML = '';
+        return;
+    }
+    var results = searchNotes(query, scope);
+    var notDone = SEARCH_INDEX_DONE < SEARCH_INDEX_TOTAL;
+    if (results.length === 0) {
+        container.innerHTML = '<div class="sr-empty">'+(notDone?'Still indexing... try again in a moment':'No results found')+'</div>';
+        container.style.display = 'block';
+        return;
+    }
+    var q = query.trim();
+    var html = '';
+    results.forEach(function(r) {
+        var item = r.item;
+        html += '<div class="sr-item" onclick="goToSearchResult(\''+item.topicId+'\',\''+item.sectionId+'\')">'
+            +'<div class="sr-badge">'+item.topicId+'</div>'
+            +'<div class="sr-content">'
+            +'<div class="sr-heading">'+_srHighlight(item.heading, q)+'</div>'
+            +(item.snippet?'<div class="sr-snippet">'+_srEscape(item.snippet.substring(0,90))+'</div>':'')
+            +'</div></div>';
+    });
+    if (notDone) html += '<div class="sr-indexing">Indexing '+SEARCH_INDEX_DONE+'/'+SEARCH_INDEX_TOTAL+' topics...</div>';
+    container.innerHTML = html;
+    container.style.display = 'block';
+}
+
+function clearSearch(scope) {
+    var inpId = scope === 'oral' ? 'oral-search' : 'written-search';
+    var inp = document.getElementById(inpId);
+    if (inp) { inp.value = ''; inp.focus(); }
+    searchAndRender('', scope);
+}
+
+function goToSearchResult(topicId, sectionId) {
+    // Close all search UIs
+    var scope = topicId.startsWith('W') ? 'written' : 'oral';
+    clearSearch(scope);
+    gSearchClose();
+    // Close mobile sidebar
+    var sb = document.getElementById('sidebar');
+    if (sb) sb.classList.remove('open');
+    var sbOv = document.getElementById('sidebar-overlay');
+    if (sbOv) sbOv.classList.remove('open');
+    window._pendingScroll = sectionId;
+    var allTopics = TOPICS.concat(WRITTEN_TOPICS);
+    var t = allTopics.find(function(x){ return x.id === topicId; });
+    if (t) window.fetchTopicData(t.id, t.key);
+}
+
+// ── Global (Sidebar) Search ───────────────────────────────
+var _gFilter = 'all';
+
+function setGFilter(f) {
+    _gFilter = f;
+    var labels = {all:'All ▾', oral:'Oral ▾', written:'Writ ▾'};
+    var btn = document.getElementById('gsf-btn');
+    if (btn) btn.textContent = labels[f] || 'All ▾';
+    var dd = document.getElementById('gsf-dropdown');
+    if (dd) dd.style.display = 'none';
+    var inp = document.getElementById('gsearch-input');
+    if (inp && inp.value.trim().length >= 2) gSearch(inp.value);
+}
+
+function gFilterToggle(e) {
+    e.stopPropagation();
+    var dd = document.getElementById('gsf-dropdown');
+    if (dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+
+function gSearch(query) {
+    var panel = document.getElementById('gsearch-panel');
+    var resultsEl = document.getElementById('gsearch-results');
+    if (!panel || !resultsEl) return;
+    var dd = document.getElementById('gsf-dropdown');
+    if (dd) dd.style.display = 'none';
+    if (!query || query.trim().length < 2) {
+        panel.style.display = 'none';
+        resultsEl.innerHTML = '';
+        return;
+    }
+    var scope = _gFilter === 'all' ? null : _gFilter;
+    var results = searchNotes(query, scope);
+    var notDone = SEARCH_INDEX_DONE < SEARCH_INDEX_TOTAL;
+    var html = '';
+    if (results.length === 0) {
+        html = '<div class="sr-empty">' + (notDone ? 'Still indexing… try again in a moment' : 'No results found') + '</div>';
+    } else {
+        var q = query.trim();
+        results.forEach(function(r) {
+            var item = r.item;
+            var scopeLabel = item.scope === 'oral' ? 'Oral' : 'Written';
+            html += '<div class="sr-item" onclick="goToSearchResult(\'' + item.topicId + '\',\'' + item.sectionId + '\')">'
+                + '<div class="sr-badge">' + item.topicId + '</div>'
+                + '<div class="sr-content">'
+                + '<div class="sr-heading">' + _srHighlight(item.heading, q) + '</div>'
+                + '<div class="sr-meta">' + scopeLabel + ' · ' + _srEscape(item.topicName) + '</div>'
+                + '</div></div>';
+        });
+        if (notDone) html += '<div class="sr-indexing">Indexing ' + SEARCH_INDEX_DONE + '/' + SEARCH_INDEX_TOTAL + ' topics…</div>';
+    }
+    resultsEl.innerHTML = html;
+    // Position directly below the search input, constrained to sidebar width
+    var inp = document.getElementById('gsearch-input');
+    var sb = document.getElementById('sidebar');
+    var rect = inp ? inp.getBoundingClientRect() : null;
+    var sbRect = sb ? sb.getBoundingClientRect() : null;
+    if (rect) {
+        var maxH = Math.min(360, window.innerHeight - rect.bottom - 20);
+        panel.style.top = (rect.bottom + 6) + 'px';
+        var panelLeft = Math.max(8, rect.left);
+        var panelWidth = Math.min(rect.width, window.innerWidth - panelLeft - 8);
+        panel.style.left = panelLeft + 'px';
+        panel.style.width = panelWidth + 'px';
+        resultsEl.style.maxHeight = maxH + 'px';
+    }
+    panel.style.display = 'block';
+}
+
+function gSearchClose() {
+    var panel = document.getElementById('gsearch-panel');
+    if (panel) panel.style.display = 'none';
+}
+
+function startBackgroundIndexing() {
+    var allIds = [];
+    TOPICS.forEach(function(t){ if(t.notesReady) allIds.push(t.id); });
+    WRITTEN_TOPICS.forEach(function(t){ if(t.notesReady) allIds.push(t.id); });
+    SEARCH_INDEX_TOTAL = allIds.length;
+    window._bgIndexing = true;
+    var i = 0;
+    function indexNext() {
+        if (i >= allIds.length) {
+            window._bgIndexing = false;
+            return;
+        }
+        var topicId = allIds[i++];
+        if (window.NOTE_HTML && window.NOTE_HTML[topicId]) {
+            buildSearchIndexForTopic(topicId, window.NOTE_HTML[topicId]);
+            setTimeout(indexNext, 30);
+            return;
+        }
+        // Use script injection (works with file:// and http://)
+        var s = document.createElement('script');
+        var path = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
+        s.src = path + topicId.toLowerCase() + '_notes.js';
+        s.onload = function() { setTimeout(indexNext, 100); };
+        s.onerror = function() { SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[topicId] = true; setTimeout(indexNext, 100); };
+        document.head.appendChild(s);
+    }
+    setTimeout(indexNext, 2500);
+}
+
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('#oral-search-wrap')) {
+        var r = document.getElementById('oral-search-results');
+        if (r) r.style.display = 'none';
+    }
+    if (!e.target.closest('#written-search-wrap')) {
+        var r2 = document.getElementById('written-search-results');
+        if (r2) r2.style.display = 'none';
+    }
+    if (!e.target.closest('#gsearch-area') && !e.target.closest('#gsearch-panel')) {
+        var dd = document.getElementById('gsf-dropdown');
+        if (dd) dd.style.display = 'none';
+        gSearchClose();
+    }
+});
+
+// ═══════════════════════════════════════════════════════
 // ROUTING (Refresh & Back Button Support)
 // ═══════════════════════════════════════════════════════
 window._isRouting = false;
@@ -1254,11 +1523,20 @@ function handleHashRouting() {
       showView('welcome');
   } else if (hash.startsWith('notes=')) {
       var topicId = hash.split('=')[1];
-      var t = TOPICS.find(function(x) { return x.id === topicId; });
+      var t = TOPICS.find(function(x) { return x.id === topicId; }) || WRITTEN_TOPICS.find(function(x) { return x.id === topicId; });
       if (t) fetchTopicData(t.id, t.key);
   } else if (hash.startsWith('quiz=')) {
       var topicId = hash.split('=')[1];
       goToQuizFromNotes(topicId);
+  } else if (hash === 'sq-landing') {
+      openSurveyorQA();
+  } else if (hash === 'sq-all') {
+      openSurveyorQA(function() { renderSqAll(); });
+  } else if (hash === 'sq-grid') {
+      openSurveyorQA(function() { renderSqGrid(); });
+  } else if (hash.startsWith('sq-detail=')) {
+      var surveyorName = decodeURIComponent(hash.split('=')[1]);
+      openSurveyorQA(function() { openSqDetail(surveyorName); });
   } else {
       showView(hash);
       if (hash === 'quiz-bank') initQuizBank();
@@ -1276,4 +1554,145 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
       .catch(function() {}); // fail silently
   });
+}
+
+startBackgroundIndexing();
+
+// ═══════════════ SURVEYOR Q&A LOGIC ═══════════════
+
+let sqCurrentPage = 0;
+const sqPageSize = 50;
+
+function openSurveyorQA(onReady) {
+    var cb = onReady || function() { showView('sq-landing'); };
+    if (!window.SQ_DATA) {
+        let script = document.createElement('script');
+        script.src = '../data/Orals/SurveyorQA/sq_data.js';
+        script.onload = cb;
+        document.body.appendChild(script);
+    } else {
+        cb();
+    }
+}
+
+function formatSqAnswer(text) {
+    var lines = text.split('\n');
+    var html = '';
+    for (var i = 0; i < lines.length; i++) {
+        var line = lines[i].trim();
+        if (!line) continue;
+        var numMatch = line.match(/^(\d+)\.\s+(.+)/);
+        if (numMatch) {
+            html += '<div class="sq-bullet sq-numbered"><span class="sq-num">' + esc(numMatch[1]) + '.</span><span class="sq-bullet-text">' + esc(numMatch[2]) + '</span></div>';
+            continue;
+        }
+        var labelMatch = line.match(/^([A-Z][^:]{1,49}):\s*(.+)/);
+        if (labelMatch) {
+            html += '<div class="sq-bullet"><span class="sq-label">' + esc(labelMatch[1]) + ':</span> <span class="sq-bullet-text">' + esc(labelMatch[2]) + '</span></div>';
+            continue;
+        }
+        html += '<div class="sq-para">' + esc(line) + '</div>';
+    }
+    return html;
+}
+
+function renderSqCard(q) {
+    var ans = formatSqAnswer(q.answer);
+    return '<div class="sq-card">'
+        + '<div class="sq-header"><div class="sq-badges">'
+        + '<span class="sq-badge-surveyor">' + esc(q.surveyor) + '</span>'
+        + '<span class="sq-badge-topic">' + esc(q.topic) + '</span>'
+        + '</div></div>'
+        + '<div class="sq-q">Q: ' + esc(q.question) + '</div>'
+        + '<div class="sq-a">' + ans + '</div>'
+        + '</div>';
+}
+
+function renderSqAll() {
+    showView('sq-all');
+    sqCurrentPage = 0;
+    document.getElementById('sq-all-container').innerHTML = '';
+    loadMoreSqAll();
+}
+
+function loadMoreSqAll() {
+    if (!window.SQ_DATA) return;
+    if (sqCurrentPage * sqPageSize >= window.SQ_DATA.questions.length) return;
+    
+    let container = document.getElementById('sq-all-container');
+    let questions = window.SQ_DATA.questions;
+    let start = sqCurrentPage * sqPageSize;
+    let end = start + sqPageSize;
+    let html = '';
+    
+    for (let i = start; i < end && i < questions.length; i++) {
+        html += renderSqCard(questions[i]);
+    }
+    
+    container.innerHTML += html;
+    sqCurrentPage++;
+    
+    if (end >= questions.length) {
+        document.getElementById('sq-load-more').style.display = 'none';
+    } else {
+        document.getElementById('sq-load-more').style.display = 'inline-block';
+    }
+}
+
+function renderSqGrid() {
+    showView('sq-grid');
+    if (!window.SQ_DATA) return;
+    
+    let grid = document.getElementById('sq-surveyor-grid');
+    let surveyors = window.SQ_DATA.surveyors;
+    let activeSurveyors = new Set(window.SQ_DATA.questions.map(q => q.surveyor));
+    
+    let html = '';
+    let sortedNames = Array.from(activeSurveyors).sort();
+    
+    for (let name of sortedNames) {
+        let meta = surveyors[name] || {};
+        let qCount = window.SQ_DATA.questions.filter(q => q.surveyor === name).length;
+        let tops = meta.top_topics ? meta.top_topics.slice(0, 3).join(', ') : 'Mixed';
+        
+        html += '<div class="sq-surveyor-card" data-surveyor="' + esc(name) + '">'
+            + '<div class="sq-surveyor-name">🧑‍✈️ ' + esc(name) + '</div>'
+            + '<div class="sq-surveyor-stat"><strong>' + qCount + '</strong> questions</div>'
+            + '<div class="sq-surveyor-stat"><strong>Top Topics:</strong> ' + esc(tops) + '</div>'
+            + '</div>';
+    }
+    
+    grid.innerHTML = html;
+    grid.onclick = function(e) {
+        var card = e.target.closest('[data-surveyor]');
+        if (card) openSqDetail(card.getAttribute('data-surveyor'));
+    };
+}
+
+function openSqDetail(surveyorName) {
+    showView('sq-detail');
+    if (!window.SQ_DATA) return;
+
+    document.getElementById('sq-detail-title').textContent = surveyorName;
+
+    let meta = window.SQ_DATA.surveyors[surveyorName] || {};
+    let infoDiv = document.getElementById('sq-detail-info');
+    infoDiv.textContent = '';
+    let strong = document.createElement('strong');
+    strong.textContent = 'Style Notes: ';
+    let span = document.createElement('span');
+    span.textContent = meta.style_notes || 'No specific style noted.';
+    infoDiv.appendChild(strong);
+    infoDiv.appendChild(span);
+    infoDiv.className = 'n-info';
+    
+    let container = document.getElementById('sq-detail-container');
+    let questions = window.SQ_DATA.questions.filter(q => q.surveyor === surveyorName);
+    
+    let html = '';
+    for (let q of questions) {
+        html += renderSqCard(q);
+    }
+    
+    container.innerHTML = html;
 }

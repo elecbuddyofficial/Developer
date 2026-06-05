@@ -42,7 +42,7 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
 <div class="n-h1" id="s-principle">1A. EMF EQUATION - WORKED EXAMPLES & SURVEYOR Q&A</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Worked Example 1:</strong> Single phase transformer. Primary: N1 = <span class="n-val">500 turns</span>, V1 = <span class="n-val">440V</span>, f = <span class="n-val">50Hz</span>.<br>Φ_max = E / (4.44 × f × N) = 440 / (4.44 × 50 × 500) = 440 / 111,000 = <span class="n-val">0.00396 Wb</span>.<br>Secondary: N2 = 100 turns → V2 = 440 × (100/500) = <span class="n-val">88V</span>.</div></div>
 
-  <div class="n-formula">4.44 = 4 × √2 / √2 = form factor constant for sinusoidal flux<div class="label">Origin of the 4.44 constant in the EMF equation</div></div>
+  <div class="n-formula">E = 4.44 × f × N × Φmax &nbsp;|&nbsp; 4.44 = 4 × ff &nbsp;|&nbsp; ff = π / (2√2) ≈ 1.11 (form factor of sine wave)<div class="label">Origin of 4.44: RMS/Average ratio of a sine wave (form factor ≈ 1.11) × 4 = 4.44</div></div>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (All surveyors):</strong> What is the working principle of a transformer?<br><strong>Ideal Answer:</strong> Mutual electromagnetic induction. AC in primary creates alternating magnetic flux in core. Alternating flux links secondary winding. By Faraday's law, EMF induced in secondary is proportional to rate of change of flux and number of secondary turns. V1/V2 = N1/N2. Step-up: more secondary turns = higher secondary voltage, lower current. Cannot work on DC - DC gives constant flux, no change, no induction. Transformer is essentially a magnetic coupling between two electrically isolated circuits.</div></div>
 
@@ -77,8 +77,8 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Vishwanathan, Nair: Transformer is humming louder than usual - causes?</strong></div></div>
   <div class="n-h2">Normal Hum</div>
   <p class="n-p">Transformers hum at <strong>TWICE</strong> the supply frequency (100Hz for 50Hz supply).<br>
-  <strong>CAUSE:</strong> Magnetostriction — core laminations physically expand and contract with each magnetic flux cycle. At 50Hz: flux cycles 50 times per second. Core dimensions change twice per cycle (in both positive and negative peaks of flux). Result: mechanical vibration at 100Hz — transmitted as hum through mounting structure and oil.</p>
-  <div class="n-h2">Increased Hum — When to Worry</div>
+  <strong>CAUSE:</strong> Magnetostriction - core laminations physically expand and contract with each magnetic flux cycle. At 50Hz: flux cycles 50 times per second. Core dimensions change twice per cycle (in both positive and negative peaks of flux). Result: mechanical vibration at 100Hz - transmitted as hum through mounting structure and oil.</p>
+  <div class="n-h2">Increased Hum - When to Worry</div>
   <ul class="n-list">
     <li><strong>1. OVERVOLTAGE:</strong> Higher voltage → higher flux density → more magnetostriction → louder hum.</li>
     <li><strong>2. LOOSE LAMINATIONS:</strong> Laminations vibrate more freely → louder rattle/hum. Indicates maintenance needed.</li>
@@ -204,12 +204,12 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Deswal):</strong> Conditions for parallel operation of transformers?<br><strong>Ideal Answer:</strong> (1) Same voltage/turns ratio - avoid circulating current; (2) Same polarity - else short circuit; (3) Same phase sequence; (4) Same vector group/phase displacement (e.g. Dyn11 with Dyn11); (5) Same per-unit impedance - for proportional load sharing. If %Z differs, transformer with lower impedance takes more load and may overload.</div></div>
 
   <div class="n-h1" id="s-flyback">🔄 Flyback Transformer - Electronics-Linked</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib asks this — electronics-linked question.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib asks this - electronics-linked question.</strong></div></div>
   <p class="n-p">A flyback transformer (line output transformer / LOPT) is a special type used in switch-mode power supplies (SMPS) and older CRT displays. It stores energy in the magnetic core during the switch-ON phase and releases it during switch-OFF.</p>
   <div class="n-h2">Working (Different from Normal Transformer)</div>
   <ol class="n-steps">
-    <li><strong>PHASE 1 (SWITCH ON):</strong> Switch (MOSFET) closes. Primary current flows — energy stored in magnetic core as flux (like an inductor). Secondary diode is reverse biased — NO secondary current.</li>
-    <li><strong>PHASE 2 (FLYBACK/SWITCH OFF):</strong> Switch opens. Magnetic field collapses — polarity reverses — secondary diode is now forward biased — stored energy releases into secondary circuit.</li>
+    <li><strong>PHASE 1 (SWITCH ON):</strong> Switch (MOSFET) closes. Primary current flows - energy stored in magnetic core as flux (like an inductor). Secondary diode is reverse biased - NO secondary current.</li>
+    <li><strong>PHASE 2 (FLYBACK/SWITCH OFF):</strong> Switch opens. Magnetic field collapses - polarity reverses - secondary diode is now forward biased - stored energy releases into secondary circuit.</li>
   </ol>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Ship Applications:</strong> SMPS (all modern 24V DC, 12V DC control supplies), radar transmitter (high voltage pulse for magnetron), isolated DC-DC converters. Provides full galvanic isolation.</div></div>
 
@@ -219,13 +219,13 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
   <ul class="n-list">
     <li><strong>Setup:</strong> Apply rated voltage to primary. Secondary open-circuited. Measure: P0 (watts), V1, I0.</li>
     <li><strong>Results:</strong> P0 = iron losses (core losses). I0 = no-load current. PF0 = P0 / (V1 × I0).</li>
-    <li><strong>Practice:</strong> Run on LOW VOLTAGE side (secondary) to save power — apply rated LV voltage.</li>
+    <li><strong>Practice:</strong> Run on LOW VOLTAGE side (secondary) to save power - apply rated LV voltage.</li>
   </ul>
   <div class="n-h2">Short Circuit (Load) Test</div>
   <ul class="n-list">
     <li><strong>Setup:</strong> Short-circuit secondary. Apply REDUCED voltage to primary until rated current flows. Measure: Psc (watts), Vsc, I1.</li>
     <li><strong>Results:</strong> Psc = copper losses at rated current. Vsc = percentage impedance voltage.</li>
-    <li><strong>Practice:</strong> Run on HIGH VOLTAGE side (primary) — apply reduced voltage.</li>
+    <li><strong>Practice:</strong> Run on HIGH VOLTAGE side (primary) - apply reduced voltage.</li>
     <li><strong>Impedance:</strong> Percentage impedance Z% = (Vsc / V1rated) × 100%. Typical Z%: 4-8% for power transformers.</li>
   </ul>
 

@@ -103,7 +103,7 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
   </ol>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Temperature correction:</strong> Insulation resistance approximately halves for every <span class="n-val">10°C</span> rise in temperature. All readings must be corrected to <span class="n-val">40°C</span> baseline for comparison with previous records.</div></div>
-  <div class="n-formula">IR(40°C) = IR(measured) × 0.5^((T−40)/10)<div class="label">T = measured winding temperature in °C · Corrects readings to standard 40°C baseline for log comparison</div></div>
+  <div class="n-formula">IR(40°C) = IR(measured) × 2^((T−40)/10)<div class="label">T = measured winding temperature in °C · IR halves per 10°C rise, so hot readings × 2^n restores 40°C baseline · e.g. 10 MΩ at 80°C = 10 × 2⁴ = 160 MΩ at 40°C</div></div>
 
   <div class="n-h1" id="s-pi">📈 Polarisation Index (PI) Test</div>
   <div class="n-formula">PI = IR(10 minutes) / IR(1 minute)<div class="label">Both readings taken at the same test voltage. PI distinguishes dry from moisture-contaminated insulation.</div></div>

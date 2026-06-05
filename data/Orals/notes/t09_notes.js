@@ -315,10 +315,10 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
 
   <!-- ═══ MISSING V2.1 GAPS ═══ -->
   <div class="n-h1" id="s-boiler-alarms">Boiler Electrical Alarms &amp; Troubleshoot</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Sudhir — 'what is your role in boiler fault?'</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Sudhir - 'what is your role in boiler fault?'</strong></div></div>
   <ul class="n-list">
     <li><strong>ETO owns:</strong> All sensors (PT100, pressure/DP transmitters, level gauges), solenoid valves, ignition transformer, FD fan motor, BMS PLC.</li>
-    <li><strong>C/E owns:</strong> Mechanical issues — tube leaks, pump failures, combustion tuning.</li>
+    <li><strong>C/E owns:</strong> Mechanical issues - tube leaks, pump failures, combustion tuning.</li>
     <li><strong>Flame failure alarm:</strong> Check UV/IR flame detector (clean lens), check ignition transformer voltage, check solenoid valve (test with 24V), check BMS controller output.</li>
     <li><strong>High/low water level alarm:</strong> Check DP transmitter calibration, reference leg isolation valve open, drain valve closed, compare with sight glass.</li>
     <li><strong>FD fan motor fault:</strong> Check overload relay reset, thermistor resistance (normal: 100–200&Omega;, tripped: &gt;3k&Omega;), starter contactors, duct pressure switch.</li>
@@ -327,8 +327,8 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>FD fan motor vs normal motor:</strong> FD fan has high inertia → uses star-delta or soft starter. Normal motor may use DOL.</div></div>
 
   <div class="n-h1" id="s-tc-rpm">Turbocharger RPM Sensor</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Type:</strong> Magnetic pickup (variable reluctance) sensor — most common. Some high-speed TCs use eddy current or optical.</div></div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Ferromagnetic toothed wheel (phonic wheel) on TC shaft rotates past sensor tip. Each tooth passing changes magnetic flux through sensor coil — induces voltage pulse. Frequency of pulses = RPM of TC.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Type:</strong> Magnetic pickup (variable reluctance) sensor - most common. Some high-speed TCs use eddy current or optical.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Ferromagnetic toothed wheel (phonic wheel) on TC shaft rotates past sensor tip. Each tooth passing changes magnetic flux through sensor coil - induces voltage pulse. Frequency of pulses = RPM of TC.</div></div>
   <div class="n-p"><strong>Calibration:</strong> Count teeth &times; pulses per tooth &times; conversion factor = RPM. Usually preconfigured in tachometer.<br>
   <strong>Faults:</strong> Oil on sensor tip → weak signal. Air gap too large (&gt;<span class="n-val">2mm</span>) → no signal. Broken tooth → erratic RPM. Cable fault → zero reading. Clean tip, check gap during maintenance.</div>
 
@@ -340,27 +340,27 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <li><strong>Monitoring:</strong> Check heel angle display matches inclinometer. Check transfer pump current. Verify tank level sensors.</li>
   </ul>
 
-  <div class="n-h1" id="s-tev">TEV — Thermostatic Expansion Valve</div>
+  <div class="n-h1" id="s-tev">TEV - Thermostatic Expansion Valve</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Function:</strong> Regulates refrigerant flow into evaporator to maintain constant superheat at evaporator outlet.</div></div>
   <div class="n-p"><strong>Working:</strong> Sensor bulb on suction line detects superheat temperature. Bellows transmit pressure to valve needle. High superheat → valve opens more → more flow → superheat reduced. Low superheat → valve closes → less flow.</div>
   <div class="n-p"><strong>Typical setpoint:</strong> <span class="n-val">4–6&deg;C</span> above saturation temperature at evaporator pressure.<br>
   <strong>ETO check:</strong> Measure suction line temperature and pressure → calculate actual superheat → compare to set value. Adjust TEV if needed.</div>
 
-  <div class="n-h1" id="s-lo-alarm">Lube Oil Low Pressure Alarm — ETO Action</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: 'Generators running, suddenly LO low pressure alarm — ETO action?'</strong></div></div>
+  <div class="n-h1" id="s-lo-alarm">Lube Oil Low Pressure Alarm - ETO Action</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: 'Generators running, suddenly LO low pressure alarm - ETO action?'</strong></div></div>
   <ol class="n-steps">
     <li>Do NOT immediately stop engine. Inform C/E and bridge.</li>
-    <li>Check local LO pressure gauge — confirm alarm is genuine (not sensor fault).</li>
+    <li>Check local LO pressure gauge - confirm alarm is genuine (not sensor fault).</li>
     <li>Check LO pump running (listen, check ammeter, check local pressure).</li>
-    <li>Check LO sump level — if low, immediate risk of bearing damage.</li>
-    <li>Check LO pump inlet strainer — blocked strainer = low pressure.</li>
+    <li>Check LO sump level - if low, immediate risk of bearing damage.</li>
+    <li>Check LO pump inlet strainer - blocked strainer = low pressure.</li>
     <li>If pressure keeps dropping → prepare to switch to manual emergency stop to prevent bearing damage. Log all actions.</li>
   </ol>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>ETO Scope:</strong> Check LO pressure sensor calibration, level sensor, pump motor running (electrical). C/E handles mechanical cause.</div></div>
 
   <!-- ═══ MISSING V2.2 GAPS ═══ -->
-  <div class="n-h1" id="s-crane-safeties">Crane Safeties — ALL Types</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Deswal, Gopikrishna — 'all crane safeties' asked frequently.</strong></div></div>
+  <div class="n-h1" id="s-crane-safeties">Crane Safeties - ALL Types</div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Deswal, Gopikrishna - 'all crane safeties' asked frequently.</strong></div></div>
   <div class="n-h2">Mechanical Safeties</div>
   <ul class="n-list">
     <li><strong>Overload/Overhoist limit:</strong> Trips hoist motor when SWL exceeded or hook reaches top.</li>
@@ -377,10 +377,10 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
     <li><strong>Interlocks:</strong> Cannot operate hoist and slew simultaneously in some cranes.</li>
     <li><strong>Emergency stop:</strong> Accessible from crane cab and ground level.</li>
   </ul>
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>'Load hoisted mid-air, crane stopped, power cut — what holds the load?'</strong><br>Electromagnetic brake — spring-applied, fail-safe.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>'Load hoisted mid-air, crane stopped, power cut - what holds the load?'</strong><br>Electromagnetic brake - spring-applied, fail-safe.</div></div>
 
   <div class="n-h1" id="s-steering-alarms">Steering Gear Alarms &amp; Trips</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Gopikrishna, Sudhir — very commonly asked.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Sanjib, Gopikrishna, Sudhir - very commonly asked.</strong></div></div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--orange-border)">
       <div class="card-title" style="color:var(--orange)">ALARMS (Warning Only - No Trip)</div>
@@ -406,7 +406,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Resetting hydraulic lock (Hunting):</strong> Switch to NFU (Non-Follow-Up) control. Move tiller manually. Identify cause. Reset trip. Return to FU mode.</div></div>
 
   <div class="n-h1" id="s-gov-types">Governor Types</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad — 'types of governors? which type on main engine?'</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad - 'types of governors? which type on main engine?'</strong></div></div>
   <ol class="n-steps">
     <li><strong>MECHANICAL (Centrifugal/Flyball):</strong> Rotating flyweights driven by engine. Speed increases → flyweights fly out → fuel rack reduces. Used on older ME/AE.</li>
     <li><strong>HYDRAULIC-MECHANICAL (Woodward):</strong> Flyball + hydraulic servo amplifier. More precise. Used on most diesel generators.</li>
@@ -415,25 +415,25 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Summary Answer:</strong> "DG typically uses hydraulic-mechanical Woodward governor. ME uses electronic governor on modern ships."</div></div>
 
   <div class="n-h1" id="s-overspeed-test">Overspeed Relay Test Procedure</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad — 'how do you test overspeed relay?'</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: Kamath, Wad - 'how do you test overspeed relay?'</strong></div></div>
   <ul class="n-list">
     <li><strong>Method 1 (Setpoint reduction):</strong> Reduces governor speed setpoint → engine speed falls. <strong>(Tests governor, NOT overspeed relay).</strong></li>
-    <li><strong>Method 2 (Mechanical lift test — CORRECT):</strong> While engine runs at governed speed → manually lift the overspeed trip lever → confirm trip activates → engine shuts down. Reset manually after test.</li>
+    <li><strong>Method 2 (Mechanical lift test - CORRECT):</strong> While engine runs at governed speed → manually lift the overspeed trip lever → confirm trip activates → engine shuts down. Reset manually after test.</li>
     <li><strong>Method 3 (Electronic test):</strong> Press 'Overspeed test' button on governor panel → simulates overspeed signal → confirm relay trips.</li>
   </ul>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Why two systems?</strong> Governor adjusts fuel to maintain speed. Overspeed trip is a BACKUP — activates if governor fails and speed runs away. Testing one does not test the other.</div></div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Why two systems?</strong> Governor adjusts fuel to maintain speed. Overspeed trip is a BACKUP - activates if governor fails and speed runs away. Testing one does not test the other.</div></div>
 
   <!-- ═══ MISSING V2.3 GAPS ═══ -->
   <div class="n-h1" id="s-reefer-lo">Reefer Compressor LO Pressure Sensor</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: How ETO measures and calibrates the reefer compressor LO pressure sensor.</strong></div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why it's critical:</strong> Protects bearings. If LO pressure drops below min (typically <span class="n-val">1.5–2 bar</span>), compressor must trip immediately to prevent seizure.</div></div>
   <ol class="n-steps">
-    <li>Permit to work — notify C/E, stop compressor, allow LO pressure to equalise to zero.</li>
+    <li>Permit to work - notify C/E, stop compressor, allow LO pressure to equalise to zero.</li>
     <li>Isolate sensor at 3-valve manifold: close PROCESS ISOLATION valve, open EQUALISING BYPASS valve to vent residual pressure.</li>
     <li>Connect calibrated reference gauge (digital calibrator) to test tapping.</li>
     <li>Apply increasing test pressures in steps (0%, 25%, 50%, 75%, 100%). Compare panel reading with reference (Acceptable error: &plusmn;2%).</li>
     <li>If deviation exists: use HART communicator or trim screws to adjust zero and span.</li>
-    <li><strong>Test TRIP SETPOINT:</strong> Slowly reduce test pressure — note exact pressure when trip alarm activates (typically alarm <span class="n-val">2 bar</span>, trip <span class="n-val">1.5 bar</span>).</li>
+    <li><strong>Test TRIP SETPOINT:</strong> Slowly reduce test pressure - note exact pressure when trip alarm activates (typically alarm <span class="n-val">2 bar</span>, trip <span class="n-val">1.5 bar</span>).</li>
     <li>Restore manifold (close equalise, open isolation) and document test.</li>
   </ol>
 
@@ -442,7 +442,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> A large-bore valve (100–150 mm) fitted to the SUCTION SIDE of the main sea water cooling pump. Used for ONE purpose: emergency dewatering of the engine room when normal bilge pumps cannot cope.</div></div>
   <div class="n-p"><strong>Capacities:</strong> Dedicated bilge pump = <span class="n-val">10–50 m³/hr</span>. Main SW cooling pump = <span class="n-val">200–600 m³/hr</span>.<br>
   <strong>Procedure:</strong> Inform C/E and Master. Close SW cooling pump discharge to coolers (to avoid pumping bilge water through engine cooling systems). Open injection valve.</div>
-  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>NEVER use for normal bilge pumping</strong> — it uses the main cooling pump, which cannot simultaneously cool the engine while pumping the bilge. Valve is sealed shut normally.</div></div>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>NEVER use for normal bilge pumping</strong> - it uses the main cooling pump, which cannot simultaneously cool the engine while pumping the bilge. Valve is sealed shut normally.</div></div>
 
   <div class="n-h1" id="s-smoke-density">Smoke Density Meter</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "how does a smoke density meter work?"</strong></div></div>
@@ -450,7 +450,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <ul class="n-list">
     <li><strong>Air Purge System:</strong> Compressed air continuously purges across optical windows to prevent soot deposits. <em>Critical: without purge, readings are false high.</em></li>
     <li><strong>Clean Air Reference:</strong> Autozeros against clean air to compensate for lamp aging.</li>
-    <li><strong>ETO Maintenance:</strong> Verify purge pressure (0.3–0.5 bar) — most common failure mode. Clean lenses monthly when purge is off. Calibration check quarterly.</li>
+    <li><strong>ETO Maintenance:</strong> Verify purge pressure (0.3–0.5 bar) - most common failure mode. Clean lenses monthly when purge is off. Calibration check quarterly.</li>
   </ul>
 
   <div class="n-h1" id="s-drydock">Drydock Duties &amp; Working Aloft</div>
@@ -476,7 +476,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-h2">Lifeboat Sprinkler (Water Spray)</div>
   <div class="n-p"><strong>Purpose:</strong> Protects enclosed lifeboat from radiant heat/burning oil on sea surface. Engine-driven pump draws sea water through hull cock and sprays entire outer hull surface with continuous water film. Required by SOLAS LSC 4.4.</div>
 
-  <div class="n-h1" id="s-crane-speed">ER Crane — Speed Adjustment</div>
+  <div class="n-h1" id="s-crane-speed">ER Crane - Speed Adjustment</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL: "how do you adjust the speed of the ER crane?"</strong></div></div>
   <ul class="n-list">
     <li><strong>Type 1 - Pole Changing (Dahlander):</strong> Fixed at two steps (e.g. 8-pole low / 4-pole high). No fine adjustment possible. Check contactors/IR.</li>

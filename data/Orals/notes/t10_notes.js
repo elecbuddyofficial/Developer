@@ -154,7 +154,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
   2. At berth: mooring wires, gangways, shore power cables, and seawater all provide alternative metallic paths to the jetty's steel piling.<br>
   3. ICCP current strays into these alternative paths instead of returning normally.<br>
   4. When stray current EXITS from the jetty metalwork back into seawater to complete the circuit → that exit point becomes the ANODE → rapid anodic dissolution = corrosion of jetty steel.<br>
-  5. <span class="n-val">10 amps</span> of stray DC = dissolves <span class="n-val">~10 kg</span> of steel per year. A typical ICCP outputs 5-100A.<br>
+  5. <span class="n-val">10 amps</span> of stray DC = dissolves <span class="n-val">~91 kg</span> of steel per year (~9.1 kg per amp by Faraday's law). A typical ICCP outputs 5-100A.<br>
   6. Shore power connection additionally links ship hull to terminal earthing system - creates unpredictable current paths and false reference electrode readings.</div></div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Double problem at berth:</strong> (1) Stray current corrodes jetty infrastructure and nearby vessels. (2) Nearby metallic structures cause ship's reference electrode to read falsely → controller may over-protect the hull → hydrogen evolution + paint disbondment on own hull. Must switch OFF and fit galvanic isolator on shore earth conductor.</div></div>
 
@@ -238,7 +238,7 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><th>Topic</th><th>Frequency</th><th>Key Points</th></tr>
     <tr><td>ICCP working principle</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Hull = cathode | MMO/Ti anodes parallel | Ag/AgCl reference | <span class="n-val">-850 mV</span> setpoint | AC→DC controller</td></tr>
     <tr><td>Protection potential values</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Min <span class="n-val">-800 mV</span> | Target <span class="n-val">-850 mV</span> | Over-protection &lt;<span class="n-val">-1100 mV</span> | Output <span class="n-val">6–25V, 5–100A</span></td></tr>
-    <tr><td>Switch off at berth</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Stray current | <span class="n-val">10A</span> = <span class="n-val">10 kg</span> steel/year | False ref readings → over-protection</td></tr>
+    <tr><td>Switch off at berth</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Stray current | <span class="n-val">10A</span> = <span class="n-val">~91 kg</span> steel/year | False ref readings → over-protection</td></tr>
     <tr><td>Reference electrode</td><td class="hl">⭐⭐⭐⭐⭐ All surveyors</td><td>Ag/AgCl | Replace every <span class="n-val">2.5 years</span> | Gel depletes → drift</td></tr>
     <tr><td>Voltage trend over time</td><td class="hl">⭐⭐⭐⭐ Multiple surveyors</td><td>Aging hull → UP | Warm water → DOWN | Cold water → UP</td></tr>
     <tr><td>Bonding vs earthing</td><td class="hl">⭐⭐⭐⭐ Multiple surveyors</td><td>Bonding = equi-potential corrosion prevention | Earthing = safety fault path | &lt;<span class="n-val">1 Ω</span></td></tr>

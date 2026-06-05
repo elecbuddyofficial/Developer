@@ -246,13 +246,13 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Form Factor = RMS value / Average value.</strong> For a pure sine wave: π/(2√2) ≈ <strong>1.11</strong>.</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Significance:</strong> Transformers are designed based on this 1.11 factor. If supply is distorted by harmonics, the form factor increases above 1.11 → transformer core flux is higher than designed → increased iron losses → severe overheating. Also appears in generator EMF equation: E = 4.44 × f × N × Φm (where 4.44 = 4 × 1.11).</div></div>
 
-  <div class="n-h1" id="s-reactive">🔄 Reactive Power — Where Does It Go?</div>
+  <div class="n-h1" id="s-reactive">🔄 Reactive Power - Where Does It Go?</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM CRITICAL (Kamath): "Where does reactive power go?"</strong></div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body">Reactive power (kVAR) is <strong>NOT</strong> lost or dissipated as heat. It oscillates between the source and the load at twice the supply frequency. It is returned to the source every half cycle.</div></div>
   <ul class="n-list">
     <li><strong>In an induction motor:</strong> kVAR sustains the rotating magnetic field enabling torque. No kVAR = no magnetic field = no torque.</li>
     <li><strong>In a transformer:</strong> kVAR maintains the core magnetisation.</li>
-    <li><strong>Answer in one sentence:</strong> "Reactive power goes to the motor to sustain its magnetic field — it is returned to the source every half cycle, not consumed."</li>
+    <li><strong>Answer in one sentence:</strong> "Reactive power goes to the motor to sustain its magnetic field - it is returned to the source every half cycle, not consumed."</li>
   </ul>
 
   <div class="n-h1" id="s-avrsolas">📜 SOLAS Regulation for AVR</div>

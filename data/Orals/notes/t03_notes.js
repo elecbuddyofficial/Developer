@@ -255,45 +255,45 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Hunting:</strong> Oscillation of the rotor about the synchronous position when load fluctuates suddenly. The rotor tries to restore the equilibrium power angle but overshoots - oscillates. Damper winding damps these oscillations (acts as a brake on relative motion). <strong>Pole slipping:</strong> If the applied torque exceeds the maximum pull-out torque - the rotor loses synchronism completely. Motor must be stopped and re-started. Cause: sudden large overload, severe voltage dip.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Synchronous condenser:</strong> An overexcited synchronous motor running with NO mechanical load on its shaft. Overexcitation causes it to draw leading current - supplies leading kVAR to the busbar. Used for power factor correction where continuously variable leading kVAR is needed. More flexible than fixed capacitor banks.</div></div>
   <div class="n-h2">SG Motor Safety Features</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyor asked SG motor safety features — know all five.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyor asked SG motor safety features - know all five.</strong></div></div>
   <ul class="n-list">
-    <li><strong>Field failure relay:</strong> trips if DC excitation is lost — motor loses synchronism, pulls high current as induction motor, overheats.</li>
-    <li><strong>Out-of-step protection:</strong> detects when rotor falls out of synchronism — trips motor before damage.</li>
+    <li><strong>Field failure relay:</strong> trips if DC excitation is lost - motor loses synchronism, pulls high current as induction motor, overheats.</li>
+    <li><strong>Out-of-step protection:</strong> detects when rotor falls out of synchronism - trips motor before damage.</li>
     <li><strong>Under-voltage trip:</strong> protects on supply failure.</li>
     <li><strong>Overcurrent protection:</strong> standard motor protection.</li>
-    <li><strong>Starting protection:</strong> During asynchronous starting, field winding must be short-circuited or loaded with resistor — prevents high induced voltage in open field winding.</li>
+    <li><strong>Starting protection:</strong> During asynchronous starting, field winding must be short-circuited or loaded with resistor - prevents high induced voltage in open field winding.</li>
   </ul>
 
   <!-- ═══ ADVANCED MOTOR PHYSICS ═══ -->
   <div class="n-h1" id="s3-motor-physics">⚡ Advanced Motor Physics</div>
   <div class="n-h2">Motor Crawling - Cause &amp; Remedy</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Kolkata surveyors, Sanjib — "motor runs at slow speed after starting"</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Kolkata surveyors, Sanjib - "motor runs at slow speed after starting"</strong></div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Motor crawling:</strong> A squirrel cage induction motor locks into a stable but very low running speed of approximately <span class="n-val">1/7 of synchronous speed (Ns)</span> instead of accelerating to normal speed. Caused by the <strong>7th harmonic component</strong> in the air-gap flux (due to the non-sinusoidal distributed winding). The 7th harmonic produces a synchronous torque at 1/7 Ns that can be large enough to hold the motor at this low speed. <strong>Remedy:</strong> Use a skewed rotor (rotor bars angled relative to shaft axis) - this distributes the harmonic torque and prevents stable crawling torque dips. Alternative: use chorded (short-pitched) stator windings to reduce harmonic content.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: Why does a motor crawl and how is it prevented?</strong><br><strong>Ideal Answer:</strong> Crawling is when the motor runs stably at 1/7 synchronous speed due to the 7th harmonic flux component creating a locking torque. Recognised by: motor starts, accelerates to ~1/7 speed, then stops accelerating, runs noisily at low speed. Overcurrent follows. Prevented by skewed rotor slots (most common) or chorded stator windings.</div></div>
   <div class="n-h2">Eddy Current Losses - Cause &amp; Prevention</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Eddy currents:</strong> Circulating currents induced in the iron core by the changing magnetic flux. These flow in closed loops perpendicular to the flux and generate heat (I²R losses). <strong>Prevention:</strong> Assemble the core from thin insulated laminations of <span class="n-val">0.3–0.5 mm</span> thickness made from high-resistivity silicon steel. Each lamination is insulated from the next by a thin oxide coating or varnish. Eddy currents are forced to circulate within each thin lamination - path length and resistance increase dramatically → eddy current losses greatly reduced. Also present in transformers — same solution.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Eddy currents:</strong> Circulating currents induced in the iron core by the changing magnetic flux. These flow in closed loops perpendicular to the flux and generate heat (I²R losses). <strong>Prevention:</strong> Assemble the core from thin insulated laminations of <span class="n-val">0.3–0.5 mm</span> thickness made from high-resistivity silicon steel. Each lamination is insulated from the next by a thin oxide coating or varnish. Eddy currents are forced to circulate within each thin lamination - path length and resistance increase dramatically → eddy current losses greatly reduced. Also present in transformers - same solution.</div></div>
   <div class="n-h2">Double-Cage Rotor</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Kamath, Sanjib — where used on ships and why</strong></div></div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Double-cage rotor design:</strong> Two concentric squirrel cages on the same rotor. <strong>Outer cage:</strong> High resistance, low reactance (near the air gap). <strong>Inner cage:</strong> Low resistance, high reactance (deep in the rotor iron). At starting (high slip, high frequency rotor currents): skin effect concentrates current in outer high-resistance cage → high starting torque with limited starting current. At running speed (low slip, low frequency): current shifts to inner low-resistance cage → high efficiency, low copper losses. Used on ships for: windlass, mooring winch, anchor windlass, bow thruster motors — all need high starting torque. Advantage over single cage: better starting torque without external rotor resistance starter, better PF at running.</div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Kamath, Sanjib - where used on ships and why</strong></div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Double-cage rotor design:</strong> Two concentric squirrel cages on the same rotor. <strong>Outer cage:</strong> High resistance, low reactance (near the air gap). <strong>Inner cage:</strong> Low resistance, high reactance (deep in the rotor iron). At starting (high slip, high frequency rotor currents): skin effect concentrates current in outer high-resistance cage → high starting torque with limited starting current. At running speed (low slip, low frequency): current shifts to inner low-resistance cage → high efficiency, low copper losses. Used on ships for: windlass, mooring winch, anchor windlass, bow thruster motors - all need high starting torque. Advantage over single cage: better starting torque without external rotor resistance starter, better PF at running.</div></div>
   <div class="n-h2">Insulation Class</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Insulation class defines maximum operating temperature of winding insulation:</strong><br>
   Class B: 130°C maximum. Class F: 155°C maximum. Class H: 180°C maximum.<br>
-  <strong>Ship's alternator/generator:</strong> typically Class F (155°C) — operated at Class B temperature (130°C) for reliability margin.<br>
+  <strong>Ship's alternator/generator:</strong> typically Class F (155°C) - operated at Class B temperature (130°C) for reliability margin.<br>
   <strong>Main cooling seawater pump (MCSW) motor:</strong> typically Class F. Pump room motors in wet/humid environment need Class F or H minimum.<br>
-  Why asked: Surveyor checks you know the motor's thermal limits — important for IR test interpretation and alarm/trip settings.</div></div>
+  Why asked: Surveyor checks you know the motor's thermal limits - important for IR test interpretation and alarm/trip settings.</div></div>
   <div class="n-h2">Self-Synchronous Motor (Synchro / Selsyn)</div>
-  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>A transmitter-receiver pair that maintain exact angular correspondence.</strong> No power circuit — signal circuit only. Working: AC supply to transmitter rotor. Stator outputs 3-phase signal proportional to rotor angle. Receiver stator receives same signal — its rotor aligns to same angle as transmitter. Used on ships for: remote position indicators — rudder angle indicator, valve position indicator (remote), fuel level gauge. Advantage: continuous, accurate position feedback over long distances without mechanical linkage.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>A transmitter-receiver pair that maintain exact angular correspondence.</strong> No power circuit - signal circuit only. Working: AC supply to transmitter rotor. Stator outputs 3-phase signal proportional to rotor angle. Receiver stator receives same signal - its rotor aligns to same angle as transmitter. Used on ships for: remote position indicators - rudder angle indicator, valve position indicator (remote), fuel level gauge. Advantage: continuous, accurate position feedback over long distances without mechanical linkage.</div></div>
 
   <!-- ═══ MOTOR OVERHEATING ═══ -->
   <div class="n-h1" id="s3-overheating">🌡️ Motor Overheating - Causes and Actions</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Multiple surveyors — "why is motor overheating?" — know all 8 causes.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Multiple surveyors - "why is motor overheating?" - know all 8 causes.</strong></div></div>
   <ul class="n-list">
-    <li><strong>1. OVERLOAD:</strong> Motor driving excessive load — current exceeds rated → I²R heat in windings.</li>
-    <li><strong>2. SINGLE PHASING:</strong> One phase lost — remaining two phases carry ~2× current — severe heating.</li>
+    <li><strong>1. OVERLOAD:</strong> Motor driving excessive load - current exceeds rated → I²R heat in windings.</li>
+    <li><strong>2. SINGLE PHASING:</strong> One phase lost - remaining two phases carry ~2× current - severe heating.</li>
     <li><strong>3. UNDER-VOLTAGE:</strong> Low supply voltage → higher current for same torque → overheating.</li>
-    <li><strong>4. VENTILATION FAILURE:</strong> Blocked filters, failed cooling fan, dirty housing — heat cannot escape.</li>
-    <li><strong>5. HIGH AMBIENT:</strong> Engine room temperature exceeds design limit (usually 45°C) — less cooling margin.</li>
-    <li><strong>6. FREQUENT STARTING:</strong> Each start = 6–8× FLC inrush — frequent starts prevent cooling between starts.</li>
+    <li><strong>4. VENTILATION FAILURE:</strong> Blocked filters, failed cooling fan, dirty housing - heat cannot escape.</li>
+    <li><strong>5. HIGH AMBIENT:</strong> Engine room temperature exceeds design limit (usually 45°C) - less cooling margin.</li>
+    <li><strong>6. FREQUENT STARTING:</strong> Each start = 6–8× FLC inrush - frequent starts prevent cooling between starts.</li>
     <li><strong>7. BEARING FAILURE:</strong> Seized bearing increases mechanical load → thermal overload.</li>
     <li><strong>8. PHASE IMBALANCE:</strong> Unequal voltages → negative sequence currents → additional rotor heating.</li>
   </ul>
@@ -301,29 +301,29 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
 
   <!-- ═══ SINGLE PHASING ═══ -->
   <div class="n-h1" id="s3-single-phase">⚡ Single Phasing - Effect and Detection</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Deswal, Kamath — "what is single phasing and how do you detect it?"</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Deswal, Kamath - "what is single phasing and how do you detect it?"</strong></div></div>
   <ul class="n-list">
     <li>Single phasing: one of three phases is lost (fuse blown, contactor contact failure, cable break).</li>
-    <li>Running motor continues on two phases — draws heavy current in remaining phases (~2× normal, = √3 × normal).</li>
-    <li>Motor cannot develop full torque — will stall under heavy load.</li>
-    <li>Vibration increases — negative sequence currents produce counter-rotating torque.</li>
-    <li>Stopped motor in single-phase condition: CANNOT restart — starting torque is zero on two phases.</li>
-    <li><strong>Detection:</strong> (1) Ammeter per phase — missing phase shows zero. (2) Phase failure relay — trips on loss of any phase instantaneously.</li>
-    <li><strong>Protection:</strong> Use 3-element thermal overload relay with phase-sensitive protection — single-element will NOT protect against single-phasing adequately. Phase failure relay is best.</li>
+    <li>Running motor continues on two phases - draws heavy current in remaining phases (~2× normal, = √3 × normal).</li>
+    <li>Motor cannot develop full torque - will stall under heavy load.</li>
+    <li>Vibration increases - negative sequence currents produce counter-rotating torque.</li>
+    <li>Stopped motor in single-phase condition: CANNOT restart - starting torque is zero on two phases.</li>
+    <li><strong>Detection:</strong> (1) Ammeter per phase - missing phase shows zero. (2) Phase failure relay - trips on loss of any phase instantaneously.</li>
+    <li><strong>Protection:</strong> Use 3-element thermal overload relay with phase-sensitive protection - single-element will NOT protect against single-phasing adequately. Phase failure relay is best.</li>
   </ul>
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: What happens when a motor single-phases while running?</strong><br><strong>Ideal Answer:</strong> The motor continues running but on two phases only. The remaining two phase windings carry approximately 1.73× (√3) normal current to maintain torque. Motor overheats rapidly — winding insulation degrades. If heavily loaded it will stall. The 3-element thermal overload relay or phase failure relay should trip it. A motor that has single-phased at standstill cannot start — it hums and draws locked-rotor current until protection trips.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: What happens when a motor single-phases while running?</strong><br><strong>Ideal Answer:</strong> The motor continues running but on two phases only. The remaining two phase windings carry approximately 1.73× (√3) normal current to maintain torque. Motor overheats rapidly - winding insulation degrades. If heavily loaded it will stall. The 3-element thermal overload relay or phase failure relay should trip it. A motor that has single-phased at standstill cannot start - it hums and draws locked-rotor current until protection trips.</div></div>
 
   <!-- ═══ AFTER REWINDING ═══ -->
   <div class="n-h1" id="s3-rewind">🔧 Motor Checks After Rewinding</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Deswal: "Motor came back from shore after rewinding — what checks do you do?"</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Deswal: "Motor came back from shore after rewinding - what checks do you do?"</strong></div></div>
   <ol class="n-steps">
     <li><strong>Insulation Resistance (IR) test:</strong> All 3 phases to earth and between phases. Minimum 1 MΩ at 500V DC megger (per IEEE 43: 1 MΩ per kV + 1 MΩ). Healthy new winding ≫ 100 MΩ.</li>
-    <li><strong>Winding resistance balance:</strong> Measure DC resistance of all 3 phases with bridge meter. Should be balanced within 2–5% — unbalance indicates shorted turns or poor connections.</li>
+    <li><strong>Winding resistance balance:</strong> Measure DC resistance of all 3 phases with bridge meter. Should be balanced within 2–5% - unbalance indicates shorted turns or poor connections.</li>
     <li><strong>Terminal markings check:</strong> Confirm U1/U2, V1/V2, W1/W2 correctly labelled. If markings missing → find by testing.</li>
     <li><strong>Phase rotation check:</strong> Use phase rotation meter. Confirm same as original before connecting.</li>
     <li><strong>Surge / impulse test:</strong> Detects turn-to-turn insulation weakness not found by simple IR test (high-voltage surge comparison).</li>
-    <li><strong>High Voltage (Hi-Pot) test:</strong> Applied AC = 2 × rated voltage <span class="n-val">+1000 V</span> for 1 minute (IEC 60034-1) — proves insulation strength.</li>
-    <li><strong>No-load running test:</strong> Run uncoupled — check starting current, running current balance on three phases, vibration, bearing temperature and noise.</li>
+    <li><strong>High Voltage (Hi-Pot) test:</strong> Applied AC = 2 × rated voltage <span class="n-val">+1000 V</span> for 1 minute (IEC 60034-1) - proves insulation strength.</li>
+    <li><strong>No-load running test:</strong> Run uncoupled - check starting current, running current balance on three phases, vibration, bearing temperature and noise.</li>
     <li><strong>End-shield alignment:</strong> Ensure air gap is uniform after reassembly.</li>
     <li><strong>IP rating maintained:</strong> Check all cable gland seals and terminal box cover.</li>
   </ol>
@@ -331,16 +331,16 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
 
   <!-- ═══ MOTOR OVERHAULING ═══ -->
   <div class="n-h1" id="s3-motor-overhaul">🔧 Motor Overhauling Procedure</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Multiple candidates asked about motor overhauling procedure — 9 steps.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Multiple candidates asked about motor overhauling procedure - 9 steps.</strong></div></div>
   <ol class="n-steps">
     <li><strong>Isolate, permit to work:</strong> Lock off, tag out, verify dead with voltage tester.</li>
     <li><strong>Disconnect all cables:</strong> Mark with identification tags for reconnection.</li>
     <li><strong>Remove motor from mounting:</strong> Support shaft during removal to avoid bearing damage.</li>
     <li><strong>Disassemble:</strong> Remove end shields, extract rotor, inspect bearings for wear/pitting.</li>
     <li><strong>Clean windings:</strong> Dry compressed air, check IR, inspect for burn marks or tracking.</li>
-    <li><strong>Replace bearings:</strong> Standard practice during overhaul — fit correct grade per nameplate/bearing code.</li>
+    <li><strong>Replace bearings:</strong> Standard practice during overhaul - fit correct grade per nameplate/bearing code.</li>
     <li><strong>Reassemble and align:</strong> Refit to mounting, check coupling alignment.</li>
-    <li><strong>Megger test before energising:</strong> Record IR value — compare to previous record.</li>
+    <li><strong>Megger test before energising:</strong> Record IR value - compare to previous record.</li>
     <li><strong>Commission:</strong> Check rotation direction, measure running current all three phases, check vibration and bearing temperature.</li>
   </ol>
 
@@ -349,23 +349,23 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Multiple candidates asked about crane motor speed control.</strong></div></div>
   <ul class="n-list">
     <li><strong>1. POLE CHANGING (Dahlander winding):</strong> 2-pole = high speed, 4-pole = low speed. Simple, two fixed speeds only.</li>
-    <li><strong>2. ROTOR RESISTANCE (Slip ring motor):</strong> External resistance in rotor → increases slip → reduces speed. Steps decrease speed with good torque — used historically for cranes.</li>
-    <li><strong>3. VFD (Variable Frequency Drive):</strong> Full variable speed, smooth control, regenerative braking. Modern cranes — best method.</li>
-    <li><strong>4. CASCADE CONTROL:</strong> Two coupled motors — auxiliary motor fed from rotor circuit. Less common.</li>
+    <li><strong>2. ROTOR RESISTANCE (Slip ring motor):</strong> External resistance in rotor → increases slip → reduces speed. Steps decrease speed with good torque - used historically for cranes.</li>
+    <li><strong>3. VFD (Variable Frequency Drive):</strong> Full variable speed, smooth control, regenerative braking. Modern cranes - best method.</li>
+    <li><strong>4. CASCADE CONTROL:</strong> Two coupled motors - auxiliary motor fed from rotor circuit. Less common.</li>
   </ul>
 
   <!-- ═══ BACK EMF ═══ -->
   <div class="n-h1" id="s3-back-emf">⚡ Back EMF - Principle and Reversing Switch</div>
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>"What is back EMF?" and reversing switch operation — exam critical.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>"What is back EMF?" and reversing switch operation - exam critical.</strong></div></div>
   <ul class="n-list">
-    <li><strong>Back EMF:</strong> Voltage generated by the rotating motor opposing the supply voltage — increases as motor accelerates.</li>
+    <li><strong>Back EMF:</strong> Voltage generated by the rotating motor opposing the supply voltage - increases as motor accelerates.</li>
     <li><strong>At no load:</strong> Back EMF ≈ supply voltage → very small net voltage → small current (magnetising + friction losses only).</li>
     <li><strong>At full load:</strong> Load slows rotor → back EMF drops → larger net voltage → more current → more torque (self-regulating).</li>
     <li><strong>At starting:</strong> Back EMF = 0 → full supply across winding resistance → 6–8× FLC starting current.</li>
-    <li><strong>DC motor:</strong> Back EMF = φ × N × K (proportional to speed) — used in DC speed control (field weakening increases speed by reducing back EMF margin).</li>
-    <li><strong>3-pole double-throw (reversing) switch:</strong> Swaps two phases → reverses motor rotation direction. Used for reversing duty: bilge pumps, windlass, crane. MUST stop motor before switching — never switch under load.</li>
+    <li><strong>DC motor:</strong> Back EMF = φ × N × K (proportional to speed) - used in DC speed control (field weakening increases speed by reducing back EMF margin).</li>
+    <li><strong>3-pole double-throw (reversing) switch:</strong> Swaps two phases → reverses motor rotation direction. Used for reversing duty: bilge pumps, windlass, crane. MUST stop motor before switching - never switch under load.</li>
   </ul>
-  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: What is back EMF and what is its significance?</strong><br><strong>Ideal Answer:</strong> Back EMF is the counter-voltage generated by the rotating armature opposing the supply. It increases with speed. At starting, back EMF is zero — full supply voltage drives current through winding resistance → very high starting current. As speed increases, back EMF increases → net driving voltage decreases → current falls to normal running level. This is the self-regulating mechanism of a DC motor: increased load slows rotor → back EMF drops → more current → more torque automatically.</div></div>
+  <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: What is back EMF and what is its significance?</strong><br><strong>Ideal Answer:</strong> Back EMF is the counter-voltage generated by the rotating armature opposing the supply. It increases with speed. At starting, back EMF is zero - full supply voltage drives current through winding resistance → very high starting current. As speed increases, back EMF increases → net driving voltage decreases → current falls to normal running level. This is the self-regulating mechanism of a DC motor: increased load slows rotor → back EMF drops → more current → more torque automatically.</div></div>
 
   <!-- ═══ FRAME DETAIL ═══ -->
   <div class="n-h1" id="s3-frame-detail">📏 Motor Frame Numbers &amp; Precision Alignment</div>
@@ -380,7 +380,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <ol class="n-steps">
     <li><strong>Alignment check:</strong> Use dial gauge on coupling face (angular and parallel). Also check with straight edge across coupling halves. Tolerance &lt;0.05 mm.</li>
     <li><strong>Coupling bolts:</strong> Check torque to manufacturer spec. Check anti-vibration rubber insert condition (for flexible couplings).</li>
-    <li><strong>End float check:</strong> Measure axial movement — must be within spec to avoid thrust bearing overload.</li>
+    <li><strong>End float check:</strong> Measure axial movement - must be within spec to avoid thrust bearing overload.</li>
     <li><strong>After brief run:</strong> Check vibration (compare to baseline), bearing temperature. No abnormal noise.</li>
     <li><strong>Record:</strong> Log alignment readings, bolt torques, date in maintenance file.</li>
   </ol>
@@ -422,7 +422,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
     <tr><td>Wash-down / car decks / RoRo</td><td class="hl"><span class="n-val">IP56</span></td><td>High-impact heavy water jets from any direction</td></tr>
     <tr><td>Intermittent bilge / submersion</td><td class="hl"><span class="n-val">IP68</span></td><td>Continuous underwater submersion</td></tr>
   </table>
-  <div class="n-h2">5kW 440V Motor — Specs &amp; Starter Selection</div>
+  <div class="n-h2">5kW 440V Motor - Specs &amp; Starter Selection</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyor asked motor nameplate data and starter selection for a 5 kW pump motor.</strong></div></div>
   <ul class="n-list">
     <li>FLC = P/(√3 × V × PF × η) ≈ 5000/(1.732 × 440 × 0.85 × 0.90) ≈ <span class="n-val">8.5 A</span></li>
@@ -430,7 +430,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
     <li>Speed: ~1450 rpm (4-pole, 50Hz synchronous = 1500 rpm, ~3% slip)</li>
     <li><strong>Autotransformer starter:</strong> reduces voltage to 65–80% → reduces current and torque as V². Use when load needs medium starting torque.</li>
     <li><strong>Soft starter:</strong> gradually ramps voltage 0→100%. Smooth start, adjustable ramp. Most suitable for pumps.</li>
-    <li><strong>Selection for 5 kW pump:</strong> Soft starter preferred — gentle ramp, no water hammer, protects pipe fittings.</li>
+    <li><strong>Selection for 5 kW pump:</strong> Soft starter preferred - gentle ramp, no water hammer, protects pipe fittings.</li>
   </ul>
 
   <!-- ═══ MOTOR PROTECTION ═══ -->
@@ -455,7 +455,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   • <strong>Fuse element:</strong> Silver or silver-copper alloy (low resistance, high melting point) - designed to vaporise cleanly at fault current<br>
   • <strong>Arc quenching filler:</strong> Silica sand (quartz granules) packed around the element - when element vaporises, the arc energy is absorbed and quenched by the sand<br>
   • <strong>Breaking capacity:</strong> <span class="n-val">80–100 kA</span> - safely interrupts very high fault currents without explosive failure<br>
-  <strong>Motor circuit fuse selection rule:</strong> HRC fuse must be rated at <span class="n-val">1.5–2.5 × motor Full Load Current (FLC)</span>. Must pass the starting surge (6–8 × FLC lasting 5–15 seconds) without blowing, but must clear a fault current quickly. Never use rewirable fuse on 440V MSB feeder — unsafe, inaccurate rating, slow operation.</div></div>
+  <strong>Motor circuit fuse selection rule:</strong> HRC fuse must be rated at <span class="n-val">1.5–2.5 × motor Full Load Current (FLC)</span>. Must pass the starting surge (6–8 × FLC lasting 5–15 seconds) without blowing, but must clear a fault current quickly. Never use rewirable fuse on 440V MSB feeder - unsafe, inaccurate rating, slow operation.</div></div>
   <div class="n-h2">ISO Bearing Code - Decoder</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Example: Bearing 6205-2RS</strong><br>
   • <strong>6</strong> = Deep-groove ball bearing (type designation). 7=angular contact, 2=spherical roller, 3=cylindrical roller.<br>
@@ -469,20 +469,20 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <!-- ═══ SURVEYOR Q&A ═══ -->
   <div class="n-h1" id="s-surveyor-qa">🗣️ Surveyor Q&amp;A (Topic 3: Electric Motors)</div>
   <table class="n-table">
-    <tr><th>Examiner Question</th><th>Ideal Answer — Key Points</th></tr>
+    <tr><th>Examiner Question</th><th>Ideal Answer - Key Points</th></tr>
     <tr><td><strong>Q (Sanjib): Why does a 3-phase induction motor draw 6-8× FLC on starting?</strong></td><td>At standstill, motor acts like a transformer with short-circuited secondary (squirrel cage rotor). Slip = 1. RMF cuts stationary rotor bars at maximum speed → maximum induced EMF → maximum rotor current. Stator must supply balancing current. As rotor accelerates, slip decreases, back-EMF builds, current drops to normal.</td></tr>
-    <tr><td><strong>Q (Nair): Single-phasing — running vs standstill?</strong></td><td>Running: motor continues on two phases, draws ~1.73× current in remaining phases, overheats, overload relay should trip. Standstill: motor cannot start — hums and draws locked-rotor current because RMF cannot be established — will burn out quickly if not tripped.</td></tr>
+    <tr><td><strong>Q (Nair): Single-phasing - running vs standstill?</strong></td><td>Running: motor continues on two phases, draws ~1.73× current in remaining phases, overheats, overload relay should trip. Standstill: motor cannot start - hums and draws locked-rotor current because RMF cannot be established - will burn out quickly if not tripped.</td></tr>
     <tr><td><strong>Q (Kamath): How to change direction of rotation?</strong></td><td>Swap any two of the three supply phases. This reverses the phase sequence (R-Y-B → Y-R-B), which reverses the direction of the RMF, and the rotor follows it.</td></tr>
     <tr><td><strong>Q (Deswal): Why high starting current?</strong></td><td>At standstill slip=1, rotor frequency = 50 Hz, squirrel cage rotor has very low resistance → large EMF + low impedance = 5–8× FLC. Causes busbar voltage dip, cable heating, possible generator trip.</td></tr>
-    <tr><td><strong>Q (Kamath, Sanjib): Explain Ward-Leonard system.</strong></td><td>AC motor drives DC generator at constant speed. Generator field rheostat varied → generator output voltage varies 0 to max → DC motor armature voltage and speed controlled smoothly. Reversing generator field reverses motor direction. Stepless, both directions, inherent regenerative braking. Bulky — 3 machines — now replaced by VFD/thyristor.</td></tr>
+    <tr><td><strong>Q (Kamath, Sanjib): Explain Ward-Leonard system.</strong></td><td>AC motor drives DC generator at constant speed. Generator field rheostat varied → generator output voltage varies 0 to max → DC motor armature voltage and speed controlled smoothly. Reversing generator field reverses motor direction. Stepless, both directions, inherent regenerative braking. Bulky - 3 machines - now replaced by VFD/thyristor.</td></tr>
     <tr><td><strong>Q (Sanjib): What is DC injection braking?</strong></td><td>AC supply disconnected, DC injected into stator → produces stationary magnetic field. Rotating rotor cuts stationary field → induced rotor currents → braking torque → rapid standstill. Heat dissipated in rotor. No mechanical wear. Used on fans and pumps.</td></tr>
     <tr><td><strong>Q (Sanjib, Kamath): What is armature reaction?</strong></td><td>Distortion and weakening of main field flux by armature current's magnetic field. Cross-magnetising effect shifts MNA → brush sparking. Demagnetising effect reduces torque. Remedied by interpoles (series with armature) and compensating windings in pole faces.</td></tr>
-    <tr><td><strong>Q (Kolkata, Sanjib): Motor crawling — cause and prevention?</strong></td><td>Motor locks at 1/7 Ns due to 7th harmonic flux component. Prevented by skewed rotor slots (most common) or chorded stator windings.</td></tr>
-    <tr><td><strong>Q (Multiple): Motor overheating — causes?</strong></td><td>Overload, single phasing, under-voltage, ventilation failure, high ambient temperature, frequent starting, bearing failure, phase imbalance (negative sequence currents).</td></tr>
-    <tr><td><strong>Q (Deswal): Motor after rewinding — checks?</strong></td><td>IR test (phase-earth + phase-phase), resistance balance ±2%, terminal marking confirmation, phase rotation check, Hi-Pot test at 2V+1000V for 1 min, no-load run checking current balance, vibration, bearing temp, IP rating maintained.</td></tr>
-    <tr><td><strong>Q (Multiple): Crane motor speed control methods?</strong></td><td>Pole changing (Dahlander — 2 fixed speeds), rotor resistance (slip ring — stepped speed reduction), VFD (full variable, modern), cascade control (less common).</td></tr>
+    <tr><td><strong>Q (Kolkata, Sanjib): Motor crawling - cause and prevention?</strong></td><td>Motor locks at 1/7 Ns due to 7th harmonic flux component. Prevented by skewed rotor slots (most common) or chorded stator windings.</td></tr>
+    <tr><td><strong>Q (Multiple): Motor overheating - causes?</strong></td><td>Overload, single phasing, under-voltage, ventilation failure, high ambient temperature, frequent starting, bearing failure, phase imbalance (negative sequence currents).</td></tr>
+    <tr><td><strong>Q (Deswal): Motor after rewinding - checks?</strong></td><td>IR test (phase-earth + phase-phase), resistance balance ±2%, terminal marking confirmation, phase rotation check, Hi-Pot test at 2V+1000V for 1 min, no-load run checking current balance, vibration, bearing temp, IP rating maintained.</td></tr>
+    <tr><td><strong>Q (Multiple): Crane motor speed control methods?</strong></td><td>Pole changing (Dahlander - 2 fixed speeds), rotor resistance (slip ring - stepped speed reduction), VFD (full variable, modern), cascade control (less common).</td></tr>
     <tr><td><strong>Q: What is back EMF?</strong></td><td>Counter-voltage generated by rotating armature opposing supply. Zero at standstill → full supply drives high starting current. Increases with speed → reduces net voltage → current falls to running level. Self-regulating: more load → speed drops → back EMF drops → more current → more torque automatically.</td></tr>
-    <tr><td><strong>Q (Kamath, Sanjib): Double-cage rotor — where used and why?</strong></td><td>Outer cage: high-R, low-X. Inner cage: low-R, high-X. At starting: skin effect → outer cage carries current → high starting torque. At running: inner cage carries current → efficient running. Used: windlass, mooring winch, bow thruster — high starting torque needed without external rotor resistance.</td></tr>
+    <tr><td><strong>Q (Kamath, Sanjib): Double-cage rotor - where used and why?</strong></td><td>Outer cage: high-R, low-X. Inner cage: low-R, high-X. At starting: skin effect → outer cage carries current → high starting torque. At running: inner cage carries current → efficient running. Used: windlass, mooring winch, bow thruster - high starting torque needed without external rotor resistance.</td></tr>
     <tr><td><strong>Q: SG motor safety features?</strong></td><td>Field failure relay (loss of DC excitation), out-of-step protection (loss of synchronism), under-voltage trip, overcurrent protection, starting protection (field winding short-circuited during asynchronous start).</td></tr>
   </table>
 
