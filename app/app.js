@@ -1500,6 +1500,297 @@ document.addEventListener('click', function(e) {
 });
 
 // ═══════════════════════════════════════════════════════
+// APP GUIDE
+// ═══════════════════════════════════════════════════════
+
+var _guideStep = 0;
+var _guideActive = false;
+var _guideTimer = null;
+var _guideResizeTimer = null;
+
+var GUIDE_STEPS = [
+    { type: 'slide', id: 'welcome' },
+    {
+        type: 'spotlight',
+        view: 'welcome',
+        openSidebar: true,
+        target: '#sb-nav-main',
+        pad: 6,
+        title: 'Your navigation',
+        body: 'These three buttons are how you move around the app. Tap Oral Exam Section to start your oral prep, Written Section for regulatory topics, or Quiz Bank for standalone practice.',
+        prefer: 'right'
+    },
+    {
+        type: 'spotlight',
+        view: 'oral',
+        target: '#view-oral .welcome-grid',
+        pad: 10,
+        title: 'Inside the Oral Section',
+        body: 'Three areas inside Oral. Each one is a different way to prepare. Here is what they do:',
+        prefer: 'bottom'
+    },
+    {
+        type: 'spotlight',
+        view: 'oral',
+        target: '#view-oral .welcome-card:first-child',
+        pad: 8,
+        title: 'Study Notes',
+        body: 'Tap any of the 23 topics to open fully formatted notes with tables, diagrams, and step-by-step procedures. Colour-coded and structured for fast revision.',
+        prefer: 'bottom'
+    },
+    {
+        type: 'spotlight',
+        view: 'oral',
+        target: '#view-oral .welcome-card:nth-child(2)',
+        pad: 8,
+        title: 'Quiz Practice',
+        body: 'Drill topic-by-topic with 5,643 questions. Pick a category, answer questions, and get instant feedback with full explanations after every answer.',
+        prefer: 'bottom'
+    },
+    {
+        type: 'spotlight',
+        view: 'oral',
+        target: '.sq-oral-card',
+        pad: 8,
+        title: 'Surveyor Q&A',
+        body: 'Real questions asked by MMD surveyors in actual exams, with model answers. Filter by surveyor name or topic to prepare for exactly who you might be facing.',
+        prefer: 'top'
+    },
+    {
+        type: 'spotlight',
+        view: 'written',
+        target: '#view-written .welcome-card:first-child',
+        pad: 8,
+        title: 'Written Section',
+        body: 'Structured notes and worked examples for ISM, SOLAS, MARPOL, MLC and more. Built to give you clear answers for the written paper without digging through textbooks.',
+        prefer: 'bottom'
+    },
+    {
+        type: 'spotlight',
+        view: 'welcome',
+        openSidebar: true,
+        target: '#gsearch-area',
+        pad: 6,
+        title: 'Search everything',
+        body: 'Type any keyword and jump straight to the right topic across all notes. Try "alternator", "earth fault", or "MARPOL". Works across oral and written sections.',
+        prefer: 'bottom'
+    },
+    { type: 'slide', id: 'support' }
+];
+
+function startGuide() {
+    _guideStep = 0;
+    _guideActive = true;
+    var ov = document.getElementById('guide-overlay');
+    ov.style.display = 'block';
+    ov.style.opacity = '0';
+    requestAnimationFrame(function() {
+        ov.style.transition = 'opacity 0.35s ease';
+        ov.style.opacity = '1';
+    });
+    _guideShowStep(0);
+}
+
+function guideNext() {
+    _guideStep++;
+    if (_guideStep >= GUIDE_STEPS.length) { guideDismiss(true); return; }
+    _guideShowStep(_guideStep);
+}
+
+function guideDismiss(save) {
+    if (save) localStorage.setItem('guide_seen', '1');
+    _guideActive = false;
+    clearTimeout(_guideTimer);
+    var ov = document.getElementById('guide-overlay');
+    ov.style.transition = 'opacity 0.3s ease';
+    ov.style.opacity = '0';
+    setTimeout(function() {
+        ov.style.display = 'none';
+        ov.style.opacity = '';
+        ov.style.transition = '';
+        document.getElementById('guide-spotlight').style.display = 'none';
+        document.getElementById('guide-tooltip').style.display = 'none';
+        document.getElementById('guide-slide-wrap').style.display = 'none';
+        if (window.innerWidth <= 768) closeMobileMenu();
+    }, 310);
+}
+
+function _guideShowStep(idx) {
+    var step = GUIDE_STEPS[idx];
+    _guideDots(idx);
+    if (step.type === 'slide') _guideSlide(step);
+    else _guideSpotlight(step, idx);
+}
+
+function _guideSlide(step) {
+    document.getElementById('guide-spotlight').style.display = 'none';
+    document.getElementById('guide-tooltip').style.display = 'none';
+    var wrap = document.getElementById('guide-slide-wrap');
+    var card = document.getElementById('guide-slide-card');
+    wrap.style.display = 'flex';
+    card.innerHTML = step.id === 'welcome' ? _guideWelcomeHTML() : _guideSupportHTML();
+    card.style.opacity = '0';
+    card.style.transform = 'scale(0.96) translateY(18px)';
+    requestAnimationFrame(function() {
+        card.style.transition = 'opacity 0.38s ease, transform 0.42s cubic-bezier(0.34,1.56,0.64,1)';
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1) translateY(0)';
+    });
+}
+
+function _guideWelcomeHTML() {
+    return '<div style="text-align:center">'
+        + '<div style="font-size:50px;margin-bottom:18px;filter:drop-shadow(0 4px 18px rgba(168,85,247,0.45))">🎓</div>'
+        + '<h2 style="font-size:21px;font-weight:800;color:var(--text);margin-bottom:10px;line-height:1.3">Welcome to MMD Elec Buddy</h2>'
+        + '<p style="font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:28px">Your complete ETO exam prep companion. Let\'s take a quick tour so you know exactly how to use this.</p>'
+        + '<button class="guide-btn-primary" onclick="guideNext()">Take the tour</button>'
+        + '<div style="margin-top:13px"><button class="guide-btn-text" onclick="guideDismiss(true)">Skip for now</button></div>'
+        + '</div>';
+}
+
+function _guideSupportHTML() {
+    return '<div style="text-align:center">'
+        + '<div style="display:flex;justify-content:center;gap:12px;margin-bottom:26px;flex-wrap:wrap">'
+        + _gStat('23','Topics') + _gStat('5,643','Questions') + _gStat('281','Surveyor Answers')
+        + '</div>'
+        + '<h2 style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Keep it free for everyone.</h2>'
+        + '<p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px">Most cadets studying for MMD can\'t afford paid subscriptions. This app exists to change that.</p>'
+        + '<p style="font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:8px">Every note and question here was tracked down from MMD forums, study materials, and real exam reports. Months of work - and it\'s still growing.</p>'
+        + '<p style="font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:28px">If you\'re in a position to help, your support means everything and keeps it free for the ones who aren\'t.</p>'
+        + '<a href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" class="guide-btn-support" onclick="setTimeout(function(){guideDismiss(true)},400)">Support this project</a>'
+        + '<div style="margin-top:14px"><button class="guide-btn-text" onclick="guideDismiss(true)">Start studying</button></div>'
+        + '</div>';
+}
+
+function _gStat(num, label) {
+    return '<div class="guide-stat-box"><div class="guide-stat-num">' + num + '</div><div class="guide-stat-lbl">' + label + '</div></div>';
+}
+
+function _guideSpotlight(step, idx) {
+    document.getElementById('guide-slide-wrap').style.display = 'none';
+
+    if (step.view) _guideNav(step.view);
+
+    if (step.openSidebar && window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebar-overlay').classList.add('open');
+    } else if (!step.openSidebar) {
+        closeMobileMenu();
+    }
+
+    clearTimeout(_guideTimer);
+    _guideTimer = setTimeout(function() {
+        var el = document.querySelector(step.target);
+        if (!el) { guideNext(); return; }
+
+        el.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+
+        var rect = el.getBoundingClientRect();
+        var pad = step.pad || 8;
+        var sp = document.getElementById('guide-spotlight');
+        var firstTime = sp.style.display === 'none';
+
+        sp.style.display = 'block';
+        if (firstTime) {
+            sp.style.transition = 'none';
+            sp.style.opacity = '0';
+            requestAnimationFrame(function() {
+                sp.style.transition = 'opacity 0.3s ease';
+                sp.style.opacity = '1';
+            });
+        } else {
+            sp.style.transition = 'top 0.38s cubic-bezier(0.25,1,0.5,1), left 0.38s cubic-bezier(0.25,1,0.5,1), width 0.38s cubic-bezier(0.25,1,0.5,1), height 0.38s cubic-bezier(0.25,1,0.5,1), border-radius 0.38s ease';
+        }
+        sp.style.top    = (rect.top  - pad) + 'px';
+        sp.style.left   = (rect.left - pad) + 'px';
+        sp.style.width  = (rect.width  + pad * 2) + 'px';
+        sp.style.height = (rect.height + pad * 2) + 'px';
+        var br = parseInt(window.getComputedStyle(el).borderRadius) || 12;
+        sp.style.borderRadius = Math.min(br + pad, 24) + 'px';
+
+        _guideTooltip(rect, pad, step, idx);
+    }, step.view || step.openSidebar ? 260 : 60);
+}
+
+function _guideTooltip(targetRect, pad, step, idx) {
+    var tt = document.getElementById('guide-tooltip');
+    var spotlights = GUIDE_STEPS.filter(function(s) { return s.type === 'spotlight'; });
+    var spIdx = 0;
+    for (var i = 0; i <= idx; i++) { if (GUIDE_STEPS[i].type === 'spotlight') spIdx++; }
+
+    document.getElementById('guide-tt-step').textContent = 'Step ' + spIdx + ' of ' + spotlights.length;
+    document.getElementById('guide-tt-title').textContent = step.title;
+    document.getElementById('guide-tt-body').textContent = step.body;
+
+    tt.style.visibility = 'hidden';
+    tt.style.display = 'block';
+    tt.style.opacity = '0';
+    var tw = tt.offsetWidth, th = tt.offsetHeight;
+    tt.style.visibility = '';
+
+    var vw = window.innerWidth, vh = window.innerHeight, mg = 12;
+    var sT = targetRect.top - pad, sL = targetRect.left - pad;
+    var sR = targetRect.right + pad, sB = targetRect.bottom + pad;
+    var sW = targetRect.width + pad * 2, sH = targetRect.height + pad * 2;
+
+    var placements = [step.prefer, 'bottom', 'top', 'right', 'left'].filter(Boolean);
+    var seen = {};
+    placements = placements.filter(function(p) { return seen[p] ? false : (seen[p] = true); });
+
+    var top, left, placed = false;
+    for (var pi = 0; pi < placements.length; pi++) {
+        var pos = placements[pi];
+        if (pos === 'bottom')      { top = sB + mg;             left = sL + sW/2 - tw/2; }
+        else if (pos === 'top')    { top = sT - th - mg;        left = sL + sW/2 - tw/2; }
+        else if (pos === 'right')  { top = sT + sH/2 - th/2;   left = sR + mg; }
+        else                       { top = sT + sH/2 - th/2;   left = sL - tw - mg; }
+        left = Math.max(mg, Math.min(left, vw - tw - mg));
+        top  = Math.max(mg, Math.min(top,  vh - th - mg));
+        if (top >= mg && top+th <= vh-mg && left >= mg && left+tw <= vw-mg) { placed = true; break; }
+    }
+    if (!placed) {
+        left = Math.max(mg, Math.min((vw-tw)/2, vw-tw-mg));
+        top = sB + mg;
+        if (top + th > vh - mg) top = Math.max(mg, sT - th - mg);
+    }
+
+    tt.style.top  = top  + 'px';
+    tt.style.left = left + 'px';
+    requestAnimationFrame(function() {
+        tt.style.transition = 'opacity 0.25s ease';
+        tt.style.opacity = '1';
+    });
+}
+
+function _guideDots(idx) {
+    var el = document.getElementById('guide-dots');
+    if (!el) return;
+    var html = '';
+    GUIDE_STEPS.forEach(function(_, i) { html += '<span class="guide-dot' + (i === idx ? ' active' : '') + '"></span>'; });
+    el.innerHTML = html;
+}
+
+function _guideNav(name) {
+    var prev = window._isRouting;
+    window._isRouting = true;
+    showView(name);
+    window._isRouting = prev;
+}
+
+window.addEventListener('resize', function() {
+    if (!_guideActive) return;
+    clearTimeout(_guideResizeTimer);
+    _guideResizeTimer = setTimeout(function() {
+        var step = GUIDE_STEPS[_guideStep];
+        if (step && step.type === 'spotlight') _guideSpotlight(step, _guideStep);
+    }, 150);
+});
+
+setTimeout(function() {
+    if (!localStorage.getItem('guide_seen')) startGuide();
+}, 900);
+
+// ═══════════════════════════════════════════════════════
 // ORAL SCROLL HINT
 // ═══════════════════════════════════════════════════════
 var _oshTimer = null;

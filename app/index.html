@@ -14,6 +14,7 @@
   </button>
   <div class="logo">ETO <b style="color:var(--text); font-weight:inherit;">Exam</b> Prep <span>ETO CoC · STCW Reg. III/6</span></div>
   <div class="spacer"></div>
+  <button id="guide-relaunch-btn" onclick="startGuide()" title="App guide" aria-label="Open app guide">?</button>
   <div class="tb-badge" id="topbar-badge"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic 1 of 23</div>
 </div>
 <div id="layout">
@@ -42,6 +43,7 @@
       <div id="gsearch-results" class="gsearch-scroll"></div>
     </div>
   </div>
+  <div id="sb-nav-main">
   <button class="sb-item" id="si-oral" onclick="showView('oral')">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg></span><span class="label">Oral Exam Section</span>
   </button>
@@ -51,6 +53,7 @@
   <button class="sb-item" id="si-quiz-bank" onclick="showView('quiz-bank');initQuizBank()">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></span><span class="label">Quiz Bank</span>
   </button>
+  </div>
   <div id="topic-side-list"></div>
   <div class="sb-spacer"></div>
   <a class="sb-item" href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="color:var(--orange);font-weight:700;background:rgba(245, 158, 11, 0.05);border:1px solid rgba(245, 158, 11, 0.2)">
@@ -407,6 +410,26 @@
 
 
 
+
+<!-- ══════════ APP GUIDE OVERLAY ══════════ -->
+<div id="guide-overlay">
+  <div id="guide-spotlight"></div>
+  <div id="guide-tooltip">
+    <div class="guide-tt-header">
+      <span id="guide-tt-step" class="guide-tt-stepcount"></span>
+      <button class="guide-tt-skip" onclick="guideDismiss(true)">Skip guide</button>
+    </div>
+    <div id="guide-tt-title" class="guide-tt-title"></div>
+    <div id="guide-tt-body" class="guide-tt-body"></div>
+    <div class="guide-tt-footer">
+      <div id="guide-dots"></div>
+      <button class="guide-btn-next" onclick="guideNext()">Next &rarr;</button>
+    </div>
+  </div>
+  <div id="guide-slide-wrap">
+    <div id="guide-slide-card"></div>
+  </div>
+</div>
 
 <!-- ── Oral Scroll Hint (mobile first-visit) ── -->
 <div id="oral-scroll-hint" style="display:none;position:fixed;bottom:88px;left:50%;transform:translateX(-50%);z-index:600;flex-direction:column;align-items:center;gap:6px;pointer-events:auto">
