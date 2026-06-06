@@ -385,6 +385,8 @@ function showView(n){
   if(n==='written-notes-picker')buildWrittenTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
   if(n==='quiz') buildCatGrid();
+  if(n==='oral' && window.innerWidth <= 768) setTimeout(maybeShowOralHint, 600);
+  else dismissOralHint(false);
   
   // URL Routing
   if (!window._isRouting) {
@@ -1496,6 +1498,50 @@ document.addEventListener('click', function(e) {
         gSearchClose();
     }
 });
+
+// ═══════════════════════════════════════════════════════
+// ORAL SCROLL HINT
+// ═══════════════════════════════════════════════════════
+var _oshTimer = null;
+var _oshListeners = [];
+
+function maybeShowOralHint() {
+    if (localStorage.getItem('osh_seen')) return;
+    var hint = document.getElementById('oral-scroll-hint');
+    if (!hint) return;
+    hint.classList.remove('osh-hide');
+    hint.classList.add('osh-show');
+
+    // Auto-dismiss after 5 seconds
+    _oshTimer = setTimeout(function() { dismissOralHint(true); }, 5000);
+
+    // Tap pill -> scroll to Surveyor card then dismiss
+    var pill = document.getElementById('osh-pill');
+    function onPillTap() {
+        var card = document.querySelector('.sq-oral-card');
+        if (card) card.scrollIntoView({behavior: 'smooth', block: 'center'});
+        dismissOralHint(true);
+    }
+    pill.addEventListener('click', onPillTap, {once: true});
+
+    // Scroll anywhere -> dismiss
+    var content = document.getElementById('content');
+    function onScroll() { dismissOralHint(true); }
+    if (content) content.addEventListener('scroll', onScroll, {once: true, passive: true});
+    _oshListeners = [{el: content, fn: onScroll}];
+}
+
+function dismissOralHint(remember) {
+    if (remember) localStorage.setItem('osh_seen', '1');
+    clearTimeout(_oshTimer);
+    _oshListeners.forEach(function(l) { if (l.el) l.el.removeEventListener('scroll', l.fn); });
+    _oshListeners = [];
+    var hint = document.getElementById('oral-scroll-hint');
+    if (!hint || !hint.classList.contains('osh-show')) return;
+    hint.classList.remove('osh-show');
+    hint.classList.add('osh-hide');
+    setTimeout(function() { hint.style.display = 'none'; hint.classList.remove('osh-hide'); }, 320);
+}
 
 // ═══════════════════════════════════════════════════════
 // ROUTING (Refresh & Back Button Support)
