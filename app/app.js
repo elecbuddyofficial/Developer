@@ -1581,6 +1581,9 @@ var GUIDE_STEPS = [
 function startGuide() {
     _guideStep = 0;
     _guideActive = true;
+    // Disable will-change on sidebar so guide overlay z-index is respected on iOS Safari
+    var sb = document.getElementById('sidebar');
+    if (sb) sb.style.willChange = 'auto';
     var ov = document.getElementById('guide-overlay');
     ov.style.display = 'block';
     ov.style.opacity = '0';
@@ -1611,6 +1614,8 @@ function guideDismiss(save) {
         document.getElementById('guide-spotlight').style.display = 'none';
         document.getElementById('guide-tooltip').style.display = 'none';
         document.getElementById('guide-slide-wrap').style.display = 'none';
+        var sb = document.getElementById('sidebar');
+        if (sb) sb.style.willChange = '';
         if (window.innerWidth <= 768) closeMobileMenu();
     }, 310);
 }
@@ -1709,7 +1714,7 @@ function _guideSpotlight(step, idx) {
         sp.style.borderRadius = Math.min(br + pad, 24) + 'px';
 
         _guideTooltip(rect, pad, step, idx);
-    }, step.view || step.openSidebar ? 260 : 60);
+    }, step.openSidebar ? 450 : step.view ? 260 : 60);
 }
 
 function _guideTooltip(targetRect, pad, step, idx) {
