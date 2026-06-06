@@ -162,7 +162,7 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--blue-bright);outlin
 .access-card-icon{font-size:32px;margin-bottom:16px}
 .access-card-title{font-size:18px;font-weight:800;color:var(--t1);margin-bottom:8px;letter-spacing:-.3px}
 .access-card-sub{font-size:13.5px;color:var(--t2);line-height:1.65;margin-bottom:20px}
-.access-link{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--r8);background:var(--blue-d);border:1px solid var(--blue-b);color:var(--blue-bright);font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;word-break:break-all}
+.access-link{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:var(--r8);background:var(--blue-d);border:1px solid var(--blue-b);color:var(--blue-bright);font-size:13px;font-weight:700;text-decoration:none;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .access-link:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
 .mobile-tabs{display:flex;gap:8px;margin-bottom:20px}
 .mob-tab{flex:1;padding:8px 12px;border-radius:var(--r8);border:1px solid var(--border);background:transparent;color:var(--t2);font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;text-align:center}
@@ -203,7 +203,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
   .topics-grid{grid-template-columns:1fr 1fr}
   .hero-btns{flex-direction:column;width:100%;max-width:320px;margin:0 auto}
   .btn-xl{width:100%;justify-content:center}
-  .hero-stats{gap:16px;padding:20px}
+  .hero-stats{gap:16px;padding:20px;flex-wrap:nowrap}
   .disc{flex-direction:column;gap:10px}
   .footer-inner{flex-direction:column;text-align:center}
   .footer-text{text-align:center}
@@ -281,20 +281,15 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
         <dt class="hs-lbl">Oral Topics</dt>
         <dd class="hs-num">23</dd>
       </div>
-      <div class="hero-stat" style="width:1px;background:var(--border);margin:8px 0" aria-hidden="true"></div>
+      <div class="hero-stat" style="width:1px;background:var(--border);margin:8px 0;align-self:stretch;flex-shrink:0" aria-hidden="true"></div>
       <div class="hero-stat">
         <dt class="hs-lbl">Quiz Questions</dt>
         <dd class="hs-num">700+</dd>
       </div>
-      <div class="hero-stat" style="width:1px;background:var(--border);margin:8px 0" aria-hidden="true"></div>
+      <div class="hero-stat" style="width:1px;background:var(--border);margin:8px 0;align-self:stretch;flex-shrink:0" aria-hidden="true"></div>
       <div class="hero-stat">
         <dt class="hs-lbl">Cost</dt>
         <dd class="hs-num">Free</dd>
-      </div>
-      <div class="hero-stat" style="width:1px;background:var(--border);margin:8px 0" aria-hidden="true"></div>
-      <div class="hero-stat">
-        <dt class="hs-lbl">Origin</dt>
-        <dd class="hs-num" style="font-size:clamp(18px,2.5vw,28px)">One Cadet</dd>
       </div>
     </dl>
   </div>
@@ -465,29 +460,29 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
       </div>
 
       <!-- WRITTEN PREP BOX -->
-      <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);overflow:hidden;opacity:0.5">
-        <div style="padding:clamp(20px, 4vw, 32px);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.02)">
+      <div style="background:var(--s1);border:1px solid var(--border);border-radius:var(--r16);overflow:hidden">
+        <div style="padding:clamp(20px, 4vw, 32px);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.02)">
           <div>
             <h3 style="font-size:22px;font-weight:800;color:var(--t1)">Written Exam Prep</h3>
             <p style="font-size:14px;color:var(--t2);margin-top:4px">Past papers, numerical solutions, and long-form answers.</p>
           </div>
-          <a href="app/index.html" style="display:inline-flex;align-items:center;gap:8px;padding:8px 20px;border-radius:var(--r8);background:var(--blue);color:#fff;font-size:13px;font-weight:700;text-decoration:none;transition:background .2s" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='var(--blue)'">Open Written Section →</a>
+          <a href="app/index.html" class="access-link" style="margin:0">Open App →</a>
         </div>
         <div style="padding:clamp(20px, 4vw, 32px)">
           <div style="display:flex;flex-direction:column;gap:12px;color:var(--t2);font-size:15px;line-height:1.6">
             <p>A structured approach to passing the ETO Written Examination with absolute confidence.</p>
             <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:10px;margin-top:8px">
               <li style="display:flex;align-items:flex-start;gap:10px">
-                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
-                <span>Past question papers categorized by topic.</span>
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span>
+                <span><strong>Past Papers</strong> categorized by topic for targeted revision.</span>
               </li>
               <li style="display:flex;align-items:flex-start;gap:10px">
-                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
-                <span>Step-by-step numerical solutions.</span>
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span>
+                <span><strong>Numerical Solutions</strong> worked step-by-step with full explanations.</span>
               </li>
               <li style="display:flex;align-items:flex-start;gap:10px">
-                <span style="color:var(--t3);font-weight:900;margin-top:2px">✓</span> 
-                <span>Long-form descriptive answers and circuit diagrams.</span>
+                <span style="color:var(--blue);font-weight:900;margin-top:2px">✓</span>
+                <span><strong>Descriptive Answers</strong> and circuit diagrams for long-form questions.</span>
               </li>
             </ul>
           </div>
