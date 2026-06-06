@@ -1442,21 +1442,8 @@ function gSearch(query) {
         });
         if (notDone) html += '<div class="sr-indexing">Indexing ' + SEARCH_INDEX_DONE + '/' + SEARCH_INDEX_TOTAL + ' topics…</div>';
     }
+    resultsEl.style.maxHeight = '320px';
     resultsEl.innerHTML = html;
-    // Position directly below the search input, constrained to sidebar width
-    var inp = document.getElementById('gsearch-input');
-    var sb = document.getElementById('sidebar');
-    var rect = inp ? inp.getBoundingClientRect() : null;
-    var sbRect = sb ? sb.getBoundingClientRect() : null;
-    if (rect) {
-        var maxH = Math.min(360, window.innerHeight - rect.bottom - 20);
-        panel.style.top = (rect.bottom + 6) + 'px';
-        var panelLeft = Math.max(8, rect.left);
-        var panelWidth = Math.min(rect.width, window.innerWidth - panelLeft - 8);
-        panel.style.left = panelLeft + 'px';
-        panel.style.width = panelWidth + 'px';
-        resultsEl.style.maxHeight = maxH + 'px';
-    }
     panel.style.display = 'block';
 }
 
