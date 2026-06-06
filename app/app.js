@@ -1615,7 +1615,7 @@ function guideDismiss(save) {
         document.getElementById('guide-tooltip').style.display = 'none';
         document.getElementById('guide-slide-wrap').style.display = 'none';
         var sb = document.getElementById('sidebar');
-        if (sb) sb.style.willChange = '';
+        if (sb) { sb.style.willChange = ''; sb.style.transform = ''; sb.style.transition = ''; }
         if (window.innerWidth <= 768) closeMobileMenu();
     }, 310);
 }
@@ -1677,9 +1677,18 @@ function _guideSpotlight(step, idx) {
     if (step.view) _guideNav(step.view);
 
     if (step.openSidebar && window.innerWidth <= 768) {
-        document.getElementById('sidebar').classList.add('open');
+        var sb = document.getElementById('sidebar');
+        sb.classList.add('open');
         document.getElementById('sidebar-overlay').classList.add('open');
+        // After transition completes, remove transform so sidebar has no compositing layer
+        // (fixes guide overlay rendered below sidebar on iOS/Chrome mobile)
+        setTimeout(function() {
+            sb.style.transition = 'none';
+            sb.style.transform = 'none';
+        }, 320);
     } else if (!step.openSidebar) {
+        var sb2 = document.getElementById('sidebar');
+        if (sb2) { sb2.style.transform = ''; sb2.style.transition = ''; }
         closeMobileMenu();
     }
 
