@@ -1,4622 +1,6243 @@
 window.loadQuizzes("T02_HV", [
   {
-    "q": "Per IEC 60092, what voltage is considered 'High Voltage' on ships?",
-    "a": "Above 1000V AC or 1500V DC",
+    "q": "What is the IEC definition of High Voltage AC?",
+    "a": "Above 1000V AC",
     "opts": [
-      "Above 440V AC",
-      "Above 1000V AC or 1500V DC",
-      "Above 3300V AC",
-      "Above 11000V AC"
+      "Above 500V AC",
+      "Above 1000V AC",
+      "Above 1500V AC",
+      "Above 6600V AC"
     ],
-    "exp": "IEC 60092 defines Low Voltage as up to and including 1000V AC. High Voltage is anything above 1000V AC or 1500V DC.",
-    "id": "T02_HV_001",
-    "topic": "T02_HV",
-    "cat": "HV"
+    "exp": "According to IEC 60092, HV is defined as exceeding 1000V AC or 1500V DC.",
+    "cat": "BAS",
+    "id": "T02A_001"
   },
   {
-    "q": "What is the primary advantage of using High Voltage on ships with large electrical demand?",
-    "a": "Lower current for the same power, resulting in smaller cables and reduced weight",
+    "q": "Which is the most common High Voltage level found on ships?",
+    "a": "6.6 kV",
     "opts": [
-      "Lower cost of switchgear",
-      "Lower current for the same power, resulting in smaller cables and reduced weight",
-      "Safer for personnel than 440V",
-      "Eliminates the need for transformers"
+      "3.3 kV",
+      "6.6 kV",
+      "11 kV",
+      "440 V"
     ],
-    "exp": "Power = V x I x \u221a3. Doubling the voltage halves the current for the same power, significantly reducing cable size, weight, and I\u00b2R losses.",
-    "id": "T02_HV_002",
-    "topic": "T02_HV",
-    "cat": "HV"
+    "exp": "While 3.3 kV and 11 kV are used, 6.6 kV is the most prevalent standard on modern HV vessels.",
+    "cat": "BAS",
+    "id": "T02A_002"
   },
   {
-    "q": "Why are standard ship HV voltages (3.3kV, 6.6kV, 11kV) multiples of 1.1?",
-    "a": "Derived from the form factor (1.11) of a sinusoidal AC waveform and IEC standard series",
+    "q": "At what power demand level is High Voltage usually justified?",
+    "a": "3–5 MW",
     "opts": [
-      "It matches the frequency of 60Hz exactly",
-      "Derived from the form factor (1.11) of a sinusoidal AC waveform and IEC standard series",
-      "To compensate for 10% voltage drop",
-      "It is an arbitrary maritime convention"
+      "1–2 MW",
+      "3–5 MW",
+      "10–15 MW",
+      "Above 20 MW"
     ],
-    "exp": "The base 1.1kV comes from the form factor (Vrms/Vavg = 1.11). Standard IEC voltage series and transformer turns ratios are based on these multiples to ensure interoperability.",
-    "id": "T02_HV_003",
-    "topic": "T02_HV",
-    "cat": "HV"
+    "exp": "HV becomes economical when total ship electrical power requirements exceed 3 to 5 MW.",
+    "cat": "BAS",
+    "id": "T02A_003"
   },
   {
-    "q": "Why is an Air Circuit Breaker (ACB) generally not used for High Voltage systems?",
-    "a": "Air ionises under intense HV arc energy and fails to quench the arc",
+    "q": "Which equation provides the primary justification for using High Voltage?",
+    "a": "P = √3 × V × I × PF",
     "opts": [
-      "It is too heavy",
-      "Air ionises under intense HV arc energy and fails to quench the arc",
-      "Air reacts with copper at high voltage",
-      "It operates too quickly"
+      "P = I²R",
+      "P = √3 × V × I × PF",
+      "V = IR",
+      "P = V × I"
     ],
-    "exp": "At 6.6kV, arc energy is roughly 225 times higher than at 440V. Air ionises and becomes conductive, failing to quench the arc, leading to explosion or severe fire.",
-    "id": "T02_HV_004",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "The formula P = √3 × V × I × PF shows that doubling voltage allows current to be halved for the same power.",
+    "cat": "BAS",
+    "id": "T02A_004"
   },
   {
-    "q": "How does a Vacuum Circuit Breaker (VCB) quench an electrical arc?",
-    "a": "Contacts open in a vacuum; metal vapour arc dissipates instantly at the first current zero crossing",
+    "q": "What happens to cable size when increasing voltage from 440V to 6.6 kV?",
+    "a": "Cable size decreases significantly",
     "opts": [
-      "It stretches the arc using magnetic chutes",
-      "It blasts air to cool the contacts",
-      "Contacts open in a vacuum; metal vapour arc dissipates instantly at the first current zero crossing",
-      "It uses SF6 gas to absorb electrons"
+      "Cable size remains the same",
+      "Cable size increases significantly",
+      "Cable size decreases significantly",
+      "Cable size is no longer relevant"
     ],
-    "exp": "In a vacuum (no air molecules to ionise), the small metal vapour arc formed during opening dissipates instantly when the AC current crosses zero.",
-    "id": "T02_HV_005",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "Higher voltage allows for lower current, which requires thinner, cheaper cables.",
+    "cat": "BAS",
+    "id": "T02A_005"
   },
   {
-    "q": "What is a major property of SF6 (Sulphur Hexafluoride) gas used in switchgear?",
-    "a": "It is electronegative and absorbs free electrons, preventing arc sustaining",
+    "q": "How much copper is saved when using 6.6 kV instead of 440V for the same power?",
+    "a": "A massive saving in weight and cost",
     "opts": [
-      "It is highly flammable",
-      "It is lighter than air",
-      "It is electronegative and absorbs free electrons, preventing arc sustaining",
-      "It is a highly conductive plasma"
+      "Copper weight remains identical",
+      "Copper weight doubles",
+      "A massive saving in weight and cost",
+      "Copper is replaced by aluminum"
     ],
-    "exp": "SF6 is strongly electronegative. It captures free electrons to form heavy, immobile negative ions, rapidly increasing dielectric strength and quenching the arc.",
-    "id": "T02_HV_006",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "The lower current requirement directly translates to less copper being needed for the conductors.",
+    "cat": "BAS",
+    "id": "T02A_006"
   },
   {
-    "q": "What is a critical environmental and safety concern regarding SF6 gas?",
-    "a": "Extremely high Global Warming Potential (GWP 23,500) and toxic byproducts after arcing",
+    "q": "Why is the use of High Voltage better for long cable runs?",
+    "a": "Lower resistive voltage drop along cables",
     "opts": [
-      "It destroys the ozone layer",
-      "Extremely high Global Warming Potential (GWP 23,500) and toxic byproducts after arcing",
-      "It is highly corrosive to copper",
-      "It is explosive when mixed with air"
+      "Higher frequency capacity",
+      "Lower resistive voltage drop along cables",
+      "Increased insulation resistance",
+      "Better arc quenching"
     ],
-    "exp": "SF6 has a GWP of 23,500x CO\u2082. Furthermore, when exposed to an electric arc, it decomposes into highly toxic gases like HF and SOF2.",
-    "id": "T02_HV_007",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "Lower current means less voltage lost to conductor resistance (V = IR), improving regulation.",
+    "cat": "BAS",
+    "id": "T02A_007"
   },
   {
-    "q": "Why is an interlock fitted to prevent racking a VCB in or out while the breaker is CLOSED?",
-    "a": "To prevent drawing or inserting the VCB under load, which would create a catastrophic arc at the busbar spouts",
+    "q": "Which types of large ship frequently use 11 kV systems?",
+    "a": "LNG carriers, cruise ships, and VLCCs",
     "opts": [
-      "To save physical effort",
-      "To prevent drawing or inserting the VCB under load, which would create a catastrophic arc at the busbar spouts",
-      "To prevent damage to the racking handle",
-      "To keep the control circuit connected"
+      "Small fishing vessels",
+      "Coastal tankers",
+      "LNG carriers, cruise ships, and VLCCs",
+      "Tug boats"
     ],
-    "exp": "Racking a closed breaker would interrupt massive load or fault currents in open air rather than inside the vacuum bottle, causing an explosive arc flash.",
-    "id": "T02_HV_020",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "Very large vessels with propulsion demands in the 20+ MW range utilize 11 kV.",
+    "cat": "BAS",
+    "id": "T02A_008"
   },
   {
-    "q": "What does racking a VCB to the 'TEST' position accomplish?",
-    "a": "Disconnects main power busbars but leaves control circuits connected for testing relay logic",
+    "q": "If P = √3 × V × I × PF, doubling V means I must?",
+    "a": "Be halved",
     "opts": [
-      "Connects it fully to the busbars",
-      "Disconnects main power busbars but leaves control circuits connected for testing relay logic",
-      "Fully isolates both power and control",
-      "Connects it to an external test generator"
+      "Remain unchanged",
+      "Double",
+      "Be halved",
+      "Be quadrupled"
     ],
-    "exp": "In the TEST position, the breaker can be tripped and closed via the protection relays to verify control logic without actually energising the HV load.",
-    "id": "T02_HV_021",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "Since P is constant, I and V are inversely proportional.",
+    "cat": "BAS",
+    "id": "T02A_009"
   },
   {
-    "q": "What is the 'Ductor test' during VCB maintenance?",
-    "a": "Measuring the main contact resistance using a micro-ohmmeter in the closed position",
+    "q": "What is the consequence of lower current in terms of losses?",
+    "a": "Lower I²R losses",
     "opts": [
-      "Testing the vacuum integrity with high voltage",
-      "Measuring the main contact resistance using a micro-ohmmeter in the closed position",
-      "Testing the insulation to earth",
-      "Measuring the speed of the closing spring"
+      "Higher I²R losses",
+      "Lower I²R losses",
+      "No change in losses",
+      "Increased friction losses"
     ],
-    "exp": "Ductor test passes high current through the closed contacts to measure resistance (usually <100 micro-ohms). High resistance indicates worn or oxidised contacts.",
-    "id": "T02_HV_022",
-    "topic": "T02_HV",
-    "cat": "VCB"
+    "exp": "The heating loss in a conductor is proportional to the square of the current (I²R).",
+    "cat": "BAS",
+    "id": "T02A_010"
   },
   {
-    "q": "What is the primary purpose of a Neutral Earthing Resistor (NER) in a ship's HV system?",
-    "a": "To limit earth fault current to a safe low value (typically 5-30A) and prevent overvoltages",
+    "q": "What is a major engineering advantage of thinner HV cables?",
+    "a": "Reduces weight and space in cable trays/bulkheads",
     "opts": [
-      "To increase the short circuit current for faster tripping",
-      "To limit earth fault current to a safe low value (typically 5-30A) and prevent overvoltages",
-      "To provide a path for harmonic currents",
-      "To step down the voltage for metering"
+      "Increases cable flexibility",
+      "Reduces weight and space in cable trays/bulkheads",
+      "Allows cables to carry more current",
+      "Eliminates the need for insulation"
     ],
-    "exp": "Solid earthing causes massive destructive fault currents. Fully floating systems cause dangerous overvoltages (\u221a3 \u00d7 line voltage). NER is the safe compromise.",
-    "id": "T02_HV_008",
-    "topic": "T02_HV",
-    "cat": "NER"
+    "exp": "Weight and space saving is critical on modern complex vessels.",
+    "cat": "BAS",
+    "id": "T02A_011"
   },
   {
-    "q": "Calculate the NER value for a 6.6kV system to limit earth fault current to 10A.",
-    "a": "381 ohms",
+    "q": "For the same kVA rating, how does HV generator copper requirement compare to LV?",
+    "a": "Less copper required",
     "opts": [
-      "660 ohms",
-      "1100 ohms",
-      "381 ohms",
-      "38 ohms"
+      "More copper required",
+      "Less copper required",
+      "Exactly the same amount",
+      "Copper is not used in generators"
     ],
-    "exp": "V_phase = 6600 / \u221a3 = 3810V. Resistance = V_phase / I = 3810 / 10 = 381 ohms.",
-    "id": "T02_HV_009",
-    "topic": "T02_HV",
-    "cat": "NER"
+    "exp": "Lower current requirement means thinner windings can be used.",
+    "cat": "BAS",
+    "id": "T02A_012"
   },
   {
-    "q": "According to IEC 60092, what defines a 'Dead Front Panel'?",
-    "a": "An electrical panel where NO live parts are accessible from the front operating side",
+    "q": "Which loads typically necessitate HV systems on modern ships?",
+    "a": "VFD-driven cargo pumps, azipods, and bow thrusters",
     "opts": [
-      "A panel disconnected from all power sources",
-      "An electrical panel where NO live parts are accessible from the front operating side",
-      "A panel with no indicator lights",
-      "A panel painted black to indicate high voltage"
+      "Lighting and domestic fans",
+      "VFD-driven cargo pumps, azipods, and bow thrusters",
+      "Navigation lights",
+      "Galley refrigeration"
     ],
-    "exp": "Dead front means all live busbars and terminals are enclosed behind barriers. Accidental contact during normal operation from the front is impossible.",
-    "id": "T02_HV_010",
-    "topic": "T02_HV",
-    "cat": "MSB"
+    "exp": "These high-power mechanical loads reach the MW range, exceeding LV capacity limits.",
+    "cat": "BAS",
+    "id": "T02A_013"
   },
   {
-    "q": "What is the minimum rubber mat thickness required in front of HV switchgear (>1000V)?",
-    "a": "12 mm thick, rated for the voltage class",
+    "q": "Does HV justify itself for ships with 1 MW total demand?",
+    "a": "No, it is typically justified above 3–5 MW",
     "opts": [
-      "6 mm",
-      "12 mm thick, rated for the voltage class",
+      "Yes, for safety reasons",
+      "No, it is typically justified above 3–5 MW",
+      "Yes, for lower frequency",
+      "No, it requires higher current"
+    ],
+    "exp": "Below the 3-5 MW threshold, the cost of HV switchgear and transformers outweighs the cable savings.",
+    "cat": "BAS",
+    "id": "T02A_014"
+  },
+  {
+    "q": "What does HV stand for in the context of ship power systems?",
+    "a": "High Voltage",
+    "opts": [
+      "Heavy Vessel",
+      "High Voltage",
+      "High Velocity",
+      "High Variable"
+    ],
+    "exp": "HV is the industry standard abbreviation for High Voltage.",
+    "cat": "BAS",
+    "id": "T02A_015"
+  },
+  {
+    "q": "What is the form factor of a pure sinusoidal AC waveform?",
+    "a": "1.11",
+    "opts": [
+      "1.00",
+      "1.11",
+      "1.41",
+      "0.707"
+    ],
+    "exp": "Form factor = V_rms / V_avg ≈ 1.11.",
+    "cat": "MULT",
+    "id": "T02A_016"
+  },
+  {
+    "q": "The IEC base unit for the standard voltage series is?",
+    "a": "1.1 kV",
+    "opts": [
+      "0.44 kV",
+      "1.1 kV",
+      "2.2 kV",
+      "6.6 kV"
+    ],
+    "exp": "The 1.11 form factor leads to the 1.1 kV base unit for standardized equipment.",
+    "cat": "MULT",
+    "id": "T02A_017"
+  },
+  {
+    "q": "Which of the following is NOT part of the standard IEC voltage series?",
+    "a": "5.5 kV",
+    "opts": [
+      "3.3 kV",
+      "6.6 kV",
+      "11 kV",
+      "5.5 kV"
+    ],
+    "exp": "The series follows 1.1, 3.3, 6.6, 11 kV. 5.5 kV is not a standard step.",
+    "cat": "MULT",
+    "id": "T02A_018"
+  },
+  {
+    "q": "Why is standardization of the HV series important?",
+    "a": "Simplifies transformer design and ensures interoperability",
+    "opts": [
+      "Makes cables cheaper to manufacture",
+      "Simplifies transformer design and ensures interoperability",
+      "Reduces the number of phases required",
+      "Allows the use of DC transmission"
+    ],
+    "exp": "Consistent voltage levels allow manufacturers to produce transformers and switchgear globally.",
+    "cat": "MULT",
+    "id": "T02A_019"
+  },
+  {
+    "q": "HV insulation must be designed to withstand which voltage value?",
+    "a": "Peak voltage",
+    "opts": [
+      "RMS voltage",
+      "Average voltage",
+      "Peak voltage",
+      "Minimum voltage"
+    ],
+    "exp": "Dielectric breakdown occurs at the voltage peak, not the RMS value.",
+    "cat": "MULT",
+    "id": "T02A_020"
+  },
+  {
+    "q": "How is peak voltage related to RMS voltage for a sine wave?",
+    "a": "V_peak = V_rms × √2",
+    "opts": [
+      "V_peak = V_rms / √2",
+      "V_peak = V_rms × √2",
+      "V_peak = V_rms × 2",
+      "V_peak = V_rms / 2"
+    ],
+    "exp": "Peak voltage is approximately 1.414 times the RMS voltage.",
+    "cat": "MULT",
+    "id": "T02A_021"
+  },
+  {
+    "q": "What happens on a fully floating HV system during a single earth fault?",
+    "a": "Healthy phase voltage rises from phase voltage to line voltage",
+    "opts": [
+      "Current becomes zero",
+      "Healthy phase voltage rises from phase voltage to line voltage",
+      "The system automatically trips",
+      "The frequency drops"
+    ],
+    "exp": "The phase-to-ground voltage on unfaulted phases rises by factor of √3 (from 3.81 kV to 6.6 kV).",
+    "cat": "MULT",
+    "id": "T02A_022"
+  },
+  {
+    "q": "What is the ferroresonance risk in fully floating HV systems?",
+    "a": "Dangerous oscillatory overvoltages",
+    "opts": [
+      "Loss of phase sequence",
+      "Dangerous oscillatory overvoltages",
+      "Instantaneous short circuit",
+      "Reduction of harmonics"
+    ],
+    "exp": "Floating neutrals can interact with cable capacitance to cause self-excited oscillatory voltage spikes.",
+    "cat": "MULT",
+    "id": "T02A_023"
+  },
+  {
+    "q": "What does an NER provide that a floating system lacks?",
+    "a": "A defined earth reference",
+    "opts": [
+      "A higher current flow",
+      "A defined earth reference",
+      "Lower cable costs",
+      "More harmonics"
+    ],
+    "exp": "The NER connects the neutral to earth to fix the reference and stabilize voltage.",
+    "cat": "MULT",
+    "id": "T02A_024"
+  },
+  {
+    "q": "Who frequently asks about the 1.1 kV multiples?",
+    "a": "Praveen Nair",
+    "opts": [
+      "Kamath",
+      "Vishwanathan",
+      "Praveen Nair",
+      "Sanjib"
+    ],
+    "exp": "The notes explicitly identify Praveen Nair as the surveyor who asks this.",
+    "cat": "MULT",
+    "id": "T02A_025"
+  },
+  {
+    "q": "What is the base of the entire IEC standard voltage series?",
+    "a": "1.1",
+    "opts": [
+      "1.0",
+      "1.1",
+      "1.5",
+      "2.0"
+    ],
+    "exp": "Derived from the 1.11 form factor, 1.1 is the base multiplier for the series.",
+    "cat": "MULT",
+    "id": "T02A_026"
+  },
+  {
+    "q": "Why is the voltage rise on healthy phases a concern?",
+    "a": "It severely stresses insulation of healthy phases",
+    "opts": [
+      "It causes the generator to over-speed",
+      "It severely stresses insulation of healthy phases",
+      "It makes cables lighter",
+      "It reduces electrical interference"
+    ],
+    "exp": "Running at 6.6 kV instead of 3.8 kV stresses the insulation right at its design limit.",
+    "cat": "MULT",
+    "id": "T02A_027"
+  },
+  {
+    "q": "The IEC voltage series is derived from which AC parameter?",
+    "a": "Form Factor",
+    "opts": [
+      "Frequency",
+      "Phase Shift",
+      "Form Factor",
+      "Power Factor"
+    ],
+    "exp": "The ratio of RMS to Average voltage (1.11) defines the base standard.",
+    "cat": "MULT",
+    "id": "T02A_028"
+  },
+  {
+    "q": "Is the HV system floating like most LV ships?",
+    "a": "No, it is earthed via an NER",
+    "opts": [
+      "Yes, it is fully floating",
+      "No, it is earthed via an NER",
+      "Yes, but only in emergencies",
+      "No, it is solidly earthed"
+    ],
+    "exp": "Using an NER prevents the overvoltage issues of floating systems.",
+    "cat": "MULT",
+    "id": "T02A_029"
+  },
+  {
+    "q": "What value in the IEC standard is 6.6 kV derived from?",
+    "a": "6 × 1.1",
+    "opts": [
+      "3 × 1.1",
+      "6 × 1.1",
+      "10 × 1.1",
+      "1.1 × 1.1"
+    ],
+    "exp": "6.6 is exactly 6 times the 1.1 kV base unit.",
+    "cat": "MULT",
+    "id": "T02A_030"
+  },
+  {
+    "q": "Which is an advantage of HV compared to LV?",
+    "a": "Smaller cable cross-sections",
+    "opts": [
+      "Increased cable weight",
+      "Smaller cable cross-sections",
+      "Requires more maintenance",
+      "Requires higher current"
+    ],
+    "exp": "Lower current for same power allows for significantly smaller, lighter cables.",
+    "cat": "ADV",
+    "id": "T02A_031"
+  },
+  {
+    "q": "Why does HV have lower I²R losses?",
+    "a": "Lower current",
+    "opts": [
+      "Higher voltage",
+      "Lower current",
+      "Smaller insulation",
+      "Lower frequency"
+    ],
+    "exp": "Since loss is proportional to current squared, halving the current reduces loss to one quarter.",
+    "cat": "ADV",
+    "id": "T02A_032"
+  },
+  {
+    "q": "What is a disadvantage of HV systems?",
+    "a": "Special switchgear requirements",
+    "opts": [
+      "Increased cable cross-section",
+      "Special switchgear requirements",
+      "Lower voltage regulation",
+      "Simplified safety procedures"
+    ],
+    "exp": "VCBs and SF6 breakers are necessary, which are expensive compared to LV air breakers.",
+    "cat": "ADV",
+    "id": "T02A_033"
+  },
+  {
+    "q": "Why do HV systems require trained personnel?",
+    "a": "Safety hazard and certification requirements",
+    "opts": [
+      "They generate more heat",
+      "Safety hazard and certification requirements",
+      "They work at higher frequencies",
+      "They have complex mechanical gearboxes"
+    ],
+    "exp": "HV systems are more lethal; STCW III/6 requires specialized training/authorization for ETOs.",
+    "cat": "ADV",
+    "id": "T02A_034"
+  },
+  {
+    "q": "What type of transformer is needed for LV loads in an HV ship?",
+    "a": "Step-down transformer",
+    "opts": [
+      "Step-up transformer",
+      "Step-down transformer",
+      "Auto-transformer only",
+      "Isolation transformer"
+    ],
+    "exp": "You must step down the 6.6 kV or 11 kV to 440 V for general hotel/pump usage.",
+    "cat": "ADV",
+    "id": "T02A_035"
+  },
+  {
+    "q": "Why do HV cables take longer to discharge?",
+    "a": "High capacitive charge storage",
+    "opts": [
+      "They are shorter in length",
+      "High capacitive charge storage",
+      "They are poorly insulated",
+      "They have higher frequency"
+    ],
+    "exp": "Long cables act as capacitors; they hold a dangerous charge even when isolated.",
+    "cat": "ADV",
+    "id": "T02A_036"
+  },
+  {
+    "q": "How long must one wait after HV isolation before testing?",
+    "a": "Minimum 5 minutes",
+    "opts": [
+      "Minimum 1 minute",
+      "Minimum 5 minutes",
+      "Minimum 30 minutes",
+      "Instantaneous"
+    ],
+    "exp": "The notes specify a 5-minute minimum wait for capacitive discharge.",
+    "cat": "ADV",
+    "id": "T02A_037"
+  },
+  {
+    "q": "What is one economic benefit of HV systems?",
+    "a": "Smaller generator windings",
+    "opts": [
+      "Higher number of windings",
+      "Smaller generator windings",
+      "No need for an AVR",
+      "Less protection relaying"
+    ],
+    "exp": "Less copper is required to produce the same kVA rating at higher voltage.",
+    "cat": "ADV",
+    "id": "T02A_038"
+  },
+  {
+    "q": "Are HV motors cheaper or more expensive than LV motors?",
+    "a": "More expensive",
+    "opts": [
+      "Cheaper",
+      "More expensive",
+      "Same cost",
+      "Free with switchgear"
+    ],
+    "exp": "HV insulation and build quality requirements make HV equipment costlier.",
+    "cat": "ADV",
+    "id": "T02A_039"
+  },
+  {
+    "q": "Why does HV enableVery Large Loads?",
+    "a": "Limits total current to manageable levels",
+    "opts": [
+      "Increases the prime mover speed",
+      "Limits total current to manageable levels",
+      "Requires more generators",
+      "Requires higher frequency"
+    ],
+    "exp": "Without HV, 20 MW would require tens of thousands of amps, which is impractical for copper distribution.",
+    "cat": "ADV",
+    "id": "T02A_040"
+  },
+  {
+    "q": "Is the HV protection system simpler or more complex than LV?",
+    "a": "More complex",
+    "opts": [
+      "Simpler",
+      "More complex",
+      "Exactly the same",
+      "No protection needed"
+    ],
+    "exp": "NERs, IRMs, and differential relays add layers of complexity absent in basic LV boards.",
+    "cat": "ADV",
+    "id": "T02A_041"
+  },
+  {
+    "q": "Do HV systems use thin cables?",
+    "a": "Yes, compared to equivalent LV power cables",
+    "opts": [
+      "No, they use massive copper bars only",
+      "Yes, compared to equivalent LV power cables",
+      "No, they are larger due to insulation",
+      "They don't use cables"
+    ],
+    "exp": "The conductor cross-section is smaller because the required current is much lower.",
+    "cat": "ADV",
+    "id": "T02A_042"
+  },
+  {
+    "q": "What is required to make HV equipment safe?",
+    "a": "Specialized training and PTW procedures",
+    "opts": [
+      "Lowering the voltage frequently",
+      "Specialized training and PTW procedures",
+      "Using open-type switchboards",
+      "No special requirements"
+    ],
+    "exp": "Safety is paramount; strict PTW and certification are mandatory for HV operations.",
+    "cat": "ADV",
+    "id": "T02A_043"
+  },
+  {
+    "q": "Are HV losses higher than LV losses?",
+    "a": "No, they are generally lower due to reduced current",
+    "opts": [
+      "Yes, due to corona",
+      "No, they are generally lower due to reduced current",
+      "They are equivalent",
+      "Losses do not exist in HV"
+    ],
+    "exp": "Lower current is the key to energy efficiency in electrical transmission.",
+    "cat": "ADV",
+    "id": "T02A_044"
+  },
+  {
+    "q": "Does HV justify itself for small vessels?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only if they have batteries",
+      "Only if they are diesel-electric"
+    ],
+    "exp": "The overhead of HV switchgear and transformers makes it inefficient for low power demand.",
+    "cat": "ADV",
+    "id": "T02A_045"
+  },
+  {
+    "q": "What does NER stand for?",
+    "a": "Neutral Earthing Resistor",
+    "opts": [
+      "Neutral Energy Relay",
+      "Neutral Earthing Resistor",
+      "Negative Earth Relay",
+      "New Earth Regulation"
+    ],
+    "exp": "The NER provides the earth reference for the HV system.",
+    "cat": "NER",
+    "id": "T02A_046"
+  },
+  {
+    "q": "What is the fault current limit typically set to for a shipboard NER?",
+    "a": "5–30 A",
+    "opts": [
+      "1–5 A",
+      "5–30 A",
+      "100–500 A",
+      "1000 A"
+    ],
+    "exp": "It is low enough to prevent fire/arc damage but high enough for relay detection.",
+    "cat": "NER",
+    "id": "T02A_047"
+  },
+  {
+    "q": "What happens if a solid earth fault occurs without an NER?",
+    "a": "Fault current reaches thousands of amps, leading to stator destruction",
+    "opts": [
+      "Fault current is zero",
+      "Fault current reaches thousands of amps, leading to stator destruction",
+      "The system stays healthy",
+      "The frequency increases"
+    ],
+    "exp": "The impedance is only the generator winding itself, which is near-zero for massive short-circuit amps.",
+    "cat": "NER",
+    "id": "T02A_048"
+  },
+  {
+    "q": "What is used to create an artificial neutral for a delta-connected generator?",
+    "a": "Zig-zag (earthing) transformer",
+    "opts": [
+      "Step-down transformer",
+      "Zig-zag (earthing) transformer",
+      "NER alone",
+      "High-voltage diode bridge"
+    ],
+    "exp": "A zig-zag transformer provides a neutral path in systems lacking a physical star point.",
+    "cat": "NER",
+    "id": "T02A_049"
+  },
+  {
+    "q": "Where is the NER physically connected?",
+    "a": "Between the star point and the ship's hull (earth)",
+    "opts": [
+      "Across the phase conductors",
+      "Between the star point and the ship's hull (earth)",
+      "Across the AVR terminals",
+      "In parallel with the VCB"
+    ],
+    "exp": "The connection forces the system neutral to reference ground through a limiting resistor.",
+    "cat": "NER",
+    "id": "T02A_050"
+  },
+  {
+    "q": "What is the formula for NER resistance value?",
+    "a": "R = V_phase / I_fault",
+    "opts": [
+      "R = V_line / I_fault",
+      "R = V_phase / I_fault",
+      "R = I_fault / V_phase",
+      "R = V_phase × I_fault"
+    ],
+    "exp": "Resistance equals phase voltage divided by the desired fault current.",
+    "cat": "NER",
+    "id": "T02A_051"
+  },
+  {
+    "q": "What is the typical resistance range for a 6.6 kV NER?",
+    "a": "300–800 Ω",
+    "opts": [
+      "1–5 Ω",
+      "300–800 Ω",
+      "1000–5000 Ω",
+      "0.1–0.5 Ω"
+    ],
+    "exp": "For 6.6 kV, calculations yield values in this range depending on the desired fault current.",
+    "cat": "NER",
+    "id": "T02A_052"
+  },
+  {
+    "q": "Why is the NER mounted in a restricted-access enclosure?",
+    "a": "Because the resistor elements are live at the system neutral",
+    "opts": [
+      "Because the oil inside is flammable",
+      "Because the resistor elements are live at the system neutral",
+      "To keep the air inside dry",
+      "To prevent electromagnetic interference"
+    ],
+    "exp": "While the neutral is close to earth, it is still part of the HV circuit and a shock hazard.",
+    "cat": "NER",
+    "id": "T02A_053"
+  },
+  {
+    "q": "What is the typical thermal rating duration for an NER?",
+    "a": "5–10 seconds",
+    "opts": [
+      "1–2 seconds",
+      "5–10 seconds",
+      "1 hour",
+      "Continuous"
+    ],
+    "exp": "It must handle the fault current just long enough for the relay to trip, otherwise it burns out.",
+    "cat": "NER",
+    "id": "T02A_054"
+  },
+  {
+    "q": "What is the modern alternative to the conventional NER?",
+    "a": "High-Resistance Grounding (HRG)",
+    "opts": [
+      "Low-Resistance Grounding",
+      "High-Resistance Grounding (HRG)",
+      "Solid Grounding",
+      "Floating Grounding"
+    ],
+    "exp": "HRG is increasingly popular for its operational continuity benefits.",
+    "cat": "NER",
+    "id": "T02A_055"
+  },
+  {
+    "q": "How does HRG differ from a conventional NER?",
+    "a": "Limits fault current to a very low level (1–5 A) and prevents tripping on first fault",
+    "opts": [
+      "Limits fault current to 500 A",
+      "Limits fault current to a very low level (1–5 A) and prevents tripping on first fault",
+      "Trips faster than an NER",
+      "Does not use any resistor"
+    ],
+    "exp": "The lower current in HRG is too low to cause damage, allowing continued operation.",
+    "cat": "NER",
+    "id": "T02A_056"
+  },
+  {
+    "q": "What component in HRG provides per-phase earth indication?",
+    "a": "Ground Fault Monitor (GFM)",
+    "opts": [
+      "The VCB",
+      "Ground Fault Monitor (GFM)",
+      "The AVR",
+      "The zig-zag transformer"
+    ],
+    "exp": "The GFM measures impedance to identify which phase has faulted.",
+    "cat": "NER",
+    "id": "T02A_057"
+  },
+  {
+    "q": "What happens if a second earth fault occurs on an HRG system?",
+    "a": "It creates a phase-to-phase fault, which must be cleared",
+    "opts": [
+      "It continues operating normally",
+      "It converts to an NER system",
+      "It creates a phase-to-phase fault, which must be cleared",
+      "It trips on undervoltage"
+    ],
+    "exp": "The advantage is lost; the second fault creates a short circuit requiring immediate clearing.",
+    "cat": "NER",
+    "id": "T02A_058"
+  },
+  {
+    "q": "What IEC 80005-1 requirement exists for HVSC NERs?",
+    "a": "Minimum 25 A for 5 seconds",
+    "opts": [
+      "Maximum 10 A for 1 second",
+      "Minimum 25 A for 5 seconds",
+      "Maximum 5 A for 10 minutes",
+      "Minimum 100 A for 1 second"
+    ],
+    "exp": "Shore-to-ship connection standards are specific about fault current ratings.",
+    "cat": "NER",
+    "id": "T02A_059"
+  },
+  {
+    "q": "What is the primary material used for NER elements?",
+    "a": "Stainless steel or nichrome",
+    "opts": [
+      "Copper",
+      "Aluminum",
+      "Stainless steel or nichrome",
+      "Ceramic"
+    ],
+    "exp": "These alloys maintain resistance and physical integrity under high-heat fault conditions.",
+    "cat": "NER",
+    "id": "T02A_060"
+  },
+  {
+    "q": "Why is an ACB unsuitable for 6.6 kV?",
+    "a": "Air ionises and becomes conducting at high voltage",
+    "opts": [
+      "It is too physically large",
+      "Air ionises and becomes conducting at high voltage",
+      "It lacks a spring mechanism",
+      "It is too quiet"
+    ],
+    "exp": "The arc in air at HV creates a plasma that sustains itself, making air quenching impossible.",
+    "cat": "VCB",
+    "id": "T02A_061"
+  },
+  {
+    "q": "What is the medium inside a VCB bottle?",
+    "a": "Vacuum",
+    "opts": [
+      "SF6 Gas",
+      "Vacuum",
+      "Oil",
+      "Air"
+    ],
+    "exp": "A vacuum bottle provides both quenching and insulation for the open contacts.",
+    "cat": "VCB",
+    "id": "T02A_062"
+  },
+  {
+    "q": "How long does a VCB arc typically last?",
+    "a": "1/2 cycle (10 ms at 50 Hz)",
+    "opts": [
+      "2-3 cycles",
+      "1/2 cycle (10 ms at 50 Hz)",
+      "1 second",
+      "Continuous"
+    ],
+    "exp": "The arc extinguishes at the very first current zero crossing.",
+    "cat": "VCB",
+    "id": "T02A_063"
+  },
+  {
+    "q": "What is the operational life limit of a vacuum bottle?",
+    "a": "Finite",
+    "opts": [
+      "Infinite",
+      "Finite",
+      "1 year",
+      "100 cycles"
+    ],
+    "exp": "Bottles eventually lose vacuum over time and use.",
+    "cat": "VCB",
+    "id": "T02A_064"
+  },
+  {
+    "q": "How do you verify vacuum integrity?",
+    "a": "Apply 30–40 kV DC across open contacts",
+    "opts": [
+      "Visually inspect the ceramic casing",
+      "Apply 30–40 kV DC across open contacts",
+      "Check the weight of the bottle",
+      "Test with a 500V megger"
+    ],
+    "exp": "Only an HV test can confirm if the vacuum level is still sufficient for insulation.",
+    "cat": "VCB",
+    "id": "T02A_065"
+  },
+  {
+    "q": "What is the maximum voltage rating of an ACB?",
+    "a": "Up to 1000 V",
+    "opts": [
+      "Up to 500 V",
+      "Up to 1000 V",
+      "Up to 6.6 kV",
+      "Up to 36 kV"
+    ],
+    "exp": "ACBs are strictly limited to LV (Low Voltage) service.",
+    "cat": "VCB",
+    "id": "T02A_066"
+  },
+  {
+    "q": "Which quench medium is suitable for up to 800 kV?",
+    "a": "SF6",
+    "opts": [
+      "Vacuum",
+      "Air",
+      "SF6",
+      "Oil"
+    ],
+    "exp": "SF6 is the only medium capable of handling extreme ultra-high voltage grids.",
+    "cat": "VCB",
+    "id": "T02A_067"
+  },
+  {
+    "q": "Why is SF6 so effective as an arc quencher?",
+    "a": "It is electronegative and absorbs free electrons",
+    "opts": [
+      "It is cheaper than air",
+      "It is electronegative and absorbs free electrons",
+      "It is a liquid",
+      "It prevents short circuits"
+    ],
+    "exp": "By capturing the free electrons that sustain an arc, it halts the discharge immediately.",
+    "cat": "VCB",
+    "id": "T02A_068"
+  },
+  {
+    "q": "Which is an environmental concern with SF6?",
+    "a": "Very high Global Warming Potential (GWP)",
+    "opts": [
+      "It is toxic in its pure form",
+      "Very high Global Warming Potential (GWP)",
+      "It ozone depletes",
+      "It is flammable"
+    ],
+    "exp": "SF6 is one of the most potent greenhouse gases known.",
+    "cat": "VCB",
+    "id": "T02A_069"
+  },
+  {
+    "q": "VCB maintenance is generally considered:",
+    "a": "Low",
+    "opts": [
+      "High",
+      "Low",
+      "Zero",
+      "Very demanding"
+    ],
+    "exp": "With no arc products or quenching medium to change, VCBs are very reliable.",
+    "cat": "VCB",
+    "id": "T02A_070"
+  },
+  {
+    "q": "What defines the VCB quench speed?",
+    "a": "First current zero crossing",
+    "opts": [
+      "Mechanical spring speed",
+      "First current zero crossing",
+      "Operator reaction time",
+      "Relay reset time"
+    ],
+    "exp": "It doesn't just quench; it extinguishes at the moment current naturally hits zero.",
+    "cat": "VCB",
+    "id": "T02A_071"
+  },
+  {
+    "q": "What happens if a VCB bottle loses its vacuum?",
+    "a": "Dielectric strength vanishes, causing flashover",
+    "opts": [
+      "It acts like an ACB",
+      "Dielectric strength vanishes, causing flashover",
+      "It becomes a better insulator",
+      "The VCB trips on overcurrent"
+    ],
+    "exp": "Vacuum is the insulation; without it, the contacts will arc immediately upon closing.",
+    "cat": "VCB",
+    "id": "T02A_072"
+  },
+  {
+    "q": "Which switchgear uses arc chutes?",
+    "a": "ACB",
+    "opts": [
+      "VCB",
+      "SF6",
+      "ACB",
+      "None"
+    ],
+    "exp": "ACBs use physical chutes to stretch and cool the air-borne arc.",
+    "cat": "VCB",
+    "id": "T02A_073"
+  },
+  {
+    "q": "Is VCB or ACB standard for 6.6 kV shipboards?",
+    "a": "VCB",
+    "opts": [
+      "ACB",
+      "VCB",
+      "Neither",
+      "Oil breakers"
+    ],
+    "exp": "VCBs are the standard choice for all 3.3 kV - 11 kV marine boards.",
+    "cat": "VCB",
+    "id": "T02A_074"
+  },
+  {
+    "q": "Compared to air, how much better is SF6 dielectric strength at 1 bar?",
+    "a": "2.5 times better",
+    "opts": [
+      "Equal",
+      "2.5 times better",
+      "10 times better",
+      "0.5 times better"
+    ],
+    "exp": "At atmospheric pressure, SF6 is 2.5x more effective than air as an insulator.",
+    "cat": "VCB",
+    "id": "T02A_075"
+  },
+  {
+    "q": "What is SF6 gas composed of?",
+    "a": "Sulphur and Fluorine",
+    "opts": [
+      "Sulphur and Oxygen",
+      "Sulphur and Fluorine",
+      "Sulphur and Helium",
+      "Carbon and Fluorine"
+    ],
+    "exp": "Sulphur Hexafluoride (1 atom of Sulphur, 6 atoms of Fluorine).",
+    "cat": "SF6",
+    "id": "T02A_076"
+  },
+  {
+    "q": "Is SF6 gas toxic in its pure, un-arced state?",
+    "a": "No, it is non-toxic",
+    "opts": [
+      "Yes, it is highly toxic",
+      "No, it is non-toxic",
+      "Only when compressed",
+      "Only in sunlight"
+    ],
+    "exp": "Pure SF6 is inert and used safely in many applications, but arc products change this entirely.",
+    "cat": "SF6",
+    "id": "T02A_077"
+  },
+  {
+    "q": "What is the GWP of SF6?",
+    "a": "23,500",
+    "opts": [
+      "1",
+      "100",
+      "23,500",
+      "1,000,000"
+    ],
+    "exp": "Its GWP is 23,500 times that of CO2, making its release a significant environmental incident.",
+    "cat": "SF6",
+    "id": "T02A_078"
+  },
+  {
+    "q": "What is a dangerous arc decomposition product of SF6?",
+    "a": "HF (Hydrogen fluoride)",
+    "opts": [
+      "Pure Oxygen",
+      "HF (Hydrogen fluoride)",
+      "Helium",
+      "Nitrogen"
+    ],
+    "exp": "HF is an extremely corrosive acid formed when the arc energy breaks SF6 bonds in the presence of moisture.",
+    "cat": "SF6",
+    "id": "T02A_079"
+  },
+  {
+    "q": "What PPE is required when entering an enclosure after an SF6 arc event?",
+    "a": "SCBA and chemical protective gloves",
+    "opts": [
+      "Simple dust mask",
+      "Standard boiler suit and safety glasses",
+      "SCBA and chemical protective gloves",
+      "No special PPE needed if well ventilated"
+    ],
+    "exp": "Toxic decomposition gases require full breathing apparatus and skin protection.",
+    "cat": "SF6",
+    "id": "T02A_080"
+  },
+  {
+    "q": "What chemical powder is used to neutralize SF6 arc products?",
+    "a": "Calcium hydroxide",
+    "opts": [
+      "Sodium bicarbonate",
+      "Calcium hydroxide",
+      "Salt powder",
+      "Sand"
+    ],
+    "exp": "Ca(OH)₂ neutralizes the acidic HF and other fluoride compounds before inspection.",
+    "cat": "SF6",
+    "id": "T02A_081"
+  },
+  {
+    "q": "How long should you ventilate an enclosure after an SF6 arc event?",
+    "a": "Minimum 30 minutes",
+    "opts": [
+      "5 minutes",
+      "30 minutes",
+      "2 hours",
+      "10 seconds"
+    ],
+    "exp": "Forced ventilation is vital to remove toxic byproducts before entry.",
+    "cat": "SF6",
+    "id": "T02A_082"
+  },
+  {
+    "q": "What is the atmospheric lifetime of SF6 gas?",
+    "a": "3200 years",
+    "opts": [
+      "10 years",
+      "3200 years",
+      "1 year",
+      "100 years"
+    ],
+    "exp": "It is nearly permanent once released into the atmosphere.",
+    "cat": "SF6",
+    "id": "T02A_083"
+  },
+  {
+    "q": "Is SF6 flammable?",
+    "a": "No, it is non-flammable",
+    "opts": [
+      "Yes, highly flammable",
+      "No, it is non-flammable",
+      "Only when mixed with air",
+      "Only when heated"
+    ],
+    "exp": "SF6 is chemically stable and non-combustible.",
+    "cat": "SF6",
+    "id": "T02A_084"
+  },
+  {
+    "q": "Why is SF6 dangerous even if not inhaled?",
+    "a": "It can cause asphyxiation by displacing oxygen in confined spaces",
+    "opts": [
+      "It is radioactive",
+      "It can cause asphyxiation by displacing oxygen in confined spaces",
+      "It emits high levels of UV",
+      "It induces voltage on nearby metal"
+    ],
+    "exp": "As a dense gas, it can settle in pits, suffocating anyone entering without oxygen monitoring.",
+    "cat": "SF6",
+    "id": "T02A_085"
+  },
+  {
+    "q": "What happens if HF (Hydrogen fluoride) contacts the skin?",
+    "a": "Biological tissue damage (burns)",
+    "opts": [
+      "It turns into harmless gas",
+      "Biological tissue damage (burns)",
+      "It has no effect",
+      "It immediately freezes the tissue"
+    ],
+    "exp": "HF is a severe systemic poison that attacks skin and bone, requiring immediate medical attention.",
+    "cat": "SF6",
+    "id": "T02A_086"
+  },
+  {
+    "q": "What does a VCB bottle smell like?",
+    "a": "Nothing",
+    "opts": [
+      "Ozone",
+      "Nothing",
+      "Burning metal",
+      "Sulfur"
+    ],
+    "exp": "It is a sealed vacuum, containing no chemicals that release odors unless it has been opened or compromised.",
+    "cat": "SF6",
+    "id": "T02A_087"
+  },
+  {
+    "q": "Why monitor SF6 gas pressure?",
+    "a": "Leak control and arc integrity",
+    "opts": [
+      "To measure voltage",
+      "Leak control and arc integrity",
+      "To identify the GWP",
+      "To monitor internal temperature"
+    ],
+    "exp": "Loss of pressure indicates a leak and lowers dielectric strength for arc quenching.",
+    "cat": "SF6",
+    "id": "T02A_088"
+  },
+  {
+    "q": "Is SF6 lighter than air?",
+    "a": "No, it is much denser than air",
+    "opts": [
+      "Yes",
+      "No, it is much denser than air",
+      "They are the same weight",
+      "It depends on the temperature"
+    ],
+    "exp": "SF6 is a heavy gas and tends to pool at the bottom of compartments.",
+    "cat": "SF6",
+    "id": "T02A_089"
+  },
+  {
+    "q": "What is the primary danger of SF6 arc products?",
+    "a": "They are highly toxic",
+    "opts": [
+      "They are highly explosive",
+      "They are highly toxic",
+      "They neutralise the SF6",
+      "They are radioactive"
+    ],
+    "exp": "Decomposition produces hazardous fluorides and sulphates that are extremely harmful to human health.",
+    "cat": "SF6",
+    "id": "T02A_090"
+  },
+  {
+    "q": "What is a Dead Front panel?",
+    "a": "A switchboard where no live parts are accessible from the front during normal operation",
+    "opts": [
+      "A switchboard that is never used",
+      "A switchboard where no live parts are accessible from the front during normal operation",
+      "A switchboard with no meters",
+      "A switchboard that only works in blackout"
+    ],
+    "exp": "The defining safety feature is the total enclosure of all live busbars behind barriers.",
+    "cat": "DEAD",
+    "id": "T02A_091"
+  },
+  {
+    "q": "What IEC standard requires dead-front construction?",
+    "a": "IEC 60092",
+    "opts": [
+      "IEC 60034",
+      "IEC 60092",
+      "ISO 9001",
+      "SOLAS III"
+    ],
+    "exp": "IEC 60092 covers electrical installations in ships and mandates dead-front construction.",
+    "cat": "DEAD",
+    "id": "T02A_092"
+  },
+  {
+    "q": "What is the maximum allowable touch voltage on the front of an MSB?",
+    "a": "50 V AC or 120 V DC",
+    "opts": [
+      "24 V AC or 48 V DC",
+      "50 V AC or 120 V DC",
+      "440 V AC",
+      "6.6 kV"
+    ],
+    "exp": "Standard limits for safe-to-touch operating interfaces.",
+    "cat": "DEAD",
+    "id": "T02A_093"
+  },
+  {
+    "q": "What happens if a door on a dead-front panel is opened?",
+    "a": "It either trips the circuit or requires prior isolation",
+    "opts": [
+      "The entire MSB shuts down",
+      "It either trips the circuit or requires prior isolation",
+      "It sounds the ship's general alarm",
+      "It does nothing"
+    ],
+    "exp": "Interlocks or physical barriers ensure you cannot touch HV/LV live busbars by just swinging a door open.",
+    "cat": "DEAD",
+    "id": "T02A_094"
+  },
+  {
+    "q": "Why were older open-type MSBs dangerous?",
+    "a": "Live busbars were exposed",
+    "opts": [
+      "They lacked meters",
+      "Live busbars were exposed",
+      "They had no earth fault monitoring",
+      "They required too much space"
+    ],
+    "exp": "Accidental contact with exposed copper busbars frequently caused severe electrocutions.",
+    "cat": "DEAD",
+    "id": "T02A_095"
+  },
+  {
+    "q": "Are operating handles insulated on a dead-front panel?",
+    "a": "Yes, they are insulated or at safe touch voltage",
+    "opts": [
+      "No, they are always bare metal",
+      "Yes, they are insulated or at safe touch voltage",
+      "Only the HV handles",
+      "Only the LV handles"
+    ],
+    "exp": "Every interface you interact with must be safe for human contact.",
+    "cat": "DEAD",
+    "id": "T02A_096"
+  },
+  {
+    "q": "What protects the interior of the switchboard?",
+    "a": "Barriers, doors, and shutters",
+    "opts": [
+      "Only the door lock",
+      "Barriers, doors, and shutters",
+      "Only the operator",
+      "Nothing, it is open"
+    ],
+    "exp": "Multiple layers of protection isolate the user from internal live components.",
+    "cat": "DEAD",
+    "id": "T02A_097"
+  },
+  {
+    "q": "Can any voltage level exist inside a dead-front panel?",
+    "a": "Yes",
+    "opts": [
+      "No, only 440 V max",
+      "Yes",
+      "No, only 24 V max",
+      "No, only HV"
+    ],
+    "exp": "The enclosure makes it safe regardless of whether the internal bus is 440 V or 11 kV.",
+    "cat": "DEAD",
+    "id": "T02A_098"
+  },
+  {
+    "q": "What is the primary function of a dead-front panel?",
+    "a": "Prevent operator access to live parts during normal operation",
+    "opts": [
+      "Increase busbar cooling",
+      "Prevent operator access to live parts during normal operation",
+      "Improve synchronization speed",
+      "Allow easy access for repairs"
+    ],
+    "exp": "Normal operation involves operating breakers, not working inside the board.",
+    "cat": "DEAD",
+    "id": "T02A_099"
+  },
+  {
+    "q": "If internal live parts are 6.6 kV, are they exposed on the front?",
+    "a": "No",
+    "opts": [
+      "Yes, but only when locked",
+      "No",
+      "Yes, if not grounded",
+      "Sometimes"
+    ],
+    "exp": "Regardless of voltage, the panel remains dead-front, blocking all access to the 6.6 kV bus.",
+    "cat": "DEAD",
+    "id": "T02A_100"
+  },
+  {
+    "q": "What do the handles and buttons represent on a dead-front panel?",
+    "a": "Safe touch voltage operating interface",
+    "opts": [
+      "Bare live busbar extensions",
+      "Safe touch voltage operating interface",
+      "High voltage terminals",
+      "Maintenance points only"
+    ],
+    "exp": "All buttons are designed for touch safety.",
+    "cat": "DEAD",
+    "id": "T02A_101"
+  },
+  {
+    "q": "Is the front of the MSB meant for internal maintenance?",
+    "a": "No, internal maintenance requires doors/covers to be opened",
+    "opts": [
+      "Yes, always",
+      "No, internal maintenance requires doors/covers to be opened",
+      "Yes, if gloves are worn",
+      "Yes, if in TEST position"
+    ],
+    "exp": "The front is for control; internal maintenance involves deeper, controlled access.",
+    "cat": "DEAD",
+    "id": "T02A_102"
+  },
+  {
+    "q": "Why are dead-front panels mandatory?",
+    "a": "For safety and operator protection",
+    "opts": [
+      "For busbar cooling",
+      "For safety and operator protection",
+      "For easier cable termination",
+      "For faster load transfer"
+    ],
+    "exp": "Protecting life is the absolute driver behind IEC 60092 standards.",
+    "cat": "DEAD",
+    "id": "T02A_103"
+  },
+  {
+    "q": "Does dead-front mean the MSB is not live?",
+    "a": "No, it just means live parts are not accessible from the front",
+    "opts": [
+      "Yes",
+      "No, it just means live parts are not accessible from the front",
+      "It depends on the position",
+      "Only for HV"
+    ],
+    "exp": "The board is likely energized; you just cannot touch the dangerous bits.",
+    "cat": "DEAD",
+    "id": "T02A_104"
+  },
+  {
+    "q": "How does an operator interact with a dead-front MSB?",
+    "a": "Using controls designed for safety",
+    "opts": [
+      "Using an insulated stick only",
+      "Using controls designed for safety",
+      "By opening the front doors",
+      "By removing the barriers"
+    ],
+    "exp": "The controls are specifically designed to safely interface with the energized system.",
+    "cat": "DEAD",
+    "id": "T02A_105"
+  },
+  {
+    "q": "How many safeties are listed in the complete MSB guide?",
+    "a": "14",
+    "opts": [
+      "5",
+      "10",
+      "14",
+      "20"
+    ],
+    "exp": "The comprehensive MSB safety guide in the notes lists 14 specific items.",
+    "cat": "MSB",
+    "id": "T02A_106"
+  },
+  {
+    "q": "What is the minimum thickness requirement for LV (440V) rubber mats?",
+    "a": "6 mm",
+    "opts": [
       "3 mm",
+      "6 mm",
+      "12 mm",
       "25 mm"
     ],
-    "exp": "For 440V LV systems, minimum 6mm mats are used. For HV systems (>1000V), minimum 12mm thickness mats rated for the specific HV class are required.",
-    "id": "T02_HV_011",
-    "topic": "T02_HV",
-    "cat": "MSB"
+    "exp": "The notes specify 6 mm for LV systems.",
+    "cat": "MSB",
+    "id": "T02A_107"
   },
   {
-    "q": "What is the IEC standard colour coding for three-phase AC busbars in an MSB?",
-    "a": "L1: Brown, L2: Black, L3: Grey, Neutral: Blue",
+    "q": "What is the minimum thickness for HV system rubber mats?",
+    "a": "12 mm",
     "opts": [
-      "L1: Red, L2: Yellow, L3: Blue, Neutral: Black",
-      "L1: Brown, L2: Black, L3: Grey, Neutral: Blue",
-      "L1: White, L2: Red, L3: Black, Neutral: Green",
-      "L1: Yellow, L2: Green, L3: Red, Neutral: White"
+      "6 mm",
+      "10 mm",
+      "12 mm",
+      "20 mm"
     ],
-    "exp": "The new IEC standard (IEC 60446) is Brown/Black/Grey for phases, Blue for neutral, and Green/Yellow for Earth. Older ships may still use Red/Yellow/Blue.",
-    "id": "T02_HV_012",
-    "topic": "T02_HV",
-    "cat": "MSB"
+    "exp": "The notes specify 12 mm for HV ships.",
+    "cat": "MSB",
+    "id": "T02A_108"
   },
   {
-    "q": "What is an 'Arc Flash'?",
-    "a": "An explosive release of energy and intense heat (>20,000\u00b0C) from an electrical arc fault through air",
+    "q": "What is the minimum front working space required for an MSB?",
+    "a": "1000 mm",
     "opts": [
-      "A controlled spark used to test insulation",
-      "An explosive release of energy and intense heat (>20,000\u00b0C) from an electrical arc fault through air",
-      "The bright light emitted by a VCB operating normally",
-      "A static discharge between two ungrounded objects"
+      "600 mm",
+      "1000 mm",
+      "1500 mm",
+      "2000 mm"
     ],
-    "exp": "Arc flash is a catastrophic fault producing intense radiant heat, blinding UV light, and vaporised metal.",
-    "id": "T02_HV_013",
-    "topic": "T02_HV",
-    "cat": "SAF"
+    "exp": "A clear, safe path of 1 meter is required in front of the MSB.",
+    "cat": "MSB",
+    "id": "T02A_109"
   },
   {
-    "q": "What phenomenon typically accompanies an Arc Flash and can throw personnel across a room?",
-    "a": "Arc Blast (pressure/shock wave from rapid air expansion)",
+    "q": "What is the minimum rear clearance required for an MSB?",
+    "a": "600 mm",
     "opts": [
-      "Electromagnetic pulse",
-      "Arc Blast (pressure/shock wave from rapid air expansion)",
-      "Toxic gas cloud",
-      "Magnetic resonance"
+      "500 mm",
+      "600 mm",
+      "1000 mm",
+      "200 mm"
     ],
-    "exp": "Arc Blast is the physical pressure wave caused by the rapid expansion of air and vaporised metal (copper expands 67,000 times its volume).",
-    "id": "T02_HV_014",
-    "topic": "T02_HV",
-    "cat": "SAF"
+    "exp": "600 mm is the required space for safely accessing rear cable entries.",
+    "cat": "MSB",
+    "id": "T02A_110"
   },
   {
-    "q": "What is the most critical first step before performing any maintenance on a High Voltage system?",
-    "a": "Perform a Risk Assessment and obtain a Permit to Work (PTW)",
+    "q": "What is the function of the bus tie breaker?",
+    "a": "Allows isolation of one MSB section while the other stays live",
     "opts": [
-      "Put on rubber gloves",
-      "Perform a Risk Assessment and obtain a Permit to Work (PTW)",
-      "Rack out the VCB",
-      "Apply earthing clamps"
+      "Connects the generator to the bus",
+      "Allows isolation of one MSB section while the other stays live",
+      "Protects the system against overspeed",
+      "Monitors insulation resistance"
     ],
-    "exp": "HV work ALWAYS begins with a formal risk assessment and obtaining an authorised Permit to Work. No exceptions.",
-    "id": "T02_HV_015",
-    "topic": "T02_HV",
-    "cat": "SAF"
+    "exp": "It is essential for dividing the MSB to allow safe maintenance on part of it.",
+    "cat": "MSB",
+    "id": "T02A_111"
   },
   {
-    "q": "Why must you wait at least 5 minutes after isolating an HV circuit before working on it?",
-    "a": "To allow the lethal capacitive charge stored in HV cables and equipment to fully dissipate",
+    "q": "What type of fire extinguisher must be provided at the MSB?",
+    "a": "CO2",
     "opts": [
-      "To let the equipment cool down",
-      "To allow the lethal capacitive charge stored in HV cables and equipment to fully dissipate",
-      "To allow SF6 gas to settle",
-      "To ensure the VCB mechanism resets"
+      "Water",
+      "Foam",
+      "CO2",
+      "Dry Chemical Powder"
     ],
-    "exp": "HV cables have high capacitance and act like giant capacitors. Even after disconnection from supply, they retain a lethal charge that takes time to drain.",
-    "id": "T02_HV_016",
-    "topic": "T02_HV",
-    "cat": "SAF"
+    "exp": "CO2 is non-conductive and residue-free, perfect for electrical fires.",
+    "cat": "MSB",
+    "id": "T02A_112"
   },
   {
-    "q": "When testing for dead on an isolated HV circuit, what is the correct testing sequence?",
-    "a": "Test on known live source \u2192 Test isolated circuit (all phases to earth) \u2192 Retest on known live source",
+    "q": "What colours identify L1, L2, L3 in modern IEC standards?",
+    "a": "Brown, Black, Grey",
     "opts": [
-      "Test phase to phase only",
-      "Test on known live source \u2192 Test isolated circuit (all phases to earth) \u2192 Retest on known live source",
-      "Test using a standard 1000V multimeter",
-      "Apply earths first, then test for dead"
+      "Red, Yellow, Blue",
+      "Brown, Black, Grey",
+      "Yellow, Green, Red",
+      "Black, Red, Blue"
     ],
-    "exp": "This is the proving-dead protocol. You must prove the tester works before using it, and prove it still works after using it, to ensure it didn't fail during the test.",
-    "id": "T02_HV_017",
-    "topic": "T02_HV",
-    "cat": "SAF"
+    "exp": "Brown, Black, Grey is the current IEC 60446 international standard.",
+    "cat": "MSB",
+    "id": "T02A_113"
   },
   {
-    "q": "For a 6.6kV shipboard system, what Class and colour of HV insulating gloves must be used?",
-    "a": "Class 2 (Yellow), rated for 17,000V AC",
+    "q": "What are the L1, L2, L3 colours in older BS 158 systems?",
+    "a": "Red, Yellow, Blue",
     "opts": [
-      "Class 0 (Red)",
-      "Class 1 (White)",
-      "Class 2 (Yellow), rated for 17,000V AC",
-      "Class 3 (Green), rated for 26,500V AC"
+      "Brown, Black, Grey",
+      "Red, Yellow, Blue",
+      "Blue, Black, Red",
+      "Grey, Brown, Black"
     ],
-    "exp": "Class 2 (Yellow) is standard for 6.6kV systems. Class 3 (Green) is used for 11kV systems. Gloves must be tested every 6 months.",
-    "id": "T02_HV_018",
-    "topic": "T02_HV",
-    "cat": "GLV"
+    "exp": "Older UK/Indian ships used the Red-Yellow-Blue convention.",
+    "cat": "MSB",
+    "id": "T02A_114"
   },
   {
-    "q": "What must always be worn over HV rubber insulating gloves?",
-    "a": "Leather outer protectors",
+    "q": "What is the purpose of an Earth bus running through the MSB?",
+    "a": "To bond all equipment cases to hull potential",
     "opts": [
-      "Cotton inner liners",
-      "Arc-flash rated gauntlets",
-      "Leather outer protectors",
-      "Nothing, they must be used alone"
+      "To carry neutral current",
+      "To bond all equipment cases to hull potential",
+      "To carry the HV phases",
+      "To improve aesthetic appearance"
     ],
-    "exp": "Rubber insulating gloves are very susceptible to cuts and punctures. Leather outer protectors shield the rubber from mechanical damage.",
-    "id": "T02_HV_019",
-    "topic": "T02_HV",
-    "cat": "GLV"
+    "exp": "Ensuring all conductive cases are at earth potential prevents lethal shocks if a fault occurs.",
+    "cat": "MSB",
+    "id": "T02A_115"
   },
   {
-    "q": "Why is a 2500V or 5000V megger used for testing 6.6kV HV equipment instead of a 500V megger?",
-    "a": "To meaningfully stress the thick HV insulation to a level comparable to its operating voltage and detect weak spots",
+    "q": "What must be installed on all MSB breakers/isolators for maintenance?",
+    "a": "Lockout/tagout (LOTO) facilities",
     "opts": [
-      "Because 500V meggers are not accurate",
-      "To meaningfully stress the thick HV insulation to a level comparable to its operating voltage and detect weak spots",
-      "To overcome the high resistance of HV copper",
-      "To charge the cable capacitance faster"
+      "Automatic shut-off sensors",
+      "Lockout/tagout (LOTO) facilities",
+      "Remote reset buttons",
+      "Warning lights only"
     ],
-    "exp": "A 500V test on 6.6kV insulation applies less than 8% of operating stress. It will pass severely degraded insulation that would instantly fail under actual 6.6kV stress.",
-    "id": "T02_HV_023",
-    "topic": "T02_HV",
-    "cat": "IR"
+    "exp": "LOTO padlocks prevent accidental energization while maintenance is underway.",
+    "cat": "MSB",
+    "id": "T02A_116"
   },
   {
-    "q": "What is the general rule of thumb for the MINIMUM acceptable insulation resistance (IR) for HV equipment?",
-    "a": "Rated Voltage (in kV) + 1 Megohm",
+    "q": "Why should MSB rooms have forward and aft doors?",
+    "a": "Emergency escape if fire blocks one end",
     "opts": [
-      "Rated Voltage (in kV) x 10 Megohms",
-      "1 Megohm regardless of voltage",
-      "Rated Voltage (in kV) + 1 Megohm",
-      "50 Megohms for all HV"
+      "For ventilation efficiency",
+      "Emergency escape if fire blocks one end",
+      "To balance weight distribution",
+      "To accommodate switchboard length"
     ],
-    "exp": "Minimum IR = kV + 1 M\u03a9. For 6.6kV equipment, the absolute minimum is 7.6 M\u03a9. For 11kV, it is 12 M\u03a9.",
-    "id": "T02_HV_024",
-    "topic": "T02_HV",
-    "cat": "IR"
+    "exp": "Safety dictates that any personnel in the MSB must have two paths out during an emergency.",
+    "cat": "MSB",
+    "id": "T02A_117"
   },
   {
-    "q": "What does the '200% insulation' standard require before returning HV equipment to service after repair?",
-    "a": "Measured IR must be at least twice the minimum acceptable value",
+    "q": "What should the MSB lighting be supplied from?",
+    "a": "Emergency lighting circuit",
     "opts": [
-      "Insulation must be physically twice as thick",
-      "Measured IR must be at least twice the minimum acceptable value",
-      "Two layers of rubber tape must be used",
-      "The equipment must withstand 200% overvoltage"
+      "The main busbar",
+      "The emergency lighting circuit",
+      "Battery power only",
+      "The ventilation circuit"
     ],
-    "exp": "200% insulation means a safety margin. If the minimum allowed is 1 M\u03a9, the repaired equipment must measure at least 2 M\u03a9 before it is deemed safe.",
-    "id": "T02_HV_025",
-    "topic": "T02_HV",
-    "cat": "IR"
+    "exp": "If the main generator fails, the MSB must still be lit so that the crew can manually operate breakers.",
+    "cat": "MSB",
+    "id": "T02A_118"
   },
   {
-    "q": "How does an Insulation Resistance Monitor (IRM) detect an earth fault on an IT (insulated neutral) ship system?",
-    "a": "Injects a low-voltage signal between neutral and earth and monitors the circuit impedance",
+    "q": "What is the function of phase barriers?",
+    "a": "Prevent phase-to-phase flashover during a fault",
     "opts": [
-      "Measures the current difference between phases",
-      "Injects a low-voltage signal between neutral and earth and monitors the circuit impedance",
-      "Senses the magnetic field around the earth bar",
-      "Measures the neutral voltage to earth"
+      "Increase busbar voltage",
+      "Prevent phase-to-phase flashover during a fault",
+      "Provide cooling to the phases",
+      "Identify the phases"
     ],
-    "exp": "The IRM applies 1-5V DC/AC between the system and hull. If insulation degrades, impedance drops, leakage current flows, and the IRM triggers an alarm (typically below 50-100 k\u03a9).",
-    "id": "T02_HV_026",
-    "topic": "T02_HV",
-    "cat": "IRM"
+    "exp": "If one phase shorts to earth, the barrier stops the arc from jumping to the other phases.",
+    "cat": "MSB",
+    "id": "T02A_119"
   },
   {
-    "q": "In tanker electrical zones, what is Zone 0?",
-    "a": "An area where a flammable atmosphere is continuously present (e.g., inside cargo tanks)",
+    "q": "How hot can an arc flash reach?",
+    "a": "Over 20,000°C",
     "opts": [
-      "A completely safe area",
-      "An area where flammable atmosphere is likely during normal operation",
-      "An area where flammable atmosphere is unlikely",
-      "An area where a flammable atmosphere is continuously present (e.g., inside cargo tanks)"
+      "1,000°C",
+      "5,000°C",
+      "Over 20,000°C",
+      "100°C"
     ],
-    "exp": "Zone 0 is the most hazardous. Only Category 'ia' Intrinsically Safe (Ex-ia) equipment is permitted in Zone 0.",
-    "id": "T02_HV_027",
-    "topic": "T02_HV",
-    "cat": "BON"
+    "exp": "The extreme energy release in a few milliseconds produces temperatures hotter than the sun's surface.",
+    "cat": "ARC",
+    "id": "T02A_120"
   },
   {
-    "q": "What is the correct sequence for bonding and connecting hoses during tanker cargo operations?",
-    "a": "Connect ship-to-jetty bonding cable FIRST, then connect cargo hose. (Disconnect in reverse order).",
+    "q": "What is an Arc Flash?",
+    "a": "Explosive release of energy from an electrical arc fault through air",
     "opts": [
-      "Connect hose first, then bonding cable",
-      "Connect ship-to-jetty bonding cable FIRST, then connect cargo hose. (Disconnect in reverse order).",
-      "Bonding is not required for modern tankers",
-      "Connect hose, start pumping, then connect bonding cable"
+      "A slow heat release from a wire",
+      "Explosive release of energy from an electrical arc fault through air",
+      "A magnetic pulse only",
+      "A light display"
     ],
-    "exp": "The ship and jetty must be brought to the same electrical potential BEFORE the hose flanges come near each other, preventing static sparks from igniting vapours.",
-    "id": "T02_HV_028",
-    "topic": "T02_HV",
-    "cat": "BON"
+    "exp": "It's the rapid conversion of electrical energy into thermal energy and plasma.",
+    "cat": "ARC",
+    "id": "T02A_121"
   },
   {
-    "q": "What is the principle behind 'Ex-d' (Flameproof) equipment used in Zone 1 areas?",
-    "a": "The heavy enclosure contains any internal explosion and cools escaping gases via long flame paths below ignition temperature",
+    "q": "What does an Arc Blast produce?",
+    "a": "Overpressure shock wave",
     "opts": [
-      "It prevents any gas from entering the enclosure",
-      "It limits the circuit energy so sparks cannot ignite gas",
-      "The heavy enclosure contains any internal explosion and cools escaping gases via long flame paths below ignition temperature",
-      "It is constantly purged with fresh air"
+      "A cooling breeze",
+      "Overpressure shock wave",
+      "A magnetic field increase",
+      "Frequency stability"
     ],
-    "exp": "Ex-d doesn't stop gas getting in. It allows internal explosions but ensures the flame cannot propagate outside the enclosure to the surrounding atmosphere.",
-    "id": "T02_HV_029",
-    "topic": "T02_HV",
-    "cat": "BON"
+    "exp": "Rapid air expansion and copper vaporisation generate a blast wave that can collapse switchgear walls.",
+    "cat": "ARC",
+    "id": "T02A_122"
   },
   {
-    "q": "Why is a Shaft Earthing system required on modern vessels?",
-    "a": "To provide a direct electrical path from shaft to hull, preventing stray currents from causing electrolytic pitting in the bearings",
+    "q": "What is the minimum pressure blast can exceed?",
+    "a": "1000 lbf/ft²",
     "opts": [
-      "To ground the main engine block",
-      "To protect the propeller from lightning strikes",
-      "To provide a direct electrical path from shaft to hull, preventing stray currents from causing electrolytic pitting in the bearings",
-      "To monitor shaft speed"
+      "10 lbf/ft²",
+      "50 lbf/ft²",
+      "1000 lbf/ft²",
+      "10,000 lbf/ft²"
     ],
-    "exp": "The bearing oil film insulates the shaft. Stray common-mode currents (from alternators or VFDs) build up voltage and arc through the oil film, destroying the bearings. The shaft earthing brush safely bypasses this current to the hull.",
-    "id": "T02_HV_030",
-    "topic": "T02_HV",
-    "cat": "SHF"
+    "exp": "The blast wave is powerful enough to throw personnel and destroy metal structures.",
+    "cat": "ARC",
+    "id": "T02A_123"
   },
   {
-    "q": "Surveyor Sanjib frequently asks: What is the primary purpose of a Neutral Earthing Resistor (NER) in HV systems?",
-    "a": "Limits earth fault current to prevent stator core damage",
+    "q": "What can happen to molten copper during an arc flash?",
+    "a": "It is vaporised and projected at high velocity",
     "opts": [
-      "Limits earth fault current to prevent stator core damage",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "It solidifies and stays on the busbar",
+      "It is vaporised and projected at high velocity",
+      "It creates a new connection",
+      "It is sucked into the ventilation"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_001",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The intense heat vaporises the copper, which then turns into high-speed shrapnel.",
+    "cat": "ARC",
+    "id": "T02A_124"
   },
   {
-    "q": "According to Surveyor Kamath, what is the required IR value for an HV motor (e.g. 6.6kV) before starting?",
-    "a": "(Un/1000) + 1 Megohm, so minimum 7.6 Megohms (often practical rule is >100 M\u03a9)",
+    "q": "What type of burn injury results from an arc flash?",
+    "a": "Third-degree burns",
     "opts": [
-      "(Un/1000) + 1 Megohm, so minimum 7.6 Megohms (often practical rule is >100 M\u03a9)",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Mild sunburn",
+      "First-degree burns",
+      "Third-degree burns",
+      "Frostbite"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_002",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The radiant heat is so intense that it causes severe, permanent burns even from meters away.",
+    "cat": "ARC",
+    "id": "T02A_125"
   },
   {
-    "q": "Surveyor Deswal usually asks: How is the arc extinguished in a Vacuum Circuit Breaker (VCB)?",
-    "a": "By interrupting the current in a high vacuum where no ionizable gas exists",
+    "q": "What is the risk to the eyes during an arc flash?",
+    "a": "Intense UV/IR light causes retinal damage",
     "opts": [
-      "By interrupting the current in a high vacuum where no ionizable gas exists",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Temporary loss of night vision",
+      "Intense UV/IR light causes retinal damage",
+      "No risk to the eyes",
+      "Only thermal burns"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_003",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The flash is blindingly bright with heavy UV/IR content that can permanently blind.",
+    "cat": "ARC",
+    "id": "T02A_126"
   },
   {
-    "q": "What is the significance of the Polarization Index (PI) test in HV cables as requested by surveyors?",
-    "a": "It indicates the cleanliness and dryness of the insulation over time (10 min / 1 min ratio)",
+    "q": "What PPE is required for arc protection?",
+    "a": "Arc-flash rated coverall suit and face shield",
     "opts": [
-      "It indicates the cleanliness and dryness of the insulation over time (10 min / 1 min ratio)",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Simple cotton overalls",
+      "Arc-flash rated coverall suit and face shield",
+      "Rubber apron",
+      "Polarized sunglasses"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_004",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Standard PPE doesn't stop arc heat; you need certified arc-rated suits.",
+    "cat": "ARC",
+    "id": "T02A_127"
   },
   {
-    "q": "What happens if a vacuum bottle in a VCB loses its vacuum? (Common surveyor question)",
-    "a": "The arc cannot be extinguished and the breaker may violently explode if operated under load",
+    "q": "How is arc-flash rating typically measured?",
+    "a": "cal/cm²",
     "opts": [
-      "The arc cannot be extinguished and the breaker may violently explode if operated under load",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Watts",
+      "Volts",
+      "cal/cm²",
+      "Amps"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_005",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The incident energy is measured in calories per square centimeter (cal/cm²).",
+    "cat": "ARC",
+    "id": "T02A_128"
   },
   {
-    "q": "According to MMD Surveyors, what is the most critical safety document required before commencing HV maintenance?",
-    "a": "Permit to Work (PTW)",
+    "q": "Can a standard face shield protect against arc flash?",
+    "a": "No, must be an arc-rated face shield",
     "opts": [
-      "Permit to Work (PTW)",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Yes, any plastic shield",
+      "No, must be an arc-rated face shield",
+      "Yes, if worn with sunglasses",
+      "No, face shields are forbidden"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_006",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Standard clear shields are not heat resistant and will melt onto the face.",
+    "cat": "ARC",
+    "id": "T02A_129"
   },
   {
-    "q": "What is the function of the corona shield in high voltage systems?",
-    "a": "To evenly distribute electric field and prevent corona discharge",
+    "q": "Is working alone on HV permissible?",
+    "a": "No, a second person is mandatory for rescue",
     "opts": [
-      "To evenly distribute electric field and prevent corona discharge",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Yes, if the ETO is certified",
+      "No, a second person is mandatory for rescue",
+      "Yes, if there is a phone nearby",
+      "Yes, if in the MSB room"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_007",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "If you are incapacitated, a second person is the only way to rescue you safely.",
+    "cat": "ARC",
+    "id": "T02A_130"
   },
   {
-    "q": "Surveyor Sanjib asks: How do you prove a high voltage circuit is dead?",
-    "a": "By using an approved and tested Voltage Indicating Device (VID)",
+    "q": "What type of gloves must be worn for HV work?",
+    "a": "Class 2 (or higher) rubber insulating gloves with leather outer protectors",
     "opts": [
-      "By using an approved and tested Voltage Indicating Device (VID)",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Basic cotton gloves",
+      "Class 2 (or higher) rubber insulating gloves with leather outer protectors",
+      "Thin plastic gloves",
+      "No gloves needed"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_008",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Rubber provides the insulation; leather provides mechanical puncture resistance.",
+    "cat": "ARC",
+    "id": "T02A_131"
   },
   {
-    "q": "During an oral exam, how would you explain 'Sanction to Test' for HV systems?",
-    "a": "A formal document allowing testing on HV equipment without a full PTW for operational checks",
+    "q": "What happens if a balaclava is not arc-rated?",
+    "a": "It can ignite or melt, causing facial burns",
     "opts": [
-      "A formal document allowing testing on HV equipment without a full PTW for operational checks",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "It acts as a shield",
+      "It can ignite or melt, causing facial burns",
+      "It protects better than a hood",
+      "It has no impact"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_009",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Non-rated fabrics burn instantly when exposed to the high energy of an arc.",
+    "cat": "ARC",
+    "id": "T02A_132"
   },
   {
-    "q": "What is the minimum safe distance (clearance) when working near exposed 6.6kV conductors?",
-    "a": "Usually minimum 1 meter for 6.6kV, depending on company SMS",
+    "q": "Is arc flash just about light?",
+    "a": "No, it is light, heat, sound, and pressure",
     "opts": [
-      "Usually minimum 1 meter for 6.6kV, depending on company SMS",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Yes",
+      "No, it is light, heat, sound, and pressure",
+      "No, it is only light and heat",
+      "No, it is only heat and pressure"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_010",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "It is an explosive, multi-modal energy event.",
+    "cat": "ARC",
+    "id": "T02A_133"
   },
   {
-    "q": "Surveyor Deswal asks: Why are HV cables screened with a copper tape or wire?",
-    "a": "To confine the electric field within the insulation and provide a path for earth fault currents",
+    "q": "What is the primary objective of arc flash PPE?",
+    "a": "To protect against burns and fatal energy transfer",
     "opts": [
-      "To confine the electric field within the insulation and provide a path for earth fault currents",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "To look professional",
+      "To protect against burns and fatal energy transfer",
+      "To keep the operator clean",
+      "To prevent electrical shocks only"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_011",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "PPE is the final layer of safety when electrical isolation is not fully possible or as secondary defense.",
+    "cat": "ARC",
+    "id": "T02A_134"
   },
   {
-    "q": "What is the purpose of a discharge stick in HV maintenance?",
-    "a": "To safely discharge residual static charge from HV cables to earth before touching",
+    "q": "What is the absolute golden rule for HV work?",
+    "a": "Assume live until proved dead",
     "opts": [
-      "To safely discharge residual static charge from HV cables to earth before touching",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Always wear gloves",
+      "Assume live until proved dead",
+      "Always work in pairs",
+      "Always check the fuse first"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_012",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Never trust panel indicators or memory; the test for dead is the only reliable verification.",
+    "cat": "PTW",
+    "id": "T02A_135"
   },
   {
-    "q": "How do you test an HV voltage indicating device (VID) before use?",
-    "a": "By testing it on a known live source or using a proving unit before and after use",
+    "q": "Who must sign the PTW for HV work?",
+    "a": "Chief Engineer",
     "opts": [
-      "By testing it on a known live source or using a proving unit before and after use",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Master",
+      "Chief Engineer",
+      "ETO",
+      "Duty Oiler"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_013",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The Chief Engineer authorizes all high-risk high-voltage operations.",
+    "cat": "PTW",
+    "id": "T02A_136"
   },
   {
-    "q": "Surveyor Kamath asks: Why do we use vacuum instead of air for 6.6kV breakers?",
-    "a": "Vacuum has superior dielectric strength and allows very compact breaker designs",
+    "q": "What is the purpose of LOTO?",
+    "a": "Prevent accidental energization",
     "opts": [
-      "Vacuum has superior dielectric strength and allows very compact breaker designs",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Labeling the equipment",
+      "Prevent accidental energization",
+      "Cooling the breakers",
+      "Grounding the phases"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_014",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Locks keep the switch mechanically held open so someone else cannot accidentally close it.",
+    "cat": "PTW",
+    "id": "T02A_137"
   },
   {
-    "q": "What is the dielectric strength of the vacuum used in VCBs?",
-    "a": "Typically 10^-5 to 10^-7 torr",
+    "q": "How long should you wait for capacitive discharge before testing?",
+    "a": "5 minutes",
     "opts": [
-      "Typically 10^-5 to 10^-7 torr",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "1 minute",
+      "5 minutes",
+      "30 minutes",
+      "1 hour"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_015",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "5 minutes is the specified wait time for HV equipment discharge.",
+    "cat": "PTW",
+    "id": "T02A_138"
   },
   {
-    "q": "According to surveyors, why is the NER rated for a specific time limit (e.g. 10 seconds)?",
-    "a": "To prevent the resistor from melting due to excessive heat during a sustained earth fault",
+    "q": "What is the correct 'Test for Dead' sequence?",
+    "a": "Prove tester on known live → test work point → re-prove tester on known live",
     "opts": [
-      "To prevent the resistor from melting due to excessive heat during a sustained earth fault",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Test work point → prove tester",
+      "Prove tester on known live → test work point → re-prove tester on known live",
+      "Test work point directly",
+      "Use only visual indicators"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_016",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Proving the tester both before and after ensures you haven't been working with a broken detector.",
+    "cat": "PTW",
+    "id": "T02A_139"
   },
   {
-    "q": "What happens if the HV earth fault is not cleared within the NER rating time?",
-    "a": "The NER could fail, leading to an uncontrolled earth fault and potential fire",
+    "q": "When applying earthing clamps, what is connected first?",
+    "a": "The earth side (to hull/ground) first",
     "opts": [
-      "The NER could fail, leading to an uncontrolled earth fault and potential fire",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "The conductor side (to the busbar) first",
+      "The earth side (to hull/ground) first",
+      "Both at the same time",
+      "Doesn't matter"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_017",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Always connect to earth first so you are not handling a dangling lead that might have come into contact with HV.",
+    "cat": "PTW",
+    "id": "T02A_140"
   },
   {
-    "q": "Surveyor Sanjib: What is the difference between an Earthing Switch and a Circuit Breaker?",
-    "a": "Earthing switch is designed to handle fault making current, but not load breaking current",
+    "q": "What should be placed around the HV work area?",
+    "a": "Physical barriers and warning signs",
     "opts": [
-      "Earthing switch is designed to handle fault making current, but not load breaking current",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Temporary lighting",
+      "Physical barriers and warning signs",
+      "Additional fire extinguishers",
+      "Extra rubber mats"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_018",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Barriers define the safe working perimeter to exclude unauthorized personnel.",
+    "cat": "PTW",
+    "id": "T02A_141"
   },
   {
-    "q": "Why must the earthing switch be closed before issuing a Permit to Work?",
-    "a": "To ensure any accidental energization results in a safe short to ground, protecting workers",
+    "q": "In what order are earths removed?",
+    "a": "LAST before re-energisation",
     "opts": [
-      "To ensure any accidental energization results in a safe short to ground, protecting workers",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "First thing in the morning",
+      "After re-energisation",
+      "LAST before re-energisation",
+      "Before removing the barrier"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_019",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "If you leave them on and switch power, you get a short circuit; they must be removed immediately before startup.",
+    "cat": "PTW",
+    "id": "T02A_142"
   },
   {
-    "q": "During an MMD exam, how do you describe a 'High Voltage' system limit on ships?",
-    "a": "Any voltage exceeding 1000V AC or 1500V DC",
+    "q": "What is the purpose of the PTW briefing?",
+    "a": "Ensure all involved personnel understand hazards and procedure",
     "opts": [
-      "Any voltage exceeding 1000V AC or 1500V DC",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "To check equipment availability",
+      "Ensure all involved personnel understand hazards and procedure",
+      "To verify the weather",
+      "To assign maintenance tasks"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_020",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Communication of the specific risks and steps is the primary tool for accident prevention.",
+    "cat": "PTW",
+    "id": "T02A_143"
   },
   {
-    "q": "What is the primary risk of arc flash in HV switchboards?",
-    "a": "Severe burns from intense heat, pressure wave, and flying molten metal",
+    "q": "Why is the bridge informed before HV work?",
+    "a": "To ensure they are aware of electrical isolation status",
     "opts": [
-      "Severe burns from intense heat, pressure wave, and flying molten metal",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "To request a coffee",
+      "To ensure they are aware of electrical isolation status",
+      "To check the engine speed",
+      "To update the logbook"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_021",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Isolation status can affect propulsion, steering, or navigation system availability.",
+    "cat": "PTW",
+    "id": "T02A_144"
   },
   {
-    "q": "Surveyor Deswal asks: What PPE is mandatory for racking out a VCB?",
-    "a": "Arc flash suit, face shield, and rated HV gloves",
+    "q": "Who keeps the key to the LOTO lock?",
+    "a": "The ETO",
     "opts": [
-      "Arc flash suit, face shield, and rated HV gloves",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "The Chief Engineer",
+      "The ETO",
+      "The Duty Officer",
+      "The shore tech"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_022",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "The person performing the work maintains control of the isolation key.",
+    "cat": "PTW",
+    "id": "T02A_145"
   },
   {
-    "q": "How do you measure the contact resistance of a VCB?",
-    "a": "Using a micro-ohmmeter (Ductor tester) injecting DC current",
+    "q": "What do 'Men At Work' tags indicate?",
+    "a": "That equipment must not be operated",
     "opts": [
-      "Using a micro-ohmmeter (Ductor tester) injecting DC current",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "That the equipment is ready to use",
+      "That equipment must not be operated",
+      "That the ETO is absent",
+      "That voltage is low"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_023",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Tags act as a visual deterrent to prevent accidental switch manipulation.",
+    "cat": "PTW",
+    "id": "T02A_146"
   },
   {
-    "q": "What is the significance of tracking in HV insulation?",
-    "a": "Formation of a permanent conductive path across the surface of insulation",
+    "q": "Does isolation replace the test for dead?",
+    "a": "No",
     "opts": [
-      "Formation of a permanent conductive path across the surface of insulation",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "Yes",
+      "No",
+      "Only for HV",
+      "Only for LV"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_024",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Isolation is a process; test for dead is the verification of the process's success.",
+    "cat": "PTW",
+    "id": "T02A_147"
   },
   {
-    "q": "According to Surveyor Kamath, what causes corona discharge?",
-    "a": "Ionization of air around conductors due to concentrated electric fields",
+    "q": "Are induction-induced voltages possible in isolated HV cables?",
+    "a": "Yes, especially if parallel runs are live",
     "opts": [
-      "Ionization of air around conductors due to concentrated electric fields",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
+      "No",
+      "Yes, especially if parallel runs are live",
+      "Only in DC systems",
+      "Only in air"
     ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_025",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
+    "exp": "Capacitive and inductive coupling from nearby energized cables can induce lethal voltages on isolated lines.",
+    "cat": "PTW",
+    "id": "T02A_148"
   },
   {
-    "q": "What is a PTW (Permit to Work) and who issues it for HV?",
-    "a": "A safety document issued by the Chief Engineer (or authorized HV person)",
-    "opts": [
-      "A safety document issued by the Chief Engineer (or authorized HV person)",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
-    ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_026",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
-  },
-  {
-    "q": "Surveyor Sanjib: What is the function of the anti-condensation heater in an HV motor?",
-    "a": "To prevent moisture condensation on windings when the motor is stopped",
-    "opts": [
-      "To prevent moisture condensation on windings when the motor is stopped",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
-    ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_027",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
-  },
-  {
-    "q": "How is the anti-condensation heater interlocked with the main HV contactor?",
-    "a": "It is normally closed when the main contactor is open, and vice versa",
-    "opts": [
-      "It is normally closed when the main contactor is open, and vice versa",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
-    ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_028",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
-  },
-  {
-    "q": "During surveyor exams, what is the accepted value of a PI test that indicates good insulation?",
-    "a": "A PI value greater than 2.0 indicates good insulation",
-    "opts": [
-      "A PI value greater than 2.0 indicates good insulation",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
-    ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_029",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
-  },
-  {
-    "q": "What does a PI value below 1.0 indicate according to surveyors?",
-    "a": "The insulation is dangerously wet or degraded and must not be energized",
-    "opts": [
-      "The insulation is dangerously wet or degraded and must not be energized",
-      "Incorrect answer A",
-      "Incorrect answer B",
-      "Incorrect answer C"
-    ],
-    "exp": "Surveyor specific HV question.",
-    "id": "T02_SURV_030",
-    "topic": "T02_HV",
-    "cat": "Surveyor Questions"
-  },
-  {
-    "q": "What is the primary operational advantage of transmitting power at High Voltage (e.g., 6.6kV) rather than Low Voltage (440V) on a large vessel?",
-    "a": "It significantly reduces the current for a given power level, allowing for smaller, lighter cables and reducing I2R copper losses.",
-    "opts": [
-      "It eliminates the need for circuit breakers.",
-      "It significantly reduces the current for a given power level, allowing for smaller, lighter cables and reducing I2R copper losses.",
-      "It makes the power perfectly immune to harmonics.",
-      "It removes the need for step-down transformers."
-    ],
-    "exp": "According to P = V x I x cos(phi), if Voltage increases, Current decreases for the same Power. Lower current means thinner, lighter cables and massive savings on copper weight.",
-    "cat": "HV",
-    "id": "T02_HV_061",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "According to standard marine practice (IEC 60092), any system operating at or above what AC voltage is classified as High Voltage?",
-    "a": "1000V AC",
-    "opts": [
-      "440V AC",
-      "690V AC",
-      "1000V AC",
-      "3300V AC"
-    ],
-    "exp": "Marine rules classify voltages up to 1000V AC (and 1500V DC) as Low Voltage. Anything strictly above 1000V AC is High Voltage and requires special certification (STCW A-III/1, A-III/2, A-III/6).",
-    "cat": "HV",
-    "id": "T02_HV_062",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are standard ship HV generation voltages exactly 3.3kV, 6.6kV, or 11kV?",
-    "a": "To provide a 10% allowance for voltage drop across the system to ensure equipment receives its nominal 3kV, 6kV, or 10kV rating.",
-    "opts": [
-      "Because 1.1 is the universal magnetic permeability constant.",
-      "To provide a 10% allowance for voltage drop across the system to ensure equipment receives its nominal 3kV, 6kV, or 10kV rating.",
-      "Because alternators cannot generate exactly 3000V.",
-      "It is an arbitrary historical standard with no engineering basis."
-    ],
-    "exp": "The 1.1 multiplier (e.g., 3kV x 1.1 = 3.3kV) compensates for the inherent voltage drop in long cables, transformers, and distribution networks, ensuring the end consumer receives adequate voltage.",
-    "cat": "HV",
-    "id": "T02_HV_063",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When is an ETO or Engineer permitted to work on live High Voltage equipment?",
-    "a": "Never. Live working on HV equipment is strictly prohibited under all circumstances.",
-    "opts": [
-      "When wearing Class 4 rubber gloves.",
-      "If authorized by the Chief Engineer.",
-      "Never. Live working on HV equipment is strictly prohibited under all circumstances.",
-      "When using an insulated fiberglass hook."
-    ],
-    "exp": "Unlike 220V/440V systems where live troubleshooting is sometimes necessary (with precautions), HV safety rules globally prohibit working on live HV parts. It must always be Isolated, Dead, and Earthed.",
-    "cat": "HV",
-    "id": "T02_HV_064",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What phenomenon occurs in HV cables if the insulation is degraded and micro-voids exist within the dielectric?",
-    "a": "Partial Discharge (Corona), leading to rapid insulation breakdown.",
-    "opts": [
-      "Galvanic corrosion.",
-      "Partial Discharge (Corona), leading to rapid insulation breakdown.",
-      "Capacitive reactance inversion.",
-      "Thermal runaway of the copper core."
-    ],
-    "exp": "High voltage stresses the insulation. If microscopic air gaps exist, the air ionizes (partial discharge), producing ozone and UV light that rapidly destroys the surrounding insulation.",
-    "cat": "HV",
-    "id": "T02_HV_065",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are Vacuum Circuit Breakers (VCBs) preferred over Air Circuit Breakers (ACBs) for marine High Voltage applications?",
-    "a": "Vacuum has vastly superior dielectric strength, allowing rapid arc quenching in a very small physical space.",
-    "opts": [
-      "They are much cheaper to manufacture.",
-      "Vacuum has vastly superior dielectric strength, allowing rapid arc quenching in a very small physical space.",
-      "They never require any maintenance.",
-      "They do not require an operating mechanism."
-    ],
-    "exp": "At 6.6kV, an arc drawn in air can stretch for meters. In a high vacuum (10^-6 Torr), there are no gas molecules to ionize, meaning the arc collapses almost instantly at the first zero-crossing of the AC current.",
-    "cat": "VCB",
-    "id": "T02_HV_066",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if the vacuum integrity of a VCB 'bottle' is compromised?",
-    "a": "The breaker loses its arc-quenching ability and will explode catastrophically if opened under load.",
-    "opts": [
-      "The breaker simply will not close.",
-      "The breaker loses its arc-quenching ability and will explode catastrophically if opened under load.",
-      "The contacts will weld together but remain safe.",
-      "The vacuum pump automatically restarts."
-    ],
-    "exp": "If air leaks into the vacuum interrupter, it acts as a conductor at 6.6kV. When the contacts separate, the arc will not extinguish, building massive pressure and causing a violent explosion.",
-    "cat": "VCB",
-    "id": "T02_HV_067",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How is the vacuum integrity of a VCB bottle practically tested during maintenance?",
-    "a": "By applying a high voltage DC test (e.g., 10kV to 30kV) across the open contacts and measuring leakage current.",
-    "opts": [
-      "By shaking it to hear loose parts.",
-      "By applying a high voltage DC test (e.g., 10kV to 30kV) across the open contacts and measuring leakage current.",
-      "By connecting a vacuum gauge.",
-      "By submerging it in water to look for bubbles."
-    ],
-    "exp": "Since you cannot physically measure the vacuum inside a sealed ceramic bottle, you apply a high DC voltage across the open contacts. If the vacuum is good, leakage current is negligible (micro-amps). If it has failed, it will flash over.",
-    "cat": "VCB",
-    "id": "T02_HV_068",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does 'racking out' a VCB mean?",
-    "a": "Physically withdrawing the entire breaker unit from the switchboard to guarantee a visible air gap isolation.",
-    "opts": [
-      "Opening the internal contacts.",
-      "Physically withdrawing the entire breaker unit from the switchboard to guarantee a visible air gap isolation.",
-      "Testing the vacuum bottles.",
-      "Connecting the earthing switch."
-    ],
-    "exp": "Safety requires physical isolation. Racking the breaker out on its rails disconnects the primary 'tulip' contacts from the live busbars, providing a physical, visible air gap.",
-    "cat": "VCB",
-    "id": "T02_HV_069",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is an interlock fitted to prevent a VCB from being racked in or out while the main contacts are CLOSED?",
-    "a": "To prevent drawing a massive, unquenchable arc in the open air at the isolating plug-in contacts.",
-    "opts": [
-      "To protect the racking handle from breaking.",
-      "To prevent drawing a massive, unquenchable arc in the open air at the isolating plug-in contacts.",
-      "To ensure the vacuum doesn't leak.",
-      "Because the breaker is physically heavier when closed."
-    ],
-    "exp": "The primary isolating 'tulip' contacts are not designed to break load current. If you rack a closed breaker out under load, a 6.6kV arc will strike between the breaker and the busbar, causing an immediate arc flash explosion.",
-    "cat": "VCB",
-    "id": "T02_HV_070",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary function of a Neutral Earthing Resistor (NER) in a marine 6.6kV system?",
-    "a": "To strictly limit the magnitude of a single phase-to-earth fault current, preventing catastrophic core damage while allowing protection relays to detect the fault.",
-    "opts": [
-      "To increase the short-circuit current for faster tripping.",
-      "To strictly limit the magnitude of a single phase-to-earth fault current, preventing catastrophic core damage while allowing protection relays to detect the fault.",
-      "To absorb harmonic distortions.",
-      "To convert the system to an insulated neutral (IT) system."
-    ],
-    "exp": "In a 440V system, earth faults are tolerated (IT system). In 6.6kV, the voltage is too high; a phase-to-earth arc would destroy the stator iron. The NER grounds the star point but limits the fault current to a safe, low value (often matching the generator's full load current or less).",
-    "cat": "NER",
-    "id": "T02_HV_071",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a 6.6kV generator is star-connected, what is the phase-to-neutral voltage across the NER during a solid earth fault on one phase?",
-    "a": "3810 Volts",
-    "opts": [
-      "6600 Volts",
-      "3810 Volts",
-      "440 Volts",
-      "0 Volts"
-    ],
-    "exp": "Phase voltage = Line Voltage / sqrt(3). Therefore, 6600 / 1.732 = 3810V. During a solid earth fault on one phase, the neutral point is driven to phase potential relative to earth, putting 3810V across the NER.",
-    "cat": "NER",
-    "id": "T02_HV_072",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if a second phase-to-earth fault occurs on a different phase before the first one is cleared in an NER system?",
-    "a": "It becomes a Phase-to-Phase short circuit, bypassing the NER entirely, resulting in massive, unrestricted fault current.",
-    "opts": [
-      "The NER limits the current even more.",
-      "It becomes a Phase-to-Phase short circuit, bypassing the NER entirely, resulting in massive, unrestricted fault current.",
-      "The voltage drops to zero safely.",
-      "The generators automatically synchronize."
-    ],
-    "exp": "The NER only protects against a single phase-to-earth fault. If Phase A earths in one motor, and Phase B earths in another, the current travels A -> Earth -> B, bypassing the neutral point and the NER, causing a massive short circuit.",
-    "cat": "NER",
-    "id": "T02_HV_073",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are High Voltage systems on ships designed to automatically trip upon detecting a single earth fault, unlike 440V systems?",
-    "a": "Because the high voltage will cause severe, rapid arcing damage to equipment and poses extreme risk of a secondary phase-to-phase fault.",
-    "opts": [
-      "Because HV cables cannot handle earth faults.",
-      "Because the high voltage will cause severe, rapid arcing damage to equipment and poses extreme risk of a secondary phase-to-phase fault.",
-      "Because the NER will instantly explode.",
-      "It is merely a suggestion, not a requirement."
-    ],
-    "exp": "While a 440V IT system can run with one earth fault safely to maintain essential services, a 6.6kV arc is highly destructive. It will burn through insulation in seconds, so the protection relay must trip the faulty circuit immediately.",
-    "cat": "NER",
-    "id": "T02_HV_074",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How is a Neutral Earthing Resistor continuously monitored for integrity?",
-    "a": "By using an NER monitor relay that injects a small measuring current to ensure the resistor has not burned out or gone open-circuit.",
-    "opts": [
-      "By visual inspection only.",
-      "By measuring its temperature constantly.",
-      "By using an NER monitor relay that injects a small measuring current to ensure the resistor has not burned out or gone open-circuit.",
-      "By bypassing it periodically."
-    ],
-    "exp": "If the NER breaks (open circuit), the HV system becomes an ungrounded IT system without anyone knowing. The monitor relay ensures the earth path is intact and raises an alarm if the resistance changes.",
-    "cat": "NER",
-    "id": "T02_HV_075",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is an 'Arc Flash'?",
-    "a": "A massive, explosive release of thermal energy caused by a high-voltage electrical arc traveling through ionized air.",
-    "opts": [
-      "A small spark when opening a switch.",
-      "A massive, explosive release of thermal energy caused by a high-voltage electrical arc traveling through ionized air.",
-      "The light emitted by a fluorescent tube.",
-      "A type of welding used in shipbuilding."
-    ],
-    "exp": "An arc flash is essentially an electrical explosion. The temperature of the arc can reach 20,000\u00b0C (four times hotter than the sun), vaporizing copper and creating a lethal blast wave of molten metal and superheated air.",
-    "cat": "SAF",
-    "id": "T02_HV_076",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What piece of documentation is absolutely mandatory before beginning any work on isolated High Voltage equipment?",
-    "a": "A specialized High Voltage Permit to Work (PTW) signed by the Chief Engineer.",
-    "opts": [
-      "A simple verbal agreement with the watchkeeper.",
-      "A specialized High Voltage Permit to Work (PTW) signed by the Chief Engineer.",
-      "A hot work permit.",
-      "A generic risk assessment."
-    ],
-    "exp": "The HV PTW is a legal and life-saving document. It proves that the equipment has been properly isolated, locked off, tested dead, and earthed by an authorized person before work begins.",
-    "cat": "SAF",
-    "id": "T02_HV_077",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the correct sequence for making High Voltage equipment safe to work on?",
-    "a": "Isolate, Secure (Lock out), Verify Dead (Prove dead), Earth and Short-circuit, Issue PTW.",
-    "opts": [
-      "Issue PTW, Isolate, Earth.",
-      "Isolate, Secure (Lock out), Verify Dead (Prove dead), Earth and Short-circuit, Issue PTW.",
-      "Earth, Verify Dead, Isolate.",
-      "Verify Dead, Isolate, Lock out, Issue PTW."
-    ],
-    "exp": "This is the universally accepted strict sequence. You must completely disconnect power, physically lock the breakers open, use a certified tester to prove there is no voltage, physically connect the phases to earth, and only then issue the permit.",
-    "cat": "SAF",
-    "id": "T02_HV_078",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is 'Earthing and Short-circuiting' a mandatory step before working on HV cables, even after proving them dead?",
-    "a": "To discharge any lethal capacitive voltage stored in the cables and to instantly trip the breaker if it is accidentally energized.",
-    "opts": [
-      "To test the NER.",
-      "To prevent the cables from rusting.",
-      "To discharge any lethal capacitive voltage stored in the cables and to instantly trip the breaker if it is accidentally energized.",
-      "To keep the cables warm."
-    ],
-    "exp": "Long HV cables act as massive capacitors and hold a lethal charge for hours. Earthing bleeds this off safely. Also, if someone accidentally switches the power back on, the solid earth connection instantly trips the breaker, saving the worker.",
-    "cat": "SAF",
-    "id": "T02_HV_079",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary IEC standard that governs the testing and certification of electrically insulating gloves?",
-    "a": "IEC 60903",
-    "opts": [
-      "IEC 60092",
-      "IEC 60903",
-      "IEC 61892",
-      "IEC 60529"
-    ],
-    "exp": "IEC 60903 specifies the requirements for insulating gloves and mitts used for protection against electrical shock.",
-    "cat": "GLV",
-    "id": "T02_HV_080",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "For a marine 6.6kV system, what class of rubber insulating glove is minimally required for safe operation?",
-    "a": "Class 1 (Proof tested to 10kV, maximum use 7.5kV AC)",
-    "opts": [
-      "Class 00 (Max 500V)",
-      "Class 0 (Max 1000V)",
-      "Class 1 (Proof tested to 10kV, maximum use 7.5kV AC)",
-      "Class 4 (Max 36kV)"
-    ],
-    "exp": "Class 1 gloves are rated for a maximum AC use voltage of 7,500V, which safely covers standard 6.6kV shipboard distribution networks.",
-    "cat": "GLV",
-    "id": "T02_HV_081",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the standard color code label assigned to Class 1 insulating gloves according to IEC standards?",
-    "a": "White",
-    "opts": [
-      "Red",
-      "White",
-      "Yellow",
-      "Green"
-    ],
-    "exp": "IEC colour coding for gloves: Class 00 (Beige), Class 0 (Red), Class 1 (White), Class 2 (Yellow), Class 3 (Green), Class 4 (Orange).",
-    "cat": "GLV",
-    "id": "T02_HV_082",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What must ALWAYS be worn over rubber insulating gloves when working near HV equipment?",
-    "a": "Leather protector gloves to prevent mechanical damage to the rubber.",
-    "opts": [
-      "Cotton sweat liners.",
-      "Leather protector gloves to prevent mechanical damage to the rubber.",
-      "Flame-retardant gauntlets.",
-      "Kevlar cut-resistant gloves."
-    ],
-    "exp": "Rubber insulating gloves are fragile and easily punctured by sharp edges, wire strands, or tools. Leather protectors are mandatory to prevent any physical damage that would compromise the electrical insulation.",
-    "cat": "GLV",
-    "id": "T02_HV_083",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Before every single use, what test MUST the ETO perform on their HV rubber gloves?",
-    "a": "A manual air inflation test (visual and auditory check for leaks).",
-    "opts": [
-      "A 10kV dielectric breakdown test.",
-      "A water submersion test.",
-      "A manual air inflation test (visual and auditory check for leaks).",
-      "A continuity test with a multimeter."
-    ],
-    "exp": "By rolling the cuff tightly, air is trapped inside the glove. The user must listen and look for tiny pinhole leaks. Even a microscopic hole renders the glove lethal at 6.6kV.",
-    "cat": "GLV",
-    "id": "T02_HV_084",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How often must HV insulating gloves be sent to a certified laboratory for routine electrical re-testing?",
-    "a": "Every 6 months from the date of issue (or 12 months from the date of manufacture if unused).",
-    "opts": [
-      "Every month.",
-      "Every 6 months from the date of issue (or 12 months from the date of manufacture if unused).",
-      "Every 5 years during special survey.",
-      "They never need testing, only replacement when torn."
-    ],
-    "exp": "Rubber degrades over time due to ozone, UV, and temperature. Strict marine standards demand periodic laboratory dielectric proof testing, typically every 6 months of active service.",
-    "cat": "GLV",
-    "id": "T02_HV_085",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the maximum permissible AC use voltage for Class 0 rubber gloves (Red label)?",
-    "a": "1,000 Volts AC",
-    "opts": [
-      "500 Volts AC",
-      "1,000 Volts AC",
-      "3,300 Volts AC",
-      "7,500 Volts AC"
-    ],
-    "exp": "Class 0 gloves are only for Low Voltage work (up to 1000V AC). They offer zero protection on a 6.6kV system.",
-    "cat": "GLV",
-    "id": "T02_HV_086",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a Class 1 glove is used without a leather protector (even once), what is the correct procedure?",
-    "a": "It must immediately be removed from service and sent for laboratory dielectric re-testing.",
-    "opts": [
-      "It can be reused if no visible damage is found.",
-      "It should be washed in warm soapy water.",
-      "It must immediately be removed from service and sent for laboratory dielectric re-testing.",
-      "It must be downgraded to a Class 0 glove."
-    ],
-    "exp": "Because microscopic cuts from a single unprotected use can compromise the 7.5kV rating, the glove is considered unsafe until scientifically proven otherwise by a high-voltage test machine.",
-    "cat": "GLV",
-    "id": "T02_HV_087",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How should HV rubber insulating gloves be stored when not in use?",
-    "a": "Stored flat in a dedicated canvas bag, in a cool, dark, dry place away from ozone sources.",
-    "opts": [
-      "Folded tightly in the engineer's toolbox.",
-      "Hung by the fingers near the switchboard.",
-      "Stored flat in a dedicated canvas bag, in a cool, dark, dry place away from ozone sources.",
-      "Kept inside the main MSB panel."
-    ],
-    "exp": "Folding causes stress cracks. Heat and UV light destroy rubber. Ozone (generated by electric motors and switchgear) accelerates rubber rot. Thus, flat storage in a dark bag is required.",
-    "cat": "GLV",
-    "id": "T02_HV_088",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If an ETO is preparing to rack out a 6.6kV VCB, besides HV gloves, what other critical PPE is mandated?",
-    "a": "An Arc Flash suit, including a face shield with the appropriate cal/cm2 rating, and an arc-rated balaclava.",
-    "opts": [
-      "Standard cotton boiler suit and safety glasses.",
-      "A chemical splash suit and respirator.",
-      "An Arc Flash suit, including a face shield with the appropriate cal/cm2 rating, and an arc-rated balaclava.",
-      "High visibility vest and hard hat."
-    ],
-    "exp": "Racking a breaker is the highest risk time for an arc flash. HV gloves prevent shock, but an arc flash suit (Nomex/Kevlar blend) prevents third-degree burns from the explosive thermal energy.",
-    "cat": "GLV",
-    "id": "T02_HV_089",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What degrades the dielectric strength of rubber gloves the fastest in an engine room environment?",
-    "a": "Contamination by oil, grease, or petroleum-based solvents.",
-    "opts": [
-      "Loud noise and vibration.",
-      "High humidity.",
-      "Contamination by oil, grease, or petroleum-based solvents.",
-      "Fresh water condensation."
-    ],
-    "exp": "Petroleum products rapidly attack natural rubber, causing it to swell, soften, and lose all insulating properties. Gloves must be kept strictly away from oil.",
-    "cat": "GLV",
-    "id": "T02_HV_090",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the correct procedure for washing HV rubber gloves if they become dirty?",
-    "a": "Wash with mild soap and lukewarm water, rinse thoroughly, and air dry away from direct heat.",
-    "opts": [
-      "Clean with engine degreaser.",
-      "Wash with mild soap and lukewarm water, rinse thoroughly, and air dry away from direct heat.",
-      "Dry clean only.",
-      "Scrub with a wire brush and diesel."
-    ],
-    "exp": "Harsh chemicals destroy rubber. Mild soap is safe, but the gloves must be completely dry inside and out before use, as moisture conducts electricity.",
-    "cat": "GLV",
-    "id": "T02_HV_091",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of the 'clearance' requirement between the cuff of the rubber glove and the leather protector?",
-    "a": "To prevent surface tracking (flashover) of high voltage across the leather to the user's arm.",
-    "opts": [
-      "To allow air circulation to cool the hands.",
-      "To make the gloves easier to take off.",
-      "To prevent surface tracking (flashover) of high voltage across the leather to the user's arm.",
-      "To allow room for a wristwatch."
-    ],
-    "exp": "Leather is not an insulator. If the leather protector covers the entire rubber cuff, HV can track across the dirty leather directly to the skin. A gap (e.g., 25mm for Class 1) must be maintained.",
-    "cat": "GLV",
-    "id": "T02_HV_092",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When donning HV PPE, why must watches and rings be removed?",
-    "a": "They can tear the rubber gloves and act as highly conductive, heat-retaining points during a shock or arc flash.",
-    "opts": [
-      "They affect the magnetic field of the switchboard.",
-      "They can tear the rubber gloves and act as highly conductive, heat-retaining points during a shock or arc flash.",
-      "They are not allowed by the company uniform policy.",
-      "They cause static electricity buildup."
-    ],
-    "exp": "Jewelry easily punctures the delicate rubber. In an arc flash, metal jewelry rapidly absorbs heat, causing severe localized third-degree burns melting into the skin.",
-    "cat": "GLV",
-    "id": "T02_HV_093",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Class 2 insulating gloves (Yellow label) are rated for what maximum AC use voltage?",
-    "a": "17,000 Volts AC",
-    "opts": [
-      "7,500 Volts AC",
-      "11,000 Volts AC",
-      "17,000 Volts AC",
-      "26,500 Volts AC"
-    ],
-    "exp": "Class 2 gloves are proof tested to 20kV and have a maximum use voltage of 17kV. They are sometimes used on 11kV shipboard systems.",
-    "cat": "GLV",
-    "id": "T02_HV_094",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What indicates that an HV glove has failed the air inflation test?",
-    "a": "A whistling sound or a noticeable decrease in pressure when the trapped air is held.",
-    "opts": [
-      "The glove turns a lighter color.",
-      "A whistling sound or a noticeable decrease in pressure when the trapped air is held.",
-      "The glove feels warm to the touch.",
-      "The rubber becomes sticky."
-    ],
-    "exp": "Even if the hole is invisible, air escaping under pressure will produce a distinct hiss or whistle, and the glove will physically deflate.",
-    "cat": "GLV",
-    "id": "T02_HV_095",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you use HV insulating gloves that are past their stamped re-test date, provided they pass an air inflation test?",
-    "a": "No, it is strictly prohibited. They must be re-tested by a certified lab before any further use.",
-    "opts": [
-      "Yes, in an emergency only.",
-      "Yes, if authorized by the Chief Engineer.",
-      "No, it is strictly prohibited. They must be re-tested by a certified lab before any further use.",
-      "Yes, if they are Class 4 gloves."
-    ],
-    "exp": "The air test only finds physical holes; it cannot detect chemical degradation or dielectric breakdown of the rubber matrix. Only high-voltage lab testing ensures they are safe.",
-    "cat": "GLV",
-    "id": "T02_HV_096",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is an alternative to standard natural rubber gloves for personnel with severe latex allergies?",
-    "a": "Gloves made from synthetic polymers (like EPDM or Polychloroprene) certified to IEC 60903.",
-    "opts": [
-      "Thick leather welding gloves.",
-      "Gloves made from synthetic polymers (like EPDM or Polychloroprene) certified to IEC 60903.",
-      "Standard nitrile surgical gloves.",
-      "Working barehanded but standing on a rubber mat."
-    ],
-    "exp": "Manufacturers provide synthetic (Type II) insulating gloves that are ozone resistant and do not contain natural latex proteins, suitable for allergic personnel.",
-    "cat": "GLV",
-    "id": "T02_HV_097",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When is it acceptable to turn HV gloves inside out?",
-    "a": "Never, except specifically instructed by the manufacturer during cleaning and drying, as it stresses the rubber.",
-    "opts": [
-      "Whenever putting them back in the bag.",
-      "Never, except specifically instructed by the manufacturer during cleaning and drying, as it stresses the rubber.",
-      "Always, to protect the outer surface.",
-      "Only when performing the air test."
-    ],
-    "exp": "Repeatedly turning thick rubber gloves inside out places extreme mechanical stress on the seams and crotches of the fingers, leading to premature cracking.",
-    "cat": "GLV",
-    "id": "T02_HV_098",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does ozone (O3) damage rubber insulating gloves?",
-    "a": "It attacks the polymer chains, causing 'ozone cutting'\u2014deep, brittle cracks that destroy the dielectric strength.",
-    "opts": [
-      "It makes the gloves highly conductive.",
-      "It attacks the polymer chains, causing 'ozone cutting'\u2014deep, brittle cracks that destroy the dielectric strength.",
-      "It melts the rubber into a liquid.",
-      "It causes the gloves to shrink."
-    ],
-    "exp": "Ozone, generated by corona discharge from HV equipment, rapidly oxidizes natural rubber. When stressed (like being folded), the rubber splits deeply, forming visible cracks.",
-    "cat": "GLV",
-    "id": "T02_HV_099",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of wearing cotton inner liners under HV rubber gloves?",
-    "a": "To absorb sweat, improving comfort and preventing the hands from slipping inside the glove.",
-    "opts": [
-      "To increase the voltage rating of the glove.",
-      "To absorb sweat, improving comfort and preventing the hands from slipping inside the glove.",
-      "To prevent the rubber from tearing.",
-      "To provide extra heat protection from an arc flash."
-    ],
-    "exp": "Rubber gloves do not breathe. Sweaty hands can make precision work impossible and make the gloves extremely difficult to remove. Liners solve this comfort issue.",
-    "cat": "GLV",
-    "id": "T02_HV_100",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if a leather protector is excessively wet with water or sweat?",
-    "a": "It can conduct electricity, potentially bridging the clearance gap and causing a shock.",
-    "opts": [
-      "It shrinks and crushes the rubber glove.",
-      "It can conduct electricity, potentially bridging the clearance gap and causing a shock.",
-      "It provides better grip on the breaker handle.",
-      "It acts as a better insulator."
-    ],
-    "exp": "Wet leather is conductive. If the wet leather touches grounded metal and the clearance to the rubber cuff is compromised, current can track along the moisture path.",
-    "cat": "GLV",
-    "id": "T02_HV_101",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the 'Two-Color' construction found in some premium HV gloves?",
-    "a": "The inside and outside are different colors; if the outer color is worn away revealing the inner color, the glove must be discarded.",
-    "opts": [
-      "It indicates they can be used for both AC and DC.",
-      "The inside and outside are different colors; if the outer color is worn away revealing the inner color, the glove must be discarded.",
-      "It helps identify the left and right hand.",
-      "It proves they are made of synthetic rubber."
-    ],
-    "exp": "A contrasting inner color (e.g., black outside, yellow inside) provides an instant visual indicator of severe mechanical wear or deep cuts that compromise the glove's thickness.",
-    "cat": "GLV",
-    "id": "T02_HV_102",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What must be checked on the leather protectors before donning them over the rubber gloves?",
-    "a": "Check for embedded metal shards, wire clippings, or sharp debris inside that could puncture the rubber.",
-    "opts": [
-      "Check the date of manufacture.",
-      "Check for embedded metal shards, wire clippings, or sharp debris inside that could puncture the rubber.",
-      "Check if they are fully oiled.",
-      "Check the voltage rating stamped on the leather."
-    ],
-    "exp": "Protectors face harsh environments. If a piece of copper wire is trapped inside the leather, it will stab directly through the rubber glove when the user grips a tool.",
-    "cat": "GLV",
-    "id": "T02_HV_103",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Which of the following is NOT a valid test for HV gloves onboard a ship?",
-    "a": "High-voltage dielectric breakdown test.",
-    "opts": [
-      "Visual inspection for cracks.",
-      "Manual air inflation test.",
-      "Checking the date of the last laboratory test.",
-      "High-voltage dielectric breakdown test."
-    ],
-    "exp": "Ships do not have the specialized, calibrated AC/DC high voltage testing tanks required to perform a proper dielectric breakdown test. This must be done ashore.",
-    "cat": "GLV",
-    "id": "T02_HV_104",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the IEC 60903 definition of 'Proof Test Voltage' for a glove?",
-    "a": "The high voltage applied under specified conditions for 3 minutes to verify the electrical strength of the glove.",
-    "opts": [
-      "The voltage at which the glove instantly melts.",
-      "The high voltage applied under specified conditions for 3 minutes to verify the electrical strength of the glove.",
-      "The normal working voltage of the switchboard.",
-      "The voltage rating of the leather protector."
-    ],
-    "exp": "The proof test (e.g., 10kV for Class 1) is a factory/lab quality assurance test. The glove must withstand this voltage for 3 minutes without puncturing and while keeping leakage current within strict limits.",
-    "cat": "GLV",
-    "id": "T02_HV_105",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you use talcum powder inside HV gloves to make them easier to put on?",
-    "a": "Yes, provided it is pure, non-conductive, and approved by the glove manufacturer.",
-    "opts": [
-      "No, it acts as an abrasive.",
-      "Yes, provided it is pure, non-conductive, and approved by the glove manufacturer.",
-      "Yes, but only graphite powder.",
-      "No, it interacts with the ozone."
-    ],
-    "exp": "Pure French chalk or approved talc is often used to prevent the rubber from sticking to the skin, but it must not contain metallic impurities or chemicals that degrade rubber.",
-    "cat": "GLV",
-    "id": "T02_HV_106",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a ship's HV system is 11kV, what Class of rubber gloves MUST be used?",
-    "a": "Class 2 (Maximum use 17kV AC)",
+    "q": "Which class of HV glove is used for 6.6 kV?",
+    "a": "Class 2",
     "opts": [
       "Class 0",
       "Class 1",
-      "Class 2 (Maximum use 17kV AC)",
-      "Class 3 (Maximum use 26.5kV AC)"
+      "Class 2",
+      "Class 4"
     ],
-    "exp": "Class 1 maxes out at 7.5kV. For an 11kV system (commonly found on very large cruise ships or LNG carriers), Class 2 (Yellow label) is the minimum required rating.",
-    "cat": "GLV",
-    "id": "T02_HV_107",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 2 is rated for 17 kV, making it the correct and safest choice for 6.6 kV systems.",
+    "cat": "GLOV",
+    "id": "T02A_149"
   },
   {
-    "q": "What feature defines an HV switchboard as 'Metal-Clad' according to IEC 62271-200?",
-    "a": "All major components (breakers, busbars, cables) are enclosed in separate, earthed metal compartments.",
+    "q": "What is the colour of Class 2 gloves?",
+    "a": "Yellow",
     "opts": [
-      "It is painted with a metallic coating.",
-      "All major components (breakers, busbars, cables) are enclosed in separate, earthed metal compartments.",
-      "It uses aluminum busbars instead of copper.",
-      "The entire switchboard is suspended on metal springs."
+      "White",
+      "Yellow",
+      "Green",
+      "Orange"
     ],
-    "exp": "Metal-clad switchgear provides the highest safety level. If an arc flash occurs in the breaker compartment, grounded metal barriers prevent the blast from spreading to the busbar or cable compartments.",
-    "cat": "MSB",
-    "id": "T02_HV_108",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 2 gloves are internationally colour-coded as yellow.",
+    "cat": "GLOV",
+    "id": "T02A_150"
   },
   {
-    "q": "What is an 'Arc Relief Flap' or 'Pressure Relief Duct' on an HV switchboard?",
-    "a": "A weak point designed to blow open and direct the explosive pressure of an arc flash upwards and safely away from operators.",
+    "q": "What is the voltage rating of Class 3 gloves?",
+    "a": "26,500 V",
     "opts": [
-      "A vent to let out excess heat during normal operation.",
-      "A flap to insert a fire extinguisher nozzle.",
-      "A weak point designed to blow open and direct the explosive pressure of an arc flash upwards and safely away from operators.",
-      "A viewing window for the busbars."
+      "17,000 V",
+      "26,500 V",
+      "36,000 V",
+      "7,500 V"
     ],
-    "exp": "An arc flash causes an instantaneous, massive increase in air pressure. Without relief flaps directing this blast out the top of the board, the steel doors would blow off like shrapnel into the operator.",
-    "cat": "MSB",
-    "id": "T02_HV_109",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 3 provides protection up to 26.5 kV.",
+    "cat": "GLOV",
+    "id": "T02A_151"
   },
   {
-    "q": "Why do HV switchboards utilize 'Busbar Shutters'?",
-    "a": "To automatically cover the live fixed contacts when the circuit breaker is racked out, preventing accidental contact.",
+    "q": "What is the colour of Class 3 gloves?",
+    "a": "Green",
     "opts": [
-      "To keep dust off the circuit breaker.",
-      "To automatically cover the live fixed contacts when the circuit breaker is racked out, preventing accidental contact.",
-      "To secure the breaker during rough weather.",
-      "To provide ventilation to the busbars."
+      "White",
+      "Yellow",
+      "Green",
+      "Orange"
     ],
-    "exp": "When a VCB is drawn out, the live 6.6kV busbar connections are exposed. Mechanical shutters automatically drop down over these spouts, providing a physical barrier against accidental touch.",
-    "cat": "MSB",
-    "id": "T02_HV_110",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 3 gloves are green.",
+    "cat": "GLOV",
+    "id": "T02A_152"
   },
   {
-    "q": "What is the purpose of 'Anti-Condensation Heaters' inside HV switchboard compartments?",
-    "a": "To keep the internal temperature slightly above ambient, preventing moisture from condensing on the high-voltage insulation.",
+    "q": "When should gloves undergo a dielectric test?",
+    "a": "Every 6 months",
     "opts": [
-      "To keep the operator warm during maintenance.",
-      "To keep the internal temperature slightly above ambient, preventing moisture from condensing on the high-voltage insulation.",
-      "To bake the insulating varnish on the busbars.",
-      "To melt any ice that forms in the engine room."
+      "Every year",
+      "Every 6 months",
+      "Every 2 years",
+      "Only when damaged"
     ],
-    "exp": "Moisture is the enemy of high voltage. If the board cools down, condensation forms on the insulators, causing tracking and eventual flashover. Small heaters run continuously (when the breaker is open) to prevent this.",
-    "cat": "MSB",
-    "id": "T02_HV_111",
-    "topic": "T02_HighVoltage"
+    "exp": "The standard interval for electrical dielectric re-testing is every 6 months.",
+    "cat": "GLOV",
+    "id": "T02A_153"
   },
   {
-    "q": "In HV switchboards, what material is typically used to insulate the copper busbars themselves, aside from air?",
-    "a": "Heat-shrinkable tubing or epoxy resin casting.",
+    "q": "What must you do before EVERY use of the gloves?",
+    "a": "Inflation test",
     "opts": [
-      "Asbestos tape.",
-      "Heat-shrinkable tubing or epoxy resin casting.",
-      "Standard PVC electrical tape.",
-      "Cotton cloth soaked in oil."
+      "Electrical test",
+      "Inflation test",
+      "Wash with soap",
+      "Replace them"
     ],
-    "exp": "While air provides some insulation, HV busbars are heavily insulated with special anti-tracking heat-shrink sleeves or epoxy resin to reduce the necessary air gap distance and prevent phase-to-phase arcing from rodents or tools.",
-    "cat": "MSB",
-    "id": "T02_HV_112",
-    "topic": "T02_HighVoltage"
+    "exp": "A manual air-check inflation test helps find microscopic punctures.",
+    "cat": "GLOV",
+    "id": "T02A_154"
   },
   {
-    "q": "What is the 'Earthing Switch' (or Make-Proof Earthing Switch) in an HV switchboard?",
-    "a": "A mechanically interlocked switch used to solidly connect the outgoing cables to earth before maintenance.",
+    "q": "What is the purpose of leather outer protectors?",
+    "a": "Puncture resistance",
     "opts": [
-      "A switch that turns on the NER.",
-      "A mechanically interlocked switch used to solidly connect the outgoing cables to earth before maintenance.",
-      "A switch used to bypass the main breaker.",
-      "A switch that detects earth faults."
+      "Insulation boost",
+      "Puncture resistance",
+      "Cold protection",
+      "Better grip"
     ],
-    "exp": "To ensure absolute safety, once the breaker is racked out, an earthing switch is thrown. 'Make-proof' means if the cable is accidentally live when earthed, the switch can safely withstand the resulting short-circuit force without exploding.",
-    "cat": "MSB",
-    "id": "T02_HV_113",
-    "topic": "T02_HighVoltage"
+    "exp": "Rubber punctures easily; leather protects the rubber from sharp objects.",
+    "cat": "GLOV",
+    "id": "T02A_155"
   },
   {
-    "q": "What mechanical interlock prevents closing the earthing switch on a live circuit?",
-    "a": "The earthing switch can only be operated if the main circuit breaker is in the 'Test' or 'Withdrawn' position.",
+    "q": "What happens if a glove fails the inflation test?",
+    "a": "Reject it immediately",
     "opts": [
-      "A software lock in the PMS.",
-      "The earthing switch can only be operated if the main circuit breaker is in the 'Test' or 'Withdrawn' position.",
-      "A padlock held by the captain.",
-      "A sensor that measures voltage."
+      "Patch it",
+      "Reject it immediately",
+      "Use it anyway",
+      "Double glove"
     ],
-    "exp": "Mechanical cams and levers physically block the earthing switch handle from being inserted or turned unless the main VCB has been safely disconnected from the busbars.",
-    "cat": "MSB",
-    "id": "T02_HV_114",
-    "topic": "T02_HighVoltage"
+    "exp": "Any leak means the glove provides zero electrical safety.",
+    "cat": "GLOV",
+    "id": "T02A_156"
   },
   {
-    "q": "What is the function of the 'Test' position for a VCB in an HV switchboard?",
-    "a": "The main HV contacts are disconnected, but the low voltage control circuits remain connected to test breaker operation.",
+    "q": "Which class is suited for 3.3 kV?",
+    "a": "Class 1",
     "opts": [
-      "The breaker is fully connected to the busbars but cannot take load.",
-      "The main HV contacts are disconnected, but the low voltage control circuits remain connected to test breaker operation.",
-      "The breaker is entirely removed from the panel.",
-      "The breaker applies a test voltage to the cables."
+      "Class 0",
+      "Class 1",
+      "Class 2",
+      "Class 3"
     ],
-    "exp": "In the 'Test' position, the 6.6kV circuit is physically broken (air gap). However, the umbilical cord for the 24V/110V control logic is still plugged in, allowing engineers to test the open/close coils and protection relays safely.",
-    "cat": "MSB",
-    "id": "T02_HV_115",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 1 is rated for 7.5 kV, sufficient for 3.3 kV.",
+    "cat": "GLOV",
+    "id": "T02A_157"
   },
   {
-    "q": "Why must the compartment doors of an HV switchboard remain closed and bolted before operating a circuit breaker?",
-    "a": "To ensure the arc flash containment structure is fully intact in case of a catastrophic breaker failure.",
+    "q": "Can you repair a puncture in an HV glove?",
+    "a": "No",
     "opts": [
-      "To keep the noise down.",
-      "To ensure the arc flash containment structure is fully intact in case of a catastrophic breaker failure.",
-      "To prevent the anti-condensation heaters from losing heat.",
-      "To stop the vacuum in the bottles from escaping."
+      "Yes",
+      "No",
+      "Only with rubber glue",
+      "Only with tape"
     ],
-    "exp": "Internal arc classification (IAC) ratings rely entirely on the steel doors being securely latched. Operating a breaker with the door open bypasses this protection, exposing the operator directly to a potential blast.",
-    "cat": "MSB",
-    "id": "T02_HV_116",
-    "topic": "T02_HighVoltage"
+    "exp": "Safety equipment reliability cannot be maintained via patches; replacement is mandatory.",
+    "cat": "GLOV",
+    "id": "T02A_158"
   },
   {
-    "q": "What is a 'Protection Relay' in the context of an HV switchboard?",
-    "a": "A microprocessor-based device that monitors CT and PT signals and commands the breaker to trip during abnormal conditions.",
+    "q": "What class is Orange?",
+    "a": "Class 4",
     "opts": [
-      "A mechanical spring that holds the breaker open.",
-      "A microprocessor-based device that monitors CT and PT signals and commands the breaker to trip during abnormal conditions.",
-      "A relay that turns on the switchboard lights.",
-      "A device that automatically synchronizes the generators."
+      "Class 1",
+      "Class 2",
+      "Class 3",
+      "Class 4"
     ],
-    "exp": "Modern Intelligent Electronic Devices (IEDs) analyze current (from CTs) and voltage (from PTs). If they detect overcurrent, short circuit, or earth faults, they send a 24V DC signal to the breaker's trip coil.",
-    "cat": "MSB",
-    "id": "T02_HV_117",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 4 gloves are orange, rated up to 36 kV.",
+    "cat": "GLOV",
+    "id": "T02A_159"
   },
   {
-    "q": "What are CTs (Current Transformers) and PTs (Potential Transformers) used for in HV switchboards?",
-    "a": "To safely step down 6.6kV and high currents to low, measurable values (e.g., 110V and 5A) for meters and relays.",
+    "q": "Is the leather protector tested?",
+    "a": "Yes, inspected for cuts/holes",
     "opts": [
-      "To increase the voltage for transmission.",
-      "To safely step down 6.6kV and high currents to low, measurable values (e.g., 110V and 5A) for meters and relays.",
-      "To convert AC to DC for the control circuits.",
-      "To provide emergency power to the switchboard."
+      "No",
+      "Yes, inspected for cuts/holes",
+      "Only if it gets wet",
+      "It is replaced every 6 months"
     ],
-    "exp": "You cannot connect a 6.6kV line directly to a meter. PTs step 6600V down to 110V. CTs step 1000A down to 1A or 5A, completely isolating the operator and delicate electronics from the lethal primary high voltage.",
-    "cat": "MSB",
-    "id": "T02_HV_118",
-    "topic": "T02_HighVoltage"
+    "exp": "Damaged leather may allow sharp metal to penetrate and puncture the rubber beneath.",
+    "cat": "GLOV",
+    "id": "T02A_160"
   },
   {
-    "q": "What is a critical safety rule regarding the secondary circuit of a Current Transformer (CT) while the primary is live?",
-    "a": "The secondary circuit MUST NEVER be open-circuited; it must always be shorted or connected to a load.",
+    "q": "What should the glove tag show?",
+    "a": "Date of last electrical dielectric test",
     "opts": [
-      "It must never be short-circuited.",
-      "The secondary circuit MUST NEVER be open-circuited; it must always be shorted or connected to a load.",
-      "It must be grounded to exactly 440V.",
-      "It must be connected to a DC source."
+      "Expiry date only",
+      "Date of last electrical dielectric test",
+      "User name",
+      "Brand name"
     ],
-    "exp": "If a CT secondary is opened while primary current flows, the core saturates and induces thousands of volts across the open secondary terminals, creating a lethal shock hazard and destroying the CT insulation.",
-    "cat": "MSB",
-    "id": "T02_HV_119",
-    "topic": "T02_HighVoltage"
+    "exp": "The tag is proof that the glove has passed the certified dielectric test within the 6-month window.",
+    "cat": "GLOV",
+    "id": "T02A_161"
   },
   {
-    "q": "What is meant by 'Internal Arc Classification' (IAC) for marine HV switchboards?",
-    "a": "A rating indicating the switchboard has been tested to withstand and contain an internal arc flash for a specific duration and current.",
+    "q": "What is the consequence of missing the tag?",
+    "a": "DO NOT USE - remove from service",
     "opts": [
-      "The ability of the switchboard to generate an arc.",
-      "A rating indicating the switchboard has been tested to withstand and contain an internal arc flash for a specific duration and current.",
-      "The classification of the vacuum bottles.",
-      "The speed at which the breaker opens."
+      "It is acceptable",
+      "DO NOT USE - remove from service",
+      "Re-test it yourself",
+      "Use only for LV"
     ],
-    "exp": "An IAC rating (e.g., IAC AFLR 31.5kA 1s) guarantees that if a massive 31.5kA short-circuit arc occurs inside, the metal casing will not rupture and operators outside will not be injured for 1 second.",
-    "cat": "MSB",
-    "id": "T02_HV_120",
-    "topic": "T02_HighVoltage"
+    "exp": "Lack of a current, verified test tag means safety compliance cannot be proven.",
+    "cat": "GLOV",
+    "id": "T02A_162"
   },
   {
-    "q": "How does an 'Optical Arc Fault Sensor' protect an HV switchboard?",
-    "a": "It uses fiber optic lenses to detect the intense flash of light from an arc, sending an instantaneous trip signal before pressure builds.",
+    "q": "What is the voltage rating of Class 1 gloves?",
+    "a": "7,500 V",
     "opts": [
-      "It uses lasers to measure the air gap.",
-      "It uses fiber optic lenses to detect the intense flash of light from an arc, sending an instantaneous trip signal before pressure builds.",
-      "It visually inspects the busbars for corrosion.",
-      "It takes photographs of the operator for security."
+      "1,000 V",
+      "7,500 V",
+      "17,000 V",
+      "26,500 V"
     ],
-    "exp": "Light travels faster than pressure. By detecting the blinding flash of an arc fault (often combined with an overcurrent signal), the relay trips the incoming breaker in milliseconds, drastically minimizing explosive damage.",
-    "cat": "MSB",
-    "id": "T02_HV_121",
-    "topic": "T02_HighVoltage"
+    "exp": "Class 1 covers up to 7.5 kV.",
+    "cat": "GLOV",
+    "id": "T02A_163"
   },
   {
-    "q": "What is a 'Mimic Panel' on the front of an HV switchboard?",
-    "a": "A graphical line diagram showing the layout of busbars, breakers, and generators, often with LED indicators showing live/dead status.",
+    "q": "How often should you inspect gloves for damage?",
+    "a": "Visually before every use",
     "opts": [
-      "A mirror for the operator to check their PPE.",
-      "A graphical line diagram showing the layout of busbars, breakers, and generators, often with LED indicators showing live/dead status.",
-      "A touchscreen used to play training videos.",
-      "A panel that mimics the sounds of the engine room."
+      "Every year",
+      "Visually before every use",
+      "Only when cleaning",
+      "Never"
     ],
-    "exp": "The mimic diagram provides an instant, easy-to-understand visual representation of the ship's electrical topology, reducing operator error during stressful switching operations.",
-    "cat": "MSB",
-    "id": "T02_HV_122",
-    "topic": "T02_HighVoltage"
+    "exp": "A daily check protects you against a puncture that occurred since last use.",
+    "cat": "RULE",
+    "id": "T02A_164"
   },
   {
-    "q": "Why are key-exchange interlock systems (like Castell keys) used on HV systems?",
-    "a": "To ensure a strict, forced sequence of operations (e.g., you cannot unlock a transformer door until the main breaker is locked open).",
+    "q": "What must you keep away from gloves?",
+    "a": "Oil and petroleum products",
     "opts": [
-      "To prevent the crew from stealing the breakers.",
-      "To ensure a strict, forced sequence of operations (e.g., you cannot unlock a transformer door until the main breaker is locked open).",
-      "To start the emergency generator.",
-      "To provide encryption for the SCADA network."
+      "Water",
+      "Oil and petroleum products",
+      "Plastic bags",
+      "Wooden boxes"
     ],
-    "exp": "Castell keys trap a physical key in a lock. Turning off the breaker releases Key A. Key A is used to unlock the earthing switch, which releases Key B. Key B unlocks the compartment door. This completely eliminates human sequencing errors.",
-    "cat": "MSB",
-    "id": "T02_HV_123",
-    "topic": "T02_HighVoltage"
+    "exp": "Petroleum strips the rubber of its flexibility and dielectric integrity.",
+    "cat": "RULE",
+    "id": "T02A_165"
   },
   {
-    "q": "What is 'Control Voltage' in the context of an HV switchboard?",
-    "a": "The low voltage (usually 24V DC, 110V DC, or 220V AC) used to power the protection relays, indicator lights, and breaker trip/close coils.",
+    "q": "Why avoid UV light exposure?",
+    "a": "UV degrades rubber over time",
     "opts": [
-      "The 6.6kV generated by the alternators.",
-      "The low voltage (usually 24V DC, 110V DC, or 220V AC) used to power the protection relays, indicator lights, and breaker trip/close coils.",
-      "The voltage required to test the vacuum bottles.",
-      "The voltage sent to the ship's navigation lights."
+      "It causes them to shrink",
+      "UV degrades rubber over time",
+      "It makes them sticky",
+      "No reason"
     ],
-    "exp": "The massive 6.6kV system is entirely controlled by a safe, reliable low-voltage network, usually backed up by batteries (UPS) so breakers can still trip even during a total blackout.",
-    "cat": "MSB",
-    "id": "T02_HV_124",
-    "topic": "T02_HighVoltage"
+    "exp": "Prolonged UV exposure turns rubber brittle, leading to cracking.",
+    "cat": "RULE",
+    "id": "T02A_166"
   },
   {
-    "q": "If the 24V DC control power to a VCB panel is lost, what happens to the breaker?",
-    "a": "It remains in its current state (open or closed), but it cannot be operated electrically and protection relays are disabled.",
+    "q": "What does Ozone do to rubber gloves?",
+    "a": "Causes invisible micro-fractures",
     "opts": [
-      "It automatically trips open.",
-      "It automatically closes.",
-      "It remains in its current state (open or closed), but it cannot be operated electrically and protection relays are disabled.",
-      "It causes an arc flash."
+      "Enhances strength",
+      "Causes invisible micro-fractures",
+      "It does nothing",
+      "It disinfects"
     ],
-    "exp": "The main contacts are held closed by mechanical latches, not electromagnets. Without control power, the trip coil cannot fire. The breaker must be tripped manually by pressing the mechanical push-button on the front.",
-    "cat": "MSB",
-    "id": "T02_HV_125",
-    "topic": "T02_HighVoltage"
+    "exp": "Ozone (produced by electric motors/sparks) causes 'ozone cracking', which ruins the glove.",
+    "cat": "RULE",
+    "id": "T02A_167"
   },
   {
-    "q": "What is a 'Trip Circuit Supervision' (TCS) relay?",
-    "a": "A relay that continuously monitors the integrity of the wiring to the breaker's trip coil, alarming if the wire breaks.",
+    "q": "Where should gloves be stored?",
+    "a": "In a cool, dark, dry location",
     "opts": [
-      "A relay that monitors the temperature of the busbars.",
-      "A relay that continuously monitors the integrity of the wiring to the breaker's trip coil, alarming if the wire breaks.",
-      "A device that supervises the ETO during maintenance.",
-      "A relay that prevents the breaker from closing."
+      "Near the engine room door",
+      "In a cool, dark, dry location",
+      "In the bridge locker",
+      "Near the boiler"
     ],
-    "exp": "If the tiny wire leading to the trip coil breaks, the protection relay cannot open the breaker during a short circuit. TCS passes a harmless milliamp current through the trip coil 24/7 to prove the circuit is intact.",
-    "cat": "MSB",
-    "id": "T02_HV_126",
-    "topic": "T02_HighVoltage"
+    "exp": "Optimal storage prevents UV, heat, and humidity degradation.",
+    "cat": "RULE",
+    "id": "T02A_168"
   },
   {
-    "q": "When visually inspecting a live HV switchboard (through a viewing window), what is a sign of Corona discharge?",
-    "a": "A faint blue or purple glow around busbar joints or cable terminations, accompanied by a hissing sound and ozone smell.",
+    "q": "How should a leak be identified in an inflation test?",
+    "a": "Deflation or audible leak",
     "opts": [
-      "Bright orange sparks.",
-      "A faint blue or purple glow around busbar joints or cable terminations, accompanied by a hissing sound and ozone smell.",
-      "The busbars turning bright red.",
-      "Water dripping from the roof."
+      "Colour change",
+      "Deflation or audible leak",
+      "Increased pressure",
+      "Feeling cold"
     ],
-    "exp": "Corona is the ionization of air due to high electric field stress. It emits UV light (appearing purple/blue in the dark) and creates ozone gas. It indicates failing insulation or sharp edges on conductors.",
-    "cat": "MSB",
-    "id": "T02_HV_127",
-    "topic": "T02_HighVoltage"
+    "exp": "If the trapped air escapes, the rubber is compromised.",
+    "cat": "RULE",
+    "id": "T02A_169"
   },
   {
-    "q": "What tool is used to prove a 6.6kV busbar is dead before applying earths?",
-    "a": "A certified High Voltage Potential Indicator (voltage detector), which must be proved on a known live source before and after use.",
+    "q": "What is the first step in the rack-out sequence?",
+    "a": "OPEN VCB",
     "opts": [
-      "A standard 1000V digital multimeter.",
-      "A certified High Voltage Potential Indicator (voltage detector), which must be proved on a known live source before and after use.",
-      "A neon screwdriver.",
-      "A megger."
+      "Disconnect control power",
+      "OPEN VCB",
+      "Turn the handle",
+      "Apply earth"
     ],
-    "exp": "Standard multimeters will explode at 6.6kV. A specialized HV detector wand (usually with lights and a siren) on a long fiberglass pole is used. The crucial 'prove-test-prove' method ensures the wand's battery wasn't dead.",
-    "cat": "MSB",
-    "id": "T02_HV_128",
-    "topic": "T02_HighVoltage"
+    "exp": "Safety interlocks prohibit movement while the breaker is carrying load.",
+    "cat": "MAINT",
+    "id": "T02A_170"
   },
   {
-    "q": "What is the function of the 'Anti-Pumping' relay in a circuit breaker control circuit?",
-    "a": "It prevents the breaker from rapidly opening and closing (pumping) if the 'Close' command is maintained while a 'Trip' condition exists.",
+    "q": "What should you do after opening the VCB during rack-out?",
+    "a": "Discharge closing spring",
     "opts": [
-      "It pumps insulating oil into the breaker.",
-      "It prevents the breaker from rapidly opening and closing (pumping) if the 'Close' command is maintained while a 'Trip' condition exists.",
-      "It ensures the vacuum pump stays off.",
-      "It stops the ship's fuel pumps during a blackout."
+      "Apply earth",
+      "Test for dead",
+      "Discharge closing spring",
+      "Open the door"
     ],
-    "exp": "If an operator holds the 'Close' button while a fault exists on the line, the protection relay instantly trips the breaker. Without anti-pumping, the continuous close signal would immediately close it again, destroying the breaker.",
-    "cat": "MSB",
-    "id": "T02_HV_129",
-    "topic": "T02_HighVoltage"
+    "exp": "Preventing accidental energy release is a critical step in the sequence.",
+    "cat": "MAINT",
+    "id": "T02A_171"
   },
   {
-    "q": "What is the primary difference between a 'Switch Disconnector' and a 'Circuit Breaker' in HV gear?",
-    "a": "A circuit breaker can safely interrupt massive short-circuit fault currents; a switch disconnector can only break normal load currents.",
+    "q": "What happens in the TEST position?",
+    "a": "Disconnected from HV busbars, control circuits still connected",
     "opts": [
-      "A switch disconnector operates at 440V.",
-      "A circuit breaker can safely interrupt massive short-circuit fault currents; a switch disconnector can only break normal load currents.",
-      "A switch disconnector is always filled with oil.",
-      "There is no difference; the terms are interchangeable."
+      "Fully live",
+      "Disconnected from HV busbars, control circuits still connected",
+      "Fully isolated",
+      "The door is locked"
     ],
-    "exp": "Switch disconnectors are cheaper and used for isolating transformers or ring mains under normal load. They do not have the heavy-duty arc quenching capacity to stop a 40,000 Amp short circuit.",
-    "cat": "MSB",
-    "id": "T02_HV_130",
-    "topic": "T02_HighVoltage"
+    "exp": "TEST allows safe testing of protection relays without HV exposure.",
+    "cat": "MAINT",
+    "id": "T02A_172"
   },
   {
-    "q": "Why is SF6 (Sulphur Hexafluoride) sometimes used instead of air in some HV switchboards (GIS)?",
-    "a": "SF6 is a highly electronegative gas with excellent dielectric strength, allowing the switchboard to be made much smaller and immune to salt air.",
+    "q": "How do you know the VCB is in the ISOLATED position?",
+    "a": "Confirmed by shutter closure over busbar spouts",
     "opts": [
-      "SF6 is lighter than air.",
-      "SF6 is a highly electronegative gas with excellent dielectric strength, allowing the switchboard to be made much smaller and immune to salt air.",
-      "SF6 makes the copper busbars more conductive.",
-      "SF6 is cheaper than air."
+      "The VCB light turns green",
+      "Confirmed by shutter closure over busbar spouts",
+      "The door pops open",
+      "The handle stops turning"
     ],
-    "exp": "Gas Insulated Switchgear (GIS) seals the busbars in a tank of SF6 gas. Because SF6 insulates much better than air, the components can be placed very close together, saving critical space on modern vessels.",
-    "cat": "MSB",
-    "id": "T02_HV_131",
-    "topic": "T02_HighVoltage"
+    "exp": "Shutters provide a physical barrier between you and the live busbar.",
+    "cat": "MAINT",
+    "id": "T02A_173"
   },
   {
-    "q": "What is the required minimum clearance distance in front of an HV switchboard for operator safety?",
-    "a": "Typically at least 1 meter (or more depending on Class rules) of clear, unobstructed walkway covered with an HV rubber mat.",
+    "q": "What is the typical contact resistance (ductor test) spec?",
+    "a": "< 100 μΩ",
     "opts": [
-      "0.5 meters.",
-      "Typically at least 1 meter (or more depending on Class rules) of clear, unobstructed walkway covered with an HV rubber mat.",
-      "3 meters.",
-      "No specific clearance is required."
+      "< 1 Ω",
+      "< 100 μΩ",
+      "< 10 mΩ",
+      "< 1 kΩ"
     ],
-    "exp": "Sufficient space is required so that operators can safely rack breakers in and out using the long handle without backing into handrails, and to allow an escape path if an arc flash occurs.",
-    "cat": "MSB",
-    "id": "T02_HV_132",
-    "topic": "T02_HighVoltage"
+    "exp": "Extremely low resistance is required to avoid heat during high-current fault events.",
+    "cat": "MAINT",
+    "id": "T02A_174"
   },
   {
-    "q": "How does a 'Differential Protection' relay work on an HV generator or large transformer?",
-    "a": "It compares the current entering the equipment to the current leaving it; if they are not exactly equal, it trips instantly for an internal fault.",
+    "q": "What does a VCB timing test measure?",
+    "a": "Time to open or close contacts",
     "opts": [
-      "It measures the voltage difference between phases.",
-      "It compares the current entering the equipment to the current leaving it; if they are not exactly equal, it trips instantly for an internal fault.",
-      "It relies on measuring the temperature difference.",
-      "It compares the speed of two generators."
+      "Vacuum bottle pressure",
+      "Time to open or close contacts",
+      "Spring charging motor speed",
+      "Resistance between phases"
     ],
-    "exp": "Kirchhoff's Current Law: Current in must equal Current out. Differential relays use CTs at both ends of a stator winding. If a phase-to-phase short occurs inside the winding, the currents unbalance, and the relay trips instantaneously (0 seconds).",
-    "cat": "MSB",
-    "id": "T02_HV_133",
-    "topic": "T02_HighVoltage"
+    "exp": "Timing determines the mechanical health and speed of the operating mechanism.",
+    "cat": "MAINT",
+    "id": "T02A_175"
   },
   {
-    "q": "What must be done to the ship's 6.6kV cables before megger testing them?",
-    "a": "They must be isolated, proved dead, completely discharged to earth to remove capacitive charge, and disconnected from sensitive electronics.",
+    "q": "How are VCB pivot points maintained?",
+    "a": "Lubricated per maker's manual",
     "opts": [
-      "They must be energized to 440V.",
-      "They must be isolated, proved dead, completely discharged to earth to remove capacitive charge, and disconnected from sensitive electronics.",
-      "They must be washed with fresh water.",
-      "They must be connected to the MSB."
+      "Painted",
+      "Lubricated per maker's manual",
+      "Welded",
+      "Taped over"
     ],
-    "exp": "HV cables store massive energy. You must earth them to bleed the charge. Then, before meggering at 5000V DC, you must ensure voltage transformers (PTs) or electronics are disconnected, or the megger will destroy them.",
-    "cat": "MSB",
-    "id": "T02_HV_134",
-    "topic": "T02_HighVoltage"
+    "exp": "Specified grease ensures smooth, predictable mechanical timing.",
+    "cat": "MAINT",
+    "id": "T02A_176"
   },
   {
-    "q": "Why is a 5000V DC megger typically used for testing 6.6kV High Voltage cables instead of a standard 500V megger?",
-    "a": "To properly stress the thick insulation and detect deep-seated micro-voids or moisture that a low voltage cannot bridge.",
+    "q": "What does high contact resistance mean?",
+    "a": "Worn or oxidised contacts",
     "opts": [
-      "Because 500V is not enough to power the meter's display.",
-      "To properly stress the thick insulation and detect deep-seated micro-voids or moisture that a low voltage cannot bridge.",
-      "Because HV cables have negative resistance at low voltages.",
-      "To burn off any surface dirt."
+      "The vacuum is too high",
+      "Worn or oxidised contacts",
+      "The breaker is too fast",
+      "The spring is too tight"
     ],
-    "exp": "Insulation acts like a resistor. A 500V test might show 'Infinity' on a 6.6kV cable even if there is a massive internal crack, because 500V isn't strong enough to arc across the crack. 5000V puts the dielectric under realistic stress.",
+    "exp": "Surface degradation adds resistive heating, leading to failure.",
+    "cat": "MAINT",
+    "id": "T02A_177"
+  },
+  {
+    "q": "What happens to the VCB if lubrication is wrong?",
+    "a": "Mechanism can slow down or freeze",
+    "opts": [
+      "It catches fire",
+      "Mechanism can slow down or freeze",
+      "It loses vacuum",
+      "It gains speed"
+    ],
+    "exp": "Hardened grease or dirty lubricant restricts mechanical operation speed.",
+    "cat": "MAINT",
+    "id": "T02A_178"
+  },
+  {
+    "q": "Can you visually check the vacuum bottle?",
+    "a": "No, it requires special HV test equipment",
+    "opts": [
+      "Yes, just look for cracks",
+      "No, it requires special HV test equipment",
+      "Yes, if you use a microscope",
+      "Only if it is cracked"
+    ],
+    "exp": "Vacuum is invisible; only an electrical breakdown test can confirm the integrity.",
+    "cat": "MAINT",
+    "id": "T02A_179"
+  },
+  {
+    "q": "What indicates slow VCB operation?",
+    "a": "Mechanism wear or spring fatigue",
+    "opts": [
+      "Vacuum leakage",
+      "Mechanism wear or spring fatigue",
+      "Low temperature",
+      "Excessive lubrication"
+    ],
+    "exp": "As parts wear or springs lose tension, the mechanical travel takes longer.",
+    "cat": "MAINT",
+    "id": "T02A_180"
+  },
+  {
+    "q": "What is indicated by extended settling time in a VCB?",
+    "a": "Contact bounce",
+    "opts": [
+      "Vacuum loss",
+      "Contact bounce",
+      "Fast timing",
+      "High contact resistance"
+    ],
+    "exp": "If contacts 'bounce' or chatter upon closing, they are not firmly seated.",
+    "cat": "MAINT",
+    "id": "T02A_181"
+  },
+  {
+    "q": "What is the typical operating time for a marine VCB?",
+    "a": "40–80 ms",
+    "opts": [
+      "10–20 ms",
+      "40–80 ms",
+      "200–500 ms",
+      "1–2 seconds"
+    ],
+    "exp": "This is the industry standard window for reliable mechanical switching.",
+    "cat": "MAINT",
+    "id": "T02A_182"
+  },
+  {
+    "q": "How can you detect spring fatigue?",
+    "a": "Measure spring compression against specification",
+    "opts": [
+      "By sound",
+      "Measure spring compression against specification",
+      "By observing the vacuum",
+      "By feeling the heat"
+    ],
+    "exp": "Compressing the spring and checking the force/dimension against manual specs reveals loss of tension.",
+    "cat": "MAINT",
+    "id": "T02A_183"
+  },
+  {
+    "q": "Is mechanical timing data valuable?",
+    "a": "Yes, for trend analysis",
+    "opts": [
+      "No, it is useless",
+      "Yes, for trend analysis",
+      "Only if it fails",
+      "Only for new VCBs"
+    ],
+    "exp": "Tracking timing changes over years helps predict failure before it happens.",
+    "cat": "MAINT",
+    "id": "T02A_184"
+  },
+  {
+    "q": "What is a major indicator of contact bounce?",
+    "a": "Extended settling time during closing test",
+    "opts": [
+      "Low vacuum",
+      "Extended settling time during closing test",
+      "High operating temperature",
+      "Loose fasteners"
+    ],
+    "exp": "The contacts fail to lock into place cleanly, oscillating before finally seating.",
+    "cat": "MAINT",
+    "id": "T02A_185"
+  },
+  {
+    "q": "What is the remedy for high contact bounce?",
+    "a": "Replace contacts or adjust spring tension",
+    "opts": [
+      "Clean the mechanism",
+      "Replace contacts or adjust spring tension",
+      "Re-lubricate the pivot",
+      "Do nothing"
+    ],
+    "exp": "If the spring pressure isn't enough to hold the contact closed against magnetic/mechanical force, it bounces.",
+    "cat": "MAINT",
+    "id": "T02A_186"
+  },
+  {
+    "q": "Does timing test detect spring fatigue?",
+    "a": "Yes, via slow operation results",
+    "opts": [
+      "No",
+      "Yes, via slow operation results",
+      "Only vacuum leakage",
+      "Only electrical faults"
+    ],
+    "exp": "A weak spring takes longer to force the contacts shut.",
+    "cat": "MAINT",
+    "id": "T02A_187"
+  },
+  {
+    "q": "Why is it important to trend mechanical timing?",
+    "a": "Deterioration is gradual and detectable",
+    "opts": [
+      "It's a SOLAS requirement",
+      "Deterioration is gradual and detectable",
+      "To avoid testing too often",
+      "To compare with other ships"
+    ],
+    "exp": "Sudden failure is rare; progressive timing delay is a reliable sign of approaching end-of-life.",
+    "cat": "MAINT",
+    "id": "T02A_188"
+  },
+  {
+    "q": "What could cause slow operation in a mechanism?",
+    "a": "Dried or wrong lubrication",
+    "opts": [
+      "Vacuum bottle is too full",
+      "Dried or wrong lubrication",
+      "Over-speeding the VCB",
+      "Excessive spring tension"
+    ],
+    "exp": "Friction from dirty/stuck grease dramatically increases mechanical closing time.",
+    "cat": "MAINT",
+    "id": "T02A_189"
+  },
+  {
+    "q": "What megger voltage is used for 3.3 kV HV equipment?",
+    "a": "2500 V DC",
+    "opts": [
+      "500 V DC",
+      "2500 V DC",
+      "5000 V DC",
+      "100 V DC"
+    ],
+    "exp": "2500V is the standard stress level for 3.3 kV systems.",
     "cat": "IR",
-    "id": "T02_HV_135",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_190"
   },
   {
-    "q": "What is the recommended minimum acceptable Insulation Resistance (IR) value for a 6.6kV stator winding at operating temperature?",
-    "a": "Generally at least 100 Mega-ohms, though modern standards often demand >1000 Mega-ohms.",
+    "q": "What megger voltage is preferred for 6.6 kV cables?",
+    "a": "5000 V DC",
     "opts": [
-      "1 Mega-ohm",
-      "10 Mega-ohms",
-      "Generally at least 100 Mega-ohms, though modern standards often demand >1000 Mega-ohms.",
-      "Zero ohms"
+      "500 V DC",
+      "2500 V DC",
+      "5000 V DC",
+      "100 V DC"
     ],
-    "exp": "The old rule of thumb is (kV + 1) Mega-ohms (e.g., 7.6 M-ohms), but this is dangerously low for modern HV systems. Leading manufacturers stipulate minimums of 100 M-ohms to 1 Giga-ohm before safely applying 6.6kV.",
+    "exp": "The thick insulation of 6.6 kV cables requires 5 kV for an effective stress test.",
     "cat": "IR",
-    "id": "T02_HV_136",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_191"
   },
   {
-    "q": "What is the Polarization Index (PI) test?",
-    "a": "The ratio of the Insulation Resistance measured at 10 minutes divided by the IR measured at 1 minute.",
+    "q": "Why use high voltage for megger testing?",
+    "a": "To meaningfully stress insulation toward operating voltage",
     "opts": [
-      "The ratio of voltage to current after 1 hour.",
-      "The resistance measured at 0 degrees Celsius.",
-      "The ratio of the Insulation Resistance measured at 10 minutes divided by the IR measured at 1 minute.",
-      "A test to see if the magnetic poles are reversed."
+      "To measure lower resistance",
+      "To meaningfully stress insulation toward operating voltage",
+      "To check for vacuum integrity",
+      "To save time"
     ],
-    "exp": "PI = IR(10 min) / IR(1 min). It is a superior diagnostic tool because it cancels out the effect of temperature and assesses the actual cleanliness and dryness of the winding insulation.",
+    "exp": "Insulation weakness often remains dormant at low voltages but breaks down at operational HV levels.",
     "cat": "IR",
-    "id": "T02_HV_137",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_192"
   },
   {
-    "q": "What does a Polarization Index (PI) value of 1.0 or less indicate?",
-    "a": "Severe contamination, moisture, or degraded insulation that is unsafe to energize.",
+    "q": "What is the IEC minimum IR formula?",
+    "a": "Working Voltage (kV) + 1 MΩ",
     "opts": [
-      "Perfectly clean and dry insulation.",
-      "Severe contamination, moisture, or degraded insulation that is unsafe to energize.",
-      "The alternator is running backwards.",
-      "The megger battery is dead."
+      "Working Voltage (kV) - 1 MΩ",
+      "Working Voltage (kV) + 1 MΩ",
+      "Working Voltage (kV) × 2 MΩ",
+      "Working Voltage (kV) / 2 MΩ"
     ],
-    "exp": "A healthy insulation matrix 'polarizes' (aligns its molecules) under DC voltage, meaning resistance should steadily increase over 10 minutes. If it stays flat (PI=1.0) or drops, leakage current is overpowering the polarization, indicating dirty/wet windings.",
+    "exp": "This universal standard defines the minimum acceptable performance for ship insulation.",
     "cat": "IR",
-    "id": "T02_HV_138",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_193"
   },
   {
-    "q": "What is considered a 'Good' Polarization Index (PI) for Class F high-voltage marine insulation?",
-    "a": "Between 2.0 and 4.0",
+    "q": "What is the minimum IR for a 6.6 kV machine?",
+    "a": "7.6 MΩ",
     "opts": [
-      "Less than 1.0",
-      "Exactly 1.5",
-      "Between 2.0 and 4.0",
-      "Greater than 10.0"
+      "1 MΩ",
+      "6.6 MΩ",
+      "7.6 MΩ",
+      "15 MΩ"
     ],
-    "exp": "A PI between 2.0 and 4.0 indicates clean, dry, healthy insulation. Values below 1.5 are questionable (requires cleaning/baking), and values above 5.0 on modern epoxy might indicate brittle, dry-cracked insulation.",
+    "exp": "6.6 + 1 = 7.6 MΩ.",
     "cat": "IR",
-    "id": "T02_HV_139",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_194"
   },
   {
-    "q": "Why must the high-voltage cables be earthed for at least 15-30 minutes AFTER completing a 5000V megger test?",
-    "a": "To safely bleed off the lethal capacitive charge absorbed by the long cables during the DC test.",
+    "q": "What is the minimum IR for a 3.3 kV machine?",
+    "a": "4.3 MΩ",
     "opts": [
-      "To recalibrate the megger.",
-      "To prevent the cables from rusting.",
-      "To safely bleed off the lethal capacitive charge absorbed by the long cables during the DC test.",
-      "To cool down the copper conductors."
+      "3.3 MΩ",
+      "4.3 MΩ",
+      "5.3 MΩ",
+      "1 MΩ"
     ],
-    "exp": "High voltage cables have massive capacitance. The 5000V DC megger charges this capacitor. If you disconnect the megger and touch the cable, it will discharge 5000V directly through you. The charge must be earthed away.",
+    "exp": "3.3 + 1 = 4.3 MΩ.",
     "cat": "IR",
-    "id": "T02_HV_140",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_195"
   },
   {
-    "q": "What is the Dielectric Absorption Ratio (DAR)?",
-    "a": "The ratio of Insulation Resistance at 60 seconds divided by the IR at 30 seconds.",
+    "q": "What is the 200% return-to-service rule?",
+    "a": "After repair, IR must be twice the minimum acceptable value",
     "opts": [
-      "The speed at which water absorbs into cables.",
-      "The ratio of Insulation Resistance at 60 seconds divided by the IR at 30 seconds.",
-      "The maximum voltage a cable can absorb.",
-      "A measurement of cable diameter."
+      "After repair, IR must be 200 MΩ",
+      "After repair, IR must be twice the minimum acceptable value",
+      "After repair, IR must be 1 MΩ",
+      "After repair, IR must be 500% of minimum"
     ],
-    "exp": "DAR is similar to PI but used for shorter tests or smaller equipment where polarization happens faster. A DAR of >1.25 is generally considered acceptable.",
+    "exp": "A high safety buffer (doubling minimum) ensures equipment can handle operational aging.",
     "cat": "IR",
-    "id": "T02_HV_141",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_196"
   },
   {
-    "q": "When performing an IR test on a 6.6kV generator, what must be done to the Automatic Voltage Regulator (AVR) sensing lines?",
-    "a": "They must be completely disconnected to prevent the 5000V test voltage from destroying the delicate AVR electronics.",
+    "q": "What is the return-to-service IR for a 6.6 kV machine?",
+    "a": "15.2 MΩ",
     "opts": [
-      "They must be connected to earth.",
-      "They must be completely disconnected to prevent the 5000V test voltage from destroying the delicate AVR electronics.",
-      "They must be short-circuited together.",
-      "They require a separate 10kV test."
+      "7.6 MΩ",
+      "15.2 MΩ",
+      "20 MΩ",
+      "30 MΩ"
     ],
-    "exp": "AVRs contain low-voltage microprocessors and diodes. The 5000V DC from the megger will instantly fry these components if the sensing or power lines are left connected to the stator terminals.",
+    "exp": "7.6 MΩ × 2 = 15.2 MΩ.",
     "cat": "IR",
-    "id": "T02_HV_142",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_197"
   },
   {
-    "q": "What is a 'Guard Terminal' on a high-voltage 5000V megger?",
-    "a": "A third connection used to bypass surface leakage currents around insulators, ensuring only the true internal volumetric resistance is measured.",
+    "q": "Why is PI test used on HV cables?",
+    "a": "Capacitance makes a single IR reading unreliable",
     "opts": [
-      "A physical lock to prevent unauthorized use.",
-      "A third connection used to bypass surface leakage currents around insulators, ensuring only the true internal volumetric resistance is measured.",
-      "A terminal that connects to the ship's alarm system.",
-      "A backup earth connection."
+      "It is faster",
+      "Capacitance makes a single IR reading unreliable",
+      "It is a SOLAS requirement",
+      "It detects continuity"
     ],
-    "exp": "If an insulator is dirty, current crawls across the dirt (surface leakage), giving a falsely low reading. Wrapping a bare wire around the insulator and connecting it to the 'Guard' terminal shunts this surface current away from the measurement circuit.",
+    "exp": "Large cables act like capacitors, and the leakage current takes time to steady, hence the ratio is more representative.",
     "cat": "IR",
-    "id": "T02_HV_143",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_198"
   },
   {
-    "q": "How does temperature affect Insulation Resistance (IR) readings?",
-    "a": "IR is highly temperature-dependent; an increase of 10\u00b0C roughly halves the insulation resistance.",
+    "q": "What voltage is forbidden on sensitive electronics?",
+    "a": "500 V megger",
     "opts": [
-      "Temperature has no effect on IR.",
-      "IR increases as temperature increases.",
-      "IR is highly temperature-dependent; an increase of 10\u00b0C roughly halves the insulation resistance.",
-      "IR doubles for every 1\u00b0C increase."
+      "50 V megger",
+      "500 V megger",
+      "2500 V megger",
+      "100 V megger"
     ],
-    "exp": "Because resistance drops drastically as windings get hotter, a reading taken at 70\u00b0C will look terribly low compared to a reading taken at 20\u00b0C. Readings must always be mathematically corrected to a base temperature (usually 40\u00b0C) for trending.",
+    "exp": "500 V instantly blows sensitive semiconductor junctions on control boards.",
     "cat": "IR",
-    "id": "T02_HV_144",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_199"
   },
   {
-    "q": "What is the 'Step Voltage' test used in HV cable maintenance?",
-    "a": "Applying DC voltage in increasing steps (e.g., 1kV, 2kV, 3kV) and ensuring the IR reading remains stable at each step.",
+    "q": "What is the discharge rule for HV terminals?",
+    "a": "1 minute per kV applied",
     "opts": [
-      "Walking on the cable to test for physical damage.",
-      "Applying DC voltage in increasing steps (e.g., 1kV, 2kV, 3kV) and ensuring the IR reading remains stable at each step.",
-      "Measuring the voltage drop across a 1-meter step.",
-      "Testing the stairs leading to the HV switchboard."
+      "30 seconds",
+      "1 minute per kV applied",
+      "5 minutes",
+      "10 minutes"
     ],
-    "exp": "If insulation is healthy, its resistance remains relatively constant regardless of applied voltage. If the IR drops significantly as voltage steps up, it indicates micro-cracks or voids are beginning to break down under stress.",
+    "exp": "This ensures the capacitive charge is drained to a non-lethal level.",
     "cat": "IR",
-    "id": "T02_HV_145",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_200"
   },
   {
-    "q": "Why is DC used for megger testing rather than AC?",
-    "a": "AC would continuously charge and discharge the cable's capacitance, drawing massive reactive current and requiring a huge, impractical power supply.",
+    "q": "What is the IEC minimum IR for 11 kV?",
+    "a": "12 MΩ",
     "opts": [
-      "AC is too dangerous.",
-      "DC is easier to generate with a hand crank.",
-      "AC would continuously charge and discharge the cable's capacitance, drawing massive reactive current and requiring a huge, impractical power supply.",
-      "AC destroys rubber insulation."
+      "11 MΩ",
+      "12 MΩ",
+      "13 MΩ",
+      "10 MΩ"
     ],
-    "exp": "Cables act as capacitors. With AC, the capacitance must be constantly charged and discharged 50/60 times a second. A DC megger only has to charge the capacitance once, after which it only measures the tiny, true leakage current.",
+    "exp": "11 + 1 = 12 MΩ.",
     "cat": "IR",
-    "id": "T02_HV_146",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_201"
   },
   {
-    "q": "If a 6.6kV motor has been sitting idle in a humid environment for 6 months, what is the best practice before starting?",
-    "a": "Perform an IR and PI test; if low, apply space heaters or low-voltage DC to bake out the moisture before applying 6.6kV.",
+    "q": "What is the return-to-service IR for 11 kV?",
+    "a": "24 MΩ",
     "opts": [
-      "Start it immediately to let the running heat dry it out.",
-      "Wash it with fresh water first.",
-      "Perform an IR and PI test; if low, apply space heaters or low-voltage DC to bake out the moisture before applying 6.6kV.",
-      "Double the fuse rating."
+      "12 MΩ",
+      "22 MΩ",
+      "24 MΩ",
+      "25 MΩ"
     ],
-    "exp": "Applying 6.6kV to wet windings will cause an instantaneous phase-to-earth explosion. The moisture must be driven out slowly using internal anti-condensation heaters or external warm air blowers.",
+    "exp": "12 MΩ × 2 = 24 MΩ.",
     "cat": "IR",
-    "id": "T02_HV_147",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_202"
   },
   {
-    "q": "What happens if you touch the copper core of an HV cable during a 5000V megger test?",
-    "a": "You will receive a severe, potentially lethal 5000V DC electric shock.",
+    "q": "What megger voltage is used for LV alternator test?",
+    "a": "1000 V DC",
     "opts": [
-      "Nothing, the current is too low to feel.",
-      "You will feel a mild tingle.",
-      "You will receive a severe, potentially lethal 5000V DC electric shock.",
-      "The megger will automatically shut off."
+      "500 V DC",
+      "1000 V DC",
+      "2500 V DC",
+      "5000 V DC"
     ],
-    "exp": "While meggers have limited output current (usually a few milliamps), a 5000V shock across the human heart can cause lethal ventricular fibrillation, and the stored capacitive energy in the cable can deliver a massive jolt.",
+    "exp": "Large transformers and alternators are often tested at 1000V DC.",
     "cat": "IR",
-    "id": "T02_HV_148",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_203"
   },
   {
-    "q": "What is the typical sequence of testing a 3-core HV cable?",
-    "a": "Phase U to Earth, V to Earth, W to Earth, then Phase U-V, V-W, and W-U.",
+    "q": "If IR is 2 MΩ on a 6.6 kV machine, is it safe to operate?",
+    "a": "No, 2 MΩ < 7.6 MΩ minimum",
     "opts": [
-      "Only measure all three tied together to earth.",
-      "Phase U to Earth only.",
-      "Phase U to Earth, V to Earth, W to Earth, then Phase U-V, V-W, and W-U.",
-      "Measure from one end of the cable to the other."
+      "Yes, > 1 MΩ",
+      "No, 2 MΩ < 7.6 MΩ minimum",
+      "Yes, > 0 MΩ",
+      "Unsure"
     ],
-    "exp": "Complete testing requires checking the insulation between every conductor and the earthed metallic sheath, AND checking the insulation between the conductors themselves (cross-phase).",
+    "exp": "It fails the minimum 7.6 MΩ threshold.",
     "cat": "IR",
-    "id": "T02_HV_149",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_204"
   },
   {
-    "q": "What does a reading of '0 Megohms' during a megger test indicate?",
-    "a": "A dead short circuit (solid metallic contact between the conductor and earth/other phase).",
+    "q": "What system uses an IRM?",
+    "a": "IT (Insulated Neutral) system",
     "opts": [
-      "Perfect insulation.",
-      "The megger is switched off.",
-      "A dead short circuit (solid metallic contact between the conductor and earth/other phase).",
-      "High moisture content."
+      "TNC-S system",
+      "IT (Insulated Neutral) system",
+      "TN-C system",
+      "Solidly earthed system"
     ],
-    "exp": "Zero resistance means the test current is flowing entirely unimpeded. The insulation has completely failed, or an earthing strap was accidentally left connected.",
-    "cat": "IR",
-    "id": "T02_HV_150",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the IR reading is dangerously low due to heavy carbon dust contamination, what is the remedy?",
-    "a": "Vacuum the windings, wash with an approved electro-cleaner solvent, and bake dry.",
-    "opts": [
-      "Increase the voltage to burn the dust away.",
-      "Vacuum the windings, wash with an approved electro-cleaner solvent, and bake dry.",
-      "Paint over the dust with insulating varnish.",
-      "Rinse with sea water."
-    ],
-    "exp": "Carbon dust is highly conductive. It must be physically removed using vacuuming and non-residue evaporating solvents. Never use compressed air, which drives the dust deeper into the crevices.",
-    "cat": "IR",
-    "id": "T02_HV_151",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you perform a 5000V megger test on a 440V motor?",
-    "a": "No, 5000V will severely stress and likely puncture the low-voltage insulation.",
-    "opts": [
-      "Yes, it provides a better reading.",
-      "No, 5000V will severely stress and likely puncture the low-voltage insulation.",
-      "Yes, but only for 30 seconds.",
-      "No, the megger will break."
-    ],
-    "exp": "Test voltages must match the equipment rating. 440V equipment is tested at 500V or 1000V DC. Applying 5000V to a 440V winding will destroy it.",
-    "cat": "IR",
-    "id": "T02_HV_152",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the 'Dielectric Discharge' (DD) test?",
-    "a": "A test that measures the discharge current after the megger is turned off, diagnosing the health of multiple layers of insulation.",
-    "opts": [
-      "A test to see how far an arc can jump.",
-      "A test that measures the discharge current after the megger is turned off, diagnosing the health of multiple layers of insulation.",
-      "Testing the oil in a transformer.",
-      "Checking the battery of the megger."
-    ],
-    "exp": "Advanced testers use the DD test to find individual weak layers in multi-layer insulation (like stator coils). A high discharge current indicates a specific layer has absorbed too much charge due to degradation.",
-    "cat": "IR",
-    "id": "T02_HV_153",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is it vital to ensure the HV circuit breaker is racked out and locked off before meggering an outgoing cable?",
-    "a": "To ensure the cable is completely isolated from the live busbars and cannot be accidentally energized by someone else.",
-    "opts": [
-      "To save battery power on the megger.",
-      "To ensure the cable is completely isolated from the live busbars and cannot be accidentally energized by someone else.",
-      "To prevent the megger from reading the busbar resistance.",
-      "Because racking out automatically connects the megger."
-    ],
-    "exp": "Safety is paramount. If the breaker is left racked in, someone could close it via automation, sending 6.6kV into the cable while the ETO is holding the megger leads, resulting in a fatality.",
-    "cat": "IR",
-    "id": "T02_HV_154",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does an unstable, violently jumping needle/display on a megger during a 5000V test suggest?",
-    "a": "Continuous arcing or partial discharge occurring across a crack or moisture track during the test.",
-    "opts": [
-      "A perfectly healthy cable.",
-      "The ship is vibrating too much.",
-      "Continuous arcing or partial discharge occurring across a crack or moisture track during the test.",
-      "The batteries are low."
-    ],
-    "exp": "If the reading jumps wildly (e.g., from 500M down to 10M, back to 400M), the 5000V is literally causing a microscopic spark inside the cable. The arc flashes, resistance drops, the arc extinguishes, resistance rises, repeating rapidly.",
-    "cat": "IR",
-    "id": "T02_HV_155",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When interpreting IR trending data, what is more important than the absolute Megohm value?",
-    "a": "The historical trend over time; a sudden, steep drop indicates an acute problem.",
-    "opts": [
-      "The specific brand of megger used.",
-      "The historical trend over time; a sudden, steep drop indicates an acute problem.",
-      "Ensuring it is exactly 100 Megohms.",
-      "The humidity of the room on that exact day."
-    ],
-    "exp": "If a motor reads 800M for 5 years, and suddenly drops to 150M in one month, that is a massive red flag (water ingress, oil leak), even though 150M is technically above the 'minimum' limit.",
-    "cat": "IR",
-    "id": "T02_HV_156",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What component in a VCB panel MUST be earthed before meggering the incoming cables?",
-    "a": "The Voltage Transformers (PTs) must be racked out or disconnected.",
-    "opts": [
-      "The main busbars.",
-      "The current transformers (CTs).",
-      "The Voltage Transformers (PTs) must be racked out or disconnected.",
-      "The anti-condensation heaters."
-    ],
-    "exp": "PTs are connected directly phase-to-earth across the incoming lines to measure voltage. If left connected, the megger will measure the low resistance of the PT primary coil, giving a false 'Short Circuit' reading and potentially damaging the PT.",
-    "cat": "IR",
-    "id": "T02_HV_157",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the recommended test duration to obtain a true Insulation Resistance (IR) value for a large HV motor?",
-    "a": "At least 1 minute (60 seconds) to allow the capacitive charging current to decay.",
-    "opts": [
-      "1 second.",
-      "10 seconds.",
-      "At least 1 minute (60 seconds) to allow the capacitive charging current to decay.",
-      "1 hour."
-    ],
-    "exp": "When DC is first applied, a heavy 'charging current' flows, making the resistance appear falsely low. After 60 seconds, this current approaches zero, leaving only the true leakage current to be measured.",
-    "cat": "IR",
-    "id": "T02_HV_158",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a megger reading is taken at 60\u00b0C and is 50 Megohms, what is the approximate corrected value at 40\u00b0C?",
-    "a": "200 Megohms",
-    "opts": [
-      "12.5 Megohms",
-      "50 Megohms",
-      "100 Megohms",
-      "200 Megohms"
-    ],
-    "exp": "Using the rule of thumb that IR doubles for every 10\u00b0C drop: Drop to 50\u00b0C = 100M. Drop to 40\u00b0C = 200M. The insulation is actually much healthier than the raw 50M reading suggested.",
-    "cat": "IR",
-    "id": "T02_HV_159",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What safety equipment must the ETO wear while actually performing the 5000V megger test?",
-    "a": "Class 1 HV Rubber insulating gloves with leather protectors.",
-    "opts": [
-      "Only safety glasses.",
-      "Class 1 HV Rubber insulating gloves with leather protectors.",
-      "No gloves are needed for testing.",
-      "A full chemical suit."
-    ],
-    "exp": "Even though it's a test instrument, 5000V DC is lethal. If the test leads have compromised insulation or the user accidentally touches the bare crocodile clip, severe shock will occur.",
-    "cat": "IR",
-    "id": "T02_HV_160",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if a VLF (Very Low Frequency) AC test is used instead of a DC Megger test for HV cables?",
-    "a": "It stresses the cable with AC (which is closer to operational stress) without requiring a massive power supply, effectively finding insulation defects.",
-    "opts": [
-      "It melts the cable.",
-      "It stresses the cable with AC (which is closer to operational stress) without requiring a massive power supply, effectively finding insulation defects.",
-      "It magnetizes the copper core.",
-      "It cannot detect moisture."
-    ],
-    "exp": "VLF testing (usually at 0.1 Hz) is an advanced alternative to DC meggers. Because the frequency is so low, the capacitive charging current is minimal, yet it applies an AC wave that better simulates actual running conditions to find water trees.",
-    "cat": "IR",
-    "id": "T02_HV_161",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is a Shaft Earthing System absolutely critical on modern vessels, especially those with variable frequency drives or high-voltage alternators?",
-    "a": "To provide a low-resistance path for induced shaft currents to earth, preventing them from discharging through and destroying the main engine bearings.",
-    "opts": [
-      "To power the steering gear.",
-      "To provide a low-resistance path for induced shaft currents to earth, preventing them from discharging through and destroying the main engine bearings.",
-      "To act as a lightning rod for the propeller.",
-      "To measure the RPM of the shaft."
-    ],
-    "exp": "Electrical machinery and hull cathodic protection systems induce electrical potentials on the rotating propeller shaft. If not earthed, this voltage builds up until it arcs across the thin oil film in the main thrust bearings, causing severe pitting and rapid failure.",
-    "cat": "SHF",
-    "id": "T02_HV_162",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary component of a shaft earthing assembly that contacts the spinning propeller shaft?",
-    "a": "Silver-graphite slip rings and heavy-duty grounding brushes.",
-    "opts": [
-      "A bath of liquid mercury.",
-      "Silver-graphite slip rings and heavy-duty grounding brushes.",
-      "A solid copper wire bolted to the shaft.",
-      "A magnetic induction coil."
-    ],
-    "exp": "A highly conductive band (often silver alloy) is clamped around the shaft. Spring-loaded silver-graphite brushes ride on this band to continuously conduct the induced currents directly to the ship's hull.",
-    "cat": "SHF",
-    "id": "T02_HV_163",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does 'Spark Erosion' damage a main engine bearing?",
-    "a": "Shaft voltage arcs across the microscopic lubricating oil film, melting tiny craters into the white metal bearing surface.",
-    "opts": [
-      "Friction ignites the lubricating oil.",
-      "Shaft voltage arcs across the microscopic lubricating oil film, melting tiny craters into the white metal bearing surface.",
-      "Static electricity causes the bearing to rust.",
-      "The bearing becomes magnetized and seizes."
-    ],
-    "exp": "The LO film acts as an insulator. When shaft voltage exceeds the dielectric strength of the thin oil film (usually around 0.5V to 1V), it flashes over. Millions of these micro-arcs rip molecules of metal away, leaving a frosted, pitted surface.",
-    "cat": "SHF",
-    "id": "T02_HV_164",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the acceptable limit for the potential difference (voltage) between the rotating shaft and the ship's hull?",
-    "a": "Typically less than 50 milli-volts (0.05V).",
-    "opts": [
-      "Less than 5 Volts.",
-      "Less than 50 milli-volts (0.05V).",
-      "Less than 24 Volts.",
-      "Zero is impossible, up to 12V is acceptable."
-    ],
-    "exp": "To guarantee that the voltage can never bridge the oil film in the bearings, the shaft earthing system must keep the shaft potential clamped firmly below 50mV at all times.",
-    "cat": "SHF",
-    "id": "T02_HV_165",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the function of the milli-voltmeter mounted on the shaft earthing panel?",
-    "a": "To continuously monitor the voltage between the shaft and the hull, triggering an alarm if the earthing brushes fail.",
-    "opts": [
-      "To measure the power output of the main engine.",
-      "To continuously monitor the voltage between the shaft and the hull, triggering an alarm if the earthing brushes fail.",
-      "To check the battery voltage.",
-      "To measure the speed of the propeller."
-    ],
-    "exp": "The panel uses a separate, dedicated sensing brush to measure the actual shaft voltage. If the main grounding brushes get dirty or wear out, the voltage spikes, and the meter triggers a 'High Shaft Voltage' alarm.",
-    "cat": "SHF",
-    "id": "T02_HV_166",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why must the shaft earthing slip ring track be kept impeccably clean?",
-    "a": "Dirt or oil creates a high-resistance barrier, rendering the brushes useless and forcing currents through the bearings.",
-    "opts": [
-      "To look good for port state control.",
-      "Dirt or oil creates a high-resistance barrier, rendering the brushes useless and forcing currents through the bearings.",
-      "To prevent the shaft from rusting.",
-      "To reduce mechanical friction."
-    ],
-    "exp": "The system only works if the path of least resistance is through the brushes. If oil coats the silver ring, the brush resistance goes up, and the current will seek an easier path\u2014usually through the expensive main thrust bearing.",
-    "cat": "SHF",
-    "id": "T02_HV_167",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What material is strictly forbidden for cleaning the silver slip ring of a shaft earthing system?",
-    "a": "Emery cloth, sandpaper, or any abrasive containing silicon carbide or aluminum oxide.",
-    "opts": [
-      "Clean dry cotton cloths.",
-      "Emery cloth, sandpaper, or any abrasive containing silicon carbide or aluminum oxide.",
-      "Approved electrical solvent.",
-      "Specialized burnishing blocks."
-    ],
-    "exp": "Standard abrasives shed hard microscopic particles that imbed in the soft silver ring. These particles will rapidly machine away the carbon brushes. Only non-abrasive Scotch-Brite or specialized burnishing tools should be used.",
-    "cat": "SHF",
-    "id": "T02_HV_168",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Where is the shaft earthing system typically installed on the vessel?",
-    "a": "As far aft as possible, on the intermediate shaft near the stern tube, before the main engine.",
-    "opts": [
-      "Inside the main engine crankcase.",
-      "As far aft as possible, on the intermediate shaft near the stern tube, before the main engine.",
-      "On the bridge.",
-      "At the bow thruster."
-    ],
-    "exp": "By placing the earthing brushes between the propeller (the source of much of the galvanic current) and the main engine, the currents are shunted to the hull before they can reach the engine bearings.",
-    "cat": "SHF",
-    "id": "T02_HV_169",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What causes the galvanic currents that the shaft earthing system must dissipate?",
-    "a": "The dissimilar metals of the bronze propeller and the steel hull rotating in seawater (an electrolyte).",
-    "opts": [
-      "Lightning strikes.",
-      "The dissimilar metals of the bronze propeller and the steel hull rotating in seawater (an electrolyte).",
-      "Friction from the wind.",
-      "Radio waves from the radar."
-    ],
-    "exp": "The ship acts like a giant battery. The bronze propeller, steel hull, and salty seawater create a galvanic cell. The shaft earthing system provides a deliberate short-circuit to neutralize this battery effect safely.",
-    "cat": "SHF",
-    "id": "T02_HV_170",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does the ICCP (Impressed Current Cathodic Protection) system interact with the shaft earthing system?",
-    "a": "The ICCP protects the hull by injecting current; the shaft earthing ensures the propeller is bonded to the hull so it is also protected by the ICCP.",
-    "opts": [
-      "They must never be used on the same ship.",
-      "The ICCP protects the hull by injecting current; the shaft earthing ensures the propeller is bonded to the hull so it is also protected by the ICCP.",
-      "The shaft earthing powers the ICCP.",
-      "The ICCP destroys the shaft earthing brushes."
-    ],
-    "exp": "If the shaft is electrically floating (due to the oil film), the ICCP cannot protect the bronze propeller from corrosion. The shaft earthing brushes solidly connect the propeller to the hull, extending the ICCP's protective blanket over the propeller.",
-    "cat": "SHF",
-    "id": "T02_HV_171",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the typical composition of a shaft earthing brush?",
-    "a": "High silver content (up to 80%) mixed with graphite.",
-    "opts": [
-      "Pure hard copper.",
-      "High silver content (up to 80%) mixed with graphite.",
-      "Standard pure carbon.",
-      "Lead and tin."
-    ],
-    "exp": "Standard carbon brushes have too much electrical resistance for this application. Silver provides extreme conductivity to keep voltage below 50mV, while graphite provides lubrication to prevent wear on the ring.",
-    "cat": "SHF",
-    "id": "T02_HV_172",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the 'High Shaft Voltage' alarm sounds in the Engine Control Room, what is the most immediate troubleshooting step?",
-    "a": "Check the shaft earthing brushes for wear, sticking in their holders, or severe oil contamination on the ring.",
-    "opts": [
-      "Shut down the main engine immediately.",
-      "Check the shaft earthing brushes for wear, sticking in their holders, or severe oil contamination on the ring.",
-      "Turn off the ICCP system.",
-      "Increase the AVR voltage."
-    ],
-    "exp": "A high voltage means the earthing path is broken. Usually, a brush has worn too short, jammed in its holder due to dirt, or the silver track is coated in oil leaked from a nearby bearing.",
-    "cat": "SHF",
-    "id": "T02_HV_173",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are there usually two or more grounding brushes running on the same slip ring?",
-    "a": "For redundancy and to increase the total contact area, ensuring ultra-low resistance to earth.",
-    "opts": [
-      "One is for AC, one is for DC.",
-      "For redundancy and to increase the total contact area, ensuring ultra-low resistance to earth.",
-      "One measures speed, one measures voltage.",
-      "To act as a mechanical brake on the shaft."
-    ],
-    "exp": "Having multiple brushes in parallel halves the electrical resistance to the hull. If one brush bounces or gets dirty, the other maintains the vital earth connection, preventing bearing damage.",
-    "cat": "SHF",
-    "id": "T02_HV_174",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the function of the separate 'Sensing Brush'?",
-    "a": "It does not carry earth current; it only measures the true voltage of the shaft to feed the alarm panel.",
-    "opts": [
-      "It injects test current into the shaft.",
-      "It cleans the slip ring.",
-      "It does not carry earth current; it only measures the true voltage of the shaft to feed the alarm panel.",
-      "It powers the shaft rotation sensor."
-    ],
-    "exp": "If you measured voltage from the grounding brushes themselves, a bad connection would show a falsely low voltage (0V) because it's disconnected. A dedicated, high-impedance sensing brush ensures accurate reading of the actual shaft potential.",
-    "cat": "SHF",
-    "id": "T02_HV_175",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does Variable Frequency Drive (VFD) propulsion increase the need for shaft earthing?",
-    "a": "VFDs use high-frequency IGBT switching (PWM) which induces significant high-frequency capacitive currents in the motor shaft.",
-    "opts": [
-      "VFDs use DC power which rusts the shaft.",
-      "VFDs use high-frequency IGBT switching (PWM) which induces significant high-frequency capacitive currents in the motor shaft.",
-      "VFDs remove all lubrication from the bearings.",
-      "VFDs generate massive magnetic fields that stop the propeller."
-    ],
-    "exp": "The rapid pulsing of a PWM drive creates 'Common Mode Voltage'. This high-frequency voltage easily couples across the internal capacitances of the motor onto the rotor shaft, leading to severe spark erosion if not aggressively earthed.",
-    "cat": "SHF",
-    "id": "T02_HV_176",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if you accidentally reverse the connections on the milli-voltmeter of the shaft earthing panel?",
-    "a": "The meter will read backwards (negative), but the earthing brushes will still physically protect the bearings.",
-    "opts": [
-      "The main engine will trip.",
-      "The meter will read backwards (negative), but the earthing brushes will still physically protect the bearings.",
-      "The shaft will instantly corrode.",
-      "The ICCP system will explode."
-    ],
-    "exp": "The earthing brushes are passive, physical connections to the hull. The meter is just an observation tool. Reversing the meter wires just reverses the needle polarity; it doesn't break the physical earth path.",
-    "cat": "SHF",
-    "id": "T02_HV_177",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "During dry dock, what maintenance should be performed on the shaft earthing system?",
-    "a": "Clean the silver track, verify the hull bonding strap integrity, replace worn brushes, and calibrate the alarm panel.",
-    "opts": [
-      "Paint the silver track with anti-fouling.",
-      "Clean the silver track, verify the hull bonding strap integrity, replace worn brushes, and calibrate the alarm panel.",
-      "Remove it entirely as it is only needed in water.",
-      "Grease the slip ring heavily to prevent rust."
-    ],
-    "exp": "Dry dock is the perfect time to do a deep clean, ensure the thick braided copper wire connecting the brush holder to the actual steel hull is totally free of corrosion, and renew the expensive silver brushes.",
-    "cat": "SHF",
-    "id": "T02_HV_178",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'V-Ring' or 'Wiper' sometimes installed near the shaft earthing system?",
-    "a": "A mechanical seal/flinger to prevent oil or water from migrating along the shaft onto the sensitive silver slip ring.",
-    "opts": [
-      "A device to measure shaft torque.",
-      "A mechanical seal/flinger to prevent oil or water from migrating along the shaft onto the sensitive silver slip ring.",
-      "A grounding strap for the propeller.",
-      "A device to cut fishing nets."
-    ],
-    "exp": "Since oil destroys the electrical contact, rubber flingers are strapped to the shaft forward and aft of the earthing ring. Centrifugal force flings any creeping oil outwards, keeping the track dry.",
-    "cat": "SHF",
-    "id": "T02_HV_179",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the shaft voltage is hovering at 150mV despite brand new brushes and a clean track, what might be the issue?",
-    "a": "The braided copper grounding strap connecting the brush holder to the ship's hull is corroded, loose, or broken.",
-    "opts": [
-      "The propeller has fallen off.",
-      "The braided copper grounding strap connecting the brush holder to the ship's hull is corroded, loose, or broken.",
-      "The main engine is running too fast.",
-      "The sea water is too salty."
-    ],
-    "exp": "The current must get from the brush holder to the hull. If the massive copper strap connecting the holder to the deck plates has rusted at the bolted joint, the resistance rises, causing the voltage to spike.",
-    "cat": "SHF",
-    "id": "T02_HV_180",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why shouldn't you paint the brush holder assembly of the shaft earthing system?",
-    "a": "Paint acts as an insulator; if it gets between mating surfaces or the earthing strap, it destroys the low-resistance path to the hull.",
-    "opts": [
-      "Paint makes it look messy.",
-      "Paint acts as an insulator; if it gets between mating surfaces or the earthing strap, it destroys the low-resistance path to the hull.",
-      "Paint causes the silver to melt.",
-      "The paint will catch fire from the sparks."
-    ],
-    "exp": "Overzealous deck crew painting the bilge area often paint over the copper earthing straps and bolts. This insulates the bolts, breaking the vital connection to the ship's steel hull.",
-    "cat": "SHF",
-    "id": "T02_HV_181",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the typical brush pressure for a silver-graphite shaft earthing brush?",
-    "a": "Relatively low (e.g., 200-300 g/cm2) to prevent excessive wear of the soft silver, while still maintaining contact.",
-    "opts": [
-      "Extremely high (over 10 kg).",
-      "Relatively low (e.g., 200-300 g/cm2) to prevent excessive wear of the soft silver, while still maintaining contact.",
-      "Zero, it hovers using magnets.",
-      "It varies with the speed of the engine."
-    ],
-    "exp": "Because the silver ring is soft and expensive, spring pressure must be carefully calibrated. Too much pressure wears the brushes and ring out in weeks; too little causes bouncing and arcing.",
-    "cat": "SHF",
-    "id": "T02_HV_182",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "In twin-screw vessels, how many shaft earthing systems are required?",
-    "a": "One complete, independent system per propeller shaft.",
-    "opts": [
-      "One system shared between both shafts.",
-      "One complete, independent system per propeller shaft.",
-      "Only the starboard shaft needs one.",
-      "Twin screws cancel out the voltage, so none are needed."
-    ],
-    "exp": "Each shaft generates its own galvanic and static potentials independently. Therefore, every rotating propulsion shaft must have its own dedicated earthing ring, brushes, and monitor.",
-    "cat": "SHF",
-    "id": "T02_HV_183",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the effect of an un-earthed shaft on the ship's ICCP system?",
-    "a": "The ICCP reference cells will read unstable potentials, and the propeller will suffer severe galvanic corrosion.",
-    "opts": [
-      "The ICCP will work perfectly.",
-      "The ICCP reference cells will read unstable potentials, and the propeller will suffer severe galvanic corrosion.",
-      "The ICCP will shut down the main engine.",
-      "The ICCP anodes will dissolve instantly."
-    ],
-    "exp": "The ICCP is designed to protect the hull AND the propeller. If the shaft is insulated by oil, the ICCP current cannot reach the propeller. The bronze propeller will then aggressively corrode the nearby steel stern tube.",
-    "cat": "SHF",
-    "id": "T02_HV_184",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can a standard multimeter accurately measure shaft voltage?",
-    "a": "No, shaft voltage is a mix of DC (galvanic) and high-frequency AC (PWM/static). A specialized oscilloscope or wide-band meter is needed for accurate analysis.",
-    "opts": [
-      "Yes, any cheap meter works fine.",
-      "No, shaft voltage is a mix of DC (galvanic) and high-frequency AC (PWM/static). A specialized oscilloscope or wide-band meter is needed for accurate analysis.",
-      "Yes, but only on the Amps setting.",
-      "No, meters explode near the shaft."
-    ],
-    "exp": "While the panel meter gives a rough DC average, the actual destructive spikes are high-frequency AC transients that a standard digital multimeter is too slow to detect.",
-    "cat": "SHF",
-    "id": "T02_HV_185",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is 'fluting' on a bearing?",
-    "a": "A distinct washboard or ribbed pattern worn into the bearing surface, a classic symptom of prolonged electrical spark erosion.",
-    "opts": [
-      "A type of lubrication groove.",
-      "A distinct washboard or ribbed pattern worn into the bearing surface, a classic symptom of prolonged electrical spark erosion.",
-      "Rust caused by water in the oil.",
-      "A manufacturing defect."
-    ],
-    "exp": "As the shaft rotates and arcs rhythmically through the oil film, it creates a pattern of parallel ridges (fluting) on the bearing race. Once fluting starts, bearing failure is rapid and catastrophic.",
-    "cat": "SHF",
-    "id": "T02_HV_186",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How do you safely clean a silver-graphite brush while under way?",
-    "a": "Carefully remove it from the holder, wipe it with a lint-free cloth and electrical contact cleaner, and ensure it slides freely before replacing.",
-    "opts": [
-      "Spray it heavily with WD-40.",
-      "Carefully remove it from the holder, wipe it with a lint-free cloth and electrical contact cleaner, and ensure it slides freely before replacing.",
-      "Sand it down with a coarse file.",
-      "Wash it in soapy water."
-    ],
-    "exp": "Brushes can get sticky from carbon dust. Safely pulling one brush out (while the redundant brush maintains the earth) to clean it with evaporating solvent is standard maintenance.",
-    "cat": "SHF",
-    "id": "T02_HV_187",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'Passive' shaft earthing system vs an 'Active' system?",
-    "a": "Passive relies only on physical brushes shorting to the hull. Active systems inject a counter-voltage or high-frequency current to actively cancel out the shaft potential.",
-    "opts": [
-      "Passive uses magnets; Active uses springs.",
-      "Passive relies only on physical brushes shorting to the hull. Active systems inject a counter-voltage or high-frequency current to actively cancel out the shaft potential.",
-      "Passive systems are illegal.",
-      "Active systems only work in fresh water."
-    ],
-    "exp": "Most ships use passive (brushes). High-tech vessels with severe VFD issues might use Active systems that measure the shaft voltage and instantly inject an opposing voltage to force the potential to absolute zero.",
-    "cat": "SHF",
-    "id": "T02_HV_188",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is it important that the grounding strap from the brush holder is bolted directly to the hull structure, rather than a pipe or handrail?",
-    "a": "Pipes and handrails may have rubber gaskets or painted joints, creating high electrical resistance to the true sea-earth.",
-    "opts": [
-      "Pipes might get too hot.",
-      "Pipes and handrails may have rubber gaskets or painted joints, creating high electrical resistance to the true sea-earth.",
-      "It is illegal to drill holes in pipes.",
-      "Handrails vibrate too much."
-    ],
-    "exp": "The goal is the absolute lowest resistance to the surrounding seawater. The main structural steel frames of the ship provide the best path. Piping systems are often electrically isolated.",
-    "cat": "SHF",
-    "id": "T02_HV_189",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the shaft voltage spikes only when the shaft is turning at high RPM, but is zero when slow, what does this indicate?",
-    "a": "Hydrodynamic lift. At high speed, the shaft fully rides on a thick film of oil (insulating it). At low speed, metal-to-metal contact naturally earths it.",
-    "opts": [
-      "The ICCP system only works at low speed.",
-      "Hydrodynamic lift. At high speed, the shaft fully rides on a thick film of oil (insulating it). At low speed, metal-to-metal contact naturally earths it.",
-      "The brushes are being blown away by the wind.",
-      "The generator is over-producing voltage."
-    ],
-    "exp": "Bearings are designed to lift the shaft on a wedge of oil (hydrodynamic lubrication). Once lifted, the shaft is electrically floating, and voltage builds up immediately until the brushes take it to earth.",
-    "cat": "SHF",
-    "id": "T02_HV_190",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "According to marine classification societies, what voltage level is considered 'High Voltage' on board a ship?",
-    "a": "Any voltage exceeding 1000V AC or 1500V DC.",
-    "opts": [
-      "Any voltage exceeding 440V AC.",
-      "Any voltage exceeding 1000V AC or 1500V DC.",
-      "Any voltage above 11kV.",
-      "Voltages above 6.6kV only."
-    ],
-    "exp": "Standard low voltage marine systems run up to 440V or 690V. The regulatory threshold where stringent High Voltage rules (like earthing, permits, and interlocks) apply is >1000V AC.",
-    "cat": "HV",
-    "id": "T02_HV_191",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why do modern large vessels (like LNG carriers or mega container ships) use High Voltage (e.g., 6.6kV) instead of standard 440V?",
-    "a": "To significantly reduce the current for a given power, which reduces copper cable size, weight, and I\u00b2R heat losses.",
-    "opts": [
-      "To make the motors spin faster.",
-      "To significantly reduce the current for a given power, which reduces copper cable size, weight, and I\u00b2R heat losses.",
-      "High voltage is less dangerous to humans.",
-      "To eliminate the need for transformers."
-    ],
-    "exp": "Power = Voltage \u00d7 Current. If you increase the voltage by 15 times (440V to 6600V), the current drops by 15 times. This allows for much thinner cables, saving massive amounts of weight and cost on large ships with high power demands (like bow thrusters).",
-    "cat": "HV",
-    "id": "T02_HV_192",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the phenomenon called 'Corona Discharge' in High Voltage systems?",
-    "a": "The ionization of air surrounding a high-voltage conductor, producing a faint purple glow, a hissing sound, and ozone gas.",
-    "opts": [
-      "A type of mechanical failure in circuit breakers.",
-      "The ionization of air surrounding a high-voltage conductor, producing a faint purple glow, a hissing sound, and ozone gas.",
-      "A buildup of static electricity on the hull.",
-      "The arc that occurs when opening a breaker."
-    ],
-    "exp": "When voltage is very high, the electric field can strip electrons from the surrounding air molecules (ionization). This creates a conductive halo (corona), producing ozone which degrades rubber insulation.",
-    "cat": "HV",
-    "id": "T02_HV_193",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does a 'Tracking' failure refer to in HV insulators?",
-    "a": "An irreversible, conductive carbon path burned across the surface of an insulator due to dirt, moisture, and high voltage.",
-    "opts": [
-      "Following the wiring diagram accurately.",
-      "An irreversible, conductive carbon path burned across the surface of an insulator due to dirt, moisture, and high voltage.",
-      "The physical cracking of a ceramic insulator.",
-      "The path an arc takes through a vacuum."
-    ],
-    "exp": "If an insulator is dirty, small leakage currents flow across the surface. These currents heat up and char the dirt, creating a permanent carbon track. Carbon is conductive, so eventually, a massive short circuit flashes across this track.",
-    "cat": "HV",
-    "id": "T02_HV_194",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "In an HV system, what is the purpose of 'Creepage Distance'?",
-    "a": "The shortest distance along the surface of an insulator between two conductive parts, designed to prevent tracking.",
-    "opts": [
-      "The distance a cable can stretch.",
-      "The shortest distance along the surface of an insulator between two conductive parts, designed to prevent tracking.",
-      "The distance an arc can jump through the air.",
-      "The physical length of the switchboard room."
-    ],
-    "exp": "Creepage is measured along the *surface*. To increase creepage without making the insulator physically taller, manufacturers mold 'sheds' or ribs into the insulator to make the surface path longer, defeating tracking.",
-    "cat": "HV",
-    "id": "T02_HV_195",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is 'Clearance Distance' in contrast to Creepage?",
-    "a": "The shortest straight-line distance through the air between two conductive parts.",
-    "opts": [
-      "The distance required between two switchboards.",
-      "The shortest straight-line distance through the air between two conductive parts.",
-      "The distance along the surface of an insulator.",
-      "The minimum height of the ceiling."
-    ],
-    "exp": "Clearance is the straight-line 'jump' distance through the air. If clearance is too small for the voltage, the air will ionize, and an arc will strike directly through the air between the phases.",
-    "cat": "HV",
-    "id": "T02_HV_196",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are High Voltage busbars often heavily insulated (e.g., heat-shrink sleeved) unlike bare 440V busbars?",
-    "a": "To prevent accidental phase-to-phase faults from vermin, dropped tools, or severe environmental contamination.",
-    "opts": [
-      "To keep the copper from rusting.",
-      "To prevent accidental phase-to-phase faults from vermin, dropped tools, or severe environmental contamination.",
-      "To increase the current carrying capacity.",
-      "To change the color for phase identification."
-    ],
-    "exp": "At 6.6kV, a rat walking across bare busbars will instantly vaporize, causing a catastrophic arc flash that can destroy the switchboard. Insulation prevents this and reduces required clearance distances.",
-    "cat": "HV",
-    "id": "T02_HV_197",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary lethal hazard of an Arc Flash in an HV switchboard?",
-    "a": "The explosive release of thermal energy, vaporized copper, and intense ultraviolet light.",
-    "opts": [
-      "The loud noise.",
-      "The explosive release of thermal energy, vaporized copper, and intense ultraviolet light.",
-      "The magnetic field disrupting pacemakers.",
-      "The generation of ozone gas."
-    ],
-    "exp": "An arc flash is essentially a bomb. Temperatures reach 20,000\u00b0C (hotter than the sun), instantly vaporizing copper (which expands 67,000 times in volume), creating a blast wave, molten shrapnel, and blinding light.",
-    "cat": "HV",
-    "id": "T02_HV_198",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does moisture affect the dielectric strength of high voltage insulation?",
-    "a": "Moisture drastically reduces dielectric strength, making the insulation highly susceptible to breakdown and arcing.",
-    "opts": [
-      "Moisture increases dielectric strength.",
-      "Moisture has no effect.",
-      "Moisture drastically reduces dielectric strength, making the insulation highly susceptible to breakdown and arcing.",
-      "Moisture acts as a cooling agent, improving performance."
-    ],
-    "exp": "Water is a conductor. When absorbed into insulation (like older paper/oil types or micro-cracks in epoxy), it provides a path for current to flow, inevitably leading to a catastrophic short circuit.",
-    "cat": "HV",
-    "id": "T02_HV_199",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is 'Partial Discharge' (PD) in an HV cable?",
-    "a": "Localized microscopic electrical discharges within voids or bubbles inside the solid insulation.",
-    "opts": [
-      "A battery losing half its charge.",
-      "Localized microscopic electrical discharges within voids or bubbles inside the solid insulation.",
-      "A switch opening slowly.",
-      "Current leaking to the ship's hull."
-    ],
-    "exp": "If a cable has a tiny air bubble inside its insulation from manufacturing, the air breaks down (sparks) under high voltage before the solid rubber does. These tiny, continuous internal sparks slowly eat away the insulation from the inside out.",
-    "cat": "HV",
-    "id": "T02_HV_200",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is anti-condensation heating crucial in High Voltage alternators and switchboards?",
-    "a": "To keep the internal temperature slightly above ambient dew point, preventing moisture from condensing on the high-voltage insulators.",
-    "opts": [
-      "To keep the copper soft and flexible.",
-      "To keep the internal temperature slightly above ambient dew point, preventing moisture from condensing on the high-voltage insulators.",
-      "To warm up the engine room.",
-      "To burn off carbon dust."
-    ],
-    "exp": "If the ship moves from a warm to a cold climate, water will condense on the cold insulators. At 6.6kV, this thin film of water will instantly cause a flashover when energized. Heaters keep the equipment dry when offline.",
-    "cat": "HV",
-    "id": "T02_HV_201",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the function of the semi-conductive screen layer in a High Voltage cable?",
-    "a": "To smooth out the electrical field stresses around the conductor and prevent localized voltage concentration.",
-    "opts": [
-      "To provide a path for the signal current.",
-      "To smooth out the electrical field stresses around the conductor and prevent localized voltage concentration.",
-      "To make the cable flexible.",
-      "To prevent water ingress."
-    ],
-    "exp": "The copper conductor consists of many twisted wires, meaning the surface is bumpy. Voltage stress concentrates sharply on bumps. A smooth semi-conductive layer surrounds the copper, giving the voltage field a perfectly smooth, stress-free boundary.",
-    "cat": "HV",
-    "id": "T02_HV_202",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a 6.6kV system has a rated current of 2000A, what is the approximate apparent power capacity?",
-    "a": "22.8 MVA",
-    "opts": [
-      "13.2 MVA",
-      "22.8 MVA",
-      "6.6 MVA",
-      "2.0 MVA"
-    ],
-    "exp": "Power = \u221a3 \u00d7 V \u00d7 I. (1.732 \u00d7 6600V \u00d7 2000A = 22,862,400 VA, or roughly 22.8 MVA). This illustrates the massive power levels handled by marine HV boards.",
-    "cat": "HV",
-    "id": "T02_HV_203",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does a 'Capacitive Voltage Indicator' (Neon indicator) on an HV switchboard panel do?",
-    "a": "It provides a visual indication (flashing lights) that the busbars or cables behind the panel are live with high voltage.",
-    "opts": [
-      "It measures the exact voltage level.",
-      "It provides a visual indication (flashing lights) that the busbars or cables behind the panel are live with high voltage.",
-      "It indicates the battery charge level.",
-      "It shows if the circuit breaker is open."
-    ],
-    "exp": "These indicators use the capacitive coupling of the insulators to bleed off a tiny amount of voltage to flash a neon light. If they are flashing, the system is DEADLY. They must be checked before opening any panel.",
-    "cat": "HV",
-    "id": "T02_HV_204",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Is it safe to assume a circuit is dead if the Capacitive Voltage Indicators are NOT flashing?",
-    "a": "No, the bulbs or capacitive circuits could be broken. Always verify with an approved high voltage proving unit and tester.",
-    "opts": [
-      "Yes, they are fail-safe.",
-      "No, the bulbs or capacitive circuits could be broken. Always verify with an approved high voltage proving unit and tester.",
-      "Yes, as long as the breaker is open.",
-      "No, they only flash on DC."
-    ],
-    "exp": "Never trust your life to a lightbulb. Before touching any HV conductor, you must 'Prove Dead' using a certified HV probe, and you must test the probe itself on a known source before and after.",
-    "cat": "HV",
-    "id": "T02_HV_205",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'Treeing' failure in solid dielectric cables (like XLPE)?",
-    "a": "Microscopic, tree-like hollow channels that grow through the insulation over time due to electrical stress and moisture.",
-    "opts": [
-      "Fungus growing on the outer sheath.",
-      "Microscopic, tree-like hollow channels that grow through the insulation over time due to electrical stress and moisture.",
-      "The cable splitting into multiple branches.",
-      "Roots from cargo entering the cable ducts."
-    ],
-    "exp": "'Water trees' or 'Electrical trees' are permanent degradations inside the plastic insulation. They grow slowly over years until they bridge the gap between the conductor and the earth sheath, causing a massive short circuit.",
-    "cat": "HV",
-    "id": "T02_HV_206",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why must High Voltage cables have an earthed metallic shield (copper tape or wire mesh) around the insulation?",
-    "a": "To confine the electric field entirely within the insulation and provide a path for fault currents if the insulation fails.",
-    "opts": [
-      "To make the cable heavier.",
-      "To confine the electric field entirely within the insulation and provide a path for fault currents if the insulation fails.",
-      "To act as the neutral conductor.",
-      "To prevent magnetic interference with compasses."
-    ],
-    "exp": "Without the earth shield, the lethal electric field would extend outside the cable, meaning touching the plastic jacket could kill you. The shield keeps the field inside and guarantees that any internal failure shorts directly to earth, tripping the breaker immediately.",
-    "cat": "HV",
-    "id": "T02_HV_207",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of 'Stress Cones' or 'Terminations' at the ends of an HV cable?",
-    "a": "To safely graduate and relieve the intense electrical field concentration that occurs where the earth shield is cut back.",
-    "opts": [
-      "To physically clamp the cable to the wall.",
-      "To safely graduate and relieve the intense electrical field concentration that occurs where the earth shield is cut back.",
-      "To cool the ends of the wire.",
-      "To connect the three phases together."
-    ],
-    "exp": "When you strip back the earthed shield to connect the cable to a terminal, the electrical field violently concentrates at the sharp edge of the cut shield, causing immediate breakdown. A stress cone spreads this field out over a safe distance.",
-    "cat": "HV",
-    "id": "T02_HV_208",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "In a marine 6.6kV system, what color is typically used to denote 'High Voltage' warning signs and cables?",
-    "a": "Red.",
-    "opts": [
-      "Green.",
-      "Red.",
-      "Blue.",
-      "Yellow."
-    ],
-    "exp": "Standard convention uses bold Red signage (often with a lightning bolt) to explicitly differentiate HV equipment spaces, panels, and cables from standard 440V (which often uses yellow or black).",
-    "cat": "HV",
-    "id": "T02_HV_209",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you use standard insulated hand tools (rated 1000V) on a live 6.6kV system?",
-    "a": "Absolutely not. Standard tools will immediately break down; moreover, working on live marine HV systems is strictly prohibited.",
-    "opts": [
-      "Yes, if you wear two pairs of gloves.",
-      "Absolutely not. Standard tools will immediately break down; moreover, working on live marine HV systems is strictly prohibited.",
-      "Yes, but only for a few seconds.",
-      "Yes, the 1000V rating has a 10x safety factor."
-    ],
-    "exp": "1000V tools offer zero protection against 6600V. Furthermore, unlike low voltage where 'live work' is sometimes (dangerously) done, HV must ALWAYS be isolated, locked out, and earthed before any panel is opened.",
-    "cat": "HV",
-    "id": "T02_HV_210",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is 'BIL' (Basic Impulse Level) regarding HV equipment?",
-    "a": "The maximum peak voltage surge (like a lightning strike or switching transient) the insulation can withstand without breaking down.",
-    "opts": [
-      "The lowest voltage the system can run on.",
-      "The maximum peak voltage surge (like a lightning strike or switching transient) the insulation can withstand without breaking down.",
-      "The battery level of the UPS.",
-      "The current required to open a breaker."
-    ],
-    "exp": "Switching a massive inductive load (like a bow thruster) off creates a massive voltage spike (transient). A 6.6kV switchboard must have a BIL of perhaps 60kV to ensure these microsecond spikes don't blow up the insulators.",
-    "cat": "HV",
-    "id": "T02_HV_211",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of the 'Anti-Pumping' relay in an HV circuit breaker closing circuit?",
-    "a": "To prevent the breaker from rapidly opening and closing (pumping) if the 'Close' button is held down while a fault condition (trip) exists.",
-    "opts": [
-      "To pump cooling oil through the breaker.",
-      "To prevent the breaker from rapidly opening and closing (pumping) if the 'Close' button is held down while a fault condition (trip) exists.",
-      "To pump air out of the vacuum bottle.",
-      "To prevent water from entering the panel."
-    ],
-    "exp": "If you command a breaker to close onto a short circuit, the protection relay instantly trips it. If you are still holding the close button, it would close again, trip again, close again, destroying the breaker. The anti-pumping relay locks out the close command until you release the button.",
-    "cat": "HV",
-    "id": "T02_HV_212",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary insulating and arc-quenching medium in a VCB?",
-    "a": "A high vacuum.",
-    "opts": [
-      "SF6 Gas.",
-      "A high vacuum.",
-      "Dielectric Oil.",
-      "Compressed Air."
-    ],
-    "exp": "Vacuum is an excellent insulator because without air molecules, ionization cannot occur easily, making it highly effective at quenching arcs quickly.",
-    "cat": "VCB",
-    "id": "T02_HV_213",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How does a Vacuum Circuit Breaker extinguish the arc when opening under load?",
-    "a": "The arc vaporizes a tiny amount of the contact metal; at the first AC current zero-crossing, this vapor rapidly condenses, removing the conductive path in the vacuum.",
-    "opts": [
-      "By blowing a puff of air across the contacts.",
-      "The arc vaporizes a tiny amount of the contact metal; at the first AC current zero-crossing, this vapor rapidly condenses, removing the conductive path in the vacuum.",
-      "By submerging the contacts in oil.",
-      "By stretching the arc until it breaks mechanically."
-    ],
-    "exp": "In a vacuum, the arc is sustained purely by ionized metal vapor boiled off the contacts. When the AC sine wave hits zero amps, the vapor instantly condenses back onto the contacts, restoring the vacuum's perfect insulation before the voltage rises again.",
-    "cat": "VCB",
-    "id": "T02_HV_214",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is the travel distance (contact gap) of a 6.6kV VCB so incredibly short (e.g., 10-15mm) compared to an Air Circuit Breaker?",
-    "a": "Because the dielectric strength of a hard vacuum is phenomenally high, so a large physical gap is not required to stop the arc.",
-    "opts": [
-      "Because VCBs operate at low voltage.",
-      "Because the dielectric strength of a hard vacuum is phenomenally high, so a large physical gap is not required to stop the arc.",
-      "To save manufacturing costs on copper.",
-      "Because vacuum slows down the moving parts."
-    ],
-    "exp": "A vacuum can withstand roughly 30kV per millimeter of gap. Therefore, a gap of just 12mm is more than enough to safely isolate a 6.6kV circuit, making VCBs very compact and fast-acting.",
-    "cat": "VCB",
-    "id": "T02_HV_215",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is 'Current Chopping' in a Vacuum Circuit Breaker?",
-    "a": "When the VCB brutally snaps the current to zero slightly BEFORE the natural AC zero-crossing, causing massive inductive voltage spikes.",
-    "opts": [
-      "Cutting the cables during removal.",
-      "When the VCB brutally snaps the current to zero slightly BEFORE the natural AC zero-crossing, causing massive inductive voltage spikes.",
-      "Chopping the sine wave into a square wave.",
-      "The physical hammering action of the contacts."
-    ],
-    "exp": "Vacuum is so efficient at quenching that it can 'chop' the arc prematurely. By formula V = L(di/dt), an instant change in current (dt=0) through an inductive motor generates a lethal voltage spike that can destroy the motor's insulation.",
-    "cat": "VCB",
-    "id": "T02_HV_216",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How is the issue of 'Current Chopping' mitigated in modern VCBs?",
-    "a": "By using specially formulated contact materials (like Copper-Chromium alloys) that sustain a tiny amount of metal vapor right up to the true zero-crossing.",
-    "opts": [
-      "By filling the vacuum bottle with air.",
-      "By using specially formulated contact materials (like Copper-Chromium alloys) that sustain a tiny amount of metal vapor right up to the true zero-crossing.",
-      "By opening the breaker very slowly.",
-      "By using a massive external resistor."
-    ],
-    "exp": "Pure copper chops badly. Metallurgists mix in Chromium or Bismuth. These metals have high vapor pressures, meaning they keep 'boiling' just long enough to bridge the gap until the AC current naturally and gently hits zero.",
-    "cat": "VCB",
-    "id": "T02_HV_217",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What component is often installed alongside a VCB to protect motors from switching transients (voltage spikes)?",
-    "a": "Surge Arresters or RC Snubber circuits.",
-    "opts": [
-      "Thermal Overloads.",
-      "Surge Arresters or RC Snubber circuits.",
-      "Reverse Power Relays.",
-      "Heater coils."
-    ],
-    "exp": "Because VCBs operate so fast, they can generate steep voltage transients. Surge arresters clamp these high voltages to earth, and RC (Resistor-Capacitor) snubbers smooth out the sharp spikes, protecting the motor windings.",
-    "cat": "VCB",
-    "id": "T02_HV_218",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How can you tell if the vacuum inside a Vacuum Interrupter (bottle) has been lost?",
-    "a": "By performing a high-voltage Hipot (Dielectric Withstand) test across the open contacts.",
-    "opts": [
-      "By shaking it to hear if it rattles.",
-      "By performing a high-voltage Hipot (Dielectric Withstand) test across the open contacts.",
-      "By looking through the glass for air bubbles.",
-      "By measuring it with a standard ohmmeter."
-    ],
-    "exp": "You cannot see a vacuum leak. If air enters the bottle, it loses its insulating properties. Applying a high test voltage (e.g., 15kV DC) across the OPEN contacts will cause it to flash over instantly if the vacuum is gone.",
-    "cat": "VCB",
-    "id": "T02_HV_219",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of the metallic bellows inside a VCB vacuum bottle?",
-    "a": "To allow the moving contact to travel in and out while maintaining a perfect, permanent hermetic vacuum seal.",
-    "opts": [
-      "To pump air into the bottle.",
-      "To allow the moving contact to travel in and out while maintaining a perfect, permanent hermetic vacuum seal.",
-      "To make a loud noise when closing.",
-      "To act as the main conducting wire."
-    ],
-    "exp": "You cannot use rubber O-rings in a hard vacuum; they leak over time. The moving contact is welded to a corrugated stainless steel bellows that flexes like an accordion, allowing movement without breaking the seal.",
-    "cat": "VCB",
-    "id": "T02_HV_220",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is contact wear relatively low in a Vacuum Circuit Breaker compared to an Air Circuit Breaker?",
-    "a": "Because the arc energy is much lower and the vaporized contact metal condenses back onto the contacts instead of blowing away.",
-    "opts": [
-      "Because they are never used under load.",
-      "Because the arc energy is much lower and the vaporized contact metal condenses back onto the contacts instead of blowing away.",
-      "Because vacuum makes the metal harder.",
-      "Because they operate at lower currents."
-    ],
-    "exp": "In an air breaker, the arc literally burns the copper, turning it to oxide dust which is blown out the chute. In a vacuum, there is no oxygen to burn the metal. It vaporizes and then plates back onto the cool surfaces, preserving the contact mass.",
-    "cat": "VCB",
-    "id": "T02_HV_221",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the typical lifespan of a VCB vacuum bottle under normal operating conditions?",
-    "a": "Usually 20 to 30 years, or upwards of 10,000 to 30,000 mechanical operations.",
-    "opts": [
-      "6 months.",
-      "Usually 20 to 30 years, or upwards of 10,000 to 30,000 mechanical operations.",
-      "100 operations max.",
-      "They must be replaced every dry dock."
-    ],
-    "exp": "VCBs are largely maintenance-free internally. The vacuum seal is robust, and contact wear is minimal. The mechanical spring operating mechanism requires maintenance long before the vacuum bottle fails.",
-    "cat": "VCB",
-    "id": "T02_HV_222",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does a 'Contact Wear Indicator' on a VCB show?",
-    "a": "The physical erosion of the contact surfaces, usually indicated by a mark on the moving stem that disappears as the contacts wear down.",
-    "opts": [
-      "The temperature of the contacts.",
-      "The physical erosion of the contact surfaces, usually indicated by a mark on the moving stem that disappears as the contacts wear down.",
-      "The vacuum level inside the bottle.",
-      "The pressure of the closing spring."
-    ],
-    "exp": "Because the contacts are sealed inside the ceramic/glass bottle, you cannot see them. The manufacturer provides a gauge or scribe line on the external moving push-rod to measure how far the contacts have burned away over the years.",
-    "cat": "VCB",
-    "id": "T02_HV_223",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why are VCBs preferred over SF6 gas breakers for most marine medium-voltage applications (up to 11kV)?",
-    "a": "VCBs are completely maintenance-free internally, environmentally friendly, and don't require gas pressure monitoring.",
-    "opts": [
-      "SF6 gas is highly explosive.",
-      "VCBs are completely maintenance-free internally, environmentally friendly, and don't require gas pressure monitoring.",
-      "VCBs are much heavier and add ballast.",
-      "SF6 gas breakers cannot interrupt high currents."
-    ],
-    "exp": "SF6 is a potent greenhouse gas, requires pressure gauges, and forms toxic byproducts when arced. Vacuum bottles are sealed for life, safe, and perfectly suited for the 6.6kV range.",
-    "cat": "VCB",
-    "id": "T02_HV_224",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the function of the 'Closing Spring' in a VCB operating mechanism?",
-    "a": "To store immense mechanical energy required to slam the contacts shut at extremely high speed against the vacuum force.",
-    "opts": [
-      "To keep the panel door closed.",
-      "To store immense mechanical energy required to slam the contacts shut at extremely high speed against the vacuum force.",
-      "To absorb vibration from the ship.",
-      "To slowly close the contacts to prevent sparks."
-    ],
-    "exp": "Closing a breaker onto a live load or short circuit requires massive, instantaneous force to overcome magnetic repulsion and prevent pre-striking arcs. The spring is charged by a small motor, ready to unleash its energy instantly.",
-    "cat": "VCB",
-    "id": "T02_HV_225",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'Pre-Strike' during the closing of a VCB?",
-    "a": "When the high voltage jumps the gap and starts an arc just fractions of a second BEFORE the contacts physically touch.",
-    "opts": [
-      "A strike by the crew before the ship sails.",
-      "When the high voltage jumps the gap and starts an arc just fractions of a second BEFORE the contacts physically touch.",
-      "When the breaker trips before being commanded.",
-      "When the contacts hit too hard and bounce."
-    ],
-    "exp": "As the moving contact approaches the fixed contact, the gap shrinks. Eventually, the voltage overcomes the remaining vacuum gap. The mechanism must be incredibly fast to close the remaining gap instantly to minimize the duration of this pre-strike arc.",
-    "cat": "VCB",
-    "id": "T02_HV_226",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you visually inspect the contacts of a Vacuum Interrupter?",
-    "a": "No, they are permanently sealed inside an opaque ceramic or metallic cylinder.",
-    "opts": [
-      "Yes, they have a glass window.",
-      "No, they are permanently sealed inside an opaque ceramic or metallic cylinder.",
-      "Yes, by unscrewing the top cap.",
-      "Yes, using an X-ray machine onboard."
-    ],
-    "exp": "Unlike old air breakers where you take off the arc chutes and look at the copper, VCBs are black boxes. Assessment relies entirely on external wear indicators and high-voltage Hipot testing.",
-    "cat": "VCB",
-    "id": "T02_HV_227",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What prevents a VCB from being racked in or out while it is CLOSED?",
-    "a": "Mechanical and electrical interlocks physically block the racking handle insertion or movement if the breaker mechanism is in the 'Closed' state.",
-    "opts": [
-      "The extreme weight of the breaker.",
-      "Mechanical and electrical interlocks physically block the racking handle insertion or movement if the breaker mechanism is in the 'Closed' state.",
-      "A padlock held by the Captain.",
-      "A warning sticker on the panel."
-    ],
-    "exp": "Racking a closed breaker out would draw a lethal arc across the rear busbar plug-in contacts, which are not designed to interrupt current. The interlock ensures you can only rack the breaker when it is OPEN (dead).",
-    "cat": "VCB",
-    "id": "T02_HV_228",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the spring charging motor on a VCB fails, can the breaker still be closed?",
-    "a": "Yes, it can be manually charged using a specialized pumping handle provided by the manufacturer.",
-    "opts": [
-      "No, the breaker is permanently locked.",
-      "Yes, it can be manually charged using a specialized pumping handle provided by the manufacturer.",
-      "Yes, by pushing the contacts together with a stick.",
-      "No, it must be replaced."
-    ],
-    "exp": "For emergency black-start capability, all VCB mechanisms have a manual socket. The ETO pumps the handle 10-20 times until the spring indicates 'CHARGED', and then pushes the mechanical 'CLOSE' button.",
-    "cat": "VCB",
-    "id": "T02_HV_229",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if a VCB loses vacuum completely while carrying full load current?",
-    "a": "The next time it attempts to open, it will fail to extinguish the arc, leading to a catastrophic meltdown and switchboard fire.",
-    "opts": [
-      "It will automatically close tighter.",
-      "The next time it attempts to open, it will fail to extinguish the arc, leading to a catastrophic meltdown and switchboard fire.",
-      "It will beep loudly.",
-      "The current will safely stop flowing."
-    ],
-    "exp": "Without vacuum, normal air fills the small 12mm gap. Air cannot quench a 6.6kV arc across 12mm. The arc will burn continuously until upstream protection (like a generator trip) activates, likely destroying the VCB in the process.",
-    "cat": "VCB",
-    "id": "T02_HV_230",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the primary purpose of a Neutral Earthing Resistor (NER) in a marine High Voltage system?",
-    "a": "To limit the maximum fault current that can flow during a phase-to-earth short circuit, preventing catastrophic damage to equipment.",
-    "opts": [
-      "To increase the voltage of the system.",
-      "To limit the maximum fault current that can flow during a phase-to-earth short circuit, preventing catastrophic damage to equipment.",
-      "To measure the power factor of the generators.",
-      "To act as a heater for the engine room."
-    ],
-    "exp": "If the neutral was solidly connected to earth, an earth fault would cause tens of thousands of amps to flow, blowing up the motor or switchboard. The NER restricts this current to a safe level (usually a few hundred amps).",
-    "cat": "NER",
-    "id": "T02_HV_231",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Where is the NER physically connected in the electrical system?",
-    "a": "Between the star point (neutral) of the main HV generator windings and the ship's hull (earth).",
-    "opts": [
-      "Between the three phases.",
-      "Between the star point (neutral) of the main HV generator windings and the ship's hull (earth).",
-      "At the bow thruster motor terminals.",
-      "Between the AVR and the exciter."
-    ],
-    "exp": "Marine HV alternators are always Star (Wye) wound. The center point where the three phases meet is the neutral. The NER sits exactly between this point and the physical steel of the ship.",
-    "cat": "NER",
-    "id": "T02_HV_232",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Unlike a 440V system which is typically 'Insulated Earth', a 6.6kV system is 'Impedance Earthed' via the NER. Why?",
-    "a": "At 6.6kV, massive capacitive charging currents exist. An insulated system would suffer lethal, unquenchable arcing faults (arcing grounds) destroying the insulation.",
-    "opts": [
-      "To save money on cables.",
-      "At 6.6kV, massive capacitive charging currents exist. An insulated system would suffer lethal, unquenchable arcing faults (arcing grounds) destroying the insulation.",
-      "Because 440V systems are safer.",
-      "To allow single-phase motors to run."
-    ],
-    "exp": "In an insulated 6.6kV system, if one phase hits earth, the other two phases jump to 6.6kV relative to earth. The massive cable capacitance causes violent, repetitive sparking at the fault site. The NER bleeds off this capacitance, stabilizing the voltage.",
-    "cat": "NER",
-    "id": "T02_HV_233",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a phase-to-earth fault occurs on an NER-earthed 6.6kV system, does the breaker trip immediately?",
-    "a": "Yes, unlike 440V systems, HV systems are designed to trip instantly on a single earth fault.",
-    "opts": [
-      "No, it just triggers an alarm and keeps running.",
-      "Yes, unlike 440V systems, HV systems are designed to trip instantly on a single earth fault.",
-      "Only if two phases hit earth.",
-      "No, it waits for the engineer to reset it."
-    ],
-    "exp": "In 440V insulated systems, the ship keeps running on a single earth fault. In 6.6kV, the fault energy is too high and dangerous. The NER limits the damage, but the protection relays trip the faulty circuit immediately to isolate it.",
-    "cat": "NER",
-    "id": "T02_HV_234",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a typical current rating for a marine NER?",
-    "a": "Often sized to limit earth fault current to between 200 Amps and 400 Amps.",
-    "opts": [
-      "1 Amp.",
-      "Often sized to limit earth fault current to between 200 Amps and 400 Amps.",
-      "10,000 Amps.",
-      "Zero Amps."
-    ],
-    "exp": "The resistor must allow enough current to flow so that the protective relays can easily detect it and trip (e.g., 200A is easily read by a CT), but low enough to prevent melting the stator core of a faulted motor.",
-    "cat": "NER",
-    "id": "T02_HV_235",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the typical time rating of a Neutral Earthing Resistor?",
-    "a": "Usually 10 seconds. It is designed to carry the fault current only long enough for the breakers to trip.",
-    "opts": [
-      "Continuous (24 hours).",
-      "Usually 10 seconds. It is designed to carry the fault current only long enough for the breakers to trip.",
-      "1 millisecond.",
-      "1 hour."
-    ],
-    "exp": "NERs are made of stainless steel grids. If 400 Amps flows through it, it generates massive heat. It will literally melt if the fault is not cleared by the breaker within 10 seconds.",
-    "cat": "NER",
-    "id": "T02_HV_236",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What protection device is usually fitted directly to the NER enclosure?",
-    "a": "An Earth Fault Current Transformer (CT) and a high-temperature alarm/trip.",
-    "opts": [
-      "A reverse power relay.",
-      "An Earth Fault Current Transformer (CT) and a high-temperature alarm/trip.",
-      "A vacuum bottle.",
-      "A frequency meter."
-    ],
-    "exp": "The CT monitors how much current is flowing to earth. If the main breaker fails to clear the fault, the NER will overheat. A temperature sensor will trip the main generator to save the NER from melting.",
-    "cat": "NER",
-    "id": "T02_HV_237",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If a ship has three 6.6kV generators running in parallel, how many NERs should be connected to earth?",
-    "a": "Only ONE. A vacuum contactor system ensures only the designated 'Master' generator has its NER connected to earth.",
-    "opts": [
-      "All three.",
-      "Only ONE. A vacuum contactor system ensures only the designated 'Master' generator has its NER connected to earth.",
-      "None of them.",
-      "Two of them."
-    ],
-    "exp": "If three NERs are connected in parallel, the total resistance drops to one-third, meaning the fault current triples (e.g., 1200A instead of 400A), defeating the purpose of the NER. An interlock system connects only one NER at a time.",
-    "cat": "NER",
-    "id": "T02_HV_238",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the function of the Neutral Earthing Contactor (NEC)?",
-    "a": "It is a specialized switch that physically connects or disconnects the generator's neutral point to the NER.",
-    "opts": [
-      "It starts the main engine.",
-      "It is a specialized switch that physically connects or disconnects the generator's neutral point to the NER.",
-      "It connects the ship to shore power.",
-      "It bypasses the circuit breaker."
-    ],
-    "exp": "To enforce the 'Only One NER' rule, the Power Management System (PMS) opens and closes these contactors automatically. When Generator 1 starts, its NEC closes. When Gen 2 parallels, its NEC stays open.",
-    "cat": "NER",
-    "id": "T02_HV_239",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What happens if an earth fault occurs, but the active generator's Neutral Earthing Contactor (NEC) was accidentally left open?",
-    "a": "The system acts as an 'Insulated' system. Zero fault current flows, the breaker does not trip, and massive destructive overvoltages (arcing grounds) can destroy equipment.",
-    "opts": [
-      "The system works perfectly.",
-      "The system acts as an 'Insulated' system. Zero fault current flows, the breaker does not trip, and massive destructive overvoltages (arcing grounds) can destroy equipment.",
-      "The generator immediately shuts down.",
-      "The NER catches fire."
-    ],
-    "exp": "Without the earth return path through the NER, the fault current cannot complete the circuit. The protection relays see nothing, but the entire 6.6kV system experiences a massive voltage shift, blowing insulators ship-wide.",
-    "cat": "NER",
-    "id": "T02_HV_240",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "How is the resistance value of the NER calculated?",
-    "a": "R = (Phase Voltage) / (Desired Max Fault Current). For 6.6kV and 400A: R = (6600/\u221a3) / 400 = Approx 9.5 Ohms.",
-    "opts": [
-      "R = Voltage \u00d7 Current.",
-      "R = (Phase Voltage) / (Desired Max Fault Current). For 6.6kV and 400A: R = (6600/\u221a3) / 400 = Approx 9.5 Ohms.",
-      "R is always exactly 50 Ohms.",
-      "R = Frequency \u00d7 Voltage."
-    ],
-    "exp": "Using Ohm's Law (V=IR), you take the phase-to-neutral voltage (6600 divided by 1.732 = 3810V) and divide it by the maximum allowable current to find the physical resistance required.",
-    "cat": "NER",
-    "id": "T02_HV_241",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What material is typically used for the resistor elements inside the NER?",
-    "a": "Stainless steel or cast iron grids due to their high thermal capacity and stable resistance at high temperatures.",
-    "opts": [
-      "Copper wire.",
-      "Stainless steel or cast iron grids due to their high thermal capacity and stable resistance at high temperatures.",
-      "Carbon fiber.",
-      "Aluminum plates."
-    ],
-    "exp": "During a fault, the resistor must absorb a tremendous amount of energy (e.g., 1.5 Megawatts) for 10 seconds without melting. Stainless steel banks are robust and handle thermal shock well.",
-    "cat": "NER",
-    "id": "T02_HV_242",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is it critical to inspect the NER enclosure during dry dock?",
-    "a": "To check for broken resistor grids, loose connections, or corrosion that could alter the resistance or break the earth path entirely.",
-    "opts": [
-      "To refill the cooling oil.",
-      "To check for broken resistor grids, loose connections, or corrosion that could alter the resistance or break the earth path entirely.",
-      "To polish the stainless steel for inspections.",
-      "To change the batteries."
-    ],
-    "exp": "The NER sits idle for years. If a grid element rusts through and snaps, the system unknowingly becomes an 'insulated earth' system. When a fault finally happens, the lack of earth path causes catastrophic overvoltages.",
-    "cat": "NER",
-    "id": "T02_HV_243",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the difference between Low Resistance Earthing (LRE) and High Resistance Earthing (HRE)?",
-    "a": "LRE limits current to hundreds of amps (trips instantly). HRE limits current to less than 10 amps (usually just alarms, no trip).",
-    "opts": [
-      "LRE uses copper; HRE uses steel.",
-      "LRE limits current to hundreds of amps (trips instantly). HRE limits current to less than 10 amps (usually just alarms, no trip).",
-      "LRE is for 6.6kV; HRE is for 440V.",
-      "LRE is illegal on ships."
-    ],
-    "exp": "Marine 6.6kV systems almost exclusively use Low Resistance Earthing (LRE) to ensure positive, instant tripping of massive faults. HRE is sometimes used on smaller industrial systems where continuity of process is vital.",
-    "cat": "NER",
-    "id": "T02_HV_244",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Can you bypass a damaged NER and connect the neutral directly to the hull to keep the ship running?",
-    "a": "Absolutely not. This creates a solidly earthed system; the next earth fault will draw tens of thousands of amps, causing massive arc flash explosions.",
-    "opts": [
-      "Yes, it is a standard emergency procedure.",
-      "Absolutely not. This creates a solidly earthed system; the next earth fault will draw tens of thousands of amps, causing massive arc flash explosions.",
-      "Yes, but only if you reduce engine speed.",
-      "Yes, as long as you bypass the AVR too."
-    ],
-    "exp": "Solid earthing on a marine 6.6kV system is highly dangerous. The fault current would only be limited by the generator's internal impedance, leading to catastrophic destruction of the faulted equipment.",
-    "cat": "NER",
-    "id": "T02_HV_245",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What provides the primary earth fault protection sensing in an NER system?",
-    "a": "A Core Balance Current Transformer (CBCT) or Zero Sequence CT wrapped around all three phase cables.",
-    "opts": [
-      "A simple fuse.",
-      "A Core Balance Current Transformer (CBCT) or Zero Sequence CT wrapped around all three phase cables.",
-      "A reverse power relay.",
-      "A voltmeter connected to the hull."
-    ],
-    "exp": "Under normal conditions, the sum of current in all three phases is zero. If current leaks to earth, the sum is no longer zero, inducing a current in the CBCT which immediately trips the relay.",
-    "cat": "NER",
-    "id": "T02_HV_246",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If an earth fault occurs on Phase U, what happens to the voltage of Phase V and Phase W relative to earth in an NER system?",
-    "a": "Their voltage relative to earth rises significantly, approaching the full line-to-line voltage (6.6kV).",
-    "opts": [
-      "They drop to zero volts.",
-      "Their voltage relative to earth rises significantly, approaching the full line-to-line voltage (6.6kV).",
-      "They remain completely unchanged.",
-      "They reverse polarity."
-    ],
-    "exp": "Because the neutral point shifts during an earth fault (due to the voltage drop across the NER), the healthy phases experience higher voltage stress. The insulation of the entire system must be rated to handle this temporary overvoltage.",
-    "cat": "NER",
-    "id": "T02_HV_247",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is the NER physically housed in a highly ventilated, cage-like enclosure?",
-    "a": "To allow rapid dissipation of massive heat during an earth fault.",
-    "opts": [
-      "To let the crew see the resistors.",
-      "To allow rapid dissipation of massive heat during an earth fault.",
-      "To keep the resistor warm.",
-      "To save weight on steel casing."
-    ],
-    "exp": "Dissipating 1.5 MW of heat, even for 10 seconds, generates an immense thermal plume. A sealed box would act like an oven, melting the insulators inside. The cage prevents personnel contact while allowing extreme airflow.",
-    "cat": "NER",
-    "id": "T02_HV_248",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the role of the 'Neutral Disconnect Link'?",
-    "a": "A manual copper link used to physically isolate the generator neutral from the NER for maintenance and Megger testing.",
-    "opts": [
-      "A fuse that blows during a fault.",
-      "A manual copper link used to physically isolate the generator neutral from the NER for maintenance and Megger testing.",
-      "A switch for the shore power.",
-      "A link that parallels two generators."
-    ],
-    "exp": "If you try to Megger the stator windings while the neutral is still connected to the earthed NER, your Megger will read a dead short circuit to earth. You must remove this physical copper link to isolate the windings before testing.",
-    "cat": "NER",
-    "id": "T02_HV_249",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If the ship has a 6.6kV to 440V step-down transformer, how is the 440V secondary side earthed?",
-    "a": "It is usually left insulated (ungrounded), maintaining the standard marine 440V IT system architecture.",
-    "opts": [
-      "It is earthed through a second NER.",
-      "It is usually left insulated (ungrounded), maintaining the standard marine 440V IT system architecture.",
-      "It is solidly connected to the hull.",
-      "It shares the main 6.6kV NER."
-    ],
-    "exp": "The HV side (6.6kV) is impedance earthed via the NER for safety and stability. The transformer provides galvanic isolation. The LV side (440V) remains insulated to ensure a single earth fault doesn't black out essential low-voltage pumps.",
-    "cat": "NER",
-    "id": "T02_HV_250",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What indicates to the Power Management System (PMS) which generator's Neutral Earthing Contactor (NEC) should be closed?",
-    "a": "Usually, the PMS designates the first generator to come online as the 'Master', closing its NEC. Subsequent generators run with NECs open.",
-    "opts": [
-      "The generator with the highest fuel level.",
-      "Usually, the PMS designates the first generator to come online as the 'Master', closing its NEC. Subsequent generators run with NECs open.",
-      "The engineer must manually flip a coin.",
-      "The generator closest to the bow."
-    ],
-    "exp": "The logic is simple: First one on the bus provides the earth path. If the master generator is stopped, the PMS must instantly close the NEC of one of the remaining running generators BEFORE opening the master's breaker.",
-    "cat": "NER",
-    "id": "T02_HV_251",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'Zig-Zag Transformer' used for in relation to NERs?",
-    "a": "It is an earthing transformer used to create an artificial neutral point on a system (like a Delta wound system) that doesn't have one.",
-    "opts": [
-      "To change 60Hz to 50Hz.",
-      "It is an earthing transformer used to create an artificial neutral point on a system (like a Delta wound system) that doesn't have one.",
-      "To step up voltage for radar.",
-      "To smooth out DC ripples."
-    ],
-    "exp": "If a ship's HV system is supplied by a Delta transformer (which has no star neutral point), you cannot connect an NER. A Zig-Zag transformer is installed purely to provide a stable neutral point to connect the NER to earth.",
-    "cat": "NER",
-    "id": "T02_HV_252",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why must the cables connecting the generator neutral to the NER be rated for High Voltage?",
-    "a": "During an earth fault, the voltage at the neutral point rises dramatically above earth potential.",
-    "opts": [
-      "Because they carry massive currents.",
-      "During an earth fault, the voltage at the neutral point rises dramatically above earth potential.",
-      "Because it looks better for inspections.",
-      "To match the color of the main cables."
-    ],
-    "exp": "Normally, the neutral is at 0V. But during a solid phase-to-earth fault, the full phase voltage (e.g., 3.8kV) is dropped across the NER. The neutral cable sits at 3.8kV relative to the hull, so it must be fully insulated.",
-    "cat": "NER",
-    "id": "T02_HV_253",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the very first step before commencing any work on a High Voltage system?",
-    "a": "Obtain a formal Permit to Work (PTW) explicitly authorizing the specific task on the specified equipment.",
-    "opts": [
-      "Put on rubber gloves.",
-      "Obtain a formal Permit to Work (PTW) explicitly authorizing the specific task on the specified equipment.",
-      "Turn off the main generators.",
-      "Notify the bridge."
-    ],
-    "exp": "Administrative control is paramount. A PTW ensures the task is planned, the equipment is identified, the Chief Engineer is aware, and the isolation plan is formalized before anyone touches a panel.",
-    "cat": "SAF",
-    "id": "T02_HV_254",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does the term 'Dead' mean in the context of HV safety?",
-    "a": "At or about zero voltage, and disconnected from any live system.",
-    "opts": [
-      "Switched off at the panel.",
-      "At or about zero voltage, and disconnected from any live system.",
-      "The fuses have been removed.",
-      "The generator is stopped."
-    ],
-    "exp": "Simply opening a breaker does not make a circuit 'dead'. It must be physically isolated (racked out) and proven to have zero voltage.",
-    "cat": "SAF",
-    "id": "T02_HV_255",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What does the term 'Earthed' mean in the context of HV safety?",
-    "a": "Connected to the general mass of earth (the ship's hull) in such a manner as to ensure immediate discharge of electrical energy without danger.",
-    "opts": [
-      "Touching the floor.",
-      "Connected to the general mass of earth (the ship's hull) in such a manner as to ensure immediate discharge of electrical energy without danger.",
-      "Connected to the neutral wire.",
-      "The circuit breaker is open."
-    ],
-    "exp": "Earthing ensures that if the system is accidentally energized (or retains a capacitive charge), the current flows instantly to the hull, tripping the breakers and protecting the worker.",
-    "cat": "SAF",
-    "id": "T02_HV_256",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "According to standard HV safety rules, what is the 'Isolate' step?",
-    "a": "Physically breaking the electrical supply to the equipment, usually by racking out a circuit breaker or removing bolted links.",
-    "opts": [
-      "Turning the control switch to OFF.",
-      "Physically breaking the electrical supply to the equipment, usually by racking out a circuit breaker or removing bolted links.",
-      "Pressing the emergency stop.",
-      "Disconnecting the battery."
-    ],
-    "exp": "Isolation must be a physical, visible break in the circuit that cannot be easily or accidentally bridged, unlike a simple switch contact.",
-    "cat": "SAF",
-    "id": "T02_HV_257",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "After isolating an HV circuit breaker, what is the mandatory next step?",
-    "a": "Secure the isolation with a physical padlock (Lock-Out) and attach a high-visibility warning tag (Tag-Out).",
-    "opts": [
-      "Prove dead immediately.",
-      "Secure the isolation with a physical padlock (Lock-Out) and attach a high-visibility warning tag (Tag-Out).",
-      "Connect the earth leads.",
-      "Start the maintenance work."
-    ],
-    "exp": "LOTO (Lock-Out, Tag-Out) ensures that no one else can come along and rack the breaker back in while you are working on the downstream equipment.",
-    "cat": "SAF",
-    "id": "T02_HV_258",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the crucial rule regarding the High Voltage Test Indicator (Proving Unit) used to 'Prove Dead'?",
-    "a": "It must be tested on a known live source (or its dedicated battery proving unit) BOTH immediately before AND immediately after testing the isolated circuit.",
-    "opts": [
-      "It must be calibrated every 10 years.",
-      "It must be tested on a known live source (or its dedicated battery proving unit) BOTH immediately before AND immediately after testing the isolated circuit.",
-      "It can only be used by the Chief Engineer.",
-      "It must be held with two hands."
-    ],
-    "exp": "If the tester is broken, it will indicate 'Dead' even if the busbars are at 6.6kV. Testing it before ensures it works. Testing it after ensures it didn't break while you were using it.",
-    "cat": "SAF",
-    "id": "T02_HV_259",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why is 'Earthing Down' mandatory on HV cables before touching them, even if they have been proven dead?",
-    "a": "To safely discharge any trapped capacitive energy and to protect against accidental re-energization from another source.",
-    "opts": [
-      "To provide a path for the Megger.",
-      "To safely discharge any trapped capacitive energy and to protect against accidental re-energization from another source.",
-      "To test the earth fault relay.",
-      "To keep the cables warm."
-    ],
-    "exp": "Long 6.6kV cables act as massive capacitors and hold a lethal charge long after being isolated. Earthing bleeds this off. It also provides a dead-short if someone bypasses your lock-out and closes a breaker.",
-    "cat": "SAF",
-    "id": "T02_HV_260",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When applying portable earthing leads to a busbar, what is the correct sequence of connection?",
-    "a": "Always connect the earth clamp to the ship's hull/earth bar FIRST, then apply the live clamp to the isolated phase conductors.",
-    "opts": [
-      "Connect to the phase conductors first, then to earth.",
-      "Always connect the earth clamp to the ship's hull/earth bar FIRST, then apply the live clamp to the isolated phase conductors.",
-      "Connect all phases together, then to earth.",
-      "The order does not matter."
-    ],
-    "exp": "If you connect to the conductor first and it happens to be charged, the loose earth clamp in your hand becomes instantly energized at high voltage.",
-    "cat": "SAF",
-    "id": "T02_HV_261",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When removing portable earthing leads, what is the correct sequence?",
-    "a": "Remove the phase connections FIRST, and disconnect from the ship's earth bar LAST.",
-    "opts": [
-      "Remove the earth connection first.",
-      "Remove the phase connections FIRST, and disconnect from the ship's earth bar LAST.",
-      "Pull all of them off at once.",
-      "The order does not matter."
-    ],
-    "exp": "You must maintain the safety ground path until the very last moment. Disconnecting the earth first leaves the leads potentially floating at a dangerous potential if an induced voltage exists.",
-    "cat": "SAF",
-    "id": "T02_HV_262",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Who is authorized to issue a High Voltage Sanction to Test or Permit to Work?",
-    "a": "Only a specially trained and designated Chief Engineer or Senior Electrical Officer (often termed the 'Authorized Person').",
-    "opts": [
-      "Any engineer on watch.",
-      "Only a specially trained and designated Chief Engineer or Senior Electrical Officer (often termed the 'Authorized Person').",
-      "The ship's Master.",
-      "The shore superintendent."
-    ],
-    "exp": "HV work requires specific legal competency. Not every ETO or Engineer is automatically authorized to isolate and issue permits for 6.6kV systems without passing an approved HV Management course.",
-    "cat": "SAF",
-    "id": "T02_HV_263",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is an 'HV Sanction to Test' as opposed to a standard 'Permit to Work'?",
-    "a": "A specific permit used when the equipment must be temporarily energized (e.g., for Meggering or phase rotation checks) during the maintenance period.",
-    "opts": [
-      "A permit for low voltage work.",
-      "A specific permit used when the equipment must be temporarily energized (e.g., for Meggering or phase rotation checks) during the maintenance period.",
-      "A permit to run the main engine.",
-      "A permit to test the fire alarms."
-    ],
-    "exp": "Under a standard PTW, the system must remain dead and earthed. If you need to remove the earths to apply 5000V from a Megger, the standard PTW is canceled, and a Sanction to Test is issued because the area is now hazardous again.",
-    "cat": "SAF",
-    "id": "T02_HV_264",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of an 'Arc Flash Suit' (Flash suit)?",
-    "a": "To protect the worker from the extreme thermal radiation (heat), molten metal, and blinding light generated during an accidental arc flash.",
-    "opts": [
-      "To protect against electric shock.",
-      "To protect the worker from the extreme thermal radiation (heat), molten metal, and blinding light generated during an accidental arc flash.",
-      "To keep the worker clean.",
-      "To protect against toxic gases."
-    ],
-    "exp": "Standard cotton or poly-blend boiler suits will instantly ignite and melt to the skin in an arc flash. Arc flash suits are made of heavy, flame-resistant materials (like Kevlar/Nomex) rated for specific calorie/cm2 thermal energy.",
-    "cat": "SAF",
-    "id": "T02_HV_265",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Why should you never point or reach your bare hand into an open HV switchboard cubicle?",
-    "a": "High voltage can arc (jump) through the air; you do not need to physically touch the copper to receive a lethal shock.",
-    "opts": [
-      "It is considered rude.",
-      "High voltage can arc (jump) through the air; you do not need to physically touch the copper to receive a lethal shock.",
-      "The panels are usually hot.",
-      "You might drop your pen."
-    ],
-    "exp": "Clearance distances are critical. If your finger breaches the safe clearance distance (e.g., within a few inches of 6.6kV), the air will ionize and the voltage will jump to your hand.",
-    "cat": "SAF",
-    "id": "T02_HV_266",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the 'Competent Person' in the context of an HV Permit to Work?",
-    "a": "The person (e.g., the ETO or Electrician) who receives the permit, performs the actual work, and is responsible for their own safety and their team.",
-    "opts": [
-      "The person who issues the permit.",
-      "The person (e.g., the ETO or Electrician) who receives the permit, performs the actual work, and is responsible for their own safety and their team.",
-      "The Captain.",
-      "The Class Surveyor."
-    ],
-    "exp": "The 'Authorized Person' plans the isolation and issues the permit. The 'Competent Person' accepts the permit, understands the isolation, and executes the physical work safely.",
-    "cat": "SAF",
-    "id": "T02_HV_267",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What should be done with the key to the padlock used to lock out an HV breaker?",
-    "a": "It must be kept in the personal possession of the 'Competent Person' doing the work, or placed in a secure lock-box.",
-    "opts": [
-      "Left in the padlock for convenience.",
-      "It must be kept in the personal possession of the 'Competent Person' doing the work, or placed in a secure lock-box.",
-      "Given to the Captain.",
-      "Hidden behind the panel."
-    ],
-    "exp": "Lockout implies exclusive control. If someone else has the key, they could remove the lock and energize the system while you are working. The person at risk must hold the key.",
-    "cat": "SAF",
-    "id": "T02_HV_268",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "When is it permissible to work on live High Voltage equipment on a ship?",
-    "a": "Never. Working on live High Voltage systems is strictly prohibited under marine safety regulations.",
-    "opts": [
-      "When the Chief Engineer authorizes it.",
-      "Never. Working on live High Voltage systems is strictly prohibited under marine safety regulations.",
-      "When wearing two pairs of gloves.",
-      "Only during an emergency at sea."
-    ],
-    "exp": "There is no justification for live HV work on a vessel. The arc flash and shock risks are too extreme. The equipment must always be dead, isolated, and earthed.",
-    "cat": "SAF",
-    "id": "T02_HV_269",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is a 'Circuit Main Earth' (CME)?",
-    "a": "An earthing switch integral to the switchgear that physically bolts the circuit to earth when closed.",
-    "opts": [
-      "A portable wire.",
-      "An earthing switch integral to the switchgear that physically bolts the circuit to earth when closed.",
-      "The main earth strap for the generator.",
-      "The earth connection for the shore power."
-    ],
-    "exp": "Modern HV switchboards have mechanical earthing switches built-in. When the breaker is racked out, a separate handle can close the CME, solidly earthing the outgoing cable to the hull without needing portable wires.",
-    "cat": "SAF",
-    "id": "T02_HV_270",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "Before closing a Circuit Main Earth (CME) switch on an outgoing cable, what must be verified?",
-    "a": "You must positively verify the cable is DEAD using the capacitive voltage indicators or a proving unit.",
-    "opts": [
-      "That the generator is running.",
-      "You must positively verify the cable is DEAD using the capacitive voltage indicators or a proving unit.",
-      "That the fire alarm is off.",
-      "That the motor is uncoupled."
-    ],
-    "exp": "Closing an earthing switch onto a live 6.6kV cable will cause an immediate, massive three-phase short circuit to earth, potentially destroying the switchgear. You must prove dead before earthing.",
-    "cat": "SAF",
-    "id": "T02_HV_271",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What is the purpose of an 'Additional Earth' or 'Working Earth'?",
-    "a": "Portable earthing leads applied directly adjacent to the work site to provide immediate protection if the CME is compromised.",
-    "opts": [
-      "To ground the test equipment.",
-      "Portable earthing leads applied directly adjacent to the work site to provide immediate protection if the CME is compromised.",
-      "To replace a broken hull connection.",
-      "To test the Megger."
-    ],
-    "exp": "If the main switchboard is 100 meters away, a CME earths the cable at the board. But a 'Working Earth' applied right at the motor terminal box ensures the ETO is protected exactly where they are working.",
-    "cat": "SAF",
-    "id": "T02_HV_272",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "If you find a person unconscious next to an open HV panel, what is your FIRST action?",
-    "a": "Do not touch them! Hit the Emergency Stop or trip the main breaker to isolate the power before approaching.",
-    "opts": [
-      "Grab them and pull them away immediately.",
-      "Do not touch them! Hit the Emergency Stop or trip the main breaker to isolate the power before approaching.",
-      "Perform CPR immediately.",
-      "Throw water on them to cool the burns."
-    ],
-    "exp": "If they are still in contact with 6.6kV, touching them will instantly electrocute you as well. You must break the circuit remotely before attempting any rescue.",
-    "cat": "SAF",
-    "id": "T02_HV_273",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "What document clearly defines the exact steps taken to isolate, lock, and earth a specific piece of HV equipment?",
-    "a": "The Isolation Certificate or Switching Plan, which is usually attached to the Permit to Work.",
-    "opts": [
-      "The ship's general arrangement plan.",
-      "The Isolation Certificate or Switching Plan, which is usually attached to the Permit to Work.",
-      "The manufacturer's manual.",
-      "The daily logbook."
-    ],
-    "exp": "A complex system might require opening 3 different breakers and closing 2 earth switches to isolate one ring-main component. This must be written out, step-by-step, in an approved Switching Plan to prevent errors.",
-    "cat": "SAF",
-    "id": "T02_HV_274",
-    "topic": "T02_HighVoltage"
-  },
-  {
-    "q": "In a 440V IT (Insulated) system, how is the insulation resistance of the entire active network continuously monitored?",
-    "a": "By an Insulation Monitoring Device (IMD) that continuously measures the resistance between the active phases and the ship's hull.",
-    "opts": [
-      "By manually Meggering the system every day.",
-      "By an Insulation Monitoring Device (IMD) that continuously measures the resistance between the active phases and the ship's hull.",
-      "By measuring the voltage between phases.",
-      "By checking the frequency of the generator."
-    ],
-    "exp": "Because 440V systems are ungrounded, a single earth fault doesn't cause a short circuit. The IMD injects a small DC or low-frequency AC signal into the network to constantly monitor the resistance to earth.",
+    "exp": "Floating systems use IRMs because they don't trip on a first earth fault.",
     "cat": "IRM",
-    "id": "T02_HV_275",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_205"
   },
   {
-    "q": "What happens in a 440V system if the Insulation Monitoring Device (IMD) detects an earth fault (e.g., resistance drops below 10 kOhms)?",
-    "a": "It triggers an audible and visual alarm in the Engine Control Room, but it DOES NOT trip the power.",
+    "q": "What is the IRM's main job?",
+    "a": "Continuously monitor impedance between live conductors and hull",
     "opts": [
-      "It immediately blacks out the ship.",
-      "It triggers an audible and visual alarm in the Engine Control Room, but it DOES NOT trip the power.",
-      "It automatically starts the emergency generator.",
-      "It shuts down the main engine."
+      "Trip the breaker on short circuit",
+      "Continuously monitor impedance between live conductors and hull",
+      "Inject HV for testing",
+      "Ground the neutral"
     ],
-    "exp": "The primary advantage of the IT (insulated) system is continuity of service. Essential pumps (like steering gear or cooling water) won't stop running just because of one earth fault. It alerts the ETO to find the fault.",
+    "exp": "It provides the early warning system that an insulation breach has occurred.",
     "cat": "IRM",
-    "id": "T02_HV_276",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_206"
   },
   {
-    "q": "Why is it dangerous to ignore a single earth fault on a 440V IT system?",
-    "a": "If a SECOND earth fault occurs on a different phase, it creates a massive phase-to-phase short circuit through the hull, causing a blackout or fire.",
+    "q": "What voltage does the IRM inject?",
+    "a": "Low-level DC (1–5 V)",
     "opts": [
-      "It consumes too much fuel.",
-      "If a SECOND earth fault occurs on a different phase, it creates a massive phase-to-phase short circuit through the hull, causing a blackout or fire.",
-      "It reverses the rotation of all motors.",
-      "It stops the IMD from working."
+      "440 V AC",
+      "Low-level DC (1–5 V)",
+      "6.6 kV DC",
+      "1000 V AC"
     ],
-    "exp": "The first fault brings that phase to 0V relative to earth, but the equipment keeps running. If another phase touches earth anywhere else on the ship, you now have a dead short between two phases via the ship's steel.",
+    "exp": "It uses a safe, low injection voltage to sense leakage current.",
     "cat": "IRM",
-    "id": "T02_HV_277",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_207"
   },
   {
-    "q": "How does a basic DC-injection Insulation Monitoring Device (IMD) work?",
-    "a": "It superimposes a small DC measuring voltage between the AC phases and earth. If insulation fails, a DC leakage current flows back to the IMD.",
+    "q": "How does the IRM indicate a fault?",
+    "a": "Visual + audible ALARM when impedance drops below threshold",
     "opts": [
-      "It measures the temperature of the cables.",
-      "It superimposes a small DC measuring voltage between the AC phases and earth. If insulation fails, a DC leakage current flows back to the IMD.",
-      "It measures the magnetic field of the hull.",
-      "It physically weighs the insulation."
+      "It trips the MSB",
+      "Visual + audible ALARM when impedance drops below threshold",
+      "It displays the fault location",
+      "It shuts down the generator"
     ],
-    "exp": "By using DC, the capacitive charging currents of the AC cables are ignored. The IMD only measures the true resistive leakage path (the actual degraded insulation) to earth.",
+    "exp": "It warns of degradation without causing a blackout.",
     "cat": "IRM",
-    "id": "T02_HV_278",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_208"
   },
   {
-    "q": "Why do modern ships with many Variable Frequency Drives (VFDs) struggle with older DC-injection IMDs?",
-    "a": "VFDs have massive internal DC links and high-frequency noise that interfere with and blind the simple DC-measuring circuit of older IMDs.",
+    "q": "What is the typical LV IRM alarm threshold?",
+    "a": "50–100 kΩ",
     "opts": [
-      "VFDs use too much power.",
-      "VFDs have massive internal DC links and high-frequency noise that interfere with and blind the simple DC-measuring circuit of older IMDs.",
-      "VFDs are perfectly insulated.",
-      "VFDs generate extreme heat."
+      "1–5 kΩ",
+      "50–100 kΩ",
+      "1–5 MΩ",
+      "10 MΩ"
     ],
-    "exp": "If an earth fault occurs on the DC side of a VFD, an older DC IMD might not detect it properly, or the VFD's rectifiers might block the IMD's test signal. Modern IMDs use complex multi-frequency pulse techniques.",
+    "exp": "An impedance of 50-100 kΩ is the danger zone for LV electrical systems.",
     "cat": "IRM",
-    "id": "T02_HV_279",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_209"
   },
   {
-    "q": "What is the typical alarm setpoint for a 440V system Insulation Monitoring Device?",
-    "a": "Usually a pre-alarm at 50 kOhms and a main alarm at 10 to 20 kOhms.",
+    "q": "How do you find the fault after an IRM alarm?",
+    "a": "Switch off non-essential circuits sequentially until alarm clears",
     "opts": [
-      "1 Ohm.",
-      "Usually a pre-alarm at 50 kOhms and a main alarm at 10 to 20 kOhms.",
-      "1000 Megohms.",
-      "Zero ohms."
+      "Look for smoke",
+      "Switch off non-essential circuits sequentially until alarm clears",
+      "Trip the main ACB",
+      "Use the thermal camera"
     ],
-    "exp": "While a motor should ideally be >1 Megohm, a large ship network has hundreds of motors and miles of cable connected in parallel. The overall system resistance is naturally lower. 20kOhms indicates a definitive fault somewhere.",
+    "exp": "Elimination is the standard manual troubleshooting method for earth faults.",
     "cat": "IRM",
-    "id": "T02_HV_280",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_210"
   },
   {
-    "q": "When tracing an earth fault that has triggered the main IMD alarm, what is the standard procedure?",
-    "a": "Sequentially open (switch off) non-essential circuit breakers on the main switchboard one by one until the IMD reading returns to normal.",
+    "q": "What happens if a second earth fault occurs on a different phase?",
+    "a": "Phase-to-phase short circuit that trips the OCR",
     "opts": [
-      "Switch off the main generators.",
-      "Sequentially open (switch off) non-essential circuit breakers on the main switchboard one by one until the IMD reading returns to normal.",
-      "Increase the voltage to burn the fault.",
-      "Ignore it until dry dock."
+      "Nothing",
+      "Phase-to-phase short circuit that trips the OCR",
+      "The IRM alarm clears",
+      "The generator over-speeds"
     ],
-    "exp": "By isolating circuits one at a time, you watch the IMD meter. When you switch off the Galley panel and the IMD suddenly jumps back to 'Infinity', you know the earth fault is on the Galley circuit.",
+    "exp": "Two earth faults on different phases complete a circuit through the hull, causing a short.",
     "cat": "IRM",
-    "id": "T02_HV_281",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_211"
   },
   {
-    "q": "After isolating the earth fault to the Galley distribution board, how do you find the specific faulty equipment?",
-    "a": "Go to the Galley board and repeat the process: switch off individual galley breakers until the local IMD or main IMD clears.",
+    "q": "Does the IRM tell you where the fault is?",
+    "a": "No",
     "opts": [
-      "Megger the entire switchboard at 5000V.",
-      "Go to the Galley board and repeat the process: switch off individual galley breakers until the local IMD or main IMD clears.",
-      "Replace all the cables in the galley.",
-      "Wash the equipment with water."
+      "Yes",
+      "No",
+      "Sometimes",
+      "Only for HV"
     ],
-    "exp": "Fault finding is a process of elimination. Narrow it from the Main Board -> Sub Board -> Individual load (e.g., the Deep Fryer element has shorted to earth).",
+    "exp": "It detects the *existence* of a fault, not its *location*.",
     "cat": "IRM",
-    "id": "T02_HV_282",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_212"
   },
   {
-    "q": "Can you have two Insulation Monitoring Devices (IMDs) actively monitoring the same galvanically connected network?",
-    "a": "No, they will interfere with each other, leading to false readings or alarms.",
+    "q": "On an HV system, what does the IRM monitor?",
+    "a": "Current through the NER",
     "opts": [
-      "Yes, for redundancy.",
-      "No, they will interfere with each other, leading to false readings or alarms.",
-      "Yes, if they are different brands.",
-      "Yes, but they must be wired in series."
+      "Phase voltage",
+      "Current through the NER",
+      "Transformer temperature",
+      "Voltage frequency"
     ],
-    "exp": "If Gen 1 has an IMD and Gen 2 has an IMD, when they are paralleled, both IMDs are injecting signals into the same cables. They will read each other's signals as a fault. The PMS automatically disconnects one IMD when paralleling.",
+    "exp": "Since the NER connects the neutral to earth, current flowing through it signifies an earth fault.",
     "cat": "IRM",
-    "id": "T02_HV_283",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_213"
   },
   {
-    "q": "What is an 'Earth Fault Location System' (EDS)?",
-    "a": "An advanced system that injects a specific pulse and uses fixed current transformers on every outgoing breaker to instantly pinpoint which circuit has the fault.",
+    "q": "Is the system floating if an NER is present?",
+    "a": "No",
     "opts": [
-      "A GPS tracker for cables.",
-      "An advanced system that injects a specific pulse and uses fixed current transformers on every outgoing breaker to instantly pinpoint which circuit has the fault.",
-      "A system that automatically fixes insulation.",
-      "A system used only in dry dock."
+      "Yes",
+      "No",
+      "Only partially",
+      "Yes, above 6.6 kV"
     ],
-    "exp": "Instead of the ETO manually switching off breakers (which disrupts operations), an EDS uses tiny CTs on every wire. It traces its own test pulse directly to the faulty breaker and displays 'Fault on Feeder 4' on a screen.",
+    "exp": "An NER provides a high-resistance path to ground, effectively 'grounding' the neutral, not floating it.",
     "cat": "IRM",
-    "id": "T02_HV_284",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_214"
   },
   {
-    "q": "If a ship's 440V IMD shows 0 Ohms (dead short to earth), but switching off EVERY breaker on the main switchboard doesn't clear it, where is the fault?",
-    "a": "The fault must be on the main busbars themselves, or inside one of the running generator alternators.",
+    "q": "Why investigate the first earth fault immediately?",
+    "a": "To fix it before a second fault creates a short circuit",
     "opts": [
-      "In the emergency generator.",
-      "The fault must be on the main busbars themselves, or inside one of the running generator alternators.",
-      "In the shore connection box.",
-      "In the 24V DC battery system."
+      "To prevent the light bulbs from blowing",
+      "To fix it before a second fault creates a short circuit",
+      "To improve generator efficiency",
+      "To stop the IRM from buzzing"
     ],
-    "exp": "If all outgoing loads are disconnected, the only things left connected to the IMD are the busbars and the generator supplying them. The generator must be stopped and Meggered immediately.",
+    "exp": "Two earth faults equal a major short-circuit event.",
     "cat": "IRM",
-    "id": "T02_HV_285",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_215"
   },
   {
-    "q": "Why are galleys and laundries common sources of 440V earth faults?",
-    "a": "Because they involve heating elements, high humidity, water spills, and frequent physical abuse of equipment.",
+    "q": "Can IRM detect earth faults in the stator?",
+    "a": "Yes",
     "opts": [
-      "Because they use DC power.",
-      "Because they involve heating elements, high humidity, water spills, and frequent physical abuse of equipment.",
-      "Because the cooks are not electricians.",
-      "Because they operate at 6.6kV."
+      "No",
+      "Yes",
+      "Only in cables",
+      "Only in transformers"
     ],
-    "exp": "Heating elements (like in ovens or washing machines) degrade over time, and water ingress into terminal boxes is extremely common in these wet areas, providing a low-resistance path to earth.",
+    "exp": "Yes, any insulation degradation anywhere on the distribution network affects the total leakage.",
     "cat": "IRM",
-    "id": "T02_HV_286",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_216"
   },
   {
-    "q": "What happens if an earth fault occurs on a 220V lighting circuit?",
-    "a": "If the 220V system is supplied by an isolating transformer, it has its own independent IMD which will alarm. It will NOT trigger the main 440V IMD.",
+    "q": "What occurs when the alarm clears during fault finding?",
+    "a": "The last circuit switched off contains the fault",
     "opts": [
-      "The main engine will trip.",
-      "If the 220V system is supplied by an isolating transformer, it has its own independent IMD which will alarm. It will NOT trigger the main 440V IMD.",
-      "The 440V system will short out.",
-      "The lights will explode."
+      "The IRM has failed",
+      "The last circuit switched off contains the fault",
+      "The generator has tripped",
+      "The fault has repaired itself"
     ],
-    "exp": "Transformers provide galvanic isolation. The 220V network is electrically separate from the 440V network. A fault on the 220V side cannot 'pass through' the transformer to the 440V IMD.",
+    "exp": "Isolating the faulty branch removes the leakage path to earth, clearing the IRM alarm.",
     "cat": "IRM",
-    "id": "T02_HV_287",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_217"
   },
   {
-    "q": "How does an Earth Fault affect the reading of a standard voltmeter connected between Phase and Earth on a 440V IT system?",
-    "a": "The faulted phase will read 0V to earth, while the healthy phases will rise to the full line-to-line voltage (440V) to earth.",
+    "q": "What is an earth fault?",
+    "a": "Breakdown of insulation between live parts and ground/hull",
     "opts": [
-      "All phases will read 0V.",
-      "The faulted phase will read 0V to earth, while the healthy phases will rise to the full line-to-line voltage (440V) to earth.",
-      "All phases will read 440V.",
-      "The voltage drops to 220V."
+      "A short between two phases",
+      "Breakdown of insulation between live parts and ground/hull",
+      "Loss of generator excitation",
+      "Overload of a pump motor"
     ],
-    "exp": "Normally, 440V phases float at about 254V to earth (440 / \u221a3). If Phase A hits earth, Phase A becomes 0V. Because Phase B is 440V away from Phase A, Phase B is now 440V away from earth.",
+    "exp": "Earth faults mean current is leaking to the structure of the ship.",
     "cat": "IRM",
-    "id": "T02_HV_288",
-    "topic": "T02_HighVoltage"
+    "id": "T02A_218"
   },
   {
-    "q": "What is 'Capacitive Leakage' in a ship's electrical network?",
-    "a": "The natural capacitance between miles of parallel cables and the steel hull, which allows small amounts of AC current to 'leak' to earth even with perfect insulation.",
+    "q": "What is the permitted category for Zone 0?",
+    "a": "Ex-ia (Intrinsically safe Cat. ia)",
     "opts": [
-      "Water leaking into a capacitor.",
-      "The natural capacitance between miles of parallel cables and the steel hull, which allows small amounts of AC current to 'leak' to earth even with perfect insulation.",
-      "A battery losing its charge.",
-      "Oil leaking from a transformer."
+      "Ex-d (Flameproof)",
+      "Ex-ia (Intrinsically safe Cat. ia)",
+      "Ex-n",
+      "Ex-p"
     ],
-    "exp": "AC current can pass through a capacitor. The cable insulation acts as the dielectric between the copper and the hull. This natural AC leakage is why simple AC monitoring systems fail on large ships; they read this capacitance as a fault.",
-    "cat": "IRM",
-    "id": "T02_HV_289",
-    "topic": "T02_HighVoltage"
+    "exp": "Only Ex-ia is safe enough for the high-risk, continuous explosive atmosphere of Zone 0.",
+    "cat": "TANK",
+    "id": "T02A_219"
   },
   {
-    "q": "Why must the IMD be temporarily disconnected when Megger testing the main switchboard?",
-    "a": "The 500V or 1000V DC from the Megger will flow directly into the sensitive IMD electronics and destroy them.",
+    "q": "Where is Zone 0 located?",
+    "a": "Inside cargo tanks",
     "opts": [
-      "To save the Megger's battery.",
-      "The 500V or 1000V DC from the Megger will flow directly into the sensitive IMD electronics and destroy them.",
-      "Because the IMD will trigger the fire alarm.",
-      "To prevent the ship from moving."
+      "Engine room",
+      "Inside cargo tanks",
+      "Navigation bridge",
+      "Accommodation cabin"
     ],
-    "exp": "The IMD is permanently wired between the busbars and earth. A Megger injects high voltage between the busbars and earth. If the IMD is left connected, it takes the full brunt of the Megger test.",
-    "cat": "IRM",
-    "id": "T02_HV_290",
-    "topic": "T02_HighVoltage"
+    "exp": "Cargo tanks carry fuel continuously, making them the most hazardous area.",
+    "cat": "TANK",
+    "id": "T02A_220"
   },
   {
-    "q": "What is a 'Phantom' or 'Transient' earth fault?",
-    "a": "An earth fault alarm that appears briefly and clears itself, often caused by starting a specific motor, moisture drying out, or VFD harmonics.",
+    "q": "What is Ex-d (Flameproof) enclosure?",
+    "a": "Contains internal explosion and cools gases below ignition temperature",
     "opts": [
-      "A ghost on the ship.",
-      "An earth fault alarm that appears briefly and clears itself, often caused by starting a specific motor, moisture drying out, or VFD harmonics.",
-      "A fault caused by the moon's gravity.",
-      "A fault on the radar system."
+      "Prevents internal explosion entirely",
+      "Contains internal explosion and cools gases below ignition temperature",
+      "Pressurised with nitrogen",
+      "Intrinsically safe energy limit"
     ],
-    "exp": "These are the hardest to find. For example, a deck crane motor might have damp windings. It throws an earth fault when started, but the heat of running dries it out in 5 minutes, clearing the fault before the ETO can trace it.",
-    "cat": "IRM",
-    "id": "T02_HV_291",
-    "topic": "T02_HighVoltage"
+    "exp": "Ex-d allows an explosion to happen inside but ensures no flame escapes to ignite the outside gas.",
+    "cat": "TANK",
+    "id": "T02A_221"
   },
   {
-    "q": "How can you test if the IMD panel is actually functioning correctly?",
-    "a": "Most IMDs have a built-in 'TEST' button that internally connects a known test resistor to earth, simulating a fault to trigger the alarm.",
+    "q": "What is the purpose of ship-to-jetty bonding cable?",
+    "a": "Equalise electrical potential to prevent static spark discharge",
     "opts": [
-      "By throwing water on the switchboard.",
-      "Most IMDs have a built-in 'TEST' button that internally connects a known test resistor to earth, simulating a fault to trigger the alarm.",
-      "By shorting a live wire to the hull with a screwdriver.",
-      "By turning it off and on again."
+      "Provide ship with shore power",
+      "Equalise electrical potential to prevent static spark discharge",
+      "Ground the cargo pumps",
+      "Check the shore voltage"
     ],
-    "exp": "You should regularly test the IMD using its self-test function to ensure the alarm relays and ECR buzzers are fully operational.",
-    "cat": "IRM",
-    "id": "T02_HV_292",
-    "topic": "T02_HighVoltage"
+    "exp": "Different potential between ship and jetty causes static build-up, which discharges as a spark.",
+    "cat": "TANK",
+    "id": "T02A_222"
   },
   {
-    "q": "In a 24V DC control system, is an earth fault dangerous?",
-    "a": "Yes, a double earth fault on a DC control system can bypass control switches, causing machinery to start unexpectedly or fail to stop.",
+    "q": "When do you remove the bonding cable?",
+    "a": "LAST - after all hose/arm connections are broken",
     "opts": [
-      "No, 24V cannot hurt you.",
-      "Yes, a double earth fault on a DC control system can bypass control switches, causing machinery to start unexpectedly or fail to stop.",
-      "No, DC doesn't use earth.",
-      "Only if it is a negative earth fault."
+      "FIRST - before connecting hoses",
+      "LAST - after all hose/arm connections are broken",
+      "During cargo transfer",
+      "Never"
     ],
-    "exp": "If the positive wire shorts to earth after the start button, and the negative wire shorts to earth before the relay coil, the current flows through the hull, bypassing the start button entirely. The motor starts on its own.",
-    "cat": "IRM",
-    "id": "T02_HV_293",
-    "topic": "T02_HighVoltage"
+    "exp": "Bonding must remain in place whenever the ship and jetty are physically connected.",
+    "cat": "TANK",
+    "id": "T02A_223"
   },
   {
-    "q": "What component is used to connect an IMD to a 6.6kV High Voltage system?",
-    "a": "A high-voltage coupling device (coupling resistors or capacitors) to step down the voltage before it reaches the low-voltage IMD.",
+    "q": "Which hose type drains static charge?",
+    "a": "Conductive hose",
     "opts": [
-      "A standard 440V fuse.",
-      "A high-voltage coupling device (coupling resistors or capacitors) to step down the voltage before it reaches the low-voltage IMD.",
-      "Direct copper wires.",
-      "A fiber optic cable."
+      "Non-conductive (insulating) hose",
+      "Conductive hose",
+      "PVC hose",
+      "Rubber tube only"
     ],
-    "exp": "You cannot connect a standard electronic IMD directly to 6.6kV. A specialized coupling module safely isolates the high voltage while allowing the IMD's test signal to pass through to the HV busbars.",
-    "cat": "IRM",
-    "id": "T02_HV_294",
-    "topic": "T02_HighVoltage"
+    "exp": "Conductive hoses allow the static charge generated by flowing fluid to drain to the ship's earth.",
+    "cat": "TANK",
+    "id": "T02A_224"
   },
   {
-    "q": "If a ship uses a solidly earthed 440V neutral system (rare on ships, common ashore), would it use an IMD?",
-    "a": "No, solidly earthed systems use Earth Leakage Circuit Breakers (RCDs/GFCI) or overcurrent relays that trip instantly on an earth fault.",
+    "q": "What does 'intrinsically safe' mean?",
+    "a": "Energy limited below the minimum ignition energy of the gas",
     "opts": [
-      "Yes, they use three IMDs.",
-      "No, solidly earthed systems use Earth Leakage Circuit Breakers (RCDs/GFCI) or overcurrent relays that trip instantly on an earth fault.",
-      "Yes, but only in the engine room.",
-      "No, they don't need any protection."
+      "Enclosure is very strong",
+      "Energy limited below the minimum ignition energy of the gas",
+      "Pressurised with air",
+      "Shielded from sparks"
     ],
-    "exp": "An IMD is ONLY used on Insulated (IT) or highly impedance-earthed networks where a fault does not draw enough current to blow a fuse. Solidly earthed systems rely on massive fault current to trip breakers instantly.",
-    "cat": "IRM",
-    "id": "T02_HV_295",
-    "topic": "T02_HighVoltage"
+    "exp": "If the energy is kept low, even if a spark occurs, it has insufficient thermal content to ignite gas.",
+    "cat": "TANK",
+    "id": "T02A_225"
   },
   {
-    "q": "What is the consequence of leaving a Megger connected to a circuit after the test is complete?",
-    "a": "The Megger itself provides a path to earth. If the circuit is energized, it acts as a permanent earth fault.",
+    "q": "Where is Ex-n equipment typically permitted?",
+    "a": "Zone 2",
     "opts": [
-      "It charges the battery of the Megger.",
-      "The Megger itself provides a path to earth. If the circuit is energized, it acts as a permanent earth fault.",
-      "It improves the insulation of the cable.",
-      "Nothing happens."
+      "Zone 0",
+      "Zone 1",
+      "Zone 2",
+      "Nowhere"
     ],
-    "exp": "If you forget to disconnect the test leads and close the breaker, the live current flows through the Megger's internal circuitry to earth, destroying the Megger and triggering the ship's earth fault alarm.",
-    "cat": "IRM",
-    "id": "T02_HV_296",
-    "topic": "T02_HighVoltage"
+    "exp": "Ex-n is a category restricted to areas where hazard is unlikely.",
+    "cat": "TANK",
+    "id": "T02A_226"
   },
   {
-    "q": "Can a fluorescent light fitting cause an earth fault?",
-    "a": "Yes, degrading ballasts or moisture inside the fitting housing are very common causes of earth faults on 220V lighting circuits.",
+    "q": "What is Ex-p (Pressurised) equipment?",
+    "a": "Enclosure pressurised with inert gas to exclude explosive atmosphere",
     "opts": [
-      "No, light is not electrical.",
-      "Yes, degrading ballasts or moisture inside the fitting housing are very common causes of earth faults on 220V lighting circuits.",
-      "No, they don't have earth wires.",
-      "Only if the bulb is broken."
+      "Explosion-proof enclosure",
+      "Enclosure pressurised with inert gas to exclude explosive atmosphere",
+      "Intrinsically safe limited circuit",
+      "Portable handheld equipment"
     ],
-    "exp": "Deck lights exposed to weather often leak. The water bridges the gap between the live ballast and the earthed metal casing, causing a persistent, low-resistance earth fault.",
-    "cat": "IRM",
-    "id": "T02_HV_297",
-    "topic": "T02_HighVoltage"
+    "exp": "Overpressure keeps explosive gases out of the motor/panel enclosure.",
+    "cat": "TANK",
+    "id": "T02A_227"
   },
   {
-    "q": "Why is it important to check the IMD reading during heavy weather or rolling?",
-    "a": "Bilge water sloshing into low-mounted terminal boxes or motors can cause intermittent earth faults.",
+    "q": "What is the risk of non-conductive hose?",
+    "a": "Static charge accumulation",
     "opts": [
-      "The IMD measures the ship's roll angle.",
-      "Bilge water sloshing into low-mounted terminal boxes or motors can cause intermittent earth faults.",
-      "The IMD screen might fall off.",
-      "Because generators produce more power in heavy seas."
+      "Too heavy",
+      "Static charge accumulation",
+      "Too fragile",
+      "Too conductive"
     ],
-    "exp": "If the earth fault alarm only goes off when the ship rolls 15 degrees to port, you know exactly where to look: a low-lying bilge pump or sensor on the port side that is getting submerged.",
-    "cat": "IRM",
-    "id": "T02_HV_298",
-    "topic": "T02_HighVoltage"
+    "exp": "Static cannot drain, potentially sparking when decoupled near vapor vents.",
+    "cat": "TANK",
+    "id": "T02A_228"
   },
   {
-    "q": "What is the difference between an 'Active' and 'Passive' earth fault location method?",
-    "a": "Passive means the ETO manually switches off breakers. Active means an EDS system automatically injects a pulse to locate the fault without shutting anything down.",
+    "q": "Is the cargo hose tested?",
+    "a": "Yes, IR test before cargo operations",
     "opts": [
-      "Active uses AC; Passive uses DC.",
-      "Passive means the ETO manually switches off breakers. Active means an EDS system automatically injects a pulse to locate the fault without shutting anything down.",
-      "Active is for HV; Passive is for LV.",
-      "Passive is illegal."
+      "No",
+      "Yes, IR test before cargo operations",
+      "Only after hose breaks",
+      "Only annually"
     ],
-    "exp": "Active EDS systems are highly preferred on modern vessels because you don't have to blackout the galley, air conditioning, or essential pumps just to find a minor fault.",
-    "cat": "IRM",
-    "id": "T02_HV_299",
-    "topic": "T02_HighVoltage"
+    "exp": "The cargo transfer checklist must confirm the hose type (conductive/non-conductive) is verified via megger.",
+    "cat": "TANK",
+    "id": "T02A_229"
   },
   {
-    "q": "If the earth fault is traced to a large 440V motor, and Meggering shows 10 kOhms, what is the usual repair?",
-    "a": "Disconnect it, open the terminal box to check for water/carbon. If internal, the motor must be removed, washed, baked in an oven, and re-varnished.",
+    "q": "What happens if a bonding cable is NOT connected?",
+    "a": "Potential difference causes static sparks",
     "opts": [
-      "Replace the fuse with a bigger one.",
-      "Disconnect it, open the terminal box to check for water/carbon. If internal, the motor must be removed, washed, baked in an oven, and re-varnished.",
-      "Paint the outside of the motor.",
-      "Run it at half speed."
+      "No effect",
+      "Potential difference causes static sparks",
+      "The ship speeds up",
+      "Voltage rises to 11 kV"
     ],
-    "exp": "You cannot 'fix' wet or carbonized insulation just by wiping the outside. The moisture must be driven out of the deep windings with heat, and sealed with dielectric varnish.",
-    "cat": "IRM",
-    "id": "T02_HV_300",
-    "topic": "T02_HighVoltage"
+    "exp": "Without bonding, static charge accumulates and discharges at the coupling/flanges.",
+    "cat": "TANK",
+    "id": "T02A_230"
   },
   {
-    "q": "How do intrinsically safe (Ex i) circuits handle earth faults?",
-    "a": "They often have their own dedicated, highly sensitive IMDs. An earth fault in a hazardous area must be cleared immediately to prevent any risk of sparking.",
+    "q": "Which zone is the pump room?",
+    "a": "Zone 1",
     "opts": [
-      "They ignore earth faults completely.",
-      "They often have their own dedicated, highly sensitive IMDs. An earth fault in a hazardous area must be cleared immediately to prevent any risk of sparking.",
-      "They explode on the first fault.",
-      "They are solidly earthed."
+      "Zone 0",
+      "Zone 1",
+      "Zone 2",
+      "Zone 3"
     ],
-    "exp": "In a gas-dangerous zone (like a tanker deck), an earth fault means the energy limitation of the Zener barrier might be bypassed. The fault must be rectified immediately to maintain the explosion-proof rating.",
-    "cat": "IRM",
-    "id": "T02_HV_301",
-    "topic": "T02_HighVoltage"
+    "exp": "Pump rooms are classified Zone 1 due to inevitable leaks/fumes.",
+    "cat": "TANK",
+    "id": "T02A_231"
   },
   {
-    "q": "What is the 'System Leakage Capacitance' displayed on advanced IMDs?",
-    "a": "The total electrical capacitance of the ship's cabling network. High values indicate a massive network and can slow down the IMD's response time.",
+    "q": "Why connect bonding first?",
+    "a": "Equalise potential before hydrocarbon contact",
     "opts": [
-      "The amount of water leaking into the ship.",
-      "The total electrical capacitance of the ship's cabling network. High values indicate a massive network and can slow down the IMD's response time.",
-      "The battery capacity of the UPS.",
-      "The size of the main generators."
+      "To check terminal voltage",
+      "Equalise electrical potential before hydrocarbon contact",
+      "To verify shore power",
+      "To prevent tripping the MSB"
     ],
-    "exp": "Advanced IMDs measure both Resistance (the fault) and Capacitance (the network size). If a ship has massive capacitance, the IMD must inject its test pulse much slower to get an accurate reading.",
-    "cat": "IRM",
-    "id": "T02_HV_302",
-    "topic": "T02_HighVoltage"
+    "exp": "Safety protocol dictates bonding is always the very first step of the transfer.",
+    "cat": "TANK",
+    "id": "T02A_232"
   },
   {
-    "q": "If the earth fault meter oscillates wildly between Infinity and Zero, what is the likely cause?",
-    "a": "A loose connection rubbing against the hull, or an arcing fault inside a vibrating piece of machinery.",
+    "q": "What causes electrolytic pitting of the propeller shaft?",
+    "a": "Stray currents discharging through the bearing oil film",
     "opts": [
-      "The IMD is perfectly calibrated.",
-      "A loose connection rubbing against the hull, or an arcing fault inside a vibrating piece of machinery.",
-      "The ship is changing speed.",
-      "A ghost."
+      "Salt water splashing",
+      "Stray currents discharging through the bearing oil film",
+      "High frequency vibrations",
+      "Magnetic field from the motor"
     ],
-    "exp": "A solid fault (like a flooded motor) gives a steady low reading. An oscillating reading implies a physical wire is bouncing against the earthed steel due to ship vibration, making and breaking the fault.",
-    "cat": "IRM",
-    "id": "T02_HV_303",
-    "topic": "T02_HighVoltage"
+    "exp": "Oil film is a dielectric; stray currents turn it into a tiny discharge arc, pitting the metal.",
+    "cat": "SHAFT",
+    "id": "T02A_233"
   },
   {
-    "q": "What is 'Equipotential Bonding' on a ship?",
-    "a": "The practice of electrically connecting all exposed metallic parts (casings, pipes, decks) together to ensure they remain at the same zero-voltage potential.",
+    "q": "What is the purpose of shaft earthing assemblies?",
+    "a": "Maintain shaft at hull potential",
     "opts": [
-      "Gluing two pieces of metal together.",
-      "The practice of electrically connecting all exposed metallic parts (casings, pipes, decks) together to ensure they remain at the same zero-voltage potential.",
-      "Connecting the positive and negative wires.",
-      "Bonding with the crew."
+      "Increase shaft speed",
+      "Maintain shaft at hull potential",
+      "Stop vibration",
+      "Reduce friction"
     ],
-    "exp": "If a live wire touches a motor casing, bonding ensures that casing is at exactly the same voltage as the steel deck you are standing on. Since there is no voltage difference between the casing and the deck, no current flows through your body.",
-    "cat": "BON",
-    "id": "T02_HV_304",
-    "topic": "T02_HighVoltage"
+    "exp": "By connecting the rotating shaft to the hull, current bypasses the bearing oil.",
+    "cat": "SHAFT",
+    "id": "T02A_234"
   },
   {
-    "q": "How is equipotential bonding practically achieved for a large electrical motor?",
-    "a": "Through a thick, braided copper grounding strap bolted from the motor casing directly to a welded stud on the ship's steel hull.",
+    "q": "What components are used in shaft earthing?",
+    "a": "Spring-loaded carbon brush assembly",
     "opts": [
-      "By painting it with metallic paint.",
-      "Through a thick, braided copper grounding strap bolted from the motor casing directly to a welded stud on the ship's steel hull.",
-      "By the rubber mounts it sits on.",
-      "By wrapping it in copper tape."
+      "Magnetic brake",
+      "Spring-loaded carbon brush assembly",
+      "Copper rollers",
+      "Oil seals"
     ],
-    "exp": "While the motor is bolted to the deck, rust, paint, and anti-vibration rubber mounts act as insulators. A dedicated copper earth strap guarantees a zero-ohm path to the hull.",
-    "cat": "BON",
-    "id": "T02_HV_305",
-    "topic": "T02_HighVoltage"
+    "exp": "The brushes ride on the shaft surface to continuously drain static/stray current.",
+    "cat": "SHAFT",
+    "id": "T02A_235"
   },
   {
-    "q": "What is a 'Ductor Tester' or Micro-Ohmmeter used for in maintenance?",
-    "a": "To measure the extremely low contact resistance (in micro-ohms) of circuit breaker contacts and heavy busbar bolted joints.",
+    "q": "What should the shaft-to-hull resistance measure?",
+    "a": "< 1 Ω",
     "opts": [
-      "To measure insulation resistance at 5000V.",
-      "To measure the extremely low contact resistance (in micro-ohms) of circuit breaker contacts and heavy busbar bolted joints.",
-      "To test the RPM of a motor.",
-      "To check the air pressure in a VCB."
+      "< 100 Ω",
+      "< 1 Ω",
+      "> 1 MΩ",
+      "1 kΩ"
     ],
-    "exp": "If a busbar joint is slightly loose, its resistance might rise from 10 micro-ohms to 1000 micro-ohms. At 2000 Amps, that tiny resistance generates massive heat, causing a fire. A Ductor tester injects a heavy DC current (e.g., 100A) to measure these tiny resistances accurately.",
-    "cat": "BON",
-    "id": "T02_HV_306",
-    "topic": "T02_HighVoltage"
+    "exp": "A very low resistance confirms a perfect electrical bond.",
+    "cat": "SHAFT",
+    "id": "T02A_236"
   },
   {
-    "q": "Why is it critical to torque-wrench busbar bolts to the manufacturer's exact specifications?",
-    "a": "Too loose causes high electrical resistance and overheating; too tight stretches the bolt, reducing clamping force or snapping it during thermal expansion.",
+    "q": "What happens if shaft-to-hull resistance is high?",
+    "a": "Current will find another path, through bearing oil",
     "opts": [
-      "Because it looks more professional.",
-      "Too loose causes high electrical resistance and overheating; too tight stretches the bolt, reducing clamping force or snapping it during thermal expansion.",
-      "To make them easier to remove later.",
-      "To prevent the ship from vibrating."
+      "The shaft is safe",
+      "Current will find another path, through bearing oil",
+      "The generator will trip",
+      "The shaft locks"
     ],
-    "exp": "Busbars expand and contract wildly as loads change. A perfectly torqued bolt with a Belleville (spring) washer maintains constant clamping pressure across all temperature ranges, keeping resistance near zero.",
-    "cat": "BON",
-    "id": "T02_HV_307",
-    "topic": "T02_HighVoltage"
+    "exp": "If the brush is worn or isolated, stray current reverts to pitting the journal.",
+    "cat": "SHAFT",
+    "id": "T02A_237"
   },
   {
-    "q": "What is 'Thermographic Inspection' (Infrared Scanning) used for on switchboards?",
-    "a": "To visually identify loose connections, unbalanced loads, or failing contacts by detecting the heat they generate before they fail catastrophically.",
+    "q": "What is checked on carbon shaft brushes?",
+    "a": "Wear against manufacturer's minimum mark",
     "opts": [
-      "To check if the switchboard is too cold.",
-      "To visually identify loose connections, unbalanced loads, or failing contacts by detecting the heat they generate before they fail catastrophically.",
-      "To see through the metal panels.",
-      "To detect water leaks."
+      "The colour of the brush",
+      "Wear against manufacturer's minimum mark",
+      "The weight of the brush",
+      "The hardness of the brush"
     ],
-    "exp": "An infrared camera can look at a live, closed switchboard and instantly show a bright white 'hot spot' where a single bolt is loose on a busbar, allowing the ETO to plan a shutdown before a fire occurs.",
-    "cat": "BON",
-    "id": "T02_HV_308",
-    "topic": "T02_HighVoltage"
+    "exp": "Brushes shorten as they wear; once they hit the limit, contact pressure fails.",
+    "cat": "SHAFT",
+    "id": "T02A_238"
   },
   {
-    "q": "When is the best time to perform a Thermographic Inspection on a switchboard?",
-    "a": "When the switchboard is under heavy, normal operating load (at least 40-50% load).",
+    "q": "Why keep oil contamination off the shaft slip ring?",
+    "a": "Oil is an insulator and prevents electrical contact",
     "opts": [
-      "When the ship is in blackout.",
-      "When the switchboard is under heavy, normal operating load (at least 40-50% load).",
-      "Immediately after turning it off.",
-      "When the panels are completely open and dead."
+      "Oil is conductive",
+      "Oil is an insulator and prevents electrical contact",
+      "Oil is a hazard for fire",
+      "Oil is harmless"
     ],
-    "exp": "Heat is generated by current (I\u00b2R). If you scan a switchboard while it has no load, a loose connection will not generate any heat and will appear perfectly normal.",
-    "cat": "BON",
-    "id": "T02_HV_309",
-    "topic": "T02_HighVoltage"
+    "exp": "Oil film between the brush and shaft breaks the grounding connection.",
+    "cat": "SHAFT",
+    "id": "T02A_239"
   },
   {
-    "q": "What maintenance must be performed on the contactors of an Air Circuit Breaker (ACB)?",
-    "a": "Inspect the silver/tungsten arcing contacts for severe pitting, check the main copper contacts for alignment, and measure contact resistance.",
+    "q": "What kind of current is shaft earthing dealing with?",
+    "a": "Stray currents (from alternators/VFDs)",
     "opts": [
-      "File them down until they are completely smooth.",
-      "Inspect the silver/tungsten arcing contacts for severe pitting, check the main copper contacts for alignment, and measure contact resistance.",
-      "Grease the electrical contacts heavily.",
-      "Replace the vacuum bottle."
+      "Only AC current",
+      "Stray currents (from alternators/VFDs)",
+      "Only DC current",
+      "None"
     ],
-    "exp": "ACBs use 'arcing contacts' to take the brunt of the spark, protecting the main current-carrying contacts. If the arcing contacts burn away completely, the main contacts will be destroyed on the next trip.",
-    "cat": "BON",
-    "id": "T02_HV_310",
-    "topic": "T02_HighVoltage"
+    "exp": "High frequency switching from modern drives creates capacitive currents seeking ground through the shaft.",
+    "cat": "SHAFT",
+    "id": "T02A_240"
   },
   {
-    "q": "Why must you NEVER use a file or sandpaper on the main silver-plated contacts of a breaker?",
-    "a": "It removes the microscopic silver plating, exposing the bare copper which quickly oxidizes, drastically increasing contact resistance and causing overheating.",
+    "q": "What happens if shaft earthing fails?",
+    "a": "Bearing failure due to electrolytic corrosion",
     "opts": [
-      "It makes them too shiny.",
-      "It removes the microscopic silver plating, exposing the bare copper which quickly oxidizes, drastically increasing contact resistance and causing overheating.",
-      "It makes the breaker close too fast.",
-      "It causes a vacuum leak."
+      "Propeller loses pitch",
+      "Bearing failure due to electrolytic corrosion",
+      "Overheating of the propeller",
+      "Total ship blackout"
     ],
-    "exp": "Silver oxide is conductive; copper oxide is an insulator. Contacts are thinly plated with silver. Filing destroys this. They should only be cleaned with a lint-free cloth and approved solvent.",
-    "cat": "BON",
-    "id": "T02_HV_311",
-    "topic": "T02_HighVoltage"
+    "exp": "Pitting makes the bearing surface rough, leading to rapid degradation and final seizure.",
+    "cat": "SHAFT",
+    "id": "T02A_241"
   },
   {
-    "q": "What is Secondary Injection Testing?",
-    "a": "Injecting simulated low-voltage/current signals directly into a protection relay to verify it trips at the correct settings, without actually passing massive fault currents through the primary busbars.",
+    "q": "How often check shaft earthing?",
+    "a": "Periodically, recorded in PMS",
     "opts": [
-      "Testing the secondary winding of a transformer.",
-      "Injecting simulated low-voltage/current signals directly into a protection relay to verify it trips at the correct settings, without actually passing massive fault currents through the primary busbars.",
-      "Injecting fuel into the emergency generator.",
-      "Testing the backup batteries."
+      "Every time the ship berths",
+      "Periodically, recorded in PMS",
+      "Only if it fails",
+      "Once a year"
     ],
-    "exp": "To test if an Overcurrent relay works at 2000A, you don't actually short-circuit the ship. You use a test kit to inject a small 5A signal directly into the relay's sensing terminals (mimicking the CT output) and time how fast it trips.",
-    "cat": "BON",
-    "id": "T02_HV_312",
-    "topic": "T02_HighVoltage"
+    "exp": "Consistent monitoring and logging are the only way to catch degradation early.",
+    "cat": "SHAFT",
+    "id": "T02A_242"
   },
   {
-    "q": "What is Primary Injection Testing?",
-    "a": "Passing a massive, actual test current (e.g., 2000A) through the primary busbars to test the entire protection chain: CTs, wiring, relay, and breaker.",
+    "q": "What generates streaming current in cargo pipes?",
+    "a": "Friction between cargo fluid and pipe wall",
     "opts": [
-      "Testing the main engine injection pumps.",
-      "Passing a massive, actual test current (e.g., 2000A) through the primary busbars to test the entire protection chain: CTs, wiring, relay, and breaker.",
-      "Injecting high voltage to test insulation.",
-      "Testing the primary radar."
+      "The ship's engine",
+      "Friction between cargo fluid and pipe wall",
+      "Cargo pump motor",
+      "The shore power"
     ],
-    "exp": "Primary injection is comprehensive but difficult, requiring massive specialized test rigs. It proves that the Current Transformer (CT) is actually measuring the busbar current correctly, something secondary injection cannot prove.",
-    "cat": "BON",
-    "id": "T02_HV_313",
-    "topic": "T02_HighVoltage"
+    "exp": "Triboelectric charging occurs as fluid rushes against fixed pipe surfaces.",
+    "cat": "STREAM",
+    "id": "T02A_243"
   },
   {
-    "q": "What must be done to a Current Transformer (CT) if the protection relay it is connected to is removed for maintenance while the busbar is live?",
-    "a": "The secondary terminals of the CT MUST be solidly short-circuited together.",
+    "q": "Why is streaming current dangerous?",
+    "a": "Accumulated charge causes static sparks",
     "opts": [
-      "The terminals must be left open-circuited.",
-      "The secondary terminals of the CT MUST be solidly short-circuited together.",
-      "The CT must be earthed.",
-      "The CT must be removed as well."
+      "It melts the hoses",
+      "Accumulated charge causes static sparks",
+      "It reduces cargo pump flow",
+      "It makes hoses float"
     ],
-    "exp": "NEVER open-circuit a live CT. If current is flowing in the primary busbar, an open-circuited secondary will induce lethal thousands of volts across its terminals, destroying the CT and electrocuting the worker.",
-    "cat": "BON",
-    "id": "T02_HV_314",
-    "topic": "T02_HighVoltage"
+    "exp": "A spark in a fuel vapour environment causes an immediate explosion.",
+    "cat": "STREAM",
+    "id": "T02A_244"
   },
   {
-    "q": "During routine maintenance, how is the mechanical operation of a circuit breaker tested?",
-    "a": "By racking it to the 'TEST' position, where the main power contacts are disconnected, but the low-voltage control circuits remain connected.",
+    "q": "What is the purpose of bonding before connecting hoses?",
+    "a": "Drain static charge to the ship's earth",
     "opts": [
-      "By hitting it with a hammer.",
-      "By racking it to the 'TEST' position, where the main power contacts are disconnected, but the low-voltage control circuits remain connected.",
-      "By short-circuiting the busbars.",
-      "By turning off the ship."
+      "To boost voltage",
+      "Drain static charge to the ship's earth",
+      "To check for leaks",
+      "To test for resistance"
     ],
-    "exp": "The TEST position allows the ETO to press 'Close' and 'Open' to verify the springs, motors, and anti-pumping relays work perfectly, without actually connecting or disconnecting high voltage power.",
-    "cat": "BON",
-    "id": "T02_HV_315",
-    "topic": "T02_HighVoltage"
+    "exp": "A continuous low-resistance path bleeds off static before it builds to spark-level voltage.",
+    "cat": "STREAM",
+    "id": "T02A_245"
   },
   {
-    "q": "What is the purpose of dielectric oil testing for high voltage transformers?",
-    "a": "To test the breakdown voltage (dielectric strength), moisture content, and dissolved gases in the oil to assess the internal health of the transformer.",
+    "q": "How does non-conductive hose prevent cathodic corrosion?",
+    "a": "Prevents cathodic protection current flow between ship and shore",
     "opts": [
-      "To check if the oil can be used for the main engine.",
-      "To test the breakdown voltage (dielectric strength), moisture content, and dissolved gases in the oil to assess the internal health of the transformer.",
-      "To measure the speed of the transformer.",
-      "To check the color of the oil for aesthetic reasons."
+      "By having lower resistance",
+      "Prevents cathodic protection current flow between ship and shore",
+      "By using an extra heavy gauge",
+      "By adding an isolator"
     ],
-    "exp": "Oil acts as both an insulator and a coolant. Over time, it absorbs moisture (lowering its insulation value) and arcing creates specific dissolved gases. Testing a sample reveals internal faults before the transformer explodes.",
-    "cat": "BON",
-    "id": "T02_HV_316",
-    "topic": "T02_HighVoltage"
+    "exp": "Some terminals use strong impressed current anodes; metal hoses would complete a galvanic cell between them.",
+    "cat": "STREAM",
+    "id": "T02A_246"
   },
   {
-    "q": "Why is 'Dissolved Gas Analysis' (DGA) performed on transformer oil?",
-    "a": "Because different types of internal electrical faults (arcing, corona, overheating) break the oil down into specific distinct gases (Hydrogen, Acetylene, Ethylene).",
+    "q": "What does IR test on cargo hose verify?",
+    "a": "Whether it is conductive or non-conductive",
     "opts": [
-      "To make sure the oil doesn't smell bad.",
-      "Because different types of internal electrical faults (arcing, corona, overheating) break the oil down into specific distinct gases (Hydrogen, Acetylene, Ethylene).",
-      "To see if the oil has turned into water.",
-      "To check for carbon monoxide for crew safety."
+      "Whether it is leak-free",
+      "Whether it is conductive or non-conductive",
+      "Whether the pressure is safe",
+      "Whether it is clean"
     ],
-    "exp": "DGA is like a blood test for the transformer. High Acetylene indicates a massive arcing fault. High Ethylene indicates severe overheating of the copper. It pinpoints the exact problem.",
-    "cat": "BON",
-    "id": "T02_HV_317",
-    "topic": "T02_HighVoltage"
+    "exp": "A megger tells you if the hose contains the internal wire bonding mesh.",
+    "cat": "STREAM",
+    "id": "T02A_247"
   },
   {
-    "q": "What is a 'Hipot' (High Potential) test?",
-    "a": "An overvoltage withstand test applying highly elevated voltage (e.g., 15kV on a 6.6kV system) for 1 minute to ensure the insulation can handle transient spikes without breaking down.",
+    "q": "What happens if a conductive hose is used where a non-conductive one is required?",
+    "a": "Galvanic corrosion problems",
     "opts": [
-      "A test for low voltage batteries.",
-      "An overvoltage withstand test applying highly elevated voltage (e.g., 15kV on a 6.6kV system) for 1 minute to ensure the insulation can handle transient spikes without breaking down.",
-      "A test to see how hot the cable gets.",
-      "Testing the physical strength of the copper."
+      "Immediate hose failure",
+      "Galvanic corrosion problems",
+      "Better flow rates",
+      "Higher static charge"
     ],
-    "exp": "Unlike a Megger which measures resistance safely, a Hipot test stresses the insulation to the breaking point. It is a 'Pass/Fail' test. If it fails, the equipment is destroyed. It is usually only done during commissioning or after major rewinds.",
-    "cat": "BON",
-    "id": "T02_HV_318",
-    "topic": "T02_HighVoltage"
+    "exp": "Completing the galvanic circuit between ship and shore is destructive to anodes/hulls.",
+    "cat": "STREAM",
+    "id": "T02A_248"
   },
   {
-    "q": "Why must you carefully clean the porcelain or epoxy insulators (bushings) inside an HV switchboard during maintenance?",
-    "a": "Dust, salt, and oil accumulation create a conductive path across the surface, leading to tracking and eventual explosive flashover.",
+    "q": "Is cargo hose continuity verified?",
+    "a": "Yes, during hose preparation",
     "opts": [
-      "To keep the switchboard looking brand new.",
-      "Dust, salt, and oil accumulation create a conductive path across the surface, leading to tracking and eventual explosive flashover.",
-      "To prevent the metal from rusting.",
-      "To improve the magnetic field."
+      "Only if it looks damaged",
+      "Yes, during hose preparation",
+      "No",
+      "Only after cargo operation"
     ],
-    "exp": "Marine environments are salty and oily. This conductive grime settles on the red epoxy insulators. Regular cleaning with specialized evaporating solvents is critical to maintain the required 'creepage' resistance.",
-    "cat": "BON",
-    "id": "T02_HV_319",
-    "topic": "T02_HighVoltage"
+    "exp": "Verify the resistance is within maker's spec to ensure it will carry static or protect the cathodics correctly.",
+    "cat": "STREAM",
+    "id": "T02A_249"
   },
   {
-    "q": "What is the function of the silica gel breather on an oil-filled transformer?",
-    "a": "To absorb moisture from the air that is drawn into the transformer as the oil cools and contracts, preventing water from contaminating the oil.",
+    "q": "What happens to the charge on a hose surface?",
+    "a": "It can ignite cargo vapours if it sparks",
     "opts": [
-      "To filter out dust and dirt.",
-      "To absorb moisture from the air that is drawn into the transformer as the oil cools and contracts, preventing water from contaminating the oil.",
-      "To provide oxygen to the oil.",
-      "To cool the oil down."
+      "It discharges silently",
+      "It can ignite cargo vapours if it sparks",
+      "It does not matter",
+      "It is sucked away by vacuum"
     ],
-    "exp": "Transformers 'breathe' as they heat up and cool down. The silica gel crystals turn from blue (or orange) to pink when saturated with water, indicating they need to be replaced or baked dry.",
-    "cat": "BON",
-    "id": "T02_HV_320",
-    "topic": "T02_HighVoltage"
+    "exp": "The discharge of the accumulated static is the high-energy event that triggers an ignition.",
+    "cat": "STREAM",
+    "id": "T02A_250"
   },
   {
-    "q": "During breaker maintenance, what type of grease is applied to the main draw-out (racking) contacts?",
-    "a": "A specialized, highly conductive electrical contact grease (like silver-loaded grease) designed to prevent oxidation and reduce friction.",
+    "q": "What standard covers HVSC systems?",
+    "a": "IEC/IEEE 80005-1:2019",
     "opts": [
-      "Standard marine bearing grease.",
-      "A specialized, highly conductive electrical contact grease (like silver-loaded grease) designed to prevent oxidation and reduce friction.",
-      "WD-40.",
-      "No grease, they must be bone dry."
+      "IEC 60092",
+      "IEC/IEEE 80005-1:2019",
+      "ISO 20000",
+      "SOLAS"
     ],
-    "exp": "Using standard mechanical grease on electrical contacts acts as an insulator, causing the plug-in clusters to overheat and melt when 2000A flows through them.",
-    "cat": "BON",
-    "id": "T02_HV_321",
-    "topic": "T02_HighVoltage"
+    "exp": "This international standard defines how shore power is safely transferred to ships.",
+    "cat": "HVSC",
+    "id": "T02A_251"
   },
   {
-    "q": "What is the purpose of testing the 'Trip Coil' of a circuit breaker?",
-    "a": "To ensure the electro-magnet that unlatches the breaker mechanism operates swiftly at its lowest specified voltage (e.g., 70% of battery voltage).",
+    "q": "What is the max prospective short-circuit current limit for HVSC?",
+    "a": "≤ 25 kA RMS",
     "opts": [
-      "To check if the breaker can handle high currents.",
-      "To ensure the electro-magnet that unlatches the breaker mechanism operates swiftly at its lowest specified voltage (e.g., 70% of battery voltage).",
-      "To test the main contacts.",
-      "To charge the closing spring."
+      "≤ 10 kA",
+      "≤ 25 kA RMS",
+      "≤ 100 kA",
+      "≤ 5 kA"
     ],
-    "exp": "The trip coil is the final defense. If the ship loses AC power and the 24V batteries are weak, the trip coil must still have the power to instantly unlatch the breaker during a fault.",
-    "cat": "BON",
-    "id": "T02_HV_322",
-    "topic": "T02_HighVoltage"
+    "exp": "Combined ship and shore contributions must not exceed 25 kA.",
+    "cat": "HVSC",
+    "id": "T02A_252"
   },
   {
-    "q": "Why is anti-condensation heating maintenance vital?",
-    "a": "If the heaters fail, moisture immediately condenses on cold HV windings when the motor is stopped, leading to instant failure upon the next start.",
+    "q": "What is the maximum allowed THD for HVSC?",
+    "a": "≤ 5%",
     "opts": [
-      "To keep the engineers warm.",
-      "If the heaters fail, moisture immediately condenses on cold HV windings when the motor is stopped, leading to instant failure upon the next start.",
-      "To burn off excess fuel.",
-      "To keep the bearings lubricated."
+      "≤ 1%",
+      "≤ 5%",
+      "≤ 10%",
+      "≤ 20%"
     ],
-    "exp": "Checking the resistance and current draw of space heaters inside alternators and motors is a critical routine task. A broken 500-watt heater can lead to the destruction of a 3 Megawatt motor.",
-    "cat": "BON",
-    "id": "T02_HV_323",
-    "topic": "T02_HighVoltage"
+    "exp": "Total Harmonic Distortion must be strictly controlled to maintain power quality.",
+    "cat": "HVSC",
+    "id": "T02A_253"
   },
   {
-    "q": "What is a 'Phase Rotation Check' and when is it performed?",
-    "a": "Verifying that the three phases (U-V-W) peak in the correct sequence. It must be performed before paralleling a newly repaired generator or connecting shore power.",
+    "q": "What is the limit for any individual harmonic in HVSC?",
+    "a": "≤ 3%",
     "opts": [
-      "Checking how fast the motor spins.",
-      "Verifying that the three phases (U-V-W) peak in the correct sequence. It must be performed before paralleling a newly repaired generator or connecting shore power.",
-      "Checking the physical rotation of the ship's propeller.",
-      "Testing the frequency of the AVR."
+      "≤ 1%",
+      "≤ 3%",
+      "≤ 5%",
+      "≤ 10%"
     ],
-    "exp": "If cables are swapped during maintenance (e.g., U-W-V), paralleling that generator to the busbar will cause a catastrophic dead-short, instantly destroying the generator and switchboard.",
-    "cat": "BON",
-    "id": "T02_HV_324",
-    "topic": "T02_HighVoltage"
+    "exp": "Individual harmonics are more restricted than the total distortion.",
+    "cat": "HVSC",
+    "id": "T02A_254"
   },
   {
-    "q": "How does a Phase Rotation Indicator work?",
-    "a": "It uses a small three-phase motor or solid-state LEDs. If connected to U-V-W, it spins clockwise (or shows Green). If two phases are swapped, it spins counter-clockwise (or shows Red).",
+    "q": "What is the equipotential bonding resistance limit?",
+    "a": "≤ 0.1 Ω",
     "opts": [
-      "It measures the voltage drop across the phases.",
-      "It uses a small three-phase motor or solid-state LEDs. If connected to U-V-W, it spins clockwise (or shows Green). If two phases are swapped, it spins counter-clockwise (or shows Red).",
-      "It measures the frequency of each phase.",
-      "It weighs the cables."
+      "≤ 1 Ω",
+      "≤ 0.1 Ω",
+      "≤ 0.01 Ω",
+      "≤ 10 Ω"
     ],
-    "exp": "It is a simple but vital tool. You test the busbar (which is correct), then test the incoming shore power. If they match, it is safe to close the breaker.",
-    "cat": "BON",
-    "id": "T02_HV_325",
-    "topic": "T02_HighVoltage"
+    "exp": "Continuous monitoring ensures this safe low-resistance path is always available.",
+    "cat": "HVSC",
+    "id": "T02A_255"
   },
   {
-    "q": "What is the importance of maintaining the physical interlocks on HV switchgear doors?",
-    "a": "They physically prevent the door from being opened unless the breaker is racked out and the earthing switch is closed, preventing access to live 6.6kV busbars.",
+    "q": "What is the safety pilot loop minimum current?",
+    "a": "50 mA",
     "opts": [
-      "They keep the doors from rattling.",
-      "They physically prevent the door from being opened unless the breaker is racked out and the earthing switch is closed, preventing access to live 6.6kV busbars.",
-      "They lock the ship down during pirate attacks.",
-      "They look good for surveyors."
+      "10 mA",
+      "50 mA",
+      "100 mA",
+      "1 A"
     ],
-    "exp": "Human error is inevitable. Mechanical interlocks (cams, rods, and key-exchanges) are foolproof physical barriers that make it mechanically impossible for an operator to make a fatal sequencing mistake.",
-    "cat": "BON",
-    "id": "T02_HV_326",
-    "topic": "T02_HighVoltage"
+    "exp": "The pilot loop must maintain 50 mA to signify a healthy plug connection.",
+    "cat": "HVSC",
+    "id": "T02A_256"
   },
   {
-    "q": "During a blackout test, what critical system must supply the switchboard protection relays and breaker trip coils?",
-    "a": "The Uninterruptible Power Supply (UPS) or the 24V/110V DC Station Battery bank.",
+    "q": "What is the safety trip time for the pilot loop?",
+    "a": "Maximum 200 ms",
     "opts": [
-      "The emergency generator.",
-      "The Uninterruptible Power Supply (UPS) or the 24V/110V DC Station Battery bank.",
-      "The main engine.",
-      "The shore power connection."
+      "10 ms",
+      "100 ms",
+      "200 ms",
+      "500 ms"
     ],
-    "exp": "If the ship blacks out (0V on the busbars), the protection relays must still remain alive to sense faults, and the breakers must have DC power to trip. Maintaining this battery bank is critical.",
-    "cat": "BON",
-    "id": "T02_HV_327",
-    "topic": "T02_HighVoltage"
+    "exp": "Within 0.2 seconds of the loop breaking, the breakers must trip.",
+    "cat": "HVSC",
+    "id": "T02A_257"
   },
   {
-    "q": "What is the danger of using standard vacuum cleaners inside a switchboard?",
-    "a": "Standard vacuums generate massive static electricity on the plastic nozzle, which can discharge into sensitive relays and destroy them.",
+    "q": "Why is the pilot loop critical?",
+    "a": "Prevents catastrophic arc flash if the plug is pulled live",
     "opts": [
-      "They are too loud.",
-      "Standard vacuums generate massive static electricity on the plastic nozzle, which can discharge into sensitive relays and destroy them.",
-      "They suck out the air from the vacuum breaker.",
-      "They might suck up a loose bolt."
+      "Increases voltage",
+      "Prevents catastrophic arc flash if the plug is pulled live",
+      "Connects the ship to earth",
+      "Measures harmonics"
     ],
-    "exp": "Specialized anti-static (ESD-safe) vacuums must be used when cleaning dust from modern microprocessor-based protection relays inside switchboards.",
-    "cat": "BON",
-    "id": "T02_HV_328",
-    "topic": "T02_HighVoltage"
+    "exp": "It detects plug withdrawal immediately, killing power before the contacts physically separate.",
+    "cat": "HVSC",
+    "id": "T02A_258"
   },
   {
-    "q": "If a large HV motor is found to have a Polarization Index (PI) of 1.1, what maintenance action is required?",
-    "a": "The motor is severely contaminated or wet. It must not be started. It requires extensive cleaning, solvent washing, and baking.",
+    "q": "Are HVSC standards applicable to existing ships?",
+    "a": "Yes, but they define compatibility",
     "opts": [
-      "The motor is perfectly fine to run.",
-      "The motor is severely contaminated or wet. It must not be started. It requires extensive cleaning, solvent washing, and baking.",
-      "The motor needs more lubricating oil.",
-      "The motor is running backwards."
+      "No",
+      "Yes, but they define compatibility",
+      "Only for cruise ships",
+      "Only for new builds"
     ],
-    "exp": "A PI near 1.0 means the insulation has zero polarizing ability; it is acting purely as a conductor. Applying high voltage will cause an instant flashover to earth.",
-    "cat": "BON",
-    "id": "T02_HV_329",
-    "topic": "T02_HighVoltage"
+    "exp": "80005-1 is the global standard for ensuring shore power connectivity works across any vessel/port pair.",
+    "cat": "HVSC",
+    "id": "T02A_259"
   },
   {
-    "q": "What does a 'Buchholz Relay' on an oil transformer do, and how is it tested?",
-    "a": "It detects gas bubbles generated by internal arcing. It is tested by pumping air into the test valve to verify the float switch drops and trips the transformer.",
+    "q": "What causes Skin Effect?",
+    "a": "Eddy currents opposing current in the conductor interior",
     "opts": [
-      "It measures the temperature of the oil.",
-      "It detects gas bubbles generated by internal arcing. It is tested by pumping air into the test valve to verify the float switch drops and trips the transformer.",
-      "It filters the oil.",
-      "It cools the transformer down."
+      "Insulation leakage",
+      "Eddy currents opposing current in the conductor interior",
+      "Magnetic saturation of the core",
+      "Excessive heat"
     ],
-    "exp": "Located in the pipe between the main tank and the conservator, the Buchholz relay catches rising gas bubbles. A slow gas buildup triggers an alarm (minor fault); a massive oil surge (major explosion) triggers an instant trip.",
-    "cat": "BON",
-    "id": "T02_HV_330",
-    "topic": "T02_HighVoltage"
+    "exp": "Eddy currents push AC charge flow to the conductor's outer surface.",
+    "cat": "SKIN",
+    "id": "T02A_260"
+  },
+  {
+    "q": "How does skin effect change with frequency?",
+    "a": "Skin depth decreases as frequency increases",
+    "opts": [
+      "Skin depth increases as frequency increases",
+      "Skin depth decreases as frequency increases",
+      "No change",
+      "Random changes"
+    ],
+    "exp": "Higher frequency means higher eddy induction, restricting charge to an even thinner skin.",
+    "cat": "SKIN",
+    "id": "T02A_261"
+  },
+  {
+    "q": "What is the consequence of skin effect on resistance?",
+    "a": "AC resistance (R_AC) increases compared to DC (R_DC)",
+    "opts": [
+      "R_AC decreases",
+      "AC resistance (R_AC) increases compared to DC (R_DC)",
+      "Both become identical",
+      "Resistance disappears"
+    ],
+    "exp": "Reduced effective cross-sectional area leads to higher resistance.",
+    "cat": "SKIN",
+    "id": "T02A_262"
+  },
+  {
+    "q": "What conductor shape is used to mitigate skin effect?",
+    "a": "Hollow or stranded",
+    "opts": [
+      "Solid rectangular",
+      "Hollow or stranded",
+      "Single solid round",
+      "Shielded only"
+    ],
+    "exp": "Stranded bundles break the conductor into many small pieces, increasing the total surface area and reducing skin-depth losses.",
+    "cat": "SKIN",
+    "id": "T02A_263"
+  },
+  {
+    "q": "What determines skin depth at 50 Hz?",
+    "a": "Approximately 9.5 mm in copper",
+    "opts": [
+      "Exactly 1 mm",
+      "Approximately 9.5 mm in copper",
+      "20 mm",
+      "100 mm"
+    ],
+    "exp": "This is a standard physical constant for AC copper transmission.",
+    "cat": "SKIN",
+    "id": "T02A_264"
+  },
+  {
+    "q": "What is Corona Effect?",
+    "a": "Ionisation of air molecules around a conductor",
+    "opts": [
+      "A type of insulation",
+      "Ionisation of air molecules around a conductor",
+      "A magnetic effect",
+      "A type of short circuit"
+    ],
+    "exp": "High electric fields strip electrons from air molecules, creating a conductive glow.",
+    "cat": "CORONA",
+    "id": "T02A_265"
+  },
+  {
+    "q": "At what field intensity does corona occur in air?",
+    "a": "Approximately 30 kV/cm",
+    "opts": [
+      "1 kV/cm",
+      "Approximately 30 kV/cm",
+      "66 kV/cm",
+      "110 kV/cm"
+    ],
+    "exp": "The dielectric strength of air is roughly 30 kV/cm; exceeding this causes partial breakdown.",
+    "cat": "CORONA",
+    "id": "T02A_266"
+  },
+  {
+    "q": "What is a visible sign of corona?",
+    "a": "Faint bluish-purple glow",
+    "opts": [
+      "Sparking",
+      "Faint bluish-purple glow",
+      "Fire",
+      "Smoke"
+    ],
+    "exp": "The ionisation produces light in the blue/purple part of the spectrum.",
+    "cat": "CORONA",
+    "id": "T02A_267"
+  },
+  {
+    "q": "What is an audible sign of corona?",
+    "a": "Hissing or crackling noise",
+    "opts": [
+      "Deep humming",
+      "Hissing or crackling noise",
+      "Ticking",
+      "Silence"
+    ],
+    "exp": "The rapid air movement from ionisation causes the characteristic hissing sound.",
+    "cat": "CORONA",
+    "id": "T02A_268"
+  },
+  {
+    "q": "Does corona consume energy?",
+    "a": "Yes, power is wasted ionising air",
+    "opts": [
+      "No",
+      "Yes, power is wasted ionising air",
+      "Only during faults",
+      "Only at night"
+    ],
+    "exp": "The power used to break air molecular bonds is drawn from the electrical system.",
+    "cat": "CORONA",
+    "id": "T02A_269"
+  },
+  {
+    "q": "What gas is produced by corona?",
+    "a": "Ozone (O₃)",
+    "opts": [
+      "Oxygen",
+      "Ozone (O₃)",
+      "SF6",
+      "CO₂"
+    ],
+    "exp": "Ozone is generated by the high energy of the discharge.",
+    "cat": "CORONA",
+    "id": "T02A_270"
+  },
+  {
+    "q": "Why is ozone harmful?",
+    "a": "It is corrosive to insulation and metal",
+    "opts": [
+      "It is explosive",
+      "It is corrosive to insulation and metal",
+      "It causes electric shock",
+      "It smells good"
+    ],
+    "exp": "Ozone is a strong oxidiser and will rot rubber/plastic insulation and rust metals.",
+    "cat": "CORONA",
+    "id": "T02A_271"
+  },
+  {
+    "q": "How to mitigate corona?",
+    "a": "Use smooth surfaces and corona rings",
+    "opts": [
+      "Use sharp points",
+      "Use smooth surfaces and corona rings",
+      "Use dusty air",
+      "Add more voltage"
+    ],
+    "exp": "Smooth conductors and field-grading rings prevent high-field 'hot spots'.",
+    "cat": "CORONA",
+    "id": "T02A_272"
+  },
+  {
+    "q": "What lowers the critical onset voltage of corona?",
+    "a": "Moisture, dust, and sharp points",
+    "opts": [
+      "Cold temperatures",
+      "Moisture, dust, and sharp points",
+      "Increased conductor diameter",
+      "Corona rings"
+    ],
+    "exp": "These factors create electric field concentrations that cause earlier ionization.",
+    "cat": "CORONA",
+    "id": "T02A_273"
+  },
+  {
+    "q": "What does corona produce besides ozone?",
+    "a": "Oxides of nitrogen",
+    "opts": [
+      "SF6 gas",
+      "Oxides of nitrogen",
+      "Copper dust",
+      "Steam"
+    ],
+    "exp": "The heat of ionisation combines nitrogen and oxygen in the air.",
+    "cat": "CORONA",
+    "id": "T02A_274"
+  },
+  {
+    "q": "What is the danger of an open-circuited CT secondary?",
+    "a": "Lethal high voltage induced",
+    "opts": [
+      "Zero voltage",
+      "Lethal high voltage induced",
+      "Overcurrent trip",
+      "No danger"
+    ],
+    "exp": "Primary current drives the core into deep saturation, inducing kilovolts of secondary emf.",
+    "cat": "CT",
+    "id": "T02A_275"
+  },
+  {
+    "q": "What is a 'shorting-type' terminal block?",
+    "a": "Make-before-break short circuiting terminal",
+    "opts": [
+      "A regular terminal",
+      "Make-before-break short circuiting terminal",
+      "An insulating terminal",
+      "A high-voltage terminal"
+    ],
+    "exp": "Ensures the CT circuit is never open-circuited during maintenance.",
+    "cat": "CT",
+    "id": "T02A_276"
+  },
+  {
+    "q": "Why MUST CTs never be open-circuited?",
+    "a": "Core saturation leads to secondary insulation breakdown",
+    "opts": [
+      "It wastes current",
+      "Core saturation leads to secondary insulation breakdown",
+      "It affects the AVR",
+      "It causes the breaker to trip"
+    ],
+    "exp": "The lack of secondary counter-flux allows the core to saturate and the voltage to spike to destructive levels.",
+    "cat": "CT",
+    "id": "T02A_277"
+  },
+  {
+    "q": "When do you apply the shorting link?",
+    "a": "BEFORE disconnecting the meter",
+    "opts": [
+      "AFTER disconnecting the meter",
+      "BEFORE disconnecting the meter",
+      "Only during a fault",
+      "Never"
+    ],
+    "exp": "Short first, then disconnect ensures continuity is always maintained.",
+    "cat": "CT",
+    "id": "T02A_278"
+  },
+  {
+    "q": "What damage can an open-circuit CT cause?",
+    "a": "CT insulation, iron core, and wiring destruction",
+    "opts": [
+      "Only meter damage",
+      "CT insulation, iron core, and wiring destruction",
+      "Nothing",
+      "Only AVR damage"
+    ],
+    "exp": "The uncontrolled energy release destroys the internal windings and core.",
+    "cat": "CT",
+    "id": "T02A_279"
+  },
+  {
+    "q": "Can you use a fuse on a CT secondary?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "A blown fuse would create an open-circuit, causing the exact destruction you seek to prevent.",
+    "cat": "CT",
+    "id": "T02A_280"
+  },
+  {
+    "q": "What is the secondary current of a typical CT?",
+    "a": "1 A or 5 A",
+    "opts": [
+      "100 A",
+      "1 A or 5 A",
+      "10 A",
+      "Zero"
+    ],
+    "exp": "These are the two standard secondary ratings for metering/protection.",
+    "cat": "CT",
+    "id": "T02A_281"
+  },
+  {
+    "q": "What does a PT measure?",
+    "a": "Voltage",
+    "opts": [
+      "Current",
+      "Voltage",
+      "Resistance",
+      "Power"
+    ],
+    "exp": "PTs step down high busbar voltage to safe levels for meters.",
+    "cat": "PT",
+    "id": "T02A_282"
+  },
+  {
+    "q": "Why is a fuse safe for a PT secondary?",
+    "a": "Secondary short-circuit is the fault; a fuse isolates it",
+    "opts": [
+      "A fuse is not safe",
+      "Secondary short-circuit is the fault; a fuse isolates it",
+      "It prevents over-voltage",
+      "It only blows when the voltage is low"
+    ],
+    "exp": "For a PT, a fault is an over-current/short; the fuse clears it safely.",
+    "cat": "PT",
+    "id": "T02A_283"
+  },
+  {
+    "q": "What happens if a fuse blows on a PT secondary?",
+    "a": "Voltmeter reads zero",
+    "opts": [
+      "The entire MSB trips",
+      "Voltmeter reads zero",
+      "The generator trips",
+      "High voltage is induced"
+    ],
+    "exp": "Loss of PT input is a non-destructive state; the meter simply shows no signal.",
+    "cat": "PT",
+    "id": "T02A_284"
+  },
+  {
+    "q": "Why is a fuse forbidden on CT secondary?",
+    "a": "Blown fuse = Open circuit = Lethal voltage",
+    "opts": [
+      "It is too expensive",
+      "Blown fuse = Open circuit = Lethal voltage",
+      "CT current is too low",
+      "There is no space"
+    ],
+    "exp": "The fuse acts as a trigger for the destructive open-circuit condition.",
+    "cat": "PT",
+    "id": "T02A_285"
+  },
+  {
+    "q": "What is preferential trip?",
+    "a": "Automatic load shedding to prevent blackout",
+    "opts": [
+      "Automatic synchronization",
+      "Automatic load shedding to prevent blackout",
+      "Automatic voltage regulation",
+      "Automatic bearing protection"
+    ],
+    "exp": "It is the last line of defense against the main OCR tripping.",
+    "cat": "PREF",
+    "id": "T02A_286"
+  },
+  {
+    "q": "Is the steering gear shed by preferential trip?",
+    "a": "No, essential services are never shed",
+    "opts": [
+      "Yes",
+      "No, essential services are never shed",
+      "Only if it's overloaded",
+      "Yes, if in harbor"
+    ],
+    "exp": "Steering gear is essential; it stays on no matter what.",
+    "cat": "PREF",
+    "id": "T02A_287"
+  },
+  {
+    "q": "At what load current does the preferential trip typically activate?",
+    "a": "~110% of rated",
+    "opts": [
+      "50% of rated",
+      "~110% of rated",
+      "200% of rated",
+      "1000% of rated"
+    ],
+    "exp": "It detects the initial onset of overload.",
+    "cat": "PREF",
+    "id": "T02A_288"
+  },
+  {
+    "q": "What is the typical dashpot delay for preferential trip?",
+    "a": "5–10 seconds",
+    "opts": [
+      "1 second",
+      "5–10 seconds",
+      "30 seconds",
+      "1 hour"
+    ],
+    "exp": "Allows short spikes (motors starting) to pass.",
+    "cat": "PREF",
+    "id": "T02A_289"
+  },
+  {
+    "q": "What is the result if preferential trip is ignored?",
+    "a": "Main OCR trips and causes blackout",
+    "opts": [
+      "Generator cools down",
+      "Main OCR trips and causes blackout",
+      "Nothing",
+      "Voltage stabilises"
+    ],
+    "exp": "The main breaker is the ultimate safety; it protects itself by killing power entirely.",
+    "cat": "PREF",
+    "id": "T02A_290"
+  },
+  {
+    "q": "What does a megger measure?",
+    "a": "Insulation resistance",
+    "opts": [
+      "Voltage",
+      "Insulation resistance",
+      "Current",
+      "Frequency"
+    ],
+    "exp": "Megger is a brand name synonym for a high-voltage insulation resistance tester.",
+    "cat": "MEG",
+    "id": "T02A_291"
+  },
+  {
+    "q": "Why is a megger better than a multimeter?",
+    "a": "High voltage stresses weak insulation",
+    "opts": [
+      "It is smaller",
+      "High voltage stresses weak insulation",
+      "It is cheaper",
+      "It measures current"
+    ],
+    "exp": "Weak insulation might pass a low-voltage test but break down under operational stress.",
+    "cat": "MEG",
+    "id": "T02A_292"
+  },
+  {
+    "q": "What resistance range do insulation tests operate in?",
+    "a": "MΩ to GΩ",
+    "opts": [
+      "kΩ to MΩ",
+      "MΩ to GΩ",
+      "0 to 10 Ω",
+      "None"
+    ],
+    "exp": "Good insulation has extremely high resistance, needing sensitive measurement.",
+    "cat": "MEG",
+    "id": "T02A_293"
+  },
+  {
+    "q": "Can you use a 500V megger on electronics?",
+    "a": "No, it destroys them",
+    "opts": [
+      "Yes",
+      "No, it destroys them",
+      "Only for low load",
+      "Only with battery"
+    ],
+    "exp": "Semiconductors like transistors and diodes cannot handle 500V; they will punch through.",
+    "cat": "MEG",
+    "id": "T02A_294"
+  },
+  {
+    "q": "What does the PI ratio test?",
+    "a": "Insulation moisture and quality",
+    "opts": [
+      "Current leakage",
+      "Insulation moisture and quality",
+      "Voltage level",
+      "Frequency stability"
+    ],
+    "exp": "It detects the absorption trend over 10 minutes, revealing hidden moisture tracks.",
+    "cat": "MEG",
+    "id": "T02A_295"
+  },
+  {
+    "q": "What is a Diesel-Electric system?",
+    "a": "Generators power motors through frequency converters",
+    "opts": [
+      "Diesels directly drive propellers",
+      "Generators power motors through frequency converters",
+      "All electrics powered by batteries",
+      "Propulsion via steam"
+    ],
+    "exp": "It's an electric propulsion system where prime movers are diesels.",
+    "cat": "DE",
+    "id": "T02A_296"
+  },
+  {
+    "q": "What is an advantage of diesel-electric propulsion?",
+    "a": "Fuel economy at partial load",
+    "opts": [
+      "Higher capital cost",
+      "Fuel economy at partial load",
+      "Less protection required",
+      "Smaller motors"
+    ],
+    "exp": "By shutting down extra generators, you keep the active ones loaded efficiently.",
+    "cat": "DE",
+    "id": "T02A_297"
+  },
+  {
+    "q": "Why is diesel-electric good for DP vessels?",
+    "a": "Redundancy and flexible power",
+    "opts": [
+      "No switchboard needed",
+      "Redundancy and flexible power",
+      "Lower maintenance",
+      "Simplified controls"
+    ],
+    "exp": "Multiple generators provide the redundancy required for Class 2/3 Dynamic Positioning.",
+    "cat": "DE",
+    "id": "T02A_298"
+  },
+  {
+    "q": "What converters are used in DE systems?",
+    "a": "Frequency converters (VFDs)",
+    "opts": [
+      "Step-up transformers",
+      "Frequency converters (VFDs)",
+      "Rectifiers only",
+      "Inverters only"
+    ],
+    "exp": "These change AC to DC and back to variable AC for motor speed control.",
+    "cat": "DE",
+    "id": "T02A_299"
+  },
+  {
+    "q": "Which ships use diesel-electric?",
+    "a": "Cruise ships, LNG carriers, DP drillships",
+    "opts": [
+      "Barges only",
+      "Cruise ships, LNG carriers, DP drillships",
+      "All cargo ships",
+      "Sailing vessels"
+    ],
+    "exp": "Any vessel needing flexible station-keeping or highly variable load capability.",
+    "cat": "DE",
+    "id": "T02A_300"
+  },
+  {
+    "q": "What is the primary surveyor expectation for 'What is NER?'?",
+    "a": "Neutral Earthing Resistor connects star point to hull to limit fault current to 5-30 A.",
+    "opts": [
+      "It is a grounding wire",
+      "Neutral Earthing Resistor connects star point to hull to limit fault current to 5-30 A.",
+      "It is a type of fuse",
+      "It is used for shorting CTs"
+    ],
+    "exp": "Key terms: Star point, hull, limit current, 5-30A.",
+    "cat": "QA",
+    "id": "T02A_301"
+  },
+  {
+    "q": "How do you explain 'VCB arc quenching'?",
+    "a": "Contacts separate in vacuum; metal vapour arc extinguishes at first current zero (10 ms).",
+    "opts": [
+      "It uses high pressure air",
+      "Contacts separate in vacuum; metal vapour arc extinguishes at first current zero (10 ms).",
+      "It blows the arc out with oil",
+      "It is slower than ACB"
+    ],
+    "exp": "Key points: Vacuum, first current zero.",
+    "cat": "QA",
+    "id": "T02A_302"
+  },
+  {
+    "q": "How to answer 'Why HV system?'?",
+    "a": "Doubling V halves I → smaller cables, lower losses, smaller windings, economical for >3 MW.",
+    "opts": [
+      "It increases the frequency",
+      "Doubling V halves I → smaller cables, lower losses, smaller windings, economical for >3 MW.",
+      "It simplifies the protection",
+      "It requires no switchgear"
+    ],
+    "exp": "The P=IV link is the mathematical core of the justification.",
+    "cat": "QA",
+    "id": "T02A_303"
+  },
+  {
+    "q": "What is the '14 MSB Safeties' trick?",
+    "a": "List as many as possible clearly, focus on the standard 14.",
+    "opts": [
+      "Just list one",
+      "List as many as possible clearly, focus on the standard 14.",
+      "Say there are none",
+      "List only HV ones"
+    ],
+    "exp": "Memorising all 14 shows high competence and exam readiness.",
+    "cat": "QA",
+    "id": "T02A_304"
+  },
+  {
+    "q": "What is the answer for HV gloves?",
+    "a": "Class 2 (Yellow) for 6.6 kV; Class 3 (Green) for 11 kV. 6-monthly test.",
+    "opts": [
+      "Use any glove",
+      "Class 2 (Yellow) for 6.6 kV; Class 3 (Green) for 11 kV. 6-monthly test.",
+      "Every 5 years",
+      "No gloves needed"
+    ],
+    "exp": "Correct class/colour matching is the key differentiator.",
+    "cat": "QA",
+    "id": "T02A_305"
+  },
+  {
+    "q": "How do you answer 'Why PT has fuse and CT does not'?",
+    "a": "PT short = fault (needs fuse); CT open = high-voltage destruction (forbidden).",
+    "opts": [
+      "PT needs fuse because of voltage",
+      "PT short = fault (needs fuse); CT open = high-voltage destruction (forbidden).",
+      "CT needs fuse because of current",
+      "They are the same"
+    ],
+    "exp": "Simple logic linking PT behavior (over-current fault) to CT behavior (voltage spike fault).",
+    "cat": "QA",
+    "id": "T02A_306"
+  },
+  {
+    "q": "What is the answer for 'What is a dead front panel'?",
+    "a": "No live parts accessible from front during operation; all enclosed by barriers.",
+    "opts": [
+      "A broken panel",
+      "No live parts accessible from front during operation; all enclosed by barriers.",
+      "An LV panel only",
+      "Any panel with doors"
+    ],
+    "exp": "Key points: Live parts enclosed, safe operating interface.",
+    "cat": "QA",
+    "id": "T02A_307"
+  },
+  {
+    "q": "What to do post-SF6 arc?",
+    "a": "Forced ventilation (30 min), SCBA, chemical gloves, neutralize with Ca(OH)₂.",
+    "opts": [
+      "Clean with water",
+      "Forced ventilation (30 min), SCBA, chemical gloves, neutralize with Ca(OH)₂.",
+      "Just enter and work",
+      "Sweep with a broom"
+    ],
+    "exp": "Ensuring safety from toxic fluoride by-products is non-negotiable.",
+    "cat": "QA",
+    "id": "T02A_308"
+  },
+  {
+    "q": "What is the 200% IR rule?",
+    "a": "After repair, IR must be double the minimum.",
+    "opts": [
+      "Double the voltage",
+      "After repair, IR must be double the minimum.",
+      "Double the time",
+      "None"
+    ],
+    "exp": "Ensuring a safety margin after overhaul.",
+    "cat": "QA",
+    "id": "T02A_309"
+  },
+  {
+    "q": "Why 5 minutes for discharge?",
+    "a": "Capacitive charge storage in HV cables",
+    "opts": [
+      "To cool the machine",
+      "Capacitive charge storage in HV cables",
+      "To verify frequency",
+      "To check for leaks"
+    ],
+    "exp": "HV cables hold lethal energy even when isolated.",
+    "cat": "QA",
+    "id": "T02A_310"
+  },
+  {
+    "q": "How to answer 'Why not floating HV?'?",
+    "a": "Voltage rise to line voltage on healthy phases, ferroresonance risks.",
+    "opts": [
+      "It is too expensive",
+      "Voltage rise to line voltage on healthy phases, ferroresonance risks.",
+      "It uses too much copper",
+      "It needs too many relays"
+    ],
+    "exp": "Explaining the voltage stress/oscillatory issues is high-scoring.",
+    "cat": "QA",
+    "id": "T02A_311"
+  },
+  {
+    "q": "Which is more common: 3.3 kV or 6.6 kV?",
+    "a": "6.6 kV",
+    "opts": [
+      "3.3 kV",
+      "6.6 kV",
+      "11 kV",
+      "440 V"
+    ],
+    "exp": "6.6 kV is the industry standard for most HV vessels.",
+    "cat": "QA",
+    "id": "T02A_312"
+  },
+  {
+    "q": "Why use stranded cables?",
+    "a": "Mitigate skin effect",
+    "opts": [
+      "Easier to pull",
+      "Mitigate skin effect",
+      "Cheaper",
+      "Heavier"
+    ],
+    "exp": "Strands increase surface area, reducing the resistive losses from current crowding.",
+    "cat": "QA",
+    "id": "T02A_313"
+  },
+  {
+    "q": "What is corona?",
+    "a": "Ionisation of air at high voltage",
+    "opts": [
+      "An insulation type",
+      "Ionisation of air at high voltage",
+      "A magnetic effect",
+      "A fault condition"
+    ],
+    "exp": "Air becomes conductive at field intensities > 30 kV/cm.",
+    "cat": "QA",
+    "id": "T02A_314"
+  },
+  {
+    "q": "What is the function of the IRM?",
+    "a": "Continuously monitor for insulation breaches in IT system",
+    "opts": [
+      "Trip the breaker",
+      "Continuously monitor for insulation breaches in IT system",
+      "Check the temperature",
+      "Calculate the load"
+    ],
+    "exp": "Early warning of degradation before a second fault happens.",
+    "cat": "QA",
+    "id": "T02A_315"
+  },
+  {
+    "q": "What is HV justification?",
+    "a": "Demand > 3–5 MW",
+    "opts": [
+      "Any ship",
+      "Demand > 3–5 MW",
+      "Only if diesel-electric",
+      "None"
+    ],
+    "exp": "It is an economic decision based on power volume.",
+    "cat": "QUICK",
+    "id": "T02A_316"
+  },
+  {
+    "q": "What is the VCB quench time?",
+    "a": "10 ms (first zero)",
+    "opts": [
+      "1 ms",
+      "10 ms (first zero)",
+      "1 s",
+      "5 s"
+    ],
+    "exp": "Extremely fast compared to ACBs.",
+    "cat": "QUICK",
+    "id": "T02A_317"
+  },
+  {
+    "q": "What is the NER limit?",
+    "a": "5–30 A",
+    "opts": [
+      "1 A",
+      "5–30 A",
+      "100 A",
+      "1000 A"
+    ],
+    "exp": "A small enough fault to prevent damage, but large enough for the relay to see it.",
+    "cat": "QUICK",
+    "id": "T02A_318"
+  },
+  {
+    "q": "What PPE for arc flash?",
+    "a": "Arc-rated suit, shield, gloves",
+    "opts": [
+      "Normal coveralls",
+      "Arc-rated suit, shield, gloves",
+      "Raincoat",
+      "None"
+    ],
+    "exp": "Full coverage against intense heat/light/pressure.",
+    "cat": "QUICK",
+    "id": "T02A_319"
+  },
+  {
+    "q": "What are SF6 arc products?",
+    "a": "HF, SOF₂, toxic fluorides",
+    "opts": [
+      "Only Oxygen",
+      "HF, SOF₂, toxic fluorides",
+      "Clean air",
+      "Water vapour"
+    ],
+    "exp": "These gases are dangerous to health.",
+    "cat": "QUICK",
+    "id": "T02A_320"
+  },
+  {
+    "q": "What is the minimum IR?",
+    "a": "kV + 1",
+    "opts": [
+      "1 MΩ",
+      "kV + 1",
+      "10 MΩ",
+      "Infinity"
+    ],
+    "exp": "IEC rule for minimal insulation standards.",
+    "cat": "QUICK",
+    "id": "T02A_321"
+  },
+  {
+    "q": "What is the 200% rule?",
+    "a": "Return-to-service IR threshold",
+    "opts": [
+      "Current limit",
+      "Return-to-service IR threshold",
+      "Voltage limit",
+      "Wait time"
+    ],
+    "exp": "Post-repair IR must double the minimum acceptable value.",
+    "cat": "QUICK",
+    "id": "T02A_322"
+  },
+  {
+    "q": "What is the IRM alarm threshold?",
+    "a": "50–100 kΩ",
+    "opts": [
+      "1–5 MΩ",
+      "50–100 kΩ",
+      "0 Ω",
+      "1000 kΩ"
+    ],
+    "exp": "Below this, the system is leaking too much to be considered safe.",
+    "cat": "QUICK",
+    "id": "T02A_323"
+  },
+  {
+    "q": "Which zone is cargo tank?",
+    "a": "Zone 0",
+    "opts": [
+      "Zone 1",
+      "Zone 0",
+      "Zone 2",
+      "Safe zone"
+    ],
+    "exp": "Highest hazard continuous atmosphere.",
+    "cat": "QUICK",
+    "id": "T02A_324"
+  },
+  {
+    "q": "What is the shaft earthing resistance?",
+    "a": "< 1 Ω",
+    "opts": [
+      "< 10 Ω",
+      "< 1 Ω",
+      "> 1 kΩ",
+      "> 1 MΩ"
+    ],
+    "exp": "The connection must be essentially a dead short to hull.",
+    "cat": "QUICK",
+    "id": "T02A_325"
+  },
+  {
+    "q": "What is the HVSC pilot loop trip time?",
+    "a": "200 ms",
+    "opts": [
+      "10 ms",
+      "200 ms",
+      "1 s",
+      "5 s"
+    ],
+    "exp": "Fast enough to prevent any plug-pulling arc.",
+    "cat": "QUICK",
+    "id": "T02A_326"
+  },
+  {
+    "q": "What creates skin effect?",
+    "a": "Eddy currents",
+    "opts": [
+      "Resistance",
+      "Eddy currents",
+      "Voltage",
+      "Frequency"
+    ],
+    "exp": "Inductive effect in the conductor pushes current to the surface.",
+    "cat": "QUICK",
+    "id": "T02A_327"
+  },
+  {
+    "q": "What is the Corona onset field?",
+    "a": "30 kV/cm",
+    "opts": [
+      "10 kV/cm",
+      "30 kV/cm",
+      "66 kV/cm",
+      "100 kV/cm"
+    ],
+    "exp": "The dielectric limit of air.",
+    "cat": "QUICK",
+    "id": "T02A_328"
+  },
+  {
+    "q": "Why no fuse on CT?",
+    "a": "Blown fuse causes open secondary = destruction",
+    "opts": [
+      "It saves money",
+      "Blown fuse causes open secondary = destruction",
+      "It is easier to install",
+      "Fuses are too big"
+    ],
+    "exp": "A blown fuse creates the very open-circuit hazard we must avoid.",
+    "cat": "QUICK",
+    "id": "T02A_329"
+  },
+  {
+    "q": "What is the preferential trip limit?",
+    "a": "110% overload",
+    "opts": [
+      "105% overload",
+      "110% overload",
+      "150% overload",
+      "200% overload"
+    ],
+    "exp": "The system monitors for sustained overload to save the busbar.",
+    "cat": "QUICK",
+    "id": "T02A_330"
+  },
+  {
+    "q": "What is the purpose of HVSC?",
+    "a": "Shore-to-ship connection to shut down DGs in port",
+    "opts": [
+      "To charge batteries",
+      "Shore-to-ship connection to shut down DGs in port",
+      "To sync the generators",
+      "To power the main propulsion"
+    ],
+    "exp": "Cold ironing reduces ship exhaust in port.",
+    "cat": "QUICK",
+    "id": "T02A_331"
+  },
+  {
+    "q": "What happens if a brush-type shaft earthing fails?",
+    "a": "Bearing failure",
+    "opts": [
+      "Propeller fall off",
+      "Bearing failure",
+      "Hull rust",
+      "Frequency drop"
+    ],
+    "exp": "Unchecked stray currents destroy bearing surfaces via pitting.",
+    "cat": "QUICK",
+    "id": "T02A_332"
+  },
+  {
+    "q": "Which is more conductive: conductive or non-conductive hose?",
+    "a": "Conductive",
+    "opts": [
+      "Non-conductive",
+      "Conductive",
+      "They are the same",
+      "None"
+    ],
+    "exp": "Conductive hose contains bonding elements to drain static.",
+    "cat": "QUICK",
+    "id": "T02A_333"
+  },
+  {
+    "q": "Does SF6 have an atmospheric lifetime?",
+    "a": "Yes, 3200 years",
+    "opts": [
+      "No, it dissolves",
+      "Yes, 3200 years",
+      "Only 1 year",
+      "Only 100 years"
+    ],
+    "exp": "It is effectively a permanent environmental contaminant.",
+    "cat": "QUICK",
+    "id": "T02A_334"
+  },
+  {
+    "q": "Can you enter an SF6 enclosure after an arc event?",
+    "a": "Only after ventilation, SCBA, and chem suit",
+    "opts": [
+      "Yes, immediately",
+      "Only after ventilation, SCBA, and chem suit",
+      "Yes, if you hold your breath",
+      "Only after 5 minutes"
+    ],
+    "exp": "Safety first: air exchange and PPE protect from toxic fumes.",
+    "cat": "QUICK",
+    "id": "T02A_335"
+  },
+  {
+    "q": "Which class is Class 0 glove?",
+    "a": "Red",
+    "opts": [
+      "Yellow",
+      "Red",
+      "Green",
+      "Orange"
+    ],
+    "exp": "Class 0 is red (1 kV rating).",
+    "cat": "QUICK",
+    "id": "T02A_336"
+  },
+  {
+    "q": "Which class is Class 00 glove?",
+    "a": "Beige",
+    "opts": [
+      "Beige",
+      "Red",
+      "Yellow",
+      "Orange"
+    ],
+    "exp": "Class 00 is beige (500 V rating).",
+    "cat": "QUICK",
+    "id": "T02A_337"
+  },
+  {
+    "q": "Is the MSB room an essential space?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only if it's HV",
+      "Only if it's LV"
+    ],
+    "exp": "It is critical for ship operation and requires emergency lighting.",
+    "cat": "QUICK",
+    "id": "T02A_338"
+  },
+  {
+    "q": "What is a major advantage of diesel-electric propulsion regarding redundancy?",
+    "a": "Multiple independent generator sets",
+    "opts": [
+      "Single engine drive",
+      "Multiple independent generator sets",
+      "No generator required",
+      "Batteries only"
+    ],
+    "exp": "If one generator fails, others remain to power the ship.",
+    "cat": "QUICK",
+    "id": "T02A_339"
+  },
+  {
+    "q": "Does diesel-electric have shaft line?",
+    "a": "No mechanical shaft line",
+    "opts": [
+      "Yes",
+      "No mechanical shaft line",
+      "Only a short one",
+      "Yes, if it's Azipod"
+    ],
+    "exp": "Energy is transferred purely electrically to motors near the propeller.",
+    "cat": "QUICK",
+    "id": "T02A_340"
+  },
+  {
+    "q": "What indicates corona?",
+    "a": "Hissing noise and blue glow",
+    "opts": [
+      "Vibration",
+      "Hissing noise and blue glow",
+      "Temperature rise",
+      "Current rise"
+    ],
+    "exp": "Audible/visual cues are key diagnostics.",
+    "cat": "QUICK",
+    "id": "T02A_341"
+  },
+  {
+    "q": "What is the IEC for HV?",
+    "a": "60092",
+    "opts": [
+      "80005",
+      "60092",
+      "1000",
+      "None"
+    ],
+    "exp": "IEC 60092 standardises shipboard electrical installations.",
+    "cat": "QUICK",
+    "id": "T02A_342"
+  },
+  {
+    "q": "What protects the PT secondary?",
+    "a": "A fuse",
+    "opts": [
+      "An OCR",
+      "A fuse",
+      "An NER",
+      "Nothing"
+    ],
+    "exp": "A simple fuse safely clears a secondary short circuit.",
+    "cat": "QUICK",
+    "id": "T02A_343"
+  },
+  {
+    "q": "What happens if you use 500V megger on 6.6 kV?",
+    "a": "Insufficent stress to reveal weak insulation",
+    "opts": [
+      "Instant burnout",
+      "Insufficent stress to reveal weak insulation",
+      "It is correct",
+      "It is too high"
+    ],
+    "exp": "Voltage stress is too low to prove HV insulation strength.",
+    "cat": "QUICK",
+    "id": "T02A_344"
+  },
+  {
+    "q": "Are rubber mats required?",
+    "a": "Yes, front and rear of MSB",
+    "opts": [
+      "No",
+      "Yes, front and rear of MSB",
+      "Only if it is cold",
+      "Only at night"
+    ],
+    "exp": "Front and rear coverage is required to prevent accidental shock during maintenance.",
+    "cat": "QUICK",
+    "id": "T02A_345"
+  },
+  {
+    "q": "What is the purpose of the Earth bus?",
+    "a": "Common hull potential bonding",
+    "opts": [
+      "Busbar cooling",
+      "Common hull potential bonding",
+      "Signal return",
+      "Shielding only"
+    ],
+    "exp": "Everything must be at the same potential (hull) to avoid shock hazards.",
+    "cat": "QUICK",
+    "id": "T02A_346"
+  },
+  {
+    "q": "How does VCB quench the arc?",
+    "a": "Vacuum",
+    "opts": [
+      "Air",
+      "Vacuum",
+      "Oil",
+      "SF6"
+    ],
+    "exp": "Vacuum bottle contacts open in space where ionisation is impossible.",
+    "cat": "QUICK",
+    "id": "T02A_347"
+  },
+  {
+    "q": "What is the minimum voltage for HV?",
+    "a": "1000 V",
+    "opts": [
+      "440 V",
+      "1000 V",
+      "6600 V",
+      "11000 V"
+    ],
+    "exp": "Standard definition per IEC.",
+    "cat": "QUICK",
+    "id": "T02A_348"
+  },
+  {
+    "q": "Is LV floating?",
+    "a": "Yes, standard for shipboard IT systems",
+    "opts": [
+      "No",
+      "Yes, standard for shipboard IT systems",
+      "Only for tankers",
+      "Only in port"
+    ],
+    "exp": "Floating (Insulated Neutral) is standard for safety.",
+    "cat": "QUICK",
+    "id": "T02A_349"
+  },
+  {
+    "q": "What is the 3+3 rule?",
+    "a": "Emergency starts rule",
+    "opts": [
+      "Rubber gloves rule",
+      "Emergency starts rule",
+      "MSB clearance",
+      "PTW stages"
+    ],
+    "exp": "Refers to the two independent starting methods for emergency generators.",
+    "cat": "QUICK",
+    "id": "T02A_350"
+  },
+  {
+    "q": "Does SF6 have an odour?",
+    "a": "No, it is odourless",
+    "opts": [
+      "Yes, strong",
+      "No, it is odourless",
+      "Only when arced",
+      "Only when leaked"
+    ],
+    "exp": "Pure gas has no sensory detection.",
+    "cat": "QUICK",
+    "id": "T02A_351"
+  },
+  {
+    "q": "Can IRM tell you where the fault is?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only on HV",
+      "Only on LV"
+    ],
+    "exp": "It only monitors the total system leakage.",
+    "cat": "QUICK",
+    "id": "T02A_352"
+  },
+  {
+    "q": "Are capacitors used on tankers?",
+    "a": "Yes, for PF correction",
+    "opts": [
+      "No",
+      "Yes, for PF correction",
+      "Only in cargo tanks",
+      "Only for HVSC"
+    ],
+    "exp": "Correction reduces current and heating, making it widely applied.",
+    "cat": "QUICK",
+    "id": "T02A_353"
+  },
+  {
+    "q": "What is the typical setting for a preferental trip delay?",
+    "a": "5-10 seconds",
+    "opts": [
+      "1 second",
+      "5-10 seconds",
+      "1 minute",
+      "10 minutes"
+    ],
+    "exp": "Allows temporary starting spikes to finish.",
+    "cat": "QUICK",
+    "id": "T02A_354"
+  },
+  {
+    "q": "Are CTs short-circuited when testing?",
+    "a": "Yes, always",
+    "opts": [
+      "No",
+      "Yes, always",
+      "Only if they are old",
+      "Only for HV"
+    ],
+    "exp": "To prevent lethal induced voltage.",
+    "cat": "QUICK",
+    "id": "T02A_355"
+  },
+  {
+    "q": "Is 6.6 kV an HV system?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in tankers",
+      "Only in cruise"
+    ],
+    "exp": "Well above the 1000V limit.",
+    "cat": "QUICK",
+    "id": "T02A_356"
+  },
+  {
+    "q": "What is the purpose of phase barriers in the MSB?",
+    "a": "Prevent phase-to-phase flashover",
+    "opts": [
+      "Increase space",
+      "Prevent phase-to-phase flashover",
+      "Cool the phases",
+      "Measure current"
+    ],
+    "exp": "If insulation fails on one phase, the barrier prevents it shorting to neighbors.",
+    "cat": "QUICK",
+    "id": "T02A_357"
+  },
+  {
+    "q": "What is the primary danger of a dead-front panel door open?",
+    "a": "Access to live busbars",
+    "opts": [
+      "The door falling off",
+      "Access to live busbars",
+      "Loss of light",
+      "Loss of voltage"
+    ],
+    "exp": "You expose parts that are normally hidden and safe.",
+    "cat": "QUICK",
+    "id": "T02A_358"
+  },
+  {
+    "q": "Is the IRM continuous?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only when tested",
+      "Only at night"
+    ],
+    "exp": "It must always be on to provide instant alarm.",
+    "cat": "QUICK",
+    "id": "T02A_359"
+  },
+  {
+    "q": "Why is the NER connection to neutral important?",
+    "a": "Fixed potential reference",
+    "opts": [
+      "Voltage boost",
+      "Fixed potential reference",
+      "Current boost",
+      "Power factor fix"
+    ],
+    "exp": "Provides the zero-point stability for the HV system.",
+    "cat": "QUICK",
+    "id": "T02A_360"
+  },
+  {
+    "q": "How does VCB handle first zero crossing?",
+    "a": "Arc extinguished",
+    "opts": [
+      "Arc gets larger",
+      "Arc extinguished",
+      "Voltage jumps",
+      "Vacuum disappears"
+    ],
+    "exp": "The natural zero current point is where the arc dies in the vacuum.",
+    "cat": "QUICK",
+    "id": "T02A_361"
+  },
+  {
+    "q": "Are HV gloves for LV use?",
+    "a": "Yes, but they may be bulkier/unnecessary",
+    "opts": [
+      "No",
+      "Yes, but they may be bulkier/unnecessary",
+      "Only in emergencies",
+      "Only for Class 00"
+    ],
+    "exp": "A Class 2 glove safely insulates against 440V, but is overkill for the task.",
+    "cat": "QUICK",
+    "id": "T02A_362"
+  },
+  {
+    "q": "What is the purpose of the pilot loop?",
+    "a": "Continuity of connection monitoring",
+    "opts": [
+      "Check voltage",
+      "Continuity of connection monitoring",
+      "Check load",
+      "Check frequency"
+    ],
+    "exp": "Ensures the shore cable is plugged in and intact.",
+    "cat": "QUICK",
+    "id": "T02A_363"
+  },
+  {
+    "q": "Why does corona occur?",
+    "a": "Electric field > 30 kV/cm",
+    "opts": [
+      "High current",
+      "Electric field > 30 kV/cm",
+      "Low frequency",
+      "High power"
+    ],
+    "exp": "Field strength in the air exceeds dielectric strength.",
+    "cat": "QUICK",
+    "id": "T02A_364"
+  },
+  {
+    "q": "Is the MSB room essential space?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for tanker",
+      "Only if manned"
+    ],
+    "exp": "It is critical infrastructure.",
+    "cat": "QUICK",
+    "id": "T02A_365"
+  },
+  {
+    "q": "What is the standard megger voltage for 440V machines?",
+    "a": "500 V",
+    "opts": [
+      "100 V",
+      "500 V",
+      "1000 V",
+      "2500 V"
+    ],
+    "exp": "Industry baseline for standard LV motors/machines.",
+    "cat": "QUICK",
+    "id": "T02A_366"
+  },
+  {
+    "q": "What is the maximum transient voltage dip allowed?",
+    "a": "20%",
+    "opts": [
+      "5%",
+      "20%",
+      "50%",
+      "10%"
+    ],
+    "exp": "SOLAS permits a temporary dip to 80% (i.e. a 20% dip).",
+    "cat": "QUICK",
+    "id": "T02A_367"
+  },
+  {
+    "q": "How does VCB quench current?",
+    "a": "Vacuum",
+    "opts": [
+      "Air",
+      "Vacuum",
+      "SF6",
+      "Oil"
+    ],
+    "exp": "Vacuum is the quench agent.",
+    "cat": "QUICK",
+    "id": "T02A_368"
+  },
+  {
+    "q": "Which is more conductive?",
+    "a": "Copper busbars",
+    "opts": [
+      "Rubber",
+      "Copper busbars",
+      "Air",
+      "Ceramic"
+    ],
+    "exp": "Copper carries the current.",
+    "cat": "QUICK",
+    "id": "T02A_369"
+  },
+  {
+    "q": "What is the primary function of the IRM?",
+    "a": "Alarm for earth fault",
+    "opts": [
+      "Trip the generator",
+      "Alarm for earth fault",
+      "Monitor voltage",
+      "Check current"
+    ],
+    "exp": "It is a supervisory, not a protection, relay.",
+    "cat": "QUICK",
+    "id": "T02A_370"
+  },
+  {
+    "q": "Can you enter SF6 space before ventilation?",
+    "a": "No, it is toxic",
+    "opts": [
+      "Yes",
+      "No, it is toxic",
+      "Only for a second",
+      "Yes, if wearing goggles"
+    ],
+    "exp": "Toxic products require clearance through air exchange.",
+    "cat": "QUICK",
+    "id": "T02A_371"
+  },
+  {
+    "q": "How many safeties are there?",
+    "a": "14",
+    "opts": [
+      "5",
+      "14",
+      "20",
+      "2"
+    ],
+    "exp": "Standard 14-point safety list.",
+    "cat": "QUICK",
+    "id": "T02A_372"
+  },
+  {
+    "q": "Which is an example of Zone 1?",
+    "a": "Pump rooms",
+    "opts": [
+      "Bridge",
+      "Pump rooms",
+      "Inside cargo tank",
+      "Engine room"
+    ],
+    "exp": "Pump rooms have high fume risk.",
+    "cat": "QUICK",
+    "id": "T02A_373"
+  },
+  {
+    "q": "Why is the shaft earthed?",
+    "a": "To avoid bearing corrosion",
+    "opts": [
+      "To measure speed",
+      "To avoid bearing corrosion",
+      "To boost voltage",
+      "To cool the oil"
+    ],
+    "exp": "Electrolytic pitting protection.",
+    "cat": "QUICK",
+    "id": "T02A_374"
+  },
+  {
+    "q": "What is the IEC for SC?",
+    "a": "80005-1",
+    "opts": [
+      "60092",
+      "80005-1",
+      "60034",
+      "1000"
+    ],
+    "exp": "Shore Connection standard.",
+    "cat": "QUICK",
+    "id": "T02A_375"
+  },
+  {
+    "q": "Does SF6 have a colour?",
+    "a": "No",
+    "opts": [
+      "Yes, blue",
+      "No",
+      "Yes, green",
+      "Yes, orange"
+    ],
+    "exp": "It's an invisible gas.",
+    "cat": "QUICK",
+    "id": "T02A_376"
+  },
+  {
+    "q": "Is the MSB an essential space?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for tanker",
+      "Only if HV"
+    ],
+    "exp": "Core ship safety requirement.",
+    "cat": "QUICK",
+    "id": "T02A_377"
+  },
+  {
+    "q": "Are there fuses in a PT?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for LV",
+      "Only for HV"
+    ],
+    "exp": "PTs are protected by fuses.",
+    "cat": "QUICK",
+    "id": "T02A_378"
+  },
+  {
+    "q": "Are there fuses in a CT?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "CT secondary fuses are dangerous.",
+    "cat": "QUICK",
+    "id": "T02A_379"
+  },
+  {
+    "q": "Is HV dangerous?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only if arcing",
+      "Only in cargo tank"
+    ],
+    "exp": "It requires the strictest safety protocols.",
+    "cat": "QUICK",
+    "id": "T02A_380"
+  },
+  {
+    "q": "What is a major advantage of HV systems?",
+    "a": "Lower current",
+    "opts": [
+      "Higher current",
+      "Lower current",
+      "Simpler protection",
+      "Lower cost"
+    ],
+    "exp": "Low current is the root benefit.",
+    "cat": "QUICK",
+    "id": "T02A_381"
+  },
+  {
+    "q": "How do you test VCB vacuum?",
+    "a": "High voltage test",
+    "opts": [
+      "Megger test",
+      "High voltage test",
+      "Visual test",
+      "Timing test"
+    ],
+    "exp": "Electrical breakdown in the bottle proves the vacuum is gone.",
+    "cat": "QUICK",
+    "id": "T02A_382"
+  },
+  {
+    "q": "What is the minimum IR for 6.6 kV?",
+    "a": "7.6 MΩ",
+    "opts": [
+      "1 MΩ",
+      "7.6 MΩ",
+      "10 MΩ",
+      "0.1 MΩ"
+    ],
+    "exp": "6.6 + 1 = 7.6 MΩ.",
+    "cat": "QUICK",
+    "id": "T02A_383"
+  },
+  {
+    "q": "Are rubber mats required?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for guests",
+      "Only if carpeted"
+    ],
+    "exp": "Mandatory safety floor covering.",
+    "cat": "QUICK",
+    "id": "T02A_384"
+  },
+  {
+    "q": "What creates the magnetic field in an alternator?",
+    "a": "Rotor",
+    "opts": [
+      "Stator",
+      "Rotor",
+      "AVR",
+      "PMG"
+    ],
+    "exp": "DC in the rotor creates the rotating field.",
+    "cat": "QUICK",
+    "id": "T02A_385"
+  },
+  {
+    "q": "Does SF6 absorb electrons?",
+    "a": "Yes (electronegative)",
+    "opts": [
+      "No",
+      "Yes (electronegative)",
+      "It loses them",
+      "It makes heat"
+    ],
+    "exp": "This is why it quenches arcs so well.",
+    "cat": "QUICK",
+    "id": "T02A_386"
+  },
+  {
+    "q": "Can you use 500V megger on electronics?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only for HV",
+      "Only for testing"
+    ],
+    "exp": "Never; it ruins control cards.",
+    "cat": "QUICK",
+    "id": "T02A_387"
+  },
+  {
+    "q": "Is the MSB room a fire hazard zone?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in port",
+      "Only at sea"
+    ],
+    "exp": "Electrical cabinets are a known fire starting point.",
+    "cat": "QUICK",
+    "id": "T02A_388"
+  },
+  {
+    "q": "What happens if you open a CT secondary?",
+    "a": "Lethal voltage",
+    "opts": [
+      "Nothing",
+      "Lethal voltage",
+      "Overcurrent trip",
+      "Undercurrent trip"
+    ],
+    "exp": "Dangerous induced voltage.",
+    "cat": "QUICK",
+    "id": "T02A_389"
+  },
+  {
+    "q": "Does the IRM monitor phase-to-phase?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "It monitors leakage to ground.",
+    "cat": "QUICK",
+    "id": "T02A_390"
+  },
+  {
+    "q": "What colour are Class 1 gloves?",
+    "a": "White",
+    "opts": [
+      "Yellow",
+      "White",
+      "Green",
+      "Orange"
+    ],
+    "exp": "Class 1 gloves are white.",
+    "cat": "QUICK",
+    "id": "T02A_391"
+  },
+  {
+    "q": "Why is the pilot loop important?",
+    "a": "Prevents live plug pulls",
+    "opts": [
+      "Measures voltage",
+      "Prevents live plug pulls",
+      "Increases power",
+      "Saves fuel"
+    ],
+    "exp": "Ensures the connection is physically secure before/during HV flow.",
+    "cat": "QUICK",
+    "id": "T02A_392"
+  },
+  {
+    "q": "What is the return-to-service IR rule?",
+    "a": "200% of minimum",
+    "opts": [
+      "50% of minimum",
+      "200% of minimum",
+      "10% of minimum",
+      "None"
+    ],
+    "exp": "Safety margin required.",
+    "cat": "QUICK",
+    "id": "T02A_393"
+  },
+  {
+    "q": "Is the VCB mechanism lubricant important?",
+    "a": "Yes, timing depends on it",
+    "opts": [
+      "No",
+      "Yes, timing depends on it",
+      "Only for cooling",
+      "Only for visual"
+    ],
+    "exp": "Mechanical timing is critical for breaker safety.",
+    "cat": "QUICK",
+    "id": "T02A_394"
+  },
+  {
+    "q": "Are HV gloves for LV use?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for shore",
+      "Only in cargo tank"
+    ],
+    "exp": "They protect against both voltages effectively.",
+    "cat": "QUICK",
+    "id": "T02A_395"
+  },
+  {
+    "q": "What is the purpose of the Earth busbar?",
+    "a": "Bonding for safety",
+    "opts": [
+      "To ground the signal",
+      "Bonding for safety",
+      "To increase voltage",
+      "To carry power"
+    ],
+    "exp": "Maintains a safe equipotential plane.",
+    "cat": "QUICK",
+    "id": "T02A_396"
+  },
+  {
+    "q": "What does a VCB quench?",
+    "a": "The arc",
+    "opts": [
+      "The current",
+      "The arc",
+      "The voltage",
+      "The gas"
+    ],
+    "exp": "The arc is the hazard to be terminated.",
+    "cat": "QUICK",
+    "id": "T02A_397"
+  },
+  {
+    "q": "What is the limit for LV touch voltage?",
+    "a": "50 V AC",
+    "opts": [
+      "100 V AC",
+      "50 V AC",
+      "440 V AC",
+      "None"
+    ],
+    "exp": "Standard safety limit.",
+    "cat": "QUICK",
+    "id": "T02A_398"
+  },
+  {
+    "q": "Is the system floating if an NER is present?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only when arcing",
+      "Only on weekends"
+    ],
+    "exp": "NER connects it to earth, making it grounded-neutral.",
+    "cat": "QUICK",
+    "id": "T02A_399"
+  },
+  {
+    "q": "Why 5 minutes for discharge?",
+    "a": "Capacitive charge",
+    "opts": [
+      "Inductive charge",
+      "Capacitive charge",
+      "Static charge",
+      "None"
+    ],
+    "exp": "Stored energy in the line needs time to bleed away.",
+    "cat": "QUICK",
+    "id": "T02A_400"
+  },
+  {
+    "q": "Why is the VCB maintenance low?",
+    "a": "Sealed unit",
+    "opts": [
+      "Uses air",
+      "Sealed unit",
+      "No switchgear",
+      "No protection"
+    ],
+    "exp": "Hermetic seal keeps out dirt and prevents internal wear.",
+    "cat": "QUICK",
+    "id": "T02A_401"
+  },
+  {
+    "q": "What is the voltage of HV systems?",
+    "a": "Above 1000 V",
+    "opts": [
+      "Below 1000 V",
+      "Above 1000 V",
+      "Only 6.6 kV",
+      "Only 11 kV"
+    ],
+    "exp": "Official threshold.",
+    "cat": "QUICK",
+    "id": "T02A_402"
+  },
+  {
+    "q": "Is the MSB room a fire risk?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Never",
+      "Depends on season"
+    ],
+    "exp": "Electrical arcs provide high energy ignition sources.",
+    "cat": "QUICK",
+    "id": "T02A_403"
+  },
+  {
+    "q": "What is the function of the CT?",
+    "a": "Step down current for meters",
+    "opts": [
+      "Measure voltage",
+      "Step down current for meters",
+      "Step down voltage",
+      "Step up voltage"
+    ],
+    "exp": "Converts primary Amps to secondary Amps.",
+    "cat": "QUICK",
+    "id": "T02A_404"
+  },
+  {
+    "q": "What is the IRM doing?",
+    "a": "Continuous monitoring",
+    "opts": [
+      "Tripping the system",
+      "Continuous monitoring",
+      "Powering the lights",
+      "Charging batteries"
+    ],
+    "exp": "Always on, always watching.",
+    "cat": "QUICK",
+    "id": "T02A_405"
+  },
+  {
+    "q": "Can you enter SF6 space before ventilation?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Sometimes",
+      "If you hurry"
+    ],
+    "exp": "Ventilation is the first mandatory safety action.",
+    "cat": "QUICK",
+    "id": "T02A_406"
+  },
+  {
+    "q": "How many safeties?",
+    "a": "14",
+    "opts": [
+      "5",
+      "14",
+      "10",
+      "4"
+    ],
+    "exp": "Standard 14 list.",
+    "cat": "QUICK",
+    "id": "T02A_407"
+  },
+  {
+    "q": "Which is Zone 0?",
+    "a": "Cargo tanks",
+    "opts": [
+      "Bridge",
+      "Cargo tanks",
+      "Engine room",
+      "Accommodation"
+    ],
+    "exp": "Where the oil lives.",
+    "cat": "QUICK",
+    "id": "T02A_408"
+  },
+  {
+    "q": "Why is shaft earthing done?",
+    "a": "Avoid electrolytic pitting",
+    "opts": [
+      "Improve speed",
+      "Avoid electrolytic pitting",
+      "Reduce noise",
+      "Measure resistance"
+    ],
+    "exp": "Bearing safety from stray currents.",
+    "cat": "QUICK",
+    "id": "T02A_409"
+  },
+  {
+    "q": "What is IEC 80005-1?",
+    "a": "HV shore connection",
+    "opts": [
+      "Switchgear design",
+      "HV shore connection",
+      "Rubber glove test",
+      "Cable sizing"
+    ],
+    "exp": "Standard for ship-to-shore power.",
+    "cat": "QUICK",
+    "id": "T02A_410"
+  },
+  {
+    "q": "Is SF6 coloured?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only blue",
+      "Only green"
+    ],
+    "exp": "Invisible gas.",
+    "cat": "QUICK",
+    "id": "T02A_411"
+  },
+  {
+    "q": "Is MSB essential space?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Maybe",
+      "Never"
+    ],
+    "exp": "Ship cannot run without power.",
+    "cat": "QUICK",
+    "id": "T02A_412"
+  },
+  {
+    "q": "Why PT has fuse?",
+    "a": "Protects against short-circuited PT",
+    "opts": [
+      "Protects the generator",
+      "Protects against short-circuited PT",
+      "Protects against overvoltage",
+      "None"
+    ],
+    "exp": "Clears a secondary fault.",
+    "cat": "QUICK",
+    "id": "T02A_413"
+  },
+  {
+    "q": "What happens if 500V megger used on HV?",
+    "a": "Insufficient stress",
+    "opts": [
+      "Dangerous",
+      "Insufficient stress",
+      "Overcurrent trip",
+      "Overvoltage trip"
+    ],
+    "exp": "Won't reliably test HV insulation strength.",
+    "cat": "QUICK",
+    "id": "T02A_414"
+  },
+  {
+    "q": "Are mats required?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "Safety requirement.",
+    "cat": "QUICK",
+    "id": "T02A_415"
+  },
+  {
+    "q": "Who makes the magnetic field?",
+    "a": "Rotor",
+    "opts": [
+      "Stator",
+      "Rotor",
+      "Exciter",
+      "AVR"
+    ],
+    "exp": "The rotating field source.",
+    "cat": "QUICK",
+    "id": "T02A_416"
+  },
+  {
+    "q": "Is SF6 electronegative?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "Only with gas"
+    ],
+    "exp": "It attracts electrons, quenching the arc.",
+    "cat": "QUICK",
+    "id": "T02A_417"
+  },
+  {
+    "q": "Can 500V megger break electronics?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "Semiconductor failure is instantaneous.",
+    "cat": "QUICK",
+    "id": "T02A_418"
+  },
+  {
+    "q": "Fire risk in MSB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Never",
+      "Only when open"
+    ],
+    "exp": "Common electrical room danger.",
+    "cat": "QUICK",
+    "id": "T02A_419"
+  },
+  {
+    "q": "What happens on open CT?",
+    "a": "Lethal voltage",
+    "opts": [
+      "Zero amps",
+      "Lethal voltage",
+      "Voltage drop",
+      "Power surge"
+    ],
+    "exp": "Extreme safety hazard.",
+    "cat": "QUICK",
+    "id": "T02A_420"
+  },
+  {
+    "q": "IRM phase monitoring?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "It is a global system leakage monitor.",
+    "cat": "QUICK",
+    "id": "T02A_421"
+  },
+  {
+    "q": "Class 1 glove colour?",
+    "a": "White",
+    "opts": [
+      "White",
+      "Yellow",
+      "Green",
+      "Orange"
+    ],
+    "exp": "Standard class identification.",
+    "cat": "QUICK",
+    "id": "T02A_422"
+  },
+  {
+    "q": "Pilot loop trip?",
+    "a": "Yes, live pull protection",
+    "opts": [
+      "No",
+      "Yes, live pull protection",
+      "Only for shore",
+      "Only for ship"
+    ],
+    "exp": "Safety interlock prevents pulling a loaded plug.",
+    "cat": "QUICK",
+    "id": "T02A_423"
+  },
+  {
+    "q": "Return to service IR?",
+    "a": "200% of minimum",
+    "opts": [
+      "100% of minimum",
+      "200% of minimum",
+      "50%",
+      "None"
+    ],
+    "exp": "The 200% rule applies post-repair.",
+    "cat": "QUICK",
+    "id": "T02A_424"
+  },
+  {
+    "q": "Is lubricant important?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in summer",
+      "Only in winter"
+    ],
+    "exp": "Critical for reliable mechanical operation.",
+    "cat": "QUICK",
+    "id": "T02A_425"
+  },
+  {
+    "q": "Are HV gloves for LV use?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in port",
+      "Only on tanker"
+    ],
+    "exp": "They insulate perfectly well at LV.",
+    "cat": "QUICK",
+    "id": "T02A_426"
+  },
+  {
+    "q": "Earth bus purpose?",
+    "a": "Bonding",
+    "opts": [
+      "Cooling",
+      "Bonding",
+      "Switching",
+      "None"
+    ],
+    "exp": "Safety bonding.",
+    "cat": "QUICK",
+    "id": "T02A_427"
+  },
+  {
+    "q": "VCB quench?",
+    "a": "Vacuum",
+    "opts": [
+      "Air",
+      "Vacuum",
+      "Oil",
+      "None"
+    ],
+    "exp": "Vacuum is the key.",
+    "cat": "QUICK",
+    "id": "T02A_428"
+  },
+  {
+    "q": "HV limit?",
+    "a": "1000V",
+    "opts": [
+      "440V",
+      "1000V",
+      "6600V",
+      "None"
+    ],
+    "exp": "The definition threshold.",
+    "cat": "QUICK",
+    "id": "T02A_429"
+  },
+  {
+    "q": "Float?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only tanker",
+      "Only bridge"
+    ],
+    "exp": "Floating neutral is for LV.",
+    "cat": "QUICK",
+    "id": "T02A_430"
+  },
+  {
+    "q": "5 min discharge?",
+    "a": "Yes, HV cable",
+    "opts": [
+      "No",
+      "Yes, HV cable",
+      "Only LV",
+      "Only battery"
+    ],
+    "exp": "Discharge time constant.",
+    "cat": "QUICK",
+    "id": "T02A_431"
+  },
+  {
+    "q": "Low maintenance VCB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "Depends"
+    ],
+    "exp": "Solid state/sealed simplicity.",
+    "cat": "QUICK",
+    "id": "T02A_432"
+  },
+  {
+    "q": "HV justification?",
+    "a": ">3 MW",
+    "opts": [
+      "1 MW",
+      ">3 MW",
+      "No limit",
+      "None"
+    ],
+    "exp": "Economic threshold.",
+    "cat": "QUICK",
+    "id": "T02A_433"
+  },
+  {
+    "q": "Fire risk in MSB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "Every MSB is a risk.",
+    "cat": "QUICK",
+    "id": "T02A_434"
+  },
+  {
+    "q": "CT open circuit?",
+    "a": "Voltage spike",
+    "opts": [
+      "Current drop",
+      "Voltage spike",
+      "Nothing",
+      "Power drop"
+    ],
+    "exp": "Lethal induced voltage.",
+    "cat": "QUICK",
+    "id": "T02A_435"
+  },
+  {
+    "q": "IRM continuous?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for shore",
+      "Only for tanker"
+    ],
+    "exp": "Mandatory surveillance.",
+    "cat": "QUICK",
+    "id": "T02A_436"
+  },
+  {
+    "q": "SF6 ventilate?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Depends",
+      "Sometimes"
+    ],
+    "exp": "Before entry is mandatory.",
+    "cat": "QUICK",
+    "id": "T02A_437"
+  },
+  {
+    "q": "14 safeties?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "None"
+    ],
+    "exp": "Correct number.",
+    "cat": "QUICK",
+    "id": "T02A_438"
+  },
+  {
+    "q": "Zone 0?",
+    "a": "Cargo tanks",
+    "opts": [
+      "Bridge",
+      "Cargo tanks",
+      "Engine room",
+      "Accommodation"
+    ],
+    "exp": "Most dangerous.",
+    "cat": "QUICK",
+    "id": "T02A_439"
+  },
+  {
+    "q": "Shaft earthing?",
+    "a": "Bearing protection",
+    "opts": [
+      "Speed control",
+      "Bearing protection",
+      "Voltage boost",
+      "Frequency"
+    ],
+    "exp": "Prevents pitting.",
+    "cat": "QUICK",
+    "id": "T02A_440"
+  },
+  {
+    "q": "IEC 80005-1?",
+    "a": "HVSC",
+    "opts": [
+      "HV Switchgear",
+      "HVSC",
+      "Gloves",
+      "None"
+    ],
+    "exp": "Shore connection standard.",
+    "cat": "QUICK",
+    "id": "T02A_441"
+  },
+  {
+    "q": "SF6 colour?",
+    "a": "None",
+    "opts": [
+      "Yellow",
+      "None",
+      "Green",
+      "Orange"
+    ],
+    "exp": "Invisible.",
+    "cat": "QUICK",
+    "id": "T02A_442"
+  },
+  {
+    "q": "Essential?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in port",
+      "Only at sea"
+    ],
+    "exp": "Critical.",
+    "cat": "QUICK",
+    "id": "T02A_443"
+  },
+  {
+    "q": "PT has fuse?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "Standard protection.",
+    "cat": "QUICK",
+    "id": "T02A_444"
+  },
+  {
+    "q": "Megger voltage?",
+    "a": "2500 V for HV",
+    "opts": [
+      "50 V",
+      "2500 V for HV",
+      "500 V",
+      "10 V"
+    ],
+    "exp": "Correct stress level.",
+    "cat": "QUICK",
+    "id": "T02A_445"
+  },
+  {
+    "q": "Rubber mats?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Maybe",
+      "Never"
+    ],
+    "exp": "Safety requirement.",
+    "cat": "QUICK",
+    "id": "T02A_446"
+  },
+  {
+    "q": "Magnetic field source?",
+    "a": "Rotor",
+    "opts": [
+      "Stator",
+      "Rotor",
+      "AVR",
+      "PMG"
+    ],
+    "exp": "Rotating field.",
+    "cat": "QUICK",
+    "id": "T02A_447"
+  },
+  {
+    "q": "SF6 absorption?",
+    "a": "Absorbs electrons",
+    "opts": [
+      "Repels electrons",
+      "Absorbs electrons",
+      "Makes them",
+      "None"
+    ],
+    "exp": "Electronegative quenching.",
+    "cat": "QUICK",
+    "id": "T02A_448"
+  },
+  {
+    "q": "Electronics megger?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "500V destroys chips.",
+    "cat": "QUICK",
+    "id": "T02A_449"
+  },
+  {
+    "q": "MSB essential?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Depends",
+      "Sometimes"
+    ],
+    "exp": "Core ship safety.",
+    "cat": "QUICK",
+    "id": "T02A_450"
+  },
+  {
+    "q": "What protects the CT?",
+    "a": "Shorting terminal",
+    "opts": [
+      "Fuse",
+      "Shorting terminal",
+      "Nothing",
+      "AVR"
+    ],
+    "exp": "Prevents open-circuit spike.",
+    "cat": "QUICK",
+    "id": "T02A_451"
+  },
+  {
+    "q": "Is MSB room a fire zone?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Never",
+      "Only in tanker"
+    ],
+    "exp": "Electrical fire risk.",
+    "cat": "QUICK",
+    "id": "T02A_452"
+  },
+  {
+    "q": "Does IRM have location?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "Requires manual isolation.",
+    "cat": "QUICK",
+    "id": "T02A_453"
+  },
+  {
+    "q": "Glove Class 1?",
+    "a": "White",
+    "opts": [
+      "Yellow",
+      "White",
+      "Green",
+      "Orange"
+    ],
+    "exp": "Correct class colour.",
+    "cat": "QUICK",
+    "id": "T02A_454"
+  },
+  {
+    "q": "Pilot loop function?",
+    "a": "Connection check",
+    "opts": [
+      "Voltage check",
+      "Connection check",
+      "Power boost",
+      "None"
+    ],
+    "exp": "Verifies physical connectivity.",
+    "cat": "QUICK",
+    "id": "T02A_455"
+  },
+  {
+    "q": "200% IR rule?",
+    "a": "Return-to-service",
+    "opts": [
+      "Current",
+      "Return-to-service",
+      "Voltage",
+      "None"
+    ],
+    "exp": "Post-repair safety buffer.",
+    "cat": "QUICK",
+    "id": "T02A_456"
+  },
+  {
+    "q": "Lubrication VCB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Depends",
+      "Sometimes"
+    ],
+    "exp": "Mechanical reliability.",
+    "cat": "QUICK",
+    "id": "T02A_457"
+  },
+  {
+    "q": "Are HV gloves for LV?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only in port",
+      "Only at sea"
+    ],
+    "exp": "They cover both.",
+    "cat": "QUICK",
+    "id": "T02A_458"
+  },
+  {
+    "q": "Earth bus?",
+    "a": "Bonding",
+    "opts": [
+      "Cooling",
+      "Bonding",
+      "Switching",
+      "Powering"
+    ],
+    "exp": "Hull connection.",
+    "cat": "QUICK",
+    "id": "T02A_459"
+  },
+  {
+    "q": "VCB arc?",
+    "a": "Vacuum",
+    "opts": [
+      "Air",
+      "Vacuum",
+      "SF6",
+      "None"
+    ],
+    "exp": "Vacuum bottle.",
+    "cat": "QUICK",
+    "id": "T02A_460"
+  },
+  {
+    "q": "HV 1000V?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only 6600",
+      "None"
+    ],
+    "exp": "Threshold value.",
+    "cat": "QUICK",
+    "id": "T02A_461"
+  },
+  {
+    "q": "Floating?",
+    "a": "No",
+    "opts": [
+      "Yes",
+      "No",
+      "Only HV",
+      "Only LV"
+    ],
+    "exp": "Floating neutral is LV concept.",
+    "cat": "QUICK",
+    "id": "T02A_462"
+  },
+  {
+    "q": "5 min discharge?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only LV",
+      "Only Battery"
+    ],
+    "exp": "Capacitive discharge time.",
+    "cat": "QUICK",
+    "id": "T02A_463"
+  },
+  {
+    "q": "Low maintenance VCB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "Depends"
+    ],
+    "exp": "Simple mechanical design.",
+    "cat": "QUICK",
+    "id": "T02A_464"
+  },
+  {
+    "q": "HV justification?",
+    "a": ">3 MW",
+    "opts": [
+      "1 MW",
+      ">3 MW",
+      "No limit",
+      "None"
+    ],
+    "exp": "Threshold for HV efficiency.",
+    "cat": "QUICK",
+    "id": "T02A_465"
+  },
+  {
+    "q": "Fire MSB?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Never",
+      "Only LV"
+    ],
+    "exp": "Electrical fire risk.",
+    "cat": "QUICK",
+    "id": "T02A_466"
+  },
+  {
+    "q": "Open CT?",
+    "a": "Lethal voltage",
+    "opts": [
+      "Zero",
+      "Lethal voltage",
+      "Trip",
+      "Nothing"
+    ],
+    "exp": "Destructive secondary EMF.",
+    "cat": "QUICK",
+    "id": "T02A_467"
+  },
+  {
+    "q": "IRM continuous?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "Only port"
+    ],
+    "exp": "Safety surveillance.",
+    "cat": "QUICK",
+    "id": "T02A_468"
+  },
+  {
+    "q": "SF6 ventilation?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Depends",
+      "Sometimes"
+    ],
+    "exp": "Toxic gas risk.",
+    "cat": "QUICK",
+    "id": "T02A_469"
+  },
+  {
+    "q": "14 safeties?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Maybe",
+      "Never"
+    ],
+    "exp": "Standardized list.",
+    "cat": "QUICK",
+    "id": "T02A_470"
+  },
+  {
+    "q": "Zone 0?",
+    "a": "Cargo tanks",
+    "opts": [
+      "Engine room",
+      "Cargo tanks",
+      "Bridge",
+      "Accommodation"
+    ],
+    "exp": "Highest zone risk.",
+    "cat": "QUICK",
+    "id": "T02A_471"
+  },
+  {
+    "q": "Shaft earthing?",
+    "a": "Bearing protection",
+    "opts": [
+      "None",
+      "Bearing protection",
+      "Voltage boost",
+      "None"
+    ],
+    "exp": "Corrosion prevention.",
+    "cat": "QUICK",
+    "id": "T02A_472"
+  },
+  {
+    "q": "IEC 80005-1?",
+    "a": "HVSC",
+    "opts": [
+      "HV Switchgear",
+      "HVSC",
+      "Gloves",
+      "None"
+    ],
+    "exp": "Shore connection standard.",
+    "cat": "QUICK",
+    "id": "T02A_473"
+  },
+  {
+    "q": "SF6 colour?",
+    "a": "None",
+    "opts": [
+      "Yes",
+      "None",
+      "Only green",
+      "Only orange"
+    ],
+    "exp": "Invisible gas.",
+    "cat": "QUICK",
+    "id": "T02A_474"
+  },
+  {
+    "q": "Essential?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Sometimes",
+      "Never"
+    ],
+    "exp": "Must stay powered.",
+    "cat": "QUICK",
+    "id": "T02A_475"
+  },
+  {
+    "q": "PT has fuse?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Only for HV",
+      "Only for LV"
+    ],
+    "exp": "Protective fuse.",
+    "cat": "QUICK",
+    "id": "T02A_476"
+  },
+  {
+    "q": "Megger voltage?",
+    "a": "2500 V for HV",
+    "opts": [
+      "500 V",
+      "2500 V for HV",
+      "100 V",
+      "10 V"
+    ],
+    "exp": "Correct test stress.",
+    "cat": "QUICK",
+    "id": "T02A_477"
+  },
+  {
+    "q": "Rubber mats?",
+    "a": "Yes",
+    "opts": [
+      "No",
+      "Yes",
+      "Maybe",
+      "Never"
+    ],
+    "exp": "Required safety equipment.",
+    "cat": "QUICK",
+    "id": "T02A_478"
+  },
+  {
+    "q": "Magnetic field?",
+    "a": "Rotor",
+    "opts": [
+      "Stator",
+      "Rotor",
+      "AVR",
+      "PMG"
+    ],
+    "exp": "Rotating field source.",
+    "cat": "QUICK",
+    "id": "T02A_479"
+  },
+  {
+    "q": "Final HV fact?",
+    "a": "Standardization simplifies design",
+    "opts": [
+      "Standardization complicates design",
+      "Standardization simplifies design",
+      "No standard",
+      "None"
+    ],
+    "exp": "Standardisation is the goal of IEC 60092/80005.",
+    "cat": "QUICK",
+    "id": "T02A_480"
   }
+
 ]);

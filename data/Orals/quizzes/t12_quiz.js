@@ -1,8 +1,13 @@
 window.loadQuizzes("T12_Cables", [
   {
     "q": "Correct sequence of layers in a shipboard LV armoured cable (innermost to outer)?",
-    "a": "Conductor \u2192 Insulation \u2192 Bedding \u2192 Armour \u2192 Outer Sheath",
-    "opts": ["Conductor \u2192 Armour \u2192 Bedding \u2192 Insulation \u2192 Outer Sheath", "Conductor \u2192 Insulation \u2192 Metallic Screen \u2192 Bedding \u2192 Outer Sheath", "Conductor \u2192 Insulation \u2192 Bedding \u2192 Armour \u2192 Outer Sheath", "Conductor \u2192 Bedding \u2192 Insulation \u2192 Armour \u2192 Outer Sheath"],
+    "a": "Conductor → Insulation → Bedding → Armour → Outer Sheath",
+    "opts": [
+      "Conductor → Armour → Bedding → Insulation → Outer Sheath",
+      "Conductor → Insulation → Metallic Screen → Bedding → Outer Sheath",
+      "Conductor → Insulation → Bedding → Armour → Outer Sheath",
+      "Conductor → Bedding → Insulation → Armour → Outer Sheath"
+    ],
     "exp": "LV marine cable layers: Conductor (current path), Insulation (XLPE/PVC electrical isolation), Bedding (cushions armour from insulation), Armour (SWA/STA mechanical protection + earth fault return), Outer Sheath (LSZH/PVC environmental protection).",
     "cat": "CABLES",
     "id": "T12C_001"
@@ -10,7 +15,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Which additional layers exist in an HV cable but not in a standard LV cable?",
     "a": "Semi-conductive conductor screen and insulation screen",
-    "opts": ["Steel wire armour (SWA)", "Low Smoke Zero Halogen (LSZH) outer sheath", "Semi-conductive conductor screen and insulation screen", "Mica tape fire barrier"],
+    "opts": [
+      "Steel wire armour (SWA)",
+      "Low Smoke Zero Halogen (LSZH) outer sheath",
+      "Semi-conductive conductor screen and insulation screen",
+      "Mica tape fire barrier"
+    ],
     "exp": "HV cables (6.6kV+) require: conductor screen (eliminates stress concentrations at conductor surface) and insulation screen (ensures uniform electric field, prevents partial discharge). LV cables operate at too low a voltage to need stress grading.",
     "cat": "CABLES",
     "id": "T12C_002"
@@ -18,7 +28,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the purpose of the armour vs the outer sheath in a marine cable?",
     "a": "Armour = mechanical protection + earth fault return path; Outer sheath = environmental and chemical protection",
-    "opts": ["Armour prevents EMI; sheath handles physical crushing", "Armour determines fire resistance; sheath provides voltage insulation", "Armour = mechanical protection + earth fault return path; Outer sheath = environmental and chemical protection", "Armour used in HV only; sheath used in LV only"],
+    "opts": [
+      "Armour prevents EMI; sheath handles physical crushing",
+      "Armour determines fire resistance; sheath provides voltage insulation",
+      "Armour = mechanical protection + earth fault return path; Outer sheath = environmental and chemical protection",
+      "Armour used in HV only; sheath used in LV only"
+    ],
     "exp": "SWA/STA armour protects against physical damage (crushing, impact, tension) and serves as earth fault return path for protection. Outer sheath (LSZH/PVC) protects against moisture, oil, UV, chemicals and determines fire performance. Different functions.",
     "cat": "CABLES",
     "id": "T12C_003"
@@ -26,23 +41,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What distinguishes IEC 60331 fire-resistant cable from IEC 60332 flame-retardant cable?",
     "a": "IEC 60331 maintains circuit integrity during fire; IEC 60332 self-extinguishes to prevent flame spread but circuit may fail",
-    "opts": ["60331 never melts; 60332 melts only above 1000\u00b0C", "60332 for essential services (steering, fire pump); 60331 for accommodation", "IEC 60331 maintains circuit integrity during fire; IEC 60332 self-extinguishes to prevent flame spread but circuit may fail", "60331 emits zero toxic smoke; 60332 emits HCl gas"],
+    "opts": [
+      "60331 never melts; 60332 melts only above 1000°C",
+      "60332 for essential services (steering, fire pump); 60331 for accommodation",
+      "IEC 60331 maintains circuit integrity during fire; IEC 60332 self-extinguishes to prevent flame spread but circuit may fail",
+      "60331 emits zero toxic smoke; 60332 emits HCl gas"
+    ],
     "exp": "IEC 60331 (fire resistant): circuit continues operating during fire - uses mica tape layer - for fire pumps, steering gear, emergency lighting. IEC 60332 (flame retardant): cable stops burning when ignition removed - prevents fire spread - but circuit fails in a fire.",
     "cat": "INSULATION",
     "id": "T12C_004"
   },
   {
     "q": "IEC 60331 fire-resistant cables must maintain circuit integrity for how long at what temperature?",
-    "a": "Minimum 3 hours at 750\u00b0C",
-    "opts": ["1 hour at 1000\u00b0C", "3 hours at 750\u00b0C", "30 minutes at 500\u00b0C", "12 hours at 200\u00b0C"],
-    "exp": "IEC 60331: minimum 3 hours at 750\u00b0C. The mica tape layer maintains insulation integrity even when the outer insulation burns away. Essential for fire pumps, steering gear - must operate during a fire for sufficient time to fight/escape.",
+    "a": "Minimum 3 hours at 750°C",
+    "opts": [
+      "1 hour at 1000°C",
+      "3 hours at 750°C",
+      "30 minutes at 500°C",
+      "12 hours at 200°C"
+    ],
+    "exp": "IEC 60331: minimum 3 hours at 750°C. The mica tape layer maintains insulation integrity even when the outer insulation burns away. Essential for fire pumps, steering gear - must operate during a fire for sufficient time to fight/escape.",
     "cat": "CABLES",
     "id": "T12C_005"
   },
   {
     "q": "Which IEC standard applies to shipboard halogen-free flame-retardant power cables (e.g. alternator to MSB cable)?",
     "a": "IEC 60092-353",
-    "opts": ["IEC 60092-353", "IEC 60331-1", "IEC 60079-14", "IEC 61363-1"],
+    "opts": [
+      "IEC 60092-353",
+      "IEC 60331-1",
+      "IEC 60079-14",
+      "IEC 61363-1"
+    ],
     "exp": "IEC 60092-353 = shipboard power cables standard. Specifies halogen-free, flame-retardant requirements for marine environments. IEC 60331 = fire resistance. IEC 60079 = hazardous area. IEC 61363 = short circuit calculations.",
     "cat": "CABLES",
     "id": "T12C_006"
@@ -50,39 +80,64 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why must an insulation resistance tester (Megger) use DC not AC?",
     "a": "AC causes capacitive charging currents making insulation appear worse than it is; DC measures only true resistive leakage",
-    "opts": ["AC generates heat in cable risking thermal breakdown during test", "AC creates magnetic interference disrupting the moving-coil galvanometer", "DC penetrates armour; AC is reflected back by steel wire armour", "AC causes capacitive charging currents making insulation appear worse than it is; DC measures only true resistive leakage"],
-    "exp": "Cables and windings act as capacitors. AC would cause continuous capacitive charge/discharge currents combining with leakage \u2192 artificially low IR reading. DC: after initial capacitive charge settles, only resistive leakage current flows \u2192 true insulation resistance reading.",
+    "opts": [
+      "AC generates heat in cable risking thermal breakdown during test",
+      "AC creates magnetic interference disrupting the moving-coil galvanometer",
+      "DC penetrates armour; AC is reflected back by steel wire armour",
+      "AC causes capacitive charging currents making insulation appear worse than it is; DC measures only true resistive leakage"
+    ],
+    "exp": "Cables and windings act as capacitors. AC would cause continuous capacitive charge/discharge currents combining with leakage → artificially low IR reading. DC: after initial capacitive charge settles, only resistive leakage current flows → true insulation resistance reading.",
     "cat": "TESTING",
     "id": "T12C_007"
   },
   {
     "q": "Megger voltage for testing a standard 440V shipboard motor?",
     "a": "500V DC",
-    "opts": ["500V DC", "1000V AC", "250V DC", "2500V DC"],
+    "opts": [
+      "500V DC",
+      "1000V AC",
+      "250V DC",
+      "2500V DC"
+    ],
     "exp": "For LV equipment up to 1000V (like 440V motors), 500V DC megger is standard. 1000V DC for LV alternators/transformers. 2500-5000V DC for HV cables and equipment. Higher megger voltage than necessary risks damaging LV insulation.",
     "cat": "TESTING",
     "id": "T12C_008"
   },
   {
     "q": "Minimum acceptable insulation resistance (IR) for a 440V machine?",
-    "a": "1 M\u03a9 - below this do NOT energise",
-    "opts": ["100 \u03a9", "1 M\u03a9 - below this do NOT energise", "5 M\u03a9", "0.1 M\u03a9"],
-    "exp": "Minimum IR = rated voltage (kV) + 1 M\u03a9. For 440V (0.44kV) \u2248 1 M\u03a9 absolute minimum. New equipment typically >100 M\u03a9. Below 1 M\u03a9: dangerous insulation breakdown, do not energise. Below 0.5 M\u03a9: ground fault risk.",
+    "a": "1 MΩ - below this do NOT energise",
+    "opts": [
+      "100 Ω",
+      "1 MΩ - below this do NOT energise",
+      "5 MΩ",
+      "0.1 MΩ"
+    ],
+    "exp": "Minimum IR = rated voltage (kV) + 1 MΩ. For 440V (0.44kV) ≈ 1 MΩ absolute minimum. New equipment typically >100 MΩ. Below 1 MΩ: dangerous insulation breakdown, do not energise. Below 0.5 MΩ: ground fault risk.",
     "cat": "INSULATION",
     "id": "T12C_009"
   },
   {
     "q": "How is Polarisation Index (PI) calculated?",
     "a": "PI = IR(10 minutes) / IR(1 minute) using same DC test voltage",
-    "opts": ["PI = IR(1 minute) / IR(10 minutes)", "PI = Applied voltage / leakage current at 10 minutes", "PI = average IR over 10-minute period", "PI = IR(10 minutes) / IR(1 minute) using same DC test voltage"],
-    "exp": "PI = 10-minute reading divided by 1-minute reading. Good dry insulation: IR continues to rise over 10 minutes (dielectric absorption) \u2192 PI > 2. Wet/contaminated: steady leakage dominates \u2192 IR stays flat \u2192 PI \u2248 1 or less.",
+    "opts": [
+      "PI = IR(1 minute) / IR(10 minutes)",
+      "PI = Applied voltage / leakage current at 10 minutes",
+      "PI = average IR over 10-minute period",
+      "PI = IR(10 minutes) / IR(1 minute) using same DC test voltage"
+    ],
+    "exp": "PI = 10-minute reading divided by 1-minute reading. Good dry insulation: IR continues to rise over 10 minutes (dielectric absorption) → PI > 2. Wet/contaminated: steady leakage dominates → IR stays flat → PI ≈ 1 or less.",
     "cat": "TESTING",
     "id": "T12C_010"
   },
   {
     "q": "PI value indicating insulation is dangerously wet/contaminated - must NOT be energised?",
     "a": "PI < 1.0",
-    "opts": ["PI > 4.0", "PI between 1.5 and 2.0", "PI > 2.0", "PI < 1.0"],
+    "opts": [
+      "PI > 4.0",
+      "PI between 1.5 and 2.0",
+      "PI > 2.0",
+      "PI < 1.0"
+    ],
     "exp": "PI < 1.0 = conductive moisture path exists - leakage current dominates over dielectric absorption - insulation too degraded to energise safely. PI 1.0-1.5 = poor, dry out first. PI 1.5-2.0 = marginal, monitor. PI > 2.0 = good, safe to energise.",
     "cat": "TESTING",
     "id": "T12C_011"
@@ -90,47 +145,77 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is the PI test reading taken at 10 minutes instead of shorter duration?",
     "a": "Allows dielectric absorption current to fully decay - leaving only true resistive leakage current",
-    "opts": ["Gives Megger time to fully charge its internal battery", "Allows capacitive charging current to build to maximum", "Gives insulation material time to cool before final reading", "Allows dielectric absorption current to fully decay - leaving only true resistive leakage current"],
+    "opts": [
+      "Gives Megger time to fully charge its internal battery",
+      "Allows capacitive charging current to build to maximum",
+      "Gives insulation material time to cool before final reading",
+      "Allows dielectric absorption current to fully decay - leaving only true resistive leakage current"
+    ],
     "exp": "When DC applied, dielectric absorption current (molecules aligning to electric field) decays slowly over several minutes. At 10 minutes it has largely decayed - the reading reflects steady-state true leakage resistance. 1-minute reading still has absorption component.",
     "cat": "TESTING",
     "id": "T12C_012"
   },
   {
     "q": "Maximum continuous operating temperature for Class F insulation?",
-    "a": "155\u00b0C",
-    "opts": ["105\u00b0C (Class A)", "130\u00b0C (Class B)", "155\u00b0C", "180\u00b0C (Class H)"],
-    "exp": "Insulation thermal classes: A=105\u00b0C, B=130\u00b0C, F=155\u00b0C, H=180\u00b0C. Class F is standard for marine alternators and modern motors. Every 10\u00b0C above rated class temperature halves insulation service life (Arrhenius rule).",
+    "a": "155°C",
+    "opts": [
+      "105°C (Class A)",
+      "130°C (Class B)",
+      "155°C",
+      "180°C (Class H)"
+    ],
+    "exp": "Insulation thermal classes: A=105°C, B=130°C, F=155°C, H=180°C. Class F is standard for marine alternators and modern motors. Every 10°C above rated class temperature halves insulation service life (Arrhenius rule).",
     "cat": "INSULATION",
     "id": "T12C_013"
   },
   {
-    "q": "Which motor is typically fitted with Class H insulation (180\u00b0C) and why?",
+    "q": "Which motor is typically fitted with Class H insulation (180°C) and why?",
     "a": "Steering gear motor - frequent heavy loads and overloads from rudder sea pressure forces",
-    "opts": ["Main seawater cooling pump - runs continuously in hot engine room", "Fresh water generator pump - operates at elevated ambient temperatures", "Steering gear motor - frequent heavy loads and overloads from rudder sea pressure forces", "Engine room ventilation fan - exposed to high exhaust temperatures"],
-    "exp": "Steering gear experiences frequent start/stop cycles, severe mechanical overloads from sea forces on rudder, and continuous service. This severe duty causes greatest thermal stress - Class H (180\u00b0C) is required to handle peak winding temperatures during overloads.",
+    "opts": [
+      "Main seawater cooling pump - runs continuously in hot engine room",
+      "Fresh water generator pump - operates at elevated ambient temperatures",
+      "Steering gear motor - frequent heavy loads and overloads from rudder sea pressure forces",
+      "Engine room ventilation fan - exposed to high exhaust temperatures"
+    ],
+    "exp": "Steering gear experiences frequent start/stop cycles, severe mechanical overloads from sea forces on rudder, and continuous service. This severe duty causes greatest thermal stress - Class H (180°C) is required to handle peak winding temperatures during overloads.",
     "cat": "INSULATION",
     "id": "T12C_014"
   },
   {
-    "q": "Arrhenius rule: what happens to insulation life operating 10\u00b0C above rated class temperature?",
+    "q": "Arrhenius rule: what happens to insulation life operating 10°C above rated class temperature?",
     "a": "Insulation service life is halved",
-    "opts": ["Life reduced by 10%", "Motor immediately short-circuits", "Life is halved", "Insulation melts requiring complete rewind"],
-    "exp": "The 10\u00b0C rule (based on Arrhenius thermal aging equation): every 10\u00b0C above rated insulation class temperature \u2192 insulation chemical aging rate doubles \u2192 service life halved. 20\u00b0C over = 1/4 life. 30\u00b0C over = 1/8 life. Critical for long-term reliability.",
+    "opts": [
+      "Life reduced by 10%",
+      "Motor immediately short-circuits",
+      "Life is halved",
+      "Insulation melts requiring complete rewind"
+    ],
+    "exp": "The 10°C rule (based on Arrhenius thermal aging equation): every 10°C above rated insulation class temperature → insulation chemical aging rate doubles → service life halved. 20°C over = 1/4 life. 30°C over = 1/8 life. Critical for long-term reliability.",
     "cat": "INSULATION",
     "id": "T12C_015"
   },
   {
     "q": "When ordering a replacement power cable, how is conductor size specified?",
-    "a": "Cross-sectional area in mm\u00b2 (square millimetres)",
-    "opts": ["AWG (American Wire Gauge)", "Volts per millimetre", "Number of strands", "Cross-sectional area in mm\u00b2 (square millimetres)"],
-    "exp": "IEC standard for marine cables uses conductor cross-section in mm\u00b2. Common sizes: 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120 mm\u00b2. AWG is not used in IEC/marine standards. Must also specify stranding class (Class 2 = standard, Class 5 = flexible).",
+    "a": "Cross-sectional area in mm² (square millimetres)",
+    "opts": [
+      "AWG (American Wire Gauge)",
+      "Volts per millimetre",
+      "Number of strands",
+      "Cross-sectional area in mm² (square millimetres)"
+    ],
+    "exp": "IEC standard for marine cables uses conductor cross-section in mm². Common sizes: 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120 mm². AWG is not used in IEC/marine standards. Must also specify stranding class (Class 2 = standard, Class 5 = flexible).",
     "cat": "CABLES",
     "id": "T12C_016"
   },
   {
     "q": "Primary operational advantage of insulated neutral (IT) 440V distribution on ships?",
     "a": "System continues operating without blackout when first earth fault occurs - no breaker trips",
-    "opts": ["Automatically trips faulty circuit immediately preventing MSB damage", "Completely prevents all electric shock hazards under any conditions", "Uses hull as return path saving cable weight", "System continues operating without blackout when first earth fault occurs - no breaker trips"],
+    "opts": [
+      "Automatically trips faulty circuit immediately preventing MSB damage",
+      "Completely prevents all electric shock hazards under any conditions",
+      "Uses hull as return path saving cable weight",
+      "System continues operating without blackout when first earth fault occurs - no breaker trips"
+    ],
     "exp": "IT (insulated neutral) system: neutral not connected to hull. First earth fault does NOT complete a circuit - no fault current flows - no trip. System continues operating with alarm. ETO has time to safely locate and fix fault at sea without blackout.",
     "cat": "SYSTEMS",
     "id": "T12C_017"
@@ -138,7 +223,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Major risk if low insulation alarm on insulated neutral system is ignored?",
     "a": "Second earth fault on different phase creates phase-to-phase short circuit through hull - partial blackout",
-    "opts": ["ICCP system automatically shuts down", "Healthy phase voltage drops to zero", "Main generator trips on reverse power - total blackout", "Second earth fault on different phase creates phase-to-phase short circuit through hull - partial blackout"],
+    "opts": [
+      "ICCP system automatically shuts down",
+      "Healthy phase voltage drops to zero",
+      "Main generator trips on reverse power - total blackout",
+      "Second earth fault on different phase creates phase-to-phase short circuit through hull - partial blackout"
+    ],
     "exp": "IT system: first fault = alarm only. If ignored and second fault develops on a different phase, current flows: phase A through hull to phase B = direct phase-to-phase fault. Massive fault current trips breakers causing partial blackout. Must investigate first fault immediately.",
     "cat": "SYSTEMS",
     "id": "T12C_018"
@@ -146,7 +236,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How is a power cable safely routed through an A-class fire/watertight bulkhead?",
     "a": "Multi-Cable Transit (MCT) system with compressed intumescent rubber sealing modules",
-    "opts": ["Tight drill hole sealed with marine-grade silicone", "PVC conduit filled with expanding polyurethane foam", "Stripped cable with bare insulation pressed through steel", "Multi-Cable Transit (MCT) system with compressed intumescent rubber sealing modules"],
+    "opts": [
+      "Tight drill hole sealed with marine-grade silicone",
+      "PVC conduit filled with expanding polyurethane foam",
+      "Stripped cable with bare insulation pressed through steel",
+      "Multi-Cable Transit (MCT) system with compressed intumescent rubber sealing modules"
+    ],
     "exp": "SOLAS requires proper cable transits for fire and watertight integrity. MCT (e.g. Roxtec): steel frame welded to bulkhead, cables pass through, rubber modules compressed around each cable. For A-class fire boundaries: intumescent rubber expands in fire maintaining fire rating.",
     "cat": "CABLES",
     "id": "T12C_019"
@@ -154,7 +249,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What IEC standard governs cables in hazardous areas (explosion-protected)?",
     "a": "IEC 60079-14 (installation of electrical equipment in explosive atmospheres)",
-    "opts": ["IEC 60092-353", "IEC 60331", "IEC 60079-14 (installation of electrical equipment in explosive atmospheres)", "IEC 60228"],
+    "opts": [
+      "IEC 60092-353",
+      "IEC 60331",
+      "IEC 60079-14 (installation of electrical equipment in explosive atmospheres)",
+      "IEC 60228"
+    ],
     "exp": "IEC 60079-14 covers electrical installations in hazardous areas (Zone 0/1/2). Cables in these areas must have appropriate protection methods - typically glands and wiring suited to Ex-e or Ex-d requirements. Different from general marine cable standard (60092-353).",
     "cat": "CABLES",
     "id": "T12C_020"
@@ -162,7 +262,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why disconnect the AVR before performing an IR test on the alternator stator?",
     "a": "Megger voltage (500-1000V DC) permanently destroys AVR semiconductor components (thyristors, transistors, ICs)",
-    "opts": ["AVR creates interference signals that give false IR readings", "Megger could back-energise the alternator through the AVR circuit", "Disconnecting AVR speeds up the test by reducing circuit complexity", "Megger voltage (500-1000V DC) permanently destroys AVR semiconductor components (thyristors, transistors, ICs)"],
+    "opts": [
+      "AVR creates interference signals that give false IR readings",
+      "Megger could back-energise the alternator through the AVR circuit",
+      "Disconnecting AVR speeds up the test by reducing circuit complexity",
+      "Megger voltage (500-1000V DC) permanently destroys AVR semiconductor components (thyristors, transistors, ICs)"
+    ],
     "exp": "AVR contains low-voltage semiconductors (thyristors at 12-48V, transistors, ICs). Applying 500-1000V DC megger voltage instantly and permanently destroys these junctions. Also disconnect rotating diodes. Always discharge winding to earth after test (>30 seconds).",
     "cat": "TESTING",
     "id": "T12C_021"
@@ -170,7 +275,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is an 'Insulated Neutral' (IT) system the standard choice for 440V low-voltage power distribution on ships?",
     "a": "It ensures that a single earth fault does not create a complete circuit, meaning no breakers trip and essential machinery continues to run seamlessly",
-    "opts": ["It completely eliminates the risk of electric shock for the crew", "It reduces the physical size and weight of the main switchboard", "It ensures that a single earth fault does not create a complete circuit, meaning no breakers trip and essential machinery continues to run seamlessly", "It allows the generators to produce 20% more power"],
+    "opts": [
+      "It completely eliminates the risk of electric shock for the crew",
+      "It reduces the physical size and weight of the main switchboard",
+      "It ensures that a single earth fault does not create a complete circuit, meaning no breakers trip and essential machinery continues to run seamlessly",
+      "It allows the generators to produce 20% more power"
+    ],
     "exp": "At sea, losing a steering motor or cooling pump suddenly due to a single frayed wire could sink the ship. The insulated neutral (floating) system guarantees that the first earth fault only triggers an alarm, not a blackout.",
     "cat": "SYSTEMS",
     "id": "T12C_022"
@@ -178,7 +288,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What happens in an insulated neutral system if a FIRST earth fault occurs (e.g., L1 touches the hull)?",
     "a": "An earth fault indicator/alarm activates on the main switchboard, but no fault current flows and no circuit breakers trip",
-    "opts": ["The main generator breaker trips instantly", "The ship's emergency generator automatically starts", "The voltage on L1 doubles, destroying connected equipment", "An earth fault indicator/alarm activates on the main switchboard, but no fault current flows and no circuit breakers trip"],
+    "opts": [
+      "The main generator breaker trips instantly",
+      "The ship's emergency generator automatically starts",
+      "The voltage on L1 doubles, destroying connected equipment",
+      "An earth fault indicator/alarm activates on the main switchboard, but no fault current flows and no circuit breakers trip"
+    ],
     "exp": "Because the neutral point is floating, there is no return path for the current through the hull. Without a complete circuit, there is zero fault current, so the system survives with just a warning alarm.",
     "cat": "SYSTEMS",
     "id": "T12C_023"
@@ -186,7 +301,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If a first earth fault (L1 to hull) is ignored, what happens if a SECOND earth fault subsequently develops on a different phase (e.g., L2 to hull)?",
     "a": "A massive phase-to-phase short circuit occurs through the hull, causing a huge fault current that instantly trips the affected circuit breakers",
-    "opts": ["A massive phase-to-phase short circuit occurs through the hull, causing a huge fault current that instantly trips the affected circuit breakers", "The two faults cancel each other out, restoring the system to normal", "The earth fault alarm simply changes from yellow to red", "The system automatically switches to the emergency switchboard"],
+    "opts": [
+      "A massive phase-to-phase short circuit occurs through the hull, causing a huge fault current that instantly trips the affected circuit breakers",
+      "The two faults cancel each other out, restoring the system to normal",
+      "The earth fault alarm simply changes from yellow to red",
+      "The system automatically switches to the emergency switchboard"
+    ],
     "exp": "This is the primary danger of the insulated system. Two simultaneous faults on different phases use the ship's steel hull as a giant wire, creating a dead short between 440V phases. This causes arc flashes, fires, and blackouts.",
     "cat": "SYSTEMS",
     "id": "T12C_024"
@@ -194,7 +314,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the primary function of an NER (Neutral Earthing Resistor)?",
     "a": "Used on High Voltage (HV) systems to intentionally connect the neutral to earth through a resistor, limiting the first earth fault current to a safe, measurable level (e.g., 5-10 Amps)",
-    "opts": ["Used on High Voltage (HV) systems to intentionally connect the neutral to earth through a resistor, limiting the first earth fault current to a safe, measurable level (e.g., 5-10 Amps)", "It reduces harmonic distortion on the main busbar", "It grounds the 440V system to prevent static buildup", "It acts as a dynamic braking resistor for large cranes"],
+    "opts": [
+      "Used on High Voltage (HV) systems to intentionally connect the neutral to earth through a resistor, limiting the first earth fault current to a safe, measurable level (e.g., 5-10 Amps)",
+      "It reduces harmonic distortion on the main busbar",
+      "It grounds the 440V system to prevent static buildup",
+      "It acts as a dynamic braking resistor for large cranes"
+    ],
     "exp": "HV systems (3.3kV, 6.6kV) cannot use a floating neutral because the capacitive charging currents alone would be lethal. Instead, they use a solid earth return path, but choke the current using an NER so a fault doesn't vaporize the switchboard.",
     "cat": "SYSTEMS",
     "id": "T12C_025"
@@ -202,47 +327,77 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How do you calculate the required Ohmic value of an NER on a 6.6 kV system designed to limit earth fault current to 5 Amps?",
     "a": "762 Ohms",
-    "opts": ["6600 Ohms", "1320 Ohms", "762 Ohms", "3300 Ohms"],
-    "exp": "NER = Phase Voltage / Fault Limit. Phase Voltage = Line Voltage / \u221a3. Phase Voltage = 6600 / 1.732 = 3810V. Therefore, NER = 3810V / 5A = 762 \u03a9.",
+    "opts": [
+      "6600 Ohms",
+      "1320 Ohms",
+      "762 Ohms",
+      "3300 Ohms"
+    ],
+    "exp": "NER = Phase Voltage / Fault Limit. Phase Voltage = Line Voltage / √3. Phase Voltage = 6600 / 1.732 = 3810V. Therefore, NER = 3810V / 5A = 762 Ω.",
     "cat": "SYSTEMS",
     "id": "T12C_026"
   },
   {
     "q": "In an Earthed Neutral system (e.g., 6.6kV HV system), what happens on the FIRST earth fault?",
     "a": "The fault creates a complete circuit through the earth/NER, drawing a limited fault current that is instantly detected by protective relays, tripping the breaker and causing a loss of supply",
-    "opts": ["The NER automatically increases its resistance to infinity", "The fault creates a complete circuit through the earth/NER, drawing a limited fault current that is instantly detected by protective relays, tripping the breaker and causing a loss of supply", "The system continues to run normally with only an alarm sounding", "The generator seamlessly transfers the load to another phase"],
+    "opts": [
+      "The NER automatically increases its resistance to infinity",
+      "The fault creates a complete circuit through the earth/NER, drawing a limited fault current that is instantly detected by protective relays, tripping the breaker and causing a loss of supply",
+      "The system continues to run normally with only an alarm sounding",
+      "The generator seamlessly transfers the load to another phase"
+    ],
     "exp": "Unlike the 440V floating system, an earth fault on a 6.6kV earthed system immediately trips the affected equipment offline to prevent catastrophic arcing and stator damage.",
     "cat": "SYSTEMS",
     "id": "T12C_027"
   },
   {
-    "q": "If the ship's 440V Earth Fault Indicator suddenly drops to 0 M\u03a9, what is the safest and most systematic way to locate the fault?",
+    "q": "If the ship's 440V Earth Fault Indicator suddenly drops to 0 MΩ, what is the safest and most systematic way to locate the fault?",
     "a": "Isolate (switch off) non-essential feeder breakers one by one; when the meter jumps back to normal (e.g., infinity), the last isolated circuit contains the fault",
-    "opts": ["Increase the generator voltage to burn out the short circuit", "Isolate (switch off) non-essential feeder breakers one by one; when the meter jumps back to normal (e.g., infinity), the last isolated circuit contains the fault", "Use a thermal imaging camera to find the hottest cable on the ship", "Wait for a second fault to trip a breaker, identifying the location automatically"],
+    "opts": [
+      "Increase the generator voltage to burn out the short circuit",
+      "Isolate (switch off) non-essential feeder breakers one by one; when the meter jumps back to normal (e.g., infinity), the last isolated circuit contains the fault",
+      "Use a thermal imaging camera to find the hottest cable on the ship",
+      "Wait for a second fault to trip a breaker, identifying the location automatically"
+    ],
     "exp": "This is the classic ETO troubleshooting method. By selectively killing power to individual sub-panels or motors, you watch the main earth meter. The moment it recovers, you've isolated the specific branch causing the grounding.",
     "cat": "SYSTEMS",
     "id": "T12C_028"
   },
   {
     "q": "What is the absolute MINIMUM acceptable Insulation Resistance (IR) reading for a 440V system during operation?",
-    "a": "1 Mega-Ohm (1 M\u03a9)",
-    "opts": ["100 Kilo-Ohms", "1 Mega-Ohm (1 M\u03a9)", "10 Mega-Ohms", "100 Mega-Ohms"],
-    "exp": "While a clean, dry ship will show >100 M\u03a9, the legal/practical limit where equipment must be dried out or taken offline before a catastrophic short occurs is 1 M\u03a9.",
+    "a": "1 Mega-Ohm (1 MΩ)",
+    "opts": [
+      "100 Kilo-Ohms",
+      "1 Mega-Ohm (1 MΩ)",
+      "10 Mega-Ohms",
+      "100 Mega-Ohms"
+    ],
+    "exp": "While a clean, dry ship will show >100 MΩ, the legal/practical limit where equipment must be dried out or taken offline before a catastrophic short occurs is 1 MΩ.",
     "cat": "SYSTEMS",
     "id": "T12C_029"
   },
   {
     "q": "What is the best modern method to detect a 'Hotspot' on a Main Switchboard busbar joint without shutting down the power?",
     "a": "Using an Infrared (IR) Thermography camera during normal live operation",
-    "opts": ["Using an Infrared (IR) Thermography camera during normal live operation", "Touching the joints carefully with the back of the hand", "Using a 500V Megger across the joint", "Spraying a light mist of water and watching for steam"],
+    "opts": [
+      "Using an Infrared (IR) Thermography camera during normal live operation",
+      "Touching the joints carefully with the back of the hand",
+      "Using a 500V Megger across the joint",
+      "Spraying a light mist of water and watching for steam"
+    ],
     "exp": "A thermal imaging camera safely 'sees' the heat caused by a loose, high-resistance joint from a safe distance while hundreds of amps are actively flowing through it.",
     "cat": "SYSTEMS",
     "id": "T12C_030"
   },
   {
     "q": "What is the physical cause of a busbar 'Hotspot'?",
-    "a": "A loose bolted joint or oxidized connection creates high electrical resistance, resulting in severe I\u00b2R localized heating",
-    "opts": ["A loose bolted joint or oxidized connection creates high electrical resistance, resulting in severe I\u00b2R localized heating", "Excessive voltage from the generator's AVR", "The copper absorbing too much humidity from the engine room", "Harmonic distortion melting the copper molecules"],
+    "a": "A loose bolted joint or oxidized connection creates high electrical resistance, resulting in severe I²R localized heating",
+    "opts": [
+      "A loose bolted joint or oxidized connection creates high electrical resistance, resulting in severe I²R localized heating",
+      "Excessive voltage from the generator's AVR",
+      "The copper absorbing too much humidity from the engine room",
+      "Harmonic distortion melting the copper molecules"
+    ],
     "exp": "Vibration on ships loosens bolts over time. A loose joint is a bad connection. Pushing 2000 Amps through a bad connection acts like a toaster heating element, eventually glowing red hot and starting a fire.",
     "cat": "SYSTEMS",
     "id": "T12C_031"
@@ -250,15 +405,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "During a routine blackout, you decide to Megger the entire 440V Main Switchboard busbar. How must it be prepared?",
     "a": "Open ALL Air Circuit Breakers (ACBs) and feeder breakers to ensure the busbar is completely isolated from all generators and ship loads, then test Phase-to-Earth and Phase-to-Phase",
-    "opts": ["Short the three phases together and test them against the neutral wire", "Leave the generators connected so their windings are tested simultaneously", "Open ALL Air Circuit Breakers (ACBs) and feeder breakers to ensure the busbar is completely isolated from all generators and ship loads, then test Phase-to-Earth and Phase-to-Phase", "Apply 5000V DC to burn off any surface contamination before testing"],
+    "opts": [
+      "Short the three phases together and test them against the neutral wire",
+      "Leave the generators connected so their windings are tested simultaneously",
+      "Open ALL Air Circuit Breakers (ACBs) and feeder breakers to ensure the busbar is completely isolated from all generators and ship loads, then test Phase-to-Earth and Phase-to-Phase",
+      "Apply 5000V DC to burn off any surface contamination before testing"
+    ],
     "exp": "To test the health of the plastic/resin busbar standoff insulators, the copper bars must be totally disconnected from all other circuits. Otherwise, you are just measuring the resistance of a random connected motor.",
     "cat": "SYSTEMS",
     "id": "T12C_032"
   },
   {
     "q": "What happens if you accidentally leave a PT (Potential Transformer) connected while Meggering the main busbar?",
-    "a": "The Megger will show a dead short (near 0 \u03a9) between phases because it is measuring the very low DC resistance of the transformer's primary winding",
-    "opts": ["The PT will step the 500V up to 500,000V, destroying the switchboard", "The Megger will explode", "The Megger will show a dead short (near 0 \u03a9) between phases because it is measuring the very low DC resistance of the transformer's primary winding", "Nothing; the PT automatically blocks DC voltage"],
+    "a": "The Megger will show a dead short (near 0 Ω) between phases because it is measuring the very low DC resistance of the transformer's primary winding",
+    "opts": [
+      "The PT will step the 500V up to 500,000V, destroying the switchboard",
+      "The Megger will explode",
+      "The Megger will show a dead short (near 0 Ω) between phases because it is measuring the very low DC resistance of the transformer's primary winding",
+      "Nothing; the PT automatically blocks DC voltage"
+    ],
     "exp": "PTs (used for voltmeters) are essentially coils of wire connecting the phases. To DC, a coil is just a short wire. You must pull the PT fuses before taking phase-to-phase Megger readings on a switchboard.",
     "cat": "SYSTEMS",
     "id": "T12C_033"
@@ -266,7 +431,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is the shock hazard slightly lower on the FIRST fault of an insulated neutral system compared to an earthed system?",
     "a": "Because there is no solid return path to the generator neutral, the only current that can flow through a person touching the fault is a very small 'capacitive charging current'",
-    "opts": ["Because there is no solid return path to the generator neutral, the only current that can flow through a person touching the fault is a very small 'capacitive charging current'", "Because the ship's hull is painted with non-conductive paint", "Because the voltage drops to 110V instantly", "Because the earth fault relay absorbs the shock"],
+    "opts": [
+      "Because there is no solid return path to the generator neutral, the only current that can flow through a person touching the fault is a very small 'capacitive charging current'",
+      "Because the ship's hull is painted with non-conductive paint",
+      "Because the voltage drops to 110V instantly",
+      "Because the earth fault relay absorbs the shock"
+    ],
     "exp": "In your house (earthed), touching a live wire sends 100 amps through you to the ground back to the transformer. On a ship (insulated), touching a live wire only sends a few milliamps of stray capacitive leakage through you. It's safer, but still dangerous.",
     "cat": "SYSTEMS",
     "id": "T12C_034"
@@ -274,7 +444,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "In a 440V ungrounded system, what indicates to the ETO that an earth fault has occurred?",
     "a": "An Earth Fault Monitor or Insulation Resistance monitoring relay continuously measures the impedance to the hull and triggers an alarm if it drops below a setpoint",
-    "opts": ["The ship's lights automatically dim by 50%", "An Earth Fault Monitor or Insulation Resistance monitoring relay continuously measures the impedance to the hull and triggers an alarm if it drops below a setpoint", "A loud buzzing sound emits from the main switchboard", "The main generator breaker trips on overcurrent"],
+    "opts": [
+      "The ship's lights automatically dim by 50%",
+      "An Earth Fault Monitor or Insulation Resistance monitoring relay continuously measures the impedance to the hull and triggers an alarm if it drops below a setpoint",
+      "A loud buzzing sound emits from the main switchboard",
+      "The main generator breaker trips on overcurrent"
+    ],
     "exp": "Because the breakers won't trip on a first fault, the ship relies entirely on a dedicated active monitoring device that constantly 'sniffs' the resistance between the live busbars and the steel deck.",
     "cat": "SYSTEMS",
     "id": "T12C_035"
@@ -282,7 +457,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the typical voltage level of the High Voltage (HV) systems used on large modern container ships or LNG carriers?",
     "a": "3.3 kV, 6.6 kV, or 11 kV",
-    "opts": ["440V or 690V", "3.3 kV, 6.6 kV, or 11 kV", "1000V DC", "220 kV or 400 kV"],
+    "opts": [
+      "440V or 690V",
+      "3.3 kV, 6.6 kV, or 11 kV",
+      "1000V DC",
+      "220 kV or 400 kV"
+    ],
     "exp": "As ship power demands grew (massive bow thrusters, reefer containers), 440V required impossibly thick cables. Stepping up to 6.6kV means current drops drastically, allowing thinner, lighter cables and smaller breakers.",
     "cat": "SYSTEMS",
     "id": "T12C_036"
@@ -290,7 +470,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why must you NEVER attempt to isolate an earth fault by opening breakers randomly while the ship is manoeuvring in restricted waters?",
     "a": "You risk accidentally shutting off the steering gear or main cooling pumps, which could result in a catastrophic collision or grounding",
-    "opts": ["Because it will cause the main engine to overspeed", "Because the breakers are locked during maneuvering", "You risk accidentally shutting off the steering gear or main cooling pumps, which could result in a catastrophic collision or grounding", "Because it violates the ISPS security code"],
+    "opts": [
+      "Because it will cause the main engine to overspeed",
+      "Because the breakers are locked during maneuvering",
+      "You risk accidentally shutting off the steering gear or main cooling pumps, which could result in a catastrophic collision or grounding",
+      "Because it violates the ISPS security code"
+    ],
     "exp": "The whole point of the insulated neutral is that the ship can safely keep sailing with one fault. Wait until the ship is in open, safe water before playing 'breaker roulette' to find the grounded pump.",
     "cat": "SYSTEMS",
     "id": "T12C_037"
@@ -298,7 +483,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the function of the 'Core Balance Current Transformer' (CBCT)?",
     "a": "It wraps around all three phase cables simultaneously; if there is an earth leak, the currents do not sum to zero, creating a magnetic imbalance that triggers an Earth Fault Relay",
-    "opts": ["It measures the active power (kW) of the generator", "It wraps around all three phase cables simultaneously; if there is an earth leak, the currents do not sum to zero, creating a magnetic imbalance that triggers an Earth Fault Relay", "It absorbs harmonic distortion from Variable Frequency Drives", "It balances the physical weight of the cables on the tray"],
+    "opts": [
+      "It measures the active power (kW) of the generator",
+      "It wraps around all three phase cables simultaneously; if there is an earth leak, the currents do not sum to zero, creating a magnetic imbalance that triggers an Earth Fault Relay",
+      "It absorbs harmonic distortion from Variable Frequency Drives",
+      "It balances the physical weight of the cables on the tray"
+    ],
     "exp": "In a healthy 3-phase circuit, L1+L2+L3 = 0. The magnetic fields cancel out perfectly. If 5 amps leaks out to the hull, the return current is missing, the magnetic field isn't zero, and the CBCT detects this leakage instantly.",
     "cat": "SYSTEMS",
     "id": "T12C_038"
@@ -306,7 +496,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Which type of shipboard equipment is notorious for causing intermittent, frustrating low-insulation alarms when it rains?",
     "a": "Deck machinery (windlasses, cranes, lighting) because their terminal boxes are exposed to saltwater, humidity, and weather",
-    "opts": ["The ship's gyrocompass", "The engine room ventilation fans", "Deck machinery (windlasses, cranes, lighting) because their terminal boxes are exposed to saltwater, humidity, and weather", "The main engine lube oil pumps"],
+    "opts": [
+      "The ship's gyrocompass",
+      "The engine room ventilation fans",
+      "Deck machinery (windlasses, cranes, lighting) because their terminal boxes are exposed to saltwater, humidity, and weather",
+      "The main engine lube oil pumps"
+    ],
     "exp": "Engine room gear stays dry. Deck gear gets pounded by waves. Water seeps into a degraded cable gland, shorts out slightly, rings the alarm, and then evaporates in the sun, making the alarm disappear mysteriously.",
     "cat": "SYSTEMS",
     "id": "T12C_039"
@@ -314,7 +509,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If a low insulation alarm points to the Galley distribution board, what is the most likely culprit?",
     "a": "Electric hot plates, ovens, or deep fryers where spilled liquids, boiling water, and grease have compromised the heating element insulation",
-    "opts": ["The watertight doors leading to the galley", "Electric hot plates, ovens, or deep fryers where spilled liquids, boiling water, and grease have compromised the heating element insulation", "The galley exhaust fan", "The chef's personal mobile phone charger"],
+    "opts": [
+      "The watertight doors leading to the galley",
+      "Electric hot plates, ovens, or deep fryers where spilled liquids, boiling water, and grease have compromised the heating element insulation",
+      "The galley exhaust fan",
+      "The chef's personal mobile phone charger"
+    ],
     "exp": "Tubular heating elements (calrods) are famous for cracking microscopically and absorbing moisture, especially when chefs boil water over them. This creates a solid path to earth.",
     "cat": "SYSTEMS",
     "id": "T12C_040"
@@ -322,7 +522,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'Capacitive Charging Current' in the context of an insulated 440V ship system?",
     "a": "Even without a solid earth connection, the miles of parallel cables act as a giant capacitor against the steel hull, allowing a small, continuous AC leakage current to flow",
-    "opts": ["The current drawn by the generator's AVR during startup", "The current used to charge the emergency batteries", "Even without a solid earth connection, the miles of parallel cables act as a giant capacitor against the steel hull, allowing a small, continuous AC leakage current to flow", "A massive surge current caused by lightning strikes"],
+    "opts": [
+      "The current drawn by the generator's AVR during startup",
+      "The current used to charge the emergency batteries",
+      "Even without a solid earth connection, the miles of parallel cables act as a giant capacitor against the steel hull, allowing a small, continuous AC leakage current to flow",
+      "A massive surge current caused by lightning strikes"
+    ],
     "exp": "Two conductors separated by an insulator (the copper wire, the PVC, and the steel hull) form a capacitor. AC current can 'pass through' capacitors. This means even a perfectly healthy insulated ship has a tiny baseline leakage current.",
     "cat": "SYSTEMS",
     "id": "T12C_041"
@@ -330,15 +535,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why must the ETO use extreme caution when using an Earth Fault finding tool that injects an AC tracing signal into the live busbar?",
     "a": "The injected signal might interfere with sensitive electronics, PLCs, or Variable Frequency Drives connected to the same busbar",
-    "opts": ["It causes the main engine to overspeed", "It instantly trips all circuit breakers onboard", "The injected signal might interfere with sensitive electronics, PLCs, or Variable Frequency Drives connected to the same busbar", "It might reverse the polarity of the ship's generators"],
+    "opts": [
+      "It causes the main engine to overspeed",
+      "It instantly trips all circuit breakers onboard",
+      "The injected signal might interfere with sensitive electronics, PLCs, or Variable Frequency Drives connected to the same busbar",
+      "It might reverse the polarity of the ship's generators"
+    ],
     "exp": "Some fault tracers superimpose a low-frequency AC or DC pulse onto the live 440V line to 'trace' the fault with a handheld wand. This dirty signal can confuse computers and VFDs if not carefully isolated.",
     "cat": "SYSTEMS",
     "id": "T12C_042"
   },
   {
     "q": "What is the primary danger of a 'Loose Connection' at a motor terminal box?",
-    "a": "It creates high electrical resistance, causing localized I\u00b2R heating that can melt the insulation, cause a phase-to-phase short, or start a fire",
-    "opts": ["It creates high electrical resistance, causing localized I\u00b2R heating that can melt the insulation, cause a phase-to-phase short, or start a fire", "It causes the motor to spin backward", "It generates high-frequency radio waves that blind the radar", "It increases the voltage to the motor, making it run too fast"],
+    "a": "It creates high electrical resistance, causing localized I²R heating that can melt the insulation, cause a phase-to-phase short, or start a fire",
+    "opts": [
+      "It creates high electrical resistance, causing localized I²R heating that can melt the insulation, cause a phase-to-phase short, or start a fire",
+      "It causes the motor to spin backward",
+      "It generates high-frequency radio waves that blind the radar",
+      "It increases the voltage to the motor, making it run too fast"
+    ],
     "exp": "Ship vibration loosens nuts. A loose nut means poor surface contact. High current squeezing through a tiny contact point generates immense heat. Terminals must be checked and torqued regularly.",
     "cat": "SYSTEMS",
     "id": "T12C_043"
@@ -346,7 +561,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How does a 'Neutral Earthing Resistor' (NER) fail safely?",
     "a": "It is continuously monitored; if the resistor burns out or breaks (Open Circuit), an alarm sounds because the HV system has lost its safe earthing path",
-    "opts": ["It automatically bypasses itself with a solid wire", "It shuts down the main engine", "It melts into a solid block of copper to ensure maximum conductivity", "It is continuously monitored; if the resistor burns out or breaks (Open Circuit), an alarm sounds because the HV system has lost its safe earthing path"],
+    "opts": [
+      "It automatically bypasses itself with a solid wire",
+      "It shuts down the main engine",
+      "It melts into a solid block of copper to ensure maximum conductivity",
+      "It is continuously monitored; if the resistor burns out or breaks (Open Circuit), an alarm sounds because the HV system has lost its safe earthing path"
+    ],
     "exp": "If the NER snaps, the 6.6kV system suddenly becomes a floating/insulated system. This is highly dangerous for HV. The integrity of the NER is actively monitored by an electronic relay.",
     "cat": "SYSTEMS",
     "id": "T12C_044"
@@ -354,7 +574,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "In a 220V lighting system, why are double-pole circuit breakers used?",
     "a": "Because in an insulated neutral system, BOTH wires (L1 and L2) are live relative to earth; a single-pole breaker would leave the circuit dangerously live even when switched off",
-    "opts": ["To comply with DC voltage regulations", "To double the current carrying capacity of the breaker", "To prevent the light bulbs from flickering", "Because in an insulated neutral system, BOTH wires (L1 and L2) are live relative to earth; a single-pole breaker would leave the circuit dangerously live even when switched off"],
+    "opts": [
+      "To comply with DC voltage regulations",
+      "To double the current carrying capacity of the breaker",
+      "To prevent the light bulbs from flickering",
+      "Because in an insulated neutral system, BOTH wires (L1 and L2) are live relative to earth; a single-pole breaker would leave the circuit dangerously live even when switched off"
+    ],
     "exp": "In a house, the neutral is 0V, so you only switch the live wire. On a ship, the 220V comes from a transformer with no ground. Both wires carry 110V relative to the hull. You MUST disconnect both to safely change a light fitting.",
     "cat": "SYSTEMS",
     "id": "T12C_045"
@@ -362,7 +587,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If a generator's stator insulation degrades completely, causing a phase-to-earth fault inside the winding while running on a 440V insulated system, what happens?",
     "a": "The earth fault alarm sounds, but the generator continues to carry the load; it must be manually taken offline and investigated immediately before a second fault destroys it",
-    "opts": ["The earth fault alarm sounds, but the generator continues to carry the load; it must be manually taken offline and investigated immediately before a second fault destroys it", "The AVR automatically disconnects the excitation", "The generator instantly trips on Reverse Power", "The generator explodes instantly"],
+    "opts": [
+      "The earth fault alarm sounds, but the generator continues to carry the load; it must be manually taken offline and investigated immediately before a second fault destroys it",
+      "The AVR automatically disconnects the excitation",
+      "The generator instantly trips on Reverse Power",
+      "The generator explodes instantly"
+    ],
     "exp": "Because it's an insulated system, even a raw short to the casing won't trip the generator. But the machine is now incredibly vulnerable. The ETO must transfer the load to a healthy generator and shut this one down fast.",
     "cat": "SYSTEMS",
     "id": "T12C_046"
@@ -370,7 +600,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the purpose of the 'Earth Bar' that runs the entire length of the Main Switchboard?",
     "a": "It provides a massive, solid, common grounding point tightly bolted to the ship's hull, to which all cable armours, equipment casings, and non-current-carrying metal parts are safely bonded",
-    "opts": ["It absorbs electromagnetic interference from the VFDs", "It serves as a physical barrier to stop people touching the live busbars", "It provides a massive, solid, common grounding point tightly bolted to the ship's hull, to which all cable armours, equipment casings, and non-current-carrying metal parts are safely bonded", "It carries the neutral return current for the 220V lighting"],
+    "opts": [
+      "It absorbs electromagnetic interference from the VFDs",
+      "It serves as a physical barrier to stop people touching the live busbars",
+      "It provides a massive, solid, common grounding point tightly bolted to the ship's hull, to which all cable armours, equipment casings, and non-current-carrying metal parts are safely bonded",
+      "It carries the neutral return current for the 220V lighting"
+    ],
     "exp": "Safety grounding relies on this massive copper bar. If a live wire touches the metal casing of the switchboard, the electricity flows safely through this earth bar into the hull, rather than through a human body.",
     "cat": "SYSTEMS",
     "id": "T12C_047"
@@ -378,7 +613,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is the use of 'Rewirable' (semi-enclosed) fuses banned on main 440V switchboards?",
     "a": "They cannot safely interrupt the massive short-circuit currents (e.g., 50kA+) of a modern switchboard; they would vaporize and cause a catastrophic arc flash explosion",
-    "opts": ["They are too expensive to replace", "They are illegal under MARPOL environmental laws", "They cannot safely interrupt the massive short-circuit currents (e.g., 50kA+) of a modern switchboard; they would vaporize and cause a catastrophic arc flash explosion", "They cause harmonic distortion"],
+    "opts": [
+      "They are too expensive to replace",
+      "They are illegal under MARPOL environmental laws",
+      "They cannot safely interrupt the massive short-circuit currents (e.g., 50kA+) of a modern switchboard; they would vaporize and cause a catastrophic arc flash explosion",
+      "They cause harmonic distortion"
+    ],
     "exp": "Only HRC (High Rupturing Capacity) fuses filled with silica sand can safely swallow the explosive energy of a dead short circuit on a 440V busbar. Wrapping copper wire around an old fuse holder is a death wish.",
     "cat": "SYSTEMS",
     "id": "T12C_048"
@@ -386,7 +626,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What indicates a healthy insulation status on a traditional 'Earth Lamp' system on the main switchboard?",
     "a": "All three lamps (representing L1, L2, L3) are glowing equally at half-brilliance",
-    "opts": ["All three lamps (representing L1, L2, L3) are glowing equally at half-brilliance", "The lamps flash in a sequential pattern", "All three lamps are completely off", "One lamp is brightly lit, and two are off"],
+    "opts": [
+      "All three lamps (representing L1, L2, L3) are glowing equally at half-brilliance",
+      "The lamps flash in a sequential pattern",
+      "All three lamps are completely off",
+      "One lamp is brightly lit, and two are off"
+    ],
     "exp": "Earth lamps are a visual check. Each lamp connects a phase to earth. Normally, they share the voltage equally (dim). If L1 touches the hull (earth fault), the L1 lamp shorts out (goes dark), and L2 and L3 get full voltage (glow super bright).",
     "cat": "SYSTEMS",
     "id": "T12C_049"
@@ -394,7 +639,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If the L2 earth lamp goes completely DARK, and L1 and L3 glow at maximum brilliance, what is the exact fault?",
     "a": "A solid (dead) earth fault has occurred specifically on the L2 phase",
-    "opts": ["The generator is single-phasing", "A solid (dead) earth fault has occurred specifically on the L2 phase", "The ship is completely healthy", "A short circuit between L1 and L3"],
+    "opts": [
+      "The generator is single-phasing",
+      "A solid (dead) earth fault has occurred specifically on the L2 phase",
+      "The ship is completely healthy",
+      "A short circuit between L1 and L3"
+    ],
     "exp": "The dark lamp indicates which phase is grounded. Because L2 is touching the hull, the voltage difference between L2 and the hull is 0V, so the L2 lamp turns off. The other two phases now see full 440V to ground.",
     "cat": "SYSTEMS",
     "id": "T12C_050"
@@ -402,7 +652,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the function of the 'Test' button on the Earth Fault Monitoring relay?",
     "a": "It artificially creates a low-resistance path to earth through an internal resistor, proving that the relay will accurately detect a fault and sound the alarm",
-    "opts": ["It artificially creates a low-resistance path to earth through an internal resistor, proving that the relay will accurately detect a fault and sound the alarm", "It disconnects the relay from the switchboard", "It tests the generator's AVR response", "It resets the system after a blackout"],
+    "opts": [
+      "It artificially creates a low-resistance path to earth through an internal resistor, proving that the relay will accurately detect a fault and sound the alarm",
+      "It disconnects the relay from the switchboard",
+      "It tests the generator's AVR response",
+      "It resets the system after a blackout"
+    ],
     "exp": "You must prove safety equipment works. Pressing the test button safely leaks a tiny, calculated current to the hull, ensuring the microprocessor hasn't frozen and the buzzer still rings.",
     "cat": "SYSTEMS",
     "id": "T12C_051"
@@ -410,79 +665,129 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What does 'Insulation Class' (e.g., Class F) define for an electric motor or generator?",
     "a": "The absolute maximum continuous operating temperature the insulation materials can safely withstand without suffering unacceptable degradation of their lifespan",
-    "opts": ["The absolute maximum continuous operating temperature the insulation materials can safely withstand without suffering unacceptable degradation of their lifespan", "The maximum voltage the motor can handle before short-circuiting", "The physical thickness of the copper wire coating", "The amount of moisture the motor can safely absorb"],
-    "exp": "Heat destroys plastics and resins. The class rating guarantees that if you keep the motor below that specific temperature (e.g., 155\u00b0C for Class F), it will last its intended 20-year design life.",
+    "opts": [
+      "The absolute maximum continuous operating temperature the insulation materials can safely withstand without suffering unacceptable degradation of their lifespan",
+      "The maximum voltage the motor can handle before short-circuiting",
+      "The physical thickness of the copper wire coating",
+      "The amount of moisture the motor can safely absorb"
+    ],
+    "exp": "Heat destroys plastics and resins. The class rating guarantees that if you keep the motor below that specific temperature (e.g., 155°C for Class F), it will last its intended 20-year design life.",
     "cat": "INSULATION",
     "id": "T12C_052"
   },
   {
     "q": "What is the maximum allowable operating temperature for Class A insulation?",
-    "a": "105\u00b0C",
-    "opts": ["155\u00b0C", "90\u00b0C", "130\u00b0C", "105\u00b0C"],
-    "exp": "Class A is obsolete for modern ships, relying on old materials like varnished cotton and paper. Its limit is a very low 105\u00b0C.",
+    "a": "105°C",
+    "opts": [
+      "155°C",
+      "90°C",
+      "130°C",
+      "105°C"
+    ],
+    "exp": "Class A is obsolete for modern ships, relying on old materials like varnished cotton and paper. Its limit is a very low 105°C.",
     "cat": "INSULATION",
     "id": "T12C_053"
   },
   {
     "q": "What is the maximum allowable operating temperature for Class E insulation?",
-    "a": "120\u00b0C",
-    "opts": ["120\u00b0C", "105\u00b0C", "180\u00b0C", "130\u00b0C"],
-    "exp": "Class E (120\u00b0C) bridges the gap between organic materials and modern synthetics, but is rarely used in modern marine construction.",
+    "a": "120°C",
+    "opts": [
+      "120°C",
+      "105°C",
+      "180°C",
+      "130°C"
+    ],
+    "exp": "Class E (120°C) bridges the gap between organic materials and modern synthetics, but is rarely used in modern marine construction.",
     "cat": "INSULATION",
     "id": "T12C_054"
   },
   {
     "q": "What is the maximum allowable operating temperature for Class B insulation?",
-    "a": "130\u00b0C",
-    "opts": ["180\u00b0C", "155\u00b0C", "130\u00b0C", "120\u00b0C"],
-    "exp": "Class B (130\u00b0C) uses mica and glass fiber with epoxy. It was the standard for general-purpose marine motors for decades before Class F took over.",
+    "a": "130°C",
+    "opts": [
+      "180°C",
+      "155°C",
+      "130°C",
+      "120°C"
+    ],
+    "exp": "Class B (130°C) uses mica and glass fiber with epoxy. It was the standard for general-purpose marine motors for decades before Class F took over.",
     "cat": "INSULATION",
     "id": "T12C_055"
   },
   {
     "q": "What is the maximum allowable operating temperature for Class F insulation?",
-    "a": "155\u00b0C",
-    "opts": ["220\u00b0C", "130\u00b0C", "155\u00b0C", "180\u00b0C"],
-    "exp": "Class F (155\u00b0C) is the modern gold standard. It uses high-temperature synthetic resins and provides excellent thermal margin for alternators and cargo pumps.",
+    "a": "155°C",
+    "opts": [
+      "220°C",
+      "130°C",
+      "155°C",
+      "180°C"
+    ],
+    "exp": "Class F (155°C) is the modern gold standard. It uses high-temperature synthetic resins and provides excellent thermal margin for alternators and cargo pumps.",
     "cat": "INSULATION",
     "id": "T12C_056"
   },
   {
     "q": "What is the maximum allowable operating temperature for Class H insulation?",
-    "a": "180\u00b0C",
-    "opts": ["180\u00b0C", "155\u00b0C", "200\u00b0C", "250\u00b0C"],
-    "exp": "Class H (180\u00b0C) uses pure silicone rubber and advanced mica. It is reserved for the most severely stressed motors onboard, surviving extreme heat and heavy overloads.",
+    "a": "180°C",
+    "opts": [
+      "180°C",
+      "155°C",
+      "200°C",
+      "250°C"
+    ],
+    "exp": "Class H (180°C) uses pure silicone rubber and advanced mica. It is reserved for the most severely stressed motors onboard, surviving extreme heat and heavy overloads.",
     "cat": "INSULATION",
     "id": "T12C_057"
   },
   {
-    "q": "Which motor in the engine room typically requires the highest insulation class (Class H - 180\u00b0C)?",
+    "q": "Which motor in the engine room typically requires the highest insulation class (Class H - 180°C)?",
     "a": "The Steering Gear motor, because it operates under frequent heavy load changes, high duty cycles, and SOLAS requirements to never trip on overload",
-    "opts": ["The Engine Room ventilation fans", "The Main Sea Water Cooling pump", "The Heavy Fuel Oil purifier motor", "The Steering Gear motor, because it operates under frequent heavy load changes, high duty cycles, and SOLAS requirements to never trip on overload"],
+    "opts": [
+      "The Engine Room ventilation fans",
+      "The Main Sea Water Cooling pump",
+      "The Heavy Fuel Oil purifier motor",
+      "The Steering Gear motor, because it operates under frequent heavy load changes, high duty cycles, and SOLAS requirements to never trip on overload"
+    ],
     "exp": "Because SOLAS bans overload tripping on steering motors, the motor must be built tough enough to literally cook itself without the insulation melting down instantly. Class H provides this extreme survival margin.",
     "cat": "INSULATION",
     "id": "T12C_058"
   },
   {
     "q": "What insulation class is typically specified for the ship's Main Alternators (Generators)?",
-    "a": "Class F (155\u00b0C), but they are often operated and alarmed as if they were Class B (130\u00b0C) to provide a massive safety and longevity margin",
-    "opts": ["Class F (155\u00b0C), but they are often operated and alarmed as if they were Class B (130\u00b0C) to provide a massive safety and longevity margin", "Class A (105\u00b0C)", "Class C (>180\u00b0C)", "Class E (120\u00b0C)"],
-    "exp": "This is standard marine design. You buy a tough Class F machine, but you set the alarms to go off at 130\u00b0C. The insulation is never stressed, so the generator lasts 30 years without rewinding.",
+    "a": "Class F (155°C), but they are often operated and alarmed as if they were Class B (130°C) to provide a massive safety and longevity margin",
+    "opts": [
+      "Class F (155°C), but they are often operated and alarmed as if they were Class B (130°C) to provide a massive safety and longevity margin",
+      "Class A (105°C)",
+      "Class C (>180°C)",
+      "Class E (120°C)"
+    ],
+    "exp": "This is standard marine design. You buy a tough Class F machine, but you set the alarms to go off at 130°C. The insulation is never stressed, so the generator lasts 30 years without rewinding.",
     "cat": "INSULATION",
     "id": "T12C_059"
   },
   {
     "q": "What is the 'Arrhenius 10-Degree Rule' regarding electrical insulation life?",
-    "a": "For every 10\u00b0C the motor operates ABOVE its rated insulation class temperature, its expected operational lifespan is cut exactly in half",
-    "opts": ["For every 10\u00b0C increase in temperature, the motor's power output drops by 10%", "It dictates that alarms must sound 10\u00b0C before the melting point", "It states that insulation must be cooled by 10\u00b0C every hour", "For every 10\u00b0C the motor operates ABOVE its rated insulation class temperature, its expected operational lifespan is cut exactly in half"],
-    "exp": "Heat causes chemical degradation. If a Class F motor (rated for 20 years at 155\u00b0C) is run continuously at 165\u00b0C, the insulation will bake and fail in 10 years. At 175\u00b0C, it fails in 5 years.",
+    "a": "For every 10°C the motor operates ABOVE its rated insulation class temperature, its expected operational lifespan is cut exactly in half",
+    "opts": [
+      "For every 10°C increase in temperature, the motor's power output drops by 10%",
+      "It dictates that alarms must sound 10°C before the melting point",
+      "It states that insulation must be cooled by 10°C every hour",
+      "For every 10°C the motor operates ABOVE its rated insulation class temperature, its expected operational lifespan is cut exactly in half"
+    ],
+    "exp": "Heat causes chemical degradation. If a Class F motor (rated for 20 years at 155°C) is run continuously at 165°C, the insulation will bake and fail in 10 years. At 175°C, it fails in 5 years.",
     "cat": "INSULATION",
     "id": "T12C_060"
   },
   {
     "q": "What is the primary difference between NEMA insulation classes and IEC insulation classes?",
-    "a": "There is no difference in the absolute maximum temperature limits; NEMA Class F is exactly 155\u00b0C, identical to IEC Class F",
-    "opts": ["NEMA classes are measured in Fahrenheit, IEC in Celsius", "NEMA allows a 20\u00b0C higher temperature for every class", "There is no difference in the absolute maximum temperature limits; NEMA Class F is exactly 155\u00b0C, identical to IEC Class F", "IEC classes apply only to cables, NEMA only to motors"],
+    "a": "There is no difference in the absolute maximum temperature limits; NEMA Class F is exactly 155°C, identical to IEC Class F",
+    "opts": [
+      "NEMA classes are measured in Fahrenheit, IEC in Celsius",
+      "NEMA allows a 20°C higher temperature for every class",
+      "There is no difference in the absolute maximum temperature limits; NEMA Class F is exactly 155°C, identical to IEC Class F",
+      "IEC classes apply only to cables, NEMA only to motors"
+    ],
     "exp": "Surveyors check this to ensure you know international standards. Whether the motor is built in the USA (NEMA) or Europe (IEC), the letter designations (A, B, F, H) dictate the exact same thermal limits.",
     "cat": "INSULATION",
     "id": "T12C_061"
@@ -490,7 +795,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'Dielectric Strength'?",
     "a": "The maximum voltage an insulating material can withstand per unit of thickness before it chemically breaks down and allows a spark to punch through it (measured in kV/mm)",
-    "opts": ["The ability of the insulation to resist water absorption", "The amount of heat required to melt the plastic", "The maximum voltage an insulating material can withstand per unit of thickness before it chemically breaks down and allows a spark to punch through it (measured in kV/mm)", "The physical pulling strength of the copper conductor"],
+    "opts": [
+      "The ability of the insulation to resist water absorption",
+      "The amount of heat required to melt the plastic",
+      "The maximum voltage an insulating material can withstand per unit of thickness before it chemically breaks down and allows a spark to punch through it (measured in kV/mm)",
+      "The physical pulling strength of the copper conductor"
+    ],
     "exp": "Resistance (Ohms) prevents slow leakage. Dielectric Strength prevents violent lightning bolts. XLPE has a dielectric strength of ~25 kV/mm, meaning it takes 25,000 volts to punch a hole through 1 millimeter of XLPE.",
     "cat": "INSULATION",
     "id": "T12C_062"
@@ -498,7 +808,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How does Dielectric Strength dictate High Voltage (HV) cable design compared to 440V cables?",
     "a": "HV cables must have significantly thicker insulation layers; the dielectric stress (Voltage / Thickness) must remain well below the material's breakdown threshold",
-    "opts": ["HV cables use thinner insulation because they are cooled by gas", "HV cables use the exact same thickness but wrap it in lead", "HV cables must have significantly thicker insulation layers; the dielectric stress (Voltage / Thickness) must remain well below the material's breakdown threshold", "HV cables don't use insulation; they rely on air gaps"],
+    "opts": [
+      "HV cables use thinner insulation because they are cooled by gas",
+      "HV cables use the exact same thickness but wrap it in lead",
+      "HV cables must have significantly thicker insulation layers; the dielectric stress (Voltage / Thickness) must remain well below the material's breakdown threshold",
+      "HV cables don't use insulation; they rely on air gaps"
+    ],
     "exp": "A 440V cable only needs a thin layer of PVC to hold the voltage. A 6.6kV cable needs a thick, flawless layer of XLPE, otherwise the massive voltage will simply arc straight through the plastic to the steel armor.",
     "cat": "INSULATION",
     "id": "T12C_063"
@@ -506,7 +821,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'Tan Delta' (Dissipation Factor) testing?",
     "a": "A diagnostic test used on HV cables/motors that measures how much electrical energy is absorbed and wasted as heat within the insulation itself due to molecular friction (dielectric losses)",
-    "opts": ["A test that measures the physical stretching of the cable", "A test to check the resistance of the copper core", "A diagnostic test used on HV cables/motors that measures how much electrical energy is absorbed and wasted as heat within the insulation itself due to molecular friction (dielectric losses)", "A method of measuring the speed of the motor"],
+    "opts": [
+      "A test that measures the physical stretching of the cable",
+      "A test to check the resistance of the copper core",
+      "A diagnostic test used on HV cables/motors that measures how much electrical energy is absorbed and wasted as heat within the insulation itself due to molecular friction (dielectric losses)",
+      "A method of measuring the speed of the motor"
+    ],
     "exp": "When AC voltage alternates, the molecules inside the plastic insulation twist back and forth. This creates microscopic friction (heat). High-quality XLPE has a very low Tan Delta. As it gets wet or ages, the friction goes up, generating excess heat.",
     "cat": "INSULATION",
     "id": "T12C_064"
@@ -514,23 +834,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why must an ETO be incredibly careful when using infrared lamps or space heaters to dry out a seawater-flooded deck motor?",
     "a": "Applying too much heat too quickly will boil the trapped water into steam, expanding and physically rupturing the varnish, destroying the insulation permanently",
-    "opts": ["Applying too much heat too quickly will boil the trapped water into steam, expanding and physically rupturing the varnish, destroying the insulation permanently", "The infrared light degrades the copper wiring", "The heat will magnetize the stator core", "The heat will cause the bearings to freeze"],
-    "exp": "Drying must be slow and gentle (e.g., 60-80\u00b0C). If you blast a wet winding with intense heat, the water inside the microscopic cracks flashes to steam, blowing the resin apart like popcorn.",
+    "opts": [
+      "Applying too much heat too quickly will boil the trapped water into steam, expanding and physically rupturing the varnish, destroying the insulation permanently",
+      "The infrared light degrades the copper wiring",
+      "The heat will magnetize the stator core",
+      "The heat will cause the bearings to freeze"
+    ],
+    "exp": "Drying must be slow and gentle (e.g., 60-80°C). If you blast a wet winding with intense heat, the water inside the microscopic cracks flashes to steam, blowing the resin apart like popcorn.",
     "cat": "INSULATION",
     "id": "T12C_065"
   },
   {
     "q": "What is the proper procedure before putting a flooded, newly dried motor back into service?",
-    "a": "The motor must be cooled to ambient temperature, and a final Megger and Polarization Index (PI) test must prove the IR is > 1 M\u03a9 and PI > 2.0",
-    "opts": ["Paint the outside of the motor to seal it", "Replace the terminal box with a waterproof one", "The motor must be cooled to ambient temperature, and a final Megger and Polarization Index (PI) test must prove the IR is > 1 M\u03a9 and PI > 2.0", "Start it immediately while hot to burn off the rest of the water"],
+    "a": "The motor must be cooled to ambient temperature, and a final Megger and Polarization Index (PI) test must prove the IR is > 1 MΩ and PI > 2.0",
+    "opts": [
+      "Paint the outside of the motor to seal it",
+      "Replace the terminal box with a waterproof one",
+      "The motor must be cooled to ambient temperature, and a final Megger and Polarization Index (PI) test must prove the IR is > 1 MΩ and PI > 2.0",
+      "Start it immediately while hot to burn off the rest of the water"
+    ],
     "exp": "You cannot test a hot motor accurately. Once it cools down, the final IR and PI tests scientifically guarantee the water is gone and the winding won't explode when 440V hits it.",
     "cat": "INSULATION",
     "id": "T12C_066"
   },
   {
-    "q": "What material is uniquely used in Class C (>180\u00b0C) and fire-resistant (IEC 60331) cable insulation?",
-    "a": "Mica tape (or pure ceramics/PTFE); Mica is a natural mineral that maintains its excellent insulating properties even when subjected to direct 750\u00b0C flames",
-    "opts": ["Standard PVC", "Asbestos", "Mica tape (or pure ceramics/PTFE); Mica is a natural mineral that maintains its excellent insulating properties even when subjected to direct 750\u00b0C flames", "Standard XLPE"],
+    "q": "What material is uniquely used in Class C (>180°C) and fire-resistant (IEC 60331) cable insulation?",
+    "a": "Mica tape (or pure ceramics/PTFE); Mica is a natural mineral that maintains its excellent insulating properties even when subjected to direct 750°C flames",
+    "opts": [
+      "Standard PVC",
+      "Asbestos",
+      "Mica tape (or pure ceramics/PTFE); Mica is a natural mineral that maintains its excellent insulating properties even when subjected to direct 750°C flames",
+      "Standard XLPE"
+    ],
     "exp": "Plastic melts. When a fire hits a critical steering gear cable, the XLPE plastic burns away. The layer of glass-like Mica tape wrapped around the copper survives, keeping the wires separated so the motor keeps running in the fire.",
     "cat": "INSULATION",
     "id": "T12C_067"
@@ -538,47 +873,77 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What does a sharp drop in Insulation Resistance (IR) accompanied by a strong smell of ozone near a high-voltage generator indicate?",
     "a": "Partial Discharge or Corona effect; high electrical stress is breaking down the air pockets in the aging insulation, creating ozone gas and physically eating away the winding resin",
-    "opts": ["The bearings are completely destroyed", "The generator is operating at peak efficiency", "Partial Discharge or Corona effect; high electrical stress is breaking down the air pockets in the aging insulation, creating ozone gas and physically eating away the winding resin", "The PMG is generating too much DC voltage"],
+    "opts": [
+      "The bearings are completely destroyed",
+      "The generator is operating at peak efficiency",
+      "Partial Discharge or Corona effect; high electrical stress is breaking down the air pockets in the aging insulation, creating ozone gas and physically eating away the winding resin",
+      "The PMG is generating too much DC voltage"
+    ],
     "exp": "High voltage can 'jump' across microscopic air bubbles trapped in cheap or old insulation. This sparking (partial discharge) creates ozone. It slowly drills tiny holes through the plastic until a catastrophic phase-to-earth failure occurs.",
     "cat": "INSULATION",
     "id": "T12C_068"
   },
   {
     "q": "Why is pure PVC insulation generally avoided for massive, high-power cables (like those feeding bow thrusters)?",
-    "a": "PVC has a lower thermal limit (70\u00b0C) and higher dielectric losses; thick XLPE is used because it can handle 90\u00b0C continuously, allowing a thinner, lighter cable to carry the same massive current",
-    "opts": ["PVC has a lower thermal limit (70\u00b0C) and higher dielectric losses; thick XLPE is used because it can handle 90\u00b0C continuously, allowing a thinner, lighter cable to carry the same massive current", "PVC is too expensive", "PVC cannot be bent around corners", "PVC reacts violently with seawater"],
-    "exp": "Because XLPE survives 90\u00b0C, you can push more amps through it before it melts. This means a 95mm\u00b2 XLPE cable can do the job of a much fatter 120mm\u00b2 PVC cable, saving tons of copper weight on the ship.",
+    "a": "PVC has a lower thermal limit (70°C) and higher dielectric losses; thick XLPE is used because it can handle 90°C continuously, allowing a thinner, lighter cable to carry the same massive current",
+    "opts": [
+      "PVC has a lower thermal limit (70°C) and higher dielectric losses; thick XLPE is used because it can handle 90°C continuously, allowing a thinner, lighter cable to carry the same massive current",
+      "PVC is too expensive",
+      "PVC cannot be bent around corners",
+      "PVC reacts violently with seawater"
+    ],
+    "exp": "Because XLPE survives 90°C, you can push more amps through it before it melts. This means a 95mm² XLPE cable can do the job of a much fatter 120mm² PVC cable, saving tons of copper weight on the ship.",
     "cat": "INSULATION",
     "id": "T12C_069"
   },
   {
     "q": "What is EPR (Ethylene Propylene Rubber) cable insulation uniquely suited for on ships?",
     "a": "Applications requiring extreme flexibility and resistance to repeated bending, such as crane trailing cables, lifeboat davit umbilicals, and festoon systems",
-    "opts": ["High-voltage underground transmission", "Fiber optic data transfer", "Applications requiring extreme flexibility and resistance to repeated bending, such as crane trailing cables, lifeboat davit umbilicals, and festoon systems", "Permanent, fixed wiring inside the switchboard"],
+    "opts": [
+      "High-voltage underground transmission",
+      "Fiber optic data transfer",
+      "Applications requiring extreme flexibility and resistance to repeated bending, such as crane trailing cables, lifeboat davit umbilicals, and festoon systems",
+      "Permanent, fixed wiring inside the switchboard"
+    ],
     "exp": "XLPE is stiff and hard. If you put it on a moving crane trolley, it will snap. EPR is thick, tough, highly flexible rubber that survives being reeled in and out thousands of times.",
     "cat": "INSULATION",
     "id": "T12C_070"
   },
   {
     "q": "What happens to the Insulation Resistance (IR) value of a motor winding as its physical temperature increases?",
-    "a": "The IR value decreases significantly; generally, the resistance cuts in half for every 10\u00b0C rise in temperature",
-    "opts": ["The IR value increases, making the motor safer", "The IR value decreases significantly; generally, the resistance cuts in half for every 10\u00b0C rise in temperature", "The IR value drops to zero instantly above 50\u00b0C", "The IR value remains perfectly constant regardless of heat"],
-    "exp": "Heat excites electrons, making it easier for leakage current to punch through the insulation. A motor measuring 100 M\u03a9 when cold (20\u00b0C) might legally and safely drop to 5 M\u03a9 when it is blazing hot (80\u00b0C).",
+    "a": "The IR value decreases significantly; generally, the resistance cuts in half for every 10°C rise in temperature",
+    "opts": [
+      "The IR value increases, making the motor safer",
+      "The IR value decreases significantly; generally, the resistance cuts in half for every 10°C rise in temperature",
+      "The IR value drops to zero instantly above 50°C",
+      "The IR value remains perfectly constant regardless of heat"
+    ],
+    "exp": "Heat excites electrons, making it easier for leakage current to punch through the insulation. A motor measuring 100 MΩ when cold (20°C) might legally and safely drop to 5 MΩ when it is blazing hot (80°C).",
     "cat": "INSULATION",
     "id": "T12C_071"
   },
   {
     "q": "Because of the temperature-resistance relationship, how must an ETO record Megger readings to make them comparable over 5 years?",
-    "a": "The ambient/winding temperature MUST be recorded alongside the Megger value, and ideally, the value should be mathematically corrected to a standard baseline (e.g., 40\u00b0C)",
-    "opts": ["Always test the motor while it is running", "The ambient/winding temperature MUST be recorded alongside the Megger value, and ideally, the value should be mathematically corrected to a standard baseline (e.g., 40\u00b0C)", "Wait exactly 24 hours after stopping before testing", "Just write down the Megger value; temperature doesn't matter for records"],
-    "exp": "If you Megger a cold motor in winter (reads 500 M\u03a9) and a hot motor in summer (reads 10 M\u03a9), you might think the motor is dying. Correcting the math back to a 40\u00b0C standard proves the insulation hasn't actually degraded.",
+    "a": "The ambient/winding temperature MUST be recorded alongside the Megger value, and ideally, the value should be mathematically corrected to a standard baseline (e.g., 40°C)",
+    "opts": [
+      "Always test the motor while it is running",
+      "The ambient/winding temperature MUST be recorded alongside the Megger value, and ideally, the value should be mathematically corrected to a standard baseline (e.g., 40°C)",
+      "Wait exactly 24 hours after stopping before testing",
+      "Just write down the Megger value; temperature doesn't matter for records"
+    ],
+    "exp": "If you Megger a cold motor in winter (reads 500 MΩ) and a hot motor in summer (reads 10 MΩ), you might think the motor is dying. Correcting the math back to a 40°C standard proves the insulation hasn't actually degraded.",
     "cat": "INSULATION",
     "id": "T12C_072"
   },
   {
     "q": "What is the primary factor that destroys the insulation varnish inside a marine alternator over time?",
     "a": "Thermal aging (sustained high temperatures baking the resin) combined with mechanical vibration and moisture/salt ingress",
-    "opts": ["Thermal aging (sustained high temperatures baking the resin) combined with mechanical vibration and moisture/salt ingress", "Using the wrong brand of diesel fuel", "Painting the outside of the generator casing", "Running the generator at exactly 60 Hz"],
+    "opts": [
+      "Thermal aging (sustained high temperatures baking the resin) combined with mechanical vibration and moisture/salt ingress",
+      "Using the wrong brand of diesel fuel",
+      "Painting the outside of the generator casing",
+      "Running the generator at exactly 60 Hz"
+    ],
     "exp": "It's a combination attack. Heat makes the resin brittle. Engine vibration cracks the brittle resin. Salty sea air gets into the cracks and creates a conductive path to ground.",
     "cat": "INSULATION",
     "id": "T12C_073"
@@ -586,23 +951,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is 'Vacuum Pressure Impregnation' (VPI) used when manufacturing or rewinding high-voltage stator coils?",
     "a": "It uses a vacuum to suck out every microscopic air bubble from deep inside the copper winding, then forces resin in under high pressure, preventing corona discharge and partial short circuits",
-    "opts": ["It uses a vacuum to suck out every microscopic air bubble from deep inside the copper winding, then forces resin in under high pressure, preventing corona discharge and partial short circuits", "It shrinks the size of the motor by 50%", "It aligns the copper molecules to improve conductivity", "It coats the outside of the motor in a rust-proof shell"],
+    "opts": [
+      "It uses a vacuum to suck out every microscopic air bubble from deep inside the copper winding, then forces resin in under high pressure, preventing corona discharge and partial short circuits",
+      "It shrinks the size of the motor by 50%",
+      "It aligns the copper molecules to improve conductivity",
+      "It coats the outside of the motor in a rust-proof shell"
+    ],
     "exp": "Air bubbles are the enemy of HV insulation. High voltage sparks across air gaps (corona). VPI ensures the coil is a 100% solid brick of void-free resin, extending the motor's life by decades.",
     "cat": "INSULATION",
     "id": "T12C_074"
   },
   {
-    "q": "If a Class F (155\u00b0C) motor is installed in a boiler room where the ambient temperature reaches 55\u00b0C, what happens to its usable power rating?",
-    "a": "The motor must be 'derated' (cannot be run at 100% load) because it has less thermal margin to dissipate its own internal heat before melting the 155\u00b0C insulation",
-    "opts": ["Nothing, the ambient temperature has no effect on motor heat", "The motor must be 'derated' (cannot be run at 100% load) because it has less thermal margin to dissipate its own internal heat before melting the 155\u00b0C insulation", "It automatically upgrades itself to Class H", "It can produce more power because it's already warmed up"],
-    "exp": "Motors are usually rated for a 40\u00b0C ambient room. If the room is 55\u00b0C, the motor starts off 15 degrees hotter than normal. If you run it at 100% load, it will overheat. You must run it at 80% load to stay safe.",
+    "q": "If a Class F (155°C) motor is installed in a boiler room where the ambient temperature reaches 55°C, what happens to its usable power rating?",
+    "a": "The motor must be 'derated' (cannot be run at 100% load) because it has less thermal margin to dissipate its own internal heat before melting the 155°C insulation",
+    "opts": [
+      "Nothing, the ambient temperature has no effect on motor heat",
+      "The motor must be 'derated' (cannot be run at 100% load) because it has less thermal margin to dissipate its own internal heat before melting the 155°C insulation",
+      "It automatically upgrades itself to Class H",
+      "It can produce more power because it's already warmed up"
+    ],
+    "exp": "Motors are usually rated for a 40°C ambient room. If the room is 55°C, the motor starts off 15 degrees hotter than normal. If you run it at 100% load, it will overheat. You must run it at 80% load to stay safe.",
     "cat": "INSULATION",
     "id": "T12C_075"
   },
   {
     "q": "What is 'Tracking' on the surface of a high-voltage insulator?",
     "a": "The formation of a permanent, conductive carbon path across the surface of the insulator, caused by electrical sparking through dirt, salt, or moisture contamination",
-    "opts": ["The physical wear marks left by cables rubbing together", "A GPS system used to locate buried cables", "The path the electrons take through the copper wire", "The formation of a permanent, conductive carbon path across the surface of the insulator, caused by electrical sparking through dirt, salt, or moisture contamination"],
+    "opts": [
+      "The physical wear marks left by cables rubbing together",
+      "A GPS system used to locate buried cables",
+      "The path the electrons take through the copper wire",
+      "The formation of a permanent, conductive carbon path across the surface of the insulator, caused by electrical sparking through dirt, salt, or moisture contamination"
+    ],
     "exp": "If an insulator is covered in salty dust, current leaks across the surface. This tiny sparking burns the plastic into black carbon. Carbon conducts electricity well. Eventually, the carbon path bridges the whole gap, causing a massive short circuit.",
     "cat": "INSULATION",
     "id": "T12C_076"
@@ -610,31 +990,51 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How can an ETO prevent 'Tracking' on main switchboard busbar supports?",
     "a": "During drydock or major shutdowns, thoroughly clean the resin/ceramic insulators with a clean, dry, lint-free cloth or an approved non-residue electro-cleaner to remove all dust and salt",
-    "opts": ["Wrap them in aluminum foil", "Spray them with saltwater to wash the dust off", "Coat them heavily in lubricating grease", "During drydock or major shutdowns, thoroughly clean the resin/ceramic insulators with a clean, dry, lint-free cloth or an approved non-residue electro-cleaner to remove all dust and salt"],
+    "opts": [
+      "Wrap them in aluminum foil",
+      "Spray them with saltwater to wash the dust off",
+      "Coat them heavily in lubricating grease",
+      "During drydock or major shutdowns, thoroughly clean the resin/ceramic insulators with a clean, dry, lint-free cloth or an approved non-residue electro-cleaner to remove all dust and salt"
+    ],
     "exp": "Cleanliness is paramount for high voltage. Removing the dirt removes the path for the electricity to leak.",
     "cat": "INSULATION",
     "id": "T12C_077"
   },
   {
     "q": "What is the primary function of the 'Anti-Condensation Space Heater' inside a marine motor?",
-    "a": "It switches ON when the motor is OFF, keeping the windings 3-5\u00b0C warmer than the ambient room air, physically preventing humid sea air from condensing into water on the cold copper coils",
-    "opts": ["It switches ON when the motor is OFF, keeping the windings 3-5\u00b0C warmer than the ambient room air, physically preventing humid sea air from condensing into water on the cold copper coils", "It melts ice off the cooling fan", "It prevents the lubricating grease from freezing", "It helps the motor reach operating temperature faster"],
+    "a": "It switches ON when the motor is OFF, keeping the windings 3-5°C warmer than the ambient room air, physically preventing humid sea air from condensing into water on the cold copper coils",
+    "opts": [
+      "It switches ON when the motor is OFF, keeping the windings 3-5°C warmer than the ambient room air, physically preventing humid sea air from condensing into water on the cold copper coils",
+      "It melts ice off the cooling fan",
+      "It prevents the lubricating grease from freezing",
+      "It helps the motor reach operating temperature faster"
+    ],
     "exp": "Condensation only forms on cold surfaces. By keeping the iron and copper slightly warm while the motor is asleep, water vapor cannot condense. This preserves the insulation resistance.",
     "cat": "INSULATION",
     "id": "T12C_078"
   },
   {
     "q": "If a space heater fails on a deck winch motor, what is the fastest sign of trouble?",
-    "a": "The Megger (Insulation Resistance) reading will plummet from >100 M\u03a9 down to <1 M\u03a9 within a few weeks due to severe moisture absorption into the varnish",
-    "opts": ["The motor will catch fire immediately when started", "The power cable will turn white", "The Megger (Insulation Resistance) reading will plummet from >100 M\u03a9 down to <1 M\u03a9 within a few weeks due to severe moisture absorption into the varnish", "The motor will spin at twice its normal speed"],
+    "a": "The Megger (Insulation Resistance) reading will plummet from >100 MΩ down to <1 MΩ within a few weeks due to severe moisture absorption into the varnish",
+    "opts": [
+      "The motor will catch fire immediately when started",
+      "The power cable will turn white",
+      "The Megger (Insulation Resistance) reading will plummet from >100 MΩ down to <1 MΩ within a few weeks due to severe moisture absorption into the varnish",
+      "The motor will spin at twice its normal speed"
+    ],
     "exp": "Space heaters are critical. If they die, the motor gets soaked in humidity. A regular PMS Megger check will catch this sudden drop, warning the ETO to fix the heater before the motor shorts out.",
     "cat": "INSULATION",
     "id": "T12C_079"
   },
   {
     "q": "What happens if a space heater is wired incorrectly and stays ON while the motor is running at 100% load?",
-    "a": "The extra 220V heat from the heater adds to the massive I\u00b2R heat generated by the running motor, potentially pushing the total internal temperature past the Class F insulation limit and destroying the motor",
-    "opts": ["The motor runs slightly more efficiently", "The extra 220V heat from the heater adds to the massive I\u00b2R heat generated by the running motor, potentially pushing the total internal temperature past the Class F insulation limit and destroying the motor", "The motor's cooling fan blows the heat away harmlessly", "The space heater burns out instantly"],
+    "a": "The extra 220V heat from the heater adds to the massive I²R heat generated by the running motor, potentially pushing the total internal temperature past the Class F insulation limit and destroying the motor",
+    "opts": [
+      "The motor runs slightly more efficiently",
+      "The extra 220V heat from the heater adds to the massive I²R heat generated by the running motor, potentially pushing the total internal temperature past the Class F insulation limit and destroying the motor",
+      "The motor's cooling fan blows the heat away harmlessly",
+      "The space heater burns out instantly"
+    ],
     "exp": "Space heaters must have an interlock (a Normally Closed auxiliary contact on the main contactor). Running = Heater Off. Stopped = Heater On. Doubling up the heat cooks the stator.",
     "cat": "INSULATION",
     "id": "T12C_080"
@@ -642,7 +1042,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'Hygroscopic' insulation, and why is it a problem?",
     "a": "Insulation that naturally attracts and absorbs water molecules from the air; old paper or cotton insulation was highly hygroscopic, which is why modern ships use non-hygroscopic synthetic resins",
-    "opts": ["Insulation that melts when exposed to UV light", "Insulation that naturally attracts and absorbs water molecules from the air; old paper or cotton insulation was highly hygroscopic, which is why modern ships use non-hygroscopic synthetic resins", "Insulation that repels oil but absorbs salt", "Insulation that changes color based on temperature"],
+    "opts": [
+      "Insulation that melts when exposed to UV light",
+      "Insulation that naturally attracts and absorbs water molecules from the air; old paper or cotton insulation was highly hygroscopic, which is why modern ships use non-hygroscopic synthetic resins",
+      "Insulation that repels oil but absorbs salt",
+      "Insulation that changes color based on temperature"
+    ],
     "exp": "Water conducts electricity. If your plastic insulation absorbs water like a sponge, it stops being an insulator. Modern epoxy resins are designed to completely reject water absorption.",
     "cat": "INSULATION",
     "id": "T12C_081"
@@ -650,23 +1055,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What fundamental electrical formula does a Megger use to calculate Insulation Resistance?",
     "a": "Ohm's Law: R = V / I. It applies a known high DC Voltage (V), measures the tiny resulting leakage Current (I), and displays the Resistance (R)",
-    "opts": ["Maxwell's Equations", "Kirchhoff's Voltage Law", "Faraday's Law of Induction", "Ohm's Law: R = V / I. It applies a known high DC Voltage (V), measures the tiny resulting leakage Current (I), and displays the Resistance (R)"],
-    "exp": "The Megger is just a highly specialized, extreme-voltage ohmmeter. It pushes 500V through the plastic insulation. If 5 micro-amps leak through, the chip calculates 500V / 0.000005A = 100,000,000 Ohms (100 M\u03a9).",
+    "opts": [
+      "Maxwell's Equations",
+      "Kirchhoff's Voltage Law",
+      "Faraday's Law of Induction",
+      "Ohm's Law: R = V / I. It applies a known high DC Voltage (V), measures the tiny resulting leakage Current (I), and displays the Resistance (R)"
+    ],
+    "exp": "The Megger is just a highly specialized, extreme-voltage ohmmeter. It pushes 500V through the plastic insulation. If 5 micro-amps leak through, the chip calculates 500V / 0.000005A = 100,000,000 Ohms (100 MΩ).",
     "cat": "TESTING",
     "id": "T12C_082"
   },
   {
     "q": "Why can't you use a standard digital multimeter (set to Ohms) to test motor insulation?",
-    "a": "A multimeter only outputs ~9V DC. This is too weak to drive a measurable current through 100 M\u03a9 of resistance, and too weak to stress the insulation to reveal hidden pinhole defects",
-    "opts": ["A multimeter uses AC voltage, which destroys insulation", "A multimeter only measures up to 100 Ohms", "A multimeter is too heavy to carry around the ship", "A multimeter only outputs ~9V DC. This is too weak to drive a measurable current through 100 M\u03a9 of resistance, and too weak to stress the insulation to reveal hidden pinhole defects"],
-    "exp": "At 9V, a 100 M\u03a9 insulator leaks 0.00000009 Amps. A standard multimeter can't detect a current that small, so it just displays 'OL' (Overload/Infinity). Furthermore, 9V won't spark across a tiny crack in the wire, but 500V will, revealing the danger.",
+    "a": "A multimeter only outputs ~9V DC. This is too weak to drive a measurable current through 100 MΩ of resistance, and too weak to stress the insulation to reveal hidden pinhole defects",
+    "opts": [
+      "A multimeter uses AC voltage, which destroys insulation",
+      "A multimeter only measures up to 100 Ohms",
+      "A multimeter is too heavy to carry around the ship",
+      "A multimeter only outputs ~9V DC. This is too weak to drive a measurable current through 100 MΩ of resistance, and too weak to stress the insulation to reveal hidden pinhole defects"
+    ],
+    "exp": "At 9V, a 100 MΩ insulator leaks 0.00000009 Amps. A standard multimeter can't detect a current that small, so it just displays 'OL' (Overload/Infinity). Furthermore, 9V won't spark across a tiny crack in the wire, but 500V will, revealing the danger.",
     "cat": "TESTING",
     "id": "T12C_083"
   },
   {
     "q": "What DC voltage should be selected on the Megger when testing a standard 440V marine motor or cable?",
     "a": "500V DC (The general rule is to use a test voltage roughly equal to or slightly higher than the system's rated operating voltage)",
-    "opts": ["50V DC", "2500V DC", "5000V DC", "500V DC (The general rule is to use a test voltage roughly equal to or slightly higher than the system's rated operating voltage)"],
+    "opts": [
+      "50V DC",
+      "2500V DC",
+      "5000V DC",
+      "500V DC (The general rule is to use a test voltage roughly equal to or slightly higher than the system's rated operating voltage)"
+    ],
     "exp": "Applying 5000V to a 440V motor will literally blast holes through its thin insulation. Applying 50V won't test it adequately. 500V stresses it just enough to prove it can handle 440V safely.",
     "cat": "TESTING",
     "id": "T12C_084"
@@ -674,7 +1094,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What DC voltage should be selected when Meggering a 6.6 kV High Voltage alternator?",
     "a": "Typically 2500V DC or 5000V DC, depending strictly on the manufacturer's specific testing manual",
-    "opts": ["500V DC", "Typically 2500V DC or 5000V DC, depending strictly on the manufacturer's specific testing manual", "10,000V DC", "100V DC"],
+    "opts": [
+      "500V DC",
+      "Typically 2500V DC or 5000V DC, depending strictly on the manufacturer's specific testing manual",
+      "10,000V DC",
+      "100V DC"
+    ],
     "exp": "HV equipment requires HV testing. A 500V Megger won't stress a 6.6kV cable enough to find a fault. However, you must follow the manual so you don't void the warranty by over-stressing it.",
     "cat": "TESTING",
     "id": "T12C_085"
@@ -682,7 +1107,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Before conducting an IR test on an alternator, why is it absolutely mandatory to physically disconnect the AVR (Automatic Voltage Regulator)?",
     "a": "The AVR is packed with delicate, low-voltage electronic microchips and diodes; slamming 500V or 1000V DC into these circuits via the excitation wiring will instantly and permanently destroy them",
-    "opts": ["The AVR will sound the ship's fire alarm", "The AVR is packed with delicate, low-voltage electronic microchips and diodes; slamming 500V or 1000V DC into these circuits via the excitation wiring will instantly and permanently destroy them", "The AVR will drain the battery of the Megger", "The AVR will artificially increase the Megger reading to 1000 M\u03a9"],
+    "opts": [
+      "The AVR will sound the ship's fire alarm",
+      "The AVR is packed with delicate, low-voltage electronic microchips and diodes; slamming 500V or 1000V DC into these circuits via the excitation wiring will instantly and permanently destroy them",
+      "The AVR will drain the battery of the Megger",
+      "The AVR will artificially increase the Megger reading to 1000 MΩ"
+    ],
     "exp": "This is a guaranteed failure point in orals and real life. Microchips run on 5V to 24V. Hitting them with a 500V Megger turns them into burnt toast. Always isolate the brain before testing the muscle.",
     "cat": "TESTING",
     "id": "T12C_086"
@@ -690,7 +1120,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Besides the AVR, what else must be disconnected or shorted out on a brushless alternator rotor before applying a Megger?",
     "a": "The Rotating Diode Rectifier assembly on the rotor must be disconnected or short-circuited to protect the diodes from destructive high-voltage transients induced from the stator",
-    "opts": ["The mechanical governor linkage", "The main cooling fan blades", "The Rotating Diode Rectifier assembly on the rotor must be disconnected or short-circuited to protect the diodes from destructive high-voltage transients induced from the stator", "The heavy steel flywheel"],
+    "opts": [
+      "The mechanical governor linkage",
+      "The main cooling fan blades",
+      "The Rotating Diode Rectifier assembly on the rotor must be disconnected or short-circuited to protect the diodes from destructive high-voltage transients induced from the stator",
+      "The heavy steel flywheel"
+    ],
     "exp": "A generator is essentially a transformer. Pushing 1000V DC into the stationary coils can magnetically induce a nasty voltage spike in the spinning coils. That spike can blow out the rectifier diodes sitting on the shaft.",
     "cat": "TESTING",
     "id": "T12C_087"
@@ -698,7 +1133,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the crucial SAFETY STEP immediately after finishing a 10-minute Megger test on a massive High Voltage cable?",
     "a": "You must physically discharge the cable by connecting it to earth (hull) for several minutes; large cables act like giant capacitors and trap lethal amounts of the 5000V DC test voltage",
-    "opts": ["You must paint the cable to seal any microscopic holes", "You must blow compressed air through the cable to cool it down", "You must reconnect the AVR immediately", "You must physically discharge the cable by connecting it to earth (hull) for several minutes; large cables act like giant capacitors and trap lethal amounts of the 5000V DC test voltage"],
+    "opts": [
+      "You must paint the cable to seal any microscopic holes",
+      "You must blow compressed air through the cable to cool it down",
+      "You must reconnect the AVR immediately",
+      "You must physically discharge the cable by connecting it to earth (hull) for several minutes; large cables act like giant capacitors and trap lethal amounts of the 5000V DC test voltage"
+    ],
     "exp": "A 100-meter HV cable is a massive capacitor. When you turn the Megger off, the cable is still holding 5000 Volts. If you grab the copper core to put the nut back on, it will shock you violently. Always bleed the voltage to ground with an earthing stick first.",
     "cat": "TESTING",
     "id": "T12C_088"
@@ -706,7 +1146,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "When a high DC voltage is applied to an insulator during a Megger test, three distinct currents flow. What is the 'Capacitive Charging Current'?",
     "a": "A massive, initial surge of current that fills the 'capacitor' formed by the copper wire and the steel hull; it decays to zero very rapidly within a few seconds",
-    "opts": ["A steady current that slowly rises over 10 minutes", "A current that flows backwards from the earth into the Megger", "The current that physically burns holes through the plastic", "A massive, initial surge of current that fills the 'capacitor' formed by the copper wire and the steel hull; it decays to zero very rapidly within a few seconds"],
+    "opts": [
+      "A steady current that slowly rises over 10 minutes",
+      "A current that flows backwards from the earth into the Megger",
+      "The current that physically burns holes through the plastic",
+      "A massive, initial surge of current that fills the 'capacitor' formed by the copper wire and the steel hull; it decays to zero very rapidly within a few seconds"
+    ],
     "exp": "When you hit the Megger button, the needle slams to 0 Ohms for a split second. This isn't a short circuit; it's the cable acting like an empty battery, sucking up current until it's 'full' of voltage.",
     "cat": "TESTING",
     "id": "T12C_089"
@@ -714,7 +1159,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the 'Dielectric Absorption Current' during an IR test?",
     "a": "A slowly decaying current caused by the molecular dipoles inside the plastic insulation physically rotating and aligning themselves with the high-voltage electrical field",
-    "opts": ["The current that charges the ship's main batteries", "A slowly decaying current caused by the molecular dipoles inside the plastic insulation physically rotating and aligning themselves with the high-voltage electrical field", "The current that leaks directly through cracks in the wire", "A dangerous current that must be avoided at all costs"],
+    "opts": [
+      "The current that charges the ship's main batteries",
+      "A slowly decaying current caused by the molecular dipoles inside the plastic insulation physically rotating and aligning themselves with the high-voltage electrical field",
+      "The current that leaks directly through cracks in the wire",
+      "A dangerous current that must be avoided at all costs"
+    ],
     "exp": "Plastics aren't completely dead; they have molecules with tiny positive and negative ends. 500V grabs those molecules and forces them to twist like compass needles. Twisting them takes energy (current). It takes about 10 minutes for them all to align and stop drawing current.",
     "cat": "TESTING",
     "id": "T12C_090"
@@ -722,15 +1172,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the 'Conductive Leakage Current' during an IR test?",
     "a": "The steady, constant current that physically leaks through cracks, moisture, and dirt in the insulation to the ground; this is the true indicator of the insulation's health",
-    "opts": ["A harmless current that flows through the air", "A current used to power the Megger's digital display", "The steady, constant current that physically leaks through cracks, moisture, and dirt in the insulation to the ground; this is the true indicator of the insulation's health", "A current that vanishes after 5 seconds"],
-    "exp": "Once the capacitor is full (seconds) and the molecules are aligned (minutes), the only current left flowing is the bad current\u2014the electrons actually squeezing through the wet, dirty plastic to escape to the hull. A high leakage current means a low Megger reading.",
+    "opts": [
+      "A harmless current that flows through the air",
+      "A current used to power the Megger's digital display",
+      "The steady, constant current that physically leaks through cracks, moisture, and dirt in the insulation to the ground; this is the true indicator of the insulation's health",
+      "A current that vanishes after 5 seconds"
+    ],
+    "exp": "Once the capacitor is full (seconds) and the molecules are aligned (minutes), the only current left flowing is the bad current—the electrons actually squeezing through the wet, dirty plastic to escape to the hull. A high leakage current means a low Megger reading.",
     "cat": "TESTING",
     "id": "T12C_091"
   },
   {
     "q": "Why is the Polarization Index (PI) test highly recommended over a simple 1-minute Megger test?",
     "a": "Because PI tests the RATIO of the 10-minute reading to the 1-minute reading, revealing hidden moisture and contamination independent of the motor's temperature",
-    "opts": ["Because the PI test uses AC voltage instead of DC", "Because the PI test automatically repairs the insulation", "Because PI tests the RATIO of the 10-minute reading to the 1-minute reading, revealing hidden moisture and contamination independent of the motor's temperature", "Because the PI test takes less time to complete"],
+    "opts": [
+      "Because the PI test uses AC voltage instead of DC",
+      "Because the PI test automatically repairs the insulation",
+      "Because PI tests the RATIO of the 10-minute reading to the 1-minute reading, revealing hidden moisture and contamination independent of the motor's temperature",
+      "Because the PI test takes less time to complete"
+    ],
     "exp": "A 1-minute reading fluctuates wildly based on how hot the engine room is today. Because PI is a ratio (Math: A / B), the temperature factor cancels itself out. It provides an absolute, scientific grade of the plastic's chemical health.",
     "cat": "TESTING",
     "id": "T12C_092"
@@ -738,7 +1198,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the formula for the Polarization Index (PI)?",
     "a": "PI = Insulation Resistance at 10 minutes / Insulation Resistance at 1 minute",
-    "opts": ["PI = Leakage Current / Charging Current", "PI = Voltage * Current * 10 minutes", "PI = Insulation Resistance at 10 minutes / Insulation Resistance at 1 minute", "PI = Insulation Resistance at 1 minute / Insulation Resistance at 10 minutes"],
+    "opts": [
+      "PI = Leakage Current / Charging Current",
+      "PI = Voltage * Current * 10 minutes",
+      "PI = Insulation Resistance at 10 minutes / Insulation Resistance at 1 minute",
+      "PI = Insulation Resistance at 1 minute / Insulation Resistance at 10 minutes"
+    ],
     "exp": "You hook up the Megger, lock the button ON, write down the reading at exactly 60 seconds, write down the reading at exactly 10 minutes, and divide the big number by the small number.",
     "cat": "TESTING",
     "id": "T12C_093"
@@ -746,7 +1211,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If a PI test results in a score of 2.5, what is the condition of the insulation?",
     "a": "Good to Excellent. The absorption current decayed properly over 10 minutes, proving the insulation is clean, dry, and polarizing correctly",
-    "opts": ["Good to Excellent. The absorption current decayed properly over 10 minutes, proving the insulation is clean, dry, and polarizing correctly", "Dangerously poor. It must be rewound immediately", "Marginal. Needs immediate space heater drying", "The motor has a dead short circuit"],
+    "opts": [
+      "Good to Excellent. The absorption current decayed properly over 10 minutes, proving the insulation is clean, dry, and polarizing correctly",
+      "Dangerously poor. It must be rewound immediately",
+      "Marginal. Needs immediate space heater drying",
+      "The motor has a dead short circuit"
+    ],
     "exp": "Anything over 2.0 is great. It means the resistance kept climbing for 10 straight minutes because the molecules were aligning, and very little bad leakage current was sneaking through.",
     "cat": "TESTING",
     "id": "T12C_094"
@@ -754,15 +1224,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If a PI test results in a score of 1.05 (a perfectly flat line), what is the condition of the insulation?",
     "a": "Very Poor / Dangerous. A flat ratio means steady leakage current (due to moisture or severe dirt) completely overpowered the absorption current from minute 1 to minute 10",
-    "opts": ["The Megger batteries are dead", "Excellent. A flat line means absolute stability", "Acceptable for low-voltage applications only", "Very Poor / Dangerous. A flat ratio means steady leakage current (due to moisture or severe dirt) completely overpowered the absorption current from minute 1 to minute 10"],
-    "exp": "If reading at 1 min is 50 M\u03a9, and reading at 10 min is 52 M\u03a9, the PI is ~1.0. This is terrible. It means the plastic is so soaked with saltwater that a massive river of leakage current is flowing, masking the tiny alignment currents.",
+    "opts": [
+      "The Megger batteries are dead",
+      "Excellent. A flat line means absolute stability",
+      "Acceptable for low-voltage applications only",
+      "Very Poor / Dangerous. A flat ratio means steady leakage current (due to moisture or severe dirt) completely overpowered the absorption current from minute 1 to minute 10"
+    ],
+    "exp": "If reading at 1 min is 50 MΩ, and reading at 10 min is 52 MΩ, the PI is ~1.0. This is terrible. It means the plastic is so soaked with saltwater that a massive river of leakage current is flowing, masking the tiny alignment currents.",
     "cat": "TESTING",
     "id": "T12C_095"
   },
   {
     "q": "Why is a PI test generally meaningless for a small 440V fractional-horsepower motor (e.g., a tiny ventilation fan)?",
     "a": "Small motors have extremely thin insulation with almost no volume; the dielectric absorption finishes in seconds, making the 10-minute reading practically identical to the 1-minute reading even if it is perfectly healthy",
-    "opts": ["Small motors have extremely thin insulation with almost no volume; the dielectric absorption finishes in seconds, making the 10-minute reading practically identical to the 1-minute reading even if it is perfectly healthy", "A 500V Megger will instantly melt a small motor", "Small motors run on DC voltage, which defeats the test", "Small motors are immune to moisture"],
+    "opts": [
+      "Small motors have extremely thin insulation with almost no volume; the dielectric absorption finishes in seconds, making the 10-minute reading practically identical to the 1-minute reading even if it is perfectly healthy",
+      "A 500V Megger will instantly melt a small motor",
+      "Small motors run on DC voltage, which defeats the test",
+      "Small motors are immune to moisture"
+    ],
     "exp": "PI relies on millions of molecules taking 10 minutes to twist into place. A tiny fan motor doesn't have enough plastic to take 10 minutes. It aligns instantly. A 1-minute basic Megger test is perfectly sufficient for small equipment.",
     "cat": "TESTING",
     "id": "T12C_096"
@@ -770,7 +1250,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the DAR (Dielectric Absorption Ratio) test?",
     "a": "A faster alternative to the PI test; it measures the ratio of the 60-second resistance reading divided by the 30-second reading",
-    "opts": ["A test that measures the thickness of the cable", "A chemical analysis of the insulating oil", "A test used strictly for checking fiber optic cables", "A faster alternative to the PI test; it measures the ratio of the 60-second resistance reading divided by the 30-second reading"],
+    "opts": [
+      "A test that measures the thickness of the cable",
+      "A chemical analysis of the insulating oil",
+      "A test used strictly for checking fiber optic cables",
+      "A faster alternative to the PI test; it measures the ratio of the 60-second resistance reading divided by the 30-second reading"
+    ],
     "exp": "Sometimes you don't have 10 minutes to stand around holding a button. DAR checks the curve early. DAR = IR(60s) / IR(30s). A healthy DAR is > 1.4. A wet DAR is < 1.1.",
     "cat": "TESTING",
     "id": "T12C_097"
@@ -778,7 +1263,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "You prepare to Megger a 3-phase motor. The motor is disconnected from the starter. How exactly do you connect the Megger leads to test Phase-to-Earth?",
     "a": "Connect the Positive (+) lead to one of the motor's phase terminals (e.g., U1), and firmly clamp the Negative (-) lead to the bare metal motor casing or earthing stud",
-    "opts": ["Hold the positive lead in your hand and touch the negative lead to the hull", "Connect both leads to the three phase terminals simultaneously", "Connect the Positive (+) lead to one of the motor's phase terminals (e.g., U1), and firmly clamp the Negative (-) lead to the bare metal motor casing or earthing stud", "Connect the leads between U1 and V1"],
+    "opts": [
+      "Hold the positive lead in your hand and touch the negative lead to the hull",
+      "Connect both leads to the three phase terminals simultaneously",
+      "Connect the Positive (+) lead to one of the motor's phase terminals (e.g., U1), and firmly clamp the Negative (-) lead to the bare metal motor casing or earthing stud",
+      "Connect the leads between U1 and V1"
+    ],
     "exp": "You are testing the plastic coating separating the copper from the iron casing. Push voltage into the copper, and see how much leaks through the plastic to the iron earth clamp.",
     "cat": "TESTING",
     "id": "T12C_098"
@@ -786,7 +1276,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If you measure Phase-to-Earth on U1, V1, and W1 separately while the motor terminal links are still installed in a Delta or Star pattern, what are you actually measuring?",
     "a": "Because the phases are physically tied together by the links, you are measuring the entire motor winding (all three phases) against earth simultaneously",
-    "opts": ["Because the phases are physically tied together by the links, you are measuring the entire motor winding (all three phases) against earth simultaneously", "You are creating a short circuit that will blow the Megger fuse", "You are testing the resistance of the terminal links themselves", "You are measuring only the U1 phase individually"],
+    "opts": [
+      "Because the phases are physically tied together by the links, you are measuring the entire motor winding (all three phases) against earth simultaneously",
+      "You are creating a short circuit that will blow the Megger fuse",
+      "You are testing the resistance of the terminal links themselves",
+      "You are measuring only the U1 phase individually"
+    ],
     "exp": "If the copper links are bolted across the top, touching U1 is the same as touching V1 and W1 because they are all connected. To test a single phase independently (e.g., to find which specific coil is bad), you must unbolt and remove the brass links first.",
     "cat": "TESTING",
     "id": "T12C_099"
@@ -794,47 +1289,77 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How do you perform a Phase-to-Phase Megger test on a motor?",
     "a": "Remove the terminal links to separate the coils. Connect the Megger leads between U1 and V1, then V1 and W1, then U1 and W1 to check if the insulation BETWEEN the different coils has broken down",
-    "opts": ["Leave the links installed and test U1 to the motor casing", "Touch both Megger leads to the U1 terminal", "Remove the terminal links to separate the coils. Connect the Megger leads between U1 and V1, then V1 and W1, then U1 and W1 to check if the insulation BETWEEN the different coils has broken down", "Connect U1, V1, and W1 to the 440V supply and measure the current"],
-    "exp": "A motor can have a perfect 100 M\u03a9 reading to the iron casing (Phase-to-Earth), but have melted varnish internally where two copper coils rub together. Testing Phase-to-Phase finds these hidden internal shorts.",
+    "opts": [
+      "Leave the links installed and test U1 to the motor casing",
+      "Touch both Megger leads to the U1 terminal",
+      "Remove the terminal links to separate the coils. Connect the Megger leads between U1 and V1, then V1 and W1, then U1 and W1 to check if the insulation BETWEEN the different coils has broken down",
+      "Connect U1, V1, and W1 to the 440V supply and measure the current"
+    ],
+    "exp": "A motor can have a perfect 100 MΩ reading to the iron casing (Phase-to-Earth), but have melted varnish internally where two copper coils rub together. Testing Phase-to-Phase finds these hidden internal shorts.",
     "cat": "TESTING",
     "id": "T12C_100"
   },
   {
     "q": "Why must you disconnect the motor supply cables from the motor terminal box if you suspect the motor is grounded?",
     "a": "To isolate the fault; if you test with the long supply cable still attached, a cut in the cable 50 meters away in the engine room will make the motor look like it has failed",
-    "opts": ["To save battery power on the Megger", "To isolate the fault; if you test with the long supply cable still attached, a cut in the cable 50 meters away in the engine room will make the motor look like it has failed", "Because the cable contains anti-static fluid", "To prevent the motor from starting accidentally"],
-    "exp": "Half the time, the 'dead motor' is actually just a sliced cable in a cable tray. Disconnecting the 6 nuts in the terminal box separates the motor from the cable. You Megger the bare motor. If it reads 100 M\u03a9, the motor is fine, and the problem is in the cable.",
+    "opts": [
+      "To save battery power on the Megger",
+      "To isolate the fault; if you test with the long supply cable still attached, a cut in the cable 50 meters away in the engine room will make the motor look like it has failed",
+      "Because the cable contains anti-static fluid",
+      "To prevent the motor from starting accidentally"
+    ],
+    "exp": "Half the time, the 'dead motor' is actually just a sliced cable in a cable tray. Disconnecting the 6 nuts in the terminal box separates the motor from the cable. You Megger the bare motor. If it reads 100 MΩ, the motor is fine, and the problem is in the cable.",
     "cat": "TESTING",
     "id": "T12C_101"
   },
   {
     "q": "Before starting a 6.6 kV Bow Thruster motor that has been idle for 6 months, what test is absolutely critical?",
     "a": "A 5000V Megger test followed by a 10-minute Polarization Index (PI) test to guarantee the massive windings haven't absorbed humidity that would cause a catastrophic explosion when 6600 Volts hits them",
-    "opts": ["A quick 500V 10-second Megger test", "A mechanical vibration test", "A phase-rotation test using a standard multimeter", "A 5000V Megger test followed by a 10-minute Polarization Index (PI) test to guarantee the massive windings haven't absorbed humidity that would cause a catastrophic explosion when 6600 Volts hits them"],
+    "opts": [
+      "A quick 500V 10-second Megger test",
+      "A mechanical vibration test",
+      "A phase-rotation test using a standard multimeter",
+      "A 5000V Megger test followed by a 10-minute Polarization Index (PI) test to guarantee the massive windings haven't absorbed humidity that would cause a catastrophic explosion when 6600 Volts hits them"
+    ],
     "exp": "High voltage takes no prisoners. If that motor is damp, 6.6kV will instantly arc through the moisture, turning the copper into vapor and destroying a million-dollar thruster. The PI test scientifically proves it is dry.",
     "cat": "TESTING",
     "id": "T12C_102"
   },
   {
-    "q": "What does a Megger reading of '0 \u03a9' (Zero Ohms) to earth mean?",
+    "q": "What does a Megger reading of '0 Ω' (Zero Ohms) to earth mean?",
     "a": "A 'Dead Short'. The copper conductor is physically touching the steel hull or the iron stator casing directly. Applying power will cause an instant massive arc and trip the breaker",
-    "opts": ["The Megger needs to be recalibrated", "A 'Dead Short'. The copper conductor is physically touching the steel hull or the iron stator casing directly. Applying power will cause an instant massive arc and trip the breaker", "The motor is fully charged and ready to run", "The insulation is in perfect factory condition"],
+    "opts": [
+      "The Megger needs to be recalibrated",
+      "A 'Dead Short'. The copper conductor is physically touching the steel hull or the iron stator casing directly. Applying power will cause an instant massive arc and trip the breaker",
+      "The motor is fully charged and ready to run",
+      "The insulation is in perfect factory condition"
+    ],
     "exp": "Zero resistance means there is no plastic left between the wire and the ship. It is a direct metal-to-metal connection.",
     "cat": "TESTING",
     "id": "T12C_103"
   },
   {
-    "q": "What does a Megger reading of '> 999 M\u03a9' or 'OL' (Overload) mean?",
+    "q": "What does a Megger reading of '> 999 MΩ' or 'OL' (Overload) mean?",
     "a": "The insulation resistance is so incredibly high and healthy that virtually zero leakage current is escaping; it exceeds the maximum measuring capability of the instrument",
-    "opts": ["The motor has absorbed too much water", "The wire is broken in half", "The Megger's internal fuse has blown", "The insulation resistance is so incredibly high and healthy that virtually zero leakage current is escaping; it exceeds the maximum measuring capability of the instrument"],
+    "opts": [
+      "The motor has absorbed too much water",
+      "The wire is broken in half",
+      "The Megger's internal fuse has blown",
+      "The insulation resistance is so incredibly high and healthy that virtually zero leakage current is escaping; it exceeds the maximum measuring capability of the instrument"
+    ],
     "exp": "On a brand new piece of dry XLPE cable, almost zero electrons can squeeze through the plastic. The Megger hits its ceiling and proudly displays 'Infinity'. This is a perfect test result.",
     "cat": "TESTING",
     "id": "T12C_104"
   },
   {
     "q": "When Meggering a generator, you forget to remove the neutral grounding link (if fitted). What will happen?",
-    "a": "Every phase will show a dead short (0 \u03a9) to earth, because the test voltage will travel straight down the copper coils, through the star point, and down the grounding link to the hull",
-    "opts": ["The generator will start spinning slowly", "The Megger will display infinity", "Every phase will show a dead short (0 \u03a9) to earth, because the test voltage will travel straight down the copper coils, through the star point, and down the grounding link to the hull", "The AVR will fry instantly"],
+    "a": "Every phase will show a dead short (0 Ω) to earth, because the test voltage will travel straight down the copper coils, through the star point, and down the grounding link to the hull",
+    "opts": [
+      "The generator will start spinning slowly",
+      "The Megger will display infinity",
+      "Every phase will show a dead short (0 Ω) to earth, because the test voltage will travel straight down the copper coils, through the star point, and down the grounding link to the hull",
+      "The AVR will fry instantly"
+    ],
     "exp": "If the center of the 'Star' winding is intentionally bolted to the hull (earthed system), you are just pushing electricity down a wire attached to the hull. You must unbolt the neutral earthing link to test the insulation holding the wire away from the hull.",
     "cat": "TESTING",
     "id": "T12C_105"
@@ -842,23 +1367,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the 'Guard' terminal found on high-end 5kV Meggers?",
     "a": "A third test lead used to bypass and eliminate 'Surface Leakage' current (e.g., current crawling across dirty porcelain) from the measurement, ensuring the Megger only measures the true internal health of the thick cable insulation",
-    "opts": ["A safety wire that prevents the operator from getting shocked", "A wire that sends test data to a laptop", "A third test lead used to bypass and eliminate 'Surface Leakage' current (e.g., current crawling across dirty porcelain) from the measurement, ensuring the Megger only measures the true internal health of the thick cable insulation", "A terminal used to charge the Megger battery"],
+    "opts": [
+      "A safety wire that prevents the operator from getting shocked",
+      "A wire that sends test data to a laptop",
+      "A third test lead used to bypass and eliminate 'Surface Leakage' current (e.g., current crawling across dirty porcelain) from the measurement, ensuring the Megger only measures the true internal health of the thick cable insulation",
+      "A terminal used to charge the Megger battery"
+    ],
     "exp": "When testing a 6.6kV cable, dirt on the outside of the rubber jacket can conduct electricity, making the cable look bad inside. Wrapping a bare wire around the jacket and hooking it to the 'Guard' terminal sucks up that dirty surface current and deletes it from the math calculation.",
     "cat": "TESTING",
     "id": "T12C_106"
   },
   {
-    "q": "If you Megger a 440V motor immediately after it trips on thermal overload (it is physically blazing hot), the reading is 0.5 M\u03a9. What should you do?",
-    "a": "Do not condemn the motor yet. Let it cool down to room temperature and re-test. IR drops drastically with heat; a cold test might reveal it is actually a healthy 50 M\u03a9",
-    "opts": ["Apply 1000V DC to burn off the excess heat", "Condemn the motor immediately and start rewinding it", "Submerge the motor in fresh water to cool it rapidly", "Do not condemn the motor yet. Let it cool down to room temperature and re-test. IR drops drastically with heat; a cold test might reveal it is actually a healthy 50 M\u03a9"],
-    "exp": "Heat masks the true health of the plastic. Because resistance halves every 10 degrees, an 80\u00b0C motor will read terrible, but a 20\u00b0C motor will read perfect. Always cool it down or use math to correct it back to 40\u00b0C.",
+    "q": "If you Megger a 440V motor immediately after it trips on thermal overload (it is physically blazing hot), the reading is 0.5 MΩ. What should you do?",
+    "a": "Do not condemn the motor yet. Let it cool down to room temperature and re-test. IR drops drastically with heat; a cold test might reveal it is actually a healthy 50 MΩ",
+    "opts": [
+      "Apply 1000V DC to burn off the excess heat",
+      "Condemn the motor immediately and start rewinding it",
+      "Submerge the motor in fresh water to cool it rapidly",
+      "Do not condemn the motor yet. Let it cool down to room temperature and re-test. IR drops drastically with heat; a cold test might reveal it is actually a healthy 50 MΩ"
+    ],
+    "exp": "Heat masks the true health of the plastic. Because resistance halves every 10 degrees, an 80°C motor will read terrible, but a 20°C motor will read perfect. Always cool it down or use math to correct it back to 40°C.",
     "cat": "TESTING",
     "id": "T12C_107"
   },
   {
     "q": "How does an ETO correctly use an 'Electrical Isolation Permit' (EIP) before IR testing?",
     "a": "It is a formal, signed document proving that the breaker is locked out (LOTO), tags are applied, and zero voltage has been verified with a meter BEFORE hands touch the copper to attach the Megger clips",
-    "opts": ["It is a document signed by the port authority", "It is a certificate allowing the use of 5000V equipment", "It is a permit allowing the ETO to work overtime", "It is a formal, signed document proving that the breaker is locked out (LOTO), tags are applied, and zero voltage has been verified with a meter BEFORE hands touch the copper to attach the Megger clips"],
+    "opts": [
+      "It is a document signed by the port authority",
+      "It is a certificate allowing the use of 5000V equipment",
+      "It is a permit allowing the ETO to work overtime",
+      "It is a formal, signed document proving that the breaker is locked out (LOTO), tags are applied, and zero voltage has been verified with a meter BEFORE hands touch the copper to attach the Megger clips"
+    ],
     "exp": "Surveyors demand strict adherence to safety culture. You never trust a switch. You lock it, tag it, test it with a voltmeter to prove it's dead, and sign your life on the EIP before touching the wires.",
     "cat": "TESTING",
     "id": "T12C_108"
@@ -866,7 +1406,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is it important to turn the Megger OFF and leave the leads connected for a few seconds after a test?",
     "a": "Modern Meggers have an internal automatic discharge circuit; leaving the leads attached allows the Megger to safely bleed the lethal capacitive voltage trapped in the cable back to zero",
-    "opts": ["It sends a confirmation signal to the ship's alarm panel", "It recalibrates the Megger for the next test", "It allows the Megger to print a receipt of the test", "Modern Meggers have an internal automatic discharge circuit; leaving the leads attached allows the Megger to safely bleed the lethal capacitive voltage trapped in the cable back to zero"],
+    "opts": [
+      "It sends a confirmation signal to the ship's alarm panel",
+      "It recalibrates the Megger for the next test",
+      "It allows the Megger to print a receipt of the test",
+      "Modern Meggers have an internal automatic discharge circuit; leaving the leads attached allows the Megger to safely bleed the lethal capacitive voltage trapped in the cable back to zero"
+    ],
     "exp": "If you hit STOP and instantly yank the red alligator clip off, the cable is still holding 500V. It will bite you. Waiting 5 seconds lets the internal resistor in the Megger suck the voltage out safely.",
     "cat": "TESTING",
     "id": "T12C_109"
@@ -874,23 +1419,38 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "When IR testing an entire switchboard, why must you push all the 'Emergency Stop' buttons and ensure all contactors are open?",
     "a": "To prevent the 500V test voltage from sneaking through control circuits, indicator lights, and PLCs, which could damage sensitive 24V components or give falsely low readings",
-    "opts": ["To test the physical springs in the buttons", "To reset the preferential trip relays", "To ensure the ship's horn doesn't blast accidentally", "To prevent the 500V test voltage from sneaking through control circuits, indicator lights, and PLCs, which could damage sensitive 24V components or give falsely low readings"],
+    "opts": [
+      "To test the physical springs in the buttons",
+      "To reset the preferential trip relays",
+      "To ensure the ship's horn doesn't blast accidentally",
+      "To prevent the 500V test voltage from sneaking through control circuits, indicator lights, and PLCs, which could damage sensitive 24V components or give falsely low readings"
+    ],
     "exp": "Switchboards are spiderwebs of wiring. A 220V indicator light bulb left in the circuit provides a path to ground, ruining your Megger reading. Pull control fuses and open all switches to isolate the heavy copper busbars completely.",
     "cat": "TESTING",
     "id": "T12C_110"
   },
   {
-    "q": "What is the standard acceptable formula to determine the absolute minimum safe Megger reading (in M\u03a9) for a large electric machine?",
-    "a": "Minimum M\u03a9 = Rated kV + 1. (e.g., A 0.44 kV motor needs a minimum of 1.44 M\u03a9. A 6.6 kV motor needs 7.6 M\u03a9)",
-    "opts": ["Minimum M\u03a9 = Rated kV + 1. (e.g., A 0.44 kV motor needs a minimum of 1.44 M\u03a9. A 6.6 kV motor needs 7.6 M\u03a9)", "Minimum M\u03a9 = Motor Weight in kg / 100", "Minimum M\u03a9 is always exactly 5.0 M\u03a9 regardless of size", "Minimum M\u03a9 = Rated Amps / 10"],
-    "exp": "This is a classic IEEE rule of thumb. Higher voltage machines need more robust insulation. A 1 M\u03a9 reading might barely scrape by for a 440V pump, but it is an absolute disaster for a 6.6kV thruster.",
+    "q": "What is the standard acceptable formula to determine the absolute minimum safe Megger reading (in MΩ) for a large electric machine?",
+    "a": "Minimum MΩ = Rated kV + 1. (e.g., A 0.44 kV motor needs a minimum of 1.44 MΩ. A 6.6 kV motor needs 7.6 MΩ)",
+    "opts": [
+      "Minimum MΩ = Rated kV + 1. (e.g., A 0.44 kV motor needs a minimum of 1.44 MΩ. A 6.6 kV motor needs 7.6 MΩ)",
+      "Minimum MΩ = Motor Weight in kg / 100",
+      "Minimum MΩ is always exactly 5.0 MΩ regardless of size",
+      "Minimum MΩ = Rated Amps / 10"
+    ],
+    "exp": "This is a classic IEEE rule of thumb. Higher voltage machines need more robust insulation. A 1 MΩ reading might barely scrape by for a 440V pump, but it is an absolute disaster for a 6.6kV thruster.",
     "cat": "TESTING",
     "id": "T12C_111"
   },
   {
     "q": "What is the correct sequence of layers for a standard Low Voltage (440V) Marine Armored Cable, from the innermost core to the outside?",
-    "a": "Conductor \u2192 Insulation \u2192 Bedding (Inner Sheath) \u2192 Armour \u2192 Outer Sheath",
-    "opts": ["Insulation \u2192 Conductor \u2192 Bedding \u2192 Outer Sheath \u2192 Armour", "Conductor \u2192 Armour \u2192 Insulation \u2192 Bedding \u2192 Outer Sheath", "Conductor \u2192 Insulation \u2192 Bedding (Inner Sheath) \u2192 Armour \u2192 Outer Sheath", "Conductor \u2192 Metallic Screen \u2192 Insulation \u2192 Armour \u2192 Outer Sheath"],
+    "a": "Conductor → Insulation → Bedding (Inner Sheath) → Armour → Outer Sheath",
+    "opts": [
+      "Insulation → Conductor → Bedding → Outer Sheath → Armour",
+      "Conductor → Armour → Insulation → Bedding → Outer Sheath",
+      "Conductor → Insulation → Bedding (Inner Sheath) → Armour → Outer Sheath",
+      "Conductor → Metallic Screen → Insulation → Armour → Outer Sheath"
+    ],
     "exp": "The copper conducts. The insulation holds the voltage. The bedding protects the soft plastic from the sharp steel. The steel armour provides physical crush protection. The outer sheath protects against seawater and oil.",
     "cat": "CABLES",
     "id": "T12C_112"
@@ -898,7 +1458,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "For a High Voltage (6.6kV) cable, what critical extra layers are added between the copper conductor and the main XLPE insulation?",
     "a": "A 'Conductor Screen' (semi-conductive layer) to smooth out the intense electrical field and prevent localized stress points that would drill holes into the XLPE",
-    "opts": ["A layer of Kevlar to prevent bullets from piercing the cable", "A layer of pure silver to increase conductivity", "A layer of lead to block radioactive emissions", "A 'Conductor Screen' (semi-conductive layer) to smooth out the intense electrical field and prevent localized stress points that would drill holes into the XLPE"],
+    "opts": [
+      "A layer of Kevlar to prevent bullets from piercing the cable",
+      "A layer of pure silver to increase conductivity",
+      "A layer of lead to block radioactive emissions",
+      "A 'Conductor Screen' (semi-conductive layer) to smooth out the intense electrical field and prevent localized stress points that would drill holes into the XLPE"
+    ],
     "exp": "Stranded copper is bumpy. At 6.6kV, voltage stress concentrates on the sharp bumps, tearing apart the plastic over time. Wrapping the bumpy copper in smooth, semi-conductive black tape creates a perfectly smooth electrical cylinder.",
     "cat": "CABLES",
     "id": "T12C_113"
@@ -906,7 +1471,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the function of the 'Metallic Screen' (copper tape or wire network) wrapped around the outside of the insulation in an HV cable?",
     "a": "It ensures the electric field remains perfectly contained inside the cable, and provides a massive, solid path to carry lethal fault currents safely to the earth relay if the cable is spiked",
-    "opts": ["It prevents the cable from stretching", "It acts as the primary neutral return wire for the 440V system", "It ensures the electric field remains perfectly contained inside the cable, and provides a massive, solid path to carry lethal fault currents safely to the earth relay if the cable is spiked", "It generates heat to melt ice off the cable"],
+    "opts": [
+      "It prevents the cable from stretching",
+      "It acts as the primary neutral return wire for the 440V system",
+      "It ensures the electric field remains perfectly contained inside the cable, and provides a massive, solid path to carry lethal fault currents safely to the earth relay if the cable is spiked",
+      "It generates heat to melt ice off the cable"
+    ],
     "exp": "HV fields are dangerous. The grounded copper screen acts like a Faraday cage, trapping the electrical stress inside the insulation. If a forklift forks the cable, the screen captures the 6.6kV instantly and dumps it to the hull, tripping the breaker.",
     "cat": "CABLES",
     "id": "T12C_114"
@@ -914,15 +1484,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What does 'SWA' stand for in marine cable specifications?",
     "a": "Steel Wire Armour",
-    "opts": ["Solid Wire Assembly", "Synthetic Water-resistant Alloy", "Steel Wire Armour", "Standard Weight Aluminium"],
+    "opts": [
+      "Solid Wire Assembly",
+      "Synthetic Water-resistant Alloy",
+      "Steel Wire Armour",
+      "Standard Weight Aluminium"
+    ],
     "exp": "SWA consists of dozens of thick, galvanized steel wires wrapped in a spiral around the inner cable. It provides immense tensile strength (pulling power) and massive protection against impacts and rats.",
     "cat": "CABLES",
     "id": "T12C_115"
   },
   {
     "q": "What is the critical difference between IEC 60332 (Flame Retardant) and IEC 60331 (Fire Resistant) cables?",
-    "a": "Flame Retardant (60332) simply stops burning when the fire is removed; Fire Resistant (60331) uses Mica tape to ensure the cable continues to conduct electricity and operate critical pumps while completely engulfed in 750\u00b0C flames",
-    "opts": ["Fire Resistant is only used for underwater applications", "Flame Retardant (60332) simply stops burning when the fire is removed; Fire Resistant (60331) uses Mica tape to ensure the cable continues to conduct electricity and operate critical pumps while completely engulfed in 750\u00b0C flames", "Flame Retardant survives 1000\u00b0C; Fire Resistant melts at 500\u00b0C", "They are exactly the same thing, just different European vs US codes"],
+    "a": "Flame Retardant (60332) simply stops burning when the fire is removed; Fire Resistant (60331) uses Mica tape to ensure the cable continues to conduct electricity and operate critical pumps while completely engulfed in 750°C flames",
+    "opts": [
+      "Fire Resistant is only used for underwater applications",
+      "Flame Retardant (60332) simply stops burning when the fire is removed; Fire Resistant (60331) uses Mica tape to ensure the cable continues to conduct electricity and operate critical pumps while completely engulfed in 750°C flames",
+      "Flame Retardant survives 1000°C; Fire Resistant melts at 500°C",
+      "They are exactly the same thing, just different European vs US codes"
+    ],
     "exp": "This is a mandatory oral question. If a fire hits a normal cable, it melts and shorts out (but won't spread the fire). If a fire hits a steering gear cable, it MUST keep working so the ship can steer away from danger. Fire Resistant (60331) is for survival.",
     "cat": "CABLES",
     "id": "T12C_116"
@@ -930,7 +1510,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Where MUST Fire Resistant (IEC 60331) cables be used onboard a ship?",
     "a": "For 'Essential Services' traversing high-risk areas, such as steering gear motors, emergency fire pumps, emergency lighting, and fire detection systems",
-    "opts": ["For the heavy fuel oil transfer pumps", "For the crew's personal cabin outlets", "For 'Essential Services' traversing high-risk areas, such as steering gear motors, emergency fire pumps, emergency lighting, and fire detection systems", "For the main galley ovens and deep fryers"],
+    "opts": [
+      "For the heavy fuel oil transfer pumps",
+      "For the crew's personal cabin outlets",
+      "For 'Essential Services' traversing high-risk areas, such as steering gear motors, emergency fire pumps, emergency lighting, and fire detection systems",
+      "For the main galley ovens and deep fryers"
+    ],
     "exp": "SOLAS dictates that life-saving equipment must survive an engine room fire. Running a standard plastic cable to the emergency fire pump defeats the purpose, as the fire would disable the pump before you could use it.",
     "cat": "CABLES",
     "id": "T12C_117"
@@ -938,7 +1523,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What does LSZH or LSF stand for, and why is it legally mandated for cables in passenger and accommodation areas?",
     "a": "Low Smoke Zero Halogen; it is chemically formulated so that if it burns, it does not release thick black smoke or highly toxic, acidic Hydrogen Chloride gas that blinds and suffocates evacuating crew",
-    "opts": ["Low Smoke Zero Halogen; it is chemically formulated so that if it burns, it does not release thick black smoke or highly toxic, acidic Hydrogen Chloride gas that blinds and suffocates evacuating crew", "Lightweight Synthetic Zinc Housing; it saves weight on the ship", "Lead Shielded Zero Heat; it prevents infrared detection by pirates", "Low Spark Zone Hazard; it prevents static sparks in fuel tanks"],
+    "opts": [
+      "Low Smoke Zero Halogen; it is chemically formulated so that if it burns, it does not release thick black smoke or highly toxic, acidic Hydrogen Chloride gas that blinds and suffocates evacuating crew",
+      "Lightweight Synthetic Zinc Housing; it saves weight on the ship",
+      "Lead Shielded Zero Heat; it prevents infrared detection by pirates",
+      "Low Spark Zone Hazard; it prevents static sparks in fuel tanks"
+    ],
     "exp": "Old PVC cables emit dense black smoke and hydrochloric acid when they burn. In a ship fire, you die from choking on the smoke long before the flames reach you. LSZH cables burn with a faint, non-toxic white smoke.",
     "cat": "CABLES",
     "id": "T12C_118"
@@ -946,7 +1536,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the 'Oxygen Index' (OI) regarding cable fire performance?",
     "a": "It measures the minimum percentage of oxygen required in the air to sustain a flame on the plastic; an OI greater than 21% means the cable is 'Flame Retardant' because it will self-extinguish in normal atmospheric air",
-    "opts": ["It measures how much oxygen the cable produces when burning", "It dictates how fast the cable will rust in the open air", "It measures the percentage of pure copper inside the wire", "It measures the minimum percentage of oxygen required in the air to sustain a flame on the plastic; an OI greater than 21% means the cable is 'Flame Retardant' because it will self-extinguish in normal atmospheric air"],
+    "opts": [
+      "It measures how much oxygen the cable produces when burning",
+      "It dictates how fast the cable will rust in the open air",
+      "It measures the percentage of pure copper inside the wire",
+      "It measures the minimum percentage of oxygen required in the air to sustain a flame on the plastic; an OI greater than 21% means the cable is 'Flame Retardant' because it will self-extinguish in normal atmospheric air"
+    ],
     "exp": "Normal air is 21% Oxygen. If a cable requires an atmosphere of 45% Oxygen to keep burning, it simply cannot burn on its own in the engine room. If you take a blowtorch away from it, it immediately snuffs itself out.",
     "cat": "CABLES",
     "id": "T12C_119"
@@ -954,7 +1549,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "How must three massive Single-Core AC cables (e.g., L1, L2, L3 feeding a giant bow thruster) be laid out on a cable tray to comply with electrical safety rules?",
     "a": "They must be clamped tightly together in a 'Trefoil' (cloverleaf triangle) formation to ensure their massive individual magnetic fields cancel each other out",
-    "opts": ["They must be run in completely different rooms", "They must be clamped tightly together in a 'Trefoil' (cloverleaf triangle) formation to ensure their massive individual magnetic fields cancel each other out", "They must be wrapped in heavy lead shielding", "They must be spread as far apart as physically possible to prevent overheating"],
+    "opts": [
+      "They must be run in completely different rooms",
+      "They must be clamped tightly together in a 'Trefoil' (cloverleaf triangle) formation to ensure their massive individual magnetic fields cancel each other out",
+      "They must be wrapped in heavy lead shielding",
+      "They must be spread as far apart as physically possible to prevent overheating"
+    ],
     "exp": "Running a single 1500 Amp AC cable acts like a giant electromagnet. It will induce severe eddy currents in the steel ship hull, heating the metal until the paint blisters and burns. Bundling the three phases together makes L1+L2+L3 = 0, deleting the magnetic field.",
     "cat": "CABLES",
     "id": "T12C_120"
@@ -962,15 +1562,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why are single-core AC cables rarely armoured with Steel Wire (SWA)?",
     "a": "Because the alternating magnetic field of a single phase would induce massive eddy currents and hysteresis losses directly in the magnetic steel wire, cooking the cable; non-magnetic aluminium or copper armour must be used instead",
-    "opts": ["Because single-core cables don't require any physical protection", "Because the alternating magnetic field of a single phase would induce massive eddy currents and hysteresis losses directly in the magnetic steel wire, cooking the cable; non-magnetic aluminium or copper armour must be used instead", "Because steel wire rusts too quickly on open decks", "Because steel is too heavy for large cables"],
+    "opts": [
+      "Because single-core cables don't require any physical protection",
+      "Because the alternating magnetic field of a single phase would induce massive eddy currents and hysteresis losses directly in the magnetic steel wire, cooking the cable; non-magnetic aluminium or copper armour must be used instead",
+      "Because steel wire rusts too quickly on open decks",
+      "Because steel is too heavy for large cables"
+    ],
     "exp": "Steel is magnetic. Wrapping a single AC phase in steel turns it into a transformer with a short-circuited secondary. The steel armor will glow red hot. 3-core cables use steel because the three phases cancel each other out before the field hits the armor.",
     "cat": "CABLES",
     "id": "T12C_121"
   },
   {
     "q": "When ordering a new cable for an engine room cooling pump, what is the proper specific designation you must provide to the superintendent?",
-    "a": "3-core, 35 mm\u00b2, stranded copper, XLPE insulated, SWA, LSF sheathed, 600/1000V, IEC 60092-353, 50 meters length",
-    "opts": ["Standard marine PVC cord, 35 amps capacity, 50 meters", "3-core, 35 mm\u00b2, stranded copper, XLPE insulated, SWA, LSF sheathed, 600/1000V, IEC 60092-353, 50 meters length", "Heavy duty wire, big size, 440V, waterproof, 50 meters", "1 inch thick cable, 3 wires inside, fireproof, 50 meters"],
+    "a": "3-core, 35 mm², stranded copper, XLPE insulated, SWA, LSF sheathed, 600/1000V, IEC 60092-353, 50 meters length",
+    "opts": [
+      "Standard marine PVC cord, 35 amps capacity, 50 meters",
+      "3-core, 35 mm², stranded copper, XLPE insulated, SWA, LSF sheathed, 600/1000V, IEC 60092-353, 50 meters length",
+      "Heavy duty wire, big size, 440V, waterproof, 50 meters",
+      "1 inch thick cable, 3 wires inside, fireproof, 50 meters"
+    ],
     "exp": "Vagueness gets the wrong cable delivered in Singapore. You must specify the core count, cross-sectional area (thickness), material, insulation type, armor type, sheath material, voltage rating, and international standard.",
     "cat": "CABLES",
     "id": "T12C_122"
@@ -978,15 +1588,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is an 'MCT' (Multi-Cable Transit) or Roxtec block, and where is it mandatory?",
     "a": "A steel frame packed with modular rubber sealing blocks and clamped tight, used wherever cables pass through a watertight bulkhead or fire-rated deck to maintain the ship's absolute watertight and A-60 fire integrity",
-    "opts": ["A device that splits high voltage into low voltage", "A steel frame packed with modular rubber sealing blocks and clamped tight, used wherever cables pass through a watertight bulkhead or fire-rated deck to maintain the ship's absolute watertight and A-60 fire integrity", "A junction box used to splice multiple cables together", "A heavy-duty winch used to pull cables through pipes"],
+    "opts": [
+      "A device that splits high voltage into low voltage",
+      "A steel frame packed with modular rubber sealing blocks and clamped tight, used wherever cables pass through a watertight bulkhead or fire-rated deck to maintain the ship's absolute watertight and A-60 fire integrity",
+      "A junction box used to splice multiple cables together",
+      "A heavy-duty winch used to pull cables through pipes"
+    ],
     "exp": "You can't just drill a hole in a wall, push a wire through, and fill it with silicone. If the ship floods, the pressure will blow the silicone out. MCT blocks use mechanically crushed rubber to grip the wires tight enough to hold back 30 feet of ocean water.",
     "cat": "CABLES",
     "id": "T12C_123"
   },
   {
     "q": "What is the function of the 'Intumescent' material used in some MCT bulkhead penetration blocks?",
-    "a": "When exposed to the extreme heat of a fire (>200\u00b0C), the material violently expands and swells up to 5 times its size, crushing the melting plastic cables and sealing the hole against flames and toxic smoke",
-    "opts": ["It absorbs water to prevent the cable from rusting", "It melts and acts as a fire-suppression foam", "When exposed to the extreme heat of a fire (>200\u00b0C), the material violently expands and swells up to 5 times its size, crushing the melting plastic cables and sealing the hole against flames and toxic smoke", "It changes color to warn the crew of high temperatures"],
+    "a": "When exposed to the extreme heat of a fire (>200°C), the material violently expands and swells up to 5 times its size, crushing the melting plastic cables and sealing the hole against flames and toxic smoke",
+    "opts": [
+      "It absorbs water to prevent the cable from rusting",
+      "It melts and acts as a fire-suppression foam",
+      "When exposed to the extreme heat of a fire (>200°C), the material violently expands and swells up to 5 times its size, crushing the melting plastic cables and sealing the hole against flames and toxic smoke",
+      "It changes color to warn the crew of high temperatures"
+    ],
     "exp": "During a raging fire, the PVC/XLPE jacket on a cable will melt and burn away, leaving an open hole through the bulkhead for the fire to escape to the next room. Intumescent rubber detects the heat and rapidly inflates like a dry sponge, aggressively plugging the gap.",
     "cat": "CABLES",
     "id": "T12C_124"
@@ -994,15 +1614,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is an 'A2' type cable gland (BS 6121 standard), commonly used on marine motors?",
     "a": "A heavy-duty brass gland designed specifically for armored cables; it features an inner cone to clamp the steel wire armor firmly for earthing, and an outer rubber seal to grip the sheath and provide IP66 watertightness",
-    "opts": ["A specialized gland for fiber optic networks", "A plastic gland used exclusively for thin data cables", "A gland that chemically welds the cable to the motor box", "A heavy-duty brass gland designed specifically for armored cables; it features an inner cone to clamp the steel wire armor firmly for earthing, and an outer rubber seal to grip the sheath and provide IP66 watertightness"],
+    "opts": [
+      "A specialized gland for fiber optic networks",
+      "A plastic gland used exclusively for thin data cables",
+      "A gland that chemically welds the cable to the motor box",
+      "A heavy-duty brass gland designed specifically for armored cables; it features an inner cone to clamp the steel wire armor firmly for earthing, and an outer rubber seal to grip the sheath and provide IP66 watertightness"
+    ],
     "exp": "Marine glands do two vital things: keep seawater out of the motor, and grab the steel armor wires tightly so that if a short circuit hits the armor, the fault current flows safely through the brass gland into the grounded motor casing.",
     "cat": "CABLES",
     "id": "T12C_125"
   },
   {
     "q": "What does 'Derating' mean when installing 20 power cables tightly bundled together on a single cable tray?",
-    "a": "Because tightly bunched cables cannot dissipate their I\u00b2R heat into the air, their maximum safe Amp capacity is mathematically reduced (derated); a cable that can handle 100A alone might only be safely rated for 70A in a thick bundle",
-    "opts": ["The magnetic fields cancel out, allowing them to carry double the current", "The cables are given a lower fire-resistance classification", "Because tightly bunched cables cannot dissipate their I\u00b2R heat into the air, their maximum safe Amp capacity is mathematically reduced (derated); a cable that can handle 100A alone might only be safely rated for 70A in a thick bundle", "The voltage of the cables is reduced by the transformer"],
+    "a": "Because tightly bunched cables cannot dissipate their I²R heat into the air, their maximum safe Amp capacity is mathematically reduced (derated); a cable that can handle 100A alone might only be safely rated for 70A in a thick bundle",
+    "opts": [
+      "The magnetic fields cancel out, allowing them to carry double the current",
+      "The cables are given a lower fire-resistance classification",
+      "Because tightly bunched cables cannot dissipate their I²R heat into the air, their maximum safe Amp capacity is mathematically reduced (derated); a cable that can handle 100A alone might only be safely rated for 70A in a thick bundle",
+      "The voltage of the cables is reduced by the transformer"
+    ],
     "exp": "Heat is the enemy of plastic. If the cable in the dead center of a giant bundle is pumping 100 Amps, its heat has nowhere to go. It will melt. Designers use complex tables to 'derate' the cables, forcing them to use a thicker, cooler wire for the same job.",
     "cat": "CABLES",
     "id": "T12C_126"
@@ -1010,7 +1640,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "According to SOLAS, how should the power cables for the Port and Starboard steering gear motors be routed?",
     "a": "They must be separated as widely as is physically practicable throughout their entire length from the switchboard to the steering flat, preventing a single localized fire or pipe burst from destroying both redundant feeds",
-    "opts": ["They must be run along the outside weather deck to keep them cool", "They must be bundled together in an extra-thick steel pipe for ultimate crush protection", "They must be separated as widely as is physically practicable throughout their entire length from the switchboard to the steering flat, preventing a single localized fire or pipe burst from destroying both redundant feeds", "They must share the exact same cable tray to ensure equal voltage drop"],
+    "opts": [
+      "They must be run along the outside weather deck to keep them cool",
+      "They must be bundled together in an extra-thick steel pipe for ultimate crush protection",
+      "They must be separated as widely as is physically practicable throughout their entire length from the switchboard to the steering flat, preventing a single localized fire or pipe burst from destroying both redundant feeds",
+      "They must share the exact same cable tray to ensure equal voltage drop"
+    ],
     "exp": "Redundancy is useless if a single event kills both backups. If a fire starts in the port alleyway, it might burn the Port steering cable, but the Starboard cable safely routed down the starboard alleyway survives, saving the ship.",
     "cat": "CABLES",
     "id": "T12C_127"
@@ -1018,7 +1653,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the SOLAS rule regarding making joints or splices in a power cable run (e.g., repairing a cut cable)?",
     "a": "Joints should be avoided wherever possible; if absolutely necessary, they must be made using class-approved, flameproof resin/epoxy splice kits that restore the cable to its original IP rating and mechanical strength",
-    "opts": ["Joints should be avoided wherever possible; if absolutely necessary, they must be made using class-approved, flameproof resin/epoxy splice kits that restore the cable to its original IP rating and mechanical strength", "Cables can simply be tied together inside a plastic junction box", "Standard wire nuts wrapped tightly in electrical tape are perfectly legal", "Joints are completely illegal under all circumstances and the entire 200m cable must be replaced"],
+    "opts": [
+      "Joints should be avoided wherever possible; if absolutely necessary, they must be made using class-approved, flameproof resin/epoxy splice kits that restore the cable to its original IP rating and mechanical strength",
+      "Cables can simply be tied together inside a plastic junction box",
+      "Standard wire nuts wrapped tightly in electrical tape are perfectly legal",
+      "Joints are completely illegal under all circumstances and the entire 200m cable must be replaced"
+    ],
     "exp": "A splice is a weak point that can spark, heat up, or let water in. While running a brand new continuous cable is always preferred, a proper 2-part liquid epoxy resin kit that cures into a solid waterproof brick is the only acceptable permanent repair.",
     "cat": "CABLES",
     "id": "T12C_128"
@@ -1026,7 +1666,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the restriction on cable joints located in a Hazardous Area (e.g., inside a Paint Locker or Pump Room)?",
     "a": "Cable joints are strictly PROHIBITED in hazardous explosive areas. Cables must run continuously without any breaks from the safe area directly to the Ex-certified equipment",
-    "opts": ["They are allowed if inspected daily", "Cable joints are strictly PROHIBITED in hazardous explosive areas. Cables must run continuously without any breaks from the safe area directly to the Ex-certified equipment", "They must be soldered rather than crimped", "They must be wrapped in red tape"],
+    "opts": [
+      "They are allowed if inspected daily",
+      "Cable joints are strictly PROHIBITED in hazardous explosive areas. Cables must run continuously without any breaks from the safe area directly to the Ex-certified equipment",
+      "They must be soldered rather than crimped",
+      "They must be wrapped in red tape"
+    ],
     "exp": "In a room full of explosive gas, a failing splice is a bomb detonator. Class societies enforce a zero-tolerance policy for joints in Ex-zones. The cable must be a single, unbroken piece of copper.",
     "cat": "CABLES",
     "id": "T12C_129"
@@ -1034,15 +1679,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'MICC' (Mineral Insulated Copper Clad) cable, and where is it traditionally used?",
     "a": "A highly specialized fire-survival cable made of solid copper rods packed tightly inside a copper tube filled with compressed Magnesium Oxide powder; historically used for fire alarms and emergency lighting",
-    "opts": ["A cable used exclusively for underwater ROVs", "A cheap, flexible cable used for temporary lighting", "A highly specialized fire-survival cable made of solid copper rods packed tightly inside a copper tube filled with compressed Magnesium Oxide powder; historically used for fire alarms and emergency lighting", "A fiber optic cable wrapped in copper mesh"],
-    "exp": "MICC (often called Pyrotenax) contains zero plastic. It is pure metal and rock dust. It can operate while literally glowing red hot in a 1000\u00b0C fire. It is extremely difficult to install and terminate, so modern fire-resistant XLPE/Mica tape cables have largely replaced it.",
+    "opts": [
+      "A cable used exclusively for underwater ROVs",
+      "A cheap, flexible cable used for temporary lighting",
+      "A highly specialized fire-survival cable made of solid copper rods packed tightly inside a copper tube filled with compressed Magnesium Oxide powder; historically used for fire alarms and emergency lighting",
+      "A fiber optic cable wrapped in copper mesh"
+    ],
+    "exp": "MICC (often called Pyrotenax) contains zero plastic. It is pure metal and rock dust. It can operate while literally glowing red hot in a 1000°C fire. It is extremely difficult to install and terminate, so modern fire-resistant XLPE/Mica tape cables have largely replaced it.",
     "cat": "CABLES",
     "id": "T12C_130"
   },
   {
     "q": "If a cable needs to cross a structural expansion joint in the ship's hull, how must it be installed?",
     "a": "An 'Expansion Loop' (a physical slack coil or U-bend of cable) must be provided to absorb the stretching and compression of the ship's steel without snapping the rigid copper wires",
-    "opts": ["It must be pulled as tight as a guitar string to brace the ship", "An 'Expansion Loop' (a physical slack coil or U-bend of cable) must be provided to absorb the stretching and compression of the ship's steel without snapping the rigid copper wires", "It must be encased in a solid block of concrete", "It must be cut in half and connected via a sliding slip-ring"],
+    "opts": [
+      "It must be pulled as tight as a guitar string to brace the ship",
+      "An 'Expansion Loop' (a physical slack coil or U-bend of cable) must be provided to absorb the stretching and compression of the ship's steel without snapping the rigid copper wires",
+      "It must be encased in a solid block of concrete",
+      "It must be cut in half and connected via a sliding slip-ring"
+    ],
     "exp": "Ships are flexible; they bend and hog/sag in heavy seas by several inches. If a thick SWA cable is clamped tight across a moving joint, the immense mechanical leverage will rip the copper conductors in half.",
     "cat": "CABLES",
     "id": "T12C_131"
@@ -1050,7 +1705,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why is it critical to use a proper calibrated crimping tool rather than pliers when terminating a cable lug onto a stranded copper wire?",
     "a": "A proper hex/indent crimper uses immense, calculated tons of pressure to cold-weld the copper strands and the lug into a solid, gas-tight block of metal with near-zero electrical resistance",
-    "opts": ["A proper hex/indent crimper uses immense, calculated tons of pressure to cold-weld the copper strands and the lug into a solid, gas-tight block of metal with near-zero electrical resistance", "Because pliers leave tool marks that rust", "Because pliers are illegal under MARPOL", "Because the crimping tool automatically solders the wire"],
+    "opts": [
+      "A proper hex/indent crimper uses immense, calculated tons of pressure to cold-weld the copper strands and the lug into a solid, gas-tight block of metal with near-zero electrical resistance",
+      "Because pliers leave tool marks that rust",
+      "Because pliers are illegal under MARPOL",
+      "Because the crimping tool automatically solders the wire"
+    ],
     "exp": "A bad crimp leaves air gaps. Electricity arcing through air gaps creates immense heat. Most motor terminal box fires start because a lazy electrician squeezed a 100-Amp lug with a pair of channel-locks instead of using the heavy hydraulic crimper.",
     "cat": "CABLES",
     "id": "T12C_132"
@@ -1058,7 +1718,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the minimum bending radius for a standard heavy marine power cable?",
     "a": "Typically 6 to 8 times the overall diameter of the cable (e.g., an 80mm thick cable cannot be bent tighter than a 480mm curve)",
-    "opts": ["It can be bent as tight as a 90-degree corner", "Exactly 2 times the diameter", "Typically 6 to 8 times the overall diameter of the cable (e.g., an 80mm thick cable cannot be bent tighter than a 480mm curve)", "Marine cables cannot be bent at all; they must be run straight"],
+    "opts": [
+      "It can be bent as tight as a 90-degree corner",
+      "Exactly 2 times the diameter",
+      "Typically 6 to 8 times the overall diameter of the cable (e.g., an 80mm thick cable cannot be bent tighter than a 480mm curve)",
+      "Marine cables cannot be bent at all; they must be run straight"
+    ],
     "exp": "Forcing a thick cable around a sharp steel corner stretches the outer plastic until it tears, and crushes the inner insulation against the copper core, causing a high-voltage short circuit.",
     "cat": "CABLES",
     "id": "T12C_133"
@@ -1066,7 +1731,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why are standard AC power cables and 24V DC communication cables generally forbidden from sharing the exact same cable tray without a physical divider?",
     "a": "The high voltage and heavy alternating currents of the power cables create immense electromagnetic fields that induce destructive noise/voltage spikes into the delicate 24V data lines",
-    "opts": ["Because the AC cables are too heavy and will crush the DC cables", "Because the 24V cables will drain power from the 440V cables", "The high voltage and heavy alternating currents of the power cables create immense electromagnetic fields that induce destructive noise/voltage spikes into the delicate 24V data lines", "Because it violates the ship's color-coding aesthetic"],
+    "opts": [
+      "Because the AC cables are too heavy and will crush the DC cables",
+      "Because the 24V cables will drain power from the 440V cables",
+      "The high voltage and heavy alternating currents of the power cables create immense electromagnetic fields that induce destructive noise/voltage spikes into the delicate 24V data lines",
+      "Because it violates the ship's color-coding aesthetic"
+    ],
     "exp": "EMI (Electromagnetic Interference) is a massive issue on modern ships. Putting a fragile Cat6 ethernet cable right next to a 2000kW Bow Thruster cable will completely scramble the ship's computer network every time the thruster fires.",
     "cat": "CABLES",
     "id": "T12C_134"
@@ -1074,15 +1744,25 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is 'Skin Effect' in large AC power cables?",
     "a": "Alternating Current (AC) naturally forces electrons to flow mostly along the outer 'skin' of the copper wire rather than through the center, increasing the effective resistance of the cable",
-    "opts": ["The tendency of the outer plastic sheath to peel off in the sun", "A condition where the steel armor becomes magnetized", "The reaction of saltwater with the copper wire turning it green", "Alternating Current (AC) naturally forces electrons to flow mostly along the outer 'skin' of the copper wire rather than through the center, increasing the effective resistance of the cable"],
-    "exp": "In DC, the whole wire is used. In AC, changing magnetic fields inside the wire push the electrons to the edge. This is why marine cables are made of hundreds of tiny stranded wires rather than one giant solid copper rod\u2014it provides much more 'skin' surface area.",
+    "opts": [
+      "The tendency of the outer plastic sheath to peel off in the sun",
+      "A condition where the steel armor becomes magnetized",
+      "The reaction of saltwater with the copper wire turning it green",
+      "Alternating Current (AC) naturally forces electrons to flow mostly along the outer 'skin' of the copper wire rather than through the center, increasing the effective resistance of the cable"
+    ],
+    "exp": "In DC, the whole wire is used. In AC, changing magnetic fields inside the wire push the electrons to the edge. This is why marine cables are made of hundreds of tiny stranded wires rather than one giant solid copper rod—it provides much more 'skin' surface area.",
     "cat": "CABLES",
     "id": "T12C_135"
   },
   {
     "q": "When sizing a cable, what two independent electrical calculations must the engineer verify to ensure it is safe?",
     "a": "The 'Current Carrying Capacity' (is the wire thick enough not to melt from the amps) and the 'Voltage Drop' (is the wire too long, causing the voltage to sag below 5% at the motor end)",
-    "opts": ["The 'Current Carrying Capacity' (is the wire thick enough not to melt from the amps) and the 'Voltage Drop' (is the wire too long, causing the voltage to sag below 5% at the motor end)", "The 'Capacitance' and the 'Inductance' only", "The 'Weight Limit' and the 'Color Code'", "The 'Magnetic Resonance' and the 'Frequency Shift'"],
+    "opts": [
+      "The 'Current Carrying Capacity' (is the wire thick enough not to melt from the amps) and the 'Voltage Drop' (is the wire too long, causing the voltage to sag below 5% at the motor end)",
+      "The 'Capacitance' and the 'Inductance' only",
+      "The 'Weight Limit' and the 'Color Code'",
+      "The 'Magnetic Resonance' and the 'Frequency Shift'"
+    ],
     "exp": "A thin wire might survive 50 amps without melting, but if it runs 200 meters to the bow thruster, the natural resistance of the copper will eat 30 Volts. The motor receives only 410V, stalls, and burns out. Both thickness and length matter.",
     "cat": "CABLES",
     "id": "T12C_136"
@@ -1090,7 +1770,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What is the primary difference between a 'Flexible' cable (Class 5/6) and a standard stranded cable (Class 2)?",
     "a": "Flexible cables use hundreds of extremely fine, hair-like copper strands, allowing them to bend and move constantly without snapping; standard cables use thicker, rigid strands meant for permanent, fixed installation",
-    "opts": ["Flexible cables are made of aluminum", "Flexible cables have no outer insulation jacket", "Standard cables can carry ten times the voltage", "Flexible cables use hundreds of extremely fine, hair-like copper strands, allowing them to bend and move constantly without snapping; standard cables use thicker, rigid strands meant for permanent, fixed installation"],
+    "opts": [
+      "Flexible cables are made of aluminum",
+      "Flexible cables have no outer insulation jacket",
+      "Standard cables can carry ten times the voltage",
+      "Flexible cables use hundreds of extremely fine, hair-like copper strands, allowing them to bend and move constantly without snapping; standard cables use thicker, rigid strands meant for permanent, fixed installation"
+    ],
     "exp": "A crane pendant or a portable welding machine requires Class 5 flexible wire. If you use standard rigid ship wiring, the thick copper strands will snap from metal fatigue within a week of bending.",
     "cat": "CABLES",
     "id": "T12C_137"
@@ -1098,7 +1783,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What indicates a cable is IEC 60092 approved for marine use?",
     "a": "It typically possesses a Type Approval certificate from a major classification society (like DNV, LR, or ABS) confirming it survives vibration, oil, and flame-retardant marine tests",
-    "opts": ["It is filled with pressurized helium gas", "It has a waterproof USB port on the end", "It is painted bright orange", "It typically possesses a Type Approval certificate from a major classification society (like DNV, LR, or ABS) confirming it survives vibration, oil, and flame-retardant marine tests"],
+    "opts": [
+      "It is filled with pressurized helium gas",
+      "It has a waterproof USB port on the end",
+      "It is painted bright orange",
+      "It typically possesses a Type Approval certificate from a major classification society (like DNV, LR, or ABS) confirming it survives vibration, oil, and flame-retardant marine tests"
+    ],
     "exp": "You cannot buy standard house wire from a hardware store and put it on a ship. Ship cables endure vicious vibration, salt, and oil. Surveyors look for the 'DNV Approved' or 'LR' stamp printed right on the cable jacket.",
     "cat": "CABLES",
     "id": "T12C_138"
@@ -1106,7 +1796,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "If an ETO is inspecting a massive cable bundle and sees a white powdery substance leaking out of the ends, what is it?",
     "a": "Talcum or chalk powder, deliberately placed inside the cable by the manufacturer during extrusion to prevent the internal rubber layers from vulcanizing and sticking together, making it easier to strip",
-    "opts": ["The breakdown of the copper core due to high frequency", "Talcum or chalk powder, deliberately placed inside the cable by the manufacturer during extrusion to prevent the internal rubber layers from vulcanizing and sticking together, making it easier to strip", "Severe corrosion of the aluminum shielding", "Dried sea salt from a hull leak"],
+    "opts": [
+      "The breakdown of the copper core due to high frequency",
+      "Talcum or chalk powder, deliberately placed inside the cable by the manufacturer during extrusion to prevent the internal rubber layers from vulcanizing and sticking together, making it easier to strip",
+      "Severe corrosion of the aluminum shielding",
+      "Dried sea salt from a hull leak"
+    ],
     "exp": "When stripping the tough outer jacket off a multi-core cable, the powder acts as a lubricant. Without it, the hot plastic would melt directly onto the inner wires during manufacturing, making it impossible for the ETO to peel the layers apart.",
     "cat": "CABLES",
     "id": "T12C_139"
@@ -1114,7 +1809,12 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "Why must you physically tag and clearly identify both ends of every single cable during an installation or motor overhaul?",
     "a": "To ensure absolute safety and prevent catastrophic cross-wiring; crossing phases will blow up motors, and connecting a 440V line to a 24V sensor input will destroy the entire automation rack",
-    "opts": ["To ensure absolute safety and prevent catastrophic cross-wiring; crossing phases will blow up motors, and connecting a 440V line to a 24V sensor input will destroy the entire automation rack", "To measure the exact length of the cable", "To satisfy aesthetic color-coding rules", "Because the tags act as a secondary grounding point"],
+    "opts": [
+      "To ensure absolute safety and prevent catastrophic cross-wiring; crossing phases will blow up motors, and connecting a 440V line to a 24V sensor input will destroy the entire automation rack",
+      "To measure the exact length of the cable",
+      "To satisfy aesthetic color-coding rules",
+      "Because the tags act as a secondary grounding point"
+    ],
     "exp": "When you disconnect 15 identical black wires to pull a giant crane motor out for overhaul, you will never remember which one is L1, L2, L3, Thermistor +, Thermistor -, Space Heater L, and Space Heater N without rigorous metal tagging.",
     "cat": "CABLES",
     "id": "T12C_140"
@@ -1122,9 +1822,483 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "What does SOLAS dictate regarding the earthing of an armored cable?",
     "a": "The metallic armor must be electrically continuous and firmly clamped to the earthed metal structure (hull) at BOTH ends of the cable run (with rare exceptions for specific instrumentation shields)",
-    "opts": ["The armor must be connected to the live phase to act as a heater", "The metallic armor must be electrically continuous and firmly clamped to the earthed metal structure (hull) at BOTH ends of the cable run (with rare exceptions for specific instrumentation shields)", "The armor should only be grounded at one end", "The armor must be cut off and covered in electrical tape"],
+    "opts": [
+      "The armor must be connected to the live phase to act as a heater",
+      "The metallic armor must be electrically continuous and firmly clamped to the earthed metal structure (hull) at BOTH ends of the cable run (with rare exceptions for specific instrumentation shields)",
+      "The armor should only be grounded at one end",
+      "The armor must be cut off and covered in electrical tape"
+    ],
     "exp": "Safety ground must be robust. Bolting the brass A2 gland tightly into the switchboard wall at one end, and into the motor casing at the other end, ensures any fault current slamming into the armor has a massive, zero-resistance path to the ship's hull to trip the breaker.",
     "cat": "CABLES",
     "id": "T12C_141"
+  },
+  {
+    "q": "What does a Megger (Insulation Resistance Tester) actually measure?",
+    "a": "The very high resistance of the insulation between a conductor and earth (or between phases)",
+    "opts": [
+      "The very high resistance of the insulation between a conductor and earth (or between phases)",
+      "The resistance of the copper wire itself",
+      "The voltage of the generator",
+      "The current flowing to the motor"
+    ],
+    "exp": "A Megger applies a known DC high voltage (500V-5000V depending on equipment rating) across the insulation and measures the resulting leakage current. IR (MΩ) = Applied Voltage (V) / Leakage Current (µA). Healthy insulation has very high resistance (hundreds of MΩ) — very little current leaks through. Degraded insulation lets more current through — lower IR reading.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Why does a Megger use DC voltage for testing instead of AC?",
+    "a": "AC would cause capacitive leakage current, making the insulation seem worse than it is; DC only measures true resistive leakage",
+    "opts": [
+      "AC would cause capacitive leakage current, making the insulation seem worse than it is; DC only measures true resistive leakage",
+      "AC is too dangerous",
+      "DC is required by SOLAS",
+      "AC cannot generate high enough voltage"
+    ],
+    "exp": "AC voltage charges and discharges the winding capacitance every half-cycle, creating a capacitive current that adds to the measured leakage current, making the insulation appear worse than it is. DC voltage: after the initial capacitive charging current dies away (typically 30-60 seconds), only true resistive leakage current remains — giving an accurate measurement of insulation quality.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What voltage Megger should be used to test a standard 440V motor on a ship?",
+    "a": "500V DC",
+    "opts": [
+      "500V DC",
+      "250V DC",
+      "1000V DC",
+      "5000V DC"
+    ],
+    "exp": "500V DC megger for 440V equipment (IEC 60364 / IEEE 43 standard). The test voltage is approximately equal to the rated voltage to adequately stress the insulation without exceeding its dielectric strength. Using 1000V on a 440V motor is acceptable for additional stress testing but risks damaging weakened insulation. Never use 5000V on 440V equipment.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What voltage Megger should be used to test a 6.6kV High Voltage motor?",
+    "a": "5000V DC (or 2500V DC depending on maker instructions)",
+    "opts": [
+      "5000V DC (or 2500V DC depending on maker instructions)",
+      "500V DC",
+      "50000V DC",
+      "1000V AC"
+    ],
+    "exp": "5000V DC megger for 6.6kV HV equipment. General rule: test voltage ≈ twice the rated voltage + 1000V. For 6.6kV: 2 × 6600 + 1000 = 14,200V (for Hi-Pot) but for routine IR testing, 5000V DC is standard. Reference: IEC 60034-1, IEEE 43. Using 500V would apply insufficient stress to reveal degradation in HV insulation.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is the general rule of thumb for minimum acceptable Insulation Resistance?",
+    "a": "Rated Voltage in kV + 1 Megohm (e.g., 440V = 0.44 + 1 = 1.44 MΩ)",
+    "opts": [
+      "Rated Voltage in kV + 1 Megohm (e.g., 440V = 0.44 + 1 = 1.44 MΩ)",
+      "100 Ohms",
+      "1000 Megohms",
+      "Zero Ohms"
+    ],
+    "exp": "IEC standard: Minimum IR (MΩ) = Working Voltage (kV) + 1. Examples: 440V (0.44kV) motor: minimum = 0.44 + 1 = 1.44 MΩ ≈ 1 MΩ. 3.3kV motor: minimum = 3.3 + 1 = 4.3 MΩ. 6.6kV motor: minimum = 6.6 + 1 = 7.6 MΩ. These are absolute minimums — in practice, aim for 10× or more of these values.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "For a 440V motor in service, what is practically considered the absolute minimum safe IR before energising?",
+    "a": "1 Megohm (though >5 MΩ is preferred)",
+    "opts": [
+      "1 Megohm (though >5 MΩ is preferred)",
+      "100 kΩ",
+      "1000 MΩ",
+      "0.1 MΩ"
+    ],
+    "exp": "1 MΩ is the absolute minimum (from IR = kV + 1 rule: 0.44kV + 1 = 1.44 MΩ, rounded to 1 MΩ). Below 1 MΩ: do NOT energise — risk of insulation flashover causing motor winding damage and earth fault. Preferred: >5 MΩ for new or recently dried motor. New motor should read hundreds of MΩ. Trend monitoring: compare to previous readings to identify degradation.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Before meggering a motor, what is the absolute most critical safety step?",
+    "a": "Ensure the circuit is isolated, locked out, tagged out (LOTO), and proven dead",
+    "opts": [
+      "Ensure the circuit is isolated, locked out, tagged out (LOTO), and proven dead",
+      "Disconnect the earth wire",
+      "Start the generator",
+      "Wear rubber gloves"
+    ],
+    "exp": "LOTO (Lock Out, Tag Out): (1) Isolate the motor at the MCC/starter. (2) Lock the isolator in the OFF position with a personal padlock. (3) Attach a danger tag. (4) Verify dead: test with approved voltage detector. Only THEN connect the megger. This prevents the motor from being started while the megger is connected — which would destroy the megger and electrocute the tester.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What MUST be disconnected before meggering an alternator or motor circuit?",
+    "a": "Sensitive electronics like the AVR, VFDs, or soft starters, as high voltage will destroy them",
+    "opts": [
+      "Sensitive electronics like the AVR, VFDs, or soft starters, as high voltage will destroy them",
+      "The main bearings",
+      "The cooling fan",
+      "The space heater"
+    ],
+    "exp": "Disconnect: (1) AVR (Automatic Voltage Regulator) from alternator field terminals — megger voltage would destroy the semiconductor components. (2) VFDs/soft starters — semiconductor power devices cannot withstand megger voltage. (3) Electronic protection relays connected to the circuit. (4) Thermistors/PT100 sensors in the winding (use lower voltage 100V megger for these). Leave power cables connected but isolate at switchboard.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "How do you megger a 3-phase motor stator to check phase-to-earth insulation?",
+    "a": "Short all 3 phase terminals together, connect the red Megger lead to the phases, and the black lead to the motor earth/casing",
+    "opts": [
+      "Short all 3 phase terminals together, connect the red Megger lead to the phases, and the black lead to the motor earth/casing",
+      "Connect red to U, black to V",
+      "Connect red to earth, black to neutral",
+      "Apply megger while motor is running"
+    ],
+    "exp": "Procedure: (1) Isolate motor (LOTO). (2) Short together all three phase terminals (U,V,W) at the terminal box. (3) Connect red (HV) megger lead to the shorted phase terminals. (4) Connect black (earth/return) lead to the motor frame/earth bolt. (5) Apply test voltage (500V DC for 440V motor). (6) Read IR after 60 seconds. (7) Record result. (8) Discharge winding before disconnecting.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Why is it recommended to short the 3 phases together when testing phase-to-earth?",
+    "a": "It ensures the entire winding is tested equally to earth and prevents high voltage stress across individual turns",
+    "opts": [
+      "It ensures the entire winding is tested equally to earth and prevents high voltage stress across individual turns",
+      "It saves time",
+      "It generates more current",
+      "It prevents the motor from spinning"
+    ],
+    "exp": "Shorting all three phases: (1) Tests all three windings simultaneously in one operation. (2) Ensures equal voltage stress across all windings — avoids over-stressing one phase. (3) Prevents inter-winding breakdown: if phases were tested individually, the non-tested phases would be at a potential between earth and the test voltage, risking insulation failure between phases.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "How long should the Megger voltage be applied for a standard IR reading?",
+    "a": "1 minute (60 seconds) to allow the reading to stabilise",
+    "opts": [
+      "1 minute (60 seconds) to allow the reading to stabilise",
+      "1 second",
+      "10 minutes",
+      "Until the battery dies"
+    ],
+    "exp": "60 seconds (1 minute) is the standard for a conventional IR reading. During the first 30-60 seconds, capacitive charging current flows (not insulation quality). After 60 seconds, this decays substantially and the reading approaches the true resistive leakage value. This 60-second reading is used for the PI denominator (IR₁). Always state: 'IR at 1 minute = X MΩ'.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "After finishing a Megger test, what MUST be done before touching the terminals?",
+    "a": "Discharge the winding by holding the earth lead to the terminals for at least 30 seconds (windings act like capacitors and store lethal charge)",
+    "opts": [
+      "Discharge the winding by holding the earth lead to the terminals for at least 30 seconds (windings act like capacitors and store lethal charge)",
+      "Start the motor immediately",
+      "Wash hands",
+      "Reverse the megger leads"
+    ],
+    "exp": "DISCHARGE the winding: Connect the earth lead from the megger to the test terminals and hold for a minimum of 30-60 seconds (longer for large HV machines — up to 5 minutes). Windings are capacitors — they store the applied DC test voltage as electrostatic charge. A large motor winding charged to 5000V will discharge through the person touching it, potentially causing a lethal electric shock.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What happens to Insulation Resistance as the temperature of the motor increases?",
+    "a": "IR drops significantly; it roughly halves for every 10°C rise in temperature",
+    "opts": [
+      "IR drops significantly; it roughly halves for every 10°C rise in temperature",
+      "IR increases",
+      "IR stays exactly the same",
+      "IR doubles"
+    ],
+    "exp": "IR decreases approximately by half for every 10°C rise (rule of thumb). Reason: heat increases molecular motion in the insulating material, increasing the mobility of charge carriers (electrons and ions), reducing resistivity. Standard correction: measure at site temperature and correct to 40°C reference using: IR(40°C) = IR(T) × 0.5^((T-40)/10). Always record temperature alongside IR value.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is the Polarisation Index (PI) test?",
+    "a": "The ratio of the IR reading at 10 minutes divided by the IR reading at 1 minute (PI = IR10 / IR1)",
+    "opts": [
+      "The ratio of the IR reading at 10 minutes divided by the IR reading at 1 minute (PI = IR10 / IR1)",
+      "The ratio of voltage to current",
+      "The difference between phase U and V",
+      "A test of the magnetic poles"
+    ],
+    "exp": "PI = IR₁₀ / IR₁ (10-minute IR reading divided by 1-minute IR reading). In clean dry insulation, IR continues to rise from 1 to 10 minutes as the insulation polarises (absorbs DC charge — dielectric absorption). High PI = insulation still absorbing charge = clean and dry. In contaminated/wet insulation, IR stays flat (leakage dominates) = PI near 1.0.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Why is the PI test better than a simple 1-minute IR test?",
+    "a": "It reveals moisture and contamination that a 1-minute test might miss, and is independent of temperature variations",
+    "opts": [
+      "It reveals moisture and contamination that a 1-minute test might miss, and is independent of temperature variations",
+      "It is faster",
+      "It uses less battery",
+      "It tests the copper resistance"
+    ],
+    "exp": "PI is temperature-independent (both IR₁ and IR₁₀ decrease equally with temperature, so their ratio stays constant). A simple IR reading changes dramatically with temperature — difficult to compare readings taken at different temperatures. PI reveals the condition of the insulation qualitatively — how well it absorbs charge (good insulation) vs. constant leakage path (contaminated insulation).",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "In a good, dry motor insulation, what happens to the IR reading over 10 minutes?",
+    "a": "It steadily INCREASES because the insulation absorbs the DC charge (polarisation), causing leakage current to decrease",
+    "opts": [
+      "It steadily INCREASES because the insulation absorbs the DC charge (polarisation), causing leakage current to decrease",
+      "It decreases rapidly",
+      "It stays exactly the same",
+      "It drops to zero"
+    ],
+    "exp": "In dry, clean insulation: IR increases continuously over 10 minutes as the insulation material polarises (dipole molecules align to the applied electric field — dielectric absorption). The capacitive charging current decays, and only a very small true leakage current remains. Typical behaviour: IR₁ = 100 MΩ, IR₁₀ = 250 MΩ, PI = 250/100 = 2.5 (good).",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "If the insulation is wet or contaminated with carbon dust, what happens during a 10-minute PI test?",
+    "a": "The reading stays flat (constant leakage path through moisture/dirt), resulting in a PI ratio near 1.0",
+    "opts": [
+      "The reading stays flat (constant leakage path through moisture/dirt), resulting in a PI ratio near 1.0",
+      "The reading shoots up to infinity",
+      "The megger explodes",
+      "The motor starts spinning"
+    ],
+    "exp": "Moisture and carbon provide a continuous conductive path through the insulation. Current flows constantly — there is no dielectric absorption effect. IR reading stays flat or may even slightly decrease as the test voltage causes additional ion migration. Result: IR₁ ≈ IR₁₀, PI ≈ 1.0. Condemns the motor — do not energise. Dry out and test again.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is an excellent, healthy PI value?",
+    "a": "Greater than 2.0 (typically 2.0 to 4.0)",
+    "opts": [
+      "Greater than 2.0 (typically 2.0 to 4.0)",
+      "Exactly 1.0",
+      "Less than 1.0",
+      "0.5"
+    ],
+    "exp": "PI > 4.0 = Excellent (new or recently serviced motor). PI 2.0-4.0 = Good (acceptable for service). PI 1.5-2.0 = Fair (monitor closely). PI 1.0-1.5 = Poor (insulation may be wet or contaminated — investigate). PI < 1.0 = Dangerous (declining resistance indicates progressive failure in progress). IEEE 43 recommendation: PI ≥ 2.0 for acceptable insulation condition.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "If a PI test results in a value of 1.1, what does this indicate?",
+    "a": "Poor insulation, likely wet or contaminated; the motor should be dried/cleaned and not energised",
+    "opts": [
+      "Poor insulation, likely wet or contaminated; the motor should be dried/cleaned and not energised",
+      "Excellent insulation",
+      "The megger is broken",
+      "The motor is ready to run"
+    ],
+    "exp": "PI = 1.1 means IR₁₀ barely exceeds IR₁ — virtually no dielectric absorption is occurring. The insulation is saturated with moisture or contaminated with carbon/salt. The constant leakage current path dominates, masking any polarisation effect. Action: Do NOT energise. Remove motor, inspect winding for moisture/contamination, apply space heater current to dry out, re-test after 24-48 hours of heating.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is the DAR (Dielectric Absorption Ratio) test?",
+    "a": "Similar to PI, but quicker: it is the ratio of IR at 60 seconds divided by IR at 30 seconds",
+    "opts": [
+      "Similar to PI, but quicker: it is the ratio of IR at 60 seconds divided by IR at 30 seconds",
+      "A test of the physical hardness of the insulation",
+      "A test of the motor's horsepower",
+      "A test of the AC voltage"
+    ],
+    "exp": "DAR = IR₆₀ / IR₃₀ (60-second reading divided by 30-second reading). Faster than the full 10-minute PI test — suitable for field checks when time is limited. Same principle: healthy insulation shows IR still rising between 30 and 60 seconds (ratio > 1.0). Contaminated insulation shows flat response (ratio ≈ 1.0). Not as discriminating as PI but useful for quick field assessment.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "When would you use DAR instead of PI?",
+    "a": "When a quick field check is needed and a full 10-minute PI test is impractical",
+    "opts": [
+      "When a quick field check is needed and a full 10-minute PI test is impractical",
+      "When testing high voltage cables only",
+      "When the motor is running",
+      "When the megger is out of battery"
+    ],
+    "exp": "DAR is used when: (1) A quick decision is needed — motor must return to service quickly. (2) Time constraints in port turnaround. (3) As a screening test — if DAR is clearly good (>1.6), proceed; if borderline, perform full PI. (4) For smaller motors where time to full PI is impractical. PI remains the preferred standard for HV machines and critical equipment.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is a good acceptable DAR value?",
+    "a": "Greater than 1.4",
+    "opts": [
+      "Greater than 1.4",
+      "Exactly 1.0",
+      "0.5",
+      "Less than 1.0"
+    ],
+    "exp": "DAR > 1.4 = Good. DAR 1.25-1.4 = Acceptable. DAR < 1.25 = Questionable — consider full PI test. Compare to IEEE 43 recommendations for the specific insulation class. Always take temperature into account — cold insulation will show better DAR than hot insulation. Record temperature at time of measurement.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "If a ship's alternator was submerged in water, cleaned, and baked, which test confirms it is dry inside?",
+    "a": "The Polarisation Index (PI) test (must be >2.0)",
+    "opts": [
+      "The Polarisation Index (PI) test (must be >2.0)",
+      "A 1-second continuity test",
+      "Visual inspection",
+      "Checking the paint color"
+    ],
+    "exp": "The Polarisation Index (PI) test is definitive. After drying: initial IR₁ reading may look acceptable (false positive due to surface drying). The PI test reveals if the core insulation is truly dry: moisture deep in the winding still present = flat PI ≈ 1.0 despite acceptable IR₁. Target: PI > 2.0 with IR₁ > 100 MΩ before returning to service. Test at operating temperature.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Can you perform a PI test using AC voltage?",
+    "a": "No, it must be DC voltage because AC causes continuous capacitive charging/discharging, masking the polarisation effect",
+    "opts": [
+      "No, it must be DC voltage because AC causes continuous capacitive charging/discharging, masking the polarisation effect",
+      "Yes, AC is preferred",
+      "Yes, but only at 60Hz",
+      "Yes, if using a multimeter"
+    ],
+    "exp": "No. AC voltage prevents the dielectric absorption (polarisation) effect from developing — the field reverses every half-cycle, forcing dipole molecules to constantly reverse alignment. The capacitive charging and discharging current would dominate, masking any true absorption trend. DC is essential for PI testing because only DC allows the progressive build-up of polarisation current that distinguishes good from bad insulation.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What should you do if an essential motor has an IR of 0.5 MΩ?",
+    "a": "Do not start it; apply space heaters or run heating current through it to dry it out until IR improves",
+    "opts": [
+      "Do not start it; apply space heaters or run heating current through it to dry it out until IR improves",
+      "Start it to dry it out with heat",
+      "Spray it with water",
+      "Bypass the breaker"
+    ],
+    "exp": "0.5 Mohm is below the minimum acceptable 1 Mohm (from IEC rule: kV + 1 = 0.44 + 1 = 1.44 Mohm minimum). Do NOT energise. Actions: (1) Apply anti-condensation heaters if fitted. (2) Connect controlled drying current through windings (10% rated current on two phases). (3) Inspect for water ingress at shaft seal and conduit entries. (4) Re-test IR every 4 hours. Return to service only when IR > 1 Mohm AND PI > 2.0 at operating temperature.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "Why are space heaters fitted inside large marine alternators and motors?",
+    "a": "To keep the winding temperature slightly above ambient, preventing condensation/moisture buildup while stopped",
+    "opts": [
+      "To keep the winding temperature slightly above ambient, preventing condensation/moisture buildup while stopped",
+      "To keep the engine room warm",
+      "To preheat the bearings",
+      "To burn off dust"
+    ],
+    "exp": "When a large machine is stopped, metal cools below ambient dew point — moisture condenses on windings. Even brief condensation periods can drop IR from hundreds of MΩ to dangerous levels. Space heaters (typically 200-500W, thermostatically controlled) maintain winding temperature 5-10°C above ambient, preventing condensation. Connected to the emergency switchboard so they remain powered when the machine is offline.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "During a megger test, what is 'Guard Terminal' used for?",
+    "a": "It bypasses surface leakage current (e.g., across dirty insulators) so the meter only measures true internal insulation leakage",
+    "opts": [
+      "It bypasses surface leakage current (e.g., across dirty insulators) so the meter only measures true internal insulation leakage",
+      "To physically guard the user from shocks",
+      "To hold the test leads",
+      "To connect to 220V mains"
+    ],
+    "exp": "The Guard terminal shorts out surface leakage current paths (e.g., current flowing along dirty or damp insulator surfaces rather than through the bulk insulation). By connecting Guard to the surface path, that leakage current bypasses the meter and flows directly to the earth terminal without being measured. The meter then measures only true volumetric insulation resistance, giving a more accurate bulk IR reading.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What is the primary cause of insulation degradation on ships?",
+    "a": "Heat (thermal aging), moisture, salt air, and oil/carbon contamination",
+    "opts": [
+      "Heat (thermal aging), moisture, salt air, and oil/carbon contamination",
+      "Too much voltage",
+      "Running the motor too fast",
+      "Magnetic interference"
+    ],
+    "exp": "Four main degradation mechanisms: (1) Thermal aging — heat causes polymer chain breakdown in insulation materials (each 10°C above rated temperature halves insulation life). (2) Moisture — water reduces dielectric strength dramatically. (3) Contamination — oil, carbon dust, salt create conductive paths. (4) Mechanical damage — vibration, repeated start-stop cycles cause micro-cracks. All four are present in marine environments simultaneously.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "If the megger reads exactly ZERO ohms immediately upon pressing test, what does it mean?",
+    "a": "There is a dead short circuit to earth (or you forgot to remove the earthing strap)",
+    "opts": [
+      "There is a dead short circuit to earth (or you forgot to remove the earthing strap)",
+      "Perfect insulation",
+      "The battery is dead",
+      "The motor is highly efficient"
+    ],
+    "exp": "Zero ohms = dead short between the test conductor and earth. Possible causes: (1) Earth clip accidentally still attached to the phase terminal being tested (test setup error — most common). (2) Phase winding has a complete insulation breakdown with direct contact to the motor frame. (3) A jumper wire or earthing lead left connected. Check setup first — remove any earthing straps, re-verify isolation before concluding insulation failure.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "What must you NEVER do while a megger test is active?",
+    "a": "Touch the test leads or the motor terminals, as the DC voltage is lethal",
+    "opts": [
+      "Touch the test leads or the motor terminals, as the DC voltage is lethal",
+      "Look at the display",
+      "Write down the reading",
+      "Stand on a rubber mat"
+    ],
+    "exp": "NEVER touch the test leads, terminals, or any connected conductor while a megger test is active. The Megger applies 500V-5000V DC to the circuit. This voltage can cause: (1) Lethal electric shock directly. (2) Electrostatic energy stored in the winding capacitance can discharge through you even after the meter is switched off. Always discharge the test circuit before touching any part.",
+    "cat": "Megger, IR Test & PI Test",
+    "id": ""
+  },
+  {
+    "q": "A three-phase induction motor has 6 unmarked terminals. What is the FIRST step before any electrical test?",
+    "opts": [
+      "Apply 440V supply and measure current balance",
+      "Separate all 6 leads and perform continuity test to find the 3 winding pairs",
+      "Connect to star and run on full voltage",
+      "Use a 500V megger on all terminals"
+    ],
+    "a": "Separate all 6 leads and perform continuity test to find the 3 winding pairs",
+    "exp": "Continuity testing identifies which leads belong to the same winding. Without knowing the three pairs, no further polarity test is possible. Only after pairing can you proceed to polarity determination.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_142"
+  },
+  {
+    "q": "In the low-voltage supply method for identifying unmarked motor terminals, U1–U2 is energised with 110V AC. One end of an unknown pair is connected to U2. You measure 190V between U1 and the free end. What does this indicate?",
+    "opts": [
+      "Wrong polarity — reverse the connection",
+      "Correct series-aiding polarity — label accordingly",
+      "Short circuit in the winding",
+      "The supply is too high — reduce it"
+    ],
+    "a": "Correct series-aiding polarity — label accordingly",
+    "exp": "When two windings are in series-aiding (correct polarity), their voltages add — measured voltage (190V) exceeds supply voltage (110V). This confirms the ends are correctly labelled. If voltage were less than supply, the windings would be opposing and polarity must be reversed.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_143"
+  },
+  {
+    "q": "What is the purpose of using a REDUCED voltage (e.g. 110–220V) instead of rated 440V when performing the low-voltage terminal identification test on a motor?",
+    "opts": [
+      "To comply with IEC 60092 standards",
+      "To prevent burning the unloaded windings during the identification procedure",
+      "Multimeters cannot read 440V",
+      "Reduced voltage gives more accurate polarity readings"
+    ],
+    "a": "To prevent burning the unloaded windings during the identification procedure",
+    "exp": "With only one winding energised and no load, current is limited only by winding resistance. Full 440V could cause excessive current and overheat or burn the winding insulation. Using reduced voltage performs the same polarity test safely without risk of damage.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_144"
+  },
+  {
+    "q": "In the flick test for motor terminal identification, a 6V battery is briefly touched to each winding pair while a centre-zero galvanometer is connected to the reference winding. Why must the battery only be briefly TOUCHED and not held?",
+    "opts": [
+      "Battery voltage will drop over time",
+      "Sustained connection saturates the core — the galvanometer will not deflect on subsequent tests",
+      "The battery will explode if held too long",
+      "The motor will start rotating"
+    ],
+    "a": "Sustained connection saturates the core — the galvanometer will not deflect on subsequent tests",
+    "exp": "The flick test relies on the transient change in flux (dΦ/dt) inducing an EMF in the reference winding. If the battery is held continuously, the core saturates and flux stops changing — no EMF is induced and the galvanometer reads zero, making polarity determination impossible.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_145"
+  },
+  {
+    "q": "After correctly identifying motor terminals A/AA, B/BB, C/CC using the flick test, how are the windings connected for a STAR configuration?",
+    "opts": [
+      "Connect A+B+C together as neutral; connect AA, BB, CC to supply",
+      "Connect AA+BB+CC together as neutral; connect A, B, C to supply",
+      "Connect A→BB, B→CC, C→AA in a loop",
+      "All six terminals connected to the three-phase supply"
+    ],
+    "a": "Connect AA+BB+CC together as neutral; connect A, B, C to supply",
+    "exp": "In a star (Y) connection, all three winding finishes (AA, BB, CC) are joined at a common neutral point. The three starts (A, B, C) connect to the three supply phases. This gives rated voltage across each winding equal to line voltage ÷ √3.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_146"
+  },
+  {
+    "q": "After completing a motor terminal identification test, the motor runs but draws unequal phase currents. What is the most likely cause?",
+    "opts": [
+      "Incorrect cable standard used",
+      "One winding pair has incorrect polarity — one phase winding is in reverse, causing unbalanced flux and unequal currents",
+      "The PI test value is too low",
+      "The armour wire is not earthed"
+    ],
+    "a": "One winding pair has incorrect polarity — one phase winding is in reverse, causing unbalanced flux and unequal currents",
+    "exp": "If terminal polarity is wrong for one winding, that phase produces flux in opposition to the rotating field rather than contributing to it. This causes magnetic imbalance — one phase draws much higher current while others may be lower. The motor also runs poorly or with excess vibration. Always verify current balance on test run before returning to full service.",
+    "cat": "Cables & Insulation",
+    "id": "T12C_147"
   }
+
 ]);

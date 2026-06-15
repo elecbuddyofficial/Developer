@@ -1,3395 +1,3123 @@
 window.loadQuizzes("T21_LSA", [
   {
-    "q": "Fundamental difference between EPIRB and SART function and frequency?",
-    "a": "EPIRB: global distress alert to satellites on 406 MHz; SART: local homing for rescue vessels responding to X-band radar pulses on 9 GHz",
+    "q": "According to SOLAS, what is the required operating voltage for survival craft electrical equipment?",
+    "a": "24 V DC",
     "opts": [
-      "EPIRB transmits voice on VHF Ch 16; SART broadcasts AIS on 161.975 MHz",
-      "EPIRB guides helicopters locally on 9 GHz; SART sends satellite texts via Inmarsat-C",
-      "Both transmit 12 dots on rescuing ship's 3 GHz S-band radar \u2014 no difference",
-      "EPIRB: global distress alert to satellites on 406 MHz; SART: local homing for rescue vessels responding to X-band radar pulses on 9 GHz"
+      "12 V DC",
+      "24 V DC",
+      "48 V DC",
+      "220 V AC"
     ],
-    "exp": "EPIRB = global alerting system (406 MHz to COSPAS-SARSAT). Transmits position and vessel ID globally. SART = local homing device (9 GHz X-band). Responds to radar pulses painting 12 dots on rescuer's radar screen for precise location. Complementary systems \u2014 different range, different purpose.",
-    "cat": "LSA",
-    "id": "T21_001"
+    "exp": "SOLAS Ch. III Reg. 31/32 states that all survival craft electrical equipment must be powered at 24 V DC.",
+    "cat": "ELEC",
+    "id": "T21A_001"
   },
   {
-    "q": "SOLAS minimum capacity for lifeboat 24V DC starting battery?",
-    "a": "Sufficient for 6 consecutive cold engine starts (30-second intervals) plus 30 minutes power for all electrical consumers",
+    "q": "How many consecutive cold starts must the lifeboat engine starting motor provide without recharging at -15°C?",
+    "a": "6 consecutive cold starts",
     "opts": [
-      "Run engine 4 hours while powering searchlight",
-      "3 cold starts and VHF standby for 96 hours",
-      "Provide 100 Ah to run emergency bilge pump indefinitely",
-      "Sufficient for 6 consecutive cold engine starts (30-second intervals) plus 30 minutes power for all electrical consumers"
+      "3 consecutive cold starts",
+      "4 consecutive cold starts",
+      "6 consecutive cold starts",
+      "10 consecutive cold starts"
     ],
-    "exp": "SOLAS III: lifeboat battery must provide 6 consecutive cold cranking attempts at 30-second intervals (ensuring multiple start attempts in cold weather) PLUS 30 minutes for searchlight, interior lights, and VHF radio. Annual inspection: check electrolyte, SG, terminals, and verify cranking capacity.",
-    "cat": "LSA",
-    "id": "T21_002"
+    "exp": "The engine starting motor must provide a minimum of 6 consecutive cold starts at -15°C without recharging.",
+    "cat": "ELEC",
+    "id": "T21A_002"
   },
   {
-    "q": "Why is CCA (Cold Cranking Amps) the critical battery specification for lifeboats?",
-    "a": "CCA = maximum current deliverable for 30 seconds at -18\u00b0C while maintaining minimum voltage \u2014 ensures cold-weather engine starting",
+    "q": "What is the minimum required continuous operation time for the lifeboat searchlight?",
+    "a": "3 hours",
     "opts": [
-      "CCA = Continuous Charge Acceptance for fast trickle charging",
-      "CCA = Constant Current Application for running 50W searchlight",
-      "CCA = Cathodic Corrosion Allowance for saltwater terminal resistance",
-      "CCA = maximum current deliverable for 30 seconds at -18\u00b0C while maintaining minimum voltage \u2014 ensures cold-weather engine starting"
+      "1 hour",
+      "2 hours",
+      "3 hours",
+      "6 hours"
     ],
-    "exp": "Cold temperatures increase battery internal resistance, drastically reducing available starting current. CCA specifies the battery's ability to crank a cold engine in worst-case conditions (-18\u00b0C). Critical for Arctic and winter operations where lifeboat must start reliably in emergency.",
-    "cat": "LSA",
-    "id": "T21_003"
+    "exp": "The lifeboat searchlight must be capable of a minimum of 3 hours of continuous operation.",
+    "cat": "ELEC",
+    "id": "T21A_003"
   },
   {
-    "q": "EEBD purpose and air duration?",
-    "a": "10 minutes of breathable air for emergency ESCAPE ONLY \u2014 not for firefighting or enclosed space entry",
+    "q": "How many portable 2-way VHF radios are required at minimum per lifeboat?",
+    "a": "2 portable",
     "opts": [
-      "30 minutes for firefighting in small electrical fires",
-      "60 minutes for enclosed space routine inspections",
-      "15 minutes for two persons to share during freon leak",
-      "10 minutes of breathable air for emergency ESCAPE ONLY \u2014 not for firefighting or enclosed space entry"
+      "1 portable",
+      "2 portable",
+      "3 portable",
+      "4 portable"
     ],
-    "exp": "EEBD = Emergency Escape Breathing Device. Hood + compressed air cylinder. 10 minutes only \u2014 for rapid escape from smoke, toxic gases, or oxygen-deficient atmosphere. No thermal protection. Never use for firefighting (no face seal protection) or enclosed space entry (insufficient duration and no O2 monitoring).",
-    "cat": "LSA",
-    "id": "T21_004"
+    "exp": "A minimum of 2 portable 2-way VHF radios are required per lifeboat.",
+    "cat": "ELEC",
+    "id": "T21A_004"
   },
   {
-    "q": "Why does battery room require dedicated exhaust ventilation (6-12 air changes/hour)?",
-    "a": "Lead-acid and Ni-Cd batteries generate highly explosive hydrogen gas during final charging stages \u2014 must be ventilated",
+    "q": "What type of sensor is typically used for davit limit switches?",
+    "a": "Inductive proximity sensors",
     "opts": [
-      "Cools UPS inverters generating heat during blackout",
-      "Prevents Freon accumulation from nearby AC compressors",
-      "Reduces humidity to maintain battery CCA rating",
-      "Lead-acid and Ni-Cd batteries generate highly explosive hydrogen gas during final charging stages \u2014 must be ventilated"
+      "Capacitive limit switches",
+      "Inductive proximity sensors",
+      "Optical limit sensors",
+      "Mechanical contact arms only"
     ],
-    "exp": "Electrolysis at end of charge cycle splits water in electrolyte \u2192 hydrogen gas released. H2 is highly explosive (LEL 4%) and lighter than air \u2192 accumulates at ceiling. Battery room must have exhaust fan drawing from CEILING level continuously. Fan must be Ex-rated (intrinsically safe or flameproof). Extraction rate 6-12 air changes per hour.",
-    "cat": "LSA",
-    "id": "T21_005"
+    "exp": "Davit limit switches use inductive proximity sensors for up-limit and travel-limit detection to prevent motor overrun.",
+    "cat": "ELEC",
+    "id": "T21A_005"
   },
   {
-    "q": "What is the Cold Cranking Amps (CCA) rating of a battery, and why is it critical for lifeboat diesel engines?",
-    "a": "CCA is the maximum current a battery can deliver for 30 seconds at -18 degrees C while maintaining at least 1.2V per cell \u2014 critical because lifeboat engines must start reliably in Arctic conditions",
+    "q": "How often should the lifeboat engine be run according to the ETO maintenance schedule?",
+    "a": "Monthly for min 3 min",
     "opts": [
-      "CCA is the maximum current a battery can deliver for 30 seconds at -18 degrees C while maintaining at least 1.2V per cell \u2014 critical because lifeboat engines must start reliably in Arctic conditions",
-      "CCA is the maximum continuous charging current a battery can accept without exceeding its thermal limit",
-      "CCA is the total amp-hour capacity at a 20-hour discharge rate at 25 degrees C \u2014 used only for UPS battery sizing",
-      "CCA is the cable current rating of the starter motor cable \u2014 unrelated to the battery itself"
+      "Weekly for min 3 min",
+      "Monthly for min 3 min",
+      "Quarterly for min 5 min",
+      "Annually for min 10 min"
     ],
-    "exp": "At -18 deg C, battery internal resistance increases dramatically. The CCA rating confirms the battery can deliver the high starting current surge (6-8x starter motor FLC) needed to crank a cold diesel engine in extreme conditions.",
-    "cat": "Battery",
-    "id": "T21_006"
+    "exp": "The ETO monthly check includes running the lifeboat engine for a minimum of 3 minutes.",
+    "cat": "ELEC",
+    "id": "T21A_006"
   },
   {
-    "q": "A new lifeboat battery arrives onboard. What is the first action the ETO must take during commissioning?",
-    "a": "Check all documentation and certificates, verify voltage and Ah capacity match the lifeboat engine manufacturer's specification, and inspect physical condition for transit damage",
+    "q": "During weekly checks, how are the davit limit switches tested?",
+    "a": "Manually test operation in stowed position",
     "opts": [
-      "Immediately connect the battery to the lifeboat starter motor and perform a cold crank test",
-      "Check all documentation and certificates, verify voltage and Ah capacity match the lifeboat engine manufacturer's specification, and inspect physical condition for transit damage",
-      "Paint the battery terminals with copper grease and measure internal resistance with a standard multimeter",
-      "Charge the battery at maximum rated current for 24 hours before any testing"
+      "By lowering the boat into the water",
+      "Manually test operation in stowed position",
+      "By simulating a power failure",
+      "By checking the battery voltage only"
     ],
-    "exp": "Battery commissioning follows: verify documentation \u2192 physical inspection \u2192 measure OCV/SG \u2192 initial charge if required \u2192 install with positive terminal first \u2192 connect trickle charger \u2192 test. Never assume a new battery is fully charged.",
-    "cat": "Battery",
-    "id": "T21_007"
+    "exp": "The weekly check requires the ETO to manually test the operation of the limit switches while the lifeboat is in the stowed position.",
+    "cat": "ELEC",
+    "id": "T21A_007"
   },
   {
-    "q": "What is the correct sequence for connecting a new lifeboat battery to prevent sparking and potential hydrogen gas ignition?",
-    "a": "Connect the POSITIVE terminal first, then the NEGATIVE terminal \u2014 disconnect in reverse order (negative first) when removing",
+    "q": "Which of these is an annual ETO check for the lifeboat electrical system?",
+    "a": "Megger insulation test on all cables",
     "opts": [
-      "The sequence does not matter as long as both connections are made within 5 seconds of each other",
-      "Connect the POSITIVE terminal first, then the NEGATIVE terminal \u2014 disconnect in reverse order (negative first) when removing",
-      "Connect both terminals simultaneously using insulated tools to avoid any voltage differential",
-      "Connect the NEGATIVE terminal first to establish earth continuity, then the POSITIVE terminal"
+      "Trickle charger voltage check",
+      "VHF radio functional test",
+      "Megger insulation test on all cables",
+      "Davit limit switch manual test"
     ],
-    "exp": "Positive first minimises arc energy if the spanner accidentally contacts the hull (which is negative earth). During removal, negative first ensures the positive is still earthed if a tool touches the hull.",
-    "cat": "Battery",
-    "id": "T21_008"
+    "exp": "Annual checks include Megger insulation testing on all LSA cables, full battery capacity tests, and brake speed tests.",
+    "cat": "ELEC",
+    "id": "T21A_008"
   },
   {
-    "q": "How many consecutive cold starts must a lifeboat engine be capable of performing to comply with SOLAS LSA Code requirements?",
-    "a": "6 consecutive cold starts within 2 minutes at an ambient temperature down to -15 degrees C",
+    "q": "What is the primary function of the electric bilge pump in a lifeboat?",
+    "a": "Must clear flooding water within the lifeboat",
     "opts": [
-      "2 consecutive cold starts \u2014 sufficient to demonstrate starting reliability",
-      "6 consecutive cold starts within 2 minutes at an ambient temperature down to -15 degrees C",
-      "10 consecutive cold starts \u2014 the more demanding IACS unified requirement",
-      "The engine must start within 30 seconds on the first attempt \u2014 subsequent attempts are not counted"
+      "Supply sea water to the fire sprinkler",
+      "Provide cooling water to the engine",
+      "Must clear flooding water within the lifeboat",
+      "Empty the internal fuel tank"
     ],
-    "exp": "SOLAS LSA Code Chapter IV requires the lifeboat engine to start and run within 2 minutes from cold in both normal and inverted positions. Six consecutive start capability demonstrates robust battery and starter motor condition.",
-    "cat": "Lifeboat",
-    "id": "T21_009"
+    "exp": "The motor-driven electric bilge pump must be capable of clearing flooding water from within the lifeboat hull.",
+    "cat": "ELEC",
+    "id": "T21A_009"
   },
   {
-    "q": "What is the mandatory SOLAS requirement for the lifeboat engine regarding starting in the inverted position?",
-    "a": "The engine must be capable of running in the inverted position \u2014 ensuring the lifeboat can self-right and restore engine operation after capsizing",
+    "q": "What type of starter motor is specified for lifeboat engines?",
+    "a": "Axial (pre-engaged) type",
     "opts": [
-      "Engines are required to stop automatically when the lifeboat inclines beyond 20 degrees to prevent flooding through the exhaust",
-      "The engine must be capable of running in the inverted position \u2014 ensuring the lifeboat can self-right and restore engine operation after capsizing",
-      "The lifeboat is not required to operate when inverted \u2014 evacuation into a life raft is required if the lifeboat capsizes",
-      "The engine must be shut down before the lifeboat can be inverted \u2014 a separate hand-cranked generator provides power during righting"
+      "Inertia drive type",
+      "Axial (pre-engaged) type",
+      "Pneumatic vane type",
+      "Direct online induction"
     ],
-    "exp": "SOLAS LSA Code requires totally enclosed lifeboats to self-right when capsized AND the engine to restart. The fuel and lubrication systems must function in the inverted position. ETO tests this during drills.",
-    "cat": "Lifeboat",
-    "id": "T21_010"
+    "exp": "The engine starting motor must be an axial (pre-engaged) type.",
+    "cat": "ELEC",
+    "id": "T21A_010"
   },
   {
-    "q": "What are the correct SOLAS minimum quantities of parachute rocket flares, hand flares, and buoyant smoke signals required in each lifeboat?",
-    "a": "4 parachute rocket flares, 6 hand flares, and 2 buoyant smoke signals per lifeboat",
+    "q": "What is the visibility radius requirement for the lifeboat searchlight?",
+    "a": "Min 180 m",
     "opts": [
-      "4 parachute rocket flares, 6 hand flares, and 2 buoyant smoke signals per lifeboat",
-      "6 parachute rocket flares, 4 hand flares, and 6 buoyant smoke signals per lifeboat",
-      "2 parachute rocket flares, 2 hand flares, and 4 buoyant smoke signals per lifeboat",
-      "12 parachute rocket flares, 4 hand flares, and 2 buoyant smoke signals per lifeboat"
+      "Min 50 m",
+      "Min 100 m",
+      "Min 180 m",
+      "Min 300 m"
     ],
-    "exp": "SOLAS LSA Code 4.4.8: Each lifeboat requires 4 rocket parachute flares (range 40km, burns 40s), 6 hand flares (range 3km, burns 60s), and 2 buoyant smoke signals (burns 3min). All have 3-year expiry.",
-    "cat": "Pyro",
-    "id": "T21_011"
+    "exp": "The searchlight must provide a minimum of 180 m visibility radius with an adjustable beam.",
+    "cat": "ELEC",
+    "id": "T21A_011"
   },
   {
-    "q": "What is the maximum shelf life of survival craft pyrotechnics before they must be landed ashore and replaced?",
-    "a": "3 years from the date of manufacture stamped on the device",
+    "q": "What is the primary power source for the lifeboat trickle charger when stowed?",
+    "a": "Shore/ship-connected",
     "opts": [
-      "Pyrotechnics have no expiry \u2014 they are replaced only if the primer or ignition cord shows visible damage",
-      "5 years from the date of manufacture \u2014 identical to the liferaft service interval",
-      "3 years from the date of manufacture stamped on the device",
-      "10 years if stored in a cool dry location below 20 degrees C"
+      "Internal lifeboat generator",
+      "Shore/ship-connected",
+      "Solar panels on the canopy",
+      "Battery regeneration"
     ],
-    "exp": "All SOLAS pyrotechnics (parachute flares, hand flares, smoke signals, line-throwing apparatus) have a strict 3-year expiry. Expired devices must be landed ashore to an approved facility \u2014 they must NEVER be discharged over the sea or incinerated onboard.",
-    "cat": "Pyro",
-    "id": "T21_012"
+    "exp": "The trickle charger is shore/ship-connected to maintain the battery at full charge while in the stowed position.",
+    "cat": "ELEC",
+    "id": "T21A_012"
   },
   {
-    "q": "A parachute rocket flare burns for a minimum of how long, and to what minimum altitude does it reach?",
-    "a": "Burns for minimum 40 seconds at a minimum altitude of 300 metres",
+    "q": "How many SARTs are required at minimum per lifeboat?",
+    "a": "Min 1 per lifeboat",
     "opts": [
-      "Burns for minimum 5 minutes at a minimum altitude of 500 metres",
-      "Burns for minimum 40 seconds at a minimum altitude of 300 metres",
-      "Burns for minimum 60 seconds at a minimum altitude of 100 metres",
-      "Burns for minimum 20 seconds at a minimum altitude of 1000 metres"
+      "Min 1 per lifeboat",
+      "Min 2 per lifeboat",
+      "Min 1 per ship",
+      "None required if EPIRB is present"
     ],
-    "exp": "SOLAS LSA Code requires parachute flares to: reach minimum 300m altitude, burn minimum 40 seconds bright red light. The parachute slows descent for maximum visibility. Effective range approximately 40 km in clear conditions.",
-    "cat": "Pyro",
-    "id": "T21_013"
+    "exp": "There must be a minimum of 1 SART (9 GHz Radar Transponder) per lifeboat.",
+    "cat": "ELEC",
+    "id": "T21A_013"
   },
   {
-    "q": "Under SOLAS LSA Code requirements, what minimum continuous output power must the lifeboat searchlight deliver and for how long?",
-    "a": "A minimum of 55W searchlight providing 180 metres visibility for a minimum of 3 hours",
+    "q": "What is the purpose of the interior lighting in a lifeboat?",
+    "a": "Sufficient to read survival/operating instructions",
     "opts": [
-      "A minimum of 100W searchlight providing 500 metres visibility for 1 hour",
-      "A minimum of 10W LED light providing 50 metres visibility for 24 hours",
-      "A minimum of 55W searchlight providing 180 metres visibility for a minimum of 3 hours",
-      "The searchlight specification is not mandated by SOLAS \u2014 it is determined by the shipyard at time of construction"
+      "To signal aircraft overhead",
+      "To provide warmth to survivors",
+      "Sufficient to read survival/operating instructions",
+      "To illuminate the water outside the boat"
     ],
-    "exp": "SOLAS LSA Code requires the lifeboat searchlight to illuminate a light-coloured object 18m wide at 180m range. Typically 55-100W with 3 hours of operational duration from the lifeboat battery.",
-    "cat": "Lifeboat",
-    "id": "T21_014"
+    "exp": "Interior lighting must be sufficient to read survival and operating instructions inside the craft.",
+    "cat": "ELEC",
+    "id": "T21A_014"
   },
   {
-    "q": "What is the mandatory minimum period that the battery room ventilation system must operate continuously before and during battery charging?",
-    "a": "Ventilation must run continuously during charging and for at least 30 minutes AFTER charging is complete to clear residual hydrogen gas",
+    "q": "What specific item is checked quarterly regarding the electric bilge pump?",
+    "a": "Check impeller & strainer",
     "opts": [
-      "Ventilation must run continuously during charging and for at least 30 minutes AFTER charging is complete to clear residual hydrogen gas",
-      "Ventilation is only required during the initial 15-minute charging peak current phase",
-      "Battery room ventilation must run at maximum capacity for 24 hours before any hot work in adjacent spaces",
-      "Ventilation only needs to be activated manually when battery SG exceeds 1.250"
+      "Check impeller & strainer",
+      "Megger test the motor",
+      "Measure output voltage",
+      "Replace the bearings"
     ],
-    "exp": "Lead-acid batteries produce hydrogen gas (H2) during charging \u2014 explosive between 4% and 75% LEL. Ventilation must remove H2 during charging AND for 30 minutes after, allowing residual H2 to clear before the room is entered or electrical equipment is switched.",
-    "cat": "BattRoom",
-    "id": "T21_015"
+    "exp": "The quarterly run test for the bilge pump includes checking the impeller and strainer for blockages.",
+    "cat": "ELEC",
+    "id": "T21A_015"
   },
   {
-    "q": "What are the two key electrical safety requirements for all lighting fixtures installed in a battery room?",
-    "a": "Must be Ex-rated (Ex d or Ex e) for Gas Group IIC (hydrogen) and the switch must be located OUTSIDE the battery room",
+    "q": "What type of lifeboat is standard on modern cargo ships?",
+    "a": "Totally Enclosed (TELB)",
     "opts": [
-      "Must be wired in parallel with a dedicated battery room circuit breaker rated at twice the total lamp wattage",
-      "Must be Ex-rated (Ex d or Ex e) for Gas Group IIC (hydrogen) and the switch must be located OUTSIDE the battery room",
-      "Must use LED technology with a minimum 50,000-hour rated lifespan and be sealed to IP65",
-      "Must be connected to the emergency switchboard and have a local isolation switch inside the room"
+      "Partially Enclosed (PELB)",
+      "Totally Enclosed (TELB)",
+      "Open Lifeboat",
+      "Inflatable Fast Rescue Boat"
     ],
-    "exp": "Battery rooms generate H2 (Gas Group IIC \u2014 most difficult to protect against). All lighting must be Ex IIC rated. The switch must be outside the room to prevent switching arcs from igniting H2 at the highest concentration point near the ceiling.",
-    "cat": "BattRoom",
-    "id": "T21_016"
+    "exp": "Totally Enclosed Lifeboats (TELB) are the standard on cargo ships, offering a self-righting fully enclosed GRP hull.",
+    "cat": "TYPE",
+    "id": "T21A_016"
   },
   {
-    "q": "What is the minimum number of air changes per hour required for forced ventilation in a battery room under SOLAS requirements?",
-    "a": "Minimum 6 air changes per hour with exhaust taken from the highest point (ceiling) of the battery room",
+    "q": "What is the carriage requirement for TELBs on cargo ships?",
+    "a": "One each side, total 200% capacity of persons on board",
     "opts": [
-      "2 air changes per hour \u2014 sufficient to dilute any H2 below 1% LEL",
-      "30 air changes per hour \u2014 the same standard as a cargo pump room",
-      "Minimum 6 air changes per hour with exhaust taken from the highest point (ceiling) of the battery room",
-      "Air changes are not specified \u2014 only a continuous air flow across the battery top surface is required"
+      "One total, 100% capacity",
+      "One each side, total 200% capacity of persons on board",
+      "Two each side, total 150% capacity",
+      "One free-fall only, 100% capacity"
     ],
-    "exp": "SOLAS requires minimum 6 air changes/hour for battery rooms. Extraction must be from the ceiling (highest point) because hydrogen is lighter than air and accumulates at the top. Intake air is introduced low.",
-    "cat": "BattRoom",
-    "id": "T21_017"
+    "exp": "Cargo ships must carry one TELB on each side, providing a total of 200% capacity for all persons on board.",
+    "cat": "TYPE",
+    "id": "T21A_017"
   },
   {
-    "q": "What maximum lowering speed for survival craft davit systems was mandated by the 2026 LSA Code amendments?",
-    "a": "Maximum 1.3 metres per second (78 metres per minute) to prevent hard water impacts and accidental hook release",
+    "q": "How often must a conventional lifeboat be launched and manoeuvred in the water?",
+    "a": "Least every 3 months",
     "opts": [
-      "Maximum 0.5 metres per second \u2014 a significant reduction to allow crew to board during lowering",
-      "Maximum 1.3 metres per second (78 metres per minute) to prevent hard water impacts and accidental hook release",
-      "No maximum speed is specified \u2014 speed is determined by the ship's maintenance officer based on sea conditions",
-      "Maximum 3.0 metres per second \u2014 the original SOLAS speed limit unchanged by 2026 amendments"
+      "Least every month",
+      "Least every 3 months",
+      "Least every 6 months",
+      "Least every year"
     ],
-    "exp": "The 2026 LSA Code amendment (IMO MSC.455(100)) caps survival craft lowering at 1.3 m/s. Higher speeds were linked to accidents where boats hit the water hard enough to activate on-load release hooks prematurely.",
-    "cat": "LSA2026",
-    "id": "T21_018"
+    "exp": "SOLAS Reg. III/20 requires each lifeboat to be launched and manoeuvred in the water at least every 3 months.",
+    "cat": "TYPE",
+    "id": "T21A_018"
   },
   {
-    "q": "What specific design requirement for single-fall on-load release hooks was introduced by the 2026 LSA amendments?",
-    "a": "Single-fall hooks must be engineered so they cannot support the craft's weight unless the locking mechanism is 100% correctly reset \u2014 preventing accidental drops from partial hook engagement",
+    "q": "How often must a free-fall lifeboat be launched by free-fall?",
+    "a": "Every 6 months",
     "opts": [
-      "Single-fall hooks must be coated with a radar-reflective paint to improve recovery operations",
-      "Single-fall hooks must now incorporate a secondary manual pin lock requiring tool removal before any release",
-      "Single-fall hooks must be engineered so they cannot support the craft's weight unless the locking mechanism is 100% correctly reset \u2014 preventing accidental drops from partial hook engagement",
-      "Single-fall hooks must be replaced with double-fall hook systems on all vessels to prevent single-point failure"
+      "Every month",
+      "Every 3 months",
+      "Every 6 months",
+      "Every 12 months"
     ],
-    "exp": "Previous accidents occurred because partially engaged hooks appeared set but released under load. The 2026 amendment requires a positive locking design where the hook physically cannot bear load unless fully and correctly reset. ETO verifies this at quarterly drills.",
-    "cat": "LSA2026",
-    "id": "T21_019"
+    "exp": "The free-fall lifeboat must be launched by free-fall every 6 months.",
+    "cat": "TYPE",
+    "id": "T21A_019"
   },
   {
-    "q": "What buoyancy requirement do new lifejackets procured after 1 January 2026 need to demonstrate?",
-    "a": "Minimum 150 Newtons buoyancy, 24-hour immersion retention, and self-righting of an unconscious person within 5 seconds",
+    "q": "What is the maximum lifespan of lifeboat fall wires regardless of condition?",
+    "a": "5 years",
     "opts": [
-      "Minimum 275 Newtons buoyancy (offshore specification) regardless of vessel type",
-      "Buoyancy testing requirements have not changed \u2014 the 2026 amendment only covers lifeboat hook design",
-      "Minimum 100 Newtons buoyancy and self-righting within 30 seconds",
-      "Minimum 150 Newtons buoyancy, 24-hour immersion retention, and self-righting of an unconscious person within 5 seconds"
+      "30 months",
+      "3 years",
+      "5 years",
+      "10 years"
     ],
-    "exp": "2026 LSA amendments require new lifejackets to provide minimum 150N, retain buoyancy after 24-hour immersion test, and self-right an unconscious adult within 5 seconds. Existing stock onboard remains valid until its marked expiry date.",
-    "cat": "LSA2026",
-    "id": "T21_020"
+    "exp": "Fall wires must be renewed every 5 years regardless of their condition.",
+    "cat": "TYPE",
+    "id": "T21A_020"
   },
   {
-    "q": "Under the January 2029 LSA Code amendment for totally enclosed lifeboats, what ventilation rate must be independently provided?",
-    "a": "Minimum 5 cubic metres per hour per person, powered independently of the main propulsion engine",
+    "q": "At what interval must lifeboat fall wires be end-for-ended or renewed?",
+    "a": "30 months",
     "opts": [
-      "Minimum 2 cubic metres per hour per person \u2014 sufficient to maintain safe O2 levels for 24 hours",
-      "Minimum 5 cubic metres per hour per person, powered independently of the main propulsion engine",
-      "Minimum 20 air changes per hour \u2014 identical to the cargo pump room standard",
-      "No independent ventilation is required \u2014 the engine room ventilation system is integrated into the lifeboat"
+      "12 months",
+      "24 months",
+      "30 months",
+      "5 years"
     ],
-    "exp": "The 2029 LSA amendment requires totally enclosed lifeboats to have a dedicated ventilation fan (min 5 m3/hr/person) powered by a separate battery independent of the propulsion engine. This prevents CO2 buildup and heat stress during extended time in the capsule.",
-    "cat": "LSA2026",
-    "id": "T21_021"
+    "exp": "Lifeboat falls must be end-for-ended or renewed every 30 months.",
+    "cat": "TYPE",
+    "id": "T21A_021"
   },
   {
-    "q": "What is the purpose of the hydrostatic release unit (HRU) on an inflatable life raft?",
-    "a": "The HRU automatically releases and inflates the life raft when the ship sinks to a depth of 2-4 metres \u2014 ensuring the life raft floats free even if crew cannot deploy it manually",
+    "q": "Which of the following must be marked on a lifeboat hull?",
+    "a": "Dimensions - length × breadth",
     "opts": [
-      "The HRU maintains the inflation pressure inside the life raft canister during storage in tropical conditions",
-      "The HRU automatically releases and inflates the life raft when the ship sinks to a depth of 2-4 metres \u2014 ensuring the life raft floats free even if crew cannot deploy it manually",
-      "The HRU connects the life raft lanyard to the ship's guardrail, preventing it from being lost overboard in rough weather",
-      "The HRU is a hydrostatic test device used at the annual service to verify the canister pressure is within limits"
+      "Dimensions - length × breadth",
+      "SOLAS Pack type (A or B)",
+      "Hydrostatic Release Unit expiry",
+      "Service/inspection date"
     ],
-    "exp": "When the ship sinks 2-4m, water pressure activates the HRU knife to cut the securing lashing. The buoyancy of the life raft pulls the painter until CO2 activates and the canister inflates, floating free of the sinking vessel.",
-    "cat": "Liferaft",
-    "id": "T21_022"
+    "exp": "Dimensions (length x breadth in metres) must be marked on the lifeboat hull. The other options are liferaft markings.",
+    "cat": "TYPE",
+    "id": "T21A_022"
   },
   {
-    "q": "How often must inflatable life rafts be serviced by an approved service station under SOLAS requirements?",
-    "a": "Every 12 months \u2014 or within 5 years of the manufactured date on first service",
+    "q": "Which of the following is marked on a liferaft container but NOT a lifeboat hull?",
+    "a": "SOLAS Pack type (A or B)",
     "opts": [
-      "Every 5 years \u2014 the same interval as the lifeboat annual survey",
-      "Every 12 months \u2014 or within 5 years of the manufactured date on first service",
-      "Every 3 years \u2014 the same interval as pyrotechnic replacement",
-      "Every 2 years if stored below deck in a controlled temperature environment"
+      "Persons capacity",
+      "Ship's name",
+      "Port of registry",
+      "SOLAS Pack type (A or B)"
     ],
-    "exp": "SOLAS LSA Code and MSC/Circ.1285 require inflatable life rafts to be serviced annually by an approved station. The service interval starts from the date of manufacture and cannot be extended even if the raft has never been deployed.",
-    "cat": "Liferaft",
-    "id": "T21_023"
+    "exp": "The SOLAS Pack type (A or B) is a marking specific to liferaft containers.",
+    "cat": "TYPE",
+    "id": "T21A_023"
   },
   {
-    "q": "What is the purpose of an Immersion Suit (Survival Suit) and what is its minimum thermal protection requirement?",
-    "a": "It provides thermal and buoyancy protection \u2014 must maintain core body temperature above 35 degrees C after 6 hours in water at 0-2 degrees C",
+    "q": "What specific hull marking indicates the physical boat assignment?",
+    "a": "Boat number (P1, P2, S1, S2)",
     "opts": [
-      "It is a high-visibility suit for helicopter rescue \u2014 no thermal protection is required by SOLAS",
-      "It provides flame protection only \u2014 designed to allow survival for 30 minutes in burning fuel on the water surface",
-      "It must maintain core temperature above 37 degrees C for 24 hours in water at 20 degrees C",
-      "It provides thermal and buoyancy protection \u2014 must maintain core body temperature above 35 degrees C after 6 hours in water at 0-2 degrees C"
+      "Engine serial number",
+      "Davit safe working load",
+      "Boat number (P1, P2, S1, S2)",
+      "Pack type A or B"
     ],
-    "exp": "SOLAS LSA Code: immersion suits must limit body core temperature drop to less than 2 degrees C after 6 hours in water of 0-2 degrees C. They must also provide 70N minimum buoyancy and self-righting capability.",
-    "cat": "Lifeboat",
-    "id": "T21_024"
+    "exp": "The boat number (e.g., P1, S1) must be marked on the hull to indicate its designated position.",
+    "cat": "TYPE",
+    "id": "T21A_024"
   },
   {
-    "q": "The EPIRB (Emergency Position Indicating Radio Beacon) must automatically activate when submerged to what depth?",
-    "a": "Activates automatically when submerged to 1-4 metres depth via hydrostatic release \u2014 transmits on 406 MHz to COSPAS-SARSAT",
+    "q": "What additional systems do TELBs on tankers carry compared to standard cargo TELBs?",
+    "a": "Air supply system & fire-protection sprinkler",
     "opts": [
-      "Activates automatically when temperature drops below 0 degrees C \u2014 indicating immersion in polar waters",
-      "Activates automatically when submerged to 1-4 metres depth via hydrostatic release \u2014 transmits on 406 MHz to COSPAS-SARSAT",
-      "Activates only when manually triggered by a crew member from the bridge GMDSS panel",
-      "Activates automatically when the vessel's roll exceeds 45 degrees for more than 10 consecutive seconds"
+      "Double hull construction & heavier ballast",
+      "Air supply system & fire-protection sprinkler",
+      "Larger battery bank & electric propulsion",
+      "Off-load release hooks only"
     ],
-    "exp": "EPIRB HRU activates the beacon at 1-4m submersion. The beacon transmits on 406 MHz (COSPAS-SARSAT satellite detection) and 121.5 MHz (homing). Class A automatically deploys; Class B must be manually deployed or activated.",
-    "cat": "Liferaft",
-    "id": "T21_025"
+    "exp": "Tanker lifeboats require an air supply system and a fire-protection sprinkler to survive passage through burning oil.",
+    "cat": "TYPE",
+    "id": "T21A_025"
   },
   {
-    "q": "What is the standard supplied voltage for lifeboat electrical equipment?",
-    "a": "24V DC",
+    "q": "Why is the fall wire end-for-ended at 30 months?",
+    "a": "This ensures the section with the most wear (at the hook end) is reversed.",
     "opts": [
-      "24V DC",
-      "220V AC",
-      "110V AC",
-      "12V DC"
+      "To comply with the 5-year replacement rule early.",
+      "This ensures the section with the most wear (at the hook end) is reversed.",
+      "To test the breaking strain of the wire.",
+      "Because the davit winch drum gets corroded."
     ],
-    "exp": "24V DC is the standard voltage for lifeboat electrical equipment. The onboard battery supplies this voltage to the starting motor, searchlight, interior lighting, and communication devices.",
-    "cat": "Lifeboat",
-    "id": "T21_026"
+    "exp": "End-for-ending reverses the wire so the section subject to the most wear at the hook end is moved to the drum.",
+    "cat": "TYPE",
+    "id": "T21A_026"
   },
   {
-    "q": "What type of sensor is typically used in modern lifeboat davit systems to confirm the boat is fully hoisted and stowed?",
-    "a": "Inductive proximity sensor",
+    "q": "Which marking must be written in block letters on the lifeboat?",
+    "a": "Ship's name",
     "opts": [
-      "Hydrostatic pressure switch",
-      "Capacitive level sensor",
-      "Ultrasonic distance sensor",
-      "Inductive proximity sensor"
+      "Manufacturer's name",
+      "Ship's name",
+      "Master's name",
+      "Davit serial number"
     ],
-    "exp": "Modern lifeboat davit systems use an inductive proximity sensor (a non-contact sensor) to detect the metallic body of the lifeboat when it approaches the stowed position, confirming it is fully hoisted and locked before releasing the brake.",
-    "cat": "Lifeboat",
-    "id": "T21_027"
+    "exp": "The ship's name must be marked in block letters on the lifeboat hull.",
+    "cat": "TYPE",
+    "id": "T21A_027"
   },
   {
-    "q": "According to the latest LSA Code amendments, what is the explicitly capped maximum lowering speed for survival craft?",
-    "a": "1.3 metres per second",
+    "q": "What equipment ensures visual location of the liferaft container at night before deployment?",
+    "a": "Water-activated light on container",
     "opts": [
-      "0.5 metres per second",
-      "1.3 metres per second",
-      "2.0 metres per second",
-      "1.0 metres per second"
+      "Internal canopy light",
+      "Water-activated light on container",
+      "Searchlight",
+      "Pyrotechnic flare attached to HRU"
     ],
-    "exp": "The maximum permitted lowering speed for survival craft (lifeboats and rescue boats) is capped at 1.3 m/s. This standardizes a safe maximum speed to prevent hard water impacts that can injure persons and cause hook release difficulties.",
-    "cat": "Lifeboat",
-    "id": "T21_028"
+    "exp": "The liferaft container is marked and fitted with a water-activated light on its exterior.",
+    "cat": "TYPE",
+    "id": "T21A_028"
   },
   {
-    "q": "What is the new 2029 LSA Code ventilation requirement for totally enclosed lifeboats?",
-    "a": "A dedicated ventilation system providing 5 cubic metres of fresh air per hour per person, independent of the engine",
+    "q": "Where is the free-fall lifeboat typically located on a cargo ship?",
+    "a": "Launched by dropping from stern ramp",
     "opts": [
-      "A dedicated ventilation system providing 5 cubic metres of fresh air per hour per person, independent of the engine",
-      "Passive ventilation louvres that open automatically upon water entry",
-      "Compressed air cylinders capable of providing 10 minutes of breathing air",
-      "An air conditioning unit powered by the emergency generator"
+      "Port side amidships",
+      "Starboard side forward",
+      "Launched by dropping from stern ramp",
+      "Below the bridge wings"
     ],
-    "exp": "To address heat stress and CO2 accumulation, enclosed lifeboats installed on or after Jan 1, 2029, must have an independent ventilation system delivering a minimum of 5 cubic metres of fresh air per hour per person.",
-    "cat": "Lifeboat",
-    "id": "T21_029"
+    "exp": "A free-fall lifeboat is launched by dropping from a stern ramp.",
+    "cat": "TYPE",
+    "id": "T21A_029"
   },
   {
-    "q": "What is the purpose of the water spray (sprinkler) system on a totally enclosed lifeboat on an oil tanker?",
-    "a": "To provide a continuous water film over the hull to allow the lifeboat to survive passing through burning oil on the sea surface",
+    "q": "Who is responsible for inspecting fall terminations for corrosion during the annual overhaul?",
+    "a": "ETO Role",
     "opts": [
-      "To wash away chemical contaminants after launching",
-      "To provide a continuous water film over the hull to allow the lifeboat to survive passing through burning oil on the sea surface",
-      "To cool the internal cabin temperature in tropical climates",
-      "To act as an internal fire suppression system in case of an engine fire"
+      "Chief Cook",
+      "ETO Role",
+      "Port State Control Officer only",
+      "Wiper"
     ],
-    "exp": "On oil and chemical tankers, the water spray system uses an engine-driven pump and sea cock to cover the lifeboat's exterior with water, preventing the GRP hull from melting or igniting when passing through a burning oil slick.",
-    "cat": "Lifeboat",
-    "id": "T21_030"
+    "exp": "The ETO's role includes inspecting sheaves and fall terminations for corrosion during the annual overhaul.",
+    "cat": "TYPE",
+    "id": "T21A_030"
   },
   {
-    "q": "What is the difference between an on-load and off-load release mechanism on a lifeboat?",
-    "a": "On-load releases the hooks while the boat is waterborne with full weight on them; off-load requires deliberate secondary action and is used for resetting or emergency in-air release",
+    "q": "What temperature is specified in the definition of Cold Cranking Amps (CCA)?",
+    "a": "-18°C",
     "opts": [
-      "On-load requires the boat to be completely out of the water; off-load is used only when submerged",
-      "On-load is activated automatically by hydrostatic pressure; off-load is strictly manual",
-      "On-load is used for lowering the boat; off-load is used for hoisting",
-      "On-load releases the hooks while the boat is waterborne with full weight on them; off-load requires deliberate secondary action and is used for resetting or emergency in-air release"
+      "-15°C",
+      "-18°C",
+      "0°C",
+      "-5°C"
     ],
-    "exp": "On-load release is the normal launch mechanism, freeing the hooks when the boat reaches the water (hydrostatic interlock prevents in-air release). Off-load is used to reset hooks or for exceptional circumstances, requiring deliberate action to prevent accidental drops.",
-    "cat": "Lifeboat",
-    "id": "T21_031"
+    "exp": "CCA is defined as the maximum current a fully charged battery can deliver for 30 seconds at -18°C.",
+    "cat": "BATT",
+    "id": "T21A_031"
   },
   {
-    "q": "Under the new LSA hook safety design amendment, what must the single fall and hook mechanism be incapable of doing?",
-    "a": "Supporting any load unless the hook is completely and correctly reset in the closed/locked position",
+    "q": "For how long must the battery deliver the CCA current without dropping below the voltage threshold?",
+    "a": "30 seconds",
     "opts": [
-      "Being operated by a single crew member",
-      "Releasing automatically upon hitting the water without manual input",
-      "Supporting any load unless the hook is completely and correctly reset in the closed/locked position",
-      "Being tested while the vessel is underway"
+      "10 seconds",
+      "30 seconds",
+      "1 minute",
+      "3 minutes"
     ],
-    "exp": "To prevent fatal accidents from partially engaged hooks, the new design mandates that the mechanism is physically incapable of supporting ANY load unless fully seated and locked. A partial reset cannot bear weight.",
-    "cat": "Lifeboat",
-    "id": "T21_032"
+    "exp": "The CCA rating specifies delivering the current for 30 seconds at -18°C.",
+    "cat": "BATT",
+    "id": "T21A_032"
   },
   {
-    "q": "When ordering a lifeboat battery for cold weather operation, which parameter is most critical to specify?",
-    "a": "CCA (Cold Cranking Amps)",
+    "q": "What is the minimum terminal voltage a 24 V battery must maintain during a CCA test?",
+    "a": "14.4 V",
     "opts": [
-      "Open Circuit Voltage (OCV)",
-      "CCA (Cold Cranking Amps)",
-      "Specific Gravity (SG)",
-      "Ampere-hour (Ah) capacity"
+      "12.0 V",
+      "14.4 V",
+      "24.0 V",
+      "10.5 V"
     ],
-    "exp": "CCA specifies the current the battery can deliver for 30 seconds at -18\u00b0C while maintaining at least 14.4V (for a 24V battery). It is the critical rating for ensuring the engine can start in Arctic or North Sea conditions where battery internal resistance is high.",
-    "cat": "Battery",
-    "id": "T21_033"
+    "exp": "The terminal voltage must not drop below 14.4 V for a 24 V system during the 30-second CCA test.",
+    "cat": "BATT",
+    "id": "T21A_033"
   },
   {
-    "q": "What specific gravity (SG) reading indicates a fully charged lead-acid battery cell at 25\u00b0C?",
-    "a": "1.265\u20131.280",
+    "q": "After a real abandon-ship exercise, within what time must the trickle charger restore full charge?",
+    "a": "24 hours",
     "opts": [
-      "1.120\u20131.150",
-      "1.350\u20131.400",
-      "1.265\u20131.280",
-      "1.190\u20131.210"
+      "8 hours",
+      "12 hours",
+      "24 hours",
+      "48 hours"
     ],
-    "exp": "A fully charged lead-acid cell has a specific gravity of 1.265\u20131.280. If it falls to 1.120\u20131.150, the battery is fully discharged. Readings must be taken with a hydrometer and corrected for temperature.",
-    "cat": "Battery",
-    "id": "T21_034"
+    "exp": "The trickle charger must restore full charge within 24 hours of returning to the stowed position.",
+    "cat": "BATT",
+    "id": "T21A_034"
   },
   {
-    "q": "How is a ship's lifeboat battery maintained at full charge between drills?",
-    "a": "By a shore-connected trickle charger providing a continuous float voltage (typically 27.6V)",
+    "q": "What is an advantage of NiCd batteries over flooded lead-acid in lifeboats?",
+    "a": "Better performance at extreme temps. Does not sulphate.",
     "opts": [
-      "By running the lifeboat engine for 10 minutes every day",
-      "By a shore-connected trickle charger providing a continuous float voltage (typically 27.6V)",
-      "By a dedicated solar panel mounted on the davit",
-      "By manually charging it once a month using a portable generator"
+      "They are significantly cheaper.",
+      "Better performance at extreme temps. Does not sulphate.",
+      "They require daily water topping up.",
+      "They output AC instead of DC."
     ],
-    "exp": "A trickle (or float) charger connected via the davit head provides a constant 27.6V (for a 24V system). Current automatically drops to a few milliamps when fully charged, preventing self-discharge without overcharging.",
-    "cat": "Battery",
-    "id": "T21_035"
+    "exp": "NiCd (Nickel Cadmium) batteries have better performance at extreme temperatures, do not sulphate, and have a longer life.",
+    "cat": "BATT",
+    "id": "T21A_035"
   },
   {
-    "q": "What chemical change causes the specific gravity of a lead-acid battery to fall during discharge?",
-    "a": "Both the lead dioxide and spongy lead plates react with sulphuric acid to form lead sulphate, producing water and diluting the electrolyte",
+    "q": "What is the typical specific gravity (SG) of a fully charged flooded lead-acid battery?",
+    "a": "1.265–1.280",
     "opts": [
-      "Lead sulphate converts back to lead dioxide, making the electrolyte more dense",
-      "Hydrogen gas is released, increasing the concentration of lead in the acid",
-      "Both the lead dioxide and spongy lead plates react with sulphuric acid to form lead sulphate, producing water and diluting the electrolyte",
-      "Sulphuric acid evaporates from the battery cells"
+      "1.100–1.150",
+      "1.200–1.225",
+      "1.265–1.280",
+      "1.350–1.400"
     ],
-    "exp": "During discharge (PbO2 + Pb + 2H2SO4 -> 2PbSO4 + 2H2O), sulphuric acid is consumed and water is produced. This dilution lowers the specific gravity of the electrolyte.",
-    "cat": "Battery",
-    "id": "T21_036"
+    "exp": "A fully charged flooded lead-acid cell has an SG target of 1.265–1.280.",
+    "cat": "BATT",
+    "id": "T21A_036"
   },
   {
-    "q": "What is the correct liquid to use when topping up the electrolyte in a flooded lead-acid battery?",
-    "a": "Distilled water only",
+    "q": "When installing a new battery, which terminal should be connected first?",
+    "a": "Install positive terminal first",
     "opts": [
-      "Dilute bicarbonate solution",
+      "Install negative terminal first",
+      "Install positive terminal first",
+      "Connect both simultaneously",
+      "Terminal order does not matter"
+    ],
+    "exp": "Install the positive terminal first, then the negative, to prevent an accidental short via tools to the chassis.",
+    "cat": "BATT",
+    "id": "T21A_037"
+  },
+  {
+    "q": "What type of terminals should be specified when ordering a lifeboat battery for marine use?",
+    "a": "Bolt-on posts (not clip-on) for marine use",
+    "opts": [
+      "Spring-loaded clips",
+      "Quick-release automotive clips",
+      "Bolt-on posts (not clip-on) for marine use",
+      "Bare wire wrap terminals"
+    ],
+    "exp": "Marine lifeboat batteries require bolt-on posts to ensure a secure, vibration-resistant connection.",
+    "cat": "BATT",
+    "id": "T21A_038"
+  },
+  {
+    "q": "What is the first step in the battery commissioning procedure?",
+    "a": "Check documents: Verify class certificate, MED approval",
+    "opts": [
+      "Apply initial charge",
+      "Check documents: Verify class certificate, MED approval",
+      "Perform CCA capacity test",
+      "Install negative terminal"
+    ],
+    "exp": "The first step (CDC-I-ITC-R) is to check documents, verifying the class certificate and MED approval.",
+    "cat": "BATT",
+    "id": "T21A_039"
+  },
+  {
+    "q": "What should the Open Circuit Voltage (OCV) of a new 12 V unit be prior to installation?",
+    "a": "≥12.6 V",
+    "opts": [
+      "≥10.5 V",
+      "≥11.8 V",
+      "≥12.6 V",
+      "≥14.4 V"
+    ],
+    "exp": "The OCV should be ≥12.6 V for a 12 V unit. If lower, it requires an initial charge.",
+    "cat": "BATT",
+    "id": "T21A_040"
+  },
+  {
+    "q": "At what rate should an initial charge typically be applied if required during commissioning?",
+    "a": "C/10 rate",
+    "opts": [
+      "C/2 rate",
+      "C/10 rate",
+      "C/20 rate",
+      "100 Amp fixed rate"
+    ],
+    "exp": "If initial charging is required, connect to an approved charger at the specified C/10 rate.",
+    "cat": "BATT",
+    "id": "T21A_041"
+  },
+  {
+    "q": "What maintenance is required for a VRLA lifeboat battery?",
+    "a": "Check OCV. No electrolyte top-up.",
+    "opts": [
+      "Monthly SG checks and water top-up.",
+      "Check OCV. No electrolyte top-up.",
+      "Renew electrolyte every 5 years.",
+      "Add sulphuric acid quarterly."
+    ],
+    "exp": "VRLA batteries are sealed and maintenance-free; you only check OCV, with no electrolyte top-up allowed.",
+    "cat": "BATT",
+    "id": "T21A_042"
+  },
+  {
+    "q": "What is the typical charger output voltage for a 24 V VRLA system?",
+    "a": "27.2–27.6 V",
+    "opts": [
+      "24.0–24.5 V",
+      "25.5–26.0 V",
+      "27.2–27.6 V",
+      "28.8–29.5 V"
+    ],
+    "exp": "The typical trickle charger output voltage for maintaining a 24 V VRLA battery is 27.2–27.6 V.",
+    "cat": "BATT",
+    "id": "T21A_043"
+  },
+  {
+    "q": "What is the maximum recommended unactivated shelf life for a VRLA battery?",
+    "a": "max 6 months",
+    "opts": [
+      "max 1 month",
+      "max 6 months",
+      "max 2 years",
+      "max 5 years"
+    ],
+    "exp": "VRLA batteries have a maximum unactivated shelf life of 6 months before permanent capacity loss can occur.",
+    "cat": "BATT",
+    "id": "T21A_044"
+  },
+  {
+    "q": "What electrolyte is used in NiCd batteries?",
+    "a": "KOH electrolyte",
+    "opts": [
       "Sulphuric acid",
+      "KOH electrolyte",
       "Distilled water only",
-      "Tap water"
+      "Gel acid"
     ],
-    "exp": "Only distilled or demineralised water should be used. Tap water contains minerals that contaminate the electrolyte and form plate deposits. Acid is only added if electrolyte was physically spilled.",
-    "cat": "Battery",
-    "id": "T21_037"
+    "exp": "NiCd batteries use an alkaline Potassium Hydroxide (KOH) electrolyte.",
+    "cat": "BATT",
+    "id": "T21A_045"
   },
   {
-    "q": "Why must a battery room have dedicated continuous mechanical extraction ventilation?",
-    "a": "To remove highly flammable hydrogen gas produced during battery charging",
+    "q": "What explosive gas is produced by lead-acid batteries during charging?",
+    "a": "Hydrogen (H₂)",
     "opts": [
-      "To keep the ambient temperature below 10\u00b0C",
-      "To supply oxygen for the chemical reactions inside the battery",
-      "To prevent the accumulation of toxic carbon monoxide",
-      "To remove highly flammable hydrogen gas produced during battery charging"
+      "Oxygen (O₂)",
+      "Hydrogen (H₂)",
+      "Carbon Monoxide (CO)",
+      "Nitrogen Dioxide (NO₂)"
     ],
-    "exp": "Lead-acid batteries produce hydrogen gas (H2) during charging. Hydrogen is explosive at 4-74% volume in air. SOLAS II-1/45.11 requires dedicated extraction ventilation (min 6 air changes/hr) routed directly to the atmosphere.",
-    "cat": "BattRoom",
-    "id": "T21_038"
+    "exp": "Lead-acid batteries produce Hydrogen (H₂) gas during charging, particularly during the equalising/gassing phase.",
+    "cat": "ROOM",
+    "id": "T21A_046"
   },
   {
-    "q": "What specific type of lighting is required inside a battery room?",
-    "a": "Explosion-protected (Ex e or Ex d rated) luminaires certified for a hydrogen atmosphere (Gas Group IIC)",
+    "q": "What is the Lower Flammability Limit (LFL) of hydrogen by volume in air?",
+    "a": "4%",
     "opts": [
-      "Standard commercial LED fittings",
-      "Explosion-protected (Ex e or Ex d rated) luminaires certified for a hydrogen atmosphere (Gas Group IIC)",
-      "Battery-operated portable lanterns only",
-      "Low-voltage halogen lamps"
+      "1%",
+      "4%",
+      "10%",
+      "15%"
     ],
-    "exp": "Due to the explosive hydrogen hazard, all light fittings must be Ex-rated for Gas Group IIC (hydrogen). Standard non-Ex electrical equipment is not permitted.",
-    "cat": "BattRoom",
-    "id": "T21_039"
+    "exp": "Hydrogen is explosive when its concentration reaches 4% by volume in air (LFL).",
+    "cat": "ROOM",
+    "id": "T21A_047"
   },
   {
-    "q": "What physical safety arrangement must be placed underneath lead-acid batteries in the battery room?",
-    "a": "A corrosion-resistant acid drip tray large enough to contain a full electrolyte spill",
+    "q": "What is the minimum ventilation requirement for a battery room?",
+    "a": "6 air changes/hour",
     "opts": [
-      "A rubber vibration-damping mat",
-      "A corrosion-resistant acid drip tray large enough to contain a full electrolyte spill",
-      "A wooden pallet to insulate the batteries from the steel deck",
-      "A grounded copper mesh pad to discharge static electricity"
+      "2 air changes/hour",
+      "4 air changes/hour",
+      "6 air changes/hour",
+      "10 air changes/hour"
     ],
-    "exp": "An acid-resistant drip tray must be installed under all lead-acid batteries to safely contain any sulphuric acid electrolyte spill, protecting the ship's steel structure from corrosion.",
-    "cat": "BattRoom",
-    "id": "T21_040"
+    "exp": "Continuous mechanical extraction must provide a minimum of 6 air changes per hour.",
+    "cat": "ROOM",
+    "id": "T21A_048"
   },
   {
-    "q": "What is the Hydrostatic Release Unit (HRU) on a liferaft designed to do?",
-    "a": "Activate via water pressure at 1.5-4m depth to cut the lashing strap, allowing the raft to float free and inflate",
+    "q": "Where must the exhaust duct exit the battery room?",
+    "a": "highest point",
     "opts": [
-      "Manually trigger the CO2 inflation cylinder when a crew member pulls the lanyard",
-      "Automatically detach the liferaft from the ship if the wind speed exceeds 50 knots",
-      "Activate via water pressure at 1.5-4m depth to cut the lashing strap, allowing the raft to float free and inflate",
-      "Release dye markers into the water to attract rescue aircraft"
+      "lowest point near the deck",
+      "mid-level near the door",
+      "highest point",
+      "directly below the batteries"
     ],
-    "exp": "If the ship sinks, the HRU triggers at 1.5\u20134 metres depth. A spring-loaded knife cuts the securing strap. The liferaft floats up, pulling the painter line taut, which then triggers the CO2 inflation system.",
-    "cat": "Liferaft",
-    "id": "T21_041"
+    "exp": "Because hydrogen is lighter than air and rises, the exhaust duct must exit directly to the atmosphere from the highest point of the room.",
+    "cat": "ROOM",
+    "id": "T21A_049"
   },
   {
-    "q": "What is the main difference between a SOLAS Pack A and Pack B liferaft equipment pack?",
-    "a": "Pack A is the comprehensive offshore pack for international voyages; Pack B is a reduced coastal pack",
+    "q": "What type of ventilation system is strictly required for a battery room?",
+    "a": "extraction",
     "opts": [
-      "Pack A deploys automatically; Pack B deploys manually",
-      "Pack A is for passenger ships; Pack B is for cargo ships",
-      "Pack A is the comprehensive offshore pack for international voyages; Pack B is a reduced coastal pack",
-      "Pack A contains inflatable rafts; Pack B contains rigid rafts"
+      "supply",
+      "extraction",
+      "natural draft only",
+      "closed-loop recirculation"
     ],
-    "exp": "SOLAS Pack A (Ocean Pack) contains more food, water, thermal aids, and pyrotechnics, required for vessels on international voyages. Pack B is for short coastal voyages where rapid rescue is expected.",
-    "cat": "Liferaft",
-    "id": "T21_042"
+    "exp": "The room requires continuous mechanical extraction (NOT supply) to ensure hydrogen exits and does not recirculate.",
+    "cat": "ROOM",
+    "id": "T21A_050"
   },
   {
-    "q": "How long is the standard validity period for a liferaft's Hydrostatic Release Unit (HRU)?",
-    "a": "2 years from installation",
+    "q": "What Ex-rating classification is required for battery room lighting?",
+    "a": "Ex d",
     "opts": [
-      "2 years from installation",
-      "It has no expiry as long as it passes annual inspection",
-      "5 years from installation",
-      "1 year from installation"
+      "Ex i",
+      "Ex d",
+      "Ex m",
+      "Standard IP56"
     ],
-    "exp": "The standard HRU has a fixed lifespan of 2 years from the date of installation, after which it must be replaced.",
-    "cat": "Liferaft",
-    "id": "T21_043"
+    "exp": "Lighting MUST be Ex-rated, specifically Ex d (flameproof) or Ex e (increased safety).",
+    "cat": "ROOM",
+    "id": "T21A_051"
   },
   {
-    "q": "What is the SOLAS requirement for parachute signal flares in a lifeboat?",
-    "a": "4 flares, capable of reaching 300m height and burning bright red for 40 seconds",
+    "q": "Which Gas Group rating must the Ex-rated lighting cover?",
+    "a": "IIC",
     "opts": [
-      "2 flares, burning white for 30 seconds",
-      "6 flares, burning red for 1 minute",
-      "12 flares, reaching 100m height",
-      "4 flares, capable of reaching 300m height and burning bright red for 40 seconds"
+      "IIA",
+      "IIB",
+      "IIC",
+      "Group I"
     ],
-    "exp": "SOLAS III/11.1 requires 4 rocket parachute flares per lifeboat. They must rocket to a minimum height of 300m, deploy a parachute, and burn bright red for at least 40 seconds to attract distant vessels.",
-    "cat": "Pyrotechnics",
-    "id": "T21_044"
+    "exp": "The lighting must have a Gas Group IIC rating, which is the highest hazard group and covers hydrogen.",
+    "cat": "ROOM",
+    "id": "T21A_052"
   },
   {
-    "q": "What is the primary purpose of buoyant orange smoke signals in a lifeboat?",
-    "a": "For daytime position marking and to indicate wind direction to approaching rescue helicopters",
+    "q": "What must be placed under ALL batteries to catch electrolyte leaks?",
+    "a": "Acid-resistant containment tray",
     "opts": [
-      "For daytime position marking and to indicate wind direction to approaching rescue helicopters",
-      "For nighttime illumination of the survival craft",
-      "To create a thermal signature for satellite detection",
-      "To repel sharks and marine predators"
+      "Wooden pallet",
+      "Acid-resistant containment tray",
+      "Aluminium drip pan",
+      "Rubber matting only"
     ],
-    "exp": "Lifeboats carry 2 buoyant smoke signals. They float and emit dense orange smoke for a minimum of 3 minutes. They are used in daylight and critically help helicopter pilots determine wind drift for their approach.",
-    "cat": "Pyrotechnics",
-    "id": "T21_045"
+    "exp": "An acid-resistant containment tray (GRP or coated steel) is required under all batteries to catch leaks.",
+    "cat": "ROOM",
+    "id": "T21A_053"
   },
   {
-    "q": "What is the expiry rule and disposal procedure for marine pyrotechnics?",
-    "a": "They expire 3 years from manufacture and must be disposed of via approved shore facilities, never discharged at sea",
+    "q": "What specific emergency equipment must be located immediately adjacent to the battery room entrance?",
+    "a": "eye-wash station",
     "opts": [
-      "They expire 5 years from manufacture and can be thrown overboard",
-      "They do not expire if kept in watertight containers",
-      "They expire 2 years from manufacture and must be tested annually",
-      "They expire 3 years from manufacture and must be disposed of via approved shore facilities, never discharged at sea"
+      "CO2 fire extinguisher",
+      "eye-wash station",
+      "SCBA set",
+      "First aid box"
     ],
-    "exp": "Pyrotechnics have a 3-year validity. Discharging expired pyrotechnics at sea is strictly forbidden as it constitutes a false Mayday signal. They must be collected by authorized shore services.",
-    "cat": "Pyrotechnics",
-    "id": "T21_046"
+    "exp": "An emergency eye-wash station must be immediately adjacent to deal with acid splashes, a primary injury risk.",
+    "cat": "ROOM",
+    "id": "T21A_054"
   },
   {
-    "q": "How many hand flares must be carried in each lifeboat?",
-    "a": "6",
+    "q": "Why must lead-acid and NiCd batteries NOT be stored in the same room?",
+    "a": "Acid fumes from lead-acid contaminate the alkaline KOH electrolyte",
     "opts": [
-      "12",
-      "2",
-      "4",
-      "6"
+      "They require different charging voltages that cause sparks",
+      "Acid fumes from lead-acid contaminate the alkaline KOH electrolyte",
+      "NiCd batteries absorb hydrogen and explode",
+      "Lead-acid batteries are too heavy to stack with NiCd"
     ],
-    "exp": "SOLAS requires 6 hand-held flares per lifeboat. They burn bright red for at least 1 minute and are used for close-range signaling when a rescue vessel is in visual range.",
-    "cat": "Pyrotechnics",
-    "id": "T21_047"
+    "exp": "Acid fumes from lead-acid batteries will contaminate the alkaline KOH electrolyte in NiCd cells, permanently ruining them.",
+    "cat": "ROOM",
+    "id": "T21A_055"
   },
   {
-    "q": "What is an EEBD (Emergency Escape Breathing Device) used for?",
-    "a": "Strictly for short-duration escape from a space filled with smoke or toxic gases",
+    "q": "What is strictly prohibited regarding tools in the battery room?",
+    "a": "No tools left on top of batteries",
     "opts": [
-      "For fighting minor fires in the engine room",
-      "Strictly for short-duration escape from a space filled with smoke or toxic gases",
-      "For entering enclosed spaces to rescue an unconscious crew member",
-      "To provide supplementary oxygen during high-altitude helicopter evacuations"
+      "No using insulated tools",
+      "No tools left on top of batteries",
+      "No using torque wrenches",
+      "No carrying tools in pockets"
     ],
-    "exp": "An EEBD provides a minimum of 10 minutes of air via a hood. It is a single-use, single-person device designed exclusively for escaping hazardous atmospheres, NOT for fire-fighting or rescue operations.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_048"
+    "exp": "Leaving or resting tools across battery terminals can cause a short-circuit, explosive current, and terminal melt.",
+    "cat": "ROOM",
+    "id": "T21A_056"
   },
   {
-    "q": "What is the minimum operating time for an EEBD required by SOLAS?",
-    "a": "10 minutes",
+    "q": "What does the 'S' stand for in the battery room memory aid 'VESP'?",
+    "a": "Spill tray",
     "opts": [
-      "30 minutes",
+      "Safety switch",
+      "Spill tray",
+      "Sensor alarm",
+      "Supply fan"
+    ],
+    "exp": "In the VESP memory aid, S stands for Spill tray (acid-resistant containment).",
+    "cat": "ROOM",
+    "id": "T21A_057"
+  },
+  {
+    "q": "What is the purpose of the Battery Management System (BMS) or periodic checks?",
+    "a": "Early detection of cell failure before capacity falls",
+    "opts": [
+      "To automatically add distilled water",
+      "Early detection of cell failure before capacity falls",
+      "To switch off the extraction fan",
+      "To control the eye-wash station"
+    ],
+    "exp": "Discharge monitoring provides early detection of cell failure before capacity falls below SOLAS requirements.",
+    "cat": "ROOM",
+    "id": "T21A_058"
+  },
+  {
+    "q": "What type of lighting is specifically prohibited in a battery room?",
+    "a": "NO standard fluorescent or incandescent fittings",
+    "opts": [
+      "NO LED fixtures of any type",
+      "NO standard fluorescent or incandescent fittings",
+      "NO Ex d flameproof fittings",
+      "NO Ex e increased safety fittings"
+    ],
+    "exp": "Standard fluorescent or incandescent fittings are prohibited because electrical sparks from lamp contacts or ballasts could ignite hydrogen.",
+    "cat": "ROOM",
+    "id": "T21A_059"
+  },
+  {
+    "q": "What happens if NiCd cells suffer cross-contamination from lead-acid fumes?",
+    "a": "Cross-contamination is permanent damage.",
+    "opts": [
+      "The cells temporarily lose 10% capacity.",
+      "The cells can be washed out with water.",
+      "Cross-contamination is permanent damage.",
+      "The KOH electrolyte turns blue."
+    ],
+    "exp": "Acid fumes permanently damage the NiCd battery performance; it is not recoverable.",
+    "cat": "ROOM",
+    "id": "T21A_060"
+  },
+  {
+    "q": "What type of engine is used in a lifeboat?",
+    "a": "Compression ignition (diesel) engine",
+    "opts": [
+      "Spark ignition (petrol) engine",
+      "Compression ignition (diesel) engine",
+      "Gas turbine engine",
+      "Electric propulsion motor only"
+    ],
+    "exp": "Lifeboats use a compression ignition (diesel) engine, which can be 4-stroke or 2-stroke.",
+    "cat": "ENGI",
+    "id": "T21A_061"
+  },
+  {
+    "q": "How much fuel must be carried in the lifeboat's integral tank?",
+    "a": "24 hours",
+    "opts": [
+      "12 hours",
+      "24 hours",
+      "48 hours",
+      "96 hours"
+    ],
+    "exp": "There must be sufficient fuel for 24 hours of continuous operation at 6 knots.",
+    "cat": "ENGI",
+    "id": "T21A_062"
+  },
+  {
+    "q": "What minimum speed must the lifeboat achieve in calm water?",
+    "a": "6 knots",
+    "opts": [
+      "4 knots",
+      "6 knots",
+      "8 knots",
+      "10 knots"
+    ],
+    "exp": "The lifeboat must achieve a minimum of 6 knots in calm water with a full complement.",
+    "cat": "ENGI",
+    "id": "T21A_063"
+  },
+  {
+    "q": "In the lifeboat engine starting circuit, what serves as the negative return conductor?",
+    "a": "engine block",
+    "opts": [
+      "A dedicated heavy gauge negative cable",
+      "The ship's hull",
+      "engine block",
+      "The propeller shaft"
+    ],
+    "exp": "The engine body/block itself forms the negative return conductor (earth return system) via a short earth strap to the battery.",
+    "cat": "ENGI",
+    "id": "T21A_064"
+  },
+  {
+    "q": "What component directly energises to close the main motor current contacts during starting?",
+    "a": "starter solenoid coil",
+    "opts": [
+      "main fuse",
+      "ignition switch",
+      "starter solenoid coil",
+      "alternator regulator"
+    ],
+    "exp": "The starter solenoid coil is energised by the ignition switch, which then closes the heavy current contacts.",
+    "cat": "ENGI",
+    "id": "T21A_065"
+  },
+  {
+    "q": "What is the key advantage of a pre-engaged (axial) starter motor?",
+    "a": "Ensures pinion is fully engaged before heavy cranking current flows",
+    "opts": [
+      "It spins the engine faster than inertia starters",
+      "Ensures pinion is fully engaged before heavy cranking current flows",
+      "It does not require a solenoid",
+      "It acts as a generator once the engine starts"
+    ],
+    "exp": "The solenoid pushes the drive pinion to mesh with the flywheel ring gear before closing the main contacts, preventing ring gear damage.",
+    "cat": "ENGI",
+    "id": "T21A_066"
+  },
+  {
+    "q": "What is a SOLAS requirement for starting the lifeboat engine besides the electric start?",
+    "a": "manual/mechanical backup",
+    "opts": [
+      "compressed air start",
+      "hydraulic accumulator start",
+      "manual/mechanical backup",
+      "secondary battery bank"
+    ],
+    "exp": "SOLAS requires a manual/mechanical backup (such as a hand crank) in addition to the primary electric start.",
+    "cat": "ENGI",
+    "id": "T21A_067"
+  },
+  {
+    "q": "During the positive circuit path of starting, what component comes immediately after the main fuse/isolator switch?",
+    "a": "ignition switch",
+    "opts": [
+      "starter solenoid coil",
+      "starter motor armature",
+      "ignition switch",
+      "battery positive terminal"
+    ],
+    "exp": "The path is: Battery positive -> main fuse/isolator switch -> ignition switch -> starter solenoid coil.",
+    "cat": "ENGI",
+    "id": "T21A_068"
+  },
+  {
+    "q": "What should the ETO check regarding the engine exhaust during the monthly run?",
+    "a": "Check exhaust colour (clear = good)",
+    "opts": [
+      "Check exhaust colour (clear = good)",
+      "Measure exhaust temperature",
+      "Sample exhaust for NOX emissions",
+      "Verify the spark arrestor is glowing"
+    ],
+    "exp": "During the monthly 3-minute run, the ETO should check that the exhaust colour is clear, indicating good combustion.",
+    "cat": "ENGI",
+    "id": "T21A_069"
+  },
+  {
+    "q": "Where does the short earth strap bolt to complete the negative circuit?",
+    "a": "engine mounting frame",
+    "opts": [
+      "starter solenoid body",
+      "engine mounting frame",
+      "propeller shaft coupling",
+      "fuel tank casing"
+    ],
+    "exp": "The earth strap is bolted to the engine mounting frame, completing the circuit from the block back to the battery negative terminal.",
+    "cat": "ENGI",
+    "id": "T21A_070"
+  },
+  {
+    "q": "How long must the ETO run the engine during the monthly maintenance check?",
+    "a": "3 minutes",
+    "opts": [
+      "1 minute",
+      "3 minutes",
       "5 minutes",
-      "60 minutes",
       "10 minutes"
     ],
-    "exp": "SOLAS mandates a minimum of 10 minutes of breathable air for an EEBD, which is sufficient time to escape from most machinery spaces if the evacuation path is clear. Modern units often provide 15 minutes.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_049"
+    "exp": "The monthly check requires starting and running the engine for a minimum of 3 minutes.",
+    "cat": "ENGI",
+    "id": "T21A_071"
   },
   {
-    "q": "What are the minimum requirements for a standard SCBA (Self-Contained Breathing Apparatus) on a cargo ship?",
-    "a": "Minimum 2 sets onboard, used for firefighting, providing at least 30 minutes of air",
+    "q": "Which of these is a 6-monthly engine maintenance task?",
+    "a": "Change engine oil and filter",
     "opts": [
-      "Minimum 2 sets onboard, used for firefighting, providing at least 30 minutes of air",
-      "Minimum 1 set per crew member, providing 60 minutes of air",
-      "Minimum 2 sets located only on the bridge, providing 15 minutes of air",
-      "Minimum 4 sets onboard, used for escape only, providing 10 minutes of air"
+      "Check fuel level",
+      "Test full-speed on water",
+      "Change engine oil and filter",
+      "Inspect starter motor brushes"
     ],
-    "exp": "SCBAs are designed for firefighting and enclosed space entry. SOLAS requires a minimum of 2 sets on cargo ships, providing at least 30 minutes (typically 200-300 bar) of positive-pressure breathable air.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_050"
+    "exp": "Changing the engine oil and filter is specified as a 6-monthly task in the maintenance schedule.",
+    "cat": "ENGI",
+    "id": "T21A_072"
   },
   {
-    "q": "What is the primary difference between a standard Rescue Boat and a Fast Rescue Boat (FRB)?",
-    "a": "A rescue boat must maintain at least 6 knots; an FRB must maintain at least 8 knots and have higher manoeuvrability",
+    "q": "What must the lifeboat engine drive system have regarding direction of travel?",
+    "a": "Reversible drive (ahead and astern capability via gearbox)",
     "opts": [
-      "A rescue boat must maintain at least 6 knots; an FRB must maintain at least 8 knots and have higher manoeuvrability",
-      "A rescue boat is manually rowed; an FRB uses an outboard motor",
-      "A rescue boat is inflatable; an FRB is always rigid GRP",
-      "A rescue boat holds 6 people; an FRB holds 15 people"
+      "Reversible drive (ahead and astern capability via gearbox)",
+      "Ahead only, steering is done by rudder",
+      "Variable pitch propeller only",
+      "Waterjet deflector only"
     ],
-    "exp": "Both must maintain speed for 4 hours. Standard rescue boats (all cargo ships) have a minimum speed of 6 knots. Fast Rescue Boats (passenger ships, offshore) require a minimum of 8 knots and rapid launch capabilities.",
-    "cat": "Rescue Boat",
-    "id": "T21_051"
+    "exp": "The lifeboat must have a reversible drive, providing ahead and astern capability via a gearbox.",
+    "cat": "ENGI",
+    "id": "T21A_073"
   },
   {
-    "q": "According to SOLAS, what is the maximum permitted time to hoist a fully loaded rescue boat back aboard the ship?",
+    "q": "When is the starter motor armature engaged with current in the axial starter design?",
+    "a": "solenoid main contacts close",
+    "opts": [
+      "ignition switch is first turned",
+      "solenoid main contacts close",
+      "engine reaches 500 RPM",
+      "manual hand crank is inserted"
+    ],
+    "exp": "Heavy current flows to the starter motor armature only after the solenoid main contacts close.",
+    "cat": "ENGI",
+    "id": "T21A_074"
+  },
+  {
+    "q": "What is inspected on a water-cooled engine during the 6-monthly check?",
+    "a": "raw-water impeller",
+    "opts": [
+      "radiator coolant level",
+      "raw-water impeller",
+      "air cooling fins",
+      "closed-loop heat exchanger"
+    ],
+    "exp": "If the engine is water-cooled, the 6-monthly check includes inspecting the raw-water impeller.",
+    "cat": "ENGI",
+    "id": "T21A_075"
+  },
+  {
+    "q": "What is the maximum permitted lowering speed for a survival craft as per the LSA Code 2026 amendment?",
+    "a": "1.3 m/s",
+    "opts": [
+      "0.5 m/s",
+      "1.0 m/s",
+      "1.3 m/s",
+      "2.0 m/s"
+    ],
+    "exp": "The lowering speed is explicitly capped at 1.3 m/s (78 m/min) by the centrifugal brake/speed governor.",
+    "cat": "DAVI",
+    "id": "T21A_076"
+  },
+  {
+    "q": "What safety device prevents motor overrun during hoisting?",
+    "a": "Limit Switches (Inductive Proximity Sensors)",
+    "opts": [
+      "Centrifugal Brake",
+      "Limit Switches (Inductive Proximity Sensors)",
+      "Mechanical Brake",
+      "Tricing Pennants"
+    ],
+    "exp": "Up-limit and travel-limit switches detect position and prevent the hoisting motor from overrunning.",
+    "cat": "DAVI",
+    "id": "T21A_077"
+  },
+  {
+    "q": "What must hold the lifeboat stationary in its stowed position under full load?",
+    "a": "Mechanical Brake (Hand Brake + Automatic)",
+    "opts": [
+      "Centrifugal Brake",
+      "Painter Line",
+      "Mechanical Brake (Hand Brake + Automatic)",
+      "Limit Switches"
+    ],
+    "exp": "The mechanical brake must hold the lifeboat stationary in the stowed position under full load.",
+    "cat": "DAVI",
+    "id": "T21A_078"
+  },
+  {
+    "q": "When is an on-load release mechanism designed to be operated?",
+    "a": "when lifeboat is waterborne with full load on hooks",
+    "opts": [
+      "when the lifeboat is suspended in mid-air",
+      "when lifeboat is waterborne with full load on hooks",
+      "only when the boat is empty",
+      "only during weekly drills"
+    ],
+    "exp": "On-load release is for normal launching when the boat is waterborne and the hooks are still under the load of the boat.",
+    "cat": "DAVI",
+    "id": "T21A_079"
+  },
+  {
+    "q": "What interlock prevents accidental release of the on-load hooks while in mid-air?",
+    "a": "Hydrostatic interlock",
+    "opts": [
+      "Centrifugal interlock",
+      "Magnetic limit switch",
+      "Hydrostatic interlock",
+      "Thermal overload relay"
+    ],
+    "exp": "A hydrostatic interlock prevents in-air release unless deliberately overridden; the boat must be waterborne for it to release naturally.",
+    "cat": "DAVI",
+    "id": "T21A_080"
+  },
+  {
+    "q": "What keeps the lifeboat alongside the ship's side during boarding after lowering?",
+    "a": "Painter Line",
+    "opts": [
+      "Fall wires",
+      "Painter Line",
+      "Tricing Pennants",
+      "On-load hook"
+    ],
+    "exp": "The painter line connects to the ship's side to keep the lifeboat alongside during boarding and is slipped after the engine starts.",
+    "cat": "DAVI",
+    "id": "T21A_081"
+  },
+  {
+    "q": "What is the function of tricing pennants?",
+    "a": "Hold lifeboat against ship's side at embarkation deck for safe boarding.",
+    "opts": [
+      "Control the lowering speed of the davit.",
+      "Release the hooks automatically when waterborne.",
+      "Hold lifeboat against ship's side at embarkation deck for safe boarding.",
+      "Tow the liferafts behind the lifeboat."
+    ],
+    "exp": "Tricing pennants hold the lifeboat tightly against the embarkation deck for boarding, and are released before final lowering.",
+    "cat": "DAVI",
+    "id": "T21A_082"
+  },
+  {
+    "q": "What action is required to operate an off-load release?",
+    "a": "Deliberate secondary action required - typically removing a pin or lifting a guard",
+    "opts": [
+      "Pulling the red handle simultaneously",
+      "Reaching a lowering speed of 1.3 m/s",
+      "Deliberate secondary action required - typically removing a pin or lifting a guard",
+      "Activation of the hydrostatic unit"
+    ],
+    "exp": "Off-load release requires a conscious secondary action to prevent accidental activation during hook maintenance or resetting.",
+    "cat": "DAVI",
+    "id": "T21A_083"
+  },
+  {
+    "q": "According to the 2026 hook safety design, what happens if a single fall hook is partially engaged?",
+    "a": "Partially engaged hook will NOT hold weight",
+    "opts": [
+      "It will hold 50% of the safe working load",
+      "It will trigger an alarm on the bridge",
+      "Partially engaged hook will NOT hold weight",
+      "It will automatically snap shut under tension"
+    ],
+    "exp": "The new design ensures that a partially engaged hook will not hold weight, preventing accidental drops from incomplete resets.",
+    "cat": "DAVI",
+    "id": "T21A_084"
+  },
+  {
+    "q": "How long must the lifeboat sprinkler system be able to withstand a fire?",
+    "a": "8 minutes",
+    "opts": [
+      "3 minutes",
+      "5 minutes",
+      "8 minutes",
+      "15 minutes"
+    ],
+    "exp": "The sprinkler system allows totally enclosed lifeboats on tankers to pass through burning oil, withstanding a minimum of 8 minutes of fire.",
+    "cat": "DAVI",
+    "id": "T21A_085"
+  },
+  {
+    "q": "When does the lifeboat sprinkler system sea cock open automatically?",
+    "a": "when waterborne",
+    "opts": [
+      "when the engine starts",
+      "when waterborne",
+      "when the red release handle is pulled",
+      "when smoke is detected"
+    ],
+    "exp": "A bottom-mounted sea cock opens automatically when the lifeboat becomes waterborne to supply the engine-driven pump.",
+    "cat": "DAVI",
+    "id": "T21A_086"
+  },
+  {
+    "q": "What is the primary limitation of the lifeboat sprinkler system?",
+    "a": "Can only operate when waterborne.",
+    "opts": [
+      "It only holds 100 liters of freshwater.",
+      "Can only operate when waterborne.",
+      "It drains the battery in 3 minutes.",
+      "It cannot spray the canopy, only the hull sides."
+    ],
+    "exp": "Because it draws seawater through a bottom sea cock, it can only operate when the lifeboat is waterborne.",
+    "cat": "DAVI",
+    "id": "T21A_087"
+  },
+  {
+    "q": "What maintenance task must the ETO perform on the sprinkler system?",
+    "a": "Clean salt-blocked nozzles.",
+    "opts": [
+      "Refill the freshwater tank.",
+      "Replace the CO2 propellant cartridge.",
+      "Clean salt-blocked nozzles.",
+      "Test the hydrostatic interlock."
+    ],
+    "exp": "The ETO visually inspects nozzles and piping, performs a quarterly flow test, and cleans any salt-blocked nozzles.",
+    "cat": "DAVI",
+    "id": "T21A_088"
+  },
+  {
+    "q": "How is the mechanical brake tested during maintenance?",
+    "a": "applying brake and attempting motor release",
+    "opts": [
+      "measuring brake pad thickness only",
+      "applying brake and attempting motor release",
+      "running the motor in reverse at full speed",
+      "dropping the boat from 1 meter"
+    ],
+    "exp": "It is tested by applying the brake and attempting a motor release to verify it holds the boat stationary under load.",
+    "cat": "DAVI",
+    "id": "T21A_089"
+  },
+  {
+    "q": "What action simultaneously releases both falls during a normal launch?",
+    "a": "Red handle pulled",
+    "opts": [
+      "Removing the safety pin",
+      "Red handle pulled",
+      "Activating the off-load switch",
+      "Slipping the painter line"
+    ],
+    "exp": "In an on-load release, pulling the red handle simultaneously releases both hooks under load.",
+    "cat": "DAVI",
+    "id": "T21A_090"
+  },
+  {
+    "q": "What is the minimum required speed for a standard Rescue Boat?",
+    "a": "5 knots",
+    "opts": [
+      "3 knots",
+      "5 knots",
+      "6 knots",
+      "8 knots"
+    ],
+    "exp": "A standard rescue boat must be capable of a minimum speed of 5 knots.",
+    "cat": "RESC",
+    "id": "T21A_091"
+  },
+  {
+    "q": "What is the minimum person capacity for a standard rescue boat?",
+    "a": "min 5 persons",
+    "opts": [
+      "min 3 persons",
+      "min 5 persons",
+      "min 6 persons",
+      "min 8 persons"
+    ],
+    "exp": "A rescue boat must have a capacity of at least 5 persons.",
+    "cat": "RESC",
+    "id": "T21A_092"
+  },
+  {
+    "q": "What is the minimum required speed for a Fast Rescue Boat (FRB)?",
+    "a": "8 knots",
+    "opts": [
+      "5 knots",
+      "6 knots",
+      "8 knots",
+      "10 knots"
+    ],
+    "exp": "An FRB must maintain a minimum speed of 8 knots for at least 4 hours.",
+    "cat": "RESC",
+    "id": "T21A_093"
+  },
+  {
+    "q": "Within what time frame must a Fast Rescue Boat (FRB) be capable of being launched and recovered?",
     "a": "5 minutes",
     "opts": [
-      "10 minutes",
-      "15 minutes",
       "2 minutes",
-      "5 minutes"
+      "5 minutes",
+      "10 minutes",
+      "15 minutes"
     ],
-    "exp": "The davit winch motor must have sufficient hoisting speed to recover the fully loaded rescue boat from the water to its stowed position within 5 minutes.",
-    "cat": "Rescue Boat",
-    "id": "T21_052"
+    "exp": "An FRB must be capable of being launched and recovered within 5 minutes in adverse weather.",
+    "cat": "RESC",
+    "id": "T21A_094"
   },
   {
-    "q": "What is the SOLAS regulation regarding embarkation ladder lighting?",
-    "a": "Embarkation stations must be illuminated by emergency lighting that lights the ladder, lifeboat, and sea surface",
+    "q": "Up to what sea state must a Fast Rescue Boat be capable of operating?",
+    "a": "Beaufort 6",
     "opts": [
-      "Embarkation stations must be illuminated by emergency lighting that lights the ladder, lifeboat, and sea surface",
-      "Lighting must only operate manually via a switch inside the lifeboat",
-      "Lighting is only required if the ship operates in Arctic waters",
-      "Embarkation stations must be lit by red LEDs to preserve night vision"
+      "Beaufort 4",
+      "Beaufort 6",
+      "Beaufort 8",
+      "Beaufort 10"
     ],
-    "exp": "SOLAS III/11.7 requires emergency lighting (supplied from the emergency switchboard) to illuminate the embarkation deck, the ladder, and the sea surface below to ensure safe boarding during a blackout.",
-    "cat": "Safety",
-    "id": "T21_053"
+    "exp": "FRBs are required to be capable of operating in sea states up to Beaufort 6.",
+    "cat": "RESC",
+    "id": "T21A_095"
   },
   {
-    "q": "How is the survivor location light on an immersion suit activated?",
-    "a": "Automatically when the suit enters the water via a saltwater-activated galvanic cell battery",
+    "q": "Where must the lighting for the rescue boat embarkation station be fed from?",
+    "a": "emergency switchboard",
     "opts": [
-      "Automatically by a hydrostatic pressure switch at 2 meters depth",
-      "By pulling a ripcord attached to the zipper",
-      "Automatically when the suit enters the water via a saltwater-activated galvanic cell battery",
-      "Manually by pressing a switch on the chest"
+      "main lighting distribution board",
+      "rescue boat internal battery",
+      "emergency switchboard",
+      "24V DC battery charger panel"
     ],
-    "exp": "The light is water-activated. The saltwater acts as the electrolyte, completing the galvanic cell circuit and turning on the flashing LED (50-70 flashes/min, visible 2nm).",
-    "cat": "Safety",
-    "id": "T21_054"
+    "exp": "Rescue boat lighting at the embarkation station must be fed from the emergency switchboard.",
+    "cat": "RESC",
+    "id": "T21A_096"
   },
   {
-    "q": "What new in-water performance tests are mandatory for lifejackets supplied after January 1, 2026?",
-    "a": "A 24-hour buoyancy retention test and a 5-second self-righting stability test",
+    "q": "What specific lighting equipment is required on the rescue boat for night SAR operations?",
+    "a": "Deck light and spotlight",
     "opts": [
-      "A dye-marker deployment test and a whistle volume test",
-      "A 24-hour buoyancy retention test and a 5-second self-righting stability test",
-      "A fire resistance test and a high-altitude drop test",
-      "A thermal insulation test in 0\u00b0C water for 6 hours"
+      "Navigation lights only",
+      "Deck light and spotlight",
+      "Strobe light and flares",
+      "Infrared camera and floodlight"
     ],
-    "exp": "Post-2026 lifejackets must pass a 24-hour immersion test (to ensure foam doesn't absorb water) and a stability test demonstrating they can turn an unconscious person face-up within 5 seconds.",
-    "cat": "Safety",
-    "id": "T21_055"
+    "exp": "A deck light and a spotlight are required for night Search and Rescue (SAR) operations.",
+    "cat": "RESC",
+    "id": "T21A_097"
   },
   {
-    "q": "What is the minimum capacity requirement for the lifeboat engine starting motor?",
-    "a": "6 consecutive cold starting attempts with 30-second intervals",
+    "q": "Which type of ship is strictly required to carry a Fast Rescue Boat (FRB)?",
+    "a": "Passenger ships",
     "opts": [
-      "10 continuous minutes of cranking",
-      "3 consecutive cold starts with 10-second intervals",
-      "6 consecutive cold starting attempts with 30-second intervals",
-      "1 cold start at -20\u00b0C"
+      "All cargo ships >500 GT",
+      "Tankers over 10,000 DWT",
+      "Passenger ships",
+      "Bulk carriers"
     ],
-    "exp": "SOLAS requires the starting motor and battery to handle at least 6 consecutive cold starts.",
-    "cat": "Lifeboat",
-    "id": "T21_057"
+    "exp": "Fast Rescue Boats (FRB) are a specific requirement on passenger ships.",
+    "cat": "RESC",
+    "id": "T21A_098"
   },
   {
-    "q": "What are the minimum operational requirements for a lifeboat searchlight?",
-    "a": "Minimum 3 hours continuous operation, visible at 180m",
+    "q": "What vessels are required to carry a standard rescue boat?",
+    "a": "All cargo ships ≥500 GT",
     "opts": [
-      "6 hours continuous operation, visible at 200m",
-      "3 hours continuous operation, visible at 180m",
-      "12 hours intermittent operation, visible at 50m",
-      "1 hour continuous operation, visible at 100m"
+      "All cargo ships ≥500 GT",
+      "Only ships operating in polar waters",
+      "Vessels under 300 GT",
+      "Passenger ships only"
     ],
-    "exp": "The 24V DC searchlight must operate continuously for at least 3 hours and be visible from 180m.",
-    "cat": "Lifeboat",
-    "id": "T21_058"
+    "exp": "SOLAS Ch. III Reg. 9 requires a standard rescue boat on all cargo ships ≥500 GT.",
+    "cat": "RESC",
+    "id": "T21A_099"
   },
   {
-    "q": "How many portable two-way VHF radiotelephones are required for survival craft on a cargo ship?",
-    "a": "At least 3",
+    "q": "What hull construction is permitted for a standard rescue boat?",
+    "a": "Rigid, semi-rigid, or inflatable",
     "opts": [
-      "1",
-      "3",
-      "2",
-      "4"
+      "Rigid hull only",
+      "Inflatable only",
+      "Rigid, semi-rigid, or inflatable",
+      "Totally enclosed GRP only"
     ],
-    "exp": "SOLAS requires at least 3 portable two-way VHF radiotelephones for GMDSS distress communications.",
-    "cat": "Lifeboat",
-    "id": "T21_059"
+    "exp": "A standard rescue boat can be rigid, semi-rigid, or inflatable.",
+    "cat": "RESC",
+    "id": "T21A_100"
   },
   {
-    "q": "What frequency band does the lifeboat Radar Transponder (SART) operate on?",
-    "a": "9 GHz (X-band)",
+    "q": "What piece of equipment is specifically listed for recovering a person from the water into the rescue boat?",
+    "a": "Rescue hook",
     "opts": [
-      "406 MHz",
-      "3 GHz (S-band)",
-      "9 GHz (X-band)",
-      "156 MHz"
+      "Davit hoist",
+      "Rescue hook",
+      "Tricing pennant",
+      "Embarkation ladder"
     ],
-    "exp": "The SART responds to 9 GHz X-band radar pulses, creating a 12-dot pattern.",
-    "cat": "Lifeboat",
-    "id": "T21_060"
+    "exp": "A rescue hook is specifically carried as equipment for recovering a person from the water.",
+    "cat": "RESC",
+    "id": "T21A_101"
   },
   {
-    "q": "What type of sensor is typically used in modern lifeboat davits to confirm the boat is fully hoisted?",
-    "a": "Inductive proximity sensor",
+    "q": "How often must the ETO test the rescue boat searchlight?",
+    "a": "monthly",
     "opts": [
-      "Hydrostatic pressure switch",
-      "Ultrasonic sensor",
-      "Optical laser sensor",
-      "Inductive proximity sensor"
+      "weekly",
+      "monthly",
+      "quarterly",
+      "annually"
     ],
-    "exp": "Inductive proximity sensors detect the metallic body of the lifeboat to confirm it is fully stowed.",
-    "cat": "Lifeboat",
-    "id": "T21_061"
+    "exp": "The ETO role includes testing the rescue boat searchlight monthly.",
+    "cat": "RESC",
+    "id": "T21A_102"
   },
   {
-    "q": "What is the purpose of the hydrostatic switch on a survival craft system?",
-    "a": "Detects water pressure at 1-4m depth to activate the automatic release mechanism",
+    "q": "On some cargo ship configurations, what can substitute for a dedicated standard rescue boat?",
+    "a": "one of the lifeboats",
     "opts": [
-      "Monitors drinking water tank levels",
-      "Detects water pressure at 1-4m depth to activate the automatic release mechanism",
-      "Controls the lifeboat bilge pump",
-      "Measures the depth of the sea floor"
+      "A liferaft",
+      "A man-overboard boat (MOB)",
+      "one of the lifeboats",
+      "A pilot boat"
     ],
-    "exp": "The hydrostatic switch (HRU) is activated by water pressure if the ship sinks (1-4m).",
-    "cat": "Lifeboat",
-    "id": "T21_062"
+    "exp": "On some cargo ship configurations, one of the lifeboats can serve as the rescue boat if it meets the requirements.",
+    "cat": "RESC",
+    "id": "T21A_103"
   },
   {
-    "q": "How does the on-load release mechanism function?",
-    "a": "It releases the hooks while the full weight of the lifeboat is still on them",
+    "q": "For how long must the FRB maintain its minimum speed of 8 knots?",
+    "a": "4 hours",
     "opts": [
-      "It releases the hooks while the full weight of the lifeboat is still on them",
-      "It automatically lowers the lifeboat to the water",
-      "It releases only when the boat is completely dry",
-      "It releases only the forward hook"
+      "2 hours",
+      "4 hours",
+      "8 hours",
+      "24 hours"
     ],
-    "exp": "On-load release frees the boat while waterborne but still under the load of its weight.",
-    "cat": "Lifeboat",
-    "id": "T21_063"
+    "exp": "The Fast Rescue Boat (FRB) must be able to maintain its minimum speed of 8 knots for 4 hours.",
+    "cat": "RESC",
+    "id": "T21A_104"
   },
   {
-    "q": "What is the primary use of the off-load release mechanism?",
-    "a": "Resetting the hooks or emergency release requiring deliberate secondary action",
+    "q": "What type of hull construction is mandatory for a Fast Rescue Boat (FRB)?",
+    "a": "Rigid hull",
     "opts": [
-      "Dropping the boat from 10 meters",
-      "Normal launching from the davit head",
-      "Resetting the hooks or emergency release requiring deliberate secondary action",
-      "Releasing the painter line"
+      "Inflatable hull",
+      "Rigid hull",
+      "Semi-rigid hull only",
+      "Aluminium flat-bottom"
     ],
-    "exp": "Off-load release is used to reset the hook or for emergency release, requiring deliberate action.",
-    "cat": "Lifeboat",
-    "id": "T21_064"
+    "exp": "An FRB must have a rigid hull construction, unlike a standard rescue boat which can be inflatable.",
+    "cat": "RESC",
+    "id": "T21A_105"
   },
   {
-    "q": "According to the latest LSA amendment, what is the maximum permitted lowering speed for survival craft?",
-    "a": "1.3 metres per second",
+    "q": "At what depth does the Hydrostatic Release Unit (HRU) activate?",
+    "a": "1.5 to 4 metres",
     "opts": [
-      "1.3 metres per second",
-      "0.5 metres per second",
-      "1.0 metres per second",
-      "2.5 metres per second"
+      "0.5 to 1 metre",
+      "1.5 to 4 metres",
+      "5 to 10 metres",
+      "10 to 15 metres"
     ],
-    "exp": "To prevent injuries from hard water impacts, the maximum lowering speed is capped at 1.3 m/s.",
-    "cat": "Lifeboat",
-    "id": "T21_065"
+    "exp": "Water pressure acts on the HRU capsule and activates it at a depth of 1.5 to 4 metres.",
+    "cat": "RAFT",
+    "id": "T21A_106"
   },
   {
-    "q": "What is the new LSA hook safety design amendment for single fall systems?",
-    "a": "The hook cannot support any load unless it is completely and correctly reset",
+    "q": "What specifically does the HRU knife mechanism cut when activated?",
+    "a": "lashing/securing strap",
     "opts": [
-      "The hook must release automatically at 5 meters",
-      "The hook cannot support any load unless it is completely and correctly reset",
-      "The hook must hold twice the lifeboat weight",
-      "The hook must be made of titanium"
+      "painter line",
+      "weak link",
+      "lashing/securing strap",
+      "CO2 inflation trigger"
     ],
-    "exp": "This eliminates failure modes where a partially engaged hook releases under load.",
-    "cat": "Lifeboat",
-    "id": "T21_066"
+    "exp": "The knife mechanism cuts the lashing/securing strap holding the liferaft container to the cradle.",
+    "cat": "RAFT",
+    "id": "T21A_107"
   },
   {
-    "q": "What new ventilation requirement applies to totally enclosed lifeboats from January 1, 2029?",
-    "a": "Dedicated ventilation providing 5 m\u00b3/hr/person, independent of the engine",
+    "q": "What breaks to free the inflated liferaft from the sinking ship?",
+    "a": "weak link",
     "opts": [
-      "Natural ventilation louvres only",
-      "An oxygen cylinder system",
-      "Dedicated ventilation providing 5 m\u00b3/hr/person, independent of the engine",
-      "Air conditioning maintaining 20\u00b0C"
+      "painter line",
+      "weak link",
+      "lashing strap",
+      "HRU casing"
     ],
-    "exp": "Addresses extreme heat stress and CO2 buildup, requiring 5 m\u00b3/hr of fresh air per person.",
-    "cat": "Lifeboat",
-    "id": "T21_067"
+    "exp": "The weak link breaks when painter line tension exceeds 2.2 kN, freeing the raft from the sinking ship.",
+    "cat": "RAFT",
+    "id": "T21A_108"
   },
   {
-    "q": "What is the purpose of the water spray (sprinkler) system on lifeboats of oil tankers?",
-    "a": "To allow the lifeboat to survive passing through burning oil on the sea surface",
+    "q": "What is the designated breaking strength of the liferaft weak link?",
+    "a": "2.2 kN",
     "opts": [
-      "To wash away chemical spills",
-      "To cool the crew during hot weather",
-      "To extinguish internal engine fires",
-      "To allow the lifeboat to survive passing through burning oil on the sea surface"
+      "1.0 kN",
+      "2.2 kN",
+      "5.0 kN",
+      "10.0 kN"
     ],
-    "exp": "Produces a continuous water film over the hull, preventing the GRP from melting or igniting.",
-    "cat": "Lifeboat",
-    "id": "T21_068"
+    "exp": "The weak link has a breaking strength of 2.2 kN, designed to break from the sinking ship but not from survivor weight.",
+    "cat": "RAFT",
+    "id": "T21A_109"
   },
   {
-    "q": "How is the lifeboat water spray system pump driven?",
-    "a": "Directly from the lifeboat engine crankshaft",
+    "q": "What pulls the CO₂ inflation trigger to inflate the liferaft?",
+    "a": "painter line",
     "opts": [
-      "Directly from the lifeboat engine crankshaft",
-      "By a dedicated 24V electric motor",
-      "By a compressed air bottle",
-      "By a hand pump operated by the crew"
+      "HRU knife",
+      "painter line",
+      "weak link",
+      "lashing strap"
     ],
-    "exp": "The centrifugal pump is driven directly by the lifeboat engine via a belt or gear drive.",
-    "cat": "Lifeboat",
-    "id": "T21_069"
+    "exp": "The painter line tightens as the ship sinks further, pulling the CO₂ inflation trigger.",
+    "cat": "RAFT",
+    "id": "T21A_110"
   },
   {
-    "q": "When does the lifeboat sprinkler system's sea cock open?",
-    "a": "When the coxswain manually opens it after the boat is waterborne",
-    "opts": [
-      "When the coxswain manually opens it after the boat is waterborne",
-      "When the painter is pulled",
-      "When internal temperature exceeds 50\u00b0C",
-      "Automatically when the davit is lowered"
-    ],
-    "exp": "The sea cock is opened manually by the coxswain once the boat is in the water.",
-    "cat": "Lifeboat",
-    "id": "T21_070"
-  },
-  {
-    "q": "What monthly functional check must the ETO perform on the lifeboat engine?",
-    "a": "Start and run the engine for a minimum of 3 minutes",
-    "opts": [
-      "Drain and replace the engine oil",
-      "Overhaul the fuel injectors",
-      "Run the engine for 1 hour",
-      "Start and run the engine for a minimum of 3 minutes"
-    ],
-    "exp": "The engine must be run for at least 3 minutes under load to verify readiness.",
-    "cat": "Lifeboat",
-    "id": "T21_071"
-  },
-  {
-    "q": "When should a davit wire rope be replaced?",
-    "a": "If more than 5% of wires in any strand are broken or heavily corroded",
-    "opts": [
-      "Every 10 years regardless of condition",
-      "If more than 5% of wires in any strand are broken or heavily corroded",
-      "Only when it completely snaps",
-      "After every lifeboat launch"
-    ],
-    "exp": "SOLAS III/10 dictates replacement if 5% of wires in any strand are broken.",
-    "cat": "Lifeboat",
-    "id": "T21_072"
-  },
-  {
-    "q": "What critical action must be taken regarding the trickle charger before lowering a lifeboat?",
-    "a": "The charger plug must be disconnected",
-    "opts": [
-      "The charger plug must be disconnected",
-      "It must be switched to 'boost' mode",
-      "The voltage must be increased to 30V",
-      "The battery must be removed"
-    ],
-    "exp": "The charger cable must be removed before lowering to prevent ripping the cable.",
-    "cat": "Lifeboat",
-    "id": "T21_073"
-  },
-  {
-    "q": "From where must the embarkation ladder emergency lighting be powered?",
-    "a": "The emergency source of electrical power (emergency switchboard)",
-    "opts": [
-      "The main engine alternator",
-      "Solar panels on the boat deck",
-      "The emergency source of electrical power (emergency switchboard)",
-      "The lifeboat's internal 24V battery"
-    ],
-    "exp": "Embarkation station lighting must be powered by the emergency switchboard.",
-    "cat": "Lifeboat",
-    "id": "T21_074"
-  },
-  {
-    "q": "What compass requirement exists for a lifeboat?",
-    "a": "An illuminated magnetic compass",
-    "opts": [
-      "A GPS chartplotter",
-      "No compass is required",
-      "An illuminated magnetic compass",
-      "A gyrocompass connected to the ship"
-    ],
-    "exp": "Lifeboats must be fitted with an illuminated magnetic compass for night navigation.",
-    "cat": "Lifeboat",
-    "id": "T21_075"
-  },
-  {
-    "q": "What is the typical flow rate design for a lifeboat water spray system?",
-    "a": "3-5 litres per square metre per minute",
-    "opts": [
-      "50 litres per square metre",
-      "3-5 litres per square metre per minute",
-      "0.1 litres per square metre",
-      "100 gallons per minute total"
-    ],
-    "exp": "Nozzles provide a continuous water film of typically 3-5 litres/m\u00b2/minute over the hull.",
-    "cat": "Lifeboat",
-    "id": "T21_076"
-  },
-  {
-    "q": "What is the ETO's role regarding the lifeboat's new 2029 ventilation system?",
-    "a": "Maintain the electric fan motor, battery backup, and verify it operates independently",
-    "opts": [
-      "Maintain the electric fan motor, battery backup, and verify it operates independently",
-      "Replace the CO2 scrubbers",
-      "Design the ducting system",
-      "Operate it continuously during normal voyages"
-    ],
-    "exp": "The ETO must ensure electrical components are functional and independent of the main engine.",
-    "cat": "Lifeboat",
-    "id": "T21_077"
-  },
-  {
-    "q": "What type of pump removes water ingress from a lifeboat?",
-    "a": "An electric or manual bilge pump",
-    "opts": [
-      "A hydraulic submersible pump",
-      "A centrifugal ballast pump",
-      "An electric or manual bilge pump",
-      "An ejector pump driven by fire main"
-    ],
-    "exp": "Lifeboats are required to have either a manual or electric bilge pump.",
-    "cat": "Lifeboat",
-    "id": "T21_078"
-  },
-  {
-    "q": "What interlock prevents accidental in-air operation of the on-load release?",
-    "a": "A hydrostatic interlock",
-    "opts": [
-      "A thermal overload relay",
-      "A centrifugal governor",
-      "A hydrostatic interlock",
-      "An anemometer interlock"
-    ],
-    "exp": "A hydrostatic interlock ensures the boat is waterborne before on-load release operates.",
-    "cat": "Lifeboat",
-    "id": "T21_079"
-  },
-  {
-    "q": "How frequently must a lifeboat's full electrical insulation test (megger) generally be performed?",
-    "a": "Annually",
-    "opts": [
-      "Weekly",
-      "Monthly",
-      "Annually",
-      "Every 5 years"
-    ],
-    "exp": "A complete electrical insulation test of lifeboat wiring is an annual maintenance task.",
-    "cat": "Lifeboat",
-    "id": "T21_080"
-  },
-  {
-    "q": "What happens if a lifeboat's on-load release mechanism fails during an emergency?",
-    "a": "The off-load release can be used as an emergency secondary release",
-    "opts": [
-      "The boat must wait for shore assistance",
-      "The lifeboat cannot be deployed",
-      "The davit wire must be cut with a grinder",
-      "The off-load release can be used as an emergency secondary release"
-    ],
-    "exp": "Off-load release provides a backup method to release hooks in exceptional circumstances.",
-    "cat": "Lifeboat",
-    "id": "T21_081"
-  },
-  {
-    "q": "What color is the standard on-load release handle at the lifeboat helm?",
-    "a": "Red",
-    "opts": [
-      "Blue",
-      "Yellow",
-      "Red",
-      "Green"
-    ],
-    "exp": "The on-load release handle is colored red to indicate its critical nature.",
-    "cat": "Lifeboat",
-    "id": "T21_082"
-  },
-  {
-    "q": "During a quarterly test of the lifeboat sprinkler system, what must the ETO observe?",
-    "a": "All nozzles spraying uniformly with no blockages",
-    "opts": [
-      "All nozzles spraying uniformly with no blockages",
-      "The fresh water tank level",
-      "The foam expansion ratio",
-      "The fire alarm panel on the bridge"
-    ],
-    "exp": "The visual flow test ensures the sea cock, pump, piping, and nozzles are clear.",
-    "cat": "Lifeboat",
-    "id": "T21_083"
-  },
-  {
-    "q": "What is the primary power source for the lifeboat's interior lighting?",
-    "a": "The 24V DC lifeboat battery",
-    "opts": [
-      "The 24V DC lifeboat battery",
-      "Dry cell AA batteries",
-      "A wind-up generator",
-      "The ship's 220V AC grid"
-    ],
-    "exp": "The main 24V DC battery supplies the interior lights.",
-    "cat": "Lifeboat",
-    "id": "T21_084"
-  },
-  {
-    "q": "What is tested during the ETO's weekly visual inspection of the lifeboat?",
-    "a": "Trickle charger connection and correct charging status",
-    "opts": [
-      "A full 10-hour capacity discharge test",
-      "The specific gravity of all cells",
-      "Trickle charger connection and correct charging status",
-      "The on-load release mechanism"
-    ],
-    "exp": "Weekly checks involve ensuring the charger is connected and the battery is floating.",
-    "cat": "Lifeboat",
-    "id": "T21_085"
-  },
-  {
-    "q": "When ordering a lifeboat battery for cold weather, which specification is most critical?",
-    "a": "CCA (Cold Cranking Amps)",
-    "opts": [
-      "Ah capacity",
-      "Shelf life",
-      "CCA (Cold Cranking Amps)",
-      "Physical dimensions"
-    ],
-    "exp": "CCA measures the battery's ability to deliver high current at -18\u00b0C.",
-    "cat": "Battery",
-    "id": "T21_086"
-  },
-  {
-    "q": "What does CCA stand for and what are its test conditions?",
-    "a": "Cold Cranking Amps; amps delivered for 30 seconds at -18\u00b0C maintaining min 14.4V",
-    "opts": [
-      "Cold Cranking Amps; amps delivered for 30 seconds at -18\u00b0C maintaining min 14.4V",
-      "Capacity Charge Amps; maximum charging current",
-      "Constant Current Amperes; continuous load at 25\u00b0C",
-      "Cold Climate Application; operates at 0\u00b0C"
-    ],
-    "exp": "CCA is the standard rating for cold starting ability at -18\u00b0C.",
-    "cat": "Battery",
-    "id": "T21_087"
-  },
-  {
-    "q": "What specific gravity (SG) indicates a fully charged vented lead-acid battery at 25\u00b0C?",
-    "a": "1.265\u20131.280",
-    "opts": [
-      "1.350\u20131.400",
-      "1.120\u20131.150",
-      "1.265\u20131.280",
-      "1.190\u20131.210"
-    ],
-    "exp": "A fully charged cell has an SG of 1.265-1.280.",
-    "cat": "Battery",
-    "id": "T21_088"
-  },
-  {
-    "q": "What is the open circuit voltage (OCV) of a fully charged 24V lead-acid battery?",
-    "a": "25.6\u201326.4V",
-    "opts": [
-      "24.0V exactly",
-      "25.6\u201326.4V",
-      "28.5\u201330.0V",
-      "22.0\u201323.5V"
-    ],
-    "exp": "A healthy, fully charged 24V battery will rest between 25.6V and 26.4V.",
-    "cat": "Battery",
-    "id": "T21_089"
-  },
-  {
-    "q": "What is the correct terminal connection sequence when installing a new lifeboat battery?",
-    "a": "Connect positive first, then negative",
-    "opts": [
-      "Connect positive first, then negative",
-      "Sequence does not matter",
-      "Connect negative first, then positive",
-      "Connect both simultaneously"
-    ],
-    "exp": "Connecting positive first prevents accidental short circuits against the hull.",
-    "cat": "Battery",
-    "id": "T21_090"
-  },
-  {
-    "q": "How is a lifeboat battery maintained at full charge while stowed?",
-    "a": "By a continuously connected 24V trickle charger",
-    "opts": [
-      "By wind generators",
-      "By solar panels",
-      "By a continuously connected 24V trickle charger",
-      "By daily engine runs"
-    ],
-    "exp": "The trickle charger maintains a constant voltage to compensate for self-discharge.",
-    "cat": "Battery",
-    "id": "T21_091"
-  },
-  {
-    "q": "What chemical is formed on both battery plates during the discharge of a lead-acid battery?",
-    "a": "Lead sulphate (PbSO4)",
-    "opts": [
-      "Sulphuric acid",
-      "Lead dioxide",
-      "Lead sulphate (PbSO4)",
-      "Spongy lead"
-    ],
-    "exp": "During discharge, both plates react with acid to form lead sulphate.",
-    "cat": "Battery",
-    "id": "T21_092"
-  },
-  {
-    "q": "Why does specific gravity fall during the discharge of a lead-acid battery?",
-    "a": "Sulphuric acid is consumed and water is produced, diluting the electrolyte",
-    "opts": [
-      "Hydrogen gas bubbles lower the density",
-      "Acid evaporates",
-      "Lead dissolves into the liquid",
-      "Sulphuric acid is consumed and water is produced, diluting the electrolyte"
-    ],
-    "exp": "The chemical reaction converts sulphuric acid into water, lowering density.",
-    "cat": "Battery",
-    "id": "T21_093"
-  },
-  {
-    "q": "What explosive gas is produced by lead-acid batteries at the end of the charging cycle?",
-    "a": "Hydrogen (H2)",
-    "opts": [
-      "Nitrogen Dioxide (NO2)",
-      "Hydrogen (H2)",
-      "Methane (CH4)",
-      "Carbon Monoxide (CO)"
-    ],
-    "exp": "Water electrolysis during final charging stages produces highly flammable hydrogen gas.",
-    "cat": "Battery",
-    "id": "T21_094"
-  },
-  {
-    "q": "What liquid must be used to top up a flooded lead-acid battery?",
-    "a": "Distilled water only",
-    "opts": [
-      "Distilled water only",
-      "Brine solution",
-      "Sulphuric acid",
-      "Tap water"
-    ],
-    "exp": "Only distilled water should be used to prevent mineral contamination.",
-    "cat": "Battery",
-    "id": "T21_095"
-  },
-  {
-    "q": "What is the typical float/trickle charging voltage for a 24V lead-acid battery system?",
-    "a": "27.6V",
-    "opts": [
-      "25.2V",
-      "30.5V",
-      "24.0V",
-      "27.6V"
-    ],
-    "exp": "A standard float voltage is 2.30V per cell, equaling 27.6V for a 24V battery.",
-    "cat": "Battery",
-    "id": "T21_096"
-  },
-  {
-    "q": "How is a battery's actual Ah capacity verified?",
-    "a": "By performing a controlled discharge (load test) and timing it",
-    "opts": [
-      "By performing a controlled discharge (load test) and timing it",
-      "By checking open circuit voltage",
-      "By reading the manufacturer label",
-      "By measuring specific gravity"
-    ],
-    "exp": "A capacity test discharges the battery at a constant rated current.",
-    "cat": "Battery",
-    "id": "T21_097"
-  },
-  {
-    "q": "If a new battery's specific gravity is measured at 1.150 upon delivery, what should be done?",
-    "a": "Perform an initial charge before installation",
-    "opts": [
-      "Add sulphuric acid",
-      "Install it immediately",
-      "Discard the battery",
-      "Perform an initial charge before installation"
-    ],
-    "exp": "An SG of 1.150 indicates deep discharge, requiring a full charge before commissioning.",
-    "cat": "Battery",
-    "id": "T21_098"
-  },
-  {
-    "q": "Why is NiCd (alkaline) sometimes preferred over lead-acid for lifeboats?",
-    "a": "Better cold weather performance and longer service life",
-    "opts": [
-      "Better cold weather performance and longer service life",
-      "Produces no hydrogen gas",
-      "Lighter weight",
-      "Cheaper initial cost"
-    ],
-    "exp": "Nickel-cadmium batteries excel in extreme cold and last 10-20 years.",
-    "cat": "Battery",
-    "id": "T21_099"
-  },
-  {
-    "q": "What is the consequence of chronic undercharging of a lead-acid battery?",
-    "a": "Irreversible sulphation of the plates",
-    "opts": [
-      "Boiling of the electrolyte",
-      "Irreversible sulphation of the plates",
-      "Thermal runaway",
-      "Excessive hydrogen generation"
-    ],
-    "exp": "Lead sulphate crystals harden on the plates, permanently reducing capacity.",
-    "cat": "Battery",
-    "id": "T21_100"
-  },
-  {
-    "q": "What should the trickle charger current drop to when the battery is fully charged?",
-    "a": "Less than 0.5A (trickle level)",
-    "opts": [
-      "10 Amps",
-      "5 Amps",
-      "Less than 0.5A (trickle level)",
-      "Zero Amps exactly"
-    ],
-    "exp": "The charger output reduces to a few hundred milliamps to compensate for self-discharge.",
-    "cat": "Battery",
-    "id": "T21_101"
-  },
-  {
-    "q": "What is the minimum pressure required for a lifeboat compressed air bottle during a monthly check?",
-    "a": "90% of its rated working pressure",
-    "opts": [
-      "100% strictly",
-      "75% of its rated working pressure",
-      "50% of its rated working pressure",
-      "90% of its rated working pressure"
-    ],
-    "exp": "If pressure falls below 90% of working pressure, it must be recharged.",
-    "cat": "Battery",
-    "id": "T21_102"
-  },
-  {
-    "q": "What type of air must be used to refill a lifeboat air bottle?",
-    "a": "Breathing quality air (Class E)",
-    "opts": [
-      "Industrial compressed air",
-      "Breathing quality air (Class E)",
-      "Nitrogen",
-      "Pure oxygen"
-    ],
-    "exp": "Industrial air contains toxic oil aerosols. Only breathing air compressors can be used.",
-    "cat": "Battery",
-    "id": "T21_103"
-  },
-  {
-    "q": "How frequently must a compressed air cylinder undergo a hydrostatic pressure test?",
-    "a": "Typically every 5 years",
+    "q": "How often must the HRU be replaced?",
+    "a": "Every 2 years",
     "opts": [
       "Annually",
       "Every 2 years",
-      "Typically every 5 years",
-      "Every 10 years"
+      "Every 3 years",
+      "Every 5 years"
     ],
-    "exp": "Regulations generally require a hydrostatic test every 5 years.",
-    "cat": "Battery",
-    "id": "T21_104"
+    "exp": "The HRU has a mandatory replacement expiry of every 2 years, regardless of condition.",
+    "cat": "RAFT",
+    "id": "T21A_111"
   },
   {
-    "q": "What is the typical timeframe within which a new battery should be commissioned after its date of manufacture?",
-    "a": "Within 3-6 months",
+    "q": "Which SOLAS liferaft pack is required for ships operating >20 nm from land?",
+    "a": "SOLAS Pack A - Offshore",
     "opts": [
-      "Within 5 years",
-      "Within 3-6 months",
-      "Within 2 years",
-      "Within 1 week"
+      "SOLAS Pack A - Offshore",
+      "SOLAS Pack B - Inshore",
+      "SOLAS Pack C - Coastal",
+      "SOLAS Pack D - Rescue"
     ],
-    "exp": "Batteries stored too long without charging suffer irreversible sulphation.",
-    "cat": "Battery",
-    "id": "T21_105"
+    "exp": "SOLAS Pack A is the offshore standard for ships operating greater than 20 nautical miles from land.",
+    "cat": "RAFT",
+    "id": "T21A_112"
   },
   {
-    "q": "When calculating lifeboat battery capacity, how long must it supply all electrical consumers (excluding engine start)?",
-    "a": "Minimum 30 minutes",
+    "q": "How many seasick pills are provided per person in a SOLAS liferaft pack?",
+    "a": "6/person",
     "opts": [
-      "10 minutes",
-      "3 hours",
-      "Minimum 30 minutes",
-      "12 hours"
+      "2/person",
+      "4/person",
+      "6/person",
+      "10/person"
     ],
-    "exp": "The battery must power all consumers for at least 30 minutes plus 6 cold starts.",
-    "cat": "Battery",
-    "id": "T21_106"
+    "exp": "SOLAS specifications require 6 seasickness tablets per person in the survival pack.",
+    "cat": "RAFT",
+    "id": "T21A_113"
   },
   {
-    "q": "How is specific gravity corrected for temperature?",
-    "a": "Using a correction formula (add or subtract 0.0007 per \u00b0C deviation from 25\u00b0C)",
+    "q": "What is the requirement for Thermal Protective Aids (TPAs) in a SOLAS Pack A liferaft?",
+    "a": "10% of capacity or min 2",
     "opts": [
-      "By diluting the acid",
-      "By heating the battery to 25\u00b0C",
-      "Using a correction formula (add or subtract 0.0007 per \u00b0C deviation from 25\u00b0C)",
-      "It is not corrected"
+      "5% of capacity or min 1",
+      "10% of capacity or min 2",
+      "50% of capacity",
+      "One for every person"
     ],
-    "exp": "Hydrometer readings vary with temperature and must be mathematically corrected.",
-    "cat": "Battery",
-    "id": "T21_107"
+    "exp": "The TPA requirement in both lifeboats and Pack A liferafts is 10% of capacity or a minimum of 2.",
+    "cat": "RAFT",
+    "id": "T21A_114"
   },
   {
-    "q": "What is the primary danger if tap water is used to top up a battery?",
-    "a": "Minerals and chlorides will contaminate the electrolyte and destroy the plates",
+    "q": "What is the fresh water ration per person in a SOLAS Pack A liferaft?",
+    "a": "1.5 L",
     "opts": [
-      "It will cause an immediate explosion",
-      "Minerals and chlorides will contaminate the electrolyte and destroy the plates",
-      "It will increase the voltage too high",
-      "It dissolves the plastic casing"
+      "0.5 L",
+      "1.0 L",
+      "1.5 L",
+      "3.0 L"
     ],
-    "exp": "Impurities in tap water react with acid, forming harmful deposits.",
-    "cat": "Battery",
-    "id": "T21_108"
+    "exp": "The fresh water ration is 1.5 L per person in sealed ration packs, plus desalting kits.",
+    "cat": "RAFT",
+    "id": "T21A_115"
   },
   {
-    "q": "What tool is used to measure specific gravity?",
-    "a": "Hydrometer",
+    "q": "What is the energy requirement for the food rations per person?",
+    "a": "10,000 kJ",
     "opts": [
-      "Hydrometer",
-      "Barometer",
-      "Multimeter",
-      "Megger"
+      "5,000 kJ",
+      "10,000 kJ",
+      "15,000 kJ",
+      "20,000 kJ"
     ],
-    "exp": "A hydrometer uses a float in a glass tube to measure electrolyte density.",
-    "cat": "Battery",
-    "id": "T21_109"
+    "exp": "Food rations must provide 10,000 kJ per person, designed to be high-calorie and require minimal water to metabolise.",
+    "cat": "RAFT",
+    "id": "T21A_116"
   },
   {
-    "q": "What should be applied to battery terminals after cleaning to prevent corrosion?",
-    "a": "Terminal grease or petroleum jelly",
+    "q": "What allows the liferaft container to float to the surface after the HRU releases it?",
+    "a": "positive buoyancy",
     "opts": [
-      "WD-40",
-      "Sulphuric acid",
-      "Terminal grease or petroleum jelly",
-      "Paint"
+      "CO2 auto-inflation",
+      "positive buoyancy",
+      "air bags deployed by the HRU",
+      "the painter line pulls it up"
     ],
-    "exp": "Grease creates an airtight seal that prevents acid fumes from oxidizing terminals.",
-    "cat": "Battery",
-    "id": "T21_110"
-  },
-  {
-    "q": "What happens to the internal resistance of a battery in extremely cold temperatures?",
-    "a": "It increases significantly, reducing available current",
-    "opts": [
-      "It reverses polarity",
-      "It drops to zero",
-      "It remains completely unaffected",
-      "It increases significantly, reducing available current"
-    ],
-    "exp": "Cold slows down chemical reactions, raising internal resistance.",
-    "cat": "Battery",
-    "id": "T21_111"
-  },
-  {
-    "q": "What condition dictates immediate replacement of a lifeboat battery?",
-    "a": "Failing an annual capacity test or voltage dropping below 10.5V during cranking",
-    "opts": [
-      "Failing an annual capacity test or voltage dropping below 10.5V during cranking",
-      "A dusty casing",
-      "A fully charged SG of 1.270",
-      "Being older than 1 year"
-    ],
-    "exp": "If the battery cannot sustain its rated load, it is defective.",
-    "cat": "Battery",
-    "id": "T21_112"
-  },
-  {
-    "q": "Why is physical inspection crucial during battery commissioning?",
-    "a": "To check for transit damage like cracked cases or electrolyte leaks",
-    "opts": [
-      "To verify the color of the plastic",
-      "To check for transit damage like cracked cases or electrolyte leaks",
-      "To ensure the manual is included",
-      "To check the brand logo"
-    ],
-    "exp": "A cracked case can leak acid, causing structural damage.",
-    "cat": "Battery",
-    "id": "T21_113"
-  },
-  {
-    "q": "What does a green light on a modern trickle charger usually indicate?",
-    "a": "Float mode / battery fully charged",
-    "opts": [
-      "Float mode / battery fully charged",
-      "No battery connected",
-      "Boost charging in progress",
-      "Fault condition"
-    ],
-    "exp": "A green indicator typically shows the charger is maintaining a float charge.",
-    "cat": "Battery",
-    "id": "T21_114"
-  },
-  {
-    "q": "Why are VRLA (Valve Regulated Lead Acid) batteries preferred for marine use?",
-    "a": "They are sealed, maintenance-free, and pose no electrolyte spill risk",
-    "opts": [
-      "They are cheaper",
-      "They are sealed, maintenance-free, and pose no electrolyte spill risk",
-      "They use salt water instead of acid",
-      "They last 50 years"
-    ],
-    "exp": "VRLA batteries do not require topping up and will not spill acid.",
-    "cat": "Battery",
-    "id": "T21_115"
-  },
-  {
-    "q": "What is the primary hazard in a ship's battery room?",
-    "a": "Explosive hydrogen gas generation",
-    "opts": [
-      "Radioactive emissions",
-      "Toxic carbon monoxide",
-      "High voltage AC shock",
-      "Explosive hydrogen gas generation"
-    ],
-    "exp": "Lead-acid batteries produce highly explosive hydrogen during charging.",
-    "cat": "BattRoom",
-    "id": "T21_116"
-  },
-  {
-    "q": "What is the explosive range of hydrogen gas in air?",
-    "a": "4% to 74% by volume",
-    "opts": [
-      "1% to 2%",
-      "It is not explosive",
-      "80% to 90%",
-      "4% to 74% by volume"
-    ],
-    "exp": "Hydrogen forms a highly volatile mixture with air at concentrations between 4% and 74%.",
-    "cat": "BattRoom",
-    "id": "T21_117"
-  },
-  {
-    "q": "What is the SOLAS requirement for battery room ventilation?",
-    "a": "Continuous mechanical extraction ventilation exhausted directly to atmosphere",
-    "opts": [
-      "Pressurized air supply",
-      "Natural ventilation via portholes",
-      "Continuous mechanical extraction ventilation exhausted directly to atmosphere",
-      "Air conditioning recycling the air"
-    ],
-    "exp": "SOLAS II-1/45.11 mandates dedicated mechanical exhaust fans.",
-    "cat": "BattRoom",
-    "id": "T21_118"
-  },
-  {
-    "q": "How many air changes per hour are typically required for battery room ventilation?",
-    "a": "Minimum 6 (some classes require 12)",
-    "opts": [
-      "30 per hour",
-      "60 per hour",
-      "Minimum 6 (some classes require 12)",
-      "1 per hour"
-    ],
-    "exp": "Class rules mandate rapid air turnover (6-12 times per hour).",
-    "cat": "BattRoom",
-    "id": "T21_119"
-  },
-  {
-    "q": "Where must the ventilation inlet and exhaust be located in a battery room?",
-    "a": "Inlet low, exhaust high",
-    "opts": [
-      "Inlet low, exhaust high",
-      "Both on the floor",
-      "Both on the ceiling",
-      "Inlet high, exhaust low"
-    ],
-    "exp": "Hydrogen is lighter than air, so exhaust must be at the highest point.",
-    "cat": "BattRoom",
-    "id": "T21_120"
-  },
-  {
-    "q": "What type of light fittings are permitted inside a battery room?",
-    "a": "Explosion-protected (Ex e or Ex d) rated for Gas Group IIC",
-    "opts": [
-      "Open incandescent bulbs",
-      "Battery-operated flashlights only",
-      "Standard fluorescent tubes",
-      "Explosion-protected (Ex e or Ex d) rated for Gas Group IIC"
-    ],
-    "exp": "All equipment must be certified explosion-proof for Group IIC gases.",
-    "cat": "BattRoom",
-    "id": "T21_121"
-  },
-  {
-    "q": "Why must the battery room exhaust duct have no sharp bends?",
-    "a": "To prevent pockets of hydrogen from becoming trapped",
-    "opts": [
-      "To prevent pockets of hydrogen from becoming trapped",
-      "To reduce fan noise",
-      "To prevent water ingress",
-      "To increase air speed"
-    ],
-    "exp": "Sharp bends can create dead air zones where hydrogen accumulates.",
-    "cat": "BattRoom",
-    "id": "T21_122"
-  },
-  {
-    "q": "What physical protection is required under all flooded lead-acid batteries?",
-    "a": "A corrosion-resistant acid drip tray",
-    "opts": [
-      "A grounded steel plate",
-      "A wooden pallet",
-      "A corrosion-resistant acid drip tray",
-      "A rubber shock absorber"
-    ],
-    "exp": "An acid-resistant tray prevents structural corrosion from spills.",
-    "cat": "BattRoom",
-    "id": "T21_123"
-  },
-  {
-    "q": "What is the recommended temperature range for a battery room?",
-    "a": "10\u00b0C to 30\u00b0C",
-    "opts": [
-      "10\u00b0C to 30\u00b0C",
-      "0\u00b0C to 10\u00b0C",
-      "40\u00b0C to 50\u00b0C",
-      "-10\u00b0C to 0\u00b0C"
-    ],
-    "exp": "Extreme heat accelerates gassing, while extreme cold reduces capacity.",
-    "cat": "BattRoom",
-    "id": "T21_124"
-  },
-  {
-    "q": "What PPE must be available at the battery room entrance?",
-    "a": "Rubber gloves, acid-resistant apron, and safety goggles",
-    "opts": [
-      "Rubber gloves, acid-resistant apron, and safety goggles",
-      "Fall arrest harness",
-      "Thermal immersion suit",
-      "Welding mask and leather gloves"
-    ],
-    "exp": "Personnel must be protected from chemical burns caused by sulphuric acid.",
-    "cat": "BattRoom",
-    "id": "T21_125"
-  },
-  {
-    "q": "What emergency first-aid equipment must be accessible near the battery room?",
-    "a": "An eye-wash station or fresh water supply",
-    "opts": [
-      "A defibrillator",
-      "A stretcher",
-      "An eye-wash station or fresh water supply",
-      "An oxygen resuscitator"
-    ],
-    "exp": "Immediate flushing with water is required if battery acid splashes into eyes.",
-    "cat": "BattRoom",
-    "id": "T21_126"
-  },
-  {
-    "q": "Where must the ship's emergency battery room be located?",
-    "a": "Outside the main machinery space, above the bulkhead deck",
-    "opts": [
-      "In the lowest part of the engine room",
-      "Inside the main switchboard room",
-      "Outside the main machinery space, above the bulkhead deck",
-      "In the cargo hold"
-    ],
-    "exp": "SOLAS II-1/42 requires emergency sources to be outside the main engine room.",
-    "cat": "BattRoom",
-    "id": "T21_127"
-  },
-  {
-    "q": "What system monitors the battery wiring for faults?",
-    "a": "The ship's insulation monitoring system",
-    "opts": [
-      "The bilge high level alarm",
-      "The ship's insulation monitoring system",
-      "The fire alarm panel",
-      "The Voyage Data Recorder"
-    ],
-    "exp": "Earth faults in the battery system are monitored to prevent arcing.",
-    "cat": "BattRoom",
-    "id": "T21_128"
-  },
-  {
-    "q": "Why are standard fluorescent lights not permitted in the battery room?",
-    "a": "They are not explosion-protected and can ignite hydrogen gas",
-    "opts": [
-      "They produce UV light that damages batteries",
-      "They interfere with insulation monitoring",
-      "They are not explosion-protected and can ignite hydrogen gas",
-      "They draw too much power"
-    ],
-    "exp": "Standard fittings produce sparks that will ignite hydrogen.",
-    "cat": "BattRoom",
-    "id": "T21_129"
-  },
-  {
-    "q": "What is the purpose of numbering each battery cell?",
-    "a": "To track individual cell voltage and specific gravity history in the maintenance log",
-    "opts": [
-      "To ensure they are installed alphabetically",
-      "To indicate the voltage rating",
-      "To track individual cell voltage and specific gravity history in the maintenance log",
-      "To identify the manufacturer"
-    ],
-    "exp": "Recording readings by cell number helps identify a single failing cell.",
-    "cat": "BattRoom",
-    "id": "T21_130"
-  },
-  {
-    "q": "What is a ventilation interlock on a battery charger?",
-    "a": "It stops the charger from operating if the exhaust fan fails",
-    "opts": [
-      "It opens the door automatically",
-      "It stops the charger from operating if the exhaust fan fails",
-      "It increases fan speed when voltage drops",
-      "It sounds a fire alarm"
-    ],
-    "exp": "Ensures batteries cannot generate hydrogen if the extraction fan is broken.",
-    "cat": "BattRoom",
-    "id": "T21_131"
-  },
-  {
-    "q": "What is the strict rule regarding smoking in the battery room?",
-    "a": "Strictly no smoking and no naked flames",
-    "opts": [
-      "Allowed in the designated corner",
-      "Strictly no smoking and no naked flames",
-      "Allowed only if the fan is on",
-      "Allowed only for e-cigarettes"
-    ],
-    "exp": "Any open flame or spark will instantly ignite a hydrogen-air mixture.",
-    "cat": "BattRoom",
-    "id": "T21_132"
-  },
-  {
-    "q": "What hazard is created by using non-Ex tools inside the battery room during charging?",
-    "a": "Sparks from dropping the tool can ignite hydrogen gas",
-    "opts": [
-      "Sparks from dropping the tool can ignite hydrogen gas",
-      "They drain the battery voltage",
-      "They rust quickly due to acid fumes",
-      "They magnetize the battery plates"
-    ],
-    "exp": "Steel tools can strike sparks if dropped. Spark-proof tools are recommended.",
-    "cat": "BattRoom",
-    "id": "T21_133"
-  },
-  {
-    "q": "If the ventilation system fails in a battery room, what is the immediate risk?",
-    "a": "Accumulation of hydrogen gas to explosive levels",
-    "opts": [
-      "The batteries will freeze",
-      "Loss of battery capacity",
-      "Accumulation of hydrogen gas to explosive levels",
-      "Acid evaporation"
-    ],
-    "exp": "Without extract fans, lighter-than-air hydrogen pools at the ceiling.",
-    "cat": "BattRoom",
-    "id": "T21_134"
-  },
-  {
-    "q": "What type of fire extinguisher is typically NOT recommended for use directly on live battery terminals?",
-    "a": "Water",
-    "opts": [
-      "Clean Agent",
-      "Dry Powder",
-      "CO2",
-      "Water"
-    ],
-    "exp": "Water conducts electricity and can cause severe short circuits.",
-    "cat": "BattRoom",
-    "id": "T21_135"
-  },
-  {
-    "q": "What is the purpose of the battery room maintenance log?",
-    "a": "To record SG, OCV, and temperature to track battery health over time",
-    "opts": [
-      "To record the ship's position",
-      "To log crew working hours",
-      "To inventory spare parts",
-      "To record SG, OCV, and temperature to track battery health over time"
-    ],
-    "exp": "Trending specific gravity helps predict battery failure before an emergency.",
-    "cat": "BattRoom",
-    "id": "T21_136"
-  },
-  {
-    "q": "What happens if a lead-acid battery is operated at 40\u00b0C continuously?",
-    "a": "Its service life is drastically reduced",
-    "opts": [
-      "The acid turns to solid",
-      "Its service life is drastically reduced",
-      "It stops producing hydrogen",
-      "Its capacity doubles"
-    ],
-    "exp": "High temperatures accelerate internal corrosion and self-discharge.",
-    "cat": "BattRoom",
-    "id": "T21_137"
-  },
-  {
-    "q": "Why is hydrogen considered 'Gas Group IIC' in explosion protection standards?",
-    "a": "It requires the lowest ignition energy of common flammable gases",
-    "opts": [
-      "It is the heaviest gas",
-      "It only burns in pure oxygen",
-      "It requires the lowest ignition energy of common flammable gases",
-      "It is non-flammable"
-    ],
-    "exp": "Group IIC is the most stringent category due to low ignition energy.",
-    "cat": "BattRoom",
-    "id": "T21_138"
-  },
-  {
-    "q": "Can the battery room exhaust duct be routed through the accommodation block?",
-    "a": "No, it must run directly to the open atmosphere",
-    "opts": [
-      "Yes, if painted red",
-      "No, it must run directly to the open atmosphere",
-      "Yes, if fitted with filters",
-      "Yes, to provide heating"
-    ],
-    "exp": "Routing hydrogen exhaust through occupied spaces risks fatal explosions.",
-    "cat": "BattRoom",
-    "id": "T21_139"
-  },
-  {
-    "q": "What action should be taken if electrolyte spills into the acid tray?",
-    "a": "Neutralize with bicarbonate of soda and clean it up safely",
-    "opts": [
-      "Ignite it to burn off",
-      "Leave it to evaporate",
-      "Wash it down the deck drain",
-      "Neutralize with bicarbonate of soda and clean it up safely"
-    ],
-    "exp": "Sulphuric acid is highly corrosive and must be neutralized with a base.",
-    "cat": "BattRoom",
-    "id": "T21_140"
-  },
-  {
-    "q": "How is a sealed VRLA battery different from a flooded battery regarding the battery room?",
-    "a": "It emits much less gas under normal charging, but still requires ventilation",
-    "opts": [
-      "It emits much less gas under normal charging, but still requires ventilation",
-      "It emits zero gas even when overcharged",
-      "It requires no ventilation at all",
-      "It absorbs oxygen from the room"
-    ],
-    "exp": "VRLA batteries recombine gases internally but vent hydrogen if overcharged.",
-    "cat": "BattRoom",
-    "id": "T21_141"
-  },
-  {
-    "q": "Where does the hydrogen gas come from in a lead-acid battery?",
-    "a": "The electrolysis of water in the electrolyte during the final stages of charging",
-    "opts": [
-      "The copper terminals",
-      "The electrolysis of water in the electrolyte during the final stages of charging",
-      "The breakdown of the plastic casing",
-      "The melting of the lead plates"
-    ],
-    "exp": "When the battery nears full charge, excess current splits water into hydrogen and oxygen.",
-    "cat": "BattRoom",
-    "id": "T21_142"
-  },
-  {
-    "q": "If a surveyor asks to see the battery room lighting, what specific marking are they looking for?",
-    "a": "Ex e or Ex d certification markings",
-    "opts": [
-      "CE mark only",
-      "Ex e or Ex d certification markings",
-      "IP65 waterproof rating",
-      "220V label"
-    ],
-    "exp": "Surveyors check the luminaire label for explosive (Ex) certification.",
-    "cat": "BattRoom",
-    "id": "T21_143"
-  },
-  {
-    "q": "How is the acid-resistant tray checked for integrity?",
-    "a": "Visual inspection for cracks or chemical degradation",
-    "opts": [
-      "Filling it with water",
-      "Visual inspection for cracks or chemical degradation",
-      "Painting it annually",
-      "Measuring its resistance"
-    ],
-    "exp": "The ETO visually inspects the tray for structural integrity during rounds.",
-    "cat": "BattRoom",
-    "id": "T21_144"
-  },
-  {
-    "q": "What determines if a battery room requires Zone 1 or Zone 2 lighting?",
-    "a": "The volume and rate of hydrogen generation calculated for the space",
-    "opts": [
-      "The number of crew onboard",
-      "The color of the paint",
-      "The ship's tonnage",
-      "The volume and rate of hydrogen generation calculated for the space"
-    ],
-    "exp": "Hazardous zoning depends on the calculated hydrogen emission rate.",
-    "cat": "BattRoom",
-    "id": "T21_145"
-  },
-  {
-    "q": "What is the primary function of a liferaft on a ship?",
-    "a": "To serve as an inflatable survival craft when a lifeboat cannot be launched",
-    "opts": [
-      "To transport cargo to shore",
-      "To store extra lifejackets",
-      "To serve as an inflatable survival craft when a lifeboat cannot be launched",
-      "To act as a fender during mooring"
-    ],
-    "exp": "Liferafts provide emergency buoyancy and shelter.",
-    "cat": "Liferaft",
-    "id": "T21_146"
-  },
-  {
-    "q": "How is a liferaft typically launched manually?",
-    "a": "Throw the canister overboard and pull the painter line to activate inflation",
-    "opts": [
-      "Shoot it from a designated cannon",
-      "Inflate it on deck with a compressor, then lower it",
-      "Lower it using the lifeboat davit",
-      "Throw the canister overboard and pull the painter line to activate inflation"
-    ],
-    "exp": "Manual launch involves throwing the canister and pulling the activation lanyard.",
-    "cat": "Liferaft",
-    "id": "T21_147"
-  },
-  {
-    "q": "What does HRU stand for?",
-    "a": "Hydrostatic Release Unit",
-    "opts": [
-      "Hull Rupture Unit",
-      "Hydraulic Rescue Utility",
-      "High Range UHF",
-      "Hydrostatic Release Unit"
-    ],
-    "exp": "The HRU is a pressure-activated safety device that releases the liferaft.",
-    "cat": "Liferaft",
-    "id": "T21_148"
-  },
-  {
-    "q": "At what depth does the HRU automatically activate?",
-    "a": "1.5 to 4 metres",
-    "opts": [
-      "50 metres",
-      "0.1 to 0.5 metres",
-      "10 to 15 metres",
-      "1.5 to 4 metres"
-    ],
-    "exp": "Water pressure at 1.5-4m depth forces a knife to cut the lashing strap.",
-    "cat": "Liferaft",
-    "id": "T21_149"
-  },
-  {
-    "q": "After the HRU cuts the securing strap, what causes the liferaft to inflate?",
-    "a": "The sinking ship pulls the painter line taut, activating the CO2 cylinder",
-    "opts": [
-      "The HRU knife directly punctures the cylinder",
-      "An electronic timer goes off",
-      "The sinking ship pulls the painter line taut, activating the CO2 cylinder",
-      "Water entering the canister causes a chemical reaction"
-    ],
-    "exp": "The raft floats while the ship sinks, pulling the painter line to trigger inflation.",
-    "cat": "Liferaft",
-    "id": "T21_150"
-  },
-  {
-    "q": "What happens if the ship sinks very quickly and pulls the liferaft underwater?",
-    "a": "The painter line breaks at a designed weak link, allowing the raft to float free",
-    "opts": [
-      "The HRU re-attaches the strap",
-      "The painter line breaks at a designed weak link, allowing the raft to float free",
-      "The liferaft sinks with the ship",
-      "The CO2 cylinder explodes"
-    ],
-    "exp": "The weak link ensures a sinking vessel does not drag the liferaft down.",
-    "cat": "Liferaft",
-    "id": "T21_151"
-  },
-  {
-    "q": "What is the standard expiry period for a Hydrostatic Release Unit (HRU)?",
-    "a": "2 years",
-    "opts": [
-      "10 years",
-      "2 years",
-      "1 year",
-      "5 years"
-    ],
-    "exp": "HRUs must be replaced every 2 years to guarantee the cutting mechanism.",
-    "cat": "Liferaft",
-    "id": "T21_152"
-  },
-  {
-    "q": "What is the primary difference between SOLAS Pack A and Pack B?",
-    "a": "Pack A is for ocean voyages (full equipment); Pack B is for coastal voyages (reduced equipment)",
-    "opts": [
-      "Pack A is rigid; Pack B is inflatable",
-      "Pack A is automatic; Pack B is manual",
-      "Pack A is for ocean voyages (full equipment); Pack B is for coastal voyages (reduced equipment)",
-      "Pack A holds 10 people; Pack B holds 20 people"
-    ],
-    "exp": "Pack A contains comprehensive survival gear for international routes.",
-    "cat": "Liferaft",
-    "id": "T21_153"
-  },
-  {
-    "q": "Which liferaft pack is required for a large cargo vessel on international voyages?",
-    "a": "SOLAS Pack A",
-    "opts": [
-      "SOLAS Pack C",
-      "SOLAS Pack B",
-      "SOLAS Pack A",
-      "No pack is required"
-    ],
-    "exp": "Ocean-going vessels must carry SOLAS Pack A for maximum survival capability.",
-    "cat": "Liferaft",
-    "id": "T21_154"
+    "exp": "The container itself is designed to float, made of GRP/fibreglass with positive buoyancy.",
+    "cat": "RAFT",
+    "id": "T21A_117"
   },
   {
     "q": "How many parachute flares are included in a SOLAS Pack A liferaft?",
     "a": "4",
     "opts": [
+      "2",
       "4",
-      "2",
-      "10",
-      "6"
-    ],
-    "exp": "SOLAS A packs contain 4 parachute flares.",
-    "cat": "Liferaft",
-    "id": "T21_155"
-  },
-  {
-    "q": "How much fresh water per person is required in a SOLAS Pack A liferaft?",
-    "a": "1.5 litres per person",
-    "opts": [
-      "5.0 litres per person",
-      "0.5 litres per person",
-      "3.0 litres per person",
-      "1.5 litres per person"
-    ],
-    "exp": "Pack A mandates 1.5L of sealed fresh water per person.",
-    "cat": "Liferaft",
-    "id": "T21_156"
-  },
-  {
-    "q": "What is the strict rule regarding seawater in a liferaft?",
-    "a": "Do not drink seawater under any circumstances",
-    "opts": [
-      "Drink it only if mixed with fresh water",
-      "Drink it only after boiling",
-      "Do not drink seawater under any circumstances",
-      "Drink it freely to stay hydrated"
-    ],
-    "exp": "Seawater causes severe dehydration and kidney failure.",
-    "cat": "Liferaft",
-    "id": "T21_157"
-  },
-  {
-    "q": "What is the requirement for thermal protective aids in a SOLAS Pack A liferaft?",
-    "a": "Sufficient for 10% of the persons the liferaft is permitted to accommodate, or 2, whichever is greater",
-    "opts": [
-      "Sufficient for 10% of the persons the liferaft is permitted to accommodate, or 2, whichever is greater",
-      "None are required",
-      "Five total",
-      "One for every person"
-    ],
-    "exp": "Essential for treating crew members suffering from severe hypothermia.",
-    "cat": "Liferaft",
-    "id": "T21_158"
-  },
-  {
-    "q": "How frequently must an inflatable liferaft be sent ashore for servicing and repacking?",
-    "a": "Annually",
-    "opts": [
-      "Every 6 months",
-      "Every 2 years",
-      "Every 5 years",
-      "Annually"
-    ],
-    "exp": "SOLAS requires annual servicing at an approved shore-based facility.",
-    "cat": "Liferaft",
-    "id": "T21_159"
-  },
-  {
-    "q": "What is the purpose of the manual bilge pump in the liferaft?",
-    "a": "To remove water that enters the liferaft",
-    "opts": [
-      "To inflate the raft manually",
-      "To remove water that enters the liferaft",
-      "To pump drinking water from the sea",
-      "To spray water on the canopy for cooling"
-    ],
-    "exp": "A manual pump is provided to keep the interior dry.",
-    "cat": "Liferaft",
-    "id": "T21_160"
-  },
-  {
-    "q": "How many anti-seasickness tablets per person are provided in a SOLAS Pack A?",
-    "a": "6",
-    "opts": [
       "6",
-      "2",
-      "20",
-      "10"
+      "8"
     ],
-    "exp": "6 tablets per person are provided to prevent vomiting.",
-    "cat": "Liferaft",
-    "id": "T21_161"
+    "exp": "A SOLAS Pack A liferaft contains 4 parachute flares.",
+    "cat": "RAFT",
+    "id": "T21A_118"
   },
   {
-    "q": "What is the difference between the forward (fwd) liferaft and the aft liferafts on a cargo ship?",
-    "a": "They have the same SOLAS specifications, but the fwd raft provides escape for crew trapped far from the bridge",
+    "q": "How does SOLAS Pack B differ from SOLAS Pack A?",
+    "a": "Reduced equipment: fewer rations, water, and pyrotechnics vs Pack A.",
     "opts": [
-      "The fwd raft has Pack B, aft has Pack A",
-      "The fwd raft is smaller",
-      "They have the same SOLAS specifications, but the fwd raft provides escape for crew trapped far from the bridge",
-      "The fwd raft does not have an HRU"
+      "It contains no TPAs or seasick tablets.",
+      "It does not require an HRU.",
+      "Reduced equipment: fewer rations, water, and pyrotechnics vs Pack A.",
+      "It uses compressed air instead of CO2 for inflation."
     ],
-    "exp": "A 6-person minimum liferaft is located forward to provide an alternative escape route.",
-    "cat": "Liferaft",
-    "id": "T21_162"
+    "exp": "Pack B has reduced rations, water, and pyrotechnics compared to Pack A, but still includes TPAs and seasick tablets.",
+    "cat": "RAFT",
+    "id": "T21A_119"
   },
   {
-    "q": "What generates the gas to inflate the liferaft?",
-    "a": "A high-pressure CO2 and Nitrogen cylinder",
+    "q": "Why are seasick tablets critical in a liferaft survival pack?",
+    "a": "survival in a raft is severely compromised by incapacitating seasickness.",
     "opts": [
-      "A manual hand pump",
-      "A high-pressure CO2 and Nitrogen cylinder",
-      "Chemical oxygen generators",
-      "An electric air compressor"
+      "they purify the drinking water.",
+      "survival in a raft is severely compromised by incapacitating seasickness.",
+      "they provide necessary calories when rations run out.",
+      "they reduce the feeling of hypothermia."
     ],
-    "exp": "Pulling the painter pierces the cylinder, rapidly inflating the tubes.",
-    "cat": "Liferaft",
-    "id": "T21_163"
+    "exp": "Seasickness tablets are important because survival is severely compromised if occupants are incapacitated by seasickness.",
+    "cat": "RAFT",
+    "id": "T21A_120"
   },
   {
-    "q": "Approximately how long does a liferaft take to fully inflate?",
-    "a": "30 seconds",
-    "opts": [
-      "5 seconds",
-      "10 minutes",
-      "5 minutes",
-      "30 seconds"
-    ],
-    "exp": "Standard CO2 inflation achieves full buoyancy in roughly 30 seconds.",
-    "cat": "Liferaft",
-    "id": "T21_164"
-  },
-  {
-    "q": "What is the capacity requirement for liferafts on a cargo ship?",
-    "a": "Capable of accommodating 100% of the total persons onboard on EACH side of the ship",
-    "opts": [
-      "50% of the crew on each side",
-      "150% of the crew total",
-      "Capable of accommodating 100% of the total persons onboard on EACH side of the ship",
-      "Exactly 10 persons"
-    ],
-    "exp": "Liferafts on the accessible side must hold the entire crew if lifeboats fail.",
-    "cat": "Liferaft",
-    "id": "T21_165"
-  },
-  {
-    "q": "What is the purpose of the water pockets (ballast bags) under the liferaft?",
-    "a": "To provide stability and prevent the liferaft from capsizing in high winds",
-    "opts": [
-      "To provide stability and prevent the liferaft from capsizing in high winds",
-      "To collect rainwater",
-      "To store drinking water",
-      "To act as an anchor"
-    ],
-    "exp": "Bags fill with seawater, lowering the center of gravity.",
-    "cat": "Liferaft",
-    "id": "T21_166"
-  },
-  {
-    "q": "What should crew members do if a liferaft inflates upside down?",
-    "a": "Use the righting strap on the underside to flip it over",
-    "opts": [
-      "Use the righting strap on the underside to flip it over",
-      "Wait for the wind to flip it",
-      "Abandon it and find another raft",
-      "Puncture it to sink it"
-    ],
-    "exp": "A designated righting strap allows a swimmer to pull the raft over.",
-    "cat": "Liferaft",
-    "id": "T21_167"
-  },
-  {
-    "q": "How is a liferaft canister protected from the elements while stowed on deck?",
-    "a": "It is housed in a rigid, watertight GRP (Glass Reinforced Plastic) container",
-    "opts": [
-      "It is stored below deck in a locker",
-      "It is housed in a rigid, watertight GRP (Glass Reinforced Plastic) container",
-      "It is wrapped in a canvas tarp",
-      "It is kept in a vacuum-sealed plastic bag"
-    ],
-    "exp": "The GRP canister protects the raft from UV damage and weather.",
-    "cat": "Liferaft",
-    "id": "T21_168"
-  },
-  {
-    "q": "What is the food ration requirement in a SOLAS Pack A liferaft?",
-    "a": "10,000 kJ per person",
-    "opts": [
-      "10,000 kJ per person",
-      "1,000 kJ per person",
-      "5,000 kJ per person",
-      "50,000 kJ per person"
-    ],
-    "exp": "High-calorie survival biscuit rations totaling 10,000 kJ per person are required.",
-    "cat": "Liferaft",
-    "id": "T21_169"
-  },
-  {
-    "q": "Can the ETO test the liferaft inflation system onboard?",
-    "a": "No, it must only be activated during an emergency or by an approved service station",
-    "opts": [
-      "Yes, but only using a manual air pump",
-      "Yes, during monthly drills",
-      "Yes, annually",
-      "No, it must only be activated during an emergency or by an approved service station"
-    ],
-    "exp": "Testing destroys the CO2 seal. The raft must be sent ashore.",
-    "cat": "Liferaft",
-    "id": "T21_170"
-  },
-  {
-    "q": "What is the required length of the painter line attached to the liferaft?",
-    "a": "Sufficient to reach the waterline at the ship's lightest seagoing condition plus 10 meters, minimum 15m total",
-    "opts": [
-      "2 meters",
-      "Exactly 5 meters",
-      "100 meters minimum",
-      "Sufficient to reach the waterline at the ship's lightest seagoing condition plus 10 meters, minimum 15m total"
-    ],
-    "exp": "The painter must be long enough to reach the water and allow drift.",
-    "cat": "Liferaft",
-    "id": "T21_171"
-  },
-  {
-    "q": "What is the purpose of the Jackknife included in the liferaft equipment?",
-    "a": "To cut the painter line once passengers are boarded and the ship is sinking",
-    "opts": [
-      "To puncture the raft if captured",
-      "For self-defense",
-      "To cut the painter line once passengers are boarded and the ship is sinking",
-      "To open food cans"
-    ],
-    "exp": "A safety knife is provided specifically to sever the painter.",
-    "cat": "Liferaft",
-    "id": "T21_172"
-  },
-  {
-    "q": "What indicates to the ETO that a liferaft HRU requires replacement?",
-    "a": "The expiry date punched on the HRU casing has passed",
-    "opts": [
-      "The expiry date punched on the HRU casing has passed",
-      "The painter line becomes frayed",
-      "The pressure gauge shows low",
-      "It starts leaking water"
-    ],
-    "exp": "HRUs are marked with a punch-hole expiry date (month/year) upon installation.",
-    "cat": "Liferaft",
-    "id": "T21_173"
-  },
-  {
-    "q": "How is rain water collected in a liferaft?",
-    "a": "Using the rainwater collection tubes on the canopy",
-    "opts": [
-      "Rain water cannot be collected",
-      "Using plastic buckets",
-      "By ringing out wet clothes",
-      "Using the rainwater collection tubes on the canopy"
-    ],
-    "exp": "The canopy has built-in gutters and tubes to channel rainwater.",
-    "cat": "Liferaft",
-    "id": "T21_174"
-  },
-  {
-    "q": "What protects a liferaft from being dragged by heavy wind while awaiting rescue?",
-    "a": "A sea anchor (drogue)",
-    "opts": [
-      "A sea anchor (drogue)",
-      "The painter line",
-      "The ballast bags",
-      "A heavy metal anchor"
-    ],
-    "exp": "A sea anchor creates drag in the water to reduce wind drift.",
-    "cat": "Liferaft",
-    "id": "T21_175"
-  },
-  {
-    "q": "How many parachute flares are required by SOLAS to be carried in a lifeboat?",
+    "q": "How many parachute flares are carried in a lifeboat?",
     "a": "4",
     "opts": [
-      "6",
-      "4",
       "2",
-      "12"
+      "4",
+      "6",
+      "8"
     ],
-    "exp": "SOLAS III/11.1 mandates exactly 4 rocket parachute flares per lifeboat.",
-    "cat": "Pyrotechnics",
-    "id": "T21_176"
+    "exp": "A lifeboat must carry 4 parachute flares.",
+    "cat": "PYRO",
+    "id": "T21A_121"
   },
   {
-    "q": "What is the minimum height a rocket parachute flare must reach?",
-    "a": "300 metres",
+    "q": "What is the minimum burn time for a parachute flare?",
+    "a": "40 seconds",
     "opts": [
-      "300 metres",
-      "1000 metres",
-      "100 metres",
-      "50 metres"
-    ],
-    "exp": "The rocket propels the flare to at least 300m so it can be seen over the horizon.",
-    "cat": "Pyrotechnics",
-    "id": "T21_177"
-  },
-  {
-    "q": "How long must a parachute flare burn?",
-    "a": "Minimum 40 seconds",
-    "opts": [
-      "3 minutes",
-      "40 seconds",
       "10 seconds",
-      "1 minute"
+      "40 seconds",
+      "1 minute",
+      "3 minutes"
     ],
-    "exp": "The flare descends slowly, burning bright red for at least 40 seconds.",
-    "cat": "Pyrotechnics",
-    "id": "T21_178"
+    "exp": "Parachute flares burn bright red for a minimum of 40 seconds.",
+    "cat": "PYRO",
+    "id": "T21A_122"
   },
   {
-    "q": "How many hand flares are required in each lifeboat?",
+    "q": "To what minimum height is a parachute flare rocket propelled?",
+    "a": "300 m",
+    "opts": [
+      "100 m",
+      "150 m",
+      "300 m",
+      "500 m"
+    ],
+    "exp": "A parachute flare is rocket propelled to a minimum height of 300 m.",
+    "cat": "PYRO",
+    "id": "T21A_123"
+  },
+  {
+    "q": "How many hand flares are required in a lifeboat?",
     "a": "6",
     "opts": [
+      "2",
       "4",
       "6",
-      "2",
-      "10"
+      "12"
     ],
-    "exp": "Six hand flares are carried for short-range signaling.",
-    "cat": "Pyrotechnics",
-    "id": "T21_179"
+    "exp": "A lifeboat must carry 6 hand flares.",
+    "cat": "PYRO",
+    "id": "T21A_124"
   },
   {
     "q": "What is the minimum burn time for a hand flare?",
     "a": "1 minute",
     "opts": [
-      "5 minutes",
-      "3 minutes",
-      "30 seconds",
-      "1 minute"
+      "40 seconds",
+      "1 minute",
+      "2 minutes",
+      "3 minutes"
     ],
     "exp": "Hand flares burn bright red for a minimum of 1 minute.",
-    "cat": "Pyrotechnics",
-    "id": "T21_180"
+    "cat": "PYRO",
+    "id": "T21A_125"
   },
   {
-    "q": "How many buoyant smoke signals are required per lifeboat?",
-    "a": "2",
+    "q": "What color smoke is emitted by a buoyant smoke signal?",
+    "a": "orange smoke",
     "opts": [
-      "6",
-      "2",
-      "4",
-      "1"
+      "white smoke",
+      "red smoke",
+      "orange smoke",
+      "black smoke"
     ],
-    "exp": "Two buoyant smoke signals are provided for daytime marking.",
-    "cat": "Pyrotechnics",
-    "id": "T21_181"
+    "exp": "A buoyant smoke signal emits dense orange smoke.",
+    "cat": "PYRO",
+    "id": "T21A_126"
   },
   {
-    "q": "What color smoke is emitted by the buoyant smoke signal?",
-    "a": "Dense orange",
-    "opts": [
-      "White",
-      "Red",
-      "Black",
-      "Dense orange"
-    ],
-    "exp": "Orange smoke provides the highest contrast against the ocean surface.",
-    "cat": "Pyrotechnics",
-    "id": "T21_182"
-  },
-  {
-    "q": "What is the minimum duration of a buoyant smoke signal?",
+    "q": "What is the minimum duration for a buoyant smoke signal?",
     "a": "3 minutes",
     "opts": [
-      "5 minutes",
-      "3 minutes",
       "1 minute",
-      "10 minutes"
-    ],
-    "exp": "The signal must emit smoke continuously for at least 3 minutes.",
-    "cat": "Pyrotechnics",
-    "id": "T21_183"
-  },
-  {
-    "q": "What is the typical shelf life of marine pyrotechnics?",
-    "a": "3 years from the date of manufacture",
-    "opts": [
-      "5 years",
-      "3 years from the date of manufacture",
-      "10 years",
-      "1 year"
-    ],
-    "exp": "Pyrotechnic chemicals degrade over time. They must be replaced after 3 years.",
-    "cat": "Pyrotechnics",
-    "id": "T21_184"
-  },
-  {
-    "q": "How must expired pyrotechnics be disposed of?",
-    "a": "Collected by authorized shore-based disposal facilities",
-    "opts": [
-      "Collected by authorized shore-based disposal facilities",
-      "Incinerated in the ship's incinerator",
-      "Fired off during New Year celebrations",
-      "Thrown overboard at sea"
-    ],
-    "exp": "They are explosives and must be handed to certified shore contractors.",
-    "cat": "Pyrotechnics",
-    "id": "T21_185"
-  },
-  {
-    "q": "Why is it illegal to test fire expired pyrotechnics at sea?",
-    "a": "It constitutes a false distress signal (Mayday) and triggers a search and rescue response",
-    "opts": [
-      "It wastes valuable equipment",
-      "The smoke pollutes the air",
-      "They might fail to ignite",
-      "It constitutes a false distress signal (Mayday) and triggers a search and rescue response"
-    ],
-    "exp": "Any red flare seen at sea is treated as a grave and imminent danger.",
-    "cat": "Pyrotechnics",
-    "id": "T21_186"
-  },
-  {
-    "q": "Where should pyrotechnics be stored inside the lifeboat?",
-    "a": "In a watertight container in the designated pyrotechnic locker",
-    "opts": [
-      "Loose under the seats",
-      "Attached to the outside of the hull",
-      "Inside the first aid kit",
-      "In a watertight container in the designated pyrotechnic locker"
-    ],
-    "exp": "They must be kept dry and secure from unauthorized access.",
-    "cat": "Pyrotechnics",
-    "id": "T21_187"
-  },
-  {
-    "q": "How many total parachute flares are typically required on the bridge of a cargo ship?",
-    "a": "12",
-    "opts": [
-      "6",
-      "24",
-      "12",
-      "4"
-    ],
-    "exp": "SOLAS requires the ship to carry 12 rocket parachute flares on the bridge.",
-    "cat": "Pyrotechnics",
-    "id": "T21_188"
-  },
-  {
-    "q": "What is the primary function of the Line-Throwing Apparatus?",
-    "a": "To shoot a rocket-propelled line to establish a physical connection with a rescuing vessel",
-    "opts": [
-      "To act as a harpoon",
-      "To measure water depth",
-      "To shoot down flares",
-      "To shoot a rocket-propelled line to establish a physical connection with a rescuing vessel"
-    ],
-    "exp": "The apparatus passes a messenger line for towing or personnel transfer.",
-    "cat": "Pyrotechnics",
-    "id": "T21_189"
-  },
-  {
-    "q": "When should hand flares ideally be used?",
-    "a": "When a rescuing vessel or aircraft is in visual range",
-    "opts": [
-      "When a rescuing vessel or aircraft is in visual range",
-      "To signal other crew members inside the ship",
-      "As soon as the ship sinks",
-      "Only during daytime"
-    ],
-    "exp": "They burn for only 1 minute and are kept until a rescuer is close enough to see.",
-    "cat": "Pyrotechnics",
-    "id": "T21_190"
-  },
-  {
-    "q": "How must a hand flare be held during operation?",
-    "a": "At arm's length downwind",
-    "opts": [
-      "Pointing at the rescuing ship",
-      "At arm's length downwind",
-      "Above the head upwind",
-      "Inside the lifeboat canopy"
-    ],
-    "exp": "Holding it downwind prevents hot slag and smoke from blowing back into the face.",
-    "cat": "Pyrotechnics",
-    "id": "T21_191"
-  },
-  {
-    "q": "What specific information does the smoke signal provide to a rescue helicopter?",
-    "a": "The wind direction and speed at the surface",
-    "opts": [
-      "The water depth",
-      "The wind direction and speed at the surface",
-      "The number of survivors",
-      "The location of the sinking ship"
-    ],
-    "exp": "Helicopters approach into the wind. Smoke drift provides vital surface wind data.",
-    "cat": "Pyrotechnics",
-    "id": "T21_192"
-  },
-  {
-    "q": "Are buoyant smoke signals effective at night?",
-    "a": "No, they are for daytime distress signaling",
-    "opts": [
-      "Yes, they glow in the dark",
-      "Yes, they emit a loud siren",
-      "No, they are for daytime distress signaling",
-      "Yes, they emit infrared heat"
-    ],
-    "exp": "Smoke is not visible at night; flares are used for night signaling.",
-    "cat": "Pyrotechnics",
-    "id": "T21_193"
-  },
-  {
-    "q": "What must the ETO/Officers check regarding pyrotechnics during monthly lifeboat rounds?",
-    "a": "Inventory quantities and the expiry dates",
-    "opts": [
-      "Repainting the casing",
-      "Weighing each flare",
-      "Test firing one flare",
-      "Inventory quantities and the expiry dates"
-    ],
-    "exp": "A visual check confirms all pyros are present and have not exceeded 3 years.",
-    "cat": "Pyrotechnics",
-    "id": "T21_194"
-  },
-  {
-    "q": "What happens if a pyrotechnic is past its expiry date but appears in perfect condition?",
-    "a": "It must be replaced immediately",
-    "opts": [
-      "It can be kept as a spare",
-      "It can be used for training",
-      "It must be replaced immediately",
-      "It is valid for 1 more year"
-    ],
-    "exp": "Regulations strictly prohibit the carriage of expired pyrotechnics.",
-    "cat": "Pyrotechnics",
-    "id": "T21_195"
-  },
-  {
-    "q": "What is the visibility range of a parachute flare in clear weather?",
-    "a": "Up to 40 km",
-    "opts": [
-      "100 km",
-      "5 km",
-      "Up to 40 km",
-      "15 km"
-    ],
-    "exp": "At 300m height, the bright red flare can be seen up to 40km away.",
-    "cat": "Pyrotechnics",
-    "id": "T21_196"
-  },
-  {
-    "q": "How many rockets are included in the Line-Throwing Apparatus?",
-    "a": "At least 4",
-    "opts": [
-      "At least 4",
-      "2",
-      "6",
-      "1"
-    ],
-    "exp": "The apparatus includes at least 4 rockets and 4 lines.",
-    "cat": "Pyrotechnics",
-    "id": "T21_197"
-  },
-  {
-    "q": "Which pyrotechnic is best suited for indicating wind direction to aircraft?",
-    "a": "Buoyant orange smoke signal",
-    "opts": [
-      "Buoyant orange smoke signal",
-      "Line-throwing rocket",
-      "Parachute flare",
-      "Hand flare"
-    ],
-    "exp": "The dense orange smoke floats on the surface, clearly showing wind direction.",
-    "cat": "Pyrotechnics",
-    "id": "T21_198"
-  },
-  {
-    "q": "Under which MARPOL Annex is the disposal of pyrotechnics at sea prohibited?",
-    "a": "MARPOL Annex V",
-    "opts": [
-      "MARPOL Annex IV",
-      "MARPOL Annex I",
-      "MARPOL Annex V",
-      "MARPOL Annex VI"
-    ],
-    "exp": "Annex V covers garbage pollution, which includes the prohibition of dumping pyros.",
-    "cat": "Pyrotechnics",
-    "id": "T21_199"
-  },
-  {
-    "q": "What color is the hand flare flame required to be?",
-    "a": "Bright red",
-    "opts": [
-      "Bright white",
-      "Bright orange",
-      "Bright red",
-      "Bright yellow"
-    ],
-    "exp": "Red is the internationally recognized color for distress signals at sea.",
-    "cat": "Pyrotechnics",
-    "id": "T21_200"
-  },
-  {
-    "q": "What is the immediate action if a hand flare fails to ignite?",
-    "a": "Hold it outboard over the water for at least 30 seconds before discarding",
-    "opts": [
-      "Open the casing to fix it",
-      "Throw it into the lifeboat immediately",
-      "Try to relight it with a lighter",
-      "Hold it outboard over the water for at least 30 seconds before discarding"
-    ],
-    "exp": "Hang-fires can ignite late. Hold it safely away from the boat before dropping it in the sea.",
-    "cat": "Pyrotechnics",
-    "id": "T21_201"
-  },
-  {
-    "q": "What is the purpose of the water-resistant container for pyrotechnics?",
-    "a": "To protect the chemical compositions from moisture degradation",
-    "opts": [
-      "To make them heavier",
-      "To keep them from floating away",
-      "To protect them from UV light only",
-      "To protect the chemical compositions from moisture degradation"
-    ],
-    "exp": "Moisture ruins pyrotechnic compounds, hence watertight storage is mandatory.",
-    "cat": "Pyrotechnics",
-    "id": "T21_202"
-  },
-  {
-    "q": "Are there pyrotechnics in a SOLAS Pack B liferaft?",
-    "a": "Yes, but fewer than in a Pack A",
-    "opts": [
-      "No, they are only in Pack A",
-      "Yes, but fewer than in a Pack A",
-      "Yes, they only have smoke signals",
-      "Yes, exactly the same amount as Pack A"
-    ],
-    "exp": "Pack B is a reduced coastal pack and carries fewer flares.",
-    "cat": "Pyrotechnics",
-    "id": "T21_203"
-  },
-  {
-    "q": "What is the firing angle typically recommended for a parachute flare in calm conditions?",
-    "a": "Slightly downwind, nearly vertical (e.g. 15 degrees off vertical)",
-    "opts": [
-      "Directly at the water",
-      "Slightly downwind, nearly vertical (e.g. 15 degrees off vertical)",
-      "45 degrees upwind",
-      "Horizontally towards the rescuer"
-    ],
-    "exp": "Firing slightly downwind ensures the parachute drifts away from the firing craft.",
-    "cat": "Pyrotechnics",
-    "id": "T21_204"
-  },
-  {
-    "q": "What pyrotechnic is NOT required in a lifeboat?",
-    "a": "White collision warning flares",
-    "opts": [
-      "Hand flares",
-      "White collision warning flares",
-      "Parachute flares",
-      "Buoyant smoke signals"
-    ],
-    "exp": "White flares are sometimes used by vessels to warn of collision, but are not LSA distress equipment.",
-    "cat": "Pyrotechnics",
-    "id": "T21_205"
-  },
-  {
-    "q": "What does EEBD stand for?",
-    "a": "Emergency Escape Breathing Device",
-    "opts": [
-      "External Engine Breathing Duct",
-      "Enclosed Entry Breathing Demand",
-      "Emergency Escape Breathing Device",
-      "Electronic Escape Beacon Device"
-    ],
-    "exp": "The EEBD is a self-contained device designed solely for escape from hazardous atmospheres.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_206"
-  },
-  {
-    "q": "What is the ONLY permitted use of an EEBD?",
-    "a": "Escape from a space filled with smoke or toxic gases",
-    "opts": [
-      "Underwater repairs",
-      "Enclosed space entry for inspection",
-      "Firefighting operations",
-      "Escape from a space filled with smoke or toxic gases"
-    ],
-    "exp": "EEBDs provide a short duration of air for evacuation only. They are NOT for firefighting.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_207"
-  },
-  {
-    "q": "How many persons can use a single EEBD?",
-    "a": "One person only",
-    "opts": [
-      "One person only",
-      "Two people sharing the hood",
-      "Depends on cylinder size",
-      "Up to five people sequentially"
-    ],
-    "exp": "The EEBD is a single-use, single-person device.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_209"
-  },
-  {
-    "q": "What is the minimum number of EEBDs required on the bridge by SOLAS?",
-    "a": "2",
-    "opts": [
-      "6",
-      "2",
-      "4",
-      "1"
-    ],
-    "exp": "SOLAS requires at least 2 EEBDs situated on the bridge for navigating officers.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_210"
-  },
-  {
-    "q": "How many EEBDs are typically required in a cargo ship's machinery space?",
-    "a": "At least 2 in the space, plus 2 near the entry/exit points",
-    "opts": [
-      "None are required in the engine room",
-      "1 near the engine control room",
-      "At least 2 in the space, plus 2 near the entry/exit points",
-      "1 for every crew member"
-    ],
-    "exp": "SOLAS requires EEBDs distributed so any person working can reach one quickly.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_211"
-  },
-  {
-    "q": "What does SCBA stand for?",
-    "a": "Self-Contained Breathing Apparatus",
-    "opts": [
-      "Self-Contained Breathing Apparatus",
-      "Standard Capacity Breathing Air",
-      "Shipboard Casualty Breathing Aid",
-      "Safety Control Breathing Air"
-    ],
-    "exp": "An SCBA is a heavy-duty, positive-pressure breathing system used for firefighting and rescue.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_212"
-  },
-  {
-    "q": "What is the standard operating time for an SCBA?",
-    "a": "Minimum 30 minutes",
-    "opts": [
-      "15 minutes",
-      "4 hours",
-      "Minimum 30 minutes",
-      "10 minutes"
-    ],
-    "exp": "SCBAs contain high-pressure air providing at least 30 minutes of breathing time.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_213"
-  },
-  {
-    "q": "What is the minimum number of SCBA sets required on a cargo ship?",
-    "a": "2",
-    "opts": [
-      "1",
-      "10",
-      "2",
-      "4"
-    ],
-    "exp": "SOLAS requires a minimum of two complete fireman's outfits, including two SCBA sets.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_214"
-  },
-  {
-    "q": "What must be checked on an SCBA cylinder before use?",
-    "a": "Pressure must be at least 90% of rated working pressure",
-    "opts": [
-      "Pressure must be at least 90% of rated working pressure",
-      "The color of the cylinder",
-      "The weight of the mask",
-      "The temperature of the air"
-    ],
-    "exp": "If the gauge reads below 90%, it must be swapped or refilled.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_215"
-  },
-  {
-    "q": "When does the SCBA low-pressure alarm (whistle) typically sound?",
-    "a": "At approximately 50-55 bar (leaving roughly 5-10 minutes of air)",
-    "opts": [
-      "At 100 bar",
-      "When the cylinder is completely empty",
-      "At 200 bar",
-      "At approximately 50-55 bar (leaving roughly 5-10 minutes of air)"
-    ],
-    "exp": "The whistle warns the user to evacuate the hazardous area immediately.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_216"
-  },
-  {
-    "q": "What is the key difference in application between an EEBD and an SCBA?",
-    "a": "EEBD is for escape only (10 min); SCBA is for firefighting/rescue (30+ min)",
-    "opts": [
-      "EEBD is for firefighting; SCBA is for escape",
-      "EEBD is for escape only (10 min); SCBA is for firefighting/rescue (30+ min)",
-      "EEBD uses oxygen; SCBA uses nitrogen",
-      "There is no difference"
-    ],
-    "exp": "EEBD hoods melt in direct fire. Only SCBAs provide protection for fighting fires.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_217"
-  },
-  {
-    "q": "What equipment is required to refill empty SCBA cylinders onboard?",
-    "a": "A dedicated breathing air compressor (Class E air)",
-    "opts": [
-      "An oxygen generator",
-      "A dedicated breathing air compressor (Class E air)",
-      "The main engine starting air compressor",
-      "A standard workshop compressor"
-    ],
-    "exp": "Only specialized compressors with strict filtration can produce safe breathing air.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_218"
-  },
-  {
-    "q": "How often must SCBA composite cylinders undergo a hydrostatic pressure test?",
-    "a": "Typically every 5 years",
-    "opts": [
-      "Every 2 years",
-      "Annually",
-      "Typically every 5 years",
-      "Never"
-    ],
-    "exp": "Cylinders are subjected to 1.5x working pressure every 5 years.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_219"
-  },
-  {
-    "q": "Why does an SCBA mask use positive pressure?",
-    "a": "To ensure any leak in the mask pushes air out, preventing toxic gases from entering",
-    "opts": [
-      "To cool the wearer's face",
-      "To make breathing harder",
-      "To inflate the protective suit",
-      "To ensure any leak in the mask pushes air out, preventing toxic gases from entering"
-    ],
-    "exp": "Positive pressure demand valves maintain higher pressure inside the mask.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_220"
-  },
-  {
-    "q": "What is the SOLAS requirement for emergency escapes from machinery spaces?",
-    "a": "At least 2 escape routes, one of which must be a vertical trunk or ladder to the open deck",
-    "opts": [
-      "At least 2 escape routes, one of which must be a vertical trunk or ladder to the open deck",
-      "1 route through the control room",
-      "No specific requirement",
-      "3 routes leading to the cargo hold"
-    ],
-    "exp": "Redundant escape routes guarantee that crew can evacuate if a fire blocks the primary exit.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_221"
-  },
-  {
-    "q": "What routine ETO/Crew check is performed on wall-mounted EEBDs?",
-    "a": "Check the pressure gauge is in the green zone and the expiry date is valid",
-    "opts": [
-      "Check the pressure gauge is in the green zone and the expiry date is valid",
-      "Test breathing from the hood",
-      "Wash the hood with soap",
-      "Refill the cylinder"
-    ],
-    "exp": "The gauge is checked during rounds. EEBDs cannot be tested by breathing.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_222"
-  },
-  {
-    "q": "How quickly must an EEBD be capable of being donned?",
-    "a": "Within approximately 30 seconds",
-    "opts": [
-      "5 minutes",
-      "10 seconds",
-      "Within approximately 30 seconds",
-      "2 minutes"
-    ],
-    "exp": "The hood design allows crew to pull it over their heads and activate air instantly.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_223"
-  },
-  {
-    "q": "What feature of the EEBD hood protects the user during escape?",
-    "a": "It is made of fire-resistant, transparent material to protect the face from radiant heat",
-    "opts": [
-      "It is completely opaque",
-      "It is made of steel",
-      "It has a built-in radio",
-      "It is made of fire-resistant, transparent material to protect the face from radiant heat"
-    ],
-    "exp": "The hood protects the hair and face from heat flashes while maintaining visibility.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_224"
-  },
-  {
-    "q": "Are spare cylinders required for the SCBA sets onboard?",
-    "a": "Yes, each SCBA set must have a spare cylinder",
-    "opts": [
-      "No, they are filled directly from a hose",
-      "Yes, each SCBA set must have a spare cylinder",
-      "No, cylinders are single-use",
-      "Only if the ship has no compressor"
-    ],
-    "exp": "SOLAS requires backup cylinders so firefighters can swap tanks quickly.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_225"
-  },
-  {
-    "q": "Can EEBDs be used for entering an enclosed space with a low oxygen alarm?",
-    "a": "No, they are strictly for emergency escape only",
-    "opts": [
-      "Yes, if the trip is shorter than 5 minutes",
-      "No, they are strictly for emergency escape only",
-      "Yes, for any enclosed space entry",
-      "Yes, but only if two people go together"
-    ],
-    "exp": "EEBDs do not have the capacity, durability, or positive pressure required for safe enclosed space entry.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_226"
-  },
-  {
-    "q": "What visual indication shows an SCBA cylinder is full?",
-    "a": "The pressure gauge reads typically 200 to 300 bar",
-    "opts": [
-      "The pressure gauge reads typically 200 to 300 bar",
-      "A green light turns on",
-      "The cylinder is warm",
-      "The pressure gauge reads 10 bar"
-    ],
-    "exp": "SCBA cylinders are filled to high pressure, normally 200 or 300 bar.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_227"
-  },
-  {
-    "q": "Who is required to be trained in donning an EEBD?",
-    "a": "All seafarers onboard as part of safety familiarization",
-    "opts": [
-      "Only the officers",
-      "Only the engineering crew",
-      "All seafarers onboard as part of safety familiarization",
-      "Only the rescue boat crew"
-    ],
-    "exp": "Everyone must know how to use an EEBD because anyone could be trapped by smoke.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_228"
-  },
-  {
-    "q": "How is the SCBA low-pressure alarm tested during pre-use checks?",
-    "a": "By closing the cylinder valve and venting the air until the whistle sounds",
-    "opts": [
-      "By pressing an electronic test button",
-      "By entering a smoke-filled room",
-      "By listening to it constantly",
-      "By closing the cylinder valve and venting the air until the whistle sounds"
-    ],
-    "exp": "Bleeding the air line verifies the mechanical whistle actuates at ~55 bar.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_229"
-  },
-  {
-    "q": "What must be done to an SCBA set immediately after use?",
-    "a": "Clean the mask, replace the cylinder with a full spare, and log the use",
-    "opts": [
-      "Leave it on deck to air out",
-      "Throw away the mask",
-      "Put it back in the locker exactly as is",
-      "Clean the mask, replace the cylinder with a full spare, and log the use"
-    ],
-    "exp": "The set must be restored to 100% readiness immediately after any operation.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_230"
-  },
-  {
-    "q": "What happens if a crew member with a thick beard tries to use an SCBA?",
-    "a": "The mask will not form a proper seal, compromising the positive pressure",
-    "opts": [
-      "The whistle sounds continuously",
-      "The mask will not form a proper seal, compromising the positive pressure",
-      "The cylinder drains twice as fast",
-      "Nothing, it works perfectly"
-    ],
-    "exp": "Facial hair prevents the silicone skirt of the mask from sealing against the skin.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_231"
-  },
-  {
-    "q": "Is the EEBD air supply activated automatically or manually?",
-    "a": "Usually automatically when the hood is pulled from the bag or manually by a pin/valve",
-    "opts": [
-      "Usually automatically when the hood is pulled from the bag or manually by a pin/valve",
-      "By speaking loudly into the hood",
-      "Only by a remote control on the bridge",
-      "By blowing into a tube"
-    ],
-    "exp": "Depending on the model, removing the hood pulls an activation pin or requires turning a valve.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_232"
-  },
-  {
-    "q": "Why is it important to check the EEBD pressure gauge regularly?",
-    "a": "To ensure the cylinder has not leaked over time and remains full for an emergency",
-    "opts": [
-      "To drain condensation",
-      "To recalibrate the gauge needle",
-      "To ensure the cylinder has not leaked over time and remains full for an emergency",
-      "To change the air inside"
-    ],
-    "exp": "A slow leak over months could leave the EEBD empty when a crew member desperately needs it.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_233"
-  },
-  {
-    "q": "What should a crew member do if their EEBD runs out of air before reaching safety?",
-    "a": "Remove the hood to prevent suffocation and continue escaping",
-    "opts": [
-      "Keep the hood on and hold breath",
-      "Stop moving and wait for rescue",
-      "Remove the hood to prevent suffocation and continue escaping",
-      "Connect it to another EEBD"
-    ],
-    "exp": "Once empty, the hood will trap CO2 and suffocate the user if not removed.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_234"
-  },
-  {
-    "q": "What is the primary maintenance task for SCBA sets by approved shore technicians?",
-    "a": "Annual inspection, calibration of demand valves, and hydrostatic cylinder testing",
-    "opts": [
-      "Refilling the air only",
-      "Repainting the cylinders",
-      "Annual inspection, calibration of demand valves, and hydrostatic cylinder testing",
-      "Washing the harness straps"
-    ],
-    "exp": "Class rules require certified technicians to verify the pneumatic systems annually.",
-    "cat": "EEBD/SCBA",
-    "id": "T21_235"
-  },
-  {
-    "q": "What is the minimum speed required for a standard Rescue Boat?",
-    "a": "6 knots",
-    "opts": [
-      "15 knots",
-      "3 knots",
-      "6 knots",
-      "8 knots"
-    ],
-    "exp": "A standard rescue boat must maintain at least 6 knots for 4 hours.",
-    "cat": "Rescue Boat",
-    "id": "T21_236"
-  },
-  {
-    "q": "What is the minimum speed required for a Fast Rescue Boat (FRB)?",
-    "a": "8 knots",
-    "opts": [
-      "6 knots",
-      "20 knots",
-      "35 knots",
-      "8 knots"
-    ],
-    "exp": "Fast rescue boats are designed for rapid casualty retrieval and must maintain at least 8 knots.",
-    "cat": "Rescue Boat",
-    "id": "T21_237"
-  },
-  {
-    "q": "What is the time limit for hoisting a fully loaded rescue boat back aboard?",
-    "a": "Maximum 5 minutes",
-    "opts": [
       "2 minutes",
-      "10 minutes",
-      "Maximum 5 minutes",
-      "30 minutes"
-    ],
-    "exp": "SOLAS requires the davit winch motor to recover the loaded boat within 5 minutes.",
-    "cat": "Rescue Boat",
-    "id": "T21_238"
-  },
-  {
-    "q": "What is the primary purpose of an immersion suit?",
-    "a": "To protect against hypothermia in cold water",
-    "opts": [
-      "To protect against hypothermia in cold water",
-      "To act as a diving suit",
-      "To protect against fire",
-      "To prevent shark attacks"
-    ],
-    "exp": "Immersion suits insulate the body, greatly extending survival time in freezing water.",
-    "cat": "Rescue Boat",
-    "id": "T21_239"
-  },
-  {
-    "q": "How quickly must an immersion suit be donned (including lifejacket)?",
-    "a": "Within 2 minutes",
-    "opts": [
-      "Within 2 minutes",
-      "30 seconds",
-      "1 minute",
+      "3 minutes",
       "5 minutes"
     ],
-    "exp": "Crew must practice donning the suit unassisted to meet the SOLAS 2-minute requirement.",
-    "cat": "Rescue Boat",
-    "id": "T21_240"
+    "exp": "Buoyant smoke signals emit smoke for a minimum of 3 minutes.",
+    "cat": "PYRO",
+    "id": "T21A_127"
   },
   {
-    "q": "What is the thermal protection standard for an immersion suit?",
-    "a": "Core temperature must not drop more than 2\u00b0C (stay > 34\u00b0C) after 6 hours in 0-2\u00b0C water",
+    "q": "How many buoyant smoke signals are carried in a lifeboat?",
+    "a": "2",
     "opts": [
-      "No standard exists",
-      "Core temp stays > 30\u00b0C for 1 hour",
-      "Core temperature must not drop more than 2\u00b0C (stay > 34\u00b0C) after 6 hours in 0-2\u00b0C water",
-      "No temperature drop after 24 hours"
-    ],
-    "exp": "The suit must provide high insulation to sustain life for 6 hours in freezing conditions.",
-    "cat": "Rescue Boat",
-    "id": "T21_242"
-  },
-  {
-    "q": "What new test is mandatory for lifejackets supplied after January 1, 2026?",
-    "a": "24-hour buoyancy retention and 5-second self-righting stability test",
-    "opts": [
-      "100-meter drop test",
-      "Fire resistance test",
-      "Acid resistance test",
-      "24-hour buoyancy retention and 5-second self-righting stability test"
-    ],
-    "exp": "Ensures lifejackets don't absorb water and can turn an unconscious person face-up.",
-    "cat": "Rescue Boat",
-    "id": "T21_243"
-  },
-  {
-    "q": "What is the minimum buoyancy requirement for an adult lifejacket?",
-    "a": "150 N (Newtons)",
-    "opts": [
-      "150 N",
-      "250 N",
-      "50 N",
-      "100 N"
-    ],
-    "exp": "Standard adult lifejackets must provide at least 150 Newtons of buoyancy.",
-    "cat": "Rescue Boat",
-    "id": "T21_245"
-  },
-  {
-    "q": "How many EPIRBs (Emergency Position Indicating Radio Beacons) are required on a cargo ship?",
-    "a": "1 (Category I, float-free)",
-    "opts": [
-      "1 (Category I, float-free)",
-      "2",
-      "One in each lifeboat",
-      "4"
-    ],
-    "exp": "Ships must carry one main float-free EPIRB, typically mounted on the bridge wing.",
-    "cat": "Rescue Boat",
-    "id": "T21_246"
-  },
-  {
-    "q": "What is the minimum transmission time for an activated EPIRB?",
-    "a": "48 hours",
-    "opts": [
-      "48 hours",
-      "12 hours",
-      "96 hours",
-      "24 hours"
-    ],
-    "exp": "The EPIRB battery must sustain continuous distress signal transmission for at least 48 hours.",
-    "cat": "Rescue Boat",
-    "id": "T21_247"
-  },
-  {
-    "q": "How many SARTs (Search and Rescue Transponders) are required on a vessel over 500 GT?",
-    "a": "Minimum 2 (one per side)",
-    "opts": [
-      "3",
       "1",
-      "Minimum 2 (one per side)",
-      "4"
+      "2",
+      "4",
+      "6"
     ],
-    "exp": "Vessels over 500 GT must carry at least two SARTs to be taken into survival craft.",
-    "cat": "Rescue Boat",
-    "id": "T21_248"
+    "exp": "A lifeboat must carry 2 buoyant smoke signals.",
+    "cat": "PYRO",
+    "id": "T21A_128"
   },
   {
-    "q": "What is the operational battery requirement for a SART?",
-    "a": "96 hours in standby mode plus 8 hours continuous transmission",
+    "q": "What is the expiry period for all pyrotechnics from their date of manufacture?",
+    "a": "3-year expiry",
     "opts": [
-      "12 hours total",
-      "48 hours standby only",
-      "96 hours in standby mode plus 8 hours continuous transmission",
-      "24 hours transmit"
+      "1-year expiry",
+      "2-year expiry",
+      "3-year expiry",
+      "5-year expiry"
     ],
-    "exp": "The SART must survive 4 days waiting for a radar ping, then transmit actively for 8 hours.",
-    "cat": "Rescue Boat",
-    "id": "T21_249"
+    "exp": "All pyrotechnics have a 3-year expiry from the date of manufacture.",
+    "cat": "PYRO",
+    "id": "T21A_129"
   },
   {
-    "q": "What vessels are required to carry Fast Rescue Boats (FRBs) instead of standard rescue boats?",
-    "a": "Passenger ships and some offshore vessels",
+    "q": "What is the correct procedure for disposing of expired pyrotechnics?",
+    "a": "return to approved disposal facility ashore",
     "opts": [
-      "Passenger ships and some offshore vessels",
-      "Bulk carriers",
-      "Oil tankers",
-      "Container ships"
+      "discard at sea",
+      "burn in the ship's incinerator",
+      "return to approved disposal facility ashore",
+      "use them during the weekly abandon ship drill"
     ],
-    "exp": "Passenger ships require FRBs for rapid deployment and retrieval.",
-    "cat": "Rescue Boat",
-    "id": "T21_250"
+    "exp": "Expired pyrotechnics must not be discarded at sea; they must be retained for approved shore disposal.",
+    "cat": "PYRO",
+    "id": "T21A_130"
   },
   {
-    "q": "What is the flash rate of an immersion suit survivor light?",
-    "a": "50-70 flashes per minute",
+    "q": "Up to what distance can a parachute flare be visible?",
+    "a": "40 km",
     "opts": [
-      "10-20 flashes per minute",
-      "50-70 flashes per minute",
-      "100-120 flashes per minute",
-      "Continuous beam (no flash)"
+      "10 km",
+      "20 km",
+      "40 km",
+      "100 km"
     ],
-    "exp": "The light flashes 50 to 70 times a minute to catch the attention of rescuers.",
-    "cat": "Rescue Boat",
-    "id": "T21_251"
+    "exp": "Parachute flares are visible up to 40 km for long-range alerting.",
+    "cat": "PYRO",
+    "id": "T21A_131"
   },
   {
-    "q": "How often are immersion suits required to undergo a hydrostatic pressure test at a service station?",
-    "a": "Typically every 3 years",
+    "q": "What is the primary use for a buoyant smoke signal?",
+    "a": "Daytime helicopter wind direction indication and position marking.",
     "opts": [
-      "Never",
-      "Monthly",
-      "Typically every 3 years",
-      "Annually"
+      "Long-range alerting at night.",
+      "Daytime helicopter wind direction indication and position marking.",
+      "Close-range location marking at night.",
+      "To signal other lifeboats to gather."
     ],
-    "exp": "To ensure seams and zippers remain watertight, suits are pressure tested periodically.",
-    "cat": "Rescue Boat",
-    "id": "T21_252"
+    "exp": "Smoke signals are for daytime use to indicate wind direction for helicopters and mark position.",
+    "cat": "PYRO",
+    "id": "T21A_132"
   },
   {
-    "q": "What equipment is standard inside a standard Rescue Boat?",
-    "a": "Engine, painter line, bailer, and first aid kit",
+    "q": "How should a hand flare be held when activated?",
+    "a": "Held in outstretched arm, downwind.",
     "opts": [
-      "Parachute flares only",
-      "Sonar and radar",
-      "Engine, painter line, bailer, and first aid kit",
-      "Water desalination plant"
+      "Pointed vertically upwards.",
+      "Thrown into the water immediately.",
+      "Held in outstretched arm, downwind.",
+      "Mounted to the lifeboat canopy."
     ],
-    "exp": "Rescue boats carry basic equipment for retrieving people from the water and towing liferafts.",
-    "cat": "Rescue Boat",
-    "id": "T21_253"
+    "exp": "A hand flare should be held in an outstretched arm, downwind to avoid sparks and slag.",
+    "cat": "PYRO",
+    "id": "T21A_133"
   },
   {
-    "q": "What is the ETO's responsibility regarding the new 2026 lifejacket amendments?",
-    "a": "Verify with the supplier that replacement lifejackets ordered are type-approved to the new standard",
+    "q": "Where should pyrotechnics be stored on the ship?",
+    "a": "Dedicated, dry, ventilated pyrotechnic locker.",
     "opts": [
-      "Conduct the 24-hour buoyancy test onboard",
-      "Verify with the supplier that replacement lifejackets ordered are type-approved to the new standard",
-      "Modify old lifejackets to meet the standard",
-      "Throw away all pre-2026 lifejackets immediately"
+      "In the Chief Officer's cabin.",
+      "Next to the main engine fuel purifiers.",
+      "Dedicated, dry, ventilated pyrotechnic locker.",
+      "On the open deck in a mesh basket."
     ],
-    "exp": "The ETO must ensure procurement orders specify the new type-approved models.",
-    "cat": "Rescue Boat",
-    "id": "T21_254"
+    "exp": "Pyrotechnics must be stored in a dedicated, dry, ventilated locker away from heat and accommodation.",
+    "cat": "PYRO",
+    "id": "T21A_134"
   },
   {
-    "q": "What visibility range is required for the immersion suit location light?",
-    "a": "Minimum 2 nautical miles in clear dark conditions",
+    "q": "What specific feature is required of a hand flare for survival use?",
+    "a": "Waterproof",
     "opts": [
-      "5 nautical miles",
-      "1 nautical mile",
-      "0.5 nautical miles",
-      "Minimum 2 nautical miles in clear dark conditions"
+      "Floats on water",
+      "Waterproof",
+      "Rocket-propelled",
+      "Produces smoke simultaneously"
     ],
-    "exp": "The flashing light must be powerful enough to be spotted by vessels 2 miles away at night.",
-    "cat": "Rescue Boat",
-    "id": "T21_255"
+    "exp": "Hand flares must be waterproof to function in a maritime survival environment.",
+    "cat": "PYRO",
+    "id": "T21A_135"
   },
   {
-    "q": "What is the minimum capacity of a rescue boat?",
-    "a": "At least 5 seated persons and 1 lying down",
+    "q": "Within what time must an immersion suit be donnable (including the lifejacket)?",
+    "a": "2 minutes",
     "opts": [
-      "2 seated persons",
-      "20 standing persons",
-      "10 seated persons",
-      "At least 5 seated persons and 1 lying down"
+      "1 minute",
+      "2 minutes",
+      "5 minutes",
+      "10 minutes"
     ],
-    "exp": "It must hold a rescue crew and at least one injured casualty lying on a stretcher.",
-    "cat": "Rescue Boat",
-    "id": "T21_256"
+    "exp": "An immersion suit must be donnable within 2 minutes without assistance.",
+    "cat": "SUIT",
+    "id": "T21A_136"
   },
   {
-    "q": "How quickly must a Fast Rescue Boat (FRB) be capable of being launched?",
-    "a": "Within 5 minutes",
+    "q": "What is the thermal performance requirement for an immersion suit in 0–2°C water?",
+    "a": "maintain body core temperature above 34°C after 6 hours",
     "opts": [
-      "Within 5 minutes",
-      "Immediately via free-fall",
-      "There is no time limit",
-      "Within 15 minutes"
+      "maintain body core temperature above 36°C after 2 hours",
+      "maintain body core temperature above 34°C after 6 hours",
+      "prevent shivering for 12 hours",
+      "keep the wearer completely dry for 24 hours"
     ],
-    "exp": "FRBs must be ready for highly rapid deployment to save persons in the water.",
-    "cat": "Rescue Boat",
-    "id": "T21_257"
+    "exp": "The suit must maintain body core temperature above 34°C after 6 hours in calm water at 0–2°C.",
+    "cat": "SUIT",
+    "id": "T21A_137"
   },
   {
-    "q": "What is the maximum lowering speed for a rescue boat?",
-    "a": "Capped at 1.3 metres per second",
+    "q": "Within what time must an immersion suit turn an unconscious person face-up?",
+    "a": "5 seconds",
     "opts": [
-      "Gravity free-fall only",
-      "3.0 m/s",
-      "Capped at 1.3 metres per second",
-      "0.5 m/s"
+      "2 seconds",
+      "5 seconds",
+      "10 seconds",
+      "30 seconds"
     ],
-    "exp": "Like lifeboats, the new amendment limits the lowering speed to prevent hard impact.",
-    "cat": "Rescue Boat",
-    "id": "T21_258"
+    "exp": "The immersion suit (and lifejacket) must right an unconscious person face-up within 5 seconds.",
+    "cat": "SUIT",
+    "id": "T21A_138"
   },
   {
-    "q": "What must an immersion suit cover?",
-    "a": "The whole body except the face",
+    "q": "How is the monthly integrity test for an immersion suit performed?",
+    "a": "Exhale into the suit via the blow-up valve",
     "opts": [
-      "The whole body except the face",
-      "Legs and arms only",
-      "Only the torso",
-      "The head only"
+      "Connect it to an air compressor",
+      "Submerge the entire suit in a water tank",
+      "Exhale into the suit via the blow-up valve",
+      "Send it ashore for hydraulic testing"
     ],
-    "exp": "It is a full-body suit protecting against severe cold water shock.",
-    "cat": "Rescue Boat",
-    "id": "T21_259"
+    "exp": "The monthly integrity check involves closing the zip and exhaling into the suit via the blow-up valve to check for pressure leaks.",
+    "cat": "SUIT",
+    "id": "T21A_139"
   },
   {
-    "q": "Can an immersion suit be worn without a lifejacket?",
-    "a": "Only if the suit itself provides the required buoyancy (150 N) and is approved as a combined suit",
+    "q": "How often must an immersion suit be serviced at an approved shore station?",
+    "a": "3 years",
     "opts": [
-      "Yes, if the wearer can swim",
-      "Only if the suit itself provides the required buoyancy (150 N) and is approved as a combined suit",
-      "Yes, always",
-      "No, never"
+      "Annually",
+      "2 years",
+      "3 years",
+      "5 years"
     ],
-    "exp": "Some suits require a separate lifejacket, while others have built-in buoyancy.",
-    "cat": "Rescue Boat",
-    "id": "T21_260"
+    "exp": "Immersion suits require servicing at an approved shore station every 3 years for full hydraulic pressure tests.",
+    "cat": "SUIT",
+    "id": "T21A_140"
   },
   {
-    "q": "What is the EPIRB hydrostatic release expiry time?",
-    "a": "Typically 2 years",
+    "q": "What is a Thermal Protective Aid (TPA)?",
+    "a": "a lightweight waterproof bag/wrapper made of low thermal conductance material",
     "opts": [
-      "1 year",
+      "a thick neoprene suit with boots attached",
+      "a heated blanket plugged into the lifeboat battery",
+      "a lightweight waterproof bag/wrapper made of low thermal conductance material",
+      "a chemically activated warming pad"
+    ],
+    "exp": "A TPA is a lightweight waterproof bag/wrapper covering the person (except face) to prevent hypothermia.",
+    "cat": "SUIT",
+    "id": "T21A_141"
+  },
+  {
+    "q": "What is the SOLAS requirement for TPAs in a lifeboat?",
+    "a": "Min 10% of the lifeboat's capacity, or min 2 TPAs per lifeboat, whichever is greater",
+    "opts": [
+      "100% of the lifeboat's capacity",
+      "Min 10% of the lifeboat's capacity, or min 2 TPAs per lifeboat, whichever is greater",
+      "Exactly 5 per lifeboat",
+      "None, if everyone has an immersion suit"
+    ],
+    "exp": "The requirement is a minimum of 10% of capacity or 2 TPAs, whichever is greater, regardless of immersion suit carriage.",
+    "cat": "SUIT",
+    "id": "T21A_142"
+  },
+  {
+    "q": "Why is a TPA required in addition to immersion suits?",
+    "a": "provides thermal protection for persons who cannot (medically or physically) don a full immersion suit",
+    "opts": [
+      "Because immersion suits leak after 1 hour",
+      "provides thermal protection for persons who cannot (medically or physically) don a full immersion suit",
+      "To serve as a body bag if a survivor dies",
+      "To wrap around the lifeboat engine to keep it warm"
+    ],
+    "exp": "TPAs are quick-don and provide protection for injured or physically incapable persons who cannot don a full immersion suit.",
+    "cat": "SUIT",
+    "id": "T21A_143"
+  },
+  {
+    "q": "What colour must a TPA be?",
+    "a": "bright orange or red",
+    "opts": [
+      "bright yellow",
+      "bright orange or red",
+      "black or navy blue",
+      "white with reflective strips"
+    ],
+    "exp": "A TPA must be highly visible, specified as bright orange or red.",
+    "cat": "SUIT",
+    "id": "T21A_144"
+  },
+  {
+    "q": "Under the 2026 SOLAS amendment, what is the minimum buoyancy requirement for a lifejacket?",
+    "a": "150 N",
+    "opts": [
+      "100 N",
+      "150 N",
+      "200 N",
+      "275 N"
+    ],
+    "exp": "The new 2026 amendment specifies a 24-hour in-water buoyancy retention test maintaining a minimum of 150 N.",
+    "cat": "SUIT",
+    "id": "T21A_145"
+  },
+  {
+    "q": "For how long must the new lifejacket test retain its minimum buoyancy?",
+    "a": "24 hours",
+    "opts": [
+      "6 hours",
+      "12 hours",
+      "24 hours",
+      "48 hours"
+    ],
+    "exp": "The 2026 amendment includes an in-water buoyancy retention test for 24 hours.",
+    "cat": "SUIT",
+    "id": "T21A_146"
+  },
+  {
+    "q": "What is the minimum operational duration for a water-activated lifejacket light?",
+    "a": "min 8 h",
+    "opts": [
+      "min 2 h",
+      "min 4 h",
+      "min 8 h",
+      "min 12 h"
+    ],
+    "exp": "The water-activated light on a lifejacket must operate for a minimum of 8 hours.",
+    "cat": "SUIT",
+    "id": "T21A_147"
+  },
+  {
+    "q": "What maintenance should be performed on the immersion suit zip?",
+    "a": "Lubricate zip with approved wax/lubricant",
+    "opts": [
+      "Paint over it with marine enamel",
+      "Spray it with WD-40",
+      "Lubricate zip with approved wax/lubricant",
+      "Leave it completely dry and unoiled"
+    ],
+    "exp": "The zip must be lubricated with approved wax/lubricant to ensure smooth operation and a watertight seal.",
+    "cat": "SUIT",
+    "id": "T21A_148"
+  },
+  {
+    "q": "What part of the body does a TPA NOT cover?",
+    "a": "face",
+    "opts": [
+      "hands",
+      "feet",
+      "head",
+      "face"
+    ],
+    "exp": "The TPA covers the person from head to toe except for the face.",
+    "cat": "SUIT",
+    "id": "T21A_149"
+  },
+  {
+    "q": "Where is retroreflective tape located on the immersion suit?",
+    "a": "chest and back",
+    "opts": [
+      "only on the boots",
+      "chest and back",
+      "around the wrists only",
+      "covering the entire face seal"
+    ],
+    "exp": "Retroreflective tape is located on the chest and back of the immersion suit.",
+    "cat": "SUIT",
+    "id": "T21A_150"
+  },
+  {
+    "q": "What is the sole purpose of an EEBD?",
+    "a": "ESCAPE ONLY",
+    "opts": [
+      "Firefighting",
+      "Entering enclosed spaces",
+      "ESCAPE ONLY",
+      "Underwater inspection"
+    ],
+    "exp": "The Emergency Escape Breathing Device (EEBD) is for ESCAPE ONLY from toxic/smoke-filled atmospheres, NOT for firefighting.",
+    "cat": "SCBA",
+    "id": "T21A_151"
+  },
+  {
+    "q": "What is the minimum duration of breathable air provided by an EEBD?",
+    "a": "10 minutes",
+    "opts": [
+      "5 minutes",
+      "10 minutes",
+      "15 minutes",
+      "30 minutes"
+    ],
+    "exp": "An EEBD must provide a minimum of 10 minutes of breathable air.",
+    "cat": "SCBA",
+    "id": "T21A_152"
+  },
+  {
+    "q": "How does an EEBD provide breathable air to the user?",
+    "a": "positive pressure inside hood",
+    "opts": [
+      "positive pressure inside hood",
+      "demand valve mask over nose and mouth",
+      "chemical oxygen generation via a mouthpiece",
+      "filtering ambient air through a charcoal canister"
+    ],
+    "exp": "The EEBD inflates a hood placed over the head, maintaining a positive pressure of breathable air inside the hood.",
+    "cat": "SCBA",
+    "id": "T21A_153"
+  },
+  {
+    "q": "What is the minimum number of EEBDs required in a space where crew regularly work?",
+    "a": "2 per space",
+    "opts": [
+      "1 per space",
+      "2 per space",
+      "3 per space",
+      "1 per deck level"
+    ],
+    "exp": "There must be a minimum of 2 EEBDs per space where crew regularly work (Engine Room, ECR, Bridge, etc.).",
+    "cat": "SCBA",
+    "id": "T21A_154"
+  },
+  {
+    "q": "What is the minimum duration for an SCBA?",
+    "a": "30 minutes",
+    "opts": [
+      "10 minutes",
+      "20 minutes",
+      "30 minutes",
+      "60 minutes"
+    ],
+    "exp": "A Self-Contained Breathing Apparatus (SCBA) must provide a minimum of 30 minutes of air.",
+    "cat": "SCBA",
+    "id": "T21A_155"
+  },
+  {
+    "q": "Why does an SCBA mask maintain positive pressure?",
+    "a": "Prevents ingress of toxic gases even if mask slightly dislodged",
+    "opts": [
+      "To force oxygen into the lungs faster",
+      "Prevents ingress of toxic gases even if mask slightly dislodged",
+      "To prevent the visor from fogging up",
+      "To make exhaling easier"
+    ],
+    "exp": "Positive pressure ensures that if the seal is briefly broken, clean air leaks out rather than toxic gas leaking in.",
+    "cat": "SCBA",
+    "id": "T21A_156"
+  },
+  {
+    "q": "What is the SCBA carriage requirement for a cargo ship?",
+    "a": "2 sets per cargo ship",
+    "opts": [
+      "1 set per cargo ship",
+      "2 sets per cargo ship",
+      "4 sets per cargo ship",
+      "1 set per fire hydrant"
+    ],
+    "exp": "At least 2 SCBA sets are required per cargo ship, kept in readily accessible locations.",
+    "cat": "SCBA",
+    "id": "T21A_157"
+  },
+  {
+    "q": "How often must an SCBA cylinder undergo a hydrostatic test?",
+    "a": "5 years",
+    "opts": [
+      "Annually",
+      "2 years",
       "5 years",
-      "Typically 2 years",
       "10 years"
     ],
-    "exp": "Like liferaft HRUs, EPIRB releases expire and must be replaced every two years.",
-    "cat": "Rescue Boat",
-    "id": "T21_261"
+    "exp": "The SCBA cylinder requires a hydrostatic pressure test every 5 years.",
+    "cat": "SCBA",
+    "id": "T21A_158"
   },
   {
-    "q": "What frequency is used for the GMDSS portable VHF radiotelephones?",
-    "a": "VHF Marine Band (156-174 MHz), particularly Channel 16",
+    "q": "At what approximate pressure does the SCBA low-pressure alarm activate?",
+    "a": "55 bar",
     "opts": [
-      "9 GHz radar band",
-      "UHF Band",
-      "Medium Frequency (MF)",
-      "VHF Marine Band (156-174 MHz), particularly Channel 16"
+      "20 bar",
+      "55 bar",
+      "100 bar",
+      "150 bar"
     ],
-    "exp": "They communicate on standard VHF marine channels for distress and coordination.",
-    "cat": "Rescue Boat",
-    "id": "T21_262"
+    "exp": "The SCBA low-pressure whistle alarm typically activates around 55 bar.",
+    "cat": "SCBA",
+    "id": "T21A_159"
   },
   {
-    "q": "What defines the required number of lifejackets on a cargo ship?",
-    "a": "One for every person onboard, plus additional for watchkeepers and remotely located persons",
+    "q": "What must be checked on the EEBD during the monthly inspection?",
+    "a": "verify cylinder pressure indicator (green zone)",
     "opts": [
-      "150% of the passenger limit",
-      "Only enough for the bridge crew",
-      "One for every person onboard, plus additional for watchkeepers and remotely located persons",
-      "Exactly 10 per ship"
+      "verify cylinder pressure indicator (green zone)",
+      "test the low pressure whistle",
+      "breathe from it for 30 seconds",
+      "hydrostatic test the cylinder"
     ],
-    "exp": "SOLAS requires lifejackets for all, plus spares on the bridge, engine control room, and forward stations.",
-    "cat": "Rescue Boat",
-    "id": "T21_263"
+    "exp": "The monthly check for an EEBD involves visually verifying the cylinder pressure indicator is in the green zone.",
+    "cat": "SCBA",
+    "id": "T21A_160"
   },
   {
-    "q": "How is a SART tested during routine maintenance?",
-    "a": "Using the self-test switch which briefly interacts with the ship's 9GHz radar",
+    "q": "How do you check the SCBA mask seal during donning?",
+    "a": "cover demand valve inlet and inhale - mask should collapse slightly and hold",
     "opts": [
-      "By leaving it on continuously",
-      "Using the self-test switch which briefly interacts with the ship's 9GHz radar",
-      "By submerging it in water",
-      "By dropping it from the bridge"
+      "exhale forcefully and listen for whistling",
+      "cover demand valve inlet and inhale - mask should collapse slightly and hold",
+      "spray soapy water around the edges",
+      "ask your partner if it looks tight"
     ],
-    "exp": "The self-test function verifies battery and transmitter health without causing a false alarm.",
-    "cat": "Rescue Boat",
-    "id": "T21_264"
+    "exp": "Covering the inlet and inhaling creates suction; if the mask collapses and holds, there are no air leaks at the face seal.",
+    "cat": "SCBA",
+    "id": "T21A_161"
   },
   {
-    "q": "What provides power for the embarkation station emergency lighting during a total blackout?",
-    "a": "The Emergency Generator or Transitional Battery Source",
+    "q": "What type of air compressor MUST be used to recharge SCBA and lifeboat air bottles?",
+    "a": "Breathing Quality air compressor",
     "opts": [
-      "Solar panels",
-      "The Emergency Generator or Transitional Battery Source",
-      "The main engine",
-      "The lifeboat batteries"
+      "Ship's main service air compressor",
+      "Industrial pneumatic compressor",
+      "Breathing Quality air compressor",
+      "Emergency starting air compressor"
     ],
-    "exp": "Emergency lighting is wired to the ESB to ensure the deck is lit when abandoning ship.",
-    "cat": "Rescue Boat",
-    "id": "T21_265"
+    "exp": "Only a Breathing Quality air compressor (Class E) may be used; industrial air contains toxic oil aerosols.",
+    "cat": "SCBA",
+    "id": "T21A_162"
+  },
+  {
+    "q": "What is a key difference in usability between EEBD and SCBA?",
+    "a": "EEBD is single use only, SCBA is reusable",
+    "opts": [
+      "EEBD is for firefighting, SCBA is for escape",
+      "EEBD is reusable, SCBA is single use only",
+      "EEBD is single use only, SCBA is reusable",
+      "EEBD uses a mask, SCBA uses a hood"
+    ],
+    "exp": "The EEBD is a single-use escape device, whereas the SCBA is reusable after refilling the cylinder.",
+    "cat": "SCBA",
+    "id": "T21A_163"
+  },
+  {
+    "q": "What is the pre-use pressure requirement for an SCBA cylinder?",
+    "a": "≥90% of rated",
+    "opts": [
+      "≥50% of rated",
+      "≥75% of rated",
+      "≥90% of rated",
+      "Exactly 100% of rated"
+    ],
+    "exp": "Before use, the SCBA cylinder pressure must be checked to be ≥90% of its rated pressure (e.g., 200-300 bar).",
+    "cat": "SCBA",
+    "id": "T21A_164"
+  },
+  {
+    "q": "How is an EEBD activated?",
+    "a": "Pull cord",
+    "opts": [
+      "Turning a handwheel valve",
+      "Pull cord",
+      "Pressing a demand valve button",
+      "Inhaling sharply"
+    ],
+    "exp": "The EEBD is activated simply by pulling a cord, which immediately inflates the hood with compressed air.",
+    "cat": "SCBA",
+    "id": "T21A_165"
+  },
+  {
+    "q": "Where is the power supply for the embarkation station lighting fed from?",
+    "a": "Emergency Switchboard (ESB)",
+    "opts": [
+      "Main Switchboard (MSB)",
+      "Emergency Switchboard (ESB)",
+      "Local 24V battery box",
+      "Direct from the shore connection"
+    ],
+    "exp": "Embarkation lighting must remain operational during a main blackout, so it is fed directly from the Emergency Switchboard.",
+    "cat": "MOB",
+    "id": "T21A_166"
+  },
+  {
+    "q": "Which specific areas must the embarkation lighting illuminate?",
+    "a": "embarkation station deck area, the embarkation ladder, the sea surface below",
+    "opts": [
+      "only the deck area and the lifeboat canopy",
+      "embarkation station deck area, the embarkation ladder, the sea surface below",
+      "the bridge wings and the forward mast",
+      "the entire ship's side from bow to stern"
+    ],
+    "exp": "It must illuminate the deck area, the ladder, and the sea surface below the davit to allow preparation in darkness.",
+    "cat": "MOB",
+    "id": "T21A_167"
+  },
+  {
+    "q": "At what height difference is an embarkation ladder required?",
+    "a": "exceeds 1.5 metres",
+    "opts": [
+      "exceeds 0.5 metres",
+      "exceeds 1.0 metres",
+      "exceeds 1.5 metres",
+      "exceeds 3.0 metres"
+    ],
+    "exp": "SOLAS Reg. III/11.7 requires an embarkation ladder where the height between the deck and light waterline exceeds 1.5 metres.",
+    "cat": "MOB",
+    "id": "T21A_168"
+  },
+  {
+    "q": "What is the minimum width of the rigid steps on an embarkation ladder?",
+    "a": "480 mm wide",
+    "opts": [
+      "300 mm wide",
+      "400 mm wide",
+      "480 mm wide",
+      "600 mm wide"
+    ],
+    "exp": "The wooden or GRP steps of the embarkation ladder must be a minimum of 480 mm wide.",
+    "cat": "MOB",
+    "id": "T21A_169"
+  },
+  {
+    "q": "What is the purpose of the MOB Marker (Dan buoy)?",
+    "a": "Provides a visible datum for the person in water and the bridge.",
+    "opts": [
+      "Transmits a 406 MHz signal to satellites.",
+      "Provides a visible datum for the person in water and the bridge.",
+      "Releases a dye marker only.",
+      "Acts as a life raft for 2 persons."
+    ],
+    "exp": "The Dan buoy provides a visible datum float with a staff, flag, and light to mark the MOB position.",
+    "cat": "MOB",
+    "id": "T21A_170"
+  },
+  {
+    "q": "What is the minimum number of lifebuoys required per ship according to SOLAS?",
+    "a": "8 lifebuoys per ship",
+    "opts": [
+      "4 lifebuoys per ship",
+      "6 lifebuoys per ship",
+      "8 lifebuoys per ship",
+      "12 lifebuoys per ship"
+    ],
+    "exp": "SOLAS requires a minimum of 8 lifebuoys per ship.",
+    "cat": "MOB",
+    "id": "T21A_171"
+  },
+  {
+    "q": "What is the minimum weight of a standard ring lifebuoy?",
+    "a": "2.5 kg",
+    "opts": [
+      "1.0 kg",
+      "2.5 kg",
+      "4.3 kg",
+      "5.0 kg"
+    ],
+    "exp": "A standard ring lifebuoy must weigh a minimum of 2.5 kg.",
+    "cat": "MOB",
+    "id": "T21A_172"
+  },
+  {
+    "q": "Pressing the MOB button on the GMDSS console performs which action?",
+    "a": "broadcasts MOB digital selective calling (DSC) on VHF Ch 70",
+    "opts": [
+      "automatically drops all lifebuoys",
+      "broadcasts MOB digital selective calling (DSC) on VHF Ch 70",
+      "stops the main engine immediately",
+      "transmits a 9 GHz radar signal"
+    ],
+    "exp": "The GMDSS MOB button records the GPS position and broadcasts a DSC alert on VHF Ch 70 with the vessel's MMSI.",
+    "cat": "MOB",
+    "id": "T21A_173"
+  },
+  {
+    "q": "What is the purpose of the MOB smoke float?",
+    "a": "gives smoke for helicopter wind direction and visual contact in high seas",
+    "opts": [
+      "creates a smoke screen for security",
+      "gives smoke for helicopter wind direction and visual contact in high seas",
+      "warms the person in the water",
+      "chokes off oxygen to extinguish a fire"
+    ],
+    "exp": "The smoke float throws smoke to provide visual contact in high seas and indicates wind direction for helicopter rescue.",
+    "cat": "MOB",
+    "id": "T21A_174"
+  },
+  {
+    "q": "What is a key action for the lookout during an MOB event?",
+    "a": "never lose sight of person",
+    "opts": [
+      "run to fetch a lifejacket",
+      "jump in after them",
+      "never lose sight of person",
+      "go down to the rescue boat immediately"
+    ],
+    "exp": "The critical role of the lookout is to point at and never lose sight of the person in the water.",
+    "cat": "MOB",
+    "id": "T21A_175"
+  },
+  {
+    "q": "How often does the ETO test the embarkation lighting?",
+    "a": "monthly",
+    "opts": [
+      "weekly",
+      "monthly",
+      "quarterly",
+      "annually"
+    ],
+    "exp": "The ETO must test the embarkation lighting monthly by switching the ESB to emergency power.",
+    "cat": "MOB",
+    "id": "T21A_176"
+  },
+  {
+    "q": "What fraction of the ship's lifebuoys must be equipped with self-igniting lights?",
+    "a": "At least half",
+    "opts": [
+      "All of them",
+      "At least half",
+      "Exactly 2",
+      "At least a quarter"
+    ],
+    "exp": "At least half of the total lifebuoys must be fitted with self-igniting lights.",
+    "cat": "MOB",
+    "id": "T21A_177"
+  },
+  {
+    "q": "How are the bridge wing MOB markers (Dan buoys) typically deployed?",
+    "a": "Automatically deploys via quick-release mounting when grabbed",
+    "opts": [
+      "Must be manually thrown over the rail",
+      "Automatically deploys via quick-release mounting when grabbed",
+      "Fired from a pneumatic launcher",
+      "Lowered slowly via a dedicated winch"
+    ],
+    "exp": "They are held in quick-release mountings and deploy automatically (dropping into the sea) when released/grabbed.",
+    "cat": "MOB",
+    "id": "T21A_178"
+  },
+  {
+    "q": "What is required on the steps and rails of the embarkation ladder?",
+    "a": "retroreflective markings",
+    "opts": [
+      "anti-fouling paint",
+      "retroreflective markings",
+      "heating elements",
+      "steel reinforcement"
+    ],
+    "exp": "The steps and rails of the embarkation ladder must have retroreflective markings to aid visibility.",
+    "cat": "MOB",
+    "id": "T21A_179"
+  },
+  {
+    "q": "What system records the GPS position of the MOB event when the button is pressed?",
+    "a": "GMDSS / AIS",
+    "opts": [
+      "VDR only",
+      "Engine telegraph",
+      "GMDSS / AIS",
+      "Auto-pilot"
+    ],
+    "exp": "Pressing the MOB button on the GMDSS or AIS console immediately records the GPS position with a timestamp.",
+    "cat": "MOB",
+    "id": "T21A_180"
+  },
+  {
+    "q": "What is the primary transmitting frequency of an EPIRB?",
+    "a": "406 MHz",
+    "opts": [
+      "156.8 MHz",
+      "121.5 MHz",
+      "406 MHz",
+      "9 GHz"
+    ],
+    "exp": "The EPIRB transmits its primary global distress alert to satellites on 406 MHz.",
+    "cat": "SART",
+    "id": "T21A_181"
+  },
+  {
+    "q": "What frequency does a SART operate on?",
+    "a": "9 GHz",
+    "opts": [
+      "406 MHz",
+      "121.5 MHz",
+      "9 GHz",
+      "14 GHz"
+    ],
+    "exp": "A SART is a radar transponder that operates on the 9 GHz (X-band) radar frequency.",
+    "cat": "SART",
+    "id": "T21A_182"
+  },
+  {
+    "q": "What is the minimum required battery life for an EPIRB while transmitting?",
+    "a": "48 hours",
+    "opts": [
+      "12 hours",
+      "24 hours",
+      "48 hours",
+      "96 hours"
+    ],
+    "exp": "An EPIRB must be capable of continuous transmission for a minimum of 48 hours.",
+    "cat": "SART",
+    "id": "T21A_183"
+  },
+  {
+    "q": "What is the battery life requirement for a SART?",
+    "a": "96 hours standby + 8 hours transmitting",
+    "opts": [
+      "48 hours continuous transmitting",
+      "96 hours standby + 8 hours transmitting",
+      "24 hours standby + 4 hours transmitting",
+      "120 hours standby only"
+    ],
+    "exp": "A SART battery must last for 96 hours in standby mode followed by 8 hours of active transmitting.",
+    "cat": "SART",
+    "id": "T21A_184"
+  },
+  {
+    "q": "What is the minimum EPIRB carriage requirement for a ship according to SOLAS?",
+    "a": "1 per ship",
+    "opts": [
+      "1 per ship",
+      "2 per ship",
+      "1 per survival craft",
+      "1 per deck"
+    ],
+    "exp": "SOLAS requires a minimum of 1 EPIRB per ship, typically in a float-free bracket on the bridge wing.",
+    "cat": "SART",
+    "id": "T21A_185"
+  },
+  {
+    "q": "What is the minimum SART carriage requirement for a ship > 500 GT?",
+    "a": "2 per ship",
+    "opts": [
+      "1 per ship",
+      "2 per ship",
+      "1 per lifeboat",
+      "4 per ship"
+    ],
+    "exp": "Ships over 500 GT are required to carry a minimum of 2 SARTs.",
+    "cat": "SART",
+    "id": "T21A_186"
+  },
+  {
+    "q": "What is the approximate detection range of a SART by a surface ship's radar?",
+    "a": "5 nm",
+    "opts": [
+      "2 nm",
+      "5 nm",
+      "10 nm",
+      "20 nm"
+    ],
+    "exp": "A SART can be detected by a surface ship's X-band radar at an approximate range of 5 nm.",
+    "cat": "SART",
+    "id": "T21A_187"
+  },
+  {
+    "q": "How often must the battery of an EPIRB be replaced?",
+    "a": "Every 5 years",
+    "opts": [
+      "Every 2 years",
+      "Every 3 years",
+      "Every 5 years",
+      "Every 10 years"
+    ],
+    "exp": "EPIRB batteries must be replaced every 5 years (or after any activation).",
+    "cat": "SART",
+    "id": "T21A_188"
+  },
+  {
+    "q": "At what depth does the HRU on an EPIRB activate to let it float free?",
+    "a": "1–4 m",
+    "opts": [
+      "0–1 m",
+      "1–4 m",
+      "5–8 m",
+      "10–15 m"
+    ],
+    "exp": "The EPIRB's HRU activates at a depth of 1–4 m to allow it to float free.",
+    "cat": "SART",
+    "id": "T21A_189"
+  },
+  {
+    "q": "How does a SART appear on an X-band radar display?",
+    "a": "12 dots",
+    "opts": [
+      "A solid line",
+      "A flashing cross",
+      "12 dots",
+      "3 concentric circles"
+    ],
+    "exp": "A SART responds to radar sweeps by creating a line of 12 dots on the radar PPI display.",
+    "cat": "SART",
+    "id": "T21A_190"
+  },
+  {
+    "q": "What vital administrative step must be taken for an EPIRB to be useful to an RCC?",
+    "a": "Must be registered with flag state",
+    "opts": [
+      "Must be registered with flag state",
+      "Must be linked to the ship's AIS",
+      "Must have the Master's signature on the casing",
+      "Must be calibrated daily"
+    ],
+    "exp": "An EPIRB must be registered with the flag state so the unique 15-digit code links to the vessel's details.",
+    "cat": "SART",
+    "id": "T21A_191"
+  },
+  {
+    "q": "What is the secondary homing frequency transmitted by an EPIRB for aircraft?",
+    "a": "121.5 MHz",
+    "opts": [
+      "156.8 MHz",
+      "121.5 MHz",
+      "9 GHz",
+      "1.6 GHz"
+    ],
+    "exp": "The EPIRB transmits a secondary aircraft homing signal on 121.5 MHz.",
+    "cat": "SART",
+    "id": "T21A_192"
+  },
+  {
+    "q": "What triggers the automatic activation of a SART?",
+    "a": "water immersion",
+    "opts": [
+      "water immersion",
+      "hydrostatic pressure at 4m",
+      "radar signal reception",
+      "satellite ping"
+    ],
+    "exp": "A SART activates automatically upon water immersion via a conductivity sensor.",
+    "cat": "SART",
+    "id": "T21A_193"
+  },
+  {
+    "q": "Who receives the distress alert transmitted by an EPIRB?",
+    "a": "Rescue Coordination Centre (RCC)",
+    "opts": [
+      "Only ships within 5 nm",
+      "Rescue Coordination Centre (RCC)",
+      "Port State Control only",
+      "The ship's company head office"
+    ],
+    "exp": "The 406 MHz signal goes via satellite to a Rescue Coordination Centre (RCC).",
+    "cat": "SART",
+    "id": "T21A_194"
+  },
+  {
+    "q": "How often is the EPIRB HRU replaced?",
+    "a": "Every 2 years",
+    "opts": [
+      "Annually",
+      "Every 2 years",
+      "Every 5 years",
+      "It does not have an HRU"
+    ],
+    "exp": "Like liferaft HRUs, the EPIRB HRU must be replaced every 2 years.",
+    "cat": "SART",
+    "id": "T21A_195"
+  },
+  {
+    "q": "What is the maximum permitted lowering speed for survival craft under the 2026 LSA amendment?",
+    "a": "1.3 m/s (78 m/min)",
+    "opts": [
+      "0.5 m/s (30 m/min)",
+      "1.0 m/s (60 m/min)",
+      "1.3 m/s (78 m/min)",
+      "2.0 m/s (120 m/min)"
+    ],
+    "exp": "The lowering speed limit is explicitly capped at 1.3 m/s (78 m/min) to prevent hard water impacts.",
+    "cat": "UPDA",
+    "id": "T21A_196"
+  },
+  {
+    "q": "What does the new 2026 hook safety design explicitly prevent?",
+    "a": "partially engaged hook will not hold weight",
+    "opts": [
+      "hooks rusting from seawater",
+      "hooks releasing while underwater",
+      "partially engaged hook will not hold weight",
+      "hooks freezing in cold weather"
+    ],
+    "exp": "The new design ensures that a partially engaged hook cannot support a load, preventing accidental drops.",
+    "cat": "UPDA",
+    "id": "T21A_197"
+  },
+  {
+    "q": "Under the Jan 2029 rules, what is the minimum ventilation rate for a totally enclosed lifeboat?",
+    "a": "5 m³/hr/person",
+    "opts": [
+      "2 m³/hr/person",
+      "5 m³/hr/person",
+      "10 m³/hr/person",
+      "20 m³/hr/person"
+    ],
+    "exp": "The dedicated ventilation system must provide a minimum of 5 m³/hr/person independent of the main engine.",
+    "cat": "UPDA",
+    "id": "T21A_198"
+  },
+  {
+    "q": "What is the ETO's responsibility regarding the 2029 lifeboat ventilation system?",
+    "a": "maintain the battery-backed fan motor and ducting",
+    "opts": [
+      "manually crank the fan during drills",
+      "maintain the battery-backed fan motor and ducting",
+      "ensure the engine exhaust powers the turbine",
+      "replace the oxygen cylinders"
+    ],
+    "exp": "The ETO is responsible for maintaining the battery-backed fan motor and ducting for the independent ventilation system.",
+    "cat": "UPDA",
+    "id": "T21A_199"
+  },
+  {
+    "q": "Under the 2026 amendment, lifejackets must pass a 24-hour retention test maintaining what buoyancy?",
+    "a": "150 N",
+    "opts": [
+      "100 N",
+      "150 N",
+      "200 N",
+      "275 N"
+    ],
+    "exp": "New lifejackets must pass a 24-hour buoyancy retention test maintaining a minimum of 150 N.",
+    "cat": "UPDA",
+    "id": "T21A_200"
+  },
+  {
+    "q": "How frequently must an abandon ship (muster) drill be conducted at sea?",
+    "a": "Weekly",
+    "opts": [
+      "Daily",
+      "Weekly",
+      "Monthly",
+      "Quarterly"
+    ],
+    "exp": "An abandon ship muster drill must be conducted weekly at sea with all crew mustered.",
+    "cat": "UPDA",
+    "id": "T21A_201"
+  },
+  {
+    "q": "How often must the lifeboat be lowered into the water and manoeuvred?",
+    "a": "Every 3 months",
+    "opts": [
+      "Weekly",
+      "Monthly",
+      "Every 3 months",
+      "Every 6 months"
+    ],
+    "exp": "The lifeboat must be lowered and manoeuvred in the water every 3 months.",
+    "cat": "UPDA",
+    "id": "T21A_202"
+  },
+  {
+    "q": "How often must a rescue boat be launched?",
+    "a": "Every month",
+    "opts": [
+      "Weekly",
+      "Every month",
+      "Every 3 months",
+      "Annually"
+    ],
+    "exp": "The rescue boat must be launched every month.",
+    "cat": "UPDA",
+    "id": "T21A_203"
+  },
+  {
+    "q": "How frequently should the EPIRB self-test be performed?",
+    "a": "Weekly",
+    "opts": [
+      "Daily",
+      "Weekly",
+      "Monthly",
+      "Annually"
+    ],
+    "exp": "The EPIRB self-test (on internal test mode only) should be performed weekly.",
+    "cat": "UPDA",
+    "id": "T21A_204"
+  },
+  {
+    "q": "How frequently should the SART self-test be performed?",
+    "a": "Monthly",
+    "opts": [
+      "Weekly",
+      "Monthly",
+      "Every 3 months",
+      "Annually"
+    ],
+    "exp": "The SART self-test, verifying light/audio response, must be performed monthly.",
+    "cat": "UPDA",
+    "id": "T21A_205"
+  },
+  {
+    "q": "How often must a free-fall lifeboat undergo a full launch?",
+    "a": "Every 6 months",
+    "opts": [
+      "Every month",
+      "Every 3 months",
+      "Every 6 months",
+      "Annually"
+    ],
+    "exp": "A free-fall lifeboat must undergo a full free-fall launch every 6 months.",
+    "cat": "UPDA",
+    "id": "T21A_206"
+  },
+  {
+    "q": "What is the critical restriction when performing the weekly EPIRB test?",
+    "a": "internal test mode only - NOT live 406 MHz transmission",
+    "opts": [
+      "Must be done outside the bridge",
+      "Must be done in a bucket of seawater",
+      "internal test mode only - NOT live 406 MHz transmission",
+      "Must notify RCC before testing"
+    ],
+    "exp": "The test must be done using the internal test mode only, preventing a live 406 MHz distress transmission.",
+    "cat": "UPDA",
+    "id": "T21A_207"
+  },
+  {
+    "q": "What is the ETO role post-drill when the lifeboat is manoeuvred in the water?",
+    "a": "Recharge within 24 h of return.",
+    "opts": [
+      "Wash the engine with fresh water.",
+      "Recharge within 24 h of return.",
+      "Remove the battery and store it in the battery room.",
+      "Test the sprinkler system with fresh water."
+    ],
+    "exp": "After a waterborne drill, the battery must be recharged within 24 hours of returning to the stowed position.",
+    "cat": "UPDA",
+    "id": "T21A_208"
+  },
+  {
+    "q": "What is the maximum lifespan of a lifeboat fall wire?",
+    "a": "5 years",
+    "opts": [
+      "30 months",
+      "3 years",
+      "5 years",
+      "10 years"
+    ],
+    "exp": "Fall wires must be renewed every 5 years regardless of condition.",
+    "cat": "UPDA",
+    "id": "T21A_209"
+  },
+  {
+    "q": "What is the purpose of the 2029 lifeboat ventilation amendment?",
+    "a": "prevent heatstroke and CO₂ buildup during prolonged survival",
+    "opts": [
+      "provide combustion air for the engine",
+      "prevent heatstroke and CO₂ buildup during prolonged survival",
+      "dry out wet immersion suits",
+      "cool the battery bank"
+    ],
+    "exp": "The independent ventilation prevents heatstroke and CO2 buildup for occupants during prolonged survival.",
+    "cat": "UPDA",
+    "id": "T21A_210"
+  },
+  {
+    "q": "In the lifeboat engine starting circuit, how does the negative current return to the battery?",
+    "a": "The engine body / block itself forms the negative return path",
+    "opts": [
+      "Via a dedicated heavy negative wire run alongside the positive",
+      "Through the ship's hull steelwork",
+      "The engine body / block itself forms the negative return path",
+      "It returns through the trickle charger circuit"
+    ],
+    "exp": "The block forms the negative earth return path, connecting to the battery via a short earth strap bolted to the frame.",
+    "cat": "SURV",
+    "id": "T21A_211"
+  },
+  {
+    "q": "What is the primary reason lead-acid and NiCd batteries must NOT be stored in the same room?",
+    "a": "acid fumes contaminate KOH electrolyte",
+    "opts": [
+      "They have different physical weights",
+      "acid fumes contaminate KOH electrolyte",
+      "NiCd chargers cannot handle lead-acid",
+      "They produce different types of explosive gas"
+    ],
+    "exp": "Acid fumes from the lead-acid battery will permanently contaminate and ruin the alkaline KOH electrolyte of the NiCd battery.",
+    "cat": "SURV",
+    "id": "T21A_212"
+  },
+  {
+    "q": "What defines the Cold Cranking Amps (CCA) rating?",
+    "a": "current delivered at -18°C for 30 seconds without voltage dropping below 14.4 V",
+    "opts": [
+      "current delivered at 0°C for 60 seconds",
+      "current delivered at -18°C for 30 seconds without voltage dropping below 14.4 V",
+      "current delivered at -15°C for 10 seconds",
+      "the maximum short circuit current of the battery"
+    ],
+    "exp": "CCA is the maximum current delivered for 30 seconds at -18°C while maintaining at least 14.4V (for a 24V system).",
+    "cat": "SURV",
+    "id": "T21A_213"
+  },
+  {
+    "q": "What is an essential safety requirement for battery room ventilation?",
+    "a": "Extraction ventilation - min 6 air changes/hour, exhausting directly to atmosphere from highest point",
+    "opts": [
+      "Supply ventilation at floor level",
+      "Extraction ventilation - min 6 air changes/hour, exhausting directly to atmosphere from highest point",
+      "A closed loop air conditioning unit",
+      "Natural draft vents on the door only"
+    ],
+    "exp": "Hydrogen rises, so continuous mechanical extraction from the highest point (min 6 ACH) is required.",
+    "cat": "SURV",
+    "id": "T21A_214"
+  },
+  {
+    "q": "How does an on-load release mechanism prevent accidental in-air release?",
+    "a": "Hydrostatic interlock prevents in-air release",
+    "opts": [
+      "A centrifugal clutch mechanism",
+      "Hydrostatic interlock prevents in-air release",
+      "A key kept by the Master",
+      "An electronic proximity sensor on the keel"
+    ],
+    "exp": "A hydrostatic interlock physically prevents the hooks from opening until the boat is waterborne and hydrostatic pressure is applied.",
+    "cat": "SURV",
+    "id": "T21A_215"
+  },
+  {
+    "q": "What is the main difference between the purpose of an EEBD and an SCBA?",
+    "a": "EEBD is for ESCAPE ONLY from toxic/smoke-filled spaces, not firefighting",
+    "opts": [
+      "EEBD is for firefighting, SCBA is for escape",
+      "EEBD is for ESCAPE ONLY from toxic/smoke-filled spaces, not firefighting",
+      "There is no difference, both are 30-minute devices",
+      "EEBD is only for underwater escape"
+    ],
+    "exp": "The EEBD provides 10 minutes of air strictly for escape, whereas the SCBA provides 30+ minutes and is used for firefighting.",
+    "cat": "SURV",
+    "id": "T21A_216"
+  },
+  {
+    "q": "What frequencies distinguish an EPIRB from a SART?",
+    "a": "EPIRB = 406 MHz, SART = 9 GHz",
+    "opts": [
+      "EPIRB = 9 GHz, SART = 406 MHz",
+      "EPIRB = 156.8 MHz, SART = 121.5 MHz",
+      "EPIRB = 406 MHz, SART = 9 GHz",
+      "EPIRB = 9 GHz, SART = 121.5 MHz"
+    ],
+    "exp": "The EPIRB uses 406 MHz for satellite alerts, while the SART uses 9 GHz to respond to X-band radar.",
+    "cat": "SURV",
+    "id": "T21A_217"
+  },
+  {
+    "q": "How many TPAs are required in a survival craft?",
+    "a": "min 10% of lifeboat/raft capacity, or min 2 per survival craft, whichever is greater",
+    "opts": [
+      "100% of the capacity",
+      "min 10% of lifeboat/raft capacity, or min 2 per survival craft, whichever is greater",
+      "Exactly 5 per craft",
+      "None, immersion suits replace them"
+    ],
+    "exp": "SOLAS requires TPAs covering 10% of capacity or a minimum of 2, even if immersion suits are provided.",
+    "cat": "SURV",
+    "id": "T21A_218"
+  },
+  {
+    "q": "How does the liferaft HRU release the raft if the ship sinks?",
+    "a": "At 1.5–4 m depth, water pressure cuts the securing lashing",
+    "opts": [
+      "At 10 m depth, a hydrostatic explosive charge fires",
+      "At 1.5–4 m depth, water pressure cuts the securing lashing",
+      "The raft buoyancy breaks the metal cradle",
+      "An electronic sensor detects water and releases a solenoid"
+    ],
+    "exp": "Water pressure acts on the HRU knife mechanism at 1.5-4 m depth, cutting the securing lashing.",
+    "cat": "SURV",
+    "id": "T21A_219"
+  },
+  {
+    "q": "Why is an axial (pre-engaged) starter motor used on lifeboats?",
+    "a": "Ensures pinion is fully meshed before heavy cranking current flows",
+    "opts": [
+      "It spins much faster than an inertia starter",
+      "Ensures pinion is fully meshed before heavy cranking current flows",
+      "It requires lower voltage to operate",
+      "It allows the engine to run backwards if needed"
+    ],
+    "exp": "The solenoid simultaneously pushes the pinion forward to mesh with the ring gear before closing the main contacts, preventing damage.",
+    "cat": "SURV",
+    "id": "T21A_220"
+  },
+  {
+    "q": "What limits the lifeboat's lowering speed, preventing an uncontrolled free-fall?",
+    "a": "Centrifugal brake / speed governor",
+    "opts": [
+      "Limit switches",
+      "Centrifugal brake / speed governor",
+      "Hydrostatic interlock",
+      "Tricing pennants"
+    ],
+    "exp": "The centrifugal brake or speed governor mechanically limits the lowering speed to a maximum of 1.3 m/s.",
+    "cat": "SURV",
+    "id": "T21A_221"
+  },
+  {
+    "q": "Which item is marked on the liferaft container but NOT the lifeboat hull?",
+    "a": "SOLAS Pack type (A or B)",
+    "opts": [
+      "Dimensions",
+      "Capacity",
+      "SOLAS Pack type (A or B)",
+      "Port of registry"
+    ],
+    "exp": "The SOLAS Pack type is specific to the survival equipment packed inside the liferaft container.",
+    "cat": "SURV",
+    "id": "T21A_222"
+  },
+  {
+    "q": "What is the required lifespan/expiry for pyrotechnics?",
+    "a": "3-year expiry from date of manufacture",
+    "opts": [
+      "1-year expiry from installation",
+      "3-year expiry from date of manufacture",
+      "5-year expiry from delivery",
+      "They do not expire if kept dry"
+    ],
+    "exp": "All pyrotechnics have a strict 3-year expiry from their date of manufacture.",
+    "cat": "SURV",
+    "id": "T21A_223"
+  },
+  {
+    "q": "What is the weak link breaking strength on the liferaft painter line?",
+    "a": "2.2 kN",
+    "opts": [
+      "1.0 kN",
+      "2.2 kN",
+      "5.0 kN",
+      "10.0 kN"
+    ],
+    "exp": "The weak link is designed to part at 2.2 kN tension to ensure the inflating raft is not pulled down by the sinking ship.",
+    "cat": "SURV",
+    "id": "T21A_224"
+  },
+  {
+    "q": "What does an off-load release mechanism require that an on-load release does not?",
+    "a": "deliberate secondary action (removing a pin or guard)",
+    "opts": [
+      "deliberate secondary action (removing a pin or guard)",
+      "hydrostatic pressure to activate",
+      "the engine to be running",
+      "the red handle to be pulled"
+    ],
+    "exp": "Because it operates without load, it requires a conscious secondary action to prevent accidental tripping during maintenance.",
+    "cat": "SURV",
+    "id": "T21A_225"
+  },
+  {
+    "q": "Quick Revision: What is the operating voltage of the Lifeboat Battery?",
+    "a": "24V",
+    "opts": [
+      "12V",
+      "24V",
+      "48V",
+      "220V"
+    ],
+    "exp": "The operating voltage for the lifeboat battery and all electrical equipment is 24V.",
+    "cat": "REV",
+    "id": "T21A_226"
+  },
+  {
+    "q": "Quick Revision: What temperature is used to define Cold Cranking Amps (CCA)?",
+    "a": "-18°C",
+    "opts": [
+      "-15°C",
+      "-18°C",
+      "0°C",
+      "10°C"
+    ],
+    "exp": "CCA is measured at -18°C for 30 seconds, maintaining a voltage above 14.4V.",
+    "cat": "REV",
+    "id": "T21A_227"
+  },
+  {
+    "q": "Quick Revision: How many air changes per hour are required in a battery room?",
+    "a": "6 ACH",
+    "opts": [
+      "2 ACH",
+      "4 ACH",
+      "6 ACH",
+      "10 ACH"
+    ],
+    "exp": "The battery room extraction system must provide 6 Air Changes per Hour (ACH).",
+    "cat": "REV",
+    "id": "T21A_228"
+  },
+  {
+    "q": "Quick Revision: What is the minimum duration of breathable air from an EEBD?",
+    "a": "10 min",
+    "opts": [
+      "5 min",
+      "10 min",
+      "15 min",
+      "30 min"
+    ],
+    "exp": "An EEBD must provide a minimum of 10 minutes of breathable air for escape.",
+    "cat": "REV",
+    "id": "T21A_229"
+  },
+  {
+    "q": "Quick Revision: What is the expiry period for all pyrotechnics?",
+    "a": "3-year expiry",
+    "opts": [
+      "1-year expiry",
+      "2-year expiry",
+      "3-year expiry",
+      "5-year expiry"
+    ],
+    "exp": "Pyrotechnics expire 3 years from their date of manufacture.",
+    "cat": "REV",
+    "id": "T21A_230"
+  },
+  {
+    "q": "Quick Revision: What is the maximum lifeboat lowering speed limit set by the 2026 amendment?",
+    "a": "1.3 m/s",
+    "opts": [
+      "0.5 m/s",
+      "1.0 m/s",
+      "1.3 m/s",
+      "2.0 m/s"
+    ],
+    "exp": "The centrifugal brake must limit the lowering speed to a maximum of 1.3 m/s.",
+    "cat": "REV",
+    "id": "T21A_231"
+  },
+  {
+    "q": "Quick Revision: What is the minimum number of EPIRBs required per ship?",
+    "a": "1/ship",
+    "opts": [
+      "1/ship",
+      "2/ship",
+      "3/ship",
+      "4/ship"
+    ],
+    "exp": "Only 1 EPIRB is required per ship.",
+    "cat": "REV",
+    "id": "T21A_232"
+  },
+  {
+    "q": "Quick Revision: What is the minimum number of SARTs required per ship >500 GT?",
+    "a": "2/ship",
+    "opts": [
+      "1/ship",
+      "2/ship",
+      "3/ship",
+      "4/ship"
+    ],
+    "exp": "Ships greater than 500 GT must carry at least 2 SARTs.",
+    "cat": "REV",
+    "id": "T21A_233"
+  },
+  {
+    "q": "Quick Revision: What forms the negative return path in the lifeboat engine starting circuit?",
+    "a": "Engine block",
+    "opts": [
+      "Negative cable",
+      "Engine block",
+      "Ship's hull",
+      "Trickle charger earth"
+    ],
+    "exp": "The engine block itself acts as the negative return conductor.",
+    "cat": "REV",
+    "id": "T21A_234"
+  },
+  {
+    "q": "Quick Revision: What is the breaking strength of the HRU weak link?",
+    "a": "2.2 kN",
+    "opts": [
+      "1.0 kN",
+      "2.2 kN",
+      "5.0 kN",
+      "10.0 kN"
+    ],
+    "exp": "The weak link breaks at 2.2 kN tension to free the liferaft from a sinking ship.",
+    "cat": "REV",
+    "id": "T21A_235"
+  },
+  {
+    "q": "Quick Revision: Within what time must an immersion suit be donned?",
+    "a": "≤2 min",
+    "opts": [
+      "≤1 min",
+      "≤2 min",
+      "≤5 min",
+      "≤10 min"
+    ],
+    "exp": "An immersion suit must be donnable within 2 minutes.",
+    "cat": "REV",
+    "id": "T21A_236"
+  },
+  {
+    "q": "Quick Revision: What interlock is used on the on-load release mechanism?",
+    "a": "hydrostatic interlock",
+    "opts": [
+      "centrifugal interlock",
+      "magnetic interlock",
+      "hydrostatic interlock",
+      "thermal interlock"
+    ],
+    "exp": "A hydrostatic interlock prevents in-air release of the on-load hooks.",
+    "cat": "REV",
+    "id": "T21A_237"
+  },
+  {
+    "q": "Quick Revision: What VHF channel does the GMDSS MOB button use for DSC alerts?",
+    "a": "Ch 70",
+    "opts": [
+      "Ch 06",
+      "Ch 13",
+      "Ch 16",
+      "Ch 70"
+    ],
+    "exp": "The MOB button broadcasts a DSC alert on VHF Ch 70.",
+    "cat": "REV",
+    "id": "T21A_238"
+  },
+  {
+    "q": "Quick Revision: What is the 2029 minimum ventilation rate rule for totally enclosed lifeboats?",
+    "a": "Min 5 m³/hr/person",
+    "opts": [
+      "Min 1 m³/hr/person",
+      "Min 5 m³/hr/person",
+      "Min 10 m³/hr/person",
+      "Min 20 m³/hr/person"
+    ],
+    "exp": "The 2029 rule requires an independent ventilation system providing 5 m³/hr/person.",
+    "cat": "REV",
+    "id": "T21A_239"
+  },
+  {
+    "q": "Quick Revision: How often must a free-fall lifeboat be launched by free-fall?",
+    "a": "Every 6 months",
+    "opts": [
+      "Every month",
+      "Every 3 months",
+      "Every 6 months",
+      "Annually"
+    ],
+    "exp": "A free-fall lifeboat must be launched by free-fall every 6 months.",
+    "cat": "REV",
+    "id": "T21A_240"
   }
+
 ]);

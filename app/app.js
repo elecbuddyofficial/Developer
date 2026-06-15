@@ -208,9 +208,101 @@ var CAT_NAMES={
   /* T02 - High Voltage */
   HV:"HV System Basics",VCB:"VCB & Circuit Breakers",NER:"Neutral Earthing Resistor",SAF:"HV Safety & Permits",GLV:"HV Gloves & PPE",IR:"IR Testing (HV)",IRM:"Insulation Monitoring",BON:"Bonding & Earthing",SHF:"Shaft Earthing",
   /* T04 - Switchboard */
-  ACB:"ACB Construction & Arc Quench",POS:"ACB Positions",OCR:"Overcurrent Relay (IDMT)",RPR:"Reverse Power Relay",UFP:"Under-Frequency Protection",BTB:"Bus Tie Breaker",GSP:"Group Starter Panel",EDG:"Emergency Generator",BAT:"Battery Testing & Types",GMD:"GMDSS Battery (SOLAS)",UPS:"UPS Systems",SHC:"Shore Connection",PRT:"Preferential Trip",MSB:"MSB Safeties",MNT:"ACB Maintenance"
+  ACB:"ACB Construction & Arc Quench",POS:"ACB Positions",OCR:"Overcurrent Relay (IDMT)",RPR:"Reverse Power Relay",UFP:"Under-Frequency Protection",BTB:"Bus Tie Breaker",GSP:"Group Starter Panel",EDG:"Emergency Generator",BAT:"Battery Testing & Types",GMD:"GMDSS Battery (SOLAS)",UPS:"UPS Systems",SHC:"Shore Connection",PRT:"Preferential Trip",MSB:"MSB Safeties",MNT:"ACB Maintenance",
+
+  /* T01 new */
+  ADV:"Advanced Topics",BLACK:"Blackout Procedure",BRUSH:"Brushless Alternator",CYBER:"Cybersecurity",DASH:"Panel & Dashboard",EXCIT:"Excitation Systems",IDMT:"IDMT Relay",KVA:"kVA Rating",LOAD:"Load Sharing",MAINT:"Maintenance",PLACE:"Alternator Placement",PRIN:"Working Principle",PROT:"Protection",RESID:"Residual Magnetism",REV:"Review",SAFE:"Safety",SOLAS:"SOLAS Regulations",SURV:"Survey Q&A",SYNC:"Synchronisation",UVMT:"Undervoltage Monitoring",VOLT:"Voltage Regulation",WIND:"Windings",
+  /* T02 new */
+  ARC:"Arc Flash & Quenching",BAS:"HV Basics",CORONA:"Corona Effect",CT:"Current Transformer",DE:"Diesel Electric",DEAD:"Dead Tank Breaker",GLOV:"HV Gloves & PPE",HVSC:"HV Shore Connection",IRM:"Insulation Monitoring",MEG:"Megger Testing",MULT:"Multiple Topics",NER:"Neutral Earthing Resistor",PT:"Potential Transformer",PTW:"Permit to Work",QA:"Q & A",QUICK:"Quick Reference",RULE:"Rules & Standards",SF6:"SF6 Gas Breaker",SHAFT:"Shaft Earthing",SKIN:"Skin Effect",STREAM:"Topic Stream",TANK:"Tank-Type Breaker",
+  /* T03 - Motors */
+  AUTO:"Auto-Transformer Start",CII:"CII & Regulations",OLR:"Overload Relay",RMF:"Rotating Magnetic Field",SDCON:"Star-Delta Control",SDMTH:"Star-Delta Method",SLIP:"Slip & Torque",STCUR:"Starting Current",STMET:"Starting Methods",SVFD:"Soft Start & VFD",TRANS:"Transient Analysis",
+  /* T04 new */
+  BATT:"Battery Systems",DIEL:"Dielectric Testing",DIFF:"Differential Protection",EF:"Earth Fault",EG:"Emergency Generator",ESBLOC:"ESB Location",FIRE:"Fire on MSB",FUSE:"Fuses",INTLK:"Interlocks",ISO:"Isolation",MCC:"Motor Control Centre",PI:"Polarisation Index",PMS:"Power Management System",RATING:"Circuit Ratings",RP:"Reverse Power",SQNA:"Surveyor Q&A",UPS:"UPS Systems",
+  /* T06 */
+  DP_CELL:"DP Cell",LVL:"Level Measurement",PRESS:"Pressure Measurement",RTD:"RTD Sensor",SPEED:"Speed Measurement",TEMP:"Temperature",THERMISTOR:"Thermistor",THERMOCOUPLE:"Thermocouple",
+  /* T07 */
+  BOILER:"Boiler Control",CASCADE:"Cascade Control",CONTROL:"Control Systems",DIGITAL:"Digital Systems",LADDER:"Ladder Diagram",LOOP:"Control Loop",PID:"PID Controller",PLC:"PLC Systems",SCADA:"SCADA",TIMERS:"Timers & Counters",VALVES:"Control Valves",
+  /* T08 */
+  ADC:"ADC / DAC",BJT:"BJT Transistor",DIODE:"Diode",IGBT:"IGBT",IS:"Intrinsic Safety",POWER:"Power Electronics",SMPS:"SMPS",THYRISTOR:"Thyristor",VFD:"Variable Frequency Drive",
+  /* T09 */
+  BLR:"Boiler",BOW_THRUSTER:"Bow Thruster",BWT:"Ballast Water Treatment",COMP:"Compressor",CRA:"Crane",CRANE:"Crane",DPT:"DP System",DeadShip:"Dead Ship Recovery",GAP:"Air Gap",Governor:"Governor",MAINENGINE:"Main Engine",Motors:"Motors",OMD:"Oil Mist Detector",OWS:"Oily Water Separator",PUR:"Purifier",REF:"Refrigeration",REFRIGERATION:"Refrigeration",SAFETY:"Safety Systems",SAL:"Salinometer",STEERING:"Steering Gear",STG:"Steering Gear",Sensors:"Sensors",UMS:"UMS",VIS:"Viscosity",VISCOTHERM:"Viscotherm",Alarms:"Alarms",
+  /* T10 */
+  BONDING:"Bonding & Earthing",ICCP:"ICCP System",MGPS:"Marine Growth Prevention",SacAnodes:"Sacrificial Anodes",
+  /* T11 */
+  CORRECTION:"PF Correction",Droop_Control:"Droop Control",FAULTS:"Faults",HARMONICS:"Harmonics",KVA_RATING:"kVA Rating",LOAD_SHARING:"Load Sharing",LOW_PF:"Low Power Factor",PF_Calculation:"PF Calculation",PF_Correction:"PF Correction",PF_Effects:"PF Effects",PF_Fundamentals:"PF Fundamentals",PF_Theory:"PF Theory",PF_Improvement:"PF Improvement",POWER_TRIANGLE:"Power Triangle",Parallel_Faults:"Parallel Faults",Power_Systems:"Power Systems",REACTIVE_POWER:"Reactive Power",SYNCHRONOUS_CONDENSER:"Synchronous Condenser",SYNCHRONOUS_MOTOR:"Synchronous Motor",
+  /* T12 */
+  CABLES:"Cables",INSULATION:"Insulation",SYSTEMS:"Cable Systems",TESTING:"Testing",
+  /* T13 */
+  DOPPLER:"Doppler Log",ECHO_SOUNDER:"Echo Sounder",EPIRB:"EPIRB",GMDSS:"GMDSS",GYROCOMPASS:"Gyrocompass",NAVTEX:"NAVTEX",RADAR:"RADAR",SART:"SART",VDR:"VDR",
+  /* T14 */
+  CALIB:"Calibration",ECDIS:"ECDIS",GAS:"Gas Detection",GAUGE:"Gauging",OXY:"Oxygen Analysis",TOXIC:"Toxic Gas",
+  /* T15 */
+  CLASSES:"Fire Classes",CO2_SYS:"CO₂ System",CO2_SYSTEM:"CO₂ System",DETECTORS:"Detectors",EMERGENCIES:"Emergencies",EXTINGUISHERS:"Extinguishers",FIRE_ALARM:"Fire Alarm",FOAM:"Foam Systems",MSB_FIRE:"MSB Fire",PORTABLE:"Portable Equipment",PUMPS:"Fire Pumps",REGULATIONS:"Regulations",SAFETY_REG:"Safety Regulations",SPRINKLER:"Sprinkler",
+  /* T16 */
+  ELECTRICAL:"Electrical Requirements",EMERGENCY:"Emergency Systems",LIFTING:"Lifting Appliances",
+  /* T17 */
+  ANNEX_I:"Annex I – Oil",ANNEX_VI:"Annex VI – Air",ODME:"ODME",ORB:"Oil Record Book",SEEMP_CII:"SEEMP & CII",
+  /* T18 */
+  ISM:"ISM Code",MainEng:"Main Engine Survey",SafEqp:"Safe Equipment",ShorePower:"Shore Power",Survey:"Survey",Trips:"Trips & Protection",
+  /* T19 */
+  BowThruster:"Bow Thruster",EX_EQUIPMENT:"EX Equipment",ExEquip:"EX Equipment",HazZone:"Hazardous Zones",IGF:"IGF Code",InertGas:"Inert Gas System",PumpRoom:"Pump Room",Static:"Static Electricity",VECS:"VECS",ZONES:"Zone Classification",
+  /* T20 */
+  BOW:"Bow Construction",COFF:"Cofferdam",CONT:"Continuity",DOCK:"Dry Dock",ESB:"Emergency Switchboard",FATIG:"Fatigue",FRAME:"Frame Structure",FSE:"Free Surface Effect",HULL:"Hull",SEQ:"Sequence",STAB:"Stability",STRUC:"Structure",
+  /* T21 */
+  DAVI:"Davit",ELEC:"Electrical",ENGI:"Engine",MOB:"Man Overboard",PYRO:"Pyrotechnics",RAFT:"Life Raft",RESC:"Rescue Boat",ROOM:"Muster Station",SCBA:"SCBA",SUIT:"Immersion Suit",TYPE:"Types",UPDA:"Updates",
+  /* T22 */
+  BLCK:"Blackout",BOIL:"Boiler",CABL:"Cables",COLD:"Cold Work",DIAG:"Diagnostics",DRYD:"Dry Dock",DUTY:"Duties",EMER:"Emergency",ENCL:"Enclosures",FUND:"Fundamentals",IMO:"IMO",SHCK:"Electric Shock",TRBL:"Troubleshooting",WELD:"Welding",WWAY:"Walkways",
+  /* T23 */
+  BMS:"Battery Management System",CHRG:"Charging",DCSY:"DC Systems",EQUL:"Equalisation",LITH:"Lithium Battery",PRIM:"Primary Cells",RATE:"Battery Rating",SEGR:"Segregation",SGM:"SG Measurement",SOLS:"SOLAS Requirements",SPEC:"Specifications",SRVY:"Survey",VRLA:"VRLA Battery"
 };
-var CAT_ICONS={WP:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,HV:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,VCB:"🔘",NER:"🔌",MSB:"📦",SAF:"🔐",GLV:"🧤",IR:"🔍",IRM:"📡",BON:"🔗",SHF:"🔩",EX:"🔋",BL:"🔄",AVR:"🎛️",RM:"🔦",SY:"🔁",LS:"⚖️",PR:"🛡️",MT:"🔧",AG:"📐",OS:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></g></svg>`,BT:"⬛",SOL:"📋",FT:"🔍",SR:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 14c.2-1 .7-1.7 1.5-2.5c1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5c.7.7 1.3 1.5 1.5 2.5m0 4h6m-5 4h4"/></svg>`,EM:"🔌",ACB:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,POS:"📍",OCR:"⏱️",RPR:"🔄",UFP:"📉",BTB:"🔀",GSP:"🎛️",EDG:"🔋",BAT:"🔋",GMD:"📡",UPS:"🔌",SHC:"🏗️",PRT:"⚖️",MNT:"🔧"};
+var CAT_ICONS={WP:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,HV:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,VCB:"🔘",NER:"🔌",MSB:"📦",SAF:"🔐",GLV:"🧤",IR:"🔍",IRM:"📡",BON:"🔗",SHF:"🔩",EX:"🔋",BL:"🔄",AVR:"🎛️",RM:"🔦",SY:"🔁",LS:"⚖️",PR:"🛡️",MT:"🔧",AG:"📐",OS:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09"/><path d="M9 12a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.4 22.4 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 .05 5 .05"/></g></svg>`,BT:"⬛",SOL:"📋",FT:"🔍",SR:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 14c.2-1 .7-1.7 1.5-2.5c1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5c.7.7 1.3 1.5 1.5 2.5m0 4h6m-5 4h4"/></svg>`,EM:"🔌",ACB:`<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>`,POS:"📍",OCR:"⏱️",RPR:"🔄",UFP:"📉",BTB:"🔀",GSP:"🎛️",EDG:"🔋",BAT:"🔋",GMD:"📡",UPS:"🔌",SHC:"🏗️",PRT:"⚖️",MNT:"🔧",
+  /* New entries */
+  ADV:"🎓",REV:"📝",MAINT:"🔧",SURV:"🔍",SAFE:"⚠️",SAF:"⚠️",SOLAS:"📋",PROT:"🛡️",PREF:"⚖️",PRIN:"⚙️",CYBER:"🔒",DASH:"📊",PTW:"📝",QA:"❓",QUICK:"⚡",RULE:"📏",MULT:"📊",STREAM:"📡",LOAD:"⚖️",KVA:"⚡",VOLT:"⚡",WIND:"🌀",UVMT:"📉",EXCIT:"🔋",IDMT:"⏱️",BLACK:"⬛",PLACE:"📍",RESID:"🔦",
+  /* T02 */
+  ARC:"⚡",BAS:"📚",CORONA:"💫",CT:"🔌",DE:"🚢",DEAD:"📦",GLOV:"🧤",HVSC:"🏗️",IRM:"📡",MEG:"🔬",NER:"🔌",PT:"🔌",SF6:"💨",SHAFT:"🔩",SKIN:"〰️",TANK:"🗄️",
+  /* T03 */
+  AUTO:"🔄",CII:"📊",OLR:"🛡️",RMF:"🌀",SDCON:"🎛️",SDMTH:"⚙️",SLIP:"📉",STCUR:"⚡",STMET:"🔄",SVFD:"🎚️",TRANS:"📈",SYNC:"🔁",
+  /* T04 */
+  BATT:"🔋",DIEL:"🧪",DIFF:"🛡️",EF:"🌍",EG:"🔋",ESBLOC:"📍",FIRE:"🔥",FUSE:"🔌",INTLK:"🔀",ISO:"🔐",MCC:"🎛️",PI:"🔍",PMS:"⚡",RATING:"📊",RP:"🔄",SQNA:"❓",UPS:"🔋",
+  /* T05 */
+  "Auto vs Double-Wound":"🔄","Buchholz Relay":"🛡️","CT & PT":"🔌","CT Knee Point":"📍","Cooling & Parallel":"❄️","DC Supply":"⚡","Flyback & Surveyor":"🔍","Frequency Compatibility":"📡","Iron & Copper Losses":"⚙️","LVDT":"📏","MSB Interlock":"🔀","No-Load vs On-Load":"⚖️","Principle & EMF":"⚡","Transformer Oil":"🛢️","kVA Rating":"📊",
+  /* T06 */
+  "4-20mA & HART":"📡","4-20mA Loops":"🔄","Analyzers":"🔬","DP Transmitter (Flow & Level)":"🌊",DP_CELL:"📊","Displacement Sensors":"📏","Flame & Gas Detection":"🔥",LVL:"📊","Level Sensors":"🌊","Modbus Communication":"📡","O2, Galvo, Salinometer, Viscotherm":"🧪",PRESS:"📊","Pressure Measurement":"📊","Proximity Sensors & Encoders":"📡",RTD:"🌡️",SPEED:"🏃","Speed & Position Sensors":"🏃",TEMP:"🌡️",THERMISTOR:"🌡️",THERMOCOUPLE:"🌡️","Temperature Sensors":"🌡️",
+  /* T07 */
+  "Alarm Systems":"🔔",BOILER:"🔥",CASCADE:"🔄",CONTROL:"🎛️",DIGITAL:"💻",LADDER:"📊",LOOP:"🔄",PID:"⚙️",PLC:"💻","PLC Maintenance":"🔧","PLC Noise Protection":"🛡️",SCADA:"💻","SIPART PS2":"🎛️",TIMERS:"⏱️",VALVES:"🔧",
+  /* T08 */
+  ADC:"📊","Amplifier":"📢",BJT:"🔌","Cycloconverter":"🔄",DIODE:"🔌","Digital":"💻","Diode":"🔌","Formula":"📐",IGBT:"⚡",IS:"🛡️","Machines":"⚙️","OpAmp":"📢","Optocoupler":"💡",POWER:"⚡","Rectifier":"🔌",SMPS:"⚡","Semiconductors":"💡",THYRISTOR:"⚡","Testing":"🔍","Thyristor":"⚡","Transistor":"🔌",VFD:"🎚️",
+  /* T09 */
+  Alarms:"🔔",BLR:"🔥",BOW_THRUSTER:"⚓",BWT:"🌊",COMP:"❄️",CRA:"🏗️",CRANE:"🏗️",DPT:"🎛️",DeadShip:"⬛",GAP:"📏",Governor:"⚙️",MAINENGINE:"⚙️",Motors:"⚙️",OMD:"🔍",OWS:"🌊",PUR:"🔧",REF:"❄️",REFRIGERATION:"❄️",SAFETY:"⚠️",SAL:"🌊",STEERING:"🎯",STG:"⚡",Sensors:"📡",UMS:"🖥️",VIS:"👁️",VISCOTHERM:"🌡️",
+  /* T10 */
+  BONDING:"🔗",ICCP:"⚡",MGPS:"🛡️",SacAnodes:"🔩","Shaft Earthing":"🔩",
+  /* T11 */
+  CORRECTION:"🔧",Droop_Control:"⚖️",FAULTS:"⚠️",HARMONICS:"〰️",KVA_RATING:"📊",LOAD_SHARING:"⚖️",LOW_PF:"📉",PF_Calculation:"📐",PF_Correction:"🔧",PF_Effects:"📊",PF_Fundamentals:"⚡",PF_Theory:"📚",PF_Improvement:"📈",POWER_TRIANGLE:"📐",Parallel_Faults:"⚠️",Power_Systems:"⚡",REACTIVE_POWER:"🔄",SYNCHRONOUS_CONDENSER:"⚙️",SYNCHRONOUS_MOTOR:"⚙️",
+  /* T12 */
+  CABLES:"🔗",INSULATION:"🛡️","Megger, IR Test & PI Test":"🔍",SYSTEMS:"⚡",TESTING:"🔍",
+  /* T13 */
+  DOPPLER:"〰️",ECHO_SOUNDER:"📡",EPIRB:"📡",GMDSS:"📡",GYROCOMPASS:"🧭",NAVTEX:"📡",RADAR:"📡",SART:"📡",VDR:"📹",
+  /* T14 */
+  CALIB:"📏",ECDIS:"🗺️",GAS:"💨",GAUGE:"📊",OXY:"🧪",TOXIC:"⚠️",
+  /* T15 */
+  CLASSES:"🔥",CO2_SYS:"💨",CO2_SYSTEM:"💨",DETECTORS:"🔍",EMERGENCIES:"🆘",EXTINGUISHERS:"🧯",FIRE_ALARM:"🔔",FOAM:"🌊",MSB_FIRE:"🔥",PORTABLE:"🧯",PUMPS:"💧",REGULATIONS:"📋",SAFETY_REG:"⚠️",SPRINKLER:"💧",
+  /* T16 */
+  ELECTRICAL:"⚡",EMERGENCY:"🆘",LIFTING:"🏗️",
+  /* T17 */
+  ANNEX_I:"🛢️",ANNEX_VI:"💨",ODME:"📡",ORB:"📝",SEEMP_CII:"📊",
+  /* T18 */
+  ISM:"📋",MainEng:"⚙️",SafEqp:"⚠️",ShorePower:"🏗️",Survey:"🔍",Trips:"🛡️",
+  /* T19 */
+  BowThruster:"⚓",EX_EQUIPMENT:"🛡️",ExEquip:"🛡️",HazZone:"⚠️",IGF:"💨",InertGas:"💨",PumpRoom:"🛢️",Static:"⚡",VECS:"💨",ZONES:"🗺️",
+  /* T20 */
+  BOW:"⚓",COFF:"📦",CONT:"🔌",DOCK:"🏗️",ESB:"⚡",FATIG:"⚠️",FRAME:"🏗️",FSE:"⚖️",HULL:"🚢",SEQ:"🔄",STAB:"⚖️",STRUC:"🏗️",
+  /* T21 */
+  DAVI:"🚤",ELEC:"⚡",ENGI:"⚙️",MOB:"🌊",PYRO:"🔥",RAFT:"🚤",RESC:"🆘",ROOM:"🏠",SCBA:"😷",SUIT:"🦺",TYPE:"📊",UPDA:"📋",
+  /* T22 */
+  BLCK:"⬛",BOIL:"🔥",CABL:"🔗",COLD:"❄️",DIAG:"🔍",DRYD:"🏗️",DUTY:"📋",EMER:"🆘",ENCL:"📦",FUND:"📚",IMO:"📋",SHCK:"⚡",TRBL:"🔧",WELD:"🔥",WWAY:"🚢",
+  /* T23 */
+  BMS:"🖥️",CHRG:"🔋",DCSY:"⚡",EQUL:"⚖️",LITH:"🔋",PRIM:"🔋",RATE:"📊",SEGR:"🔒",SGM:"📊",SOLS:"📋",SPEC:"📊",SRVY:"🔍",VRLA:"🔋"
+};
 
 // ═══ TOPICS MASTER LIST ═══════════════════════════════════════════════════════
 var TOPICS = [

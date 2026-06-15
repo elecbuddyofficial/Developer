@@ -8,7 +8,7 @@ window.loadQuizzes("T15_FireFighting", [
       "CO2 causes violent steam explosion when contacting boiling oil",
       "Does not cool oil below auto-ignition temperature; high-pressure blast scatters burning oil"
     ],
-    "exp": "Class F needs wet chemical extinguisher (saponification reaction creates soapy non-flammable cooling layer on oil surface). CO2 only smothers - oil auto-ignites when oxygen returns. Also the CO2 jet can splash 300\u00b0C burning oil across the galley.",
+    "exp": "Class F needs wet chemical extinguisher (saponification reaction creates soapy non-flammable cooling layer on oil surface). CO2 only smothers - oil auto-ignites when oxygen returns. Also the CO2 jet can splash 300°C burning oil across the galley.",
     "cat": "CLASSES",
     "id": "T15F_001"
   },
@@ -34,7 +34,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Expansion 1:1000; minimum 50% concentration",
       "Expansion 1:20; minimum 8% concentration"
     ],
-    "exp": "Liquid CO2 expands 450 times its volume at atmospheric pressure. Engine room requires minimum 34% CO2 by volume to displace oxygen below the 15% combustion limit. CO2 quantity calculated: (net hold volume \u00d7 0.34) / 0.45 (expansion factor per kg). Two-valve system ensures deliberate release.",
+    "exp": "Liquid CO2 expands 450 times its volume at atmospheric pressure. Engine room requires minimum 34% CO2 by volume to displace oxygen below the 15% combustion limit. CO2 quantity calculated: (net hold volume × 0.34) / 0.45 (expansion factor per kg). Two-valve system ensures deliberate release.",
     "cat": "CO2_SYSTEM",
     "id": "T15F_003"
   },
@@ -43,7 +43,7 @@ window.loadQuizzes("T15_FireFighting", [
     "a": "Complete verified headcount - every crew member evacuated from the protected space",
     "opts": [
       "Emergency generator confirmed running",
-      "All engines completely cooled below 100\u00b0C",
+      "All engines completely cooled below 100°C",
       "Bilge holding tank emptied to prevent overflow",
       "Complete verified headcount - every crew member evacuated from the protected space"
     ],
@@ -60,7 +60,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Pilot injects oxygen into CO2 stream to prevent piping from freezing",
       "Opened first - releases CO2 to sound 20-30 second pneumatic pre-discharge alarm before main valve opened"
     ],
-    "exp": "Two-valve system: Pilot valve first \u2192 small CO2 to alarm horn giving 20-30 seconds warning. Main valve second \u2192 discharges full bank. The delay allows anyone remaining in the space (despite headcount) to escape. After main valve: all ventilation, openings, dampers must be closed to maintain CO2 concentration.",
+    "exp": "Two-valve system: Pilot valve first → small CO2 to alarm horn giving 20-30 seconds warning. Main valve second → discharges full bank. The delay allows anyone remaining in the space (despite headcount) to escape. After main valve: all ventilation, openings, dampers must be closed to maintain CO2 concentration.",
     "cat": "CO2_SYSTEM",
     "id": "T15F_005"
   },
@@ -73,7 +73,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Immediately - provided heat detectors returned to normal",
       "Minimum 24 hours - ensures deep-seated fires completely cooled, prevents re-ignition when oxygen introduced"
     ],
-    "exp": "CO2 has very little cooling effect - it only smothers. Hot metal components (bearings, engine block, cables) remain at high temperature. Introducing fresh oxygen too soon \u2192 catastrophic backdraft/re-ignition. 24 hours minimum. Re-entry: SCBA + portable gas detector (check O2 >20.9%).",
+    "exp": "CO2 has very little cooling effect - it only smothers. Hot metal components (bearings, engine block, cables) remain at high temperature. Introducing fresh oxygen too soon → catastrophic backdraft/re-ignition. 24 hours minimum. Re-entry: SCBA + portable gas detector (check O2 >20.9%).",
     "cat": "CO2_SYSTEM",
     "id": "T15F_006"
   },
@@ -92,14 +92,14 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "Standard rated rupture temperature for a RED sprinkler bulb?",
-    "a": "68\u00b0C",
+    "a": "68°C",
     "opts": [
-      "58\u00b0C",
-      "68\u00b0C",
-      "93\u00b0C",
-      "141\u00b0C"
+      "58°C",
+      "68°C",
+      "93°C",
+      "141°C"
     ],
-    "exp": "Red bulb = 68\u00b0C (standard for accommodation, offices, public spaces). Yellow = 79\u00b0C. Green = 93\u00b0C (warmer areas). Blue = 141\u00b0C (very hot areas). Orange = 58\u00b0C (some heated spaces). The glycerine liquid inside expands, shatters bulb, releases plug at rated temperature.",
+    "exp": "Red bulb = 68°C (standard for accommodation, offices, public spaces). Yellow = 79°C. Green = 93°C (warmer areas). Blue = 141°C (very hot areas). Orange = 58°C (some heated spaces). The glycerine liquid inside expands, shatters bulb, releases plug at rated temperature.",
     "cat": "SPRINKLER",
     "id": "T15F_008"
   },
@@ -118,14 +118,14 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "How does an ionisation smoke detector work?",
-    "a": "Americium-241 (Am-241, alpha emitter) ionises air between electrodes - smoke particles attach to ions reducing current \u2192 alarm",
+    "a": "Americium-241 (Am-241, alpha emitter) ionises air between electrodes - smoke particles attach to ions reducing current → alarm",
     "opts": [
       "Cobalt-60 gamma rays heat bimetallic strip; smoke cools strip breaking circuit",
       "Uranium-235 creates magnetic field; carbon in smoke disrupts flux inducing alarm voltage",
       "Strontium-90 beta particles create optical beam; smoke breaks beam triggering alarm",
-      "Americium-241 (Am-241, alpha emitter) ionises air between electrodes - smoke particles attach to ions reducing current \u2192 alarm"
+      "Americium-241 (Am-241, alpha emitter) ionises air between electrodes - smoke particles attach to ions reducing current → alarm"
     ],
-    "exp": "Am-241 half-life = 432 years (safe alpha emitter, cannot penetrate housing). Alpha particles ionise air \u2192 small current flows between electrodes. Smoke particles attach to ions \u2192 current drops \u2192 alarm. Best for fast-flaming fires with small combustion particles. More prone to steam/dust false alarms than photoelectric.",
+    "exp": "Am-241 half-life = 432 years (safe alpha emitter, cannot penetrate housing). Alpha particles ionise air → small current flows between electrodes. Smoke particles attach to ions → current drops → alarm. Best for fast-flaming fires with small combustion particles. More prone to steam/dust false alarms than photoelectric.",
     "cat": "DETECTORS",
     "id": "T15F_010"
   },
@@ -138,18 +138,18 @@ window.loadQuizzes("T15_FireFighting", [
       "Draw power from lighting circuit - immune to MSB blackouts",
       "Better at sensing slow smouldering fires; far less prone to false alarms from cooking steam or high humidity"
     ],
-    "exp": "Photoelectric uses LED + photodetector. Visible smoke particles scatter light onto sensor \u2192 alarm. Sensitive to large visible particles from smouldering fires. Steam droplets (from showers, galley) are much smaller and don't scatter enough light. Better false alarm discrimination near high-humidity areas.",
+    "exp": "Photoelectric uses LED + photodetector. Visible smoke particles scatter light onto sensor → alarm. Sensitive to large visible particles from smouldering fires. Steam droplets (from showers, galley) are much smaller and don't scatter enough light. Better false alarm discrimination near high-humidity areas.",
     "cat": "DETECTORS",
     "id": "T15F_011"
   },
   {
     "q": "Rate-of-Rise (ROR) heat detector - triggering criterion?",
-    "a": "Triggers when temperature rises faster than 8-10\u00b0C per minute - earlier warning than fixed temperature detectors",
+    "a": "Triggers when temperature rises faster than 8-10°C per minute - earlier warning than fixed temperature detectors",
     "opts": [
-      "Triggers when temperature exceeds fixed 93\u00b0C threshold",
+      "Triggers when temperature exceeds fixed 93°C threshold",
       "Triggers when air pressure in sealed tube rises above 1500 mmWG",
       "Calculates smoke-to-heat ratio over 30-minute period",
-      "Triggers when temperature rises faster than 8-10\u00b0C per minute - earlier warning than fixed temperature detectors"
+      "Triggers when temperature rises faster than 8-10°C per minute - earlier warning than fixed temperature detectors"
     ],
     "exp": "ROR detects rapid temperature increases characteristic of fast-developing fires. Triggers BEFORE the fixed temperature setpoint is reached. Combined with fixed temperature detection (dual detector): even earlier warning. Sensitive to draughts/opening doors - can false alarm if temperature changes quickly naturally.",
     "cat": "DETECTORS",
@@ -216,7 +216,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Manually rack out burning generator ACB with metal racking handle",
       "Do NOT approach - trip all generators from remote emergency stops to cause blackout, then apply CO2 or DCP"
     ],
-    "exp": "MSB arcing fire: arc energy = I\u00b2R, potentially megawatts of energy. Approaching = arc flash death risk. Water and foam = electrocution. The only safe approach: blackout (kill all power sources remotely) \u2192 arc stops \u2192 emergency generator starts automatically within 45 seconds \u2192 then apply CO2 or DCP to smouldering cables safely.",
+    "exp": "MSB arcing fire: arc energy = I²R, potentially megawatts of energy. Approaching = arc flash death risk. Water and foam = electrocution. The only safe approach: blackout (kill all power sources remotely) → arc stops → emergency generator starts automatically within 45 seconds → then apply CO2 or DCP to smouldering cables safely.",
     "cat": "EMERGENCIES",
     "id": "T15F_017"
   },
@@ -226,7 +226,7 @@ window.loadQuizzes("T15_FireFighting", [
     "opts": [
       "High expansion foam system; ventilation blowing fresh air down from ceiling",
       "Exempt from fixed systems if two 9-litre water extinguishers stored inside",
-      "Fixed sprinkler system with 68\u00b0C bulbs; ventilation extraction at highest point",
+      "Fixed sprinkler system with 68°C bulbs; ventilation extraction at highest point",
       "Fixed CO2 smothering system (40% concentration) with external release + mechanical ventilation extraction at bottom"
     ],
     "exp": "Paint locker = Class B flammable liquid risk (solvents, thinners). SOLAS II-2/10: fixed CO2 smothering at 40% concentration (higher than ER due to solvent volatility). Release station OUTSIDE locker. Ventilation extraction at BOTTOM because solvent vapours are heavier than air - must be extracted from below to prevent explosive accumulation.",
@@ -242,7 +242,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Blocks infrared beams of smoke detection system",
       "Dilutes CO2 system effectiveness; can react with undeclared dangerous goods; adds weight creating stability risk"
     ],
-    "exp": "Water into CO2-flooded hold: dilutes CO2 below 34% concentration \u2192 re-ignition possible. Weight of water: 1 m\u00b3 = 1 tonne. Large holds can hold hundreds of tonnes of water \u2192 massive free-surface effect \u2192 capsize risk. Undeclared Class 4.3 (water-reactive) cargo + water = violent chemical reaction, explosion.",
+    "exp": "Water into CO2-flooded hold: dilutes CO2 below 34% concentration → re-ignition possible. Weight of water: 1 m³ = 1 tonne. Large holds can hold hundreds of tonnes of water → massive free-surface effect → capsize risk. Undeclared Class 4.3 (water-reactive) cargo + water = violent chemical reaction, explosion.",
     "cat": "EMERGENCIES",
     "id": "T15F_019"
   },
@@ -255,7 +255,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Acts as barrier preventing CO back-flow into accommodation",
       "Collects internal condensation preventing water from reaching optical chamber - prevents false alarms and corrosion"
     ],
-    "exp": "Temperature differentials cause condensation inside PVC sampling tubes. Without drain boxes, water accumulates and is sucked into the VESDA/ASD laser detection chamber. Water droplets scatter laser light identically to smoke particles \u2192 false alarms. Also causes PCB corrosion. Drain boxes at lowest points are essential maintenance items.",
+    "exp": "Temperature differentials cause condensation inside PVC sampling tubes. Without drain boxes, water accumulates and is sucked into the VESDA/ASD laser detection chamber. Water droplets scatter laser light identically to smoke particles → false alarms. Also causes PCB corrosion. Drain boxes at lowest points are essential maintenance items.",
     "cat": "DETECTORS",
     "id": "T15F_020"
   },
@@ -307,7 +307,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Applying water to absorb heat",
       "Using dry powder to absorb free radicals"
     ],
-    "exp": "Starvation involves physically removing the fuel\u2014such as closing a quick-closing valve on a ruptured diesel pipe, preventing more fuel from feeding the flames.",
+    "exp": "Starvation involves physically removing the fuel—such as closing a quick-closing valve on a ruptured diesel pipe, preventing more fuel from feeding the flames.",
     "cat": "CLASSES",
     "id": "T15F_024"
   },
@@ -411,7 +411,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Combustible metals like magnesium, titanium, sodium, and potassium",
       "Rubber and synthetic plastics"
     ],
-    "exp": "Class D fires involve burning metals, which burn at insanely high temperatures (often >2000\u00b0C) and can sustain their own oxygen supply.",
+    "exp": "Class D fires involve burning metals, which burn at insanely high temperatures (often >2000°C) and can sustain their own oxygen supply.",
     "cat": "CLASSES",
     "id": "T15F_032"
   },
@@ -528,7 +528,7 @@ window.loadQuizzes("T15_FireFighting", [
       "The water creates an electrically conductive path to the stove",
       "The water cools the oil too quickly, shattering the steel fryer"
     ],
-    "exp": "Water expands 1700 times when converting to steam. If water sinks below the surface of 350\u00b0C burning oil, it instantly flashes to steam, throwing the burning oil into the air like a bomb.",
+    "exp": "Water expands 1700 times when converting to steam. If water sinks below the surface of 350°C burning oil, it instantly flashes to steam, throwing the burning oil into the air like a bomb.",
     "cat": "CLASSES",
     "id": "T15F_041"
   },
@@ -577,7 +577,7 @@ window.loadQuizzes("T15_FireFighting", [
     "opts": [
       "The powder rapidly absorbs all the oxygen in the room",
       "The powder particles physically bind with free radicals in the flame, violently interrupting the chemical chain reaction of combustion",
-      "The powder freezes the fuel to -50\u00b0C",
+      "The powder freezes the fuel to -50°C",
       "The powder turns into water when exposed to heat"
     ],
     "exp": "DCP doesn't just smother; it acts chemically. The microscopic powder particles provide a massive surface area that captures the free radicals required to keep the flame alive, halting combustion almost instantly.",
@@ -809,7 +809,7 @@ window.loadQuizzes("T15_FireFighting", [
     "q": "What is AR-AFFF foam?",
     "a": "Alcohol-Resistant Aqueous Film-Forming Foam; it contains polymers that form a physical barrier to prevent polar solvents (like alcohols) from dissolving the foam blanket",
     "opts": [
-      "Arctic-Ready Aqueous Film-Forming Foam; it will not freeze at -50\u00b0C",
+      "Arctic-Ready Aqueous Film-Forming Foam; it will not freeze at -50°C",
       "Alcohol-Resistant Aqueous Film-Forming Foam; it contains polymers that form a physical barrier to prevent polar solvents (like alcohols) from dissolving the foam blanket",
       "Auto-Responsive Aqueous Film-Forming Foam; it activates on its own",
       "Aerosol-Released Aqueous Film-Forming Foam; used in portable cans"
@@ -900,7 +900,7 @@ window.loadQuizzes("T15_FireFighting", [
     "q": "How does foam extinguish a Class A (wood/paper) fire?",
     "a": "The water content within the foam cools the material, while the foam bubbles blanket the surface to prevent air access",
     "opts": [
-      "It freezes the wood to -50\u00b0C",
+      "It freezes the wood to -50°C",
       "It chemically reacts with carbon to form a solid crust",
       "The water content within the foam cools the material, while the foam bubbles blanket the surface to prevent air access",
       "It generates a massive localized vacuum"
@@ -913,7 +913,7 @@ window.loadQuizzes("T15_FireFighting", [
     "q": "Why is the use of high-expansion foam completely ineffective on a weather deck during a storm?",
     "a": "The foam is mostly air (up to 1000:1 ratio); it is incredibly light and will simply blow away in the wind before reaching the fire",
     "opts": [
-      "High expansion foam only works in temperatures above 40\u00b0C",
+      "High expansion foam only works in temperatures above 40°C",
       "The rainwater will cause the foam to burst into flames",
       "The heavy rain will wash away the PFOS chemicals",
       "The foam is mostly air (up to 1000:1 ratio); it is incredibly light and will simply blow away in the wind before reaching the fire"
@@ -927,7 +927,7 @@ window.loadQuizzes("T15_FireFighting", [
     "a": "It uses the venturi effect (pressure drop) to suck the exact percentage of raw foam concentrate out of the storage tank and mix it seamlessly into the flowing fire main water",
     "opts": [
       "It uses the venturi effect (pressure drop) to suck the exact percentage of raw foam concentrate out of the storage tank and mix it seamlessly into the flowing fire main water",
-      "It heats the water to 60\u00b0C to activate the foam chemicals",
+      "It heats the water to 60°C to activate the foam chemicals",
       "It blows high-pressure air into the foam to create the bubbles",
       "It filters the seawater to remove salt before mixing"
     ],
@@ -1054,53 +1054,53 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What does a RED colored liquid in a sprinkler bulb signify?",
-    "a": "A standard temperature rating, activating at 68\u00b0C",
+    "a": "A standard temperature rating, activating at 68°C",
     "opts": [
-      "A low temperature rating, activating at 57\u00b0C",
+      "A low temperature rating, activating at 57°C",
       "It signifies that the bulb is filled with explosive gas",
-      "A standard temperature rating, activating at 68\u00b0C",
-      "A high temperature rating, activating at 141\u00b0C"
+      "A standard temperature rating, activating at 68°C",
+      "A high temperature rating, activating at 141°C"
     ],
-    "exp": "68\u00b0C (Red) is the universal standard for normal accommodation spaces, cabins, and corridors where ambient temperatures are comfortable and stable.",
+    "exp": "68°C (Red) is the universal standard for normal accommodation spaces, cabins, and corridors where ambient temperatures are comfortable and stable.",
     "cat": "SPRINKLER",
     "id": "T15F_082"
   },
   {
     "q": "What does a YELLOW colored liquid in a sprinkler bulb signify?",
-    "a": "An intermediate temperature rating, activating at 79\u00b0C",
+    "a": "An intermediate temperature rating, activating at 79°C",
     "opts": [
-      "A high temperature rating, activating at 93\u00b0C",
-      "An intermediate temperature rating, activating at 79\u00b0C",
+      "A high temperature rating, activating at 93°C",
+      "An intermediate temperature rating, activating at 79°C",
       "It signifies the system is out of order",
-      "A standard temperature rating, activating at 68\u00b0C"
+      "A standard temperature rating, activating at 68°C"
     ],
-    "exp": "Yellow bulbs (79\u00b0C) are used in areas that might naturally get slightly warmer than a cabin, but don't require the extreme rating of a green bulb.",
+    "exp": "Yellow bulbs (79°C) are used in areas that might naturally get slightly warmer than a cabin, but don't require the extreme rating of a green bulb.",
     "cat": "SPRINKLER",
     "id": "T15F_083"
   },
   {
     "q": "What does a GREEN colored liquid in a sprinkler bulb signify?",
-    "a": "A high temperature rating, activating at 93\u00b0C; typically used in galleys or engine room areas",
+    "a": "A high temperature rating, activating at 93°C; typically used in galleys or engine room areas",
     "opts": [
       "It signifies the bulb is filled with non-toxic water",
-      "A high temperature rating, activating at 93\u00b0C; typically used in galleys or engine room areas",
-      "A standard temperature rating, activating at 68\u00b0C",
-      "An extreme temperature rating, activating at 141\u00b0C"
+      "A high temperature rating, activating at 93°C; typically used in galleys or engine room areas",
+      "A standard temperature rating, activating at 68°C",
+      "An extreme temperature rating, activating at 141°C"
     ],
-    "exp": "If you put a 68\u00b0C red bulb above a galley stove, the normal heat of cooking dinner would pop the bulb and flood the kitchen. Green bulbs (93\u00b0C) provide a higher safety margin for naturally hot rooms.",
+    "exp": "If you put a 68°C red bulb above a galley stove, the normal heat of cooking dinner would pop the bulb and flood the kitchen. Green bulbs (93°C) provide a higher safety margin for naturally hot rooms.",
     "cat": "SPRINKLER",
     "id": "T15F_084"
   },
   {
     "q": "What does a BLUE colored liquid in a sprinkler bulb signify?",
-    "a": "An extreme high temperature rating, activating at 141\u00b0C; used near skylights, boilers, or exhaust casings",
+    "a": "An extreme high temperature rating, activating at 141°C; used near skylights, boilers, or exhaust casings",
     "opts": [
       "It signifies the head sprays blue-dyed foam instead of water",
-      "A standard temperature rating, activating at 68\u00b0C",
-      "A low temperature rating, activating at 57\u00b0C",
-      "An extreme high temperature rating, activating at 141\u00b0C; used near skylights, boilers, or exhaust casings"
+      "A standard temperature rating, activating at 68°C",
+      "A low temperature rating, activating at 57°C",
+      "An extreme high temperature rating, activating at 141°C; used near skylights, boilers, or exhaust casings"
     ],
-    "exp": "141\u00b0C (Blue) is used in areas that experience massive radiant heat during normal operation, ensuring the sprinkler only activates if a genuine, uncontrollable fire occurs.",
+    "exp": "141°C (Blue) is used in areas that experience massive radiant heat during normal operation, ensuring the sprinkler only activates if a genuine, uncontrollable fire occurs.",
     "cat": "SPRINKLER",
     "id": "T15F_085"
   },
@@ -1171,11 +1171,11 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is 'Hi-Fog' or High-Pressure Water Mist (HPWM)?",
-    "a": "A highly advanced suppression system that discharges fresh water at extreme pressures (70\u2013200 bar) through micro-nozzles, atomizing the water into incredibly fine droplets (50\u2013200 \u00b5m)",
+    "a": "A highly advanced suppression system that discharges fresh water at extreme pressures (70–200 bar) through micro-nozzles, atomizing the water into incredibly fine droplets (50–200 µm)",
     "opts": [
       "A system that fills the room with thick chemical foam",
       "A system that freezes the water into microscopic ice crystals",
-      "A highly advanced suppression system that discharges fresh water at extreme pressures (70\u2013200 bar) through micro-nozzles, atomizing the water into incredibly fine droplets (50\u2013200 \u00b5m)",
+      "A highly advanced suppression system that discharges fresh water at extreme pressures (70–200 bar) through micro-nozzles, atomizing the water into incredibly fine droplets (50–200 µm)",
       "A low-pressure system that sprays warm seawater over the cargo deck"
     ],
     "exp": "Traditional sprinklers run at 6-10 bar and create large, heavy rain drops. Hi-Fog runs at 100+ bar and creates a dense, impenetrable cloud of microscopic fog that behaves almost like a gas.",
@@ -1214,7 +1214,7 @@ window.loadQuizzes("T15_FireFighting", [
     "opts": [
       "Chain Reaction Inhibition; it binds with free radicals",
       "Radiant Heat Blocking; the dense cloud of microscopic droplets forms a physical optical barrier that prevents the intense infrared heat of the fire from radiating to and igniting nearby structures",
-      "Cryogenic Freezing; it drops the room temperature to -50\u00b0C",
+      "Cryogenic Freezing; it drops the room temperature to -50°C",
       "Chemical Saponification; it turns the fuel into soap"
     ],
     "exp": "Fires often spread by baking the wall 10 feet away until it bursts into flames. The dense white fog acts like a perfect thermal mirror, blocking the heat rays and allowing firefighters to approach the blaze safely.",
@@ -1340,10 +1340,10 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is a 'Fusible Link' sprinkler head?",
-    "a": "An older style of sprinkler head that uses two metal plates held together by a solder alloy that literally melts at a specific temperature (e.g., 72\u00b0C) to release the water plug",
+    "a": "An older style of sprinkler head that uses two metal plates held together by a solder alloy that literally melts at a specific temperature (e.g., 72°C) to release the water plug",
     "opts": [
       "A sprinkler head that requires an electrical fuse to blow before opening",
-      "An older style of sprinkler head that uses two metal plates held together by a solder alloy that literally melts at a specific temperature (e.g., 72\u00b0C) to release the water plug",
+      "An older style of sprinkler head that uses two metal plates held together by a solder alloy that literally melts at a specific temperature (e.g., 72°C) to release the water plug",
       "A sprinkler head that is welded directly to the ship's hull",
       "A sprinkler head made entirely of plastic that melts away"
     ],
@@ -1729,7 +1729,7 @@ window.loadQuizzes("T15_FireFighting", [
     "id": "T15F_133"
   },
   {
-    "q": "What test should be performed on a diesel-driven Emergency Fire Pump during extreme cold weather (-10\u00b0C)?",
+    "q": "What test should be performed on a diesel-driven Emergency Fire Pump during extreme cold weather (-10°C)?",
     "a": "Verify the functionality of the engine block jacket water heater and the condition of the starting batteries, as cold temperatures severely reduce battery cranking amps and make diesel hard to ignite",
     "opts": [
       "Remove the pump impeller to protect it from ice",
@@ -1968,10 +1968,10 @@ window.loadQuizzes("T15_FireFighting", [
     "opts": [
       "A loose busbar bolted joint (causing high resistance and localized extreme heating), insulation degradation due to dirt/salt, or a failing circuit breaker contact",
       "The generator spinning slightly too fast (e.g., 61 Hz)",
-      "The ambient engine room temperature reaching 35\u00b0C",
+      "The ambient engine room temperature reaching 35°C",
       "The ship sailing through a high-magnetic anomaly near the equator"
     ],
-    "exp": "Vibration loosens massive bolts. Hundreds of amps flowing through a loose gap creates thousands of watts of heat (I\u00b2R losses). The copper glows red hot, igniting the surrounding plastic wire casing.",
+    "exp": "Vibration loosens massive bolts. Hundreds of amps flowing through a loose gap creates thousands of watts of heat (I²R losses). The copper glows red hot, igniting the surrounding plastic wire casing.",
     "cat": "FIRE_ALARM",
     "id": "T15F_152"
   },
@@ -2081,10 +2081,10 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "If a detector in the Galley keeps triggering false alarms every time the chef boils pasta, what is the best technical solution?",
-    "a": "Replace the existing Smoke Detector with a Fixed-Temperature Heat Detector (e.g., 93\u00b0C), which ignores steam and smoke but will still catch a genuine, raging fire",
+    "a": "Replace the existing Smoke Detector with a Fixed-Temperature Heat Detector (e.g., 93°C), which ignores steam and smoke but will still catch a genuine, raging fire",
     "opts": [
       "Tell the chef to stop boiling water",
-      "Replace the existing Smoke Detector with a Fixed-Temperature Heat Detector (e.g., 93\u00b0C), which ignores steam and smoke but will still catch a genuine, raging fire",
+      "Replace the existing Smoke Detector with a Fixed-Temperature Heat Detector (e.g., 93°C), which ignores steam and smoke but will still catch a genuine, raging fire",
       "Wrap a plastic bag around the smoke detector to keep steam out",
       "Permanently disconnect the detector and leave the wires taped up"
     ],
@@ -2302,14 +2302,14 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What are the typical activation setpoints for a Fixed-Temperature Heat Detector?",
-    "a": "58\u00b0C, 72\u00b0C, or 93\u00b0C depending on the ambient temperature of the space",
+    "a": "58°C, 72°C, or 93°C depending on the ambient temperature of the space",
     "opts": [
-      "250\u00b0C strictly for engine room applications",
-      "100\u00b0C, 150\u00b0C, or 200\u00b0C depending on the ambient temperature of the space",
-      "58\u00b0C, 72\u00b0C, or 93\u00b0C depending on the ambient temperature of the space",
-      "30\u00b0C, 40\u00b0C, or 50\u00b0C depending on the ambient temperature of the space"
+      "250°C strictly for engine room applications",
+      "100°C, 150°C, or 200°C depending on the ambient temperature of the space",
+      "58°C, 72°C, or 93°C depending on the ambient temperature of the space",
+      "30°C, 40°C, or 50°C depending on the ambient temperature of the space"
     ],
-    "exp": "Standard cabins might use 58\u00b0C, while an engine room or galley roof requires 93\u00b0C to prevent the normal heat of operation from triggering false alarms.",
+    "exp": "Standard cabins might use 58°C, while an engine room or galley roof requires 93°C to prevent the normal heat of operation from triggering false alarms.",
     "cat": "DETECTORS",
     "id": "T15F_178"
   },
@@ -2328,14 +2328,14 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "At what condition does a 'Rate-of-Rise' (ROR) heat detector typically trigger an alarm?",
-    "a": "When the ambient temperature increases faster than 8 to 10\u00b0C per minute",
+    "a": "When the ambient temperature increases faster than 8 to 10°C per minute",
     "opts": [
-      "When the ambient temperature increases faster than 1 to 2\u00b0C per minute",
-      "When the ambient temperature increases faster than 8 to 10\u00b0C per minute",
-      "When the absolute temperature hits exactly 100\u00b0C",
+      "When the ambient temperature increases faster than 1 to 2°C per minute",
+      "When the ambient temperature increases faster than 8 to 10°C per minute",
+      "When the absolute temperature hits exactly 100°C",
       "When the ambient temperature drops suddenly due to a CO2 discharge"
     ],
-    "exp": "ROR detectors measure the speed of heating. If the room jumps 15 degrees in one minute, it alarms, even if the room is only 40\u00b0C. This provides very early warning for rapidly developing fires.",
+    "exp": "ROR detectors measure the speed of heating. If the room jumps 15 degrees in one minute, it alarms, even if the room is only 40°C. This provides very early warning for rapidly developing fires.",
     "cat": "DETECTORS",
     "id": "T15F_180"
   },
@@ -2348,7 +2348,7 @@ window.loadQuizzes("T15_FireFighting", [
       "It uses zero electrical power to operate",
       "It also detects the presence of carbon monoxide"
     ],
-    "exp": "If a room is 20\u00b0C and a fast fire starts, the ROR will alarm at 30\u00b0C (if it heated up in 30 seconds). A fixed-temp detector would wait silently until the entire ceiling reached 72\u00b0C.",
+    "exp": "If a room is 20°C and a fast fire starts, the ROR will alarm at 30°C (if it heated up in 30 seconds). A fixed-temp detector would wait silently until the entire ceiling reached 72°C.",
     "cat": "DETECTORS",
     "id": "T15F_181"
   },
@@ -2361,7 +2361,7 @@ window.loadQuizzes("T15_FireFighting", [
       "A detector that combines smoke and heat detection in one unit",
       "A detector linked to both the main and emergency switchboards"
     ],
-    "exp": "Combined heat detectors are the most versatile. If a fire grows slowly, it might beat the ROR logic, but the fixed-temp element will still catch it when it crosses 72\u00b0C.",
+    "exp": "Combined heat detectors are the most versatile. If a fire grows slowly, it might beat the ROR logic, but the fixed-temp element will still catch it when it crosses 72°C.",
     "cat": "DETECTORS",
     "id": "T15F_182"
   },
@@ -2504,7 +2504,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Using a specially designed, battery-powered portable heat gun or hot-air blower placed over the detector head",
       "By pouring boiling water over the waterproof sensor casing"
     ],
-    "exp": "Marine-approved heat testers cup the detector and blow a controlled stream of warm air (e.g., 80\u00b0C) safely onto the bimetallic strip or thermistor, testing it without melting the plastic housing.",
+    "exp": "Marine-approved heat testers cup the detector and blow a controlled stream of warm air (e.g., 80°C) safely onto the bimetallic strip or thermistor, testing it without melting the plastic housing.",
     "cat": "DETECTORS",
     "id": "T15F_193"
   },
@@ -2639,13 +2639,13 @@ window.loadQuizzes("T15_FireFighting", [
     "id": "T15F_203"
   },
   {
-    "q": "In what physical state is CO2 stored inside the high-pressure steel cylinders in the CO2 room, and at what approximate pressure (at 20\u00b0C)?",
+    "q": "In what physical state is CO2 stored inside the high-pressure steel cylinders in the CO2 room, and at what approximate pressure (at 20°C)?",
     "a": "It is stored as a liquid under its own vapor pressure, at approximately 57 bar",
     "opts": [
       "As a solid block of dry ice at atmospheric pressure",
       "It is stored as a liquid under its own vapor pressure, at approximately 57 bar",
       "As a compressed gas at 200 bar",
-      "As a cryogenic liquid at 5 bar and -150\u00b0C"
+      "As a cryogenic liquid at 5 bar and -150°C"
     ],
     "exp": "Because CO2 liquefies easily under pressure at room temperature, the heavy steel cylinders contain liquid CO2 with a cushion of pressurized vapor at the top (~57 bar at normal room temp).",
     "cat": "CO2_SYS",
@@ -2790,7 +2790,7 @@ window.loadQuizzes("T15_FireFighting", [
       "15 minutes",
       "A minimum of 24 hours to allow the massive heavy metal components to cool below the auto-ignition temperature of the fuel"
     ],
-    "exp": "CO2 offers poor cooling. The fire is out, but the 30-ton iron engine block is still 500\u00b0C. If you open the door after 2 hours, oxygen rushes in, hits the hot iron and the fuel mist, and causes a massive, explosive backdraft (re-ignition). Keep it sealed.",
+    "exp": "CO2 offers poor cooling. The fire is out, but the 30-ton iron engine block is still 500°C. If you open the door after 2 hours, oxygen rushes in, hits the hot iron and the fuel mist, and causes a massive, explosive backdraft (re-ignition). Keep it sealed.",
     "cat": "CO2_SYS",
     "id": "T15F_215"
   },
@@ -2809,35 +2809,35 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is a 'Low Pressure (LP) CO2 System', typically found on large Ro-Ro vessels or car carriers?",
-    "a": "A system where CO2 is stored in one or two massive, refrigerated bulk tanks at -18\u00b0C, rather than hundreds of individual high-pressure cylinders",
+    "a": "A system where CO2 is stored in one or two massive, refrigerated bulk tanks at -18°C, rather than hundreds of individual high-pressure cylinders",
     "opts": [
       "A system where CO2 is mixed with seawater to lower the pressure safely",
       "A system that relies entirely on portable 9kg extinguishers",
-      "A system where CO2 is stored in one or two massive, refrigerated bulk tanks at -18\u00b0C, rather than hundreds of individual high-pressure cylinders",
+      "A system where CO2 is stored in one or two massive, refrigerated bulk tanks at -18°C, rather than hundreds of individual high-pressure cylinders",
       "A system that uses air compressors to pump CO2 out of the exhaust stack"
     ],
-    "exp": "Instead of 600 separate steel bottles (which take up massive space and are hard to weigh), an LP system uses a giant insulated cryogenic tank. A refrigeration unit keeps the liquid CO2 chilled to -18\u00b0C, which drops its vapor pressure to a manageable 20 bar.",
+    "exp": "Instead of 600 separate steel bottles (which take up massive space and are hard to weigh), an LP system uses a giant insulated cryogenic tank. A refrigeration unit keeps the liquid CO2 chilled to -18°C, which drops its vapor pressure to a manageable 20 bar.",
     "cat": "CO2_SYS",
     "id": "T15F_217"
   },
   {
     "q": "At what approximate pressure and temperature is CO2 stored in an LP CO2 bulk tank?",
-    "a": "Approximately 20 bar at -18\u00b0C",
+    "a": "Approximately 20 bar at -18°C",
     "opts": [
-      "Approximately 20 bar at -18\u00b0C",
-      "200 bar at 40\u00b0C",
-      "57 bar at 20\u00b0C",
-      "1 bar at -50\u00b0C"
+      "Approximately 20 bar at -18°C",
+      "200 bar at 40°C",
+      "57 bar at 20°C",
+      "1 bar at -50°C"
     ],
-    "exp": "Chilling the CO2 drops the pressure drastically. The ETO's main job on this system is maintaining the dual refrigeration compressors that keep the tank at -18\u00b0C.",
+    "exp": "Chilling the CO2 drops the pressure drastically. The ETO's main job on this system is maintaining the dual refrigeration compressors that keep the tank at -18°C.",
     "cat": "CO2_SYS",
     "id": "T15F_218"
   },
   {
     "q": "What critical ETO maintenance check must be performed on an LP CO2 system daily/weekly?",
-    "a": "Verifying that the refrigeration compressors are running properly to maintain -18\u00b0C, and checking the liquid level gauge",
+    "a": "Verifying that the refrigeration compressors are running properly to maintain -18°C, and checking the liquid level gauge",
     "opts": [
-      "Verifying that the refrigeration compressors are running properly to maintain -18\u00b0C, and checking the liquid level gauge",
+      "Verifying that the refrigeration compressors are running properly to maintain -18°C, and checking the liquid level gauge",
       "Replacing the spark plugs in the pilot cylinders",
       "Releasing 1 kg of CO2 to ensure the pipes are not frozen",
       "Manually weighing the massive bulk tank with a crane"
@@ -2915,7 +2915,7 @@ window.loadQuizzes("T15_FireFighting", [
     "q": "Why is a Fixed CO2 System NEVER set to 'Automatic Release' upon smoke detection on a commercial cargo ship?",
     "a": "Due to the lethal, asphyxiating nature of CO2, a human must ALWAYS visually verify the space is evacuated before pulling the lever, to prevent mass casualties on a false alarm",
     "opts": [
-      "Because automatic valves are prone to freezing shut at -18\u00b0C",
+      "Because automatic valves are prone to freezing shut at -18°C",
       "Because computers cannot calculate the correct 34% volume required",
       "Due to the lethal, asphyxiating nature of CO2, a human must ALWAYS visually verify the space is evacuated before pulling the lever, to prevent mass casualties on a false alarm",
       "Because maritime law requires the Captain to sign a physical paper permit first"
@@ -2957,7 +2957,7 @@ window.loadQuizzes("T15_FireFighting", [
       "The fans will overspeed due to the density of the CO2 gas",
       "Nothing, the CO2 is heavy enough to ignore the fans",
       "The massive fans will blow the CO2 gas right out the funnel, failing to reach the 34% concentration, and sucking fresh oxygen in to feed the fire",
-      "The fans will freeze solid and shatter due to the -78\u00b0C gas"
+      "The fans will freeze solid and shatter due to the -78°C gas"
     ],
     "exp": "CO2 only works if it stays trapped in the room like water in a bathtub. Fans act like a drain, venting your only firefighting agent into the atmosphere while pumping fresh air into the flames.",
     "cat": "CO2_SYS",
@@ -3011,7 +3011,7 @@ window.loadQuizzes("T15_FireFighting", [
       "A red cylinder with a BLUE panel and a thin rubber hose",
       "A red cylinder with a BLACK colored panel, and a distinctly large, cone-shaped discharge horn"
     ],
-    "exp": "The black panel indicates CO2. The large plastic horn is required to allow the rapidly expanding, freezing gas (-78\u00b0C) to slow down and expand without clogging, and protects the user's hands from frostbite.",
+    "exp": "The black panel indicates CO2. The large plastic horn is required to allow the rapidly expanding, freezing gas (-78°C) to slow down and expand without clogging, and protects the user's hands from frostbite.",
     "cat": "PORTABLE",
     "id": "T15F_232"
   },
@@ -3069,11 +3069,11 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is the major safety hazard to the operator when discharging a portable CO2 extinguisher?",
-    "a": "Frostbite; the rapidly expanding gas drops to -78\u00b0C, which can instantly freeze the operator's bare hand if they grip the uninsulated parts of the horn",
+    "a": "Frostbite; the rapidly expanding gas drops to -78°C, which can instantly freeze the operator's bare hand if they grip the uninsulated parts of the horn",
     "opts": [
       "The cylinder exploding like a grenade",
       "Electrocution from static buildup inside the cylinder",
-      "Frostbite; the rapidly expanding gas drops to -78\u00b0C, which can instantly freeze the operator's bare hand if they grip the uninsulated parts of the horn",
+      "Frostbite; the rapidly expanding gas drops to -78°C, which can instantly freeze the operator's bare hand if they grip the uninsulated parts of the horn",
       "Third-degree burns from the exothermic chemical reaction"
     ],
     "exp": "As the liquid CO2 flashes to gas, it absorbs massive amounts of heat. The metal piping and the base of the horn become dangerously cold. Operators must ONLY hold the designated insulated handle.",
@@ -3167,7 +3167,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Fluoroprotein foam concentrate",
       "Liquid nitrogen"
     ],
-    "exp": "This specific alkaline chemical is the only thing capable of dealing with the extreme heat (350\u00b0C+) and chemical nature of burning cooking fat.",
+    "exp": "This specific alkaline chemical is the only thing capable of dealing with the extreme heat (350°C+) and chemical nature of burning cooking fat.",
     "cat": "PORTABLE",
     "id": "T15F_244"
   },
@@ -3212,9 +3212,9 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "Why is throwing a bucket of Water on a Class F (galley deep fryer) fire incredibly dangerous?",
-    "a": "The water instantly sinks below the 350\u00b0C oil, flashes into steam, expands 1700 times in volume, and violently erupts, blowing the burning oil all over the chef and the galley",
+    "a": "The water instantly sinks below the 350°C oil, flashes into steam, expands 1700 times in volume, and violently erupts, blowing the burning oil all over the chef and the galley",
     "opts": [
-      "The water instantly sinks below the 350\u00b0C oil, flashes into steam, expands 1700 times in volume, and violently erupts, blowing the burning oil all over the chef and the galley",
+      "The water instantly sinks below the 350°C oil, flashes into steam, expands 1700 times in volume, and violently erupts, blowing the burning oil all over the chef and the galley",
       "The water dissolves the oil into toxic mustard gas",
       "The water cools the oil too quickly, shattering the steel fryer",
       "The water conducts electricity straight to the stove element"
@@ -3511,23 +3511,23 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is the most likely root mechanical/electrical cause of a sudden fire breaking out inside a previously healthy Main Switchboard?",
-    "a": "A loose busbar bolted joint causing high resistance and extreme localized I\u00b2R heating, leading to copper glowing red-hot and igniting nearby insulation",
+    "a": "A loose busbar bolted joint causing high resistance and extreme localized I²R heating, leading to copper glowing red-hot and igniting nearby insulation",
     "opts": [
       "The generator spinning slightly too fast (e.g., 61 Hz) generating excess friction",
-      "A loose busbar bolted joint causing high resistance and extreme localized I\u00b2R heating, leading to copper glowing red-hot and igniting nearby insulation",
-      "The ambient engine room temperature reaching 35\u00b0C",
+      "A loose busbar bolted joint causing high resistance and extreme localized I²R heating, leading to copper glowing red-hot and igniting nearby insulation",
+      "The ambient engine room temperature reaching 35°C",
       "The ship sailing through a high-magnetic anomaly near the equator"
     ],
-    "exp": "Ship vibration loosens massive bolts over time. If a joint carrying 1000 Amps gets loose, resistance jumps. Watts = I\u00b2R. 1000\u00b2 * 0.05 ohms = 50,000 Watts of heat generated at a single bolt. The copper melts and catches the plastic wire casing on fire.",
+    "exp": "Ship vibration loosens massive bolts over time. If a joint carrying 1000 Amps gets loose, resistance jumps. Watts = I²R. 1000² * 0.05 ohms = 50,000 Watts of heat generated at a single bolt. The copper melts and catches the plastic wire casing on fire.",
     "cat": "MSB_FIRE",
     "id": "T15F_271"
   },
   {
     "q": "How does a loose busbar joint lead directly to a fire?",
-    "a": "It creates high electrical resistance; as massive current flows across the gap, it generates intense heat (I\u00b2R loss), eventually melting the metal and igniting surrounding plastic insulation",
+    "a": "It creates high electrical resistance; as massive current flows across the gap, it generates intense heat (I²R loss), eventually melting the metal and igniting surrounding plastic insulation",
     "opts": [
       "It generates a high-voltage static charge that attracts flammable dust",
-      "It creates high electrical resistance; as massive current flows across the gap, it generates intense heat (I\u00b2R loss), eventually melting the metal and igniting surrounding plastic insulation",
+      "It creates high electrical resistance; as massive current flows across the gap, it generates intense heat (I²R loss), eventually melting the metal and igniting surrounding plastic insulation",
       "It allows sparks to jump directly to the ship's steel hull",
       "It allows moisture to enter the copper, creating explosive steam"
     ],
@@ -3752,7 +3752,7 @@ window.loadQuizzes("T15_FireFighting", [
       "To ensure you have enough leverage to pull the handle",
       "To protect yourself from an Arc Flash; if the breaker explodes or arcs violently during operation, the fireball and shrapnel project directly outward"
     ],
-    "exp": "Standard safety protocol: Stand to the side, turn your face away, use your right hand (if standing on the right), and operate the lever. If it blows, the 10,000\u00b0C fireball shoots past you, not into your chest.",
+    "exp": "Standard safety protocol: Stand to the side, turn your face away, use your right hand (if standing on the right), and operate the lever. If it blows, the 10,000°C fireball shoots past you, not into your chest.",
     "cat": "MSB_FIRE",
     "id": "T15F_290"
   },
@@ -4122,9 +4122,9 @@ window.loadQuizzes("T15_FireFighting", [
   },
   {
     "q": "What is the primary difference in operation between a 'Rate-of-Rise' heat detector and a 'Fixed-Temperature' heat detector?",
-    "a": "Rate-of-Rise triggers if the temperature climbs unusually fast (e.g., 10\u00b0C in one minute) even if the room is still cool; Fixed-Temperature only triggers when the room reaches a specific, absolute hot temperature (e.g., 72\u00b0C)",
+    "a": "Rate-of-Rise triggers if the temperature climbs unusually fast (e.g., 10°C in one minute) even if the room is still cool; Fixed-Temperature only triggers when the room reaches a specific, absolute hot temperature (e.g., 72°C)",
     "opts": [
-      "Rate-of-Rise triggers if the temperature climbs unusually fast (e.g., 10\u00b0C in one minute) even if the room is still cool; Fixed-Temperature only triggers when the room reaches a specific, absolute hot temperature (e.g., 72\u00b0C)",
+      "Rate-of-Rise triggers if the temperature climbs unusually fast (e.g., 10°C in one minute) even if the room is still cool; Fixed-Temperature only triggers when the room reaches a specific, absolute hot temperature (e.g., 72°C)",
       "Rate-of-Rise detects smoke speed, Fixed-Temperature detects flame heat",
       "Rate-of-Rise is for cold climates, Fixed-Temperature is for tropical climates",
       "Rate-of-Rise requires 220V power, Fixed-Temperature requires no power"
@@ -4142,8 +4142,9 @@ window.loadQuizzes("T15_FireFighting", [
       "It is highly toxic and causes immediate death upon inhalation",
       "It freezes into solid blocks of ice when released at room temperature"
     ],
-    "exp": "Halon was the ultimate firefighting gas\u2014clean, non-toxic, and incredibly effective at stopping fires chemically. Unfortunately, it destroys the Earth's ozone layer. It was phased out and replaced by environmentally friendlier clean agents like FM-200, Novec 1230, and high-pressure water mist.",
+    "exp": "Halon was the ultimate firefighting gas—clean, non-toxic, and incredibly effective at stopping fires chemically. Unfortunately, it destroys the Earth's ozone layer. It was phased out and replaced by environmentally friendlier clean agents like FM-200, Novec 1230, and high-pressure water mist.",
     "cat": "SAFETY_REG",
     "id": "T15F_320"
   }
+
 ]);

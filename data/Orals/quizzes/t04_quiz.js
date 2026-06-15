@@ -1,1410 +1,2694 @@
 window.loadQuizzes("T04_Switchboard", [
   {
-    "q": "What is an ACB rated for in terms of its function in the MSB?",
-    "a": "Full load current switching AND short-circuit fault current interruption",
-    "opts": ["Short-circuit interruption only - contactors handle load switching", "Full load current switching AND short-circuit fault current interruption", "Voltage regulation and current limiting", "Earth fault detection and isolation only"],
-    "exp": "An ACB in the MSB performs both roles: normal load switching (closing and opening under load current) AND protection (interrupting fault currents up to its Icu rating). A contactor handles load switching but cannot interrupt fault currents - it requires a backup fuse or ACB.",
-    "cat": "ACB",
-    "id": "T04_001"
+    "q": "What is the primary purpose of the dead-front panel construction on an MSB?",
+    "a": "Prevents physical contact with live busbars during normal operation",
+    "opts": [
+      "Trips the generator during reverse power",
+      "Sheds non-essential loads automatically",
+      "Prevents physical contact with live busbars during normal operation",
+      "Provides digital readout of earth fault resistance"
+    ],
+    "exp": "Dead-front construction uses physical or electrical interlocks to make contact with live parts impossible during normal operation.",
+    "cat": "SAF",
+    "id": "T04A_001"
   },
   {
-    "q": "What happens if the arc chutes in an ACB become cracked or saturated with carbon deposits?",
-    "a": "Arc interruption fails - arc re-strikes or persists - possible ACB explosion and fire",
-    "opts": ["ACB opens more slowly but still interrupts successfully", "Arc interruption fails - arc re-strikes or persists - possible ACB explosion and fire", "ACB closes faster due to reduced arc resistance", "Only the trip time is affected - arc is still eventually quenched"],
-    "exp": "Cracked or carbon-contaminated arc chutes lose their arc-splitting ability. The arc cannot be divided into manageable short arcs. Without effective quenching, the arc can re-strike, sustain, and cause catastrophic failure of the ACB - possible explosion, fire, and busbar burnout. Arc chute inspection and replacement is a critical maintenance task.",
-    "cat": "ACB",
-    "id": "T04_002"
+    "q": "At what typical value is the IDMT Over-current relay (OCR) set?",
+    "a": "~110% rated generator current",
+    "opts": [
+      "~85% rated generator current",
+      "~110% rated generator current",
+      "~50% rated generator current",
+      "~5-10% rated generator current"
+    ],
+    "exp": "The OCR is set at ~110% to protect busbars, cables, and ACBs from sustained overcurrent and short circuits.",
+    "cat": "SAF",
+    "id": "T04A_002"
   },
   {
-    "q": "A ship's ACB fails to trip when the overcurrent relay operates. What should be checked first?",
-    "a": "Trip coil continuity and the control circuit supply voltage",
-    "opts": ["The arc chute condition", "Trip coil continuity and the control circuit supply voltage", "The main contact silver-tungsten alloy wear", "The spring charging mechanism"],
-    "exp": "If relay operates but ACB doesn't trip: first check trip coil (TC) - measure resistance (open circuit = failed coil). Check control circuit supply voltage - NVC coil requires constant voltage to hold, TC requires a pulse to trip. Then check the mechanical latch release mechanism. Secondary injection testing would confirm whether the relay is operating its output contact correctly.",
-    "cat": "ACB",
-    "id": "T04_003"
+    "q": "What happens when the under-voltage (UV) trip relay activates?",
+    "a": "Trips generator ACB when bus voltage falls below ~85% rated",
+    "opts": [
+      "Sheds Stage 1 loads immediately",
+      "Trips generator ACB when bus voltage falls below ~85% rated",
+      "Starts the emergency generator within 45 seconds",
+      "Energises the reverse power relay"
+    ],
+    "exp": "The UV relay trips the generator ACB when voltage falls below ~85%, preventing the alternator from acting as a motor.",
+    "cat": "SAF",
+    "id": "T04A_003"
   },
   {
-    "q": "What is the purpose of having BOTH main contacts AND arc contacts in an ACB?",
-    "a": "Arc contacts make first and break last - protecting main contacts from arc damage - keeping main contact resistance low",
-    "opts": ["Main contacts carry load, arc contacts carry fault current only", "Arc contacts make first and break last - protecting main contacts from arc damage - keeping main contact resistance low", "Two contact sets provide redundancy if one set fails", "Main contacts open first, arc contacts provide a time delay"],
-    "exp": "Sequence on closing: arc contacts close FIRST (take any pre-strike arc), then main contacts close. On opening: main contacts open FIRST (arc jumps to arc contacts), then arc contacts open LAST (take the arc into the chutes). Result: silver-tungsten main contacts stay clean and low-resistance, extending life significantly.",
-    "cat": "ACB",
-    "id": "T04_004"
+    "q": "What is the time delay for the under-voltage (UV) trip relay?",
+    "a": "1–3 s",
+    "opts": [
+      "0 ms",
+      "1–3 s",
+      "5–10 s",
+      "30 s"
+    ],
+    "exp": "A 1–3 s time delay allows the relay to ride through transient voltage dips, such as during large motor starts.",
+    "cat": "SAF",
+    "id": "T04A_004"
   },
   {
-    "q": "What is the purpose of 'anti-pumping' on an ACB?",
-    "a": "Prevents the ACB from repeatedly closing if the close command is held on while a fault is present",
-    "opts": ["Prevents hydraulic oil from pumping through the mechanism", "Prevents the ACB from repeatedly closing if the close command is held on while a fault is present", "Controls the rate of arc chute cooling", "Prevents contact bounce on closing"],
-    "exp": "Without anti-pumping: if close command is held energised and a fault exists, the ACB would close, trip on fault, re-close (still getting close command), trip again repeatedly - 'pumping'. Anti-pumping circuitry latches off the close circuit after one close until the command is released and re-applied. Protects ACB from repeated fault interruption damage.",
-    "cat": "ACB",
-    "id": "T04_005"
+    "q": "What is the typical setting for a reverse power relay?",
+    "a": "5–10% rated kW with a 3–5 s delay",
+    "opts": [
+      "~110% rated kW with no delay",
+      "5–10% rated kW with a 3–5 s delay",
+      "~85% rated voltage with a 1-3 s delay",
+      "10-15% rated current with a 5 s delay"
+    ],
+    "exp": "The relay is set at 5–10% of rated kW with a 3–5 s delay to avoid tripping during normal synchronisation transients.",
+    "cat": "SAF",
+    "id": "T04A_005"
   },
   {
-    "q": "What is the difference between Ics and Icu in ACB specifications?",
-    "a": "Ics is service breaking capacity (maintained after use). Icu is ultimate capacity (may need replacing after)",
-    "opts": ["Ics is for AC systems, Icu is for DC systems", "Ics is service breaking capacity (maintained after use). Icu is ultimate capacity (may need replacing after)", "Ics is the closing capacity, Icu is the opening capacity", "Ics is for normal load, Icu is for short-circuit"],
-    "exp": "Icu (ultimate breaking capacity): maximum short-circuit current the ACB can interrupt once - after which it must be inspected and may need replacement. Ics (service breaking capacity): current the ACB can interrupt and remain fully serviceable for continued use - typically 25-100% of Icu. Ship MSBs should be specified with Ics matching prospective fault current.",
-    "cat": "ACB",
-    "id": "T04_006"
+    "q": "How does the earth fault indicator (IRM) signal an alarm?",
+    "a": "Provides a continuous digital readout and alarms below 50 kΩ",
+    "opts": [
+      "Trips the main generator ACB when reading falls below 1 MΩ",
+      "Provides a continuous digital readout and alarms below 50 kΩ",
+      "Automatically sheds non-essential loads",
+      "Opens the bus-tie breaker automatically"
+    ],
+    "exp": "The IRM gives continuous digital readouts and typically triggers an alarm when insulation resistance drops below 50 kΩ.",
+    "cat": "SAF",
+    "id": "T04A_006"
   },
   {
-    "q": "On a 440V, 60Hz vessel, what is the synchronous speed of a 4-pole emergency generator?",
-    "a": "1800 RPM",
-    "opts": ["1500 RPM", "1800 RPM", "3000 RPM", "3600 RPM"],
-    "exp": "Ns = (120 \u00d7 f) / P = (120 \u00d7 60) / 4 = 1800 RPM. For 50Hz: 1500 RPM. This calculation is directly relevant to the emergency generator - the governor must maintain this speed for correct frequency. At 1800 RPM generating 60Hz, a 2% speed drop = 60 \u00d7 0.98 = 58.8Hz - outside SOLAS \u00b15% band.",
-    "cat": "EDG",
-    "id": "T04_007"
+    "q": "What is the function of the Bus-tie (BTB) interlock?",
+    "a": "Ensures only synchronised buses connect and prevents circulating currents",
+    "opts": [
+      "Disconnects the emergency generator from the MSB",
+      "Ensures only synchronised buses connect and prevents circulating currents",
+      "Connects the shore supply to the main busbar automatically",
+      "Protects the busbar from lightning surges"
+    ],
+    "exp": "The BTB interlock prevents unsynchronised paralleling, avoiding circulating currents and fault propagation.",
+    "cat": "SAF",
+    "id": "T04A_007"
   },
   {
-    "q": "Why must the emergency generator starting batteries NOT be used for any other purpose?",
-    "a": "Any discharge from other uses reduces the guaranteed starting energy - risking failure to start in an emergency",
-    "opts": ["Battery capacity is too small for any other use", "Any discharge from other uses reduces the guaranteed starting energy - risking failure to start in an emergency", "SOLAS prohibits dual-use batteries on any system", "Using them for other purposes voids the manufacturer warranty"],
-    "exp": "SOLAS requires the emergency generator starting batteries to be dedicated solely for starting. If they are also used for lighting, electronics, or other loads, they may be in a partially discharged state when needed for emergency generator starting. The 45-second requirement cannot be met with a partially discharged starter battery.",
-    "cat": "EDG",
-    "id": "T04_008"
+    "q": "What does the preferential trip relay do?",
+    "a": "Sheds non-essential loads sequentially to prevent total blackout",
+    "opts": [
+      "Sheds non-essential loads sequentially to prevent total blackout",
+      "Trips the generator on reverse power",
+      "Starts the standby generator automatically",
+      "Isolates the emergency switchboard from the main switchboard"
+    ],
+    "exp": "It sheds lowest-priority circuits in stages as the generator nears overload to prevent a total blackout.",
+    "cat": "SAF",
+    "id": "T04A_008"
   },
   {
-    "q": "What test must be performed on the emergency generator monthly?",
-    "a": "Auto-start test - simulate main power failure and verify generator starts and supplies essential loads within 45 seconds",
-    "opts": ["Full load test for 4 hours", "Auto-start test - simulate main power failure and verify generator starts and supplies essential loads within 45 seconds", "IR test of all windings", "Manual start and run for 30 minutes at no load"],
-    "exp": "Monthly test per SOLAS: simulate main power loss \u2192 verify auto-start initiates \u2192 verify generator reaches rated voltage and frequency \u2192 verify ACB closes and essential loads supplied \u2192 time the whole sequence against the 45-second (cargo) / 30-second (passenger) limit. Log results with date, times, any defects.",
-    "cat": "EDG",
-    "id": "T04_009"
+    "q": "Why is it dangerous if the reverse power relay is not fitted?",
+    "a": "The live busbar drives the stalled generator as a synchronous motor, causing engine damage",
+    "opts": [
+      "The generator will catch fire due to excessive overvoltage",
+      "The live busbar drives the stalled generator as a synchronous motor, causing engine damage",
+      "The bus-tie breaker will rapidly open and close",
+      "The emergency generator will auto-start while the main generator is running"
+    ],
+    "exp": "Without it, a stalled prime mover is driven by the bus as a motor, damaging the crankshaft, bearings, and turbocharger.",
+    "cat": "SAF",
+    "id": "T04A_009"
   },
   {
-    "q": "The emergency generator auto-starts but takes 52 seconds to supply essential loads on a cargo ship. What is this?",
-    "a": "A SOLAS non-compliance - maximum allowed is 45 seconds - PSC deficiency",
-    "opts": ["Acceptable - 52 seconds is within the 60-second tolerance", "A SOLAS non-compliance - maximum allowed is 45 seconds - PSC deficiency", "Only unacceptable for passenger ships - cargo ships have 60 seconds", "Acceptable provided the captain has approved the extended start time"],
-    "exp": "SOLAS II-1/Reg 42: cargo ships must have essential loads supplied within 45 seconds. 52 seconds is a clear SOLAS non-compliance. PSC inspectors test this - failure is a deficiency that must be rectified before departure. Common causes: slow engine startup, clogged fuel filters, discharged starting batteries, faulty auto-start sequence relay.",
-    "cat": "EDG",
-    "id": "T04_010"
+    "q": "What does the symbol 'In' represent on an ACB nameplate?",
+    "a": "Continuous current the ACB can carry indefinitely without overheating",
+    "opts": [
+      "Maximum short-circuit breaking capacity",
+      "Continuous current the ACB can carry indefinitely without overheating",
+      "Rated operational voltage of the system",
+      "Rated impulse withstand voltage"
+    ],
+    "exp": "In is the Normal Current Rating, stamped on the frame (e.g., 1600 A), which the ACB can carry indefinitely at rated ambient temp.",
+    "cat": "RATING",
+    "id": "T04A_010"
   },
   {
-    "q": "What SOLAS regulation covers the emergency generator location and performance requirements?",
-    "a": "SOLAS Chapter II-1, Regulations 42 and 43",
-    "opts": ["SOLAS Chapter II-1, Regulations 42 and 43", "SOLAS Chapter IV, Regulation 13", "SOLAS Chapter III, Regulation 6", "SOLAS Chapter II-2, Regulation 4"],
-    "exp": "SOLAS II-1/Reg 42 (emergency source of power on cargo ships) and Reg 43 (passenger ships) cover: location, auto-start time (45/30 seconds), fuel endurance (18/36 hours), starting methods, essential services supplied. Chapter IV Reg 13 covers GMDSS battery specifically. These are the most tested SOLAS references for ETO orals.",
-    "cat": "EDG",
-    "id": "T04_011"
+    "q": "What is the difference between Icu and Ics on an ACB?",
+    "a": "Icu is the ultimate breaking capacity, while Ics is the service capacity it can repeat",
+    "opts": [
+      "Icu is for AC circuits, Ics is for DC circuits",
+      "Icu is the making capacity, Ics is the breaking capacity",
+      "Icu is the ultimate breaking capacity, while Ics is the service capacity it can repeat",
+      "Icu is the insulation voltage, Ics is the operational voltage"
+    ],
+    "exp": "Icu is the ultimate max fault current interrupted once; Ics is a percentage of Icu that the breaker can repeat in service.",
+    "cat": "RATING",
+    "id": "T04A_011"
   },
   {
-    "q": "What is the consequence of a generator motoring for more than a few seconds without the reverse power relay operating?",
-    "a": "Mechanical damage to engine internals - pistons, rings, and valves run without combustion lubrication",
-    "opts": ["Only the generator windings are damaged - the engine is unaffected", "Mechanical damage to engine internals - pistons, rings, and valves run without combustion lubrication", "The busbar voltage collapses as the motored generator absorbs kVAR", "Only the coupling between engine and generator is damaged"],
-    "exp": "A diesel engine being motored (driven mechanically without combustion): cylinder walls, piston rings, and valves run without the lubrication provided by fuel combustion chemistry. Within seconds to minutes: metal-to-metal contact \u2192 scoring \u2192 seizure. The motoring load also overloads the running generators on the busbar.",
-    "cat": "RPR",
-    "id": "T04_012"
+    "q": "Which voltage rating is always higher on an ACB nameplate?",
+    "a": "Ui (Rated Insulation Voltage) is higher than Ue (Rated Operational Voltage)",
+    "opts": [
+      "Ue (Rated Operational Voltage) is higher than Ui (Rated Insulation Voltage)",
+      "Ui (Rated Insulation Voltage) is higher than Uimp (Impulse Withstand)",
+      "Ui (Rated Insulation Voltage) is higher than Ue (Rated Operational Voltage)",
+      "Ue (Rated Operational Voltage) is higher than Uimp (Impulse Withstand)"
+    ],
+    "exp": "Ui defines the maximum dielectric withstand of the insulation, which is always higher than the normal operating voltage (Ue).",
+    "cat": "RATING",
+    "id": "T04A_012"
   },
   {
-    "q": "A generator's prime mover fails. The reverse power relay has a 5-second time delay. What happens during those 5 seconds?",
-    "a": "The generator coasts down and begins motoring - absorbing increasing power from the busbar - until relay operates",
-    "opts": ["Nothing - the generator maintains output on inertia for 5 seconds", "The generator coasts down and begins motoring - absorbing increasing power from the busbar - until relay operates", "The generator ACB trips immediately on loss of prime mover", "The preferential trip relay operates first, shedding non-essential loads"],
-    "exp": "As the engine stops, the generator loses torque and decelerates. The busbar (at constant frequency from other running generators) drives the slowing generator as a motor. Reverse real power flows increasing as the speed differential grows. After the 5-second time delay (which prevents tripping on brief paralleling transients), the reverse power relay trips the ACB.",
-    "cat": "RPR",
-    "id": "T04_013"
+    "q": "What does Uimp represent?",
+    "a": "Peak impulse voltage the ACB can withstand without flashover",
+    "opts": [
+      "Maximum continuous operating voltage",
+      "Peak impulse voltage the ACB can withstand without flashover",
+      "The voltage threshold for the under-voltage trip coil",
+      "The minimum voltage required to energise the close coil"
+    ],
+    "exp": "Uimp is the Rated Impulse Withstand Voltage, protecting against lightning surges and switching transients.",
+    "cat": "RATING",
+    "id": "T04A_013"
   },
   {
-    "q": "Why is the reverse power relay time delay set to 3-5 seconds rather than instantaneous?",
-    "a": "To prevent nuisance tripping on brief reverse power transients that occur when paralleling or during load swings",
-    "opts": ["Because the relay measuring element needs 3-5 seconds to calculate reverse power accurately", "To prevent nuisance tripping on brief reverse power transients that occur when paralleling or during load swings", "SOLAS requires minimum 5 seconds before any generator protection operates", "To give the prime mover time to restart before the ACB trips"],
-    "exp": "During synchronisation and ACB closure, brief momentary reverse power can flow as the incoming generator adjusts to the busbar. Similarly, large load swings can briefly swing the power factor causing momentary reverse flow. The 3-5 second delay prevents these transients from tripping the ACB unnecessarily while still catching a genuine prime mover failure.",
-    "cat": "RPR",
-    "id": "T04_014"
+    "q": "What is the function of the NVC / UVT coil on an ACB?",
+    "a": "It de-energises and spring-opens the ACB if control supply is lost",
+    "opts": [
+      "It energises to close the main contacts on command",
+      "It provides the trip signal during a short circuit",
+      "It de-energises and spring-opens the ACB if control supply is lost",
+      "It measures the phase angle for reverse power detection"
+    ],
+    "exp": "The No-Volt/Under-Volt coil holds the ACB closed; on power loss, it drops out to prevent accidental re-closure onto a dead bus.",
+    "cat": "RATING",
+    "id": "T04A_014"
   },
   {
-    "q": "The under-frequency relay sheds non-essential loads (preferential trip) at Stage 2 (47Hz). The frequency then recovers to 50Hz. What was the cause?",
-    "a": "Generator was transiently overloaded - load shedding restored balance - generator recovered without tripping",
-    "opts": ["The generator developed a fault that was self-correcting", "Generator was transiently overloaded - load shedding restored balance - generator recovered without tripping", "The emergency generator started and assisted the main generator", "A frequency relay malfunction caused incorrect operation"],
-    "exp": "This is the intended functioning of the under-frequency protection system. Stage 2 shed sufficient non-essential load to bring load within generator capacity - the prime mover could then accelerate back to rated speed and frequency. No generator trip occurred. Investigation should still follow: why was the generator overloaded, what load caused it, is the generation capacity adequate?",
-    "cat": "UFP",
-    "id": "T04_015"
+    "q": "How does an ACB quench an arc during opening?",
+    "a": "Main contacts open first, then arcing contacts open to draw the arc into the arc chute",
+    "opts": [
+      "Arcing contacts open first, then main contacts draw the arc into the vacuum bottle",
+      "Main contacts open first, then arcing contacts open to draw the arc into the arc chute",
+      "The arc is quenched instantly by the NVC coil",
+      "SF6 gas is released across the main contacts as they open"
+    ],
+    "exp": "The arcing sequence protects the main contacts. The arc is drawn into ceramic splitter plates in the arc chute and extinguished.",
+    "cat": "RATING",
+    "id": "T04A_015"
   },
   {
-    "q": "A ship's system is at 50Hz. During a heavy motor start, frequency dips to 47.5Hz briefly then recovers. Which relay operates?",
-    "a": "Stage 1 alarm relay (48Hz) may alarm briefly - but Stage 2 (47Hz) trip would NOT operate as 47.5Hz is above the trip threshold",
-    "opts": ["Stage 2 (47Hz) preferential trip operates - any dip below 48Hz triggers shedding", "Stage 1 alarm relay (48Hz) may alarm briefly - but Stage 2 (47Hz) trip would NOT operate as 47.5Hz is above the trip threshold", "No relay operates - 47.5Hz is within SOLAS \u00b15% tolerance", "The overcurrent relay operates due to high starting current"],
-    "exp": "Stage 1 alarm is typically set at 48Hz. A dip to 47.5Hz triggers the alarm but does NOT reach the Stage 2 (47Hz) preferential trip threshold. The dashpot timer also requires the condition to persist - a brief transient may not even trigger the alarm timer. This is the intended behaviour: alarm on moderate dip, shed loads only on sustained or severe drop.",
-    "cat": "UFP",
-    "id": "T04_016"
+    "q": "What is the typical current range for an Air Circuit Breaker (ACB) on ships?",
+    "a": "400 A – 6300 A",
+    "opts": [
+      "100 A – 1600 A",
+      "Up to ~75 A",
+      "400 A – 6300 A",
+      "10 A – 100 A"
+    ],
+    "exp": "ACBs are used for large feeders and generators, operating in the 400 A to 6300 A range.",
+    "cat": "RATING",
+    "id": "T04A_016"
   },
   {
-    "q": "What must the bus tie breaker interlock prevent?",
-    "a": "Both generator ACBs and the BTB from being closed simultaneously - preventing the generators from paralleling through the BTB unintentionally",
-    "opts": ["The BTB from closing during normal operations", "Both generator ACBs and the BTB from being closed simultaneously - preventing the generators from paralleling through the BTB unintentionally", "Personnel from accessing the BTB cubicle while closed", "The BTB from opening while generators are running in parallel"],
-    "exp": "The BTB interlocking scheme typically prevents having all three breakers (Gen 1 ACB, BTB, Gen 2 ACB) closed simultaneously unless intentional paralleling through the BTB is authorised. Without this interlock, closing the BTB while both generators are closed could create an uncontrolled parallel path - with potentially different voltages causing large circulating currents.",
-    "cat": "BTB",
-    "id": "T04_017"
+    "q": "What component is used to manually reset small branch circuits in accommodations?",
+    "a": "NFB (No-Fuse Breaker)",
+    "opts": [
+      "ACB (Air Circuit Breaker)",
+      "NFB (No-Fuse Breaker)",
+      "MCCB (Moulded Case Circuit Breaker)",
+      "VCB (Vacuum Circuit Breaker)"
+    ],
+    "exp": "NFBs (up to ~75A) are used for lighting and socket panels and replace rewirable fuses.",
+    "cat": "RATING",
+    "id": "T04A_017"
   },
   {
-    "q": "When would a ship close its Bus Tie Breaker as a normal operational procedure?",
-    "a": "When transferring load from one generator to the other - briefly closing BTB before opening the first generator ACB",
-    "opts": ["During port arrival when all generators must run in parallel through the BTB", "When transferring load from one generator to the other - briefly closing BTB before opening the first generator ACB", "Whenever frequency drops below 48Hz on either section", "During blackout drill to test BTB operation only"],
-    "exp": "Load transfer procedure: Run-up incoming generator \u2192 synchronise to its MSB section \u2192 close BTB (now both sections connected) \u2192 transfer loads as needed \u2192 close incoming generator ACB \u2192 open outgoing generator ACB \u2192 open BTB (back to split-bus). The BTB is only briefly closed during the transfer - normal operation is BTB open.",
-    "cat": "BTB",
-    "id": "T04_018"
+    "q": "What relationship is required by IEC 60947-2 between Making Capacity (Icm) and Breaking Capacity (Icu) for ACBs?",
+    "a": "Icm ≥ 2.2 × Icu",
+    "opts": [
+      "Icm = Icu",
+      "Icm ≥ 2.2 × Icu",
+      "Icu ≥ 2.2 × Icm",
+      "Icm ≥ 10 × Icu"
+    ],
+    "exp": "The asymmetric making current can be up to 2.2 × Icu due to the DC offset in the first half-cycle of an AC fault.",
+    "cat": "RATING",
+    "id": "T04A_018"
   },
   {
-    "q": "What does 'cold ironing' or 'Alternative Maritime Power (AMP)' mean?",
-    "a": "Supplying the ship from shore electrical power in port - allowing ship's generators to be shut down",
-    "opts": ["Using cold (ambient temperature) fuel to reduce generator emissions", "Supplying the ship from shore electrical power in port - allowing ship's generators to be shut down", "Connecting the emergency generator to the main switchboard", "Using renewable energy panels to supplement generator power at anchor"],
-    "exp": "Cold ironing = shore power = AMP. The ship connects to the port's electrical grid, allowing all generators to be shut down. Benefits: zero exhaust emissions in port (SOx, NOx, particulates), reduced noise, fuel savings. Required by California Air Resources Board, Port of Rotterdam, and other major ports. IEC 80005-1 covers the HVSC system standard.",
-    "cat": "SHC",
-    "id": "T04_019"
+    "q": "When maintaining ACB arc chutes, what must NEVER be used to clean ceramic splitter plates?",
+    "a": "Damp cloth",
+    "opts": [
+      "Dry cloth",
+      "Dry compressed air",
+      "Damp cloth",
+      "Soft bristle brush"
+    ],
+    "exp": "A damp cloth introduces moisture into the ceramic, which causes electrical tracking and failure.",
+    "cat": "MAINT",
+    "id": "T04A_019"
   },
   {
-    "q": "What verifications must be completed BEFORE closing the shore connection ACB?",
-    "a": "Verify shore voltage, frequency, and phase sequence match ship's system - then synchronise if transferring under load",
-    "opts": ["Only verify voltage - frequency can adjust automatically", "Verify shore voltage, frequency, and phase sequence match ship's system - then synchronise if transferring under load", "Just connect and check power flows in the correct direction", "Verify shore cable insulation resistance is above 1 M\u03a9"],
-    "exp": "Before closing shore ACB: 1) Verify shore voltage matches ship's bus voltage (within \u00b15%). 2) Verify frequency matches (or use frequency converter). 3) Verify phase sequence matches (phase rotation meter). 4) If ship's generators are still running: synchronise shore supply to running bus before closing shore ACB (like any parallel operation). Wrong phase sequence = large circulating current on closing.",
-    "cat": "SHC",
-    "id": "T04_020"
+    "q": "At what wear level are arcing contacts typically replaced?",
+    "a": "At 50% erosion limit",
+    "opts": [
+      "At 10% erosion limit",
+      "At 25% erosion limit",
+      "At 50% erosion limit",
+      "At 90% erosion limit"
+    ],
+    "exp": "Arcing contacts are usually replaced before reaching their minimum thickness, typically around the 50% erosion mark.",
+    "cat": "MAINT",
+    "id": "T04A_020"
   },
   {
-    "q": "What is the difference between Offline UPS and Online UPS for critical ship systems?",
-    "a": "Online: always feeds load through inverter - zero switchover. Offline: switches to inverter on mains failure - 4-12ms gap",
-    "opts": ["Online is newer technology. Offline is older - they both have zero switchover", "Online: always feeds load through inverter - zero switchover. Offline: switches to inverter on mains failure - 4-12ms gap", "Offline provides better power quality than online", "Online has batteries, offline relies on capacitors for short gaps"],
-    "exp": "Online (double-conversion): load ALWAYS through rectifier-inverter - mains failure has zero impact. Offline (standby): load normally direct from mains - on mains failure, switch transfers to inverter (4-12ms gap). 4-12ms is acceptable for most equipment but not for some critical navigation computers and automation systems. Ship critical systems always use online UPS.",
-    "cat": "UPS",
-    "id": "T04_021"
+    "q": "What should the main contact resistance be across closed ACB contacts?",
+    "a": "<100 µΩ",
+    "opts": [
+      ">1 MΩ",
+      "<100 µΩ",
+      "1–5 Ω",
+      "50 kΩ"
+    ],
+    "exp": "Resistance must be very low (<100 µΩ measured with a micro-ohmmeter) to prevent thermal hotspots.",
+    "cat": "MAINT",
+    "id": "T04A_021"
   },
   {
-    "q": "What loads on a ship are supplied from both the Emergency Switchboard AND UPS?",
-    "a": "GMDSS radio equipment - it must have both UPS (zero interruption) and emergency generator (long duration)",
-    "opts": ["Navigation lights - both systems ensure they never go out", "GMDSS radio equipment - it must have both UPS (zero interruption) and emergency generator (long duration)", "Main engine fuel pumps - both sources ensure propulsion", "Shore connection - both provide redundant power sources"],
-    "exp": "GMDSS is supplied from both: UPS provides immediate, uninterrupted power during any brief outage, and the emergency generator provides sustained power (18/36 hours) for extended emergency operations. The UPS covers the gap during emergency generator startup. This dual arrangement ensures GMDSS is never interrupted regardless of the nature of the emergency.",
-    "cat": "UPS",
-    "id": "T04_022"
+    "q": "What type of grease should NEVER be used near ACB arc chutes?",
+    "a": "Petroleum-based grease",
+    "opts": [
+      "Silicone grease",
+      "Lithium-based grease",
+      "Petroleum-based grease",
+      "Copper anti-seize"
+    ],
+    "exp": "Petroleum-based greases pose a fire risk and carbonize under arcing conditions; silicone or lithium are used.",
+    "cat": "MAINT",
+    "id": "T04A_022"
   },
   {
-    "q": "During a battery capacity test, a 100Ah rated battery delivers 76Ah before voltage drops below minimum. What action is required?",
-    "a": "Replace the battery - capacity is below 80% of rated (76Ah < 80Ah threshold)",
-    "opts": ["Equalising charge to recover capacity, then retest", "Replace the battery - capacity is below 80% of rated (76Ah < 80Ah threshold)", "Continue using - 76% capacity is within acceptable range", "Investigate individual cells - no replacement needed yet"],
-    "exp": "80% of 100Ah = 80Ah minimum acceptable capacity. The battery delivered only 76Ah (76%) - below the 80% replacement threshold. The battery must be replaced. This applies to all safety-critical batteries: GMDSS, emergency generator starting, emergency lighting, UPS. Certificate of the replacement test must be maintained.",
-    "cat": "BAT",
-    "id": "T04_023"
+    "q": "What is the purpose of testing the ACB in the TEST position?",
+    "a": "Control circuit remains connected while power contacts are disconnected",
+    "opts": [
+      "Both control and power circuits are completely isolated",
+      "The ACB is connected to the busbars but cannot trip",
+      "Control circuit remains connected while power contacts are disconnected",
+      "The bus-tie breaker automatically opens"
+    ],
+    "exp": "The TEST position allows safe operational testing of relays and trip coils without exposing the busbars to load.",
+    "cat": "MAINT",
+    "id": "T04A_023"
   },
   {
-    "q": "What is 'battery sulphation' and can it be reversed?",
-    "a": "Lead sulphate crystal build-up on plates due to chronic undercharging - partially reversible if caught early with equalising charge",
-    "opts": ["Contamination of electrolyte with sea water - permanently damages the battery", "Lead sulphate crystal build-up on plates due to chronic undercharging - partially reversible if caught early with equalising charge", "Oxidation of terminal connections - cleaned with sodium bicarbonate", "Gassing of hydrogen during charging - controlled by ventilation"],
-    "exp": "Sulphation occurs when a lead-acid battery is kept in a discharged state - lead sulphate crystals harden on plates, reducing active area. Early sulphation: slow equalising charge (above normal float voltage, 2.35-2.40V/cell for extended period) can partially dissolve crystals. Advanced sulphation: irreversible - replace battery. Prevent by keeping batteries on float charge.",
-    "cat": "BAT",
-    "id": "T04_024"
+    "q": "What is the very first step in the 7-step ACB isolation procedure?",
+    "a": "Obtain PTW (Permit to Work)",
+    "opts": [
+      "Rack out to ISOLATED position",
+      "Apply LOTO",
+      "Obtain PTW (Permit to Work)",
+      "Apply earth clamps"
+    ],
+    "exp": "Before any work, a Permit to Work must be obtained, and the bridge/Chief Engineer must be informed.",
+    "cat": "MAINT",
+    "id": "T04A_024"
   },
   {
-    "q": "An MSB has forward and aft access doors. What safety purpose do these serve?",
-    "a": "Emergency escape - personnel can exit from either end if fire or fault blocks one exit route",
-    "opts": ["To allow two engineers to work simultaneously from different ends", "Emergency escape - personnel can exit from either end if fire or fault blocks one exit route", "Required for ventilation airflow through the MSB", "To access busbars from both ends for maintenance"],
-    "exp": "SOLAS and IEC 60092 require access from both ends of the MSB for emergency escape. If a fire or arc flash occurs inside the MSB at one end, personnel working at the other end can exit via the opposite door without passing through the fire/arc hazard. A single door would trap people if the hazard was between them and the exit.",
-    "cat": "MSB",
-    "id": "T04_025"
+    "q": "In the ACB ISOLATED position, what provides protection from live bus stabs?",
+    "a": "Shutters close automatically over the bus stabs",
+    "opts": [
+      "The ceramic arc chutes",
+      "The NVC coil de-energises",
+      "Shutters close automatically over the bus stabs",
+      "The earth fault indicator trips the bus"
+    ],
+    "exp": "When the ACB is racked out to ISOLATED, safety shutters mechanically close over the live busbar stabs.",
+    "cat": "MAINT",
+    "id": "T04A_025"
   },
   {
-    "q": "What is the earth bus on a Main Switchboard?",
-    "a": "A continuous copper bar running the full length of the MSB to which all equipment frames and cable armour are bonded",
-    "opts": ["The busbar that carries the neutral current", "A continuous copper bar running the full length of the MSB to which all equipment frames and cable armour are bonded", "A separate earth fault bus for monitoring insulation resistance", "The busbar connecting the MSB to the hull earth plate"],
-    "exp": "The earth bus (earth bar) runs the full length of the MSB. Every cubicle frame, door, cable armour, and equipment housing is bonded to it. It connects to the ship's main earth bar and ultimately to the hull. Provides a low-impedance path for fault currents - ensuring protection relays operate rapidly on earth faults rather than current flowing through personnel.",
-    "cat": "MSB",
-    "id": "T04_026"
+    "q": "Why are earth clamps applied during ACB maintenance?",
+    "a": "To drain any capacitive charge on the bus side",
+    "opts": [
+      "To bypass the reverse power relay",
+      "To test the micro-ohmmeter",
+      "To prevent the NVC coil from dropping out",
+      "To drain any capacitive charge on the bus side"
+    ],
+    "exp": "Earth clamps are connected to the bus stabs to safely drain any remaining capacitive voltage before work begins.",
+    "cat": "MAINT",
+    "id": "T04A_026"
   },
   {
-    "q": "What are the arc contacts (arcing contacts) in an ACB made of?",
-    "a": "Carbon or copper-graphite",
-    "opts": ["Silver-tungsten alloy", "Carbon or copper-graphite", "Tungsten carbide", "Copper-nickel alloy"],
-    "exp": "Arc contacts are made of carbon or copper-graphite because they are designed to take the arc damage, protecting the silver-tungsten main contacts. They make FIRST and break LAST - absorbing arc energy so main contacts remain undamaged.",
-    "cat": "ACB",
-    "id": "T04_027"
+    "q": "Where must the voltage indicator test be performed during ACB isolation?",
+    "a": "On BOTH sides of the ACB terminals (bus side AND load side)",
+    "opts": [
+      "Only on the bus side",
+      "Only on the load side",
+      "On BOTH sides of the ACB terminals (bus side AND load side)",
+      "On the control circuit pins"
+    ],
+    "exp": "Testing both sides ensures complete isolation from both the source (bus) and any possible feedback from the load.",
+    "cat": "MAINT",
+    "id": "T04A_027"
   },
   {
-    "q": "In an ACB, what is the purpose of the arc chutes?",
-    "a": "To split the arc into multiple shorter series arcs, cooling and extinguishing it",
-    "opts": ["To store energy for the closing spring", "To split the arc into multiple shorter series arcs, cooling and extinguishing it", "To carry the main load current normally", "To provide short-circuit protection"],
-    "exp": "Arc chutes contain insulating splitter plates that divide the arc into many shorter series arcs. Each shorter arc has a higher voltage drop - the total exceeds supply voltage - so the arc cannot sustain itself and extinguishes. Arc chute material absorbs the heat.",
-    "cat": "ACB",
-    "id": "T04_028"
+    "q": "Why must rewirable (Kit-Kat) fuses NEVER be used on 440 V MSB feeders?",
+    "a": "They have low breaking capacity and variable current rating, lacking arc quench",
+    "opts": [
+      "They are too expensive to replace",
+      "They have low breaking capacity and variable current rating, lacking arc quench",
+      "They trip too quickly during transient overloads",
+      "They require silicone grease for installation"
+    ],
+    "exp": "Rewirable fuses are unsafe for high fault currents on MSB feeders because they lack proper arc quenching and accurate calibration.",
+    "cat": "FUSE",
+    "id": "T04A_028"
   },
   {
-    "q": "What is the correct sequence of events when an ACB opens under fault?",
-    "a": "Trip signal \u2192 contacts open \u2192 arc forms \u2192 arc driven into chutes \u2192 arc split \u2192 arc extinguished",
-    "opts": ["Trip signal \u2192 contacts open \u2192 arc forms \u2192 arc driven into chutes \u2192 arc split \u2192 arc extinguished", "Trip signal \u2192 arc quenched \u2192 contacts open \u2192 circuit broken", "Contacts open \u2192 trip signal \u2192 arc forms \u2192 arc extinguished", "Trip coil energised \u2192 arc forms \u2192 contacts open \u2192 spring releases"],
-    "exp": "The arc is driven by magnetic force from the arc current itself into the arc chutes where it is split and extinguished. The sequence is precise: trip signal first, then mechanical opening, then arc management inside the chutes.",
-    "cat": "ACB",
-    "id": "T04_029"
+    "q": "What is the typical breaking capacity of an HRC fuse?",
+    "a": "80–100 kA",
+    "opts": [
+      "10–20 kA",
+      "80–100 kA",
+      "2–3 kA",
+      "400–600 A"
+    ],
+    "exp": "HRC fuses can safely interrupt the highest ship fault currents (80–100 kA) without explosive failure.",
+    "cat": "FUSE",
+    "id": "T04A_029"
   },
   {
-    "q": "What does NVC (No Voltage Coil) / UVT (Under-Voltage Trip) do on an ACB?",
-    "a": "Opens the ACB automatically if control voltage is lost - fail-safe operation",
-    "opts": ["Prevents the ACB from closing on overload", "Opens the ACB automatically if control voltage is lost - fail-safe operation", "Limits the voltage across the arc contacts", "Provides backup power to the trip coil"],
-    "exp": "The NVC/UVT is a continuous-duty coil that holds the ACB closed while control voltage is present. If control voltage fails, the coil de-energises, the latch releases, and the ACB opens automatically. Fail-safe: loss of control power = breaker opens safely. It also prevents auto-reclosing after blackout restoration.",
-    "cat": "ACB",
-    "id": "T04_030"
+    "q": "What material makes up the body of an HRC fuse?",
+    "a": "High-purity ceramic or glass tube",
+    "opts": [
+      "High-purity ceramic or glass tube",
+      "Moulded plastic casing",
+      "Copper-clad aluminum",
+      "Silicone-impregnated rubber"
+    ],
+    "exp": "The body is made of ceramic or glass to withstand the explosive arc pressure when clearing a fault.",
+    "cat": "FUSE",
+    "id": "T04A_030"
   },
   {
-    "q": "What rating defines the maximum fault current an ACB can safely interrupt?",
-    "a": "Ics / Icu - short circuit breaking capacity",
-    "opts": ["In - normal current rating", "Ics / Icu - short circuit breaking capacity", "Ue - rated operational voltage", "Ui - insulation voltage"],
-    "exp": "Ics (service breaking capacity) and Icu (ultimate breaking capacity) define how much short-circuit current the ACB can interrupt safely without explosive failure. In is the continuous load current. Ue is the operational voltage.",
-    "cat": "ACB",
-    "id": "T04_031"
+    "q": "Why is silver chosen for the HRC fuse element?",
+    "a": "Low resistance and vaporises cleanly at fault current without explosive fragmentation",
+    "opts": [
+      "It melts slowly to allow long time delays",
+      "Low resistance and vaporises cleanly at fault current without explosive fragmentation",
+      "It combines with oxygen to form an insulating gas",
+      "It is highly resistant to tracking"
+    ],
+    "exp": "Silver has low resistance (no normal heating) and vaporises cleanly when the fuse blows.",
+    "cat": "FUSE",
+    "id": "T04A_031"
   },
   {
-    "q": "Why does an ACB use silver-tungsten alloy for main contacts?",
-    "a": "High electrical conductivity combined with arc resistance and low contact resistance when closed",
-    "opts": ["Cheapest material available for high-current contacts", "High electrical conductivity combined with arc resistance and low contact resistance when closed", "Magnetic properties help drive the arc into the chutes", "High thermal mass absorbs heat from the arc"],
-    "exp": "Silver-tungsten gives the best combination of electrical conductivity (silver) and arc erosion resistance (tungsten). Main contacts carry full load current normally and must have minimal contact resistance to avoid heating. Arc contacts - not main contacts - take the arc damage.",
-    "cat": "ACB",
-    "id": "T04_032"
+    "q": "What acts as the arc quench filler inside an HRC fuse?",
+    "a": "Silica (quartz) sand",
+    "opts": [
+      "SF6 gas",
+      "Mineral oil",
+      "Silica (quartz) sand",
+      "Ceramic splitter plates"
+    ],
+    "exp": "Silica sand absorbs arc energy and vaporises into silica dioxide, quenching the arc without gas pressure buildup.",
+    "cat": "FUSE",
+    "id": "T04A_032"
   },
   {
-    "q": "What is the purpose of the spring-charged operating mechanism in an ACB?",
-    "a": "Stores energy to open contacts rapidly - ensuring fast arc interruption independent of operator speed",
-    "opts": ["Provides backup power if trip coil fails", "Stores energy to open contacts rapidly - ensuring fast arc interruption independent of operator speed", "Prevents the contacts from bouncing when closing", "Controls the arc chute cooling fans"],
-    "exp": "The spring stores energy for both opening (opening spring) and closing (closing spring). On a trip command, the spring releases instantly - opening contacts in milliseconds regardless of operator action. Fast separation is critical for arc interruption in the chutes.",
-    "cat": "ACB",
-    "id": "T04_033"
+    "q": "How fast does an HRC fuse typically operate during a heavy fault?",
+    "a": "0.25–3 cycles",
+    "opts": [
+      "10–15 seconds",
+      "1–3 seconds",
+      "0.25–3 cycles",
+      "5–10 minutes"
+    ],
+    "exp": "HRC fuses are current-limiting and interrupt the fault before the current reaches its first prospective peak (0.25–3 cycles).",
+    "cat": "FUSE",
+    "id": "T04A_033"
   },
   {
-    "q": "What is the difference between ACB SERVICE and TEST positions?",
-    "a": "Service: power contacts connected to busbars. Test: power contacts disconnected but control circuits remain connected",
-    "opts": ["Service: manual operation only. Test: remote operation only", "Service: power contacts connected to busbars. Test: power contacts disconnected but control circuits remain connected", "Service: ACB closed. Test: ACB open but still in switchboard", "Service: full load rating. Test: reduced load for testing"],
-    "exp": "In TEST position, the ACB is racked halfway - main busbars are isolated but control wiring stays connected. This allows protection relay testing (secondary injection) without any live power on the circuit. ISOLATED position disconnects both power AND control circuits for full maintenance.",
-    "cat": "POS",
-    "id": "T04_034"
+    "q": "What controls the blow point on an HRC fuse silver element?",
+    "a": "Precision-machined notches",
+    "opts": [
+      "A bimetallic thermal strip",
+      "Precision-machined notches",
+      "The amount of silica sand filler",
+      "A magnetic blow-out coil"
+    ],
+    "exp": "The silver element has calibrated notches that dictate exactly where and when the element vaporises.",
+    "cat": "FUSE",
+    "id": "T04A_034"
   },
   {
-    "q": "In which ACB position can you perform secondary injection testing of protection relays?",
+    "q": "Where are Cartridge fuses typically used on ships?",
+    "a": "Small panel distribution circuits and control panel protection",
+    "opts": [
+      "MSB bus-section isolation",
+      "Small panel distribution circuits and control panel protection",
+      "Main generator feeders",
+      "High voltage 6.6 kV switchboards"
+    ],
+    "exp": "Cartridge fuses have low-to-medium breaking capacity, suitable for small distribution and control circuits.",
+    "cat": "FUSE",
+    "id": "T04A_035"
+  },
+  {
+    "q": "What happens after an HRC fuse operates?",
+    "a": "The entire fuse unit must be replaced",
+    "opts": [
+      "The fuse element is manually reset",
+      "The silver wire is rewired into the body",
+      "The entire fuse unit must be replaced",
+      "The silica sand is topped up"
+    ],
+    "exp": "HRC fuses are sacrificial and non-replaceable internally; the whole cartridge must be discarded and replaced.",
+    "cat": "FUSE",
+    "id": "T04A_036"
+  },
+  {
+    "q": "What principle does a thermal bimetallic overload relay use?",
+    "a": "Bimetallic strip heated by load current bends at a set temperature",
+    "opts": [
+      "CT samples line current to calculate IDMT",
+      "Compares IN current vs OUT current",
+      "Bimetallic strip heated by load current bends at a set temperature",
+      "Measures voltage drop across an EOL resistor"
+    ],
+    "exp": "Overload relays use a bimetallic strip that bends when heated by prolonged overcurrent to trip the contactor.",
+    "cat": "DIFF",
+    "id": "T04A_037"
+  },
+  {
+    "q": "Which relay type is best for protecting motor windings from sustained overcurrent <10× FLA?",
+    "a": "Overload relay (thermal bimetallic)",
+    "opts": [
+      "Differential relay",
+      "OCR - IDMT",
+      "Reverse power relay",
+      "Overload relay (thermal bimetallic)"
+    ],
+    "exp": "Thermal overload relays have a slow thermal time constant that matches motor heating curves perfectly for sustained overloads.",
+    "cat": "DIFF",
+    "id": "T04A_038"
+  },
+  {
+    "q": "How does an OCR (IDMT) react to different fault currents?",
+    "a": "Trips faster at higher multiples of the current setting",
+    "opts": [
+      "Trips instantly for all faults above the setting",
+      "Trips faster at higher multiples of the current setting",
+      "Provides a fixed time delay regardless of current magnitude",
+      "Bends a bimetallic strip proportionally to voltage"
+    ],
+    "exp": "IDMT (Inverse Definite Minimum Time) means the higher the overcurrent, the faster the relay operates.",
+    "cat": "DIFF",
+    "id": "T04A_039"
+  },
+  {
+    "q": "What does a differential relay measure to detect a fault?",
+    "a": "It compares current flowing INTO a zone vs current flowing OUT",
+    "opts": [
+      "It compares current flowing INTO a zone vs current flowing OUT",
+      "It measures the phase angle between voltage and current",
+      "It monitors the thermal heat generated by the load",
+      "It calculates the inverse time of the overcurrent"
+    ],
+    "exp": "A differential relay expects IN = OUT. If IN ≠ OUT, it detects an internal leakage/fault immediately.",
+    "cat": "DIFF",
+    "id": "T04A_040"
+  },
+  {
+    "q": "What type of faults are differential relays specifically designed to detect?",
+    "a": "Internal faults: earth fault, winding-to-winding short, low-level insulation breakdown",
+    "opts": [
+      "Sustained external overload on motor feeders",
+      "Reverse power motoring of the alternator",
+      "Internal faults: earth fault, winding-to-winding short, low-level insulation breakdown",
+      "Voltage surges from AVR failure"
+    ],
+    "exp": "Differential relays detect very small internal faults (as low as 5-10% rated) inside generators and transformers without delay.",
+    "cat": "DIFF",
+    "id": "T04A_041"
+  },
+  {
+    "q": "What is the typical speed of operation for a differential relay?",
+    "a": "Very fast - no intentional time delay",
+    "opts": [
+      "Very fast - no intentional time delay",
+      "Slow - matches the thermal heating curve",
+      "3–5 seconds delay",
+      "5–10 seconds dashpot delay"
+    ],
+    "exp": "Because an internal fault signifies immediate equipment breakdown, differential relays operate instantly.",
+    "cat": "DIFF",
+    "id": "T04A_042"
+  },
+  {
+    "q": "Where are differential relays most commonly fitted on a ship?",
+    "a": "Large generators (>500 kVA), large transformers, main busbars",
+    "opts": [
+      "Small motor starters and group distribution panels",
+      "Large generators (>500 kVA), large transformers, main busbars",
+      "Emergency lighting circuits",
+      "Galley ovens and water heaters"
+    ],
+    "exp": "They protect high-value, high-power zones like main generators and transformers from catastrophic internal winding faults.",
+    "cat": "DIFF",
+    "id": "T04A_043"
+  },
+  {
+    "q": "What is a key difference between a fuse and an OCR?",
+    "a": "A fuse is single-use and must be replaced; an OCR is reusable and adjustable",
+    "opts": [
+      "An OCR is single-use and must be replaced; a fuse is reusable",
+      "A fuse detects internal faults better than an OCR",
+      "A fuse is single-use and must be replaced; an OCR is reusable and adjustable",
+      "An OCR trips faster than an HRC fuse at 100 kA"
+    ],
+    "exp": "Fuses are sacrificial devices, whereas OCRs are electromagnetic or electronic relays that reset after operation.",
+    "cat": "DIFF",
+    "id": "T04A_044"
+  },
+  {
+    "q": "At what operating speed does an OCR trip at 10× its set current?",
+    "a": "<100 ms",
+    "opts": [
+      "1-3 seconds",
+      "3-5 seconds",
+      "<100 ms",
+      "Zero delay instantly"
+    ],
+    "exp": "Following the IDMT characteristic, extremely high faults (like 10× setting) trigger a very fast trip (<100 ms).",
+    "cat": "DIFF",
+    "id": "T04A_045"
+  },
+  {
+    "q": "What is the preferred method for conducting an overload test on a generator OCR?",
+    "a": "Secondary injection method",
+    "opts": [
+      "Primary injection method",
+      "Load bank test at 110% power",
+      "Secondary injection method",
+      "Megger testing the OCR terminals"
+    ],
+    "exp": "Secondary injection allows precise relay testing without exposing the actual ship systems to hazardous overload currents.",
+    "cat": "OLR",
+    "id": "T04A_046"
+  },
+  {
+    "q": "Before starting a secondary injection test on an OCR, what state should the ACB be in?",
     "a": "TEST position",
-    "opts": ["SERVICE position", "TEST position", "ISOLATED position", "Any position with the ACB tripped open"],
-    "exp": "TEST position disconnects main power contacts from busbars but keeps control wiring connected. Secondary injection test set connects to relay inputs to verify trip settings. If done in SERVICE, test currents would flow through live load cables creating hazard.",
-    "cat": "POS",
-    "id": "T04_035"
-  },
-  {
-    "q": "When must an ACB be placed in the ISOLATED position?",
-    "a": "When performing physical maintenance inside the ACB cubicle requiring full isolation of both power and control circuits",
-    "opts": ["When performing protection relay calibration tests", "When performing physical maintenance inside the ACB cubicle requiring full isolation of both power and control circuits", "When performing a closing coil operation test", "When performing a load test"],
-    "exp": "ISOLATED position fully withdraws the ACB - disconnecting both main power contacts and all control circuits. Required for physical maintenance (contact inspection, mechanism lubrication, spring replacement, arc chute replacement) where no inadvertent operation is acceptable.",
-    "cat": "POS",
-    "id": "T04_036"
-  },
-  {
-    "q": "Why does an ACB have an interlock preventing racking in/out while in the CLOSED position?",
-    "a": "To prevent breaking load current in open air - bypassing the arc chutes - which would cause explosive arc flash",
-    "opts": ["To protect the racking mechanism gears from damage", "To prevent breaking load current in open air - bypassing the arc chutes - which would cause explosive arc flash", "To comply with IEC colour-coding requirements", "To allow the closing springs to charge before insertion"],
-    "exp": "Racking a closed ACB would separate current-carrying contacts in open air, not inside the arc chutes. The resulting arc - especially at fault current - would be explosive and uncontrolled. The interlock enforces opening (tripping) the ACB first, then racking.",
-    "cat": "POS",
-    "id": "T04_037"
-  },
-  {
-    "q": "What does IDMT stand for in OCR relay terminology?",
-    "a": "Inverse Definite Minimum Time",
-    "opts": ["Instantaneous Definite Maximum Trip", "Inverse Definite Minimum Time", "Integrated Digital Metering Technology", "Inductive Differential Monitoring Threshold"],
-    "exp": "IDMT = Inverse Definite Minimum Time. Inverse: higher fault current = shorter trip time. Definite Minimum: there is a minimum trip time regardless of how high the current goes (prevents mechanical damage from too-fast operation). This characteristic coordinates protection and avoids nuisance trips on brief transient overloads.",
-    "cat": "OCR",
-    "id": "T04_038"
-  },
-  {
-    "q": "An OCR has a pick-up setting of 100A. A 500A fault flows. How does the relay respond?",
-    "a": "Trips faster than for a 200A fault - higher current multiple = shorter trip time per IDMT characteristic",
-    "opts": ["Trips at exactly the same time as for any current above pick-up", "Trips faster than for a 200A fault - higher current multiple = shorter trip time per IDMT characteristic", "Does not trip - 500A exceeds the relay's calibration range", "Trips instantaneously with no time delay"],
-    "exp": "IDMT: trip time is inversely proportional to current multiple above pick-up. At 5\u00d7 set (500A = 5\u00d7100A), trip time is much shorter than at 2\u00d7 set (200A). This allows brief overloads to be tolerated while clearing large faults rapidly.",
-    "cat": "OCR",
-    "id": "T04_039"
-  },
-  {
-    "q": "During secondary injection OCR testing, why is the ACB racked to TEST position?",
-    "a": "To isolate power busbars so test current flows only through the relay - not through live load cables",
-    "opts": ["To access relay terminals from the rear of the panel", "To isolate power busbars so test current flows only through the relay - not through live load cables", "To allow relay settings to be changed safely during the test", "To reduce the impedance seen by the injection test set"],
-    "exp": "With ACB in TEST position, CT secondary leads can be safely disconnected and injection set connected to relay alone. In SERVICE position, disconnecting CT secondary with current flowing creates dangerous open-circuit CT voltage (thousands of volts). TEST position is mandatory for this work.",
-    "cat": "OCR",
-    "id": "T04_040"
-  },
-  {
-    "q": "What does the TMS (Time Multiplier Setting) on an IDMT relay control?",
-    "a": "The overall trip time at any given current multiple - shifts the entire IDMT time-current curve up or down",
-    "opts": ["The pick-up current threshold only", "The overall trip time at any given current multiple - shifts the entire IDMT time-current curve up or down", "The shape of the curve from standard to very inverse", "The maximum current the relay can measure"],
-    "exp": "TMS multiplies all trip times by a constant factor. TMS=0.5 halves all trip times (faster). TMS=2.0 doubles all times (slower). Pick-up (Is) sets the threshold. TMS sets the speed. Together they define the complete relay characteristic for coordination with other protection devices.",
-    "cat": "OCR",
-    "id": "T04_041"
-  },
-  {
-    "q": "What is the purpose of the Reverse Power Relay on a ship's generator?",
-    "a": "To trip the generator ACB when the generator absorbs power from the busbar instead of supplying it - preventing engine damage",
-    "opts": ["To protect the generator from overvoltage during load rejection", "To trip the generator ACB when the generator absorbs power from the busbar instead of supplying it - preventing engine damage", "To prevent reverse rotation of the propeller shaft", "To trip when reactive power (kVAR) reverses"],
-    "exp": "When the prime mover fails, the generator remains synchronised to the live busbar and is motored by it - absorbing power. Without reverse power protection, the engine runs without combustion (no lubrication from fuel ignition), causing mechanical damage to pistons, valves, and injectors.",
-    "cat": "RPR",
-    "id": "T04_042"
-  },
-  {
-    "q": "What is the typical reverse power relay setting for a ship's generator?",
-    "a": "5\u201310% of rated kW in reverse, with 3\u20135 second time delay",
-    "opts": ["50% rated kW reverse, instantaneous", "5\u201310% of rated kW in reverse, with 3\u20135 second time delay", "100% rated kW reverse, 10 second delay", "2% rated kW reverse, instantaneous"],
-    "exp": "Low setting (5-10%) catches even slight motoring. The 3-5 second time delay prevents nuisance trips during paralleling transients when brief momentary reverse power may flow as machines synchronise to the busbar before taking load.",
-    "cat": "RPR",
-    "id": "T04_043"
-  },
-  {
-    "q": "What physical damage occurs if a diesel engine is motored without reverse power protection?",
-    "a": "Pistons and valves run without combustion lubrication - mechanical seizure and severe internal damage",
-    "opts": ["Engine runs at excessive speed causing bearing failure", "Pistons and valves run without combustion lubrication - mechanical seizure and severe internal damage", "Reverse rotation damages the propeller coupling", "The AVR loses excitation causing voltage collapse"],
-    "exp": "When motored, the engine is driven mechanically but without fuel combustion. No combustion = no lubrication of cylinder walls, injector tips, valve seats from fuel. The loading without proper lubrication causes rapid wear, scoring, and potential seizure of moving parts.",
-    "cat": "RPR",
-    "id": "T04_044"
-  },
-  {
-    "q": "Which test method verifies both reverse power relay calibration AND trip coil operation?",
-    "a": "Secondary injection using a power relay test set with ACB in TEST position",
-    "opts": ["Pressing the TEST button on the relay", "Secondary injection using a power relay test set with ACB in TEST position", "Running the generator deliberately under motoring conditions", "Checking relay datasheet values against wiring diagram"],
-    "exp": "Secondary injection applies calibrated voltage and current at the correct phase angle (simulating reverse power) to the relay input terminals. With ACB in TEST position, the relay output actuates the trip coil - verifying both calibration accuracy and the complete trip circuit.",
-    "cat": "RPR",
-    "id": "T04_045"
-  },
-  {
-    "q": "Why does frequency drop when a ship's generator becomes overloaded?",
-    "a": "Prime mover cannot supply enough torque for the excess load - it decelerates - reducing frequency proportionally",
-    "opts": ["The AVR reduces excitation to protect the windings", "Prime mover cannot supply enough torque for the excess load - it decelerates - reducing frequency proportionally", "The ACB limits current which reduces rotor speed", "The governor closes fuel to prevent overspeeding"],
-    "exp": "f = (P \u00d7 N) / 120. If load exceeds prime mover capacity, the engine decelerates. Every RPM reduction directly reduces frequency. The governor adds fuel attempting to restore speed, but if load demand exceeds capacity, frequency continues falling.",
-    "cat": "UFP",
-    "id": "T04_046"
-  },
-  {
-    "q": "At what frequency does the Under-Frequency relay typically trigger the FIRST stage (alarm) on a 50Hz ship?",
-    "a": "48 Hz",
-    "opts": ["45 Hz", "47 Hz", "48 Hz", "49.5 Hz"],
-    "exp": "Typical 50Hz system settings: Stage 1 alarm: 48Hz. Stage 2 preferential trip (non-essential load shedding): 47Hz. Stage 3 generator ACB trip: 45-46Hz. Staged response allows operator intervention before automatic action. SOLAS requires frequency recovery to within \u00b15% within 5 seconds of a disturbance.",
-    "cat": "UFP",
-    "id": "T04_047"
-  },
-  {
-    "q": "What happens to ship's cooling pumps when frequency drops to 45Hz on a 50Hz system?",
-    "a": "Pump speed drops 10% - reduced flow - risk of engine overheating",
-    "opts": ["Pumps stop completely below 47Hz", "Pump speed drops 10% - reduced flow - risk of engine overheating", "Pump draws more current - motor overheats", "Pump speed is unchanged - only voltage is affected"],
-    "exp": "Synchronous speed Ns = 120f/P. At 45Hz (90% of 50Hz), all induction motors run 10% slower. Centrifugal pump flow is proportional to speed - 10% speed reduction means ~10% less cooling and lubrication flow. With engines under load, this reduction in cooling can rapidly cause overheating.",
-    "cat": "UFP",
-    "id": "T04_048"
-  },
-  {
-    "q": "How does low system frequency damage ship's transformers?",
-    "a": "Core flux increases (V/f ratio rises) - iron core saturates - overheating and dramatically increased magnetising current",
-    "opts": ["Transformer output voltage drops proportionally - insufficient for loads", "Core flux increases (V/f ratio rises) - iron core saturates - overheating and dramatically increased magnetising current", "Winding resistance increases causing voltage drop", "Frequency has no effect on transformer operation"],
-    "exp": "Transformer core flux \u03a6 \u221d V/f. At constant voltage, reducing frequency increases flux beyond design. When the core saturates, magnetising current surges (can be 10\u00d7 normal), iron losses increase, and the transformer overheats - potentially damaging windings.",
-    "cat": "UFP",
-    "id": "T04_049"
-  },
-  {
-    "q": "What is the PRIMARY function of a Bus Tie Breaker (BTB) on a ship with split MSB?",
-    "a": "To connect both MSB sections, allowing one generator to supply both when the other fails",
-    "opts": ["To protect each MSB section from earth faults", "To connect both MSB sections, allowing one generator to supply both when the other fails", "To disconnect the MSB from the emergency switchboard in an emergency", "To provide backup protection for both generator ACBs simultaneously"],
-    "exp": "Large ships have two MSB sections, each normally supplied by its own generator. The BTB normally stays OPEN for maximum fault isolation. Closing the BTB connects both sections - one working generator then supplies the entire ship's load when the other fails.",
-    "cat": "BTB",
-    "id": "T04_050"
-  },
-  {
-    "q": "Why is the Bus Tie Breaker normally kept OPEN during ship operations?",
-    "a": "A fault on one busbar section cannot spread to the other - maximum fault isolation and continuity",
-    "opts": ["BTB contacts wear faster when closed under load", "A fault on one busbar section cannot spread to the other - maximum fault isolation and continuity", "Both generators produce more power with sections separated", "Classification society requires BTB open at all times at sea"],
-    "exp": "With sections split, a fault (short circuit, earth fault) on one section is isolated - protection only trips that section's generator ACB. The healthy section continues supplying the rest of the ship. If sections are connected when a fault occurs, protection may trip both generators, causing complete blackout.",
-    "cat": "BTB",
-    "id": "T04_051"
-  },
-  {
-    "q": "What colour lamp indicates a motor is RUNNING on a Group Starter Panel per IEC 60073?",
-    "a": "RED",
-    "opts": ["GREEN", "RED", "AMBER", "WHITE"],
-    "exp": "Per IEC 60073 (international standard for indication colours): RED = motor RUNNING (caution - do not approach moving parts). GREEN = motor STOPPED (safe state). AMBER/YELLOW = fault or alarm. WHITE = power supply available/healthy. This is counterintuitive - RED means running, not danger. Anil Deswal (Mumbai MMD) specifically asks this.",
-    "cat": "GSP",
-    "id": "T04_052"
-  },
-  {
-    "q": "What colour PUSH BUTTON is used for START on a Group Starter Panel per IEC 60073?",
-    "a": "GREEN",
-    "opts": ["RED", "GREEN", "WHITE", "BLACK"],
-    "exp": "Per IEC 60073: GREEN push button = START. RED push button = STOP and EMERGENCY STOP. Lamp colours: GREEN = stopped, RED = running, AMBER = fault. Push button and lamp colours serve different purposes - learn both separately as surveyors test each independently.",
-    "cat": "GSP",
-    "id": "T04_053"
-  },
-  {
-    "q": "What is the advantage of a Group Starter Panel (Motor Control Centre) over individual motor starters?",
-    "a": "Centralised control and maintenance, compact assembly, common busbars, remote operation - ideal for UMS ships",
-    "opts": ["Cheaper than individual starters for single motors", "Centralised control and maintenance, compact assembly, common busbars, remote operation - ideal for UMS ships", "Provides better short-circuit protection than individual MCBs", "Each motor gets a dedicated generator supply"],
-    "exp": "Group Starter Panel (MCC) houses all starters in one location with common busbars. Benefits: all starters accessible in one place for maintenance, compact, ECR remote start/stop supports UMS (unattended machinery spaces) operation, common power distribution is more efficient than individual cables from MSB to each starter.",
-    "cat": "GSP",
-    "id": "T04_054"
-  },
-  {
-    "q": "Per SOLAS Chapter II-1, Regulation 42, where must the emergency generator be located?",
-    "a": "Above the bulkhead deck, outside the main engine room, not sharing a boundary with it",
-    "opts": ["In the main engine room on a raised platform above floodwater level", "Above the bulkhead deck, outside the main engine room, not sharing a boundary with it", "Adjacent to the main switchboard for fast load transfer", "Directly below the bridge for crew access during emergency"],
-    "exp": "SOLAS II-1/Reg 42: Emergency generator must be above the bulkhead (freeboard) deck - protection against flooding of lower spaces. Must be outside the engine room in a separate compartment - protection against fire or flooding of the main machinery space. It must remain available when the main engine room is inaccessible.",
-    "cat": "EDG",
-    "id": "T04_055"
-  },
-  {
-    "q": "What is the maximum allowed time for a CARGO ship's emergency generator to supply essential loads per SOLAS?",
-    "a": "45 seconds",
-    "opts": ["30 seconds", "45 seconds", "60 seconds", "2 minutes"],
-    "exp": "SOLAS II-1/Reg 42: Cargo ships - 45 seconds from detection of main power failure to emergency generator supplying all essential loads. Passenger ships - 30 seconds. This includes engine startup, voltage/frequency build-up, and ACB closure. Failure to meet this time at PSC inspection results in a deficiency.",
-    "cat": "EDG",
-    "id": "T04_056"
-  },
-  {
-    "q": "How many independent starting methods must a ship's emergency generator have?",
-    "a": "Two independent methods - battery start (dedicated) plus one other",
-    "opts": ["One - battery start is sufficient by SOLAS", "Two independent methods - battery start (dedicated) plus one other", "Three methods always required", "One automatic plus one manual cranking"],
-    "exp": "SOLAS II-1/Reg 42: Two independent starting means. First method: dedicated batteries (not used for any other purpose, always kept charged). Second method: hydraulic accumulator, compressed air, or second independent battery bank. Both must be independent - failure of one cannot affect the other.",
-    "cat": "EDG",
-    "id": "T04_057"
-  },
-  {
-    "q": "How long must a CARGO ship's emergency generator fuel supply last per SOLAS?",
-    "a": "18 hours",
-    "opts": ["6 hours", "12 hours", "18 hours", "36 hours"],
-    "exp": "SOLAS II-1/Reg 42: Cargo ships - 18 hours minimum continuous operation. Passenger ships - 36 hours. The emergency generator fuel tank must be separate from the main engine room fuel system - so flooding or fire in the engine room doesn't cut off emergency generator fuel.",
-    "cat": "EDG",
-    "id": "T04_058"
-  },
-  {
-    "q": "What is the transitional source of power and what minimum duration must it provide?",
-    "a": "A battery bank providing immediate essential load supply for minimum 30 minutes while emergency generator starts",
-    "opts": ["Shore power connected during the 45-second gap", "A battery bank providing immediate essential load supply for minimum 30 minutes while emergency generator starts", "The main generators running at reduced output", "A separate diesel set for short-term emergency cover"],
-    "exp": "The transitional source (ESB batteries) provides INSTANT supply with zero startup delay - covering the 45-second window before the emergency generator comes online. It supplies: navigation lights, GMDSS, steering gear, internal communications, emergency lighting. Automatic switchover, no crew action required.",
-    "cat": "EDG",
-    "id": "T04_059"
-  },
-  {
-    "q": "Which service is NOT supplied by the emergency generator per SOLAS?",
-    "a": "Bow thruster and main propulsion auxiliaries",
-    "opts": ["Navigation lights and shapes", "Bow thruster and main propulsion auxiliaries", "GMDSS radio equipment", "Emergency bilge pump"],
-    "exp": "Emergency generator supplies SAFETY-CRITICAL systems only: navigation lights, GMDSS, fire detection/alarm, emergency bilge, watertight doors, emergency lighting, steering gear (via transitional first), one fire pump, sprinkler. Bow thruster and main propulsion are non-essential in emergencies and would overload the emergency generator.",
-    "cat": "EDG",
-    "id": "T04_060"
-  },
-  {
-    "q": "What is the correct specific gravity (SG) of a fully charged lead-acid battery cell?",
-    "a": "1.280\u20131.300",
-    "opts": ["1.100\u20131.150", "1.200\u20131.230", "1.280\u20131.300", "1.350\u20131.400"],
-    "exp": "Fully charged lead-acid cell SG: 1.280\u20131.300 measured at 25\u00b0C. Fully discharged: ~1.100. Cells should agree within 0.050 SG - diverging cells indicate sulphation, internal short, or contamination. Measured with a hydrometer. Low SG with good voltage may indicate electrolyte stratification - equalising charge needed.",
-    "cat": "BAT",
-    "id": "T04_061"
-  },
-  {
-    "q": "What liquid must be used when topping up a lead-acid battery?",
-    "a": "Distilled water only",
-    "opts": ["Tap water", "Distilled water only", "Dilute sulphuric acid", "Deionised acid solution"],
-    "exp": "ONLY distilled (or demineralised) water. Tap water contains minerals (calcium, magnesium, chlorides) that contaminate electrolyte, react with sulphuric acid, and form deposits on plates - reducing capacity and life. Add acid only if electrolyte has been physically spilled (not for routine topping up).",
-    "cat": "BAT",
-    "id": "T04_062"
-  },
-  {
-    "q": "A lead-acid cell reads SG 1.150 while all others read SG 1.290. What does this indicate?",
-    "a": "That cell is defective - possibly sulphated, internally shorted, or contaminated - investigate and likely replace",
-    "opts": ["Normal variation - cells always differ by this amount", "That cell is defective - possibly sulphated, internally shorted, or contaminated - investigate and likely replace", "The cell needs topping up with sulphuric acid", "The cell is overcharged and must be discharged first"],
-    "exp": "Cells should agree within 0.050 SG. A cell at 1.150 while others are at 1.290 is far outside tolerance (difference of 0.140). Possible causes: deep sulphation (irrecoverable), internal short circuit (discharges itself), electrolyte contamination. Load test the battery. Replace the cell or battery if capacity is below 80%.",
-    "cat": "BAT",
-    "id": "T04_063"
-  },
-  {
-    "q": "What is the nominal cell voltage of a Nickel-Cadmium (Ni-Cd) battery?",
-    "a": "1.2V per cell",
-    "opts": ["2.0V per cell", "1.5V per cell", "1.2V per cell", "3.7V per cell"],
-    "exp": "Ni-Cd cells: 1.2V nominal. Lead-acid cells: 2.0V nominal. To build a 24V battery: lead-acid needs 12 cells; Ni-Cd needs 20 cells. Ni-Cd advantages: 10-20 year life (vs 3-7 for lead-acid), excellent cold performance, tolerates overcharge better. Preferred for critical systems - GMDSS, emergency lighting.",
-    "cat": "BAT",
-    "id": "T04_064"
-  },
-  {
-    "q": "Per SOLAS Chapter IV, Regulation 13, how long must GMDSS reserve battery supply all equipment if NO UPS is fitted?",
-    "a": "6 hours",
-    "opts": ["1 hour", "3 hours", "6 hours", "12 hours"],
-    "exp": "SOLAS Ch IV Reg 13: Without UPS - 6 hours. With UPS (automatic switch to battery) - 1 hour minimum. Battery must be DEDICATED - no other use. Annual load test required. Replace when capacity falls below 80% rated. Frequently missed by candidates - Deswal and Sanjib specifically test this knowledge.",
-    "cat": "GMD",
-    "id": "T04_065"
-  },
-  {
-    "q": "The GMDSS reserve battery must supply which equipment?",
-    "a": "VHF DSC radio, MF/HF (if fitted), NAVTEX, EPIRB/SART charger circuits, Inmarsat terminal",
-    "opts": ["All bridge navigation systems including ECDIS and radar", "VHF DSC radio, MF/HF (if fitted), NAVTEX, EPIRB/SART charger circuits, Inmarsat terminal", "Emergency generator starting system and all GMDSS", "All safety systems including fire detection and bilge"],
-    "exp": "GMDSS reserve battery supplies communication equipment only: VHF (all channels + DSC Ch 70), MF/HF radio if fitted, NAVTEX receiver, EPIRB/SART charger, Inmarsat terminal. NOT for ECDIS, radar, fire alarm, or propulsion. Dedicated battery - never share capacity with other systems.",
-    "cat": "GMD",
-    "id": "T04_066"
-  },
-  {
-    "q": "When must the GMDSS battery be replaced?",
-    "a": "When load test shows actual capacity below 80% of rated Ah",
-    "opts": ["Every 2 years regardless of condition", "When load test shows actual capacity below 80% of rated Ah", "When individual cell SG drops below 1.200", "When it fails to start the emergency generator"],
-    "exp": "Annual load test: discharge battery at correct rate, measure actual Ah delivered. When measured capacity < 80% rated, replace the battery. A certificate of test must be maintained onboard. 80% is the industry-standard replacement threshold for all safety-critical batteries, both lead-acid and Ni-Cd.",
-    "cat": "GMD",
-    "id": "T04_067"
-  },
-  {
-    "q": "How does an Online (Double Conversion) UPS achieve zero switchover time during mains failure?",
-    "a": "Load is always fed through the inverter - never from mains directly - so mains failure doesn't affect the load path",
-    "opts": ["A fast electronic switch transfers load in less than 4 milliseconds", "Load is always fed through the inverter - never from mains directly - so mains failure doesn't affect the load path", "Batteries provide pulse power during the brief transfer gap", "The static bypass maintains supply during the transfer"],
-    "exp": "Online UPS: AC mains \u2192 Rectifier \u2192 DC bus (batteries connected in parallel) \u2192 Inverter \u2192 AC load. The load is ALWAYS fed from the inverter. On mains failure, batteries immediately maintain the DC bus - the inverter sees no change - the load sees no interruption. Zero switchover time is achieved by never switching.",
-    "cat": "UPS",
-    "id": "T04_068"
-  },
-  {
-    "q": "Which ship systems are typically connected to UPS?",
-    "a": "ECDIS, GMDSS, IAS/SCADA, fire alarm control panel, AIS, BNWAS",
-    "opts": ["Main engine fuel pumps and bow thruster", "ECDIS, GMDSS, IAS/SCADA, fire alarm control panel, AIS, BNWAS", "Emergency generator starting batteries", "Main switchboard and all 440V distribution"],
-    "exp": "UPS supplies systems requiring zero interruption: ECDIS (chart display - power loss = position data loss), GMDSS, Integrated Automation System (loses alarm memory on power loss), fire alarm panel, bridge navigation (AIS, BNWAS, SSAS). These cannot tolerate even the 45-second gap before emergency generator startup.",
-    "cat": "UPS",
-    "id": "T04_069"
-  },
-  {
-    "q": "What does the STATIC BYPASS on a UPS do?",
-    "a": "Automatically transfers load to direct mains supply using thyristors if UPS faults or overloads - no interruption to load",
-    "opts": ["Manual switch allowing UPS isolation for maintenance", "Automatically transfers load to direct mains supply using thyristors if UPS faults or overloads - no interruption to load", "Bypass that disconnects batteries to allow faster charging", "Connects batteries directly to load during deep discharge"],
-    "exp": "Static bypass uses fast-switching thyristors to transfer load from UPS output to direct mains in microseconds on UPS fault, overload, or overtemperature - critical load sees no interruption. Separate from the maintenance bypass (manual switch for full UPS isolation during servicing while load continues from mains).",
-    "cat": "UPS",
-    "id": "T04_070"
-  },
-  {
-    "q": "Why must an isolation transformer be used when connecting shore power to a ship?",
-    "a": "Shore supply is solidly earthed (TN-S); direct connection would earth the ship's floating system causing stray currents and hull corrosion",
-    "opts": ["To step up the shore voltage to match ship's 440V system", "Shore supply is solidly earthed (TN-S); direct connection would earth the ship's floating system causing stray currents and hull corrosion", "To prevent the shore circuit breaker tripping on starting currents", "To match shore supply frequency to ship's frequency"],
-    "exp": "Shore TN-S system: neutral solidly connected to ground. Ship IT system: unearthed (floating neutral). Without isolation transformer, shore earth connects to ship neutral - current flows through seawater between hull and jetty creating an electrolytic cell - hull fittings, propeller, and shaft corrode. The isolation transformer breaks this galvanic path.",
-    "cat": "SHC",
-    "id": "T04_071"
-  },
-  {
-    "q": "What is the IEC standard covering High Voltage Shore Connections?",
-    "a": "IEC 80005-1",
-    "opts": ["IEC 60092-301", "IEC 80005-1", "SOLAS II-1/Reg 4", "ISO 3046-1"],
-    "exp": "IEC 80005-1 is the international standard for High Voltage Shore Connection (HVSC) systems - covering connections up to 11kV. SOLAS II-1 Reg 4(1) requires ships to be capable of connecting to shore power if available. Cold ironing is mandated in some ports (California, major European ports) for environmental regulations.",
-    "cat": "SHC",
-    "id": "T04_072"
-  },
-  {
-    "q": "A ship at 50Hz connects to a 60Hz shore supply without frequency conversion. What happens?",
-    "a": "All induction motors and synchronous machines run 20% faster than rated - risk of overspeeding and mechanical damage",
-    "opts": ["Everything works normally - frequency difference is acceptable", "All induction motors and synchronous machines run 20% faster than rated - risk of overspeeding and mechanical damage", "Only transformers are affected - motors are not sensitive to frequency", "The shore ACB trips immediately on frequency mismatch"],
-    "exp": "Synchronous speed Ns = 120f/P. At 60Hz, all machines designed for 50Hz run at 120% rated speed (3600 instead of 3000 RPM for 2-pole). Fans, pumps, compressors are overspeeded - bearing damage, imbalance forces, motor overheating. A frequency converter (rectifier \u2192 DC link \u2192 50Hz inverter) is essential.",
-    "cat": "SHC",
-    "id": "T04_073"
-  },
-  {
-    "q": "What is the function of the Preferential Trip (Load Shedding) relay?",
-    "a": "Automatically disconnects non-essential loads in stages when the generator has a sustained overload - preventing ACB trip and blackout",
-    "opts": ["Automatically starts the emergency generator when main power fails", "Automatically disconnects non-essential loads in stages when the generator has a sustained overload - preventing ACB trip and blackout", "Trips the generator ACB when reverse power is detected", "Sheds essential loads to protect navigation equipment during overload"],
-    "exp": "Preferential trip sheds non-essential loads (galley, HVAC, deck equipment) progressively when sustained overload is detected. By reducing load, the generator returns within its capacity - the OCR does not trip, blackout is prevented. A dashpot timer prevents nuisance shedding from brief motor-starting transients.",
-    "cat": "PRT",
-    "id": "T04_074"
-  },
-  {
-    "q": "What is the dashpot on a preferential trip relay?",
-    "a": "A hydraulic/pneumatic time-delay device using a piston in oil/air - provides delay before shedding to allow transients to pass",
-    "opts": ["An oil-filled capacitor for energy storage", "A hydraulic/pneumatic time-delay device using a piston in oil/air - provides delay before shedding to allow transients to pass", "A buffer that softens the mechanical trip action", "A pressure vessel storing energy for the trip coil"],
-    "exp": "Dashpot: a cylinder with a piston moving against oil or air through a needle valve orifice. The rate of piston movement (and thus time delay) is adjustable via the needle valve. On overload, dashpot starts timing but doesn't shed immediately - allows motor starting transients (5-30 seconds) to pass without shedding loads.",
-    "cat": "PRT",
-    "id": "T04_075"
-  },
-  {
-    "q": "Which loads are NEVER shed by the preferential trip relay?",
-    "a": "Navigation lights, steering gear, GMDSS, fire pump, bilge pump, emergency lighting",
-    "opts": ["Galley, HVAC, and accommodation loads", "Navigation lights, steering gear, GMDSS, fire pump, bilge pump, emergency lighting", "Fresh water generator and laundry equipment", "All loads are shed if the overload is severe enough"],
-    "exp": "Essential safety loads are hardwired to be unshedable: navigation lights (SOLAS), steering gear, GMDSS communications, fire detection, fire pump, emergency bilge pump. Preferential trip targets non-essential loads: galley cooking, HVAC, accommodation electrical, deck machinery. Ship SMS defines the exact shedding sequence and priorities.",
-    "cat": "PRT",
-    "id": "T04_076"
-  },
-  {
-    "q": "How many standard safeties does a Main Switchboard typically have?",
-    "a": "14 safeties including dead front, insulating mats, earth bus, phase barriers, fire extinguisher, and locking facilities",
-    "opts": ["6 minimum", "10 minimum", "14 safeties including dead front, insulating mats, earth bus, phase barriers, fire extinguisher, and locking facilities", "20 per IEC 60092"],
-    "exp": "14 standard MSB safeties: dead front construction, insulating mats (front & rear), insulating handrails, 600mm clearance, earth bus, bus tie breaker, earth fault indicator/IMS, phase barriers, MSB lighting + emergency lighting, CO2 extinguisher, labels & colour coding, locking facilities, forward & aft access doors, ventilation. Anil Deswal tests this - most candidates name only 5-6.",
-    "cat": "MSB",
-    "id": "T04_077"
-  },
-  {
-    "q": "What minimum working clearance is required at front and rear of a Main Switchboard?",
-    "a": "600 mm",
-    "opts": ["300 mm", "450 mm", "600 mm", "1000 mm"],
-    "exp": "Minimum 600mm working clearance at both front AND rear of MSB. This is required per IEC 60092 and maritime safety standards for safe maintenance access, emergency operation, and personnel safety. Insufficient clearance is a PSC deficiency and prevents safe relay testing and ACB racking.",
-    "cat": "MSB",
-    "id": "T04_078"
-  },
-  {
-    "q": "What type of fire extinguisher is mandatory at a Main Switchboard?",
-    "a": "CO2 - does not conduct electricity and leaves no damaging residue",
-    "opts": ["Water mist extinguisher", "CO2 - does not conduct electricity and leaves no damaging residue", "Dry powder extinguisher", "Foam extinguisher"],
-    "exp": "CO2 is mandatory at MSBs: non-conductive (safe on live equipment), leaves no residue (dry powder leaves corrosive powder that damages switchgear contacts), smothers fire without water damage. Dry powder is effective but the residue damages sensitive relay contacts and busbars - never use on switchgear.",
-    "cat": "MSB",
-    "id": "T04_079"
-  },
-  {
-    "q": "What is the purpose of phase barriers in an MSB busbar chamber?",
-    "a": "Insulating barriers between busbar phases to contain single-phase faults and prevent phase-to-phase arcing",
-    "opts": ["To mechanically support busbars under short-circuit electromagnetic forces", "Insulating barriers between busbar phases to contain single-phase faults and prevent phase-to-phase arcing", "To measure inter-phase voltage for metering", "To prevent condensation bridging between busbars"],
-    "exp": "Phase barriers prevent a fault on one phase from arcing to adjacent phases and escalating to a three-phase fault. A single-phase fault is much less severe (lower energy, simpler protection response) than a three-phase fault. Barriers also protect personnel working near busbars from accidental contact with adjacent live phases.",
-    "cat": "MSB",
-    "id": "T04_080"
-  },
-  {
-    "q": "What does a DUCTOR TEST measure on an ACB?",
-    "a": "Main contact resistance in the closed position - acceptable values typically below 100 micro-ohms",
-    "opts": ["Insulation resistance between phases at 500V DC", "Main contact resistance in the closed position - acceptable values typically below 100 micro-ohms", "Speed of contact separation on trip command", "Arc chute condition after fault interruption"],
-    "exp": "Ductor (micro-ohmmeter) passes known current through closed ACB contacts and measures voltage drop - calculates resistance. New good contacts: <50 \u03bc\u03a9. Action threshold: >100 \u03bc\u03a9 indicates worn, pitted, or oxidised contacts causing heating under load. High contact resistance can cause overheating of busbars and connections at full load current.",
-    "cat": "MNT",
-    "id": "T04_081"
-  },
-  {
-    "q": "What is the correct isolation procedure before working inside an ACB cubicle?",
-    "a": "Trip ACB \u2192 rack to ISOLATED \u2192 apply lock \u2192 apply safety tag \u2192 prove dead \u2192 apply earth clamps",
-    "opts": ["Trip ACB and proceed immediately if in a hurry", "Trip ACB \u2192 rack to ISOLATED \u2192 apply lock \u2192 apply safety tag \u2192 prove dead \u2192 apply earth clamps", "Rack to TEST position and disconnect control fuses", "Turn off supply to the MSB and proceed"],
-    "exp": "Full Lockout/Tagout (LOTO): 1) Trip ACB (open). 2) Rack fully to ISOLATED. 3) Apply mechanical lock to prevent re-racking. 4) Hang signed safety tag. 5) Test for dead using approved voltage tester on all phases and to earth. 6) Apply earth clamps (discharge cable capacitance). Only then begin work.",
-    "cat": "MNT",
-    "id": "T04_082"
-  },
-  {
-    "q": "What is the PI (Polarisation Index) and what value indicates good insulation?",
-    "a": "PI = IR(10 min) / IR(1 min). PI > 2 indicates dry, good insulation",
-    "opts": ["PI = Peak current / Instantaneous current. PI > 5 is good", "PI = IR(10 min) / IR(1 min). PI > 2 indicates dry, good insulation", "PI = Phase Imbalance ratio. PI < 1% is acceptable", "PI = Power Integrity index measured by power quality analyser"],
-    "exp": "PI = 10-minute megger reading divided by 1-minute reading. Good dry insulation continues to absorb charging current over 10 minutes (polarisation) \u2192 ratio > 2. Wet or contaminated insulation discharges quickly \u2192 ratio near 1 or less. PI > 2: good. PI 1-2: marginal, investigate moisture. PI < 1: dangerous, do not energise.",
-    "cat": "MNT",
-    "id": "T04_083"
-  },
-  {
-    "q": "What does an HRC (High Rupturing Capacity) fuse contain that enables it to interrupt large fault currents safely?",
-    "a": "Pure silica sand filler that absorbs arc energy and quenches the arc without explosive failure",
-    "opts": ["A liquid quenching medium like SF6 gas", "Pure silica sand filler that absorbs arc energy and quenches the arc without explosive failure", "A bimetallic strip providing time-delay protection", "A vacuum chamber similar to a VCB"],
-    "exp": "HRC fuses contain pure silica sand packed around the fuse element. On a fault, the element vaporises and the arc forms in the sand. The sand absorbs arc energy, quenches it, and the ceramic body contains everything - no explosion or fire. HRC fuses can safely interrupt up to 80kA fault current. The body remains intact after operation.",
-    "cat": "MNT",
-    "id": "T04_084"
-  },
-  {
-    "q": "What is the key difference between an Overload Relay and an Overcurrent Relay (OCR)?",
-    "a": "Overload relay: thermal protection for motors. OCR: IDMT time-current protection for generators and feeders using CTs",
-    "opts": ["They are identical devices with different names in different countries", "Overload relay: thermal protection for motors. OCR: IDMT time-current protection for generators and feeders using CTs", "OCR is faster for the same current multiple than overload relay", "OCR protects motors, overload relay protects generators"],
-    "exp": "Overload relay: thermal or electronic element inside the motor starter, trips at 105-125% FLA over minutes, protects motor windings from overheating. OCR: IDMT characteristic relay with CT input, trips at current multiples above set value per inverse-time curve, protects generators, feeders, and transformers from overcurrents and faults.",
-    "cat": "MNT",
-    "id": "T04_085"
-  },
-  {
-    "q": "Why does a differential relay operate instantaneously with no time delay?",
-    "a": "Internal faults (winding short circuits) are immediately destructive - any delay causes more damage - must be instantaneous",
-    "opts": ["Differential relays have no timing circuit - they are physically unable to delay", "Internal faults (winding short circuits) are immediately destructive - any delay causes more damage - must be instantaneous", "The differential current is too small to measure with a timing circuit", "A 0.5 second delay is used in practice"],
-    "exp": "A differential relay compares current entering and leaving the protected zone. Any difference = internal fault (turn-to-turn short, earth fault inside winding). Internal faults are immediately and progressively destructive - every millisecond of delay causes more winding damage, more fault current, more heat. Differential protection is always instantaneous (< 0.1 seconds).",
-    "cat": "MNT",
-    "id": "T04_086"
-  },
-  {
-    "q": "What is the primary advantage of a Group Starter Panel (GSP/MCC) over distributed individual starters?",
-    "a": "Centralized control, easier maintenance, and compact power distribution via common busbars",
-    "opts": ["It allows motors to run on high-voltage DC", "It requires no ventilation or cooling", "It completely eliminates the need for overload relays", "Centralized control, easier maintenance, and compact power distribution via common busbars"],
-    "exp": "A Group Starter Panel (Motor Control Centre) houses all starters in one location, making maintenance highly efficient and supporting remote UMS operation from the ECR.",
-    "cat": "GSP",
-    "id": "T04_087"
-  },
-  {
-    "q": "According to IEC 60073, what does a GREEN indicator lamp on a Group Starter Panel signify?",
-    "a": "The motor is STOPPED (safe state)",
-    "opts": ["The motor has a FAULT", "Power is available to the panel", "The motor is RUNNING", "The motor is STOPPED (safe state)"],
-    "exp": "Under IEC 60073, Green indicates a safe state, meaning the motor is stopped and it is safe to approach the machinery.",
-    "cat": "GSP",
-    "id": "T04_088"
-  },
-  {
-    "q": "According to IEC 60073, what does a RED indicator lamp on a Group Starter Panel signify?",
-    "a": "The motor is RUNNING (hazardous state)",
-    "opts": ["The motor is STOPPED", "The motor is RUNNING (hazardous state)", "The emergency stop is active", "An electrical fault has tripped the breaker"],
-    "exp": "Counterintuitively for some, IEC 60073 dictates RED means running/danger, warning personnel not to approach moving parts.",
-    "cat": "GSP",
-    "id": "T04_089"
-  },
-  {
-    "q": "What colour is the START push button on a marine Group Starter Panel per IEC 60073?",
-    "a": "GREEN",
-    "opts": ["RED", "BLACK", "YELLOW", "GREEN"],
-    "exp": "The start button is Green, initiating the operation, while the stop button is Red.",
-    "cat": "GSP",
-    "id": "T04_090"
-  },
-  {
-    "q": "What colour is the STOP or EMERGENCY STOP push button on a marine Group Starter Panel?",
-    "a": "RED",
-    "opts": ["WHITE", "BLUE", "GREEN", "RED"],
-    "exp": "Red push buttons are universally used to stop machinery or trigger an emergency stop per IEC 60073.",
-    "cat": "GSP",
-    "id": "T04_091"
-  },
-  {
-    "q": "What does an AMBER or YELLOW lamp signify on a motor starter panel?",
-    "a": "A FAULT or ALARM condition (e.g., thermal overload trip)",
-    "opts": ["Power supply is healthy", "Normal running state", "A FAULT or ALARM condition (e.g., thermal overload trip)", "The motor is in remote mode"],
-    "exp": "Amber/Yellow indicates an abnormal condition requiring attention, such as an overload trip.",
-    "cat": "GSP",
-    "id": "T04_092"
-  },
-  {
-    "q": "What does a WHITE indicator lamp signify on a marine Group Starter Panel?",
-    "a": "Power supply is available and healthy",
-    "opts": ["The motor has tripped", "Power supply is available and healthy", "The motor is running", "The space heater is active"],
-    "exp": "A white lamp simply confirms that the control power or main supply is live to the panel.",
-    "cat": "GSP",
-    "id": "T04_093"
-  },
-  {
-    "q": "What does a BLUE indicator lamp typically signify on a Group Starter Panel?",
-    "a": "Mandatory action required, or frequently used to indicate remote/auto mode",
-    "opts": ["Mandatory action required, or frequently used to indicate remote/auto mode", "Power is disconnected", "Motor is running", "Motor is stopped"],
-    "exp": "Blue indicates a special state or mandatory action, often used on ships to show the panel is switched to remote or automatic control.",
-    "cat": "GSP",
-    "id": "T04_094"
-  },
-  {
-    "q": "What are the standard internal components of a single motor starter unit within a GSP?",
-    "a": "Incoming fuse/MCB, main contactor, overload relay, and control circuit",
-    "opts": ["Battery charger and inverter", "Isolating transformer and reverse power relay", "VFD, cycloconverter, and sync relay", "Incoming fuse/MCB, main contactor, overload relay, and control circuit"],
-    "exp": "Each 'bucket' or unit in an MCC contains the short circuit protection (fuse/MCB), switching (contactor), and thermal protection (overload) for one motor.",
-    "cat": "GSP",
-    "id": "T04_095"
-  },
-  {
-    "q": "How does a Group Starter Panel support UMS (Unattended Machinery Space) operations?",
-    "a": "By allowing centralized remote start/stop and monitoring from the Engine Control Room",
-    "opts": ["By bypassing all safety trips", "By eliminating the need for electricity", "By physically moving the motors into the ECR", "By allowing centralized remote start/stop and monitoring from the Engine Control Room"],
-    "exp": "Centralized panels easily interface with the IAS/SCADA system, allowing the duty engineer to control all pumps from the ECR without walking the ship.",
-    "cat": "GSP",
-    "id": "T04_096"
-  },
-  {
-    "q": "Why is the RED/GREEN lamp convention on IEC panels considered counterintuitive by some new engineers?",
-    "a": "Because RED means running (danger) and GREEN means stopped (safe), whereas people often associate green with 'go'",
-    "opts": ["Because RED means running (danger) and GREEN means stopped (safe), whereas people often associate green with 'go'", "Because the colors are inverted at night", "Because both lamps are on simultaneously", "Because they flash randomly"],
-    "exp": "IEC 60073 prioritizes hazard warning. A running machine is a hazard (Red), while a stationary machine is safe (Green).",
-    "cat": "GSP",
-    "id": "T04_097"
-  },
-  {
-    "q": "What protects the common busbars inside a Group Starter Panel from a massive short circuit?",
-    "a": "The feeder circuit breaker located upstream on the Main Switchboard",
-    "opts": ["The individual motor thermal overloads", "A reverse power relay", "The feeder circuit breaker located upstream on the Main Switchboard", "An under-voltage coil"],
-    "exp": "The GSP itself is fed from the MSB. If the massive common busbars inside the GSP short out, the MSB feeder breaker clears the fault.",
-    "cat": "GSP",
-    "id": "T04_098"
-  },
-  {
-    "q": "What provides short-circuit protection for an INDIVIDUAL motor within the Group Starter Panel?",
-    "a": "The incoming fuse or Motor Circuit Breaker (MCB) located inside that specific starter unit",
-    "opts": ["The incoming fuse or Motor Circuit Breaker (MCB) located inside that specific starter unit", "The main contactor coil", "The MSB generator breaker", "The thermal overload relay"],
-    "exp": "Each starter module has its own fuses or MCB to clear a short circuit on that specific motor's cable, isolating it without blacking out the rest of the panel.",
-    "cat": "GSP",
-    "id": "T04_099"
-  },
-  {
-    "q": "What component in the GSP protects the motor from sustained mechanical overloading?",
-    "a": "The thermal or electronic overload relay",
-    "opts": ["The main contactor", "The earth fault indicator", "The HRC fuses", "The thermal or electronic overload relay"],
-    "exp": "The overload relay senses sustained high current (e.g., 115% FLA) and opens the control circuit to drop the contactor before the windings melt.",
-    "cat": "GSP",
-    "id": "T04_100"
-  },
-  {
-    "q": "Why is proper segregation (partitioning) required between adjacent units in a Group Starter Panel?",
-    "a": "To prevent an arc flash or fire in one starter module from spreading to adjacent modules or the main busbars",
-    "opts": ["To improve the aesthetic appearance", "To prevent an arc flash or fire in one starter module from spreading to adjacent modules or the main busbars", "To isolate AC from DC voltages", "To keep the motors separated physically"],
-    "exp": "Form 3 or Form 4 separation uses metal barriers to contain catastrophic faults to a single 'bucket', saving the rest of the MCC.",
-    "cat": "GSP",
-    "id": "T04_101"
-  },
-  {
-    "q": "If a GSP is located in the engine room, what typical IP (Ingress Protection) rating is required?",
-    "a": "IP44 or IP54 (protected against splashing water and dust)",
-    "opts": ["IP20 (finger-proof only)", "IP44 or IP54 (protected against splashing water and dust)", "IP00 (open to air)", "IP68 (submersible)"],
-    "exp": "Engine rooms have oil mist and potential water splashing. The enclosure must prevent ingress that could cause tracking faults.",
-    "cat": "GSP",
-    "id": "T04_102"
-  },
-  {
-    "q": "What maintenance action is critical for the draw-out contacts of a GSP module?",
-    "a": "Regular inspection and lubrication with approved contact grease to ensure low resistance connection to the busbars",
-    "opts": ["Painting them with insulating varnish", "Filing the contacts aggressively", "Submerging them in distilled water", "Regular inspection and lubrication with approved contact grease to ensure low resistance connection to the busbars"],
-    "exp": "Draw-out modules have 'stabs' that grip the live busbars. Poor contact causes extreme I\u00b2R heating and module meltdown.",
-    "cat": "GSP",
-    "id": "T04_103"
-  },
-  {
-    "q": "When racking out a single starter module from a live GSP, what is the primary safety hazard?",
-    "a": "Arc flash if the module is withdrawn while the contactor is closed and drawing load current",
-    "opts": ["Arc flash if the module is withdrawn while the contactor is closed and drawing load current", "Harmonic distortion", "Loss of navigation systems", "Reverse power generation"],
-    "exp": "Modules are mechanically interlocked to prevent withdrawal under load, but bypassing this and drawing an arc on the main bus is explosive.",
-    "cat": "GSP",
-    "id": "T04_104"
-  },
-  {
-    "q": "What does 'MCC' stand for in marine electrical terminology?",
-    "a": "Motor Control Centre",
-    "opts": ["Main Circuit Controller", "Marine Contactor Cabinet", "Master Current Coordinator", "Motor Control Centre"],
-    "exp": "MCC is the widely used industrial term for a Group Starter Panel.",
-    "cat": "GSP",
-    "id": "T04_105"
-  },
-  {
-    "q": "If the WHITE lamp on a GSP starter module goes dark, what is the most likely cause?",
-    "a": "The control circuit fuse has blown, or main power to that unit is isolated",
-    "opts": ["The motor has tripped on overload", "The control circuit fuse has blown, or main power to that unit is isolated", "The motor is running normally", "The remote control is active"],
-    "exp": "The white lamp indicates control power. If it is off, the start/stop buttons will not function.",
-    "cat": "GSP",
-    "id": "T04_106"
-  },
-  {
-    "q": "What happens if the thermal overload relay in a GSP module trips?",
-    "a": "An NC contact opens the contactor coil circuit, stopping the motor, and the AMBER lamp illuminates",
-    "opts": ["The main HRC fuses blow instantly", "The motor reverses direction", "An NC contact opens the contactor coil circuit, stopping the motor, and the AMBER lamp illuminates", "The MSB generator trips"],
-    "exp": "The thermal relay does not interrupt the main power directly; it breaks the 24V/220V control circuit to the contactor coil.",
-    "cat": "GSP",
-    "id": "T04_107"
-  },
-  {
-    "q": "How is a motor typically isolated for field maintenance when powered from a GSP?",
-    "a": "Turn off the module's main isolator switch, apply LOTO (padlock), and verify dead at the motor terminals",
-    "opts": ["Turn off the module's main isolator switch, apply LOTO (padlock), and verify dead at the motor terminals", "Trip the main generator", "Remove the overload relay", "Press the red STOP button and begin work"],
-    "exp": "The STOP button is not an isolator. The rotary switch on the module door physically disconnects the 3-phase supply.",
-    "cat": "GSP",
-    "id": "T04_108"
-  },
-  {
-    "q": "What is the function of an ammeter fitted on a GSP module door?",
-    "a": "To monitor the running current of the motor, indicating mechanical load or potential stalling",
-    "opts": ["To measure the control circuit voltage", "To monitor the running current of the motor, indicating mechanical load or potential stalling", "To count the running hours", "To indicate the power factor"],
-    "exp": "Large motors have ammeters so operators can verify the pump/fan is loaded correctly and not approaching its trip threshold.",
-    "cat": "GSP",
-    "id": "T04_109"
-  },
-  {
-    "q": "What allows the GSP module door to be opened only when power is disconnected?",
-    "a": "A mechanical door interlock connected to the main rotary isolator switch",
-    "opts": ["A mechanical door interlock connected to the main rotary isolator switch", "A padlocked chain", "A software timer", "An electronic solenoid"],
-    "exp": "This ensures an operator cannot open the panel and expose live 440V terminals without first turning the switch to OFF.",
-    "cat": "GSP",
-    "id": "T04_110"
-  },
-  {
-    "q": "If an ETO needs to test a GSP control circuit with the door open, how is the mechanical interlock bypassed?",
-    "a": "By using a special tool or screwdriver to depress the interlock defeat pin while turning the switch to ON",
-    "opts": ["By using a special tool or screwdriver to depress the interlock defeat pin while turning the switch to ON", "By increasing the generator voltage", "By smashing the lock", "By removing the main fuses"],
-    "exp": "Defeating the interlock is for expert fault-finding only, carrying extreme live-working risks.",
-    "cat": "GSP",
-    "id": "T04_111"
-  },
-  {
-    "q": "Why is space heating provided inside a large Group Starter Panel?",
-    "a": "To prevent condensation from forming on the busbars and contactors when the panel is de-energized in humid environments",
-    "opts": ["To warm up the operators", "To keep the electronics at 100\u00b0C", "To prevent the plastic from cracking", "To prevent condensation from forming on the busbars and contactors when the panel is de-energized in humid environments"],
-    "exp": "Anti-condensation heaters keep the air inside the panel slightly above the dew point.",
-    "cat": "GSP",
-    "id": "T04_112"
-  },
-  {
-    "q": "What connects the individual GSP modules to the main vertical busbars?",
-    "a": "Spring-loaded copper stabs or heavy duty bolted connections",
-    "opts": ["Magnetic induction coils", "Thin optical fibers", "Wireless power transfer", "Spring-loaded copper stabs or heavy duty bolted connections"],
-    "exp": "These physical copper jaws grip the live busbars tightly to handle the heavy motor currents.",
-    "cat": "GSP",
-    "id": "T04_113"
-  },
-  {
-    "q": "What happens if the control transformer inside a GSP fails?",
-    "a": "All starters relying on that transformer lose control power (WHITE lamps go out) and no motors can be started",
-    "opts": ["All starters relying on that transformer lose control power (WHITE lamps go out) and no motors can be started", "The motors automatically start", "The MSB explodes", "The motors run at 50% speed"],
-    "exp": "GSPs often use a single 440V/220V transformer to provide control voltage to an entire bank of starters.",
-    "cat": "GSP",
-    "id": "T04_114"
-  },
-  {
-    "q": "How is remote control from the IAS integrated into a GSP?",
-    "a": "Via intermediate coupling relays in the GSP that parallel the local start/stop push buttons",
-    "opts": ["By isolating the local panel entirely", "Via intermediate coupling relays in the GSP that parallel the local start/stop push buttons", "By physically pressing the buttons with a robot", "By changing the frequency of the MSB"],
-    "exp": "The automation system sends a 24V signal to a tiny relay in the GSP, whose contacts act exactly like the human pushing the green button.",
-    "cat": "GSP",
-    "id": "T04_115"
-  },
-  {
-    "q": "What does a 'Local/Remote' selector switch on a GSP module do?",
-    "a": "It shifts control authority, locking out the IAS commands when in 'Local' to ensure safety for engineers working nearby",
-    "opts": ["It varies the speed of the motor", "It shifts control authority, locking out the IAS commands when in 'Local' to ensure safety for engineers working nearby", "It connects the motor to shore power", "It changes the motor direction"],
-    "exp": "Placing the switch in Local physically breaks the circuit from the automation system, guaranteeing the computer cannot start the pump unexpectedly.",
-    "cat": "GSP",
-    "id": "T04_116"
-  },
-  {
-    "q": "According to SOLAS Chapter IV Regulation 13, what must a GMDSS reserve battery supply?",
-    "a": "All GMDSS radio equipment (VHF, MF/HF, Inmarsat, NAVTEX) and emergency lighting at the radio station",
-    "opts": ["The ship's bow thruster", "All GMDSS radio equipment (VHF, MF/HF, Inmarsat, NAVTEX) and emergency lighting at the radio station", "The emergency generator starting motor", "The entire bridge navigation suite including radar"],
-    "exp": "The reserve battery is strictly dedicated to distress communications and cannot be burdened by radars or other non-radio loads.",
-    "cat": "GMD",
-    "id": "T04_117"
-  },
-  {
-    "q": "How long must the GMDSS battery supply all required loads if the ship DOES NOT have an automatic UPS (emergency generator starting gap)?",
-    "a": "6 hours",
-    "opts": ["3 hours", "1 hour", "6 hours", "18 hours"],
-    "exp": "If the emergency generator doesn't auto-start instantly, the battery must be massive enough to run the radios for 6 solid hours.",
-    "cat": "GMD",
-    "id": "T04_118"
-  },
-  {
-    "q": "How long must the GMDSS battery supply all required loads if the ship HAS an automatic UPS or rapid auto-starting emergency generator?",
-    "a": "1 hour",
-    "opts": ["24 hours", "30 minutes", "1 hour", "6 hours"],
-    "exp": "Because the emergency generator picks up the load within 45 seconds, the battery only needs to bridge the gap and provide a 1-hour ultimate reserve.",
-    "cat": "GMD",
-    "id": "T04_119"
-  },
-  {
-    "q": "What restriction applies to the GMDSS reserve battery regarding shared usage?",
-    "a": "It must be DEDICATED solely to the GMDSS equipment and cannot be used for any other purpose",
-    "opts": ["It can be shared with the emergency generator starter", "It can power the ECDIS computers", "It can supply the ship's general alarm", "It must be DEDICATED solely to the GMDSS equipment and cannot be used for any other purpose"],
-    "exp": "SOLAS strictly forbids tapping into the GMDSS battery for non-radio functions, ensuring its full capacity is available for a Mayday.",
-    "cat": "GMD",
-    "id": "T04_120"
-  },
-  {
-    "q": "What charging requirement exists for the GMDSS battery?",
-    "a": "An automatic charger must be fitted, capable of recharging the battery from fully discharged to minimum capacity within 10 hours",
-    "opts": ["It must be charged by solar panels", "An automatic charger must be fitted, capable of recharging the battery from fully discharged to minimum capacity within 10 hours", "It is charged by a manual hand-crank", "It must only be trickle charged"],
-    "exp": "The charger runs continuously from the main/emergency switchboard to keep the battery at 100% readiness.",
-    "cat": "GMD",
-    "id": "T04_121"
-  },
-  {
-    "q": "What type of battery is most highly recommended for GMDSS installations due to its long life and reliability?",
-    "a": "Nickel-Cadmium (Ni-Cd)",
-    "opts": ["Alkaline dry cells", "Lithium-Ion", "Nickel-Cadmium (Ni-Cd)", "Standard Flooded Lead-Acid"],
-    "exp": "Ni-Cd batteries last 10-20 years, tolerate overcharging, and perform exceptionally well in cold climates compared to lead-acid.",
-    "cat": "GMD",
-    "id": "T04_122"
-  },
-  {
-    "q": "How often must a complete capacity (load) test be performed on the GMDSS battery?",
-    "a": "Annually",
-    "opts": ["Only during Special Survey", "Annually", "Every 5 years", "Monthly"],
-    "exp": "An annual controlled discharge test proves the battery actually holds its rated Ampere-hours. This test certificate must be kept onboard.",
-    "cat": "GMD",
-    "id": "T04_123"
-  },
-  {
-    "q": "At what capacity threshold must the GMDSS battery be permanently replaced?",
-    "a": "When the measured capacity falls below 80% of its rated Ah",
-    "opts": ["When a single cell fails", "When the measured capacity falls below 80% of its rated Ah", "Below 95%", "Below 50%"],
-    "exp": "80% is the industry-standard 'end of life' mark for critical safety batteries.",
-    "cat": "GMD",
-    "id": "T04_124"
-  },
-  {
-    "q": "Where should the GMDSS battery be physically located?",
-    "a": "As high as practically possible, usually near the radio room on the bridge deck",
-    "opts": ["As high as practically possible, usually near the radio room on the bridge deck", "In the main engine room", "In the cargo control room", "Below the waterline for cooling"],
-    "exp": "Placing it high up ensures the radios can still transmit even if the ship experiences severe flooding.",
-    "cat": "GMD",
-    "id": "T04_125"
-  },
-  {
-    "q": "What happens to the GMDSS equipment if the ship experiences a total blackout (loss of main and emergency generators)?",
-    "a": "It automatically switches to the reserve 24V battery seamlessly via a blocking diode or changeover relay",
-    "opts": ["The operator must manually connect jumper cables", "It powers down to save energy", "It automatically switches to the reserve 24V battery seamlessly via a blocking diode or changeover relay", "It loses power for 45 seconds"],
-    "exp": "The radio operator will not notice the blackout; the battery instantly holds the DC bus voltage up.",
-    "cat": "GMD",
-    "id": "T04_126"
-  },
-  {
-    "q": "Which GMDSS component draws the most massive current from the battery during an emergency?",
-    "a": "The MF/HF transmitter when keying the microphone (transmitting)",
-    "opts": ["The NAVTEX printer", "The GPS receiver", "The MF/HF transmitter when keying the microphone (transmitting)", "The VHF receiver"],
-    "exp": "A 150W or 250W MF/HF radio draws 20-30 Amps at 24V while transmitting, sizing the entire battery bank requirement.",
-    "cat": "GMD",
-    "id": "T04_127"
-  },
-  {
-    "q": "What daily check must be performed on the GMDSS battery system?",
-    "a": "Verify the charging voltage and charging current on the panel meters without load",
-    "opts": ["Verify the charging voltage and charging current on the panel meters without load", "A full 6-hour discharge test", "Top up with distilled water", "Check the specific gravity of all cells"],
-    "exp": "A simple daily visual check confirms the charger hasn't tripped and the battery is floating happily.",
-    "cat": "GMD",
-    "id": "T04_128"
-  },
-  {
-    "q": "What is the typical float charging voltage for a 24V Lead-Acid GMDSS battery?",
-    "a": "27.6V",
-    "opts": ["12.6V", "30.5V", "27.6V", "24.0V"],
-    "exp": "12 cells x 2.30V/cell = 27.6V. This keeps the battery full without boiling away the electrolyte.",
-    "cat": "GMD",
-    "id": "T04_129"
-  },
-  {
-    "q": "Why are two separate battery chargers often fitted to the GMDSS battery bank?",
-    "a": "For redundancy; if the primary charger fails, the backup ensures the distress batteries remain charged",
-    "opts": ["To charge the batteries twice as fast", "One charges the VHF, one charges the MF/HF", "One is for AC, one is for DC", "For redundancy; if the primary charger fails, the backup ensures the distress batteries remain charged"],
-    "exp": "GMDSS is highly redundant. Losing the only charger mid-ocean would slowly kill the radios.",
-    "cat": "GMD",
-    "id": "T04_130"
-  },
-  {
-    "q": "How is a GMDSS battery capacity test actually conducted?",
-    "a": "By disconnecting the charger, applying a dummy resistor load (e.g., C/10 rate), and timing how long it takes to reach cutoff voltage",
-    "opts": ["By transmitting on the MF/HF radio for 6 hours", "By shaking the battery to check for loose plates", "By disconnecting the charger, applying a dummy resistor load (e.g., C/10 rate), and timing how long it takes to reach cutoff voltage", "By measuring the voltage with a multimeter for 5 seconds"],
-    "exp": "A controlled, constant-current discharge is the only mathematical way to prove total Ampere-hour health.",
-    "cat": "GMD",
-    "id": "T04_131"
-  },
-  {
-    "q": "What is the cutoff voltage (empty point) for a 24V Lead-Acid GMDSS battery during a load test?",
-    "a": "Approximately 21.0V (1.75V per cell)",
-    "opts": ["0V", "24.0V", "18.0V", "Approximately 21.0V (1.75V per cell)"],
-    "exp": "Discharging below 1.75V/cell causes permanent plate damage (deep cycling).",
-    "cat": "GMD",
-    "id": "T04_132"
-  },
-  {
-    "q": "What is the consequence of sharing the GMDSS battery with the bridge window wipers?",
-    "a": "It is a severe SOLAS violation and PSC detainable deficiency; non-radio loads drain emergency capacity",
-    "opts": ["It charges the battery faster", "It improves radio reception", "It is a severe SOLAS violation and PSC detainable deficiency; non-radio loads drain emergency capacity", "It is perfectly acceptable to save space"],
-    "exp": "PSC inspectors specifically look for unauthorized wires connected to the GMDSS battery terminals.",
-    "cat": "GMD",
-    "id": "T04_133"
-  },
-  {
-    "q": "If the GMDSS battery is a sealed VRLA (Valve Regulated Lead Acid) type, what maintenance is eliminated?",
-    "a": "Checking electrolyte levels and topping up with distilled water",
-    "opts": ["Terminal cleaning", "Load testing", "Checking electrolyte levels and topping up with distilled water", "Charging"],
-    "exp": "VRLA batteries recombine gases internally, making them 'maintenance-free' regarding fluids.",
-    "cat": "GMD",
-    "id": "T04_134"
-  },
-  {
-    "q": "What alarm must trigger on the bridge regarding the GMDSS power supply?",
-    "a": "A 'Charger Failure' or 'Loss of Main Power' alarm indicating the radios are now draining the battery",
-    "opts": ["A high-frequency radio alarm", "An antenna short circuit alarm", "A 'Charger Failure' or 'Loss of Main Power' alarm indicating the radios are now draining the battery", "A low temperature alarm"],
-    "exp": "The crew must be alerted instantly if the battery stops charging, as the 1-hour or 6-hour clock has started.",
-    "cat": "GMD",
-    "id": "T04_135"
-  },
-  {
-    "q": "Is the GMDSS battery required to power the EPIRB?",
-    "a": "No, the EPIRB has its own internal lithium battery",
-    "opts": ["No, the EPIRB has its own internal lithium battery", "Yes, via a long cable", "Yes, it is the primary power source", "Only during testing"],
-    "exp": "Float-free EPIRBs are completely autonomous. The GMDSS battery only powers the fixed radios.",
-    "cat": "GMD",
-    "id": "T04_136"
-  },
-  {
-    "q": "What powers the SART (Search and Rescue Transponder)?",
-    "a": "Its own internal non-rechargeable lithium battery",
-    "opts": ["A hand-crank dynamo", "Its own internal non-rechargeable lithium battery", "The lifeboat engine", "The GMDSS 24V battery bank"],
-    "exp": "Like the EPIRB, SARTs are survival craft equipment and carry their own 5-year internal batteries.",
-    "cat": "GMD",
-    "id": "T04_137"
-  },
-  {
-    "q": "Why is terminal maintenance critical for the GMDSS battery?",
-    "a": "Corrosion introduces high resistance, which causes massive voltage drop when the MF/HF radio draws 30 Amps, causing the radio to reboot",
-    "opts": ["Corrosion makes the battery too heavy", "Corrosion drains the water out", "Corrosion causes the battery to explode", "Corrosion introduces high resistance, which causes massive voltage drop when the MF/HF radio draws 30 Amps, causing the radio to reboot"],
-    "exp": "A corroded terminal might look fine at 1 Amp, but fails completely under the heavy transmitting load.",
-    "cat": "GMD",
-    "id": "T04_138"
-  },
-  {
-    "q": "What indicates a dead cell in a 24V GMDSS Ni-Cd battery bank?",
-    "a": "The overall open-circuit voltage will drop by exactly 1.2V (e.g., from 25.6V down to 24.4V)",
-    "opts": ["The specific gravity will drop to zero", "The overall open-circuit voltage will drop by exactly 1.2V (e.g., from 25.6V down to 24.4V)", "The battery case will bulge massively", "The charger will turn off"],
-    "exp": "A shorted cell simply removes its voltage contribution from the series string.",
-    "cat": "GMD",
-    "id": "T04_139"
-  },
-  {
-    "q": "What is the required capacity of the GMDSS battery measured in?",
-    "a": "Ampere-hours (Ah)",
-    "opts": ["Volts (V)", "Ampere-hours (Ah)", "Kilowatts (kW)", "Farads (F)"],
-    "exp": "Battery storage capacity is always rated in Ah, indicating how many amps it can provide over hours.",
-    "cat": "GMD",
-    "id": "T04_140"
-  },
+    "opts": [
+      "SERVICE position",
+      "ISOLATED position",
+      "TEST position",
+      "CLOSED position"
+    ],
+    "exp": "The TEST position connects the control circuit for relay testing but disconnects the main power contacts from the bus.",
+    "cat": "OLR",
+    "id": "T04A_047"
+  },
+  {
+    "q": "During secondary injection, what should happen when you inject 1.05× the pickup current?",
+    "a": "Relay must NOT trip",
+    "opts": [
+      "Relay must trip instantly",
+      "Relay must trip within 3 seconds",
+      "Relay must NOT trip",
+      "ACB closes automatically"
+    ],
+    "exp": "Injecting 1.05× verifies the lower threshold ensures the relay does not operate spuriously on minor, harmless overloads.",
+    "cat": "OLR",
+    "id": "T04A_048"
+  },
+  {
+    "q": "What multiples of pickup current are injected to verify the OCR's IDMT curve shape?",
+    "a": "2×, 5×, and 10× pickup",
+    "opts": [
+      "0.5×, 1.0×, and 1.5× pickup",
+      "2×, 5×, and 10× pickup",
+      "10×, 20×, and 50× pickup",
+      "1.05× only"
+    ],
+    "exp": "Testing at 2×, 5×, and 10× records varied trip times to confirm the inverse curve is functioning correctly.",
+    "cat": "OLR",
+    "id": "T04A_049"
+  },
+  {
+    "q": "What equipment is commonly used to perform the secondary injection test?",
+    "a": "Relay test set (e.g. Omicron CMC 256, FREJA)",
+    "opts": [
+      "500 V DC Megger",
+      "Relay test set (e.g. Omicron CMC 256, FREJA)",
+      "Hydrometer",
+      "Micro-ohmmeter (DLRO)"
+    ],
+    "exp": "Specialized secondary injection test sets precisely control injected current and measure trip times.",
+    "cat": "OLR",
+    "id": "T04A_050"
+  },
+  {
+    "q": "Why might a trip circuit link be opened or a test block inserted during secondary injection?",
+    "a": "To prevent an accidental ACB trip during current injection",
+    "opts": [
+      "To increase the secondary current",
+      "To prevent an accidental ACB trip during current injection",
+      "To simulate a busbar short circuit",
+      "To disable the under-voltage relay"
+    ],
+    "exp": "Isolating the trip circuit prevents the actual ACB from springing open during the curve verification phase.",
+    "cat": "OLR",
+    "id": "T04A_051"
+  },
+  {
+    "q": "What must be done immediately after verifying the relay curve but before racking back to SERVICE?",
+    "a": "Re-engage trip circuit and verify trip output contact operates the ACB",
+    "opts": [
+      "Re-engage trip circuit and verify trip output contact operates the ACB",
+      "Perform a full primary load bank test",
+      "Open the generator terminal box to check CT polarity",
+      "Reset the preferential trip dashpot"
+    ],
+    "exp": "You must confirm that the relay's trip signal successfully fires the ACB's shunt trip coil.",
+    "cat": "OLR",
+    "id": "T04A_052"
+  },
+  {
+    "q": "When is a Load Bank test used instead of secondary injection?",
+    "a": "When relay test equipment is unavailable or for functional system-level verification",
+    "opts": [
+      "When testing differential relays",
+      "When the ACB is in the ISOLATED position",
+      "When relay test equipment is unavailable or for functional system-level verification",
+      "To verify the reverse power phase angle"
+    ],
+    "exp": "Load banks apply real load, but are less precise for relay curve calibration compared to secondary injection.",
+    "cat": "OLR",
+    "id": "T04A_053"
+  },
+  {
+    "q": "In the IDMT formula, what does a trip at 10× setting indicate?",
+    "a": "A very fast trip (<100 ms)",
+    "opts": [
+      "A slow thermal trip (minutes)",
+      "A steady delay of 5 seconds",
+      "A very fast trip (<100 ms)",
+      "An open circuit fault"
+    ],
+    "exp": "At 10× setting, the IDMT curve dictates an almost instantaneous trip to clear extreme short circuits.",
+    "cat": "OLR",
+    "id": "T04A_054"
+  },
   {
-    "q": "What is the primary function of a Preferential Trip (Load Shedding) relay?",
-    "a": "To automatically disconnect non-essential loads in stages during a generator overload, preventing a total blackout",
-    "opts": ["To prioritize cooling water pumps", "To start the emergency generator", "To automatically disconnect non-essential loads in stages during a generator overload, preventing a total blackout", "To trip the generator off the busbars"],
-    "exp": "Shedding hotel loads like the galley keeps the generator from hitting its 110% overcurrent trip, saving the propulsion systems.",
-    "cat": "PRT",
-    "id": "T04_141"
+    "q": "Which of the following causes a reverse power condition?",
+    "a": "Prime mover fuel supply fails causing the engine to stall",
+    "opts": [
+      "Excitation voltage on the AVR increases suddenly",
+      "A short circuit on the main switchboard",
+      "Prime mover fuel supply fails causing the engine to stall",
+      "The shore power connection is made without synchronisation"
+    ],
+    "exp": "If the engine loses power, the live busbar drives the generator as a motor, drawing power IN instead of OUT.",
+    "cat": "RP",
+    "id": "T04A_055"
+  },
+  {
+    "q": "What core principle does the reverse power relay use to detect motoring?",
+    "a": "Wattmetric principle (directional power using phase angle)",
+    "opts": [
+      "Thermal bimetallic bending",
+      "IDMT current magnitude detection",
+      "Wattmetric principle (directional power using phase angle)",
+      "Dielectric polarization"
+    ],
+    "exp": "The relay multiplies V × I × cos φ. When motoring, the phase angle shifts ~180°, turning the power product negative.",
+    "cat": "RP",
+    "id": "T04A_056"
+  },
+  {
+    "q": "Why cannot a standard Over-Current Relay (OCR) detect reverse power?",
+    "a": "It only detects current magnitude, not power direction",
+    "opts": [
+      "It operates too quickly",
+      "It only detects current magnitude, not power direction",
+      "It measures only voltage drops",
+      "It requires a direct connection to the engine governor"
+    ],
+    "exp": "During motoring, the current magnitude is normal (no-load power). Only a directional relay detects the 180° phase shift.",
+    "cat": "RP",
+    "id": "T04A_057"
+  },
+  {
+    "q": "What is the primary reason for the 3–5 second time delay on a reverse power relay?",
+    "a": "To ride through transient reverse power during normal synchronisation",
+    "opts": [
+      "To allow the engine to restart automatically",
+      "To ride through transient reverse power during normal synchronisation",
+      "To give the preferential trip time to shed loads",
+      "To allow the AVR to boost excitation"
+    ],
+    "exp": "Brief reverse power occurs normally when an incoming generator is paralled; the delay prevents nuisance tripping.",
+    "cat": "RP",
+    "id": "T04A_058"
+  },
+  {
+    "q": "What phase angle is injected during a secondary injection test of a reverse power relay?",
+    "a": "Lagging ~170–175° (nearly anti-phase)",
+    "opts": [
+      "0° (in phase)",
+      "90° (quadrature)",
+      "Lagging ~170–175° (nearly anti-phase)",
+      "Leading 45°"
+    ],
+    "exp": "To simulate motoring, the test set applies voltage and current almost entirely in anti-phase to create negative kW.",
+    "cat": "RP",
+    "id": "T04A_059"
+  },
+  {
+    "q": "What is an opportunistic method to functionally test the reverse power relay?",
+    "a": "During shore power transfer when backing down the generator",
+    "opts": [
+      "Running the emergency generator unloaded",
+      "Tripping the bus-tie breaker",
+      "During shore power transfer when backing down the generator",
+      "Activating the emergency stop push button"
+    ],
+    "exp": "During transfer, the generator momentarily takes reverse power as it steps down, providing a real functional check.",
+    "cat": "RP",
+    "id": "T04A_060"
+  },
+  {
+    "q": "Which components supply the signals to the reverse power relay?",
+    "a": "A CT (stator current) and a PT (bus voltage)",
+    "opts": [
+      "Two CTs at both ends of the generator",
+      "A CT (stator current) and a PT (bus voltage)",
+      "An AVR and an OCR",
+      "A thermal bimetallic strip and a dashpot"
+    ],
+    "exp": "The relay needs both Current (from CT) and Voltage (from PT) to calculate directional power.",
+    "cat": "RP",
+    "id": "T04A_061"
+  },
+  {
+    "q": "At what percentage of rated generator kW does the reverse power relay typically trip?",
+    "a": "5–10%",
+    "opts": [
+      "50–60%",
+      "85–90%",
+      "110%",
+      "5–10%"
+    ],
+    "exp": "5-10% is low enough to catch a stalled engine before damage, but high enough to ignore minor power swings.",
+    "cat": "RP",
+    "id": "T04A_062"
+  },
+  {
+    "q": "What hazard is caused by a spinning, unfuelled diesel engine driven by the busbar?",
+    "a": "No lubrication pressure buildup, leading to bearing and turbocharger damage",
+    "opts": [
+      "Excessive voltage generation that destroys the AVR",
+      "No lubrication pressure buildup, leading to bearing and turbocharger damage",
+      "Overcharging of the start batteries",
+      "Immediate activation of the CO2 flooding system"
+    ],
+    "exp": "Without fuel, the engine isn't self-driving its lube oil pumps properly at synchronous speed, causing severe mechanical damage.",
+    "cat": "RP",
+    "id": "T04A_063"
   },
   {
     "q": "At what load percentage does Stage 1 of the preferential trip typically activate?",
-    "a": "Around 90% of the generator's rated capacity",
-    "opts": ["Around 90% of the generator's rated capacity", "105%", "150%", "50%"],
-    "exp": "Activating at 90% gives the system a buffer to shed load before reaching the critical 100-110% overload trip zone.",
-    "cat": "PRT",
-    "id": "T04_142"
+    "a": "~90% rated kW",
+    "opts": [
+      "~50% rated kW",
+      "~90% rated kW",
+      "~110% rated kW",
+      "~70% rated kW"
+    ],
+    "exp": "Stage 1 activates near 90% load to shed high-consumption, non-essential domestic loads before overload trips the generator.",
+    "cat": "PREF",
+    "id": "T04A_064"
   },
   {
-    "q": "Why does the preferential trip relay incorporate a time delay (e.g., 5-10 seconds)?",
-    "a": "To prevent nuisance shedding caused by the brief, massive starting currents of large electric motors",
-    "opts": ["To prevent nuisance shedding during the brief, massive starting currents of large electric motors", "Because the relays are physically slow", "To allow the emergency generator to start", "To give the crew time to cook"],
-    "exp": "Starting a thruster spikes current to 150% for 3 seconds. The delay ensures the overload is sustained before dumping the galley.",
-    "cat": "PRT",
-    "id": "T04_143"
+    "q": "Which loads are typically shed during Stage 1 of the preferential trip?",
+    "a": "Galley ovens, water heaters, laundry machines",
+    "opts": [
+      "Navigation lights and steering gear",
+      "Accommodation ventilation fans and deck machinery",
+      "Galley ovens, water heaters, laundry machines",
+      "Fire pumps and bilge pumps"
+    ],
+    "exp": "Stage 1 sheds the highest connected domestic loads that can be dropped without affecting vessel safety.",
+    "cat": "PREF",
+    "id": "T04A_065"
   },
   {
-    "q": "What physical device was traditionally used to create the time delay in older preferential trip relays?",
-    "a": "A dashpot (a pneumatic or hydraulic cylinder with a restricted orifice)",
-    "opts": ["A pendulum", "A quartz crystal", "A massive capacitor", "A dashpot (a pneumatic or hydraulic cylinder with a restricted orifice)"],
-    "exp": "The magnetic coil pulls a piston through oil. Opening the needle valve changes the timing. Modern systems use electronic timers.",
-    "cat": "PRT",
-    "id": "T04_144"
+    "q": "How long is the intentional dashpot delay for Stage 1 of the preferential trip?",
+    "a": "5–10 seconds",
+    "opts": [
+      "<100 ms",
+      "1–3 seconds",
+      "5–10 seconds",
+      "30–45 seconds"
+    ],
+    "exp": "The 5-10 second delay allows transient motor starting surges to pass without unnecessarily shedding loads.",
+    "cat": "PREF",
+    "id": "T04A_066"
   },
   {
-    "q": "What types of loads are strictly FORBIDDEN from being shed by the preferential trip system?",
-    "a": "Essential safety loads (Steering gear, Nav lights, GMDSS, Fire pump)",
-    "opts": ["Bow thruster and purifiers", "Cargo pumps and winches", "Essential safety loads (Steering gear, Nav lights, GMDSS, Fire pump)", "Air conditioning and laundry"],
-    "exp": "SOLAS mandates that critical survival and navigational equipment cannot be auto-tripped unless a total blackout occurs.",
-    "cat": "PRT",
-    "id": "T04_145"
+    "q": "Which of the following loads must NEVER be shed by the preferential trip?",
+    "a": "Steering gear motor",
+    "opts": [
+      "Accommodation ventilation fans",
+      "Galley ovens",
+      "Steering gear motor",
+      "Laundry machines"
+    ],
+    "exp": "Essential safety and navigation equipment (steering, nav lights, fire pumps) must never be shed.",
+    "cat": "PREF",
+    "id": "T04A_067"
   },
   {
-    "q": "What types of loads are typically shed during Stage 1 (Priority 2)?",
-    "a": "Galley ovens, water heaters, laundry equipment, and non-essential HVAC",
-    "opts": ["Galley ovens, water heaters, laundry equipment, and non-essential HVAC", "Radar and ECDIS", "Main engine lube oil pumps", "Emergency fire pump"],
-    "exp": "These are heavy 'hotel' loads whose temporary loss has absolutely zero impact on the safety or propulsion of the vessel.",
-    "cat": "PRT",
-    "id": "T04_146"
+    "q": "How does the mechanical dashpot create a time delay?",
+    "a": "A piston displaces fluid through an adjustable needle valve orifice",
+    "opts": [
+      "A bimetallic strip bends as it heats up",
+      "A capacitor charges until it reaches a voltage threshold",
+      "A piston displaces fluid through an adjustable needle valve orifice",
+      "An internal clock counts the grid frequency cycles"
+    ],
+    "exp": "The restricted flow of oil or air through the needle valve slows the relay armature movement, creating the delay.",
+    "cat": "PREF",
+    "id": "T04A_068"
   },
   {
-    "q": "If the generator load remains above 95% after Stage 1 has shed, what happens next?",
-    "a": "Stage 2 activates after a further time delay, shedding more significant loads like deck machinery and remaining HVAC",
-    "opts": ["Stage 2 activates after a further time delay, shedding more significant loads like deck machinery and remaining HVAC", "The voltage is reduced by 50%", "The generator trips instantly", "The fuel valves shut off"],
-    "exp": "Cascading stages slice off progressively more important equipment in a desperate bid to save the generator.",
-    "cat": "PRT",
-    "id": "T04_147"
+    "q": "What happens in a dashpot if the needle valve orifice is adjusted to be wider?",
+    "a": "Faster fluid flow results in a shorter time delay",
+    "opts": [
+      "Slower fluid flow results in a longer time delay",
+      "Faster fluid flow results in a shorter time delay",
+      "The relay trips at a higher kW percentage",
+      "The relay trips at a lower kW percentage"
+    ],
+    "exp": "A wider orifice provides less resistance to the piston, allowing it to move faster and trip sooner.",
+    "cat": "PREF",
+    "id": "T04A_069"
   },
   {
-    "q": "If the generator load still exceeds 110% after all preferential trip stages have operated, what is the final result?",
-    "a": "The Overcurrent Relay (OCR) trips the generator ACB, causing a total blackout",
-    "opts": ["The emergency generator connects in parallel", "The ship explodes", "The generator runs until it catches fire", "The Overcurrent Relay (OCR) trips the generator ACB, causing a total blackout"],
-    "exp": "Preferential trip is the last defense. If the load is a dead short circuit, the OCR ignores shedding and trips to prevent an explosion.",
-    "cat": "PRT",
-    "id": "T04_148"
+    "q": "What is shed during Stage 2 of the preferential trip?",
+    "a": "Accommodation ventilation fans and non-essential HVAC",
+    "opts": [
+      "Galley ovens and water heaters",
+      "Steering gear and navigation lights",
+      "Accommodation ventilation fans and non-essential HVAC",
+      "Emergency lighting and GMDSS"
+    ],
+    "exp": "Stage 2 sheds the next tier of non-essential loads (like HVAC) if Stage 1 shedding wasn't enough.",
+    "cat": "PREF",
+    "id": "T04A_070"
   },
   {
-    "q": "How does the preferential trip relay measure the generator load?",
-    "a": "It is connected to a Current Transformer (CT) on the generator output busbars",
-    "opts": ["By measuring the frequency drop", "By measuring the RPM of the engine", "It is connected to a Current Transformer (CT) on the generator output busbars", "By monitoring the fuel consumption"],
-    "exp": "The CT feeds a proportional smaller current (e.g., 5A) into the relay, which activates when the current crosses the 90% threshold.",
-    "cat": "PRT",
-    "id": "T04_149"
+    "q": "If a generator trips as soon as it comes on load and the pref trip keeps operating, what is a likely first step?",
+    "a": "Check for a sustained busbar fault (short circuit)",
+    "opts": [
+      "Immediately increase the dashpot delay to 30 seconds",
+      "Override the OCR relay",
+      "Check for a sustained busbar fault (short circuit)",
+      "Turn off the emergency generator"
+    ],
+    "exp": "A continuous heavy fault on the bus will cause immediate overload behavior across all protections.",
+    "cat": "PREF",
+    "id": "T04A_071"
   },
   {
-    "q": "Why is the preferential trip superior to just letting the generator trip and auto-starting the standby generator?",
-    "a": "A generator trip causes a complete blackout, stopping propulsion and steering, whereas shedding the galley keeps the ship fully manoeuvrable",
-    "opts": ["A generator trip causes a complete blackout, stopping propulsion and steering, whereas shedding the galley keeps the ship fully manoeuvrable", "It uses less fuel", "It protects the transformers from high voltage", "It charges the batteries faster"],
-    "exp": "Blackouts in narrow channels cause groundings. Keeping the propeller turning is paramount.",
-    "cat": "PRT",
-    "id": "T04_150"
+    "q": "Why is staged shedding used instead of shedding everything at once?",
+    "a": "To avoid shedding too much load too fast",
+    "opts": [
+      "Because the relay only has one contact block",
+      "To avoid shedding too much load too fast",
+      "Because Stage 2 loads operate on 220V instead of 440V",
+      "To ensure the emergency generator starts correctly"
+    ],
+    "exp": "Staging drops just enough load to recover the plant. Dropping too much load abruptly can cause a dangerous voltage/frequency spike.",
+    "cat": "PREF",
+    "id": "T04A_072"
   },
   {
-    "q": "How is a preferential trip test conducted during an annual survey?",
-    "a": "With generators running, the surveyor injects a simulated overload signal (or lowers the trip setpoint) to verify the correct sequence and timing of load shedding",
-    "opts": ["By tripping the main breaker", "By turning on every piece of equipment on the ship", "By manually pressing the trip buttons on the MSB", "With generators running, the surveyor injects a simulated overload signal (or lowers the trip setpoint) to verify the correct sequence and timing of load shedding"],
-    "exp": "Using secondary injection or tricking the PLC proves the timers and relays work without having to dangerously overload the real engine.",
-    "cat": "PRT",
-    "id": "T04_151"
+    "q": "What is the typical dielectric strength of Air in an ACB?",
+    "a": "2–3 kV/mm",
+    "opts": [
+      "8–10 kV/mm",
+      "2–3 kV/mm",
+      "~89 kV/mm",
+      "50–60 kV/mm"
+    ],
+    "exp": "Air has relatively poor dielectric strength (2-3 kV/mm) and ionises easily under heavy arc energy.",
+    "cat": "DIEL",
+    "id": "T04A_073"
   },
   {
-    "q": "What happens if a crew member tries to restart a shed load (e.g., the galley oven) while the preferential trip is still active?",
-    "a": "The circuit breaker for that load will be electrically locked out and will not close until the overload condition clears and the system is reset",
-    "opts": ["The generator will trip instantly", "The circuit breaker for that load will be electrically locked out and will not close until the overload condition clears and the system is reset", "The oven will run at half power", "The fire alarm will sound"],
-    "exp": "The trip relay maintains an open contact in the shed load's control circuit, physically preventing the cook from re-adding the load.",
-    "cat": "PRT",
-    "id": "T04_152"
+    "q": "Why are ACBs impractical for 6.6 kV ship High Voltage switchboards?",
+    "a": "The arc energy is too high to quench with air and would require massive physical separation",
+    "opts": [
+      "The contact resistance is too low for HV",
+      "The arc energy is too high to quench with air and would require massive physical separation",
+      "ACBs cannot be fitted with NVC coils",
+      "Air turns into SF6 gas under high voltage"
+    ],
+    "exp": "At 6.6kV, arc energy is ~225x higher than 440V; air cannot quench it without an explosively large housing.",
+    "cat": "DIEL",
+    "id": "T04A_074"
   },
   {
-    "q": "Does the preferential trip operate on under-frequency as well as over-current?",
-    "a": "Yes, many modern systems integrate load shedding on severe frequency drops (e.g., below 47Hz) to save a stalling engine",
-    "opts": ["Yes, many modern systems integrate load shedding on severe frequency drops (e.g., below 47Hz) to save a stalling engine", "Only on passenger ships", "No, frequency has no effect on load", "No, only over-voltage"],
-    "exp": "If the prime mover is dying, frequency drops. Shedding load immediately relieves the engine, allowing RPM to recover.",
-    "cat": "PRT",
-    "id": "T04_153"
+    "q": "What is the standard breaker type used for 6.6 kV ship HV switchboards?",
+    "a": "Vacuum Circuit Breaker (VCB)",
+    "opts": [
+      "Air Circuit Breaker (ACB)",
+      "Moulded Case Circuit Breaker (MCCB)",
+      "Vacuum Circuit Breaker (VCB)",
+      "No-Fuse Breaker (NFB)"
+    ],
+    "exp": "VCBs use vacuum bottles with 8-10 kV/mm dielectric strength, making them compact and safe for 6.6 kV.",
+    "cat": "DIEL",
+    "id": "T04A_075"
   },
   {
-    "q": "What is the primary function of the Bus Tie Breaker (BTB) on a large ship's Main Switchboard?",
-    "a": "To connect or isolate two separate sections of the MSB, allowing flexible power routing or maximum fault isolation",
-    "opts": ["To start the emergency generator", "To connect the ship to shore power", "To connect or isolate two separate sections of the MSB, allowing flexible power routing or maximum fault isolation", "To isolate the high voltage from low voltage"],
-    "exp": "The BTB splits the massive busbar down the middle. One side can run Port loads, the other Starboard loads.",
-    "cat": "BTB",
-    "id": "T04_154"
+    "q": "How does a Vacuum Circuit Breaker (VCB) quench an arc?",
+    "a": "Lack of gas molecules prevents ionization, extinguishing the arc at the first natural current zero",
+    "opts": [
+      "Ceramic splitter plates divide the arc",
+      "Lack of gas molecules prevents ionization, extinguishing the arc at the first natural current zero",
+      "Silica sand absorbs the arc energy",
+      "SF6 gas captures free electrons"
+    ],
+    "exp": "In a vacuum, there is nothing to ionize to sustain the plasma, so the arc dies cleanly at the zero-crossing.",
+    "cat": "DIEL",
+    "id": "T04A_076"
   },
   {
-    "q": "Under normal sailing conditions for highly redundant vessels (e.g., DP vessels, large cruise ships), what is the typical status of the Bus Tie Breaker?",
-    "a": "OPEN (Split-bus operation)",
-    "opts": ["It constantly toggles", "CLOSED", "Racked out", "OPEN (Split-bus operation)"],
-    "exp": "Running with the BTB open means a massive short-circuit on the Port bus cannot drag down the Starboard bus, preventing a total blackout.",
-    "cat": "BTB",
-    "id": "T04_155"
+    "q": "What is the dielectric strength of SF6 gas at 4 bar pressure?",
+    "a": "~89 kV/mm",
+    "opts": [
+      "~89 kV/mm",
+      "8–10 kV/mm",
+      "2–3 kV/mm",
+      "440 V/mm"
+    ],
+    "exp": "Pressurized SF6 gas offers extreme dielectric strength (~89 kV/mm), making it ideal for very high voltage (>33kV).",
+    "cat": "DIEL",
+    "id": "T04A_077"
   },
   {
-    "q": "If running in 'Split-Bus' mode (BTB Open), how many generators must be running?",
-    "a": "At least two (one connected to each section)",
-    "opts": ["At least two (one connected to each section)", "Four generators", "None, the batteries take over", "One large generator"],
-    "exp": "Since the buses aren't sharing power, Generator 1 feeds the left side, Generator 2 feeds the right side.",
-    "cat": "BTB",
-    "id": "T04_156"
+    "q": "Why is SF6 gas effective at suppressing arc formation?",
+    "a": "It is highly electronegative and captures free electrons",
+    "opts": [
+      "It creates a strong physical draft that blows out the arc",
+      "It freezes the contacts upon opening",
+      "It is highly electronegative and captures free electrons",
+      "It converts into silica dioxide to quench the arc"
+    ],
+    "exp": "SF6's electronegative nature rapidly strips free electrons from the arc plasma, de-ionizing it.",
+    "cat": "DIEL",
+    "id": "T04A_078"
   },
   {
-    "q": "When is the Bus Tie Breaker CLOSED during normal operations?",
-    "a": "When transferring loads between generators on opposite sections, or when a single generator is sufficient to power the entire ship",
-    "opts": ["Whenever the ship is in port", "During a blackout", "When transferring loads between generators on opposite sections, or when a single generator is sufficient to power the entire ship", "When the emergency generator is running"],
-    "exp": "If load is low, closing the BTB lets one engine power the whole ship, saving fuel and running hours.",
-    "cat": "BTB",
-    "id": "T04_157"
+    "q": "Why is SF6 gear not common on ships below 11 kV?",
+    "a": "It requires special gas handling procedures and SF6 is a potent greenhouse gas",
+    "opts": [
+      "It cannot operate at 60 Hz",
+      "It requires special gas handling procedures and SF6 is a potent greenhouse gas",
+      "SF6 gas dissolves in humid sea air",
+      "It has a lower dielectric strength than vacuum at 6.6 kV"
+    ],
+    "exp": "SF6 has a Global Warming Potential of 23,900 and needs complex handling, making sealed VCBs vastly preferred for ship 6.6kV.",
+    "cat": "DIEL",
+    "id": "T04A_079"
   },
   {
-    "q": "What critical safety interlock is applied to the Bus Tie Breaker?",
-    "a": "An interlock preventing it from closing if generators on both sections are running but unsynchronized",
-    "opts": ["An interlock preventing it from opening under load", "An interlock preventing it from closing if generators on both sections are running but unsynchronized", "An interlock tying it to the steering gear", "An interlock requiring a key from the captain"],
-    "exp": "Slamming the BTB closed while Gen 1 and Gen 2 are out of phase would cause an explosive short-circuit and snap the engine crankshafts.",
-    "cat": "BTB",
-    "id": "T04_158"
+    "q": "Roughly how many times higher is the arc energy at 6.6 kV compared to 440 V?",
+    "a": "225× higher",
+    "opts": [
+      "15× higher",
+      "50× higher",
+      "225× higher",
+      "1000× higher"
+    ],
+    "exp": "Arc energy scales with the square of voltage ratio. (6600 / 440)² = 15² = 225 times more energy.",
+    "cat": "DIEL",
+    "id": "T04A_080"
   },
   {
-    "q": "What happens if a dead short-circuit occurs on MSB Section A while the Bus Tie Breaker is CLOSED?",
-    "a": "The BTB is designed to trip almost instantly, isolating the fault to Section A and saving Section B from blacking out",
-    "opts": ["The fault crosses over and trips both generators", "The entire ship blacks out", "The busbars melt together", "The BTB is designed to trip almost instantly, isolating the fault to Section A and saving Section B from blacking out"],
-    "exp": "The BTB has its own overcurrent protection to slice the board in half before the healthy generator gets dragged down.",
-    "cat": "BTB",
-    "id": "T04_159"
+    "q": "What separation distance do VCB contacts typically need to quench an arc?",
+    "a": "~8–10 mm",
+    "opts": [
+      "~100 mm",
+      "~8–10 mm",
+      "~2–3 mm",
+      "~50 mm"
+    ],
+    "exp": "Due to the extreme dielectric strength of a vacuum, only a tiny ~8-10 mm separation is required to break high voltages safely.",
+    "cat": "DIEL",
+    "id": "T04A_081"
   },
   {
-    "q": "How does the breaking capacity of the BTB compare to the generator ACBs?",
-    "a": "It must have a massive breaking capacity, equal to or greater than the combined fault current of the entire system",
-    "opts": ["It must have a massive breaking capacity, equal to or greater than the combined fault current of the entire system", "It is identical to a small motor breaker", "It does not interrupt faults", "It is much lower to save cost"],
-    "exp": "If all generators are running, the fault current crossing the tie breaker is colossal. The BTB must be able to clear it without exploding.",
-    "cat": "BTB",
-    "id": "T04_160"
+    "q": "During a DC insulation (Megger) test, which current component decays to near-zero within 10–30 seconds?",
+    "a": "Capacitive current (Ic)",
+    "opts": [
+      "Absorption current (Ia)",
+      "True leakage current (Il)",
+      "Capacitive current (Ic)",
+      "Inductive reactive current (Ir)"
+    ],
+    "exp": "Capacitive current is simply the initial geometric charging of the cable and decays in seconds.",
+    "cat": "PI",
+    "id": "T04A_082"
   },
   {
-    "q": "During a blackout recovery drill, if Gen 1 is started and placed on Section A, how does Section B get power?",
-    "a": "By manually or automatically closing the Bus Tie Breaker after Gen 1 is verified stable",
-    "opts": ["By manually or automatically closing the Bus Tie Breaker after Gen 1 is verified stable", "By starting Gen 2 simultaneously", "It remains dark", "From the shore power cable"],
-    "exp": "Closing the tie energizes the dead half of the ship from the live half.",
-    "cat": "BTB",
-    "id": "T04_161"
+    "q": "What causes the Absorption current (Ia) during an insulation test?",
+    "a": "Molecular dipoles in the insulation aligning to the applied electric field",
+    "opts": [
+      "Surface tracking over dirty insulators",
+      "Molecular dipoles in the insulation aligning to the applied electric field",
+      "Physical movement of the copper conductors",
+      "The charging of the copper-to-hull capacitance"
+    ],
+    "exp": "Absorption current reflects dielectric polarisation as dipoles in healthy insulation slowly align over ~10 minutes.",
+    "cat": "PI",
+    "id": "T04A_083"
   },
   {
-    "q": "What is the typical ACB position sequence for routine physical maintenance on the Bus Tie Breaker?",
-    "a": "Trip open -> Rack to ISOLATED -> Apply LOTO -> Prove dead on BOTH sides of the breaker",
-    "opts": ["Leave closed -> Apply LOTO", "Trip open -> Rack to ISOLATED -> Apply LOTO -> Prove dead on BOTH sides of the breaker", "Rack to TEST -> Clean contacts", "Bypass the breaker -> Remove fuses"],
-    "exp": "Because the BTB sits between two potential power sources, you must verify absolutely zero voltage exists on both the left and right stabs.",
-    "cat": "BTB",
-    "id": "T04_162"
+    "q": "Which current component is constant throughout the test and reflects actual insulation quality?",
+    "a": "True (conductive) leakage current (Il)",
+    "opts": [
+      "Capacitive current (Ic)",
+      "Absorption current (Ia)",
+      "True (conductive) leakage current (Il)",
+      "Harmonic distortion current (Ih)"
+    ],
+    "exp": "Once capacitive and absorption currents decay, only true leakage current remains flowing through the insulation bulk.",
+    "cat": "PI",
+    "id": "T04A_084"
   },
   {
-    "q": "Can the Bus Tie Breaker be used to connect the ship's 440V MSB to the 220V lighting switchboard?",
-    "a": "No, it only connects sections of the same voltage level; transformers connect different voltage boards",
-    "opts": ["No, it only connects sections of the same voltage level; transformers connect different voltage boards", "Yes, if the frequency matches", "Yes, during emergencies only", "Yes, it acts as a step-down unit"],
-    "exp": "A breaker cannot alter voltage. Tying 440V directly to 220V would cause a catastrophic explosion.",
-    "cat": "BTB",
-    "id": "T04_163"
+    "q": "Why is a Polarization Index (PI) test conducted over exactly 10 minutes?",
+    "a": "It takes ~10 minutes for absorption current to mostly decay, revealing true leakage resistance",
+    "opts": [
+      "It takes ~10 minutes to charge the capacitive current fully",
+      "It takes ~10 minutes for absorption current to mostly decay, revealing true leakage resistance",
+      "10 minutes is the maximum run time of a Megger battery",
+      "It ensures the motor windings reach operating temperature"
+    ],
+    "exp": "At 10 minutes, the dipoles have settled, absorption current is gone, and the reading reflects true insulation health.",
+    "cat": "PI",
+    "id": "T04A_085"
   },
   {
-    "q": "Why is the BTB interlock sometimes bypassed with a key switch by senior engineers?",
-    "a": "To intentionally close it onto a dead bus during blackout recovery if the automation fails",
-    "opts": ["To test the alarm sirens", "To intentionally close it onto a dead bus during blackout recovery if the automation fails", "To disconnect shore power", "To parallel unsynchronized engines"],
-    "exp": "Overrides exist for emergencies when the PLC is dead, but they carry massive risk if used improperly.",
-    "cat": "BTB",
-    "id": "T04_164"
+    "q": "What is the formula to calculate the Polarization Index (PI)?",
+    "a": "PI = IR(10 min) / IR(1 min)",
+    "opts": [
+      "PI = IR(1 min) / IR(10 min)",
+      "PI = IR(10 min) - IR(1 min)",
+      "PI = IR(10 min) / IR(1 min)",
+      "PI = IR(1 min) + IR(10 min)"
+    ],
+    "exp": "PI is the ratio of the 10-minute resistance reading to the 1-minute resistance reading.",
+    "cat": "PI",
+    "id": "T04A_086"
   },
   {
-    "q": "What is the 'SERVICE' (or CONNECTED) position of an Air Circuit Breaker?",
-    "a": "The breaker is fully racked in; main power contacts are gripped to the busbars, and control wiring is connected. It carries the ship's load.",
-    "opts": ["The breaker is testing its own relays", "The breaker is fully racked in; main power contacts are gripped to the busbars, and control wiring is connected. It carries the ship's load.", "The breaker is providing shore power only", "The breaker is removed for repair"],
-    "exp": "This is the normal, active operating position for generating electricity or feeding motors.",
-    "cat": "POS",
-    "id": "T04_165"
+    "q": "What PI value indicates dangerous, degraded, or wet insulation?",
+    "a": "< 1.0",
+    "opts": [
+      "> 4.0",
+      "2.0 – 4.0",
+      "1.0 – 2.0",
+      "< 1.0"
+    ],
+    "exp": "A PI less than 1.0 means absorption current was negligible because water/contamination disrupted the molecular structure.",
+    "cat": "PI",
+    "id": "T04A_087"
   },
   {
-    "q": "What is the 'TEST' position of an Air Circuit Breaker?",
-    "a": "The breaker is racked out halfway; massive primary power contacts are disconnected from the bus, but tiny secondary control pins remain connected",
-    "opts": ["The breaker is completely removed from the cabinet", "The breaker is short-circuited for Meggering", "The breaker is fully connected but tripped", "The breaker is racked out halfway; massive primary power contacts are disconnected from the bus, but tiny secondary control pins remain connected"],
-    "exp": "Test mode allows the ETO to safely inject fault currents into the relays and watch the breaker physically trip without 440V danger.",
-    "cat": "POS",
-    "id": "T04_166"
+    "q": "What is an acceptable PI value for good, healthy insulation?",
+    "a": "2.0 – 4.0",
+    "opts": [
+      "< 1.0",
+      "1.0 – 2.0",
+      "2.0 – 4.0",
+      "Exactly 0.5"
+    ],
+    "exp": "A PI between 2.0 and 4.0 means the insulation is dry and dipoles aligned well, yielding a healthy ratio.",
+    "cat": "PI",
+    "id": "T04A_088"
   },
   {
-    "q": "Why is secondary injection testing of an OCR performed in the TEST position?",
-    "a": "To ensure test currents do not back-feed into live busbars, which could step-up to lethal voltages or disrupt the ship",
-    "opts": ["To ensure test currents do not back-feed into live busbars, which could step-up to lethal voltages or disrupt the ship", "Because it is required by the manufacturer", "Because the test set needs 440V to work", "To ensure test taking less time"],
-    "exp": "Testing in Service mode injects current straight into the live grid, posing extreme danger.",
-    "cat": "POS",
-    "id": "T04_167"
+    "q": "If the 1-minute reading is 10 MΩ and the 10-minute reading is 30 MΩ, what is the PI and is it acceptable?",
+    "a": "PI = 3.0, Good - Acceptable for service",
+    "opts": [
+      "PI = 0.33, Dangerous - Do not energise",
+      "PI = 3.0, Good - Acceptable for service",
+      "PI = 20.0, Questionable - Dry out needed",
+      "PI = 40.0, Excellent"
+    ],
+    "exp": "30 / 10 = 3.0. A PI of 3.0 falls in the 2.0-4.0 range, which is good/healthy.",
+    "cat": "PI",
+    "id": "T04A_089"
   },
   {
-    "q": "What is the 'ISOLATED' (or WITHDRAWN) position of an Air Circuit Breaker?",
-    "a": "The breaker is fully racked out; both main power contacts AND secondary control circuits are completely disconnected",
-    "opts": ["The breaker is locked by a software password", "The breaker is fully racked out; both main power contacts AND secondary control circuits are completely disconnected", "The breaker is connected to emergency power", "The breaker is closed but carrying no load"],
-    "exp": "This provides total physical air-gap isolation. The breaker is dead, safe to touch, and ready for LOTO and mechanical maintenance.",
-    "cat": "POS",
-    "id": "T04_168"
+    "q": "Why does wet insulation result in a low PI ratio?",
+    "a": "Contamination disrupts the molecular structure, reducing absorption current and dropping the ratio",
+    "opts": [
+      "Water increases the capacitive current significantly",
+      "Water acts as an excellent dielectric insulator",
+      "Contamination disrupts the molecular structure, reducing absorption current and dropping the ratio",
+      "Wet insulation blocks true leakage current completely"
+    ],
+    "exp": "Moisture stops the dipoles from aligning properly, so the slow-decay absorption current doesn't happen, flattening the curve.",
+    "cat": "PI",
+    "id": "T04A_090"
   },
   {
-    "q": "What physical action prevents you from racking an ACB from SERVICE to ISOLATED while it is closed and carrying load?",
-    "a": "A mechanical safety interlock prevents the racking handle from being inserted or turned until the breaker is tripped OPEN",
-    "opts": ["A mechanical safety interlock prevents the racking handle from being inserted or turned until the breaker is tripped OPEN", "The weight of the electricity", "A warning siren on the bridge", "A software timer"],
-    "exp": "Racking a closed breaker would pull the contacts apart in open air, creating a catastrophic, explosive arc flash outside the arc chutes.",
-    "cat": "POS",
-    "id": "T04_169"
+    "q": "What Specific Gravity (SG) reading indicates a fully charged lead-acid battery?",
+    "a": "1.260 – 1.280",
+    "opts": [
+      "1.100 – 1.120",
+      "~1.200",
+      "1.260 – 1.280",
+      "1.350 – 1.400"
+    ],
+    "exp": "A healthy, fully charged cell will measure between 1.260 and 1.280 SG on a hydrometer.",
+    "cat": "BATT",
+    "id": "T04A_091"
   },
   {
-    "q": "Before putting hands inside the ACB housing while in the ISOLATED position, what final mechanical check must be done?",
-    "a": "Verify the closing spring indicator says 'DISCHARGED'. If it is charged, manually fire the close/trip buttons to release the tension.",
-    "opts": ["Verify the contacts are polished", "Verify the closing spring indicator says 'DISCHARGED'. If it is charged, manually fire the close/trip buttons to release the tension.", "Apply oil to the contacts", "Megger the casing"],
-    "exp": "A charged spring holds enough kinetic energy to crush fingers if the mechanism is accidentally nudged.",
-    "cat": "POS",
-    "id": "T04_170"
+    "q": "What is the danger of leaving a battery fully discharged (SG 1.100) for more than 24-48 hours?",
+    "a": "Risk of permanent sulphation and irreversible capacity loss",
+    "opts": [
+      "Risk of thermal runaway during the next charge",
+      "Risk of permanent sulphation and irreversible capacity loss",
+      "The distilled water will evaporate instantly",
+      "The battery case will shatter from freezing"
+    ],
+    "exp": "Lead sulphate crystals harden into permanent sulphation if left discharged, destroying capacity forever.",
+    "cat": "BATT",
+    "id": "T04A_092"
   },
   {
-    "q": "How is the ACB physically moved between Service, Test, and Isolated positions?",
-    "a": "By using a special racking handle (crank) inserted into the front panel to manually wind the breaker chassis in or out on rails",
-    "opts": ["By lifting it manually with two people", "By pulling it with a rope", "By pressing an electronic button", "By using a special racking handle (crank) inserted into the front panel to manually wind the breaker chassis in or out on rails"],
-    "exp": "The racking mechanism uses high mechanical advantage to push the massive copper stabs securely onto the busbars.",
-    "cat": "POS",
-    "id": "T04_171"
+    "q": "What indicates a specific cell fault (like internal short or shedding) within a battery bank?",
+    "a": ">0.050 SG difference between cells in the same bank",
+    "opts": [
+      "All cells reading 1.200 evenly",
+      "White sulphate deposits on the external terminals",
+      ">0.050 SG difference between cells in the same bank",
+      "SG readings rising slowly during equalising charge"
+    ],
+    "exp": "A variation greater than 0.050 SG flags a degraded or faulty cell compared to the rest of the bank.",
+    "cat": "BATT",
+    "id": "T04A_093"
   },
   {
-    "q": "During Lock Out Tag Out (LOTO), where does the ETO typically place the padlock?",
-    "a": "On the racking mechanism shutter, preventing the racking handle from being inserted to move the breaker back to Service",
-    "opts": ["On the generator terminal box", "On the racking mechanism shutter, preventing the racking handle from being inserted to move the breaker back to Service", "On the main engine telegraph", "On the front glass window"],
-    "exp": "Locking the shutter guarantees nobody can wind the breaker onto the live bus while someone is working on the motor.",
-    "cat": "POS",
-    "id": "T04_172"
+    "q": "How is battery SG corrected for electrolyte temperature?",
+    "a": "±0.007 SG per 10 °C deviation from 25 °C",
+    "opts": [
+      "±0.001 SG per 5 °C deviation from 20 °C",
+      "±0.007 SG per 10 °C deviation from 25 °C",
+      "±0.050 SG per 1 °C deviation from 0 °C",
+      "±0.100 SG per 10 °C deviation from 35 °C"
+    ],
+    "exp": "Add 0.007 to the reading for every 10 °C above the 25 °C baseline, or subtract if colder.",
+    "cat": "BATT",
+    "id": "T04A_094"
   },
   {
-    "q": "When re-inserting an ACB, why must you rack it all the way until it 'clunks' or hits the mechanical stop?",
-    "a": "To ensure the massive copper stabs fully engage the busbars, preventing high resistance joints and overheating",
-    "opts": ["To trigger the alarm bell", "To ensure the massive copper stabs fully engage the busbars, preventing high resistance joints and overheating", "To clean the dust off the rails", "To test the shock absorbers"],
-    "exp": "A partially engaged stab will arc and melt under load. The mechanical stop guarantees proper insertion depth.",
-    "cat": "POS",
-    "id": "T04_173"
+    "q": "What fluid MUST be used to top up a battery electrolyte level?",
+    "a": "Distilled water ONLY",
+    "opts": [
+      "Sulphuric acid ONLY",
+      "Tap water",
+      "Distilled water ONLY",
+      "Mineral water"
+    ],
+    "exp": "Only distilled water is used. Tap water contains minerals that accelerate sulphation, and adding acid ruins the chemistry.",
+    "cat": "BATT",
+    "id": "T04A_095"
   },
   {
-    "q": "Can you start the diesel engine while its ACB is in the TEST position?",
-    "a": "Yes, but the generator will not connect to the busbars; it is safe for running the engine without producing grid power",
-    "opts": ["No, the AVR will explode", "No, the engine is physically locked", "Yes, and it will power the ship", "Yes, but the generator will not connect to the busbars; it is safe for running the engine without producing grid power"],
-    "exp": "Test mode isolates the HV output but allows the engine and AVR to run for testing purposes.",
-    "cat": "POS",
-    "id": "T04_174"
+    "q": "When is the correct time to top up battery electrolyte with distilled water?",
+    "a": "AFTER charging",
+    "opts": [
+      "BEFORE charging",
+      "DURING the equalising phase",
+      "AFTER charging",
+      "When the battery is fully discharged"
+    ],
+    "exp": "Charging causes gas evolution which raises the liquid level. Topping up before charging causes overflow and acid spills.",
+    "cat": "BATT",
+    "id": "T04A_096"
   },
   {
-    "q": "What does 'Trip-Free' mean regarding the ACB operating mechanism?",
-    "a": "The breaker is free to trip instantly on a fault even if the operator is forcefully holding the mechanical close button down",
-    "opts": ["The breaker trips freely without drawing an arc", "The trips can be bypassed for free", "The breaker is free to trip instantly on a fault even if the operator is forcefully holding the mechanical close button down", "It trips without needing any voltage"],
-    "exp": "This safety feature ensures a human operator cannot override a massive short-circuit trip by jamming the handle closed.",
-    "cat": "POS",
-    "id": "T04_175"
+    "q": "What solution is used to neutralize acid and wash terminal posts?",
+    "a": "Dilute bicarbonate of soda solution",
+    "opts": [
+      "Dilute sulphuric acid",
+      "Pure distilled water",
+      "Dilute bicarbonate of soda solution",
+      "Lithium grease"
+    ],
+    "exp": "Bicarbonate of soda safely neutralises spilled acid and sulphate deposits on the battery terminals.",
+    "cat": "BATT",
+    "id": "T04A_097"
   },
   {
-    "q": "What happens if you accidentally try to rack out an ACB while the Under-Voltage Trip (UVT) coil is de-energized?",
-    "a": "Nothing unusual; the UVT already holds the breaker safely tripped, so racking out is physically permitted",
-    "opts": ["The handle jams", "The ship blacks out", "The breaker explodes", "Nothing unusual; the UVT already holds the breaker safely tripped, so racking out is physically permitted"],
-    "exp": "Since the breaker is verified OPEN (due to the UVT), the safety interlock allows the racking crank to operate safely.",
-    "cat": "POS",
-    "id": "T04_176"
+    "q": "What is the typical voltage per cell used during an equalising charge?",
+    "a": "2.4 V/cell",
+    "opts": [
+      "2.25 V/cell",
+      "2.4 V/cell",
+      "2.0 V/cell",
+      "12.0 V/cell"
+    ],
+    "exp": "Equalising pushes a higher voltage (2.4 V/cell vs normal 2.25 float) to force all cells to 100% and break mild sulphation.",
+    "cat": "BATT",
+    "id": "T04A_098"
+  },
+  {
+    "q": "Why must emergency generator starting batteries be kept on float charge continuously?",
+    "a": "To prevent sulphation from occurring when left in a discharged state",
+    "opts": [
+      "To boil off excess distilled water",
+      "To prevent sulphation from occurring when left in a discharged state",
+      "To keep the engine block warm",
+      "To power the preferential trip dashpot"
+    ],
+    "exp": "Float charge maintains 100% capacity and entirely prevents lead sulphate crystals from forming on the plates.",
+    "cat": "BATT",
+    "id": "T04A_099"
+  },
+  {
+    "q": "What is the switchover time for an Online (Double Conversion) UPS?",
+    "a": "ZERO - no switchover",
+    "opts": [
+      "2–4 ms",
+      "4–12 ms",
+      "ZERO - no switchover",
+      "45 seconds"
+    ],
+    "exp": "Because the load is continuously fed through the battery-backed inverter, there is zero switchover delay.",
+    "cat": "UPS",
+    "id": "T04A_100"
+  },
+  {
+    "q": "How does an Offline (Standby) UPS operate normally?",
+    "a": "Load connected directly to mains; static switch transfers to inverter on failure",
+    "opts": [
+      "Load ALWAYS supplied through the inverter",
+      "Load connected directly to mains; static switch transfers to inverter on failure",
+      "Auto-transformer conditions mains voltage continuously",
+      "Thyristor directly connects load to emergency generator"
+    ],
+    "exp": "Offline UPS powers the load via raw mains normally, and only switches to the inverter (with a 4-12ms delay) during failure.",
+    "cat": "UPS",
+    "id": "T04A_101"
+  },
+  {
+    "q": "Which critical ship system requires an Online UPS because it cannot tolerate any power interruption?",
+    "a": "ECDIS and GMDSS",
+    "opts": [
+      "Galley ovens",
+      "Accommodation ventilation fans",
+      "ECDIS and GMDSS",
+      "Deck winches"
+    ],
+    "exp": "Navigation (ECDIS) and continuous watch (GMDSS) systems crash or lose memory if interrupted, requiring Double Conversion UPS.",
+    "cat": "UPS",
+    "id": "T04A_102"
+  },
+  {
+    "q": "How long must GMDSS operate on dedicated batteries if no UPS is present? (SOLAS)",
+    "a": "6 hours",
+    "opts": [
+      "30 minutes",
+      "1 hour",
+      "6 hours",
+      "18 hours"
+    ],
+    "exp": "SOLAS requires 1 hour of backup if a UPS/charger system is attached, or 6 hours on standalone dedicated batteries.",
+    "cat": "UPS",
+    "id": "T04A_103"
+  },
+  {
+    "q": "What is the function of the Static Bypass in a UPS?",
+    "a": "Transfers load directly to mains automatically if the UPS inverter fails",
+    "opts": [
+      "Allows manual isolation of the UPS for battery replacement",
+      "Converts AC directly to DC for the battery bank",
+      "Transfers load directly to mains automatically if the UPS inverter fails",
+      "Sheds non-essential loads during a blackout"
+    ],
+    "exp": "The static bypass uses a thyristor switch to instantly (microseconds) dump the load to raw mains if the inverter overloads or faults.",
+    "cat": "UPS",
+    "id": "T04A_104"
+  },
+  {
+    "q": "When is the Maintenance Bypass used on a UPS?",
+    "a": "Only when the UPS must be completely de-energised for servicing",
+    "opts": [
+      "Automatically during a blackout to start the emergency generator",
+      "Only when the UPS must be completely de-energised for servicing",
+      "To parallel the UPS inverter with the main generator",
+      "When the shore connection is established"
+    ],
+    "exp": "It's a manual switch that routes mains directly to the load, fully isolating the UPS chassis safely for physical repairs.",
+    "cat": "UPS",
+    "id": "T04A_105"
+  },
+  {
+    "q": "What is a key difference between Static bypass and Maintenance bypass?",
+    "a": "Static is automatic for faults; Maintenance is manual for servicing",
+    "opts": [
+      "Static provides battery backup; Maintenance provides generator backup",
+      "Static is manual for servicing; Maintenance is automatic for faults",
+      "Static is automatic for faults; Maintenance is manual for servicing",
+      "Static connects to the ESB; Maintenance connects to the MSB"
+    ],
+    "exp": "Static bypass relies on automated electronics to save the load; maintenance bypass relies on a human turning a mechanical switch.",
+    "cat": "UPS",
+    "id": "T04A_106"
+  },
+  {
+    "q": "What type of UPS offers a 2-4 ms switchover time and conditions mains voltage continuously?",
+    "a": "Line Interactive",
+    "opts": [
+      "Online (Double Conversion)",
+      "Offline (Standby)",
+      "Line Interactive",
+      "Static Bypass Transformer"
+    ],
+    "exp": "Line Interactive uses an AVR transformer to condition normal mains, switching to inverter slightly faster than an Offline UPS.",
+    "cat": "UPS",
+    "id": "T04A_107"
+  },
+  {
+    "q": "Why does the fire alarm panel require UPS support?",
+    "a": "It must remain active at all times, even during a blackout transition",
+    "opts": [
+      "To provide high-voltage power to the sirens",
+      "It must remain active at all times, even during a blackout transition",
+      "To run the main fire pumps automatically",
+      "To monitor the preferential trip relays"
+    ],
+    "exp": "Fire safety systems cannot lose power or reboot during the 45-second blackout gap before the emergency generator starts.",
+    "cat": "UPS",
+    "id": "T04A_108"
+  },
+  {
+    "q": "What component in a starter panel provides short-circuit protection for the motor downstream?",
+    "a": "Incoming fuse (HRC) or MCB",
+    "opts": [
+      "Thermal overload relay",
+      "Main contactor",
+      "Incoming fuse (HRC) or MCB",
+      "Dashpot timer"
+    ],
+    "exp": "HRC Fuses or MCBs catch catastrophic short-circuits, while the overload relay handles smaller sustained overcurrents.",
+    "cat": "MCC",
+    "id": "T04A_109"
+  },
+  {
+    "q": "What does a GREEN indicator lamp mean according to IEC 60073 standards?",
+    "a": "Motor STOPPED - safe state, no hazard",
+    "opts": [
+      "Motor RUNNING - hazard present",
+      "FAULT or ALARM condition",
+      "Power available / supply healthy",
+      "Motor STOPPED - safe state, no hazard"
+    ],
+    "exp": "Under IEC 60073, green means safe to approach (stopped), which is the opposite of traffic light logic.",
+    "cat": "MCC",
+    "id": "T04A_110"
+  },
+  {
+    "q": "What does a RED indicator lamp signify on a starter panel?",
+    "a": "Motor RUNNING - hazard / danger present",
+    "opts": [
+      "Motor STOPPED - safe state",
+      "Motor RUNNING - hazard / danger present",
+      "Overload trip active",
+      "Control circuit fuse blown"
+    ],
+    "exp": "Red means danger—the machine is rotating, energized, or pressurized.",
+    "cat": "MCC",
+    "id": "T04A_111"
+  },
+  {
+    "q": "What color lamp indicates a FAULT or ALARM condition on an MCC?",
+    "a": "AMBER / YELLOW",
+    "opts": [
+      "RED",
+      "WHITE",
+      "BLUE",
+      "AMBER / YELLOW"
+    ],
+    "exp": "Yellow/Amber is universally used for faults, warnings, or tripped overload status.",
+    "cat": "MCC",
+    "id": "T04A_112"
+  },
+  {
+    "q": "Which component is an electromagnetic switch that actually starts and stops the motor under load?",
+    "a": "Main contactor",
+    "opts": [
+      "Overload relay",
+      "Main contactor",
+      "NFB",
+      "HRC fuse"
+    ],
+    "exp": "The main contactor closes the heavy-duty contacts using a low-voltage control coil to run the motor.",
+    "cat": "MCC",
+    "id": "T04A_113"
+  },
+  {
+    "q": "What color lamp generally indicates 'Power available' or 'Supply healthy' without implying danger?",
+    "a": "WHITE",
+    "opts": [
+      "GREEN",
+      "WHITE",
+      "BLUE",
+      "AMBER / YELLOW"
+    ],
+    "exp": "White simply provides information that control voltage or main bus power is present to the panel.",
+    "cat": "MCC",
+    "id": "T04A_114"
+  },
+  {
+    "q": "What is a primary advantage of a Group Starter Panel (MCC) over individual scattered starters?",
+    "a": "Centralised control and easier maintenance in one location",
+    "opts": [
+      "It requires higher rated HRC fuses",
+      "Centralised control and easier maintenance in one location",
+      "It eliminates the need for thermal overload relays",
+      "It prevents short circuits entirely"
+    ],
+    "exp": "Grouping all starters in the ECR saves deck space and allows engineers to troubleshoot without entering confined spaces.",
+    "cat": "MCC",
+    "id": "T04A_115"
+  },
+  {
+    "q": "Why is control circuit voltage typically 24 V DC or 110 V AC?",
+    "a": "For safe operator interface at the push buttons",
+    "opts": [
+      "To provide higher torque to the motor",
+      "To prevent dashpot oil from leaking",
+      "For safe operator interface at the push buttons",
+      "Because HRC fuses only work at low voltages"
+    ],
+    "exp": "Low voltage keeps the human-operated push buttons safe from lethal 440V potential.",
+    "cat": "MCC",
+    "id": "T04A_116"
+  },
+  {
+    "q": "What is a blue lamp typically used for on a ship's starter panel?",
+    "a": "Mandatory action required / remote-auto mode active",
+    "opts": [
+      "Motor stopped",
+      "Motor running",
+      "Mandatory action required / remote-auto mode active",
+      "Earth fault present"
+    ],
+    "exp": "Blue indicates special operational states like 'Remote Control Active' or a mandatory operator intervention.",
+    "cat": "MCC",
+    "id": "T04A_117"
+  },
+  {
+    "q": "According to SOLAS II-1/Reg 42, where must the Emergency Switchboard (ESB) be located vertically?",
+    "a": "Above the bulkhead deck (freeboard deck)",
+    "opts": [
+      "Below the main watertight subdivision deck",
+      "In the main engine room bottom platform",
+      "Above the bulkhead deck (freeboard deck)",
+      "At the lowest possible point to maintain stability"
+    ],
+    "exp": "It must be above the bulkhead deck so it survives major hull flooding scenarios.",
+    "cat": "ESBLOC",
+    "id": "T04A_118"
+  },
+  {
+    "q": "Where must the ESB be located in relation to machinery spaces?",
+    "a": "Outside all machinery spaces",
+    "opts": [
+      "Inside the main engine room next to the MSB",
+      "Outside all machinery spaces",
+      "Inside the purifier room",
+      "Adjacent to the steering gear room"
+    ],
+    "exp": "It must be outside the main machinery space so it remains accessible if the engine room is on fire or sealed with CO2.",
+    "cat": "ESBLOC",
+    "id": "T04A_119"
+  },
+  {
+    "q": "From where must the ESB be readily accessible during an emergency?",
+    "a": "The navigation bridge",
+    "opts": [
+      "The main engine room control room",
+      "The cargo control room",
+      "The navigation bridge",
+      "The forward mooring station"
+    ],
+    "exp": "The bridge needs quick, clear access to the ESB for manual control if the engine room is inaccessible.",
+    "cat": "ESBLOC",
+    "id": "T04A_120"
+  },
+  {
+    "q": "Within how many seconds must the emergency generator start and connect on a cargo ship?",
+    "a": "45 seconds",
+    "opts": [
+      "10 seconds",
+      "30 seconds",
+      "45 seconds",
+      "60 seconds"
+    ],
+    "exp": "SOLAS requires a cargo ship's emergency generator to automatically restore power within 45 seconds.",
+    "cat": "ESBLOC",
+    "id": "T04A_121"
+  },
+  {
+    "q": "What connects to the ESB to bridge the gap before the emergency generator starts?",
+    "a": "The Transitional Source (Battery or UPS)",
+    "opts": [
+      "The Shore Supply breaker",
+      "The Transitional Source (Battery or UPS)",
+      "The main generator ACB",
+      "A hand-cranked dynamo"
+    ],
+    "exp": "The 30-minute transitional battery source provides instant power to essential loads during the 45-second start delay.",
+    "cat": "ESBLOC",
+    "id": "T04A_122"
+  },
+  {
+    "q": "Which of the following is an essential service fed by the ESB?",
+    "a": "Steering gear (one motor minimum)",
+    "opts": [
+      "Galley ovens",
+      "Steering gear (one motor minimum)",
+      "Air conditioning compressors",
+      "Main engine lube oil purifiers"
+    ],
+    "exp": "SOLAS requires essential survival and navigation systems, like one steering gear motor, to be on the ESB.",
+    "cat": "ESBLOC",
+    "id": "T04A_123"
+  },
+  {
+    "q": "Why is a Shore Connection point provided on the ESB?",
+    "a": "Allows essential services to be powered in-port without running the emergency generator continuously",
+    "opts": [
+      "To discharge the transitional batteries safely",
+      "Allows essential services to be powered in-port without running the emergency generator continuously",
+      "To test the reverse power relay without load",
+      "To synchronize the main generators with the shore grid"
+    ],
+    "exp": "During drydock or dead-ship port stays, shore power feeds the ESB to keep essential lighting and alarms alive.",
+    "cat": "ESBLOC",
+    "id": "T04A_124"
+  },
+  {
+    "q": "Within how many seconds must the emergency generator start and connect on a passenger ship?",
+    "a": "30 seconds",
+    "opts": [
+      "15 seconds",
+      "30 seconds",
+      "45 seconds",
+      "60 seconds"
+    ],
+    "exp": "Passenger ships have stricter requirements (30 seconds) compared to cargo ships (45 seconds).",
+    "cat": "ESBLOC",
+    "id": "T04A_125"
+  },
+  {
+    "q": "For how long must the transitional source supply essential loads without ANY generating source running?",
+    "a": "30 minutes",
+    "opts": [
+      "5 minutes",
+      "30 minutes",
+      "1 hour",
+      "6 hours"
+    ],
+    "exp": "SOLAS mandates the transitional battery bank must carry emergency lighting and comms for 30 minutes standalone.",
+    "cat": "ESBLOC",
+    "id": "T04A_126"
+  },
+  {
+    "q": "What is the primary function of the anti-parallel interlock between the MSB and ESB?",
+    "a": "Prevents simultaneous closing of the MSB-ESB link and emergency generator ACB without synchronisation",
+    "opts": [
+      "Ensures the emergency generator starts within 45 seconds",
+      "Prevents simultaneous closing of the MSB-ESB link and emergency generator ACB without synchronisation",
+      "Disconnects the shore supply automatically",
+      "Sheds non-essential loads from the ESB"
+    ],
+    "exp": "Closing both together would connect unsynchronised generators, causing massive circulating fault currents.",
+    "cat": "INTLK",
+    "id": "T04A_127"
+  },
+  {
+    "q": "What happens if unsynchronised main and emergency generators are paralleled?",
+    "a": "A large circulating fault current flows, causing winding damage and potential explosion",
+    "opts": [
+      "The reverse power relay safely trips them after 5 seconds",
+      "A large circulating fault current flows, causing winding damage and potential explosion",
+      "The ship's voltage doubles to 880V",
+      "The preferential trip sheds Stage 1 loads"
+    ],
+    "exp": "The huge phase and frequency difference drives tens of kiloamperes between them, destroying the windings and breakers instantly.",
+    "cat": "INTLK",
+    "id": "T04A_128"
+  },
+  {
+    "q": "During normal sea operation, what is the state of the MSB–ESB link?",
+    "a": "CLOSED, meaning the MSB feeds the ESB continuously",
+    "opts": [
+      "OPEN, meaning the ESB is dead",
+      "CLOSED, meaning the MSB feeds the ESB continuously",
+      "OPEN, meaning the emergency generator feeds the ESB",
+      "CLOSED, meaning the shore supply feeds the ESB"
+    ],
+    "exp": "Normally, the MSB supplies all power to the ship, flowing through the closed bus-tie to the ESB.",
+    "cat": "INTLK",
+    "id": "T04A_129"
+  },
+  {
+    "q": "During normal sea operation, what is the state of the emergency generator ACB?",
+    "a": "OPEN, but field maintained at nominal voltage on standby",
+    "opts": [
+      "CLOSED, sharing load with the MSB",
+      "OPEN, but field maintained at nominal voltage on standby",
+      "CLOSED, feeding only the transitional batteries",
+      "OPEN, with all field excitation removed completely"
+    ],
+    "exp": "The Emergency Generator runs on standby ready to close its ACB the moment the bus-tie opens during a blackout.",
+    "cat": "INTLK",
+    "id": "T04A_130"
+  },
+  {
+    "q": "In the cross-interlocking logic, what holds the emergency generator ACB open normally?",
+    "a": "An interlock relay confirms the MSB-ESB bus-tie breaker is closed",
+    "opts": [
+      "An interlock relay confirms the MSB-ESB bus-tie breaker is closed",
+      "The reverse power relay prevents it",
+      "The preferential trip dashpot holds it mechanically",
+      "The under-voltage relay on the main generator"
+    ],
+    "exp": "The logic dictates: If Bus-Tie is Closed -> Hold EG ACB Open. If EG ACB is Closed -> Hold Bus-Tie Open.",
+    "cat": "INTLK",
+    "id": "T04A_131"
+  },
+  {
+    "q": "What triggers the blackout sequence for the ESB?",
+    "a": "Voltage monitoring relay on the ESB detects bus dead (e.g. below 70%)",
+    "opts": [
+      "Earth fault monitor reads below 50 kΩ",
+      "Voltage monitoring relay on the ESB detects bus dead (e.g. below 70%)",
+      "Overcurrent relay reaches 110%",
+      "Differential relay trips on the main busbar"
+    ],
+    "exp": "The ESB voltage relay monitors the bus; if it drops off completely, it commands the bus-tie to open and the EG to start.",
+    "cat": "INTLK",
+    "id": "T04A_132"
+  },
+  {
+    "q": "Why does the voltage monitoring relay have a slight delay (~0.5 s) before triggering a blackout sequence?",
+    "a": "To avoid spurious starts on transient voltage dips from motor starting",
+    "opts": [
+      "To allow the preferential trip to act first",
+      "To give the main generator time to cool down",
+      "To avoid spurious starts on transient voltage dips from motor starting",
+      "To synchronize the emergency generator with the dead bus"
+    ],
+    "exp": "A small 0.5s delay ensures it's a real blackout, not just a voltage sag from starting a large pump.",
+    "cat": "INTLK",
+    "id": "T04A_133"
+  },
+  {
+    "q": "How many sources can feed the ESB bus bar at any one time?",
+    "a": "Only ONE source",
+    "opts": [
+      "Two sources (MSB and Shore)",
+      "Two sources (MSB and EG)",
+      "Only ONE source",
+      "Three sources simultaneously"
+    ],
+    "exp": "The core rule of the ESB interlock is that the bus-tie and EG ACB are mutually exclusive.",
+    "cat": "INTLK",
+    "id": "T04A_134"
+  },
+  {
+    "q": "After an emergency generator starts during a blackout, what conditions must be met before its ACB closes?",
+    "a": "Voltage builds to rated and frequency stabilises within ±5%",
+    "opts": [
+      "It must synchronize its phase angle with the dead MSB",
+      "Voltage builds to rated and frequency stabilises within ±5%",
+      "The main generator must be physically disconnected at the terminals",
+      "The transitional batteries must be fully depleted"
+    ],
+    "exp": "The EG control panel checks that V and Hz are stable and correct before throwing the breaker onto the ESB.",
+    "cat": "INTLK",
+    "id": "T04A_135"
+  },
+  {
+    "q": "What is the required fuel endurance for an emergency generator on a cargo ship?",
+    "a": "18 hours",
+    "opts": [
+      "12 hours",
+      "18 hours",
+      "24 hours",
+      "36 hours"
+    ],
+    "exp": "SOLAS dictates an 18-hour fuel supply for cargo ships (36 hours for passenger ships).",
+    "cat": "EG",
+    "id": "T04A_136"
+  },
+  {
+    "q": "How many independent starting means are required for the emergency generator under SOLAS?",
+    "a": "Two independent means",
+    "opts": [
+      "One reliable battery bank",
+      "Two independent means",
+      "Three independent means",
+      "A single manual hand-crank"
+    ],
+    "exp": "SOLAS requires a primary source (e.g., battery) and a completely separate secondary source (e.g., hydraulic or second battery).",
+    "cat": "EG",
+    "id": "T04A_137"
+  },
+  {
+    "q": "How many consecutive starts must the primary stored energy source (battery) provide without recharging?",
+    "a": "3 consecutive starts",
+    "opts": [
+      "1 start",
+      "3 consecutive starts",
+      "6 consecutive starts",
+      "10 consecutive starts"
+    ],
+    "exp": "The primary battery must crank the engine at least 3 times. The secondary system provides another 3.",
+    "cat": "EG",
+    "id": "T04A_138"
+  },
+  {
+    "q": "How often must the emergency generator auto-start test be conducted?",
+    "a": "Monthly",
+    "opts": [
+      "Weekly",
+      "Monthly",
+      "Quarterly",
+      "Annually"
+    ],
+    "exp": "A monthly functional blackout simulation is required to ensure the auto-start works within 45s.",
+    "cat": "EG",
+    "id": "T04A_139"
+  },
+  {
+    "q": "What action simulates a blackout for the monthly emergency generator test?",
+    "a": "Switching off MSB supply to the ESB via the bus-tie",
+    "opts": [
+      "Pressing the emergency stop on the main generator",
+      "Activating the reverse power relay",
+      "Switching off MSB supply to the ESB via the bus-tie",
+      "Disconnecting the transitional battery bank"
+    ],
+    "exp": "Opening the bus-tie removes voltage from the ESB, triggering the dead-bus relay and the exact automated sequence.",
+    "cat": "EG",
+    "id": "T04A_140"
+  },
+  {
+    "q": "What is the requirement for the annual full load test of the emergency generator?",
+    "a": "Connect calibrated load bank at rated kW for 4 hours minimum",
+    "opts": [
+      "Run unloaded for 4 hours",
+      "Connect calibrated load bank at rated kW for 4 hours minimum",
+      "Run at 50% load for 30 minutes",
+      "Perform a secondary injection test on its OCR"
+    ],
+    "exp": "During class survey, a 4-hour full kW load bank test verifies the engine won't overheat and can carry the SOLAS load.",
+    "cat": "EG",
+    "id": "T04A_141"
+  },
+  {
+    "q": "Which of the following is considered an essential service supplied by the Emergency Generator?",
+    "a": "Emergency bilge pumping system",
+    "opts": [
+      "Main engine cooling pumps",
+      "Emergency bilge pumping system",
+      "Accommodation air conditioning",
+      "Cargo hold cranes"
+    ],
+    "exp": "Survival systems like emergency bilge pumps, steering, and fire pumps must run on the EG.",
+    "cat": "EG",
+    "id": "T04A_142"
+  },
+  {
+    "q": "What must the officer on watch do manually to switch over to the transitional source during a blackout?",
+    "a": "No manual action required; switchover is fully automatic",
+    "opts": [
+      "Engage the static bypass switch",
+      "Close the emergency generator ACB",
+      "No manual action required; switchover is fully automatic",
+      "Start the steering gear motor from the bridge panel"
+    ],
+    "exp": "Transitional batteries or UPS take over the instant voltage drops seamlessly to keep nav lights and comms alive.",
+    "cat": "EG",
+    "id": "T04A_143"
+  },
+  {
+    "q": "What is the required fuel endurance for an emergency generator on a passenger ship?",
+    "a": "36 hours",
+    "opts": [
+      "18 hours",
+      "24 hours",
+      "36 hours",
+      "72 hours"
+    ],
+    "exp": "Passenger ships require 36 hours of emergency fuel endurance due to the complexity of evacuation.",
+    "cat": "EG",
+    "id": "T04A_144"
+  },
+  {
+    "q": "What is the main purpose of the Power Management System (PMS)?",
+    "a": "Automatically manages generator starting, stopping, and load sharing to prevent blackout",
+    "opts": [
+      "Manually isolates the ACB during maintenance",
+      "Automatically manages generator starting, stopping, and load sharing to prevent blackout",
+      "Detects earth faults on the 440V bus",
+      "Charges the emergency generator batteries"
+    ],
+    "exp": "The PMS is the automatic brain that watches the kW load and ensures enough generation is always running.",
+    "cat": "PMS",
+    "id": "T04A_145"
+  },
+  {
+    "q": "At what typical load threshold will the PMS auto-start an additional standby generator?",
+    "a": "~80% of running generator capacity",
+    "opts": [
+      "~110% of running generator capacity",
+      "~80% of running generator capacity",
+      "~30% of running generator capacity",
+      "~5-10% of running generator capacity"
+    ],
+    "exp": "When load hits ~80%, PMS pre-emptively starts and parallels a standby machine to avoid overload.",
+    "cat": "PMS",
+    "id": "T04A_146"
+  },
+  {
+    "q": "When does the PMS automatically stop a generator?",
+    "a": "When total load falls below ~30% of two generators' combined capacity",
+    "opts": [
+      "When total load falls below ~30% of two generators' combined capacity",
+      "When the reverse power relay activates",
+      "Immediately after the preferential trip sheds Stage 1",
+      "When the shore connection is made"
+    ],
+    "exp": "To save fuel and running hours, PMS shuts down the extra unit when the load drops low enough for one machine.",
+    "cat": "PMS",
+    "id": "T04A_147"
+  },
+  {
+    "q": "How does the PMS manage Reactive Load (kVAr) sharing between generators?",
+    "a": "Via AVR voltage signals",
+    "opts": [
+      "Via governor speed signals",
+      "Via AVR voltage signals",
+      "By adjusting the dashpot delay",
+      "By shedding non-essential loads"
+    ],
+    "exp": "Active load (kW) is shared via the engine governor; reactive load (kVAr) is shared via the alternator AVR.",
+    "cat": "PMS",
+    "id": "T04A_148"
+  },
+  {
+    "q": "How does the PMS manage Active Load (kW) sharing between generators?",
+    "a": "Via governor speed signals",
+    "opts": [
+      "Via governor speed signals",
+      "Via AVR voltage signals",
+      "Through the differential relay",
+      "By isolating the neutral"
+    ],
+    "exp": "The PMS adjusts the fuel rack via the governor to balance the active kW load equally across machines.",
+    "cat": "PMS",
+    "id": "T04A_149"
+  },
+  {
+    "q": "What is the PMS 'Start Inhibit' function used for?",
+    "a": "Blocking large motor starts if running generators cannot handle the surge",
+    "opts": [
+      "Preventing the emergency generator from starting during a test",
+      "Blocking large motor starts if running generators cannot handle the surge",
+      "Stopping the reverse power relay from tripping",
+      "Delaying the shore power connection"
+    ],
+    "exp": "Heavy Starts request permission from PMS. If spare capacity is too low, PMS blocks the start until another generator runs.",
+    "cat": "PMS",
+    "id": "T04A_150"
+  },
+  {
+    "q": "What system does the PMS initiate before a generator trips on overload?",
+    "a": "Preferential trip sequence",
+    "opts": [
+      "Reverse power sequence",
+      "Under-voltage trip sequence",
+      "Preferential trip sequence",
+      "Earth fault alarm"
+    ],
+    "exp": "PMS acts as the supervisory logic, often triggering the preferential shed at 90/95% to save the bus.",
+    "cat": "PMS",
+    "id": "T04A_151"
+  },
+  {
+    "q": "If generators repeatedly trip on load and the preferential trip operates, what manual action should be taken with large motors?",
+    "a": "Take them to local manual control and start them one by one",
+    "opts": [
+      "Start them all simultaneously from the ECR",
+      "Take them to local manual control and start them one by one",
+      "Bypass their thermal overload relays",
+      "Disconnect them from the MSB and wire them to the ESB"
+    ],
+    "exp": "Starting them sequentially avoids the massive combined starting current surge that crashes the bus.",
+    "cat": "PMS",
+    "id": "T04A_152"
+  },
+  {
+    "q": "What changes when the operator selects 'Harbour mode' on the PMS?",
+    "a": "Lower load thresholds are used and shore power integration is enabled",
+    "opts": [
+      "Higher thresholds are used and manoeuvring monitoring tightens",
+      "Lower load thresholds are used and shore power integration is enabled",
+      "The preferential trip is completely disabled",
+      "The emergency generator is locked out from starting"
+    ],
+    "exp": "Harbour mode expects lower loads and allows integration with shore power, compared to the aggressive availability needed at sea.",
+    "cat": "PMS",
+    "id": "T04A_153"
+  },
+  {
+    "q": "Why is an Isolated Neutral (IT) system used on ships instead of a Solidly Earthed (TN) system?",
+    "a": "A single earth fault does not cause fault current to flow, keeping the circuit operational",
+    "opts": [
+      "It makes the 440V voltage completely harmless to touch",
+      "A single earth fault does not cause fault current to flow, keeping the circuit operational",
+      "It prevents short circuits from ever occurring",
+      "It eliminates the need for an emergency generator"
+    ],
+    "exp": "An IT system allows essential machinery to keep running on a single ground fault, buying time to find it safely.",
+    "cat": "EF",
+    "id": "T04A_154"
+  },
+  {
+    "q": "What happens if a second earth fault occurs on a different phase before the first is fixed?",
+    "a": "It creates a short circuit through the hull, causing a phase-to-phase fault",
+    "opts": [
+      "The IRM reading increases back to infinity",
+      "It creates a short circuit through the hull, causing a phase-to-phase fault",
+      "The preferential trip sheds both faulted circuits",
+      "The isolated neutral system absorbs the voltage spike"
+    ],
+    "exp": "Two earth faults on different lines complete a hard short-circuit loop directly through the steel hull.",
+    "cat": "EF",
+    "id": "T04A_155"
+  },
+  {
+    "q": "When investigating an earth fault, what indicates the faulted phase on the panel?",
+    "a": "The lamp for the faulted phase dims to near-off",
+    "opts": [
+      "The lamp for the faulted phase brightens significantly",
+      "The lamp for the faulted phase dims to near-off",
+      "All three lamps turn off",
+      "The IRM reading spikes above 1 MΩ"
+    ],
+    "exp": "The phase with the fault is pulled down to earth potential (0V), so its lamp goes dark.",
+    "cat": "EF",
+    "id": "T04A_156"
+  },
+  {
+    "q": "What happens to the two healthy phase lamps when one phase goes to earth?",
+    "a": "They brighten significantly as they now see full line voltage to earth",
+    "opts": [
+      "They also dim to near-off",
+      "They brighten significantly as they now see full line voltage to earth",
+      "They change from green to red",
+      "They flash intermittently"
+    ],
+    "exp": "The healthy phases shift from phase voltage (254V) to full line voltage (440V) relative to the hull, over-brightening the lamps.",
+    "cat": "EF",
+    "id": "T04A_157"
+  },
+  {
+    "q": "What is the typical alarm threshold for the Insulation Resistance Monitor (IRM)?",
+    "a": "Below 50 kΩ",
+    "opts": [
+      "Below 1 MΩ",
+      "Below 50 kΩ",
+      "Above 100 kΩ",
+      "Above 5 MΩ"
+    ],
+    "exp": "The digital IRM typically alarms when global insulation resistance drops below 50 kΩ.",
+    "cat": "EF",
+    "id": "T04A_158"
+  },
+  {
+    "q": "What is the standard procedure to isolate the location of an earth fault?",
+    "a": "Switch off non-essential circuits one at a time and watch if the IRM reading rises",
+    "opts": [
+      "Trip the main generator ACB and megger the busbars immediately",
+      "Switch off non-essential circuits one at a time and watch if the IRM reading rises",
+      "Increase the AVR voltage until the fault burns out",
+      "Switch off all essential loads first"
+    ],
+    "exp": "Sequentially dropping breakers isolates the branch. When the faulty branch opens, the global IRM reading jumps back to normal.",
+    "cat": "EF",
+    "id": "T04A_159"
+  },
+  {
+    "q": "Which circuits MUST NOT be switched off during an earth fault hunt?",
+    "a": "Essential services (steering, fire pump, GMDSS)",
+    "opts": [
+      "Galley ovens and laundry",
+      "Accommodation lighting",
+      "Deck machinery and cranes",
+      "Essential services (steering, fire pump, GMDSS)"
+    ],
+    "exp": "You cannot drop steering or safety systems during navigation just to hunt a fault.",
+    "cat": "EF",
+    "id": "T04A_160"
+  },
+  {
+    "q": "After isolating the faulty circuit via LOTO, what voltage megger should be used for a 440V system?",
+    "a": "500 V DC megger",
+    "opts": [
+      "100 V DC megger",
+      "500 V DC megger",
+      "1000 V DC megger",
+      "5000 V DC megger"
+    ],
+    "exp": "A 500V DC megger applies slightly more than system voltage to properly test the insulation strength.",
+    "cat": "EF",
+    "id": "T04A_161"
+  },
+  {
+    "q": "What minimum megger reading confirms a repair is successful before re-energising?",
+    "a": "≥ 1 MΩ",
+    "opts": [
+      "≥ 50 kΩ",
+      "≥ 100 Ω",
+      "≥ 1 MΩ",
+      "≥ 10 MΩ"
+    ],
+    "exp": "1 MΩ is the minimum acceptable regulatory limit for LV equipment, though higher is preferred after repair.",
+    "cat": "EF",
+    "id": "T04A_162"
+  },
+  {
+    "q": "On a balanced 440 V ship system, what voltage normally appears between one phase and earth (hull)?",
+    "a": "254 V",
+    "opts": [
+      "440 V",
+      "254 V",
+      "127 V",
+      "0 V"
+    ],
+    "exp": "Phase voltage = Line Voltage ÷ √3. 440 ÷ 1.732 ≈ 254 V between any phase and the floating neutral/hull.",
+    "cat": "ISO",
+    "id": "T04A_163"
+  },
+  {
+    "q": "Why do the three earth fault indicator lamps glow at REDUCED brightness normally?",
+    "a": "Each lamp sees approximately 127 V, half of the 254 V phase-to-earth voltage",
+    "opts": [
+      "They are 440 V rated bulbs seeing only 220 V",
+      "Each lamp sees approximately 127 V, half of the 254 V phase-to-earth voltage",
+      "The IRM inserts a large resistor in series with them",
+      "They operate on 24 V DC control power"
+    ],
+    "exp": "The lamps are wired in pairs across the 254V path to the hull; 254/2 ≈ 127V per lamp makes them run dim.",
+    "cat": "ISO",
+    "id": "T04A_164"
+  },
+  {
+    "q": "What voltage does the faulty phase lamp experience during a hard earth fault?",
+    "a": "~0 V",
+    "opts": [
+      "~127 V",
+      "~220 V",
+      "~254 V",
+      "~0 V"
+    ],
+    "exp": "A dead short pulls that phase to hull potential. Hull-to-Hull = 0V, so the lamp goes completely out.",
+    "cat": "ISO",
+    "id": "T04A_165"
+  },
+  {
+    "q": "What voltage do the healthy phase lamps experience during a hard earth fault?",
+    "a": "~220 V each",
+    "opts": [
+      "~127 V each",
+      "~220 V each",
+      "~440 V each",
+      "~254 V each"
+    ],
+    "exp": "The healthy phases now see the full 440V line voltage to the hull. Shared across two series lamps: 440/2 = 220V.",
+    "cat": "ISO",
+    "id": "T04A_166"
+  },
+  {
+    "q": "What does a line-to-line voltage measurement show on a standard ship IT system?",
+    "a": "440 V",
+    "opts": [
+      "254 V",
+      "440 V",
+      "220 V",
+      "127 V"
+    ],
+    "exp": "The phase-to-phase (line) voltage across the busbars remains 440V.",
+    "cat": "ISO",
+    "id": "T04A_167"
+  },
+  {
+    "q": "In an IT system, where does the neutral point theoretically sit under balanced, no-fault conditions?",
+    "a": "It floats at zero earth potential by symmetry",
+    "opts": [
+      "It is solidly bolted to the ship's steel frame",
+      "It is connected to the shore earth via the isolation transformer",
+      "It floats at zero earth potential by symmetry",
+      "It operates at 254 V above earth"
+    ],
+    "exp": "Because of symmetrical 3-phase loading, the geometric center of the vectors sits at 0V relative to the hull, even though ungrounded.",
+    "cat": "ISO",
+    "id": "T04A_168"
+  },
+  {
+    "q": "What does the abbreviation 'IT system' stand for in electrical engineering?",
+    "a": "Isolated Terra / Insulated neutral",
+    "opts": [
+      "Integrated Transformer",
+      "Isolated Terra / Insulated neutral",
+      "Interlocked Tie",
+      "Inverted Three-phase"
+    ],
+    "exp": "Terra means Earth. IT means the source is Isolated (Insulated) from Terra (Earth).",
+    "cat": "ISO",
+    "id": "T04A_169"
+  },
+  {
+    "q": "How does the lamp behaviour immediately tell the engineer which phase is faulted?",
+    "a": "The phase whose lamp goes dark is the faulted phase",
+    "opts": [
+      "The phase whose lamp flashes red is the faulted phase",
+      "The phase whose lamp is brightest is the faulted phase",
+      "The phase whose lamp goes dark is the faulted phase",
+      "All lamps go dark, requiring a megger to check"
+    ],
+    "exp": "Since the short to hull removes all potential difference across that specific lamp, it turns off.",
+    "cat": "ISO",
+    "id": "T04A_170"
+  },
+  {
+    "q": "Why is it mathematically true that healthy lamps see ~220V during an earth fault?",
+    "a": "They divide the 440V line-to-earth fault path equally across two lamps in series",
+    "opts": [
+      "They divide the 440V line-to-earth fault path equally across two lamps in series",
+      "The AVR boosts voltage by 1.732",
+      "They draw capacitive current from the hull",
+      "The EOL resistor bypasses the 127V drop"
+    ],
+    "exp": "With one phase pinned to earth, the other two lines are 440V above earth. Two identical lamps share 440V, yielding 220V each.",
+    "cat": "ISO",
+    "id": "T04A_171"
+  },
+  {
+    "q": "What is the primary function of the EOL (End Of Line) resistor in a fire detection loop?",
+    "a": "Creates a known normal circuit resistance to provide a baseline loop current",
+    "opts": [
+      "Detects smoke particles by varying its resistance",
+      "Creates a known normal circuit resistance to provide a baseline loop current",
+      "Isolates short circuits to a single zone",
+      "Provides 24V power to the addressable detectors"
+    ],
+    "exp": "The EOL resistor allows a tiny, constant monitoring current (e.g. 5mA) to flow so the panel knows the wire isn't broken.",
+    "cat": "FIRE",
+    "id": "T04A_172"
+  },
+  {
+    "q": "What current state indicates an OPEN CIRCUIT fault on a fire loop?",
+    "a": "Zero current (EOL resistor disconnected)",
+    "opts": [
+      "Normal 5 mA current",
+      "Zero current (EOL resistor disconnected)",
+      "Current increases to 15-20 mA",
+      "Massive uncontrolled short-circuit current"
+    ],
+    "exp": "A broken wire stops all current flow. The panel sees 0 mA and throws a FAULT, not a FIRE alarm.",
+    "cat": "FIRE",
+    "id": "T04A_173"
+  },
+  {
+    "q": "What does a sharp increase in current, bypassing the EOL resistor entirely, indicate?",
+    "a": "SHORT CIRCUIT fault",
+    "opts": [
+      "NORMAL healthy state",
+      "FIRE ALARM state",
+      "SHORT CIRCUIT fault",
+      "OPEN CIRCUIT fault"
+    ],
+    "exp": "A wire-to-wire short causes current to skip the EOL completely, drawing huge current which the panel reads as a FAULT.",
+    "cat": "FIRE",
+    "id": "T04A_174"
+  },
+  {
+    "q": "How does the panel detect an actual FIRE ALARM?",
+    "a": "The detector activates and changes the loop current to a specific intermediate value (e.g. 15-20 mA)",
+    "opts": [
+      "The detector breaks the loop, dropping current to zero",
+      "The detector shorts the loop completely",
+      "The detector activates and changes the loop current to a specific intermediate value (e.g. 15-20 mA)",
+      "The EOL resistor catches fire and burns out"
+    ],
+    "exp": "A triggered detector drops its internal resistance to draw more current than the EOL, but less than a dead short.",
+    "cat": "FIRE",
+    "id": "T04A_175"
+  },
+  {
+    "q": "According to SOLAS (FSS Code Ch.9), what must the fire detection system do if a circuit wire breaks?",
+    "a": "Give a 'fault' alarm that is clearly distinct from a 'fire' alarm",
+    "opts": [
+      "Automatically ring the general alarm",
+      "Give a 'fault' alarm that is clearly distinct from a 'fire' alarm",
+      "Activate the local sprinkler system",
+      "Switch to the emergency generator"
+    ],
+    "exp": "A broken wire isn't a fire. SOLAS demands the panel distinguish between equipment failure (Fault) and an actual emergency (Fire).",
+    "cat": "FIRE",
+    "id": "T04A_176"
+  },
+  {
+    "q": "What advantage do Addressable fire detection systems have over conventional EOL zones?",
+    "a": "They transmit unique digital addresses to display exact detector location without zone ambiguity",
+    "opts": [
+      "They do not require any wiring",
+      "They run entirely on battery power",
+      "They transmit unique digital addresses to display exact detector location without zone ambiguity",
+      "They cannot detect short circuits"
+    ],
+    "exp": "Addressable heads send data packets so the panel tells you 'Cabin 402 Smoke' instead of just 'Zone 3'.",
+    "cat": "FIRE",
+    "id": "T04A_177"
+  },
+  {
+    "q": "In a conventional circuit, if loop current is measuring exactly the EOL baseline (e.g. 5 mA), what does the panel display?",
+    "a": "HEALTHY - no alarm or fault",
+    "opts": [
+      "FIRE ALARM",
+      "OPEN CIRCUIT FAULT",
+      "HEALTHY - no alarm or fault",
+      "SHORT CIRCUIT FAULT"
+    ],
+    "exp": "The EOL current proves the loop is intact and ready.",
+    "cat": "FIRE",
+    "id": "T04A_178"
+  },
+  {
+    "q": "What component in modern loops prevents a short circuit from taking down the entire ship's fire system?",
+    "a": "Short circuit isolator modules",
+    "opts": [
+      "HRC fuses at the panel",
+      "Short circuit isolator modules",
+      "The EOL resistor",
+      "Bimetallic dashpots"
+    ],
+    "exp": "Isolators physically open the loop wire on either side of a short, isolating only that section and leaving the rest alive.",
+    "cat": "FIRE",
+    "id": "T04A_179"
+  },
+  {
+    "q": "Why is an ambiguous 'no signal' bad in fire detection design?",
+    "a": "Without an EOL resistor, the panel cannot tell the difference between 'standby' and a 'cut wire'",
+    "opts": [
+      "It triggers the CO2 release accidentally",
+      "Without an EOL resistor, the panel cannot tell the difference between 'standby' and a 'cut wire'",
+      "It causes the battery to drain too fast",
+      "It creates excessive absorption current"
+    ],
+    "exp": "If 0mA meant 'Normal', a severed wire would go completely unnoticed until a fire happened and no alarm sounded.",
+    "cat": "FIRE",
+    "id": "T04A_180"
+  },
+  {
+    "q": "What is the minimum required thickness for a rubber mat in front of an LV (440 V) switchboard?",
+    "a": "6 mm minimum",
+    "opts": [
+      "2 mm minimum",
+      "6 mm minimum",
+      "12 mm minimum",
+      "25 mm minimum"
+    ],
+    "exp": "Class rules require at least 6 mm thickness for 440V insulating rubber mats.",
+    "cat": "SURV",
+    "id": "T04A_181"
+  },
+  {
+    "q": "What is the minimum required thickness for a rubber mat at a 6.6 kV HV switchboard?",
+    "a": "12 mm",
+    "opts": [
+      "6 mm",
+      "10 mm",
+      "12 mm",
+      "25 mm"
+    ],
+    "exp": "HV gear requires thicker (12 mm) mats for higher dielectric operator protection.",
+    "cat": "SURV",
+    "id": "T04A_182"
+  },
+  {
+    "q": "Why must all copper busbar connections be tightened to a specified torque before survey?",
+    "a": "Loose connections cause thermal hotspots and IR drop, leading to class findings",
+    "opts": [
+      "To prevent the busbars from bending during ship roll",
+      "Loose connections cause thermal hotspots and IR drop, leading to class findings",
+      "To improve the dielectric strength of the air gap",
+      "To increase the speed of the differential relay"
+    ],
+    "exp": "A loose joint creates I²R heating, which can melt the copper or start a fire.",
+    "cat": "SURV",
+    "id": "T04A_183"
+  },
+  {
+    "q": "What is the minimum IR test value allowed for MSB feeder circuits to earth?",
+    "a": "1 MΩ",
+    "opts": [
+      "50 kΩ",
+      "500 kΩ",
+      "1 MΩ",
+      "10 MΩ"
+    ],
+    "exp": "Using a 500V Megger, all feeders must show at least 1 MΩ to pass Class requirements.",
+    "cat": "SURV",
+    "id": "T04A_184"
+  },
+  {
+    "q": "Against what document must OCR settings be verified by the surveyor?",
+    "a": "The approved protection coordination study (load analysis document)",
+    "opts": [
+      "The ship's general arrangement plan",
+      "The approved protection coordination study (load analysis document)",
+      "The ECR daily log book",
+      "The manufacturer's marketing brochure"
+    ],
+    "exp": "Settings cannot be arbitrary; they must match the engineered coordination study to ensure correct trip sequencing.",
+    "cat": "SURV",
+    "id": "T04A_185"
+  },
+  {
+    "q": "What must be confirmed when testing the preferential trip sequence for survey?",
+    "a": "NEVER-shed loads are NOT affected while Stage 1 drops at correct time",
+    "opts": [
+      "The emergency generator auto-starts immediately",
+      "The bus-tie opens automatically",
+      "NEVER-shed loads are NOT affected while Stage 1 drops at correct time",
+      "The reverse power relay is bypassed"
+    ],
+    "exp": "The surveyor wants to see domestic loads drop while steering and nav lights remain solidly powered.",
+    "cat": "SURV",
+    "id": "T04A_186"
+  },
+  {
+    "q": "What emergency generator record do surveyors always check for the 45-second rule?",
+    "a": "Last monthly auto-start test - time to start and take load",
+    "opts": [
+      "Last annual full-load test",
+      "Last monthly auto-start test - time to start and take load",
+      "The lube oil consumption log",
+      "The battery equalisation date"
+    ],
+    "exp": "The log must prove the engine actually hit voltage and closed its ACB within the 45-second SOLAS window.",
+    "cat": "SURV",
+    "id": "T04A_187"
+  },
+  {
+    "q": "What function must the synchroscope and synchronising lamps demonstrate?",
+    "a": "Dark-lamp method must function correctly and synchroscope deflects smoothly",
+    "opts": [
+      "Lamps must flash red when out of phase",
+      "Dark-lamp method must function correctly and synchroscope deflects smoothly",
+      "Synchroscope must lock at 6 o'clock position",
+      "Lamps must remain constantly bright"
+    ],
+    "exp": "The surveyor checks that the physical synchronisation panel works perfectly for manual paralleling.",
+    "cat": "SURV",
+    "id": "T04A_188"
+  },
+  {
+    "q": "Why are phase barriers checked for cracks and secure mounting during an MSB survey?",
+    "a": "They insulate busbars from each other and must not vibrate loose under ship motion",
+    "opts": [
+      "They hold the rubber mats in place",
+      "They insulate busbars from each other and must not vibrate loose under ship motion",
+      "They prevent moisture from entering the generator",
+      "They act as the dielectric medium replacing air"
+    ],
+    "exp": "FRP phase barriers prevent flashovers between live copper bars; if broken or loose, they are a major arc-flash hazard.",
+    "cat": "SURV",
+    "id": "T04A_189"
+  },
+  {
+    "q": "What happens if the MSB-ESB link breaker and emergency generator breaker close at the same time?",
+    "a": "A massive circulating current flows due to phase difference, destroying windings and breakers",
+    "opts": [
+      "The PMS balances the load equally between them",
+      "A massive circulating current flows due to phase difference, destroying windings and breakers",
+      "The shore power connection is triggered",
+      "The UPS takes over the load smoothly"
+    ],
+    "exp": "Unsynchronised paralleling throws the machines completely out of phase, acting like a direct short circuit.",
+    "cat": "SQNA",
+    "id": "T04A_190"
+  },
+  {
+    "q": "Why is an isolation transformer required in the shore power connection?",
+    "a": "It breaks the galvanic path between the solidly earthed shore and floating ship hull to prevent corrosion",
+    "opts": [
+      "It steps down the voltage from 6.6 kV to 440 V",
+      "It breaks the galvanic path between the solidly earthed shore and floating ship hull to prevent corrosion",
+      "It filters out harmonic distortion from port cranes",
+      "It converts shore 50Hz to ship 60Hz"
+    ],
+    "exp": "Without it, the shore's TN earth bonds to the ship's IT hull, destroying the isolated neutral system and causing severe hull corrosion.",
+    "cat": "SQNA",
+    "id": "T04A_191"
+  },
+  {
+    "q": "Explain ACB arc quenching.",
+    "a": "Arc forms on arcing contacts, draws into chute, ceramic plates divide it into series arcs until voltage > 440V, extinguishing at current zero",
+    "opts": [
+      "Vacuum bottle seals the arc, freezing the electrons instantly",
+      "Arc forms on arcing contacts, draws into chute, ceramic plates divide it into series arcs until voltage > 440V, extinguishing at current zero",
+      "Silica sand absorbs the arc, turning into glass",
+      "NVC coil blows a magnetic field to cool the copper contacts"
+    ],
+    "exp": "This is the classic sequence: Arcing contacts save the main contacts, splitter plates stretch and cool the arc.",
+    "cat": "SQNA",
+    "id": "T04A_192"
+  },
+  {
+    "q": "Difference between NVC and UVT?",
+    "a": "NVC drops instantly on control power loss; UVT trips after 1-3s delay on bus voltage drop",
+    "opts": [
+      "NVC has a 3-5s delay; UVT operates instantly",
+      "NVC drops instantly on control power loss; UVT trips after 1-3s delay on bus voltage drop",
+      "NVC protects against overcurrent; UVT protects against reverse power",
+      "There is no difference, they are identical terms"
+    ],
+    "exp": "NVC (No Volt Coil) is a zero-delay holding coil for the control circuit. UVT (Under Voltage Trip) monitors the main bus with a delay.",
+    "cat": "SQNA",
+    "id": "T04A_193"
+  },
+  {
+    "q": "What is the Transitional Source of power?",
+    "a": "A battery bank or UPS that supplies essential services for 30 minutes while the EG starts",
+    "opts": [
+      "A hand-cranked generator on the bridge",
+      "A battery bank or UPS that supplies essential services for 30 minutes while the EG starts",
+      "The connection to the port's shore grid",
+      "A small steam turbine kept on standby"
+    ],
+    "exp": "It bridges the 45-second blackout gap automatically so navigation lights and comms don't die.",
+    "cat": "SQNA",
+    "id": "T04A_194"
+  },
+  {
+    "q": "How do you safely isolate an ACB?",
+    "a": "PTW -> Open -> Rack to ISOLATED -> LOTO padlock -> Test dead both sides -> Apply earth clamps",
+    "opts": [
+      "Rack to TEST -> Megger -> Apply silicone grease",
+      "Trip bus-tie -> Disconnect NVC -> Rack to SERVICE",
+      "PTW -> Open -> Rack to ISOLATED -> LOTO padlock -> Test dead both sides -> Apply earth clamps",
+      "Close shore supply -> Rack to ISOLATED -> Remove arc chutes"
+    ],
+    "exp": "This is the standard 7-step LOTO procedure for high-power switchgear.",
+    "cat": "SQNA",
+    "id": "T04A_195"
+  },
+  {
+    "q": "What does IDMT mean?",
+    "a": "Inverse Definite Minimum Time - trips faster for higher multiples of set current",
+    "opts": [
+      "Instantaneous Direct Motor Trip - stops motors instantly",
+      "Inverse Definite Minimum Time - trips faster for higher multiples of set current",
+      "Internal Dielectric Measurement Test - tests insulation strength",
+      "Isolated Distribution Main Transformer - steps down voltage"
+    ],
+    "exp": "IDMT provides graded selectivity: slow for small overloads, extremely fast for heavy short circuits.",
+    "cat": "SQNA",
+    "id": "T04A_196"
+  },
+  {
+    "q": "GMDSS battery requirements?",
+    "a": "1 hour (with UPS) or 6 hours (no UPS), dedicated battery, annual load test",
+    "opts": [
+      "30 minutes, shared with emergency lighting",
+      "18 hours for cargo, 36 hours for passenger",
+      "1 hour (with UPS) or 6 hours (no UPS), dedicated battery, annual load test",
+      "No battery required if emergency generator auto-starts in 45s"
+    ],
+    "exp": "SOLAS Reg IV strictly requires independent, dedicated GMDSS batteries capable of long stand-alone operation.",
+    "cat": "SQNA",
+    "id": "T04A_197"
+  },
+  {
+    "q": "Why do we wait 10 minutes for a PI test?",
+    "a": "To allow the absorption current from molecular dipole alignment to fully decay",
+    "opts": [
+      "To charge the capacitive plates to 500V",
+      "To allow the true leakage current to build up to maximum",
+      "To allow the absorption current from molecular dipole alignment to fully decay",
+      "To warm up the Megger instrument"
+    ],
+    "exp": "Absorption current artificially depresses the 1-minute reading. At 10 minutes, only the true leakage remains.",
+    "cat": "SQNA",
+    "id": "T04A_198"
+  },
+  {
+    "q": "Quick Revision: What is the setting and delay for a Reverse Power relay?",
+    "a": "5–10% rated kW, 3–5 s delay",
+    "opts": [
+      "90% rated kW, 5-10 s delay",
+      "5–10% rated kW, 3–5 s delay",
+      "110% rated current, <100 ms delay",
+      "85% rated voltage, 1-3 s delay"
+    ],
+    "exp": "5-10% catches motoring early. 3-5s delay ignores synchronising transients.",
+    "cat": "REV",
+    "id": "T04A_199"
+  },
+  {
+    "q": "Quick Revision: What is the sequential load restore logic after a blackout?",
+    "a": "Cooling water → LO → fuel → boiler → air compressor → HVAC, with delays to prevent surge",
+    "opts": [
+      "HVAC → air compressor → boiler → fuel → LO → cooling water",
+      "Cooling water → LO → fuel → boiler → air compressor → HVAC, with delays to prevent surge",
+      "All motors started simultaneously by the PMS",
+      "Emergency lighting → GMDSS → steering → nav lights"
+    ],
+    "exp": "Essential engine support systems are started first, separated by 30s-2m delays to prevent overloading the generator.",
+    "cat": "REV",
+    "id": "T04A_200"
+  },
+  {
+    "q": "Quick Revision: What are the three states detected by a Fire Detector EOL circuit?",
+    "a": "Normal (5mA), Fire (15-20mA), Fault (Zero or Short Circuit)",
+    "opts": [
+      "Green, Yellow, Red",
+      "Stage 1, Stage 2, Emergency",
+      "Normal (5mA), Fire (15-20mA), Fault (Zero or Short Circuit)",
+      "Capacitive, Absorption, Leakage"
+    ],
+    "exp": "The EOL allows the panel to distinguish perfectly between a healthy standby loop, an active detector, and a broken/shorted wire.",
+    "cat": "REV",
+    "id": "T04A_201"
+  },
+  {
+    "q": "Quick Revision: Where is a Differential Relay primarily fitted?",
+    "a": "Large generators (>500 kVA), transformers, busbars",
+    "opts": [
+      "Small motor starters",
+      "Large generators (>500 kVA), transformers, busbars",
+      "Lighting distribution panels",
+      "Galley supply breakers"
+    ],
+    "exp": "They protect massive, critical components by detecting tiny internal fault leakage instantly.",
+    "cat": "REV",
+    "id": "T04A_202"
+  },
+  {
+    "q": "Quick Revision: What is the Breaking Capacity of an HRC fuse?",
+    "a": "80–100 kA",
+    "opts": [
+      "2-3 kV/mm",
+      "1600 A",
+      "80–100 kA",
+      "254 V"
+    ],
+    "exp": "HRC fuses can safely interrupt the massive short-circuit currents (up to 100 kA) found on main switchboards.",
+    "cat": "REV",
+    "id": "T04A_203"
+  },
+  {
+    "q": "Quick Revision: What is the phase-to-earth voltage on a 440 V IT system?",
+    "a": "254 V",
+    "opts": [
+      "440 V",
+      "220 V",
+      "127 V",
+      "254 V"
+    ],
+    "exp": "440 V divided by the square root of 3 equals 254 V from phase to the floating neutral/hull.",
+    "cat": "REV",
+    "id": "T04A_204"
+  },
+  {
+    "q": "Quick Revision: How fast must the emergency generator auto-start on a cargo ship?",
+    "a": "45 s",
+    "opts": [
+      "30 s",
+      "45 s",
+      "60 s",
+      "10 s"
+    ],
+    "exp": "Cargo ships have a 45-second SOLAS requirement (passenger ships are 30s).",
+    "cat": "REV",
+    "id": "T04A_205"
+  },
+  {
+    "q": "Quick Revision: What indicates a good PI test result?",
+    "a": "≥ 2.0",
+    "opts": [
+      "< 1.0",
+      "1.0 - 1.5",
+      "≥ 2.0",
+      "Exactly 0"
+    ],
+    "exp": "A ratio of 2.0 or higher proves the absorption current was strong, meaning the insulation is dry and healthy.",
+    "cat": "REV",
+    "id": "T04A_206"
+  },
+  {
+    "q": "Quick Revision: How does a Preferential trip relay create its delay?",
+    "a": "Dashpot with an oil/air piston and adjustable needle valve",
+    "opts": [
+      "Bimetallic thermal strip",
+      "Dashpot with an oil/air piston and adjustable needle valve",
+      "Digital microprocessor counter",
+      "Capacitor discharge timer"
+    ],
+    "exp": "The mechanical dashpot restricts fluid flow to slow the relay armature, preventing trips on transient motor starts.",
+    "cat": "REV",
+    "id": "T04A_207"
   }
+
 ]);
