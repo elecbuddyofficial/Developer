@@ -3781,12 +3781,12 @@ window.loadQuizzes('T05_Transformers', [
   },
   {
     "q": "A transformer is rated 50 kVA, 440/110V. Why is it rated in kVA and not kW?",
-    "a": "Because transformer losses (copper I²R and iron core losses) depend on current and voltage magnitudes — neither depends on power factor. The VA product sets the thermal limit regardless of load PF.",
+    "a": "Because transformer losses (copper I²R and iron core losses) depend on current and voltage magnitudes - neither depends on power factor. The VA product sets the thermal limit regardless of load PF.",
     "opts": [
-      "Because transformer losses (copper I²R and iron core losses) depend on current and voltage magnitudes — neither depends on power factor. The VA product sets the thermal limit regardless of load PF.",
+      "Because transformer losses (copper I²R and iron core losses) depend on current and voltage magnitudes - neither depends on power factor. The VA product sets the thermal limit regardless of load PF.",
       "Because transformers only supply reactive power, not real power",
       "Because the efficiency cannot be calculated without knowing the power factor",
-      "kVA and kW ratings are interchangeable — it is simply convention"
+      "kVA and kW ratings are interchangeable - it is simply convention"
     ],
     "exp": "Copper losses = I²R (depend on current magnitude only). Iron losses = hysteresis + eddy current (depend on voltage/flux, not PF). Neither type of loss changes with power factor. The safe operating limit is set by the V×I product (kVA). Motors are rated kW because they deliver mechanical output.",
     "cat": "kVA Rating",
@@ -3795,10 +3795,10 @@ window.loadQuizzes('T05_Transformers', [
   },
   {
     "q": "Why are electric motors rated in kW while generators and transformers are rated in kVA?",
-    "a": "Motors deliver mechanical shaft output — useful work is in watts. Generators and transformers thermal limits depend on current and voltage magnitudes, not on load power factor.",
+    "a": "Motors deliver mechanical shaft output - useful work is in watts. Generators and transformers thermal limits depend on current and voltage magnitudes, not on load power factor.",
     "opts": [
-      "Motors deliver mechanical shaft output — useful work is in watts. Generators and transformers thermal limits depend on current and voltage magnitudes, not on load power factor.",
-      "It is purely convention — kW and kVA are the same for motors",
+      "Motors deliver mechanical shaft output - useful work is in watts. Generators and transformers thermal limits depend on current and voltage magnitudes, not on load power factor.",
+      "It is purely convention - kW and kVA are the same for motors",
       "Motors only consume reactive power",
       "Generators cannot produce real power"
     ],
@@ -3823,12 +3823,12 @@ window.loadQuizzes('T05_Transformers', [
   },
   {
     "q": "A 60Hz-rated transformer is connected to a 50Hz supply at the same rated voltage. What is the MOST likely consequence?",
-    "a": "Core flux increases (Φ_max ∝ V/f — lower f at same V gives higher flux) causing core saturation, increased magnetising current, excessive losses, and overheating.",
+    "a": "Core flux increases (Φ_max ∝ V/f - lower f at same V gives higher flux) causing core saturation, increased magnetising current, excessive losses, and overheating.",
     "opts": [
-      "Core flux increases (Φ_max ∝ V/f — lower f at same V gives higher flux) causing core saturation, increased magnetising current, excessive losses, and overheating.",
+      "Core flux increases (Φ_max ∝ V/f - lower f at same V gives higher flux) causing core saturation, increased magnetising current, excessive losses, and overheating.",
       "The output voltage increases proportionally to the frequency reduction",
-      "Lower frequency reduces core losses — the transformer runs cooler",
-      "No effect — transformers are frequency-independent"
+      "Lower frequency reduces core losses - the transformer runs cooler",
+      "No effect - transformers are frequency-independent"
     ],
     "exp": "EMF equation: Φ_max = E ÷ (4.44 × f × N). At 50Hz instead of 60Hz with unchanged voltage, Φ_max increases → core saturates → magnetising current rises sharply → copper losses (I²R) increase → overheating. Safe solution: reduce applied voltage to 50/60 = 83% of rated.",
     "cat": "Frequency Compatibility",
@@ -3837,9 +3837,9 @@ window.loadQuizzes('T05_Transformers', [
   },
   {
     "q": "What is the knee point voltage of a current transformer (CT)?",
-    "a": "The secondary excitation voltage above which a 10% increase in voltage causes a 50% or greater increase in magnetising current — indicating the onset of core saturation where CT output no longer accurately follows primary current.",
+    "a": "The secondary excitation voltage above which a 10% increase in voltage causes a 50% or greater increase in magnetising current - indicating the onset of core saturation where CT output no longer accurately follows primary current.",
     "opts": [
-      "The secondary excitation voltage above which a 10% increase in voltage causes a 50% or greater increase in magnetising current — indicating the onset of core saturation where CT output no longer accurately follows primary current.",
+      "The secondary excitation voltage above which a 10% increase in voltage causes a 50% or greater increase in magnetising current - indicating the onset of core saturation where CT output no longer accurately follows primary current.",
       "The maximum rated secondary voltage the CT can produce continuously",
       "The voltage at which CT primary insulation begins to break down",
       "The minimum secondary voltage needed to operate a protection relay"
@@ -3851,9 +3851,9 @@ window.loadQuizzes('T05_Transformers', [
   },
   {
     "q": "What is an LVDT and what marine applications use it?",
-    "a": "Linear Variable Differential Transformer — inductive transducer with one primary and two opposite-wound secondary coils. Moving ferromagnetic core produces differential output proportional to displacement. Used for governor fuel rack, valve stem position, and steering feedback.",
+    "a": "Linear Variable Differential Transformer - inductive transducer with one primary and two opposite-wound secondary coils. Moving ferromagnetic core produces differential output proportional to displacement. Used for governor fuel rack, valve stem position, and steering feedback.",
     "opts": [
-      "Linear Variable Differential Transformer — inductive transducer with one primary and two opposite-wound secondary coils. Moving ferromagnetic core produces differential output proportional to displacement. Used for governor fuel rack, valve stem position, and steering feedback.",
+      "Linear Variable Differential Transformer - inductive transducer with one primary and two opposite-wound secondary coils. Moving ferromagnetic core produces differential output proportional to displacement. Used for governor fuel rack, valve stem position, and steering feedback.",
       "A Low Voltage Distribution Transformer for stepping 440V down to 24V",
       "A type of isolation transformer used in engine room lighting",
       "A liquid-cooled variable transformer for shore power adjustment"

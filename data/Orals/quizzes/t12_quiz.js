@@ -1178,7 +1178,7 @@ window.loadQuizzes("T12_Cables", [
       "The steady, constant current that physically leaks through cracks, moisture, and dirt in the insulation to the ground; this is the true indicator of the insulation's health",
       "A current that vanishes after 5 seconds"
     ],
-    "exp": "Once the capacitor is full (seconds) and the molecules are aligned (minutes), the only current left flowing is the bad current—the electrons actually squeezing through the wet, dirty plastic to escape to the hull. A high leakage current means a low Megger reading.",
+    "exp": "Once the capacitor is full (seconds) and the molecules are aligned (minutes), the only current left flowing is the bad current-the electrons actually squeezing through the wet, dirty plastic to escape to the hull. A high leakage current means a low Megger reading.",
     "cat": "TESTING",
     "id": "T12C_091"
   },
@@ -1750,7 +1750,7 @@ window.loadQuizzes("T12_Cables", [
       "The reaction of saltwater with the copper wire turning it green",
       "Alternating Current (AC) naturally forces electrons to flow mostly along the outer 'skin' of the copper wire rather than through the center, increasing the effective resistance of the cable"
     ],
-    "exp": "In DC, the whole wire is used. In AC, changing magnetic fields inside the wire push the electrons to the edge. This is why marine cables are made of hundreds of tiny stranded wires rather than one giant solid copper rod—it provides much more 'skin' surface area.",
+    "exp": "In DC, the whole wire is used. In AC, changing magnetic fields inside the wire push the electrons to the edge. This is why marine cables are made of hundreds of tiny stranded wires rather than one giant solid copper rod-it provides much more 'skin' surface area.",
     "cat": "CABLES",
     "id": "T12C_135"
   },
@@ -1841,7 +1841,7 @@ window.loadQuizzes("T12_Cables", [
       "The voltage of the generator",
       "The current flowing to the motor"
     ],
-    "exp": "A Megger applies a known DC high voltage (500V-5000V depending on equipment rating) across the insulation and measures the resulting leakage current. IR (MΩ) = Applied Voltage (V) / Leakage Current (µA). Healthy insulation has very high resistance (hundreds of MΩ) — very little current leaks through. Degraded insulation lets more current through — lower IR reading.",
+    "exp": "A Megger applies a known DC high voltage (500V-5000V depending on equipment rating) across the insulation and measures the resulting leakage current. IR (MΩ) = Applied Voltage (V) / Leakage Current (µA). Healthy insulation has very high resistance (hundreds of MΩ) - very little current leaks through. Degraded insulation lets more current through - lower IR reading.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1854,7 +1854,7 @@ window.loadQuizzes("T12_Cables", [
       "DC is required by SOLAS",
       "AC cannot generate high enough voltage"
     ],
-    "exp": "AC voltage charges and discharges the winding capacitance every half-cycle, creating a capacitive current that adds to the measured leakage current, making the insulation appear worse than it is. DC voltage: after the initial capacitive charging current dies away (typically 30-60 seconds), only true resistive leakage current remains — giving an accurate measurement of insulation quality.",
+    "exp": "AC voltage charges and discharges the winding capacitance every half-cycle, creating a capacitive current that adds to the measured leakage current, making the insulation appear worse than it is. DC voltage: after the initial capacitive charging current dies away (typically 30-60 seconds), only true resistive leakage current remains - giving an accurate measurement of insulation quality.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1893,7 +1893,7 @@ window.loadQuizzes("T12_Cables", [
       "1000 Megohms",
       "Zero Ohms"
     ],
-    "exp": "IEC standard: Minimum IR (MΩ) = Working Voltage (kV) + 1. Examples: 440V (0.44kV) motor: minimum = 0.44 + 1 = 1.44 MΩ ≈ 1 MΩ. 3.3kV motor: minimum = 3.3 + 1 = 4.3 MΩ. 6.6kV motor: minimum = 6.6 + 1 = 7.6 MΩ. These are absolute minimums — in practice, aim for 10× or more of these values.",
+    "exp": "IEC standard: Minimum IR (MΩ) = Working Voltage (kV) + 1. Examples: 440V (0.44kV) motor: minimum = 0.44 + 1 = 1.44 MΩ ≈ 1 MΩ. 3.3kV motor: minimum = 3.3 + 1 = 4.3 MΩ. 6.6kV motor: minimum = 6.6 + 1 = 7.6 MΩ. These are absolute minimums - in practice, aim for 10× or more of these values.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1906,7 +1906,7 @@ window.loadQuizzes("T12_Cables", [
       "1000 MΩ",
       "0.1 MΩ"
     ],
-    "exp": "1 MΩ is the absolute minimum (from IR = kV + 1 rule: 0.44kV + 1 = 1.44 MΩ, rounded to 1 MΩ). Below 1 MΩ: do NOT energise — risk of insulation flashover causing motor winding damage and earth fault. Preferred: >5 MΩ for new or recently dried motor. New motor should read hundreds of MΩ. Trend monitoring: compare to previous readings to identify degradation.",
+    "exp": "1 MΩ is the absolute minimum (from IR = kV + 1 rule: 0.44kV + 1 = 1.44 MΩ, rounded to 1 MΩ). Below 1 MΩ: do NOT energise - risk of insulation flashover causing motor winding damage and earth fault. Preferred: >5 MΩ for new or recently dried motor. New motor should read hundreds of MΩ. Trend monitoring: compare to previous readings to identify degradation.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1919,7 +1919,7 @@ window.loadQuizzes("T12_Cables", [
       "Start the generator",
       "Wear rubber gloves"
     ],
-    "exp": "LOTO (Lock Out, Tag Out): (1) Isolate the motor at the MCC/starter. (2) Lock the isolator in the OFF position with a personal padlock. (3) Attach a danger tag. (4) Verify dead: test with approved voltage detector. Only THEN connect the megger. This prevents the motor from being started while the megger is connected — which would destroy the megger and electrocute the tester.",
+    "exp": "LOTO (Lock Out, Tag Out): (1) Isolate the motor at the MCC/starter. (2) Lock the isolator in the OFF position with a personal padlock. (3) Attach a danger tag. (4) Verify dead: test with approved voltage detector. Only THEN connect the megger. This prevents the motor from being started while the megger is connected - which would destroy the megger and electrocute the tester.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1932,7 +1932,7 @@ window.loadQuizzes("T12_Cables", [
       "The cooling fan",
       "The space heater"
     ],
-    "exp": "Disconnect: (1) AVR (Automatic Voltage Regulator) from alternator field terminals — megger voltage would destroy the semiconductor components. (2) VFDs/soft starters — semiconductor power devices cannot withstand megger voltage. (3) Electronic protection relays connected to the circuit. (4) Thermistors/PT100 sensors in the winding (use lower voltage 100V megger for these). Leave power cables connected but isolate at switchboard.",
+    "exp": "Disconnect: (1) AVR (Automatic Voltage Regulator) from alternator field terminals - megger voltage would destroy the semiconductor components. (2) VFDs/soft starters - semiconductor power devices cannot withstand megger voltage. (3) Electronic protection relays connected to the circuit. (4) Thermistors/PT100 sensors in the winding (use lower voltage 100V megger for these). Leave power cables connected but isolate at switchboard.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1958,7 +1958,7 @@ window.loadQuizzes("T12_Cables", [
       "It generates more current",
       "It prevents the motor from spinning"
     ],
-    "exp": "Shorting all three phases: (1) Tests all three windings simultaneously in one operation. (2) Ensures equal voltage stress across all windings — avoids over-stressing one phase. (3) Prevents inter-winding breakdown: if phases were tested individually, the non-tested phases would be at a potential between earth and the test voltage, risking insulation failure between phases.",
+    "exp": "Shorting all three phases: (1) Tests all three windings simultaneously in one operation. (2) Ensures equal voltage stress across all windings - avoids over-stressing one phase. (3) Prevents inter-winding breakdown: if phases were tested individually, the non-tested phases would be at a potential between earth and the test voltage, risking insulation failure between phases.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -1984,7 +1984,7 @@ window.loadQuizzes("T12_Cables", [
       "Wash hands",
       "Reverse the megger leads"
     ],
-    "exp": "DISCHARGE the winding: Connect the earth lead from the megger to the test terminals and hold for a minimum of 30-60 seconds (longer for large HV machines — up to 5 minutes). Windings are capacitors — they store the applied DC test voltage as electrostatic charge. A large motor winding charged to 5000V will discharge through the person touching it, potentially causing a lethal electric shock.",
+    "exp": "DISCHARGE the winding: Connect the earth lead from the megger to the test terminals and hold for a minimum of 30-60 seconds (longer for large HV machines - up to 5 minutes). Windings are capacitors - they store the applied DC test voltage as electrostatic charge. A large motor winding charged to 5000V will discharge through the person touching it, potentially causing a lethal electric shock.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2010,7 +2010,7 @@ window.loadQuizzes("T12_Cables", [
       "The difference between phase U and V",
       "A test of the magnetic poles"
     ],
-    "exp": "PI = IR₁₀ / IR₁ (10-minute IR reading divided by 1-minute IR reading). In clean dry insulation, IR continues to rise from 1 to 10 minutes as the insulation polarises (absorbs DC charge — dielectric absorption). High PI = insulation still absorbing charge = clean and dry. In contaminated/wet insulation, IR stays flat (leakage dominates) = PI near 1.0.",
+    "exp": "PI = IR₁₀ / IR₁ (10-minute IR reading divided by 1-minute IR reading). In clean dry insulation, IR continues to rise from 1 to 10 minutes as the insulation polarises (absorbs DC charge - dielectric absorption). High PI = insulation still absorbing charge = clean and dry. In contaminated/wet insulation, IR stays flat (leakage dominates) = PI near 1.0.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2023,7 +2023,7 @@ window.loadQuizzes("T12_Cables", [
       "It uses less battery",
       "It tests the copper resistance"
     ],
-    "exp": "PI is temperature-independent (both IR₁ and IR₁₀ decrease equally with temperature, so their ratio stays constant). A simple IR reading changes dramatically with temperature — difficult to compare readings taken at different temperatures. PI reveals the condition of the insulation qualitatively — how well it absorbs charge (good insulation) vs. constant leakage path (contaminated insulation).",
+    "exp": "PI is temperature-independent (both IR₁ and IR₁₀ decrease equally with temperature, so their ratio stays constant). A simple IR reading changes dramatically with temperature - difficult to compare readings taken at different temperatures. PI reveals the condition of the insulation qualitatively - how well it absorbs charge (good insulation) vs. constant leakage path (contaminated insulation).",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2036,7 +2036,7 @@ window.loadQuizzes("T12_Cables", [
       "It stays exactly the same",
       "It drops to zero"
     ],
-    "exp": "In dry, clean insulation: IR increases continuously over 10 minutes as the insulation material polarises (dipole molecules align to the applied electric field — dielectric absorption). The capacitive charging current decays, and only a very small true leakage current remains. Typical behaviour: IR₁ = 100 MΩ, IR₁₀ = 250 MΩ, PI = 250/100 = 2.5 (good).",
+    "exp": "In dry, clean insulation: IR increases continuously over 10 minutes as the insulation material polarises (dipole molecules align to the applied electric field - dielectric absorption). The capacitive charging current decays, and only a very small true leakage current remains. Typical behaviour: IR₁ = 100 MΩ, IR₁₀ = 250 MΩ, PI = 250/100 = 2.5 (good).",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2049,7 +2049,7 @@ window.loadQuizzes("T12_Cables", [
       "The megger explodes",
       "The motor starts spinning"
     ],
-    "exp": "Moisture and carbon provide a continuous conductive path through the insulation. Current flows constantly — there is no dielectric absorption effect. IR reading stays flat or may even slightly decrease as the test voltage causes additional ion migration. Result: IR₁ ≈ IR₁₀, PI ≈ 1.0. Condemns the motor — do not energise. Dry out and test again.",
+    "exp": "Moisture and carbon provide a continuous conductive path through the insulation. Current flows constantly - there is no dielectric absorption effect. IR reading stays flat or may even slightly decrease as the test voltage causes additional ion migration. Result: IR₁ ≈ IR₁₀, PI ≈ 1.0. Condemns the motor - do not energise. Dry out and test again.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2062,7 +2062,7 @@ window.loadQuizzes("T12_Cables", [
       "Less than 1.0",
       "0.5"
     ],
-    "exp": "PI > 4.0 = Excellent (new or recently serviced motor). PI 2.0-4.0 = Good (acceptable for service). PI 1.5-2.0 = Fair (monitor closely). PI 1.0-1.5 = Poor (insulation may be wet or contaminated — investigate). PI < 1.0 = Dangerous (declining resistance indicates progressive failure in progress). IEEE 43 recommendation: PI ≥ 2.0 for acceptable insulation condition.",
+    "exp": "PI > 4.0 = Excellent (new or recently serviced motor). PI 2.0-4.0 = Good (acceptable for service). PI 1.5-2.0 = Fair (monitor closely). PI 1.0-1.5 = Poor (insulation may be wet or contaminated - investigate). PI < 1.0 = Dangerous (declining resistance indicates progressive failure in progress). IEEE 43 recommendation: PI ≥ 2.0 for acceptable insulation condition.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2075,7 +2075,7 @@ window.loadQuizzes("T12_Cables", [
       "The megger is broken",
       "The motor is ready to run"
     ],
-    "exp": "PI = 1.1 means IR₁₀ barely exceeds IR₁ — virtually no dielectric absorption is occurring. The insulation is saturated with moisture or contaminated with carbon/salt. The constant leakage current path dominates, masking any polarisation effect. Action: Do NOT energise. Remove motor, inspect winding for moisture/contamination, apply space heater current to dry out, re-test after 24-48 hours of heating.",
+    "exp": "PI = 1.1 means IR₁₀ barely exceeds IR₁ - virtually no dielectric absorption is occurring. The insulation is saturated with moisture or contaminated with carbon/salt. The constant leakage current path dominates, masking any polarisation effect. Action: Do NOT energise. Remove motor, inspect winding for moisture/contamination, apply space heater current to dry out, re-test after 24-48 hours of heating.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2088,7 +2088,7 @@ window.loadQuizzes("T12_Cables", [
       "A test of the motor's horsepower",
       "A test of the AC voltage"
     ],
-    "exp": "DAR = IR₆₀ / IR₃₀ (60-second reading divided by 30-second reading). Faster than the full 10-minute PI test — suitable for field checks when time is limited. Same principle: healthy insulation shows IR still rising between 30 and 60 seconds (ratio > 1.0). Contaminated insulation shows flat response (ratio ≈ 1.0). Not as discriminating as PI but useful for quick field assessment.",
+    "exp": "DAR = IR₆₀ / IR₃₀ (60-second reading divided by 30-second reading). Faster than the full 10-minute PI test - suitable for field checks when time is limited. Same principle: healthy insulation shows IR still rising between 30 and 60 seconds (ratio > 1.0). Contaminated insulation shows flat response (ratio ≈ 1.0). Not as discriminating as PI but useful for quick field assessment.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2101,7 +2101,7 @@ window.loadQuizzes("T12_Cables", [
       "When the motor is running",
       "When the megger is out of battery"
     ],
-    "exp": "DAR is used when: (1) A quick decision is needed — motor must return to service quickly. (2) Time constraints in port turnaround. (3) As a screening test — if DAR is clearly good (>1.6), proceed; if borderline, perform full PI. (4) For smaller motors where time to full PI is impractical. PI remains the preferred standard for HV machines and critical equipment.",
+    "exp": "DAR is used when: (1) A quick decision is needed - motor must return to service quickly. (2) Time constraints in port turnaround. (3) As a screening test - if DAR is clearly good (>1.6), proceed; if borderline, perform full PI. (4) For smaller motors where time to full PI is impractical. PI remains the preferred standard for HV machines and critical equipment.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2114,7 +2114,7 @@ window.loadQuizzes("T12_Cables", [
       "0.5",
       "Less than 1.0"
     ],
-    "exp": "DAR > 1.4 = Good. DAR 1.25-1.4 = Acceptable. DAR < 1.25 = Questionable — consider full PI test. Compare to IEEE 43 recommendations for the specific insulation class. Always take temperature into account — cold insulation will show better DAR than hot insulation. Record temperature at time of measurement.",
+    "exp": "DAR > 1.4 = Good. DAR 1.25-1.4 = Acceptable. DAR < 1.25 = Questionable - consider full PI test. Compare to IEEE 43 recommendations for the specific insulation class. Always take temperature into account - cold insulation will show better DAR than hot insulation. Record temperature at time of measurement.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2140,7 +2140,7 @@ window.loadQuizzes("T12_Cables", [
       "Yes, but only at 60Hz",
       "Yes, if using a multimeter"
     ],
-    "exp": "No. AC voltage prevents the dielectric absorption (polarisation) effect from developing — the field reverses every half-cycle, forcing dipole molecules to constantly reverse alignment. The capacitive charging and discharging current would dominate, masking any true absorption trend. DC is essential for PI testing because only DC allows the progressive build-up of polarisation current that distinguishes good from bad insulation.",
+    "exp": "No. AC voltage prevents the dielectric absorption (polarisation) effect from developing - the field reverses every half-cycle, forcing dipole molecules to constantly reverse alignment. The capacitive charging and discharging current would dominate, masking any true absorption trend. DC is essential for PI testing because only DC allows the progressive build-up of polarisation current that distinguishes good from bad insulation.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2166,7 +2166,7 @@ window.loadQuizzes("T12_Cables", [
       "To preheat the bearings",
       "To burn off dust"
     ],
-    "exp": "When a large machine is stopped, metal cools below ambient dew point — moisture condenses on windings. Even brief condensation periods can drop IR from hundreds of MΩ to dangerous levels. Space heaters (typically 200-500W, thermostatically controlled) maintain winding temperature 5-10°C above ambient, preventing condensation. Connected to the emergency switchboard so they remain powered when the machine is offline.",
+    "exp": "When a large machine is stopped, metal cools below ambient dew point - moisture condenses on windings. Even brief condensation periods can drop IR from hundreds of MΩ to dangerous levels. Space heaters (typically 200-500W, thermostatically controlled) maintain winding temperature 5-10°C above ambient, preventing condensation. Connected to the emergency switchboard so they remain powered when the machine is offline.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2192,7 +2192,7 @@ window.loadQuizzes("T12_Cables", [
       "Running the motor too fast",
       "Magnetic interference"
     ],
-    "exp": "Four main degradation mechanisms: (1) Thermal aging — heat causes polymer chain breakdown in insulation materials (each 10°C above rated temperature halves insulation life). (2) Moisture — water reduces dielectric strength dramatically. (3) Contamination — oil, carbon dust, salt create conductive paths. (4) Mechanical damage — vibration, repeated start-stop cycles cause micro-cracks. All four are present in marine environments simultaneously.",
+    "exp": "Four main degradation mechanisms: (1) Thermal aging - heat causes polymer chain breakdown in insulation materials (each 10°C above rated temperature halves insulation life). (2) Moisture - water reduces dielectric strength dramatically. (3) Contamination - oil, carbon dust, salt create conductive paths. (4) Mechanical damage - vibration, repeated start-stop cycles cause micro-cracks. All four are present in marine environments simultaneously.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2205,7 +2205,7 @@ window.loadQuizzes("T12_Cables", [
       "The battery is dead",
       "The motor is highly efficient"
     ],
-    "exp": "Zero ohms = dead short between the test conductor and earth. Possible causes: (1) Earth clip accidentally still attached to the phase terminal being tested (test setup error — most common). (2) Phase winding has a complete insulation breakdown with direct contact to the motor frame. (3) A jumper wire or earthing lead left connected. Check setup first — remove any earthing straps, re-verify isolation before concluding insulation failure.",
+    "exp": "Zero ohms = dead short between the test conductor and earth. Possible causes: (1) Earth clip accidentally still attached to the phase terminal being tested (test setup error - most common). (2) Phase winding has a complete insulation breakdown with direct contact to the motor frame. (3) A jumper wire or earthing lead left connected. Check setup first - remove any earthing straps, re-verify isolation before concluding insulation failure.",
     "cat": "Megger, IR Test & PI Test",
     "id": ""
   },
@@ -2238,13 +2238,13 @@ window.loadQuizzes("T12_Cables", [
   {
     "q": "In the low-voltage supply method for identifying unmarked motor terminals, U1–U2 is energised with 110V AC. One end of an unknown pair is connected to U2. You measure 190V between U1 and the free end. What does this indicate?",
     "opts": [
-      "Wrong polarity — reverse the connection",
-      "Correct series-aiding polarity — label accordingly",
+      "Wrong polarity - reverse the connection",
+      "Correct series-aiding polarity - label accordingly",
       "Short circuit in the winding",
-      "The supply is too high — reduce it"
+      "The supply is too high - reduce it"
     ],
-    "a": "Correct series-aiding polarity — label accordingly",
-    "exp": "When two windings are in series-aiding (correct polarity), their voltages add — measured voltage (190V) exceeds supply voltage (110V). This confirms the ends are correctly labelled. If voltage were less than supply, the windings would be opposing and polarity must be reversed.",
+    "a": "Correct series-aiding polarity - label accordingly",
+    "exp": "When two windings are in series-aiding (correct polarity), their voltages add - measured voltage (190V) exceeds supply voltage (110V). This confirms the ends are correctly labelled. If voltage were less than supply, the windings would be opposing and polarity must be reversed.",
     "cat": "Cables & Insulation",
     "id": "T12C_143"
   },
@@ -2265,12 +2265,12 @@ window.loadQuizzes("T12_Cables", [
     "q": "In the flick test for motor terminal identification, a 6V battery is briefly touched to each winding pair while a centre-zero galvanometer is connected to the reference winding. Why must the battery only be briefly TOUCHED and not held?",
     "opts": [
       "Battery voltage will drop over time",
-      "Sustained connection saturates the core — the galvanometer will not deflect on subsequent tests",
+      "Sustained connection saturates the core - the galvanometer will not deflect on subsequent tests",
       "The battery will explode if held too long",
       "The motor will start rotating"
     ],
-    "a": "Sustained connection saturates the core — the galvanometer will not deflect on subsequent tests",
-    "exp": "The flick test relies on the transient change in flux (dΦ/dt) inducing an EMF in the reference winding. If the battery is held continuously, the core saturates and flux stops changing — no EMF is induced and the galvanometer reads zero, making polarity determination impossible.",
+    "a": "Sustained connection saturates the core - the galvanometer will not deflect on subsequent tests",
+    "exp": "The flick test relies on the transient change in flux (dΦ/dt) inducing an EMF in the reference winding. If the battery is held continuously, the core saturates and flux stops changing - no EMF is induced and the galvanometer reads zero, making polarity determination impossible.",
     "cat": "Cables & Insulation",
     "id": "T12C_145"
   },
@@ -2291,12 +2291,12 @@ window.loadQuizzes("T12_Cables", [
     "q": "After completing a motor terminal identification test, the motor runs but draws unequal phase currents. What is the most likely cause?",
     "opts": [
       "Incorrect cable standard used",
-      "One winding pair has incorrect polarity — one phase winding is in reverse, causing unbalanced flux and unequal currents",
+      "One winding pair has incorrect polarity - one phase winding is in reverse, causing unbalanced flux and unequal currents",
       "The PI test value is too low",
       "The armour wire is not earthed"
     ],
-    "a": "One winding pair has incorrect polarity — one phase winding is in reverse, causing unbalanced flux and unequal currents",
-    "exp": "If terminal polarity is wrong for one winding, that phase produces flux in opposition to the rotating field rather than contributing to it. This causes magnetic imbalance — one phase draws much higher current while others may be lower. The motor also runs poorly or with excess vibration. Always verify current balance on test run before returning to full service.",
+    "a": "One winding pair has incorrect polarity - one phase winding is in reverse, causing unbalanced flux and unequal currents",
+    "exp": "If terminal polarity is wrong for one winding, that phase produces flux in opposition to the rotating field rather than contributing to it. This causes magnetic imbalance - one phase draws much higher current while others may be lower. The motor also runs poorly or with excess vibration. Always verify current balance on test run before returning to full service.",
     "cat": "Cables & Insulation",
     "id": "T12C_147"
   }

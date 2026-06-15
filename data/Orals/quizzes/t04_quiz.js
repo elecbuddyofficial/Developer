@@ -1438,7 +1438,7 @@ window.loadQuizzes("T04_Switchboard", [
       "Overload trip active",
       "Control circuit fuse blown"
     ],
-    "exp": "Red means danger—the machine is rotating, energized, or pressurized.",
+    "exp": "Red means danger-the machine is rotating, energized, or pressurized.",
     "cat": "MCC",
     "id": "T04A_111"
   },

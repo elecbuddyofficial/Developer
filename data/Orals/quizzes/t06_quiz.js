@@ -21,7 +21,7 @@ window.loadQuizzes("T06_Sensors", [
       "It expands physically to move a pointer",
       "It changes capacitance with temperature"
     ],
-    "exp": "RTD uses the Positive Temperature Coefficient (PTC) property of metals — resistance increases with temperature. For platinum: 100 ohm at 0 deg C, rising 0.385 ohm per deg C. This linear relationship makes RTDs highly accurate for process temperature measurement.",
+    "exp": "RTD uses the Positive Temperature Coefficient (PTC) property of metals - resistance increases with temperature. For platinum: 100 ohm at 0 deg C, rising 0.385 ohm per deg C. This linear relationship makes RTDs highly accurate for process temperature measurement.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -47,7 +47,7 @@ window.loadQuizzes("T06_Sensors", [
       "It has a negative temperature coefficient",
       "It generates the highest voltage"
     ],
-    "exp": "Platinum is chosen for RTDs because: (1) Highly stable — resistance-temperature relationship doesn't drift over time. (2) Good linearity — 0.385 ohm/deg C across wide range. (3) Corrosion resistant — survives marine environment. (4) Wide range: -200 deg C to +850 deg C. Other metals (nickel, copper) are less stable and less linear.",
+    "exp": "Platinum is chosen for RTDs because: (1) Highly stable - resistance-temperature relationship doesn't drift over time. (2) Good linearity - 0.385 ohm/deg C across wide range. (3) Corrosion resistant - survives marine environment. (4) Wide range: -200 deg C to +850 deg C. Other metals (nickel, copper) are less stable and less linear.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -73,7 +73,7 @@ window.loadQuizzes("T06_Sensors", [
       "100 ohms",
       "0 ohms"
     ],
-    "exp": "PT100 at 100 deg C = 100 + (100 x 0.385) = 138.5 ohm. Formula: R(T) = 100 x (1 + 0.00385 x T) for temperatures above 0 deg C. This value is used to verify calibration — an ohmmeter reading of 138.5 ohm confirms accurate measurement at boiling point.",
+    "exp": "PT100 at 100 deg C = 100 + (100 x 0.385) = 138.5 ohm. Formula: R(T) = 100 x (1 + 0.00385 x T) for temperatures above 0 deg C. This value is used to verify calibration - an ohmmeter reading of 138.5 ohm confirms accurate measurement at boiling point.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -151,7 +151,7 @@ window.loadQuizzes("T06_Sensors", [
       "Ohms",
       "Volts (V)"
     ],
-    "exp": "Thermocouple output is millivolts (mV) — very small, typically 0-50mV depending on type and temperature range. Type K generates approximately 41 microvolts per deg C. This small signal requires amplification and is susceptible to EMI, unlike the robust 4-20mA signal of an RTD transmitter.",
+    "exp": "Thermocouple output is millivolts (mV) - very small, typically 0-50mV depending on type and temperature range. Type K generates approximately 41 microvolts per deg C. This small signal requires amplification and is susceptible to EMI, unlike the robust 4-20mA signal of an RTD transmitter.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -203,7 +203,7 @@ window.loadQuizzes("T06_Sensors", [
       "The copper cable will melt",
       "The signal changes from mV to mA"
     ],
-    "exp": "A new thermocouple junction is created at the copper/Chromel connection point, generating its own parasitic EMF. This completely corrupts the measurement. Each connection between dissimilar metals creates a Seebeck voltage — standard copper cable must NEVER be used to extend thermocouple signals.",
+    "exp": "A new thermocouple junction is created at the copper/Chromel connection point, generating its own parasitic EMF. This completely corrupts the measurement. Each connection between dissimilar metals creates a Seebeck voltage - standard copper cable must NEVER be used to extend thermocouple signals.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -268,7 +268,7 @@ window.loadQuizzes("T06_Sensors", [
       "Thermistor",
       "PT100"
     ],
-    "exp": "Thermocouple is passive — it generates its own millivolt EMF from the Seebeck Effect without requiring external power. RTD requires an external current source to measure resistance. This makes thermocouples useful in locations where power is not available or in intrinsically safe circuits.",
+    "exp": "Thermocouple is passive - it generates its own millivolt EMF from the Seebeck Effect without requiring external power. RTD requires an external current source to measure resistance. This makes thermocouples useful in locations where power is not available or in intrinsically safe circuits.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -307,7 +307,7 @@ window.loadQuizzes("T06_Sensors", [
       "A 4-20mA transmitter",
       "A mechanical bimetallic switch"
     ],
-    "exp": "Thermistor = Thermally Sensitive Resistor. Made from semiconductor metal oxides. Most are NTC (Negative Temperature Coefficient) — resistance DECREASES with temperature. Changes are large and non-linear (unlike linear RTD). Used in: lifeboat battery temperature, HVAC systems, over-temperature alarms. Not suitable for precision measurement without linearisation.",
+    "exp": "Thermistor = Thermally Sensitive Resistor. Made from semiconductor metal oxides. Most are NTC (Negative Temperature Coefficient) - resistance DECREASES with temperature. Changes are large and non-linear (unlike linear RTD). Used in: lifeboat battery temperature, HVAC systems, over-temperature alarms. Not suitable for precision measurement without linearisation.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -320,7 +320,7 @@ window.loadQuizzes("T06_Sensors", [
       "Minimum off-scale low",
       "It will read correctly from the other wires"
     ],
-    "exp": "Open circuit RTD: The bridge/measuring circuit sees infinite resistance. The instrument interprets this as an extreme temperature reading — typically maximum scale or off-scale high (> upper alarm limit). This activates a temperature HIGH alarm, alerting operators to investigate the sensor or cable rather than assuming extreme process temperature.",
+    "exp": "Open circuit RTD: The bridge/measuring circuit sees infinite resistance. The instrument interprets this as an extreme temperature reading - typically maximum scale or off-scale high (> upper alarm limit). This activates a temperature HIGH alarm, alerting operators to investigate the sensor or cable rather than assuming extreme process temperature.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -333,7 +333,7 @@ window.loadQuizzes("T06_Sensors", [
       "Minimum temperature",
       "Infinite resistance"
     ],
-    "exp": "Broken thermocouple wire = 0 mV output. Most modern instruments have 'burnout' or 'upscale/downscale drive' — they detect the open circuit and drive the displayed value to maximum or minimum to create an alarm. Without this feature, a broken thermocouple would display 0 mV as ambient temperature = cold junction only.",
+    "exp": "Broken thermocouple wire = 0 mV output. Most modern instruments have 'burnout' or 'upscale/downscale drive' - they detect the open circuit and drive the displayed value to maximum or minimum to create an alarm. Without this feature, a broken thermocouple would display 0 mV as ambient temperature = cold junction only.",
     "cat": "Temperature Sensors",
     "id": ""
   },
@@ -424,7 +424,7 @@ window.loadQuizzes("T06_Sensors", [
       "The voltage spikes to 24V",
       "It sounds a physical buzzer in the transmitter"
     ],
-    "exp": "The live zero principle: 4 mA represents 0% (not 0 mA). If a wire breaks, current drops to 0 mA — which is physically impossible in a healthy loop. The control system can therefore distinguish: 4 mA = zero reading (valid), 0 mA = fault (wire break, transmitter failure, or power loss). This enables automatic fault alarming.",
+    "exp": "The live zero principle: 4 mA represents 0% (not 0 mA). If a wire breaks, current drops to 0 mA - which is physically impossible in a healthy loop. The control system can therefore distinguish: 4 mA = zero reading (valid), 0 mA = fault (wire break, transmitter failure, or power loss). This enables automatic fault alarming.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -437,7 +437,7 @@ window.loadQuizzes("T06_Sensors", [
       "0mA causes the cable to corrode",
       "4mA is required to keep the sensor warm"
     ],
-    "exp": "If 0 mA represented zero process value, a broken wire would look identical to a zero reading — no fault detection possible. By using 4 mA as the minimum live signal, any current below 4 mA (including 0 mA from a broken wire) indicates a fault condition, not a valid measurement. NAMUR NE43 defines fault signals as <3.6 mA or >21 mA.",
+    "exp": "If 0 mA represented zero process value, a broken wire would look identical to a zero reading - no fault detection possible. By using 4 mA as the minimum live signal, any current below 4 mA (including 0 mA from a broken wire) indicates a fault condition, not a valid measurement. NAMUR NE43 defines fault signals as <3.6 mA or >21 mA.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -463,7 +463,7 @@ window.loadQuizzes("T06_Sensors", [
       "The pressure is negative (vacuum)",
       "The transmitter is perfectly calibrated"
     ],
-    "exp": "0 mA means the loop is open (wire break, blown fuse, loss of 24V DC power supply) or the transmitter has failed. 0 mA is NEVER a valid measurement value — the minimum valid reading is 4 mA. The control system will alarm 'sensor fault' or 'loop open'. Must investigate cable continuity and transmitter power supply.",
+    "exp": "0 mA means the loop is open (wire break, blown fuse, loss of 24V DC power supply) or the transmitter has failed. 0 mA is NEVER a valid measurement value - the minimum valid reading is 4 mA. The control system will alarm 'sensor fault' or 'loop open'. Must investigate cable continuity and transmitter power supply.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -476,7 +476,7 @@ window.loadQuizzes("T06_Sensors", [
       "The pressure is 20 bar",
       "The sensor is overheating"
     ],
-    "exp": "20 mA = 100% of the configured range (URV = Upper Range Value). For a 0-10 bar transmitter, 20 mA = 10 bar. Note: 20 mA is also the normal maximum — it does NOT indicate a fault. Some transmitters use >20 mA (e.g., 20.5-21 mA) for upscale fault indication per NAMUR NE43.",
+    "exp": "20 mA = 100% of the configured range (URV = Upper Range Value). For a 0-10 bar transmitter, 20 mA = 10 bar. Note: 20 mA is also the normal maximum - it does NOT indicate a fault. Some transmitters use >20 mA (e.g., 20.5-21 mA) for upscale fault indication per NAMUR NE43.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -580,7 +580,7 @@ window.loadQuizzes("T06_Sensors", [
       "It prevents the 4-20mA signal from reaching the PLC",
       "It filters out engine room noise"
     ],
-    "exp": "Ohm's Law: V = I x R. HART digital current pulses of ~0.5 mA across 250 ohm creates 0.125V (125 mV) signal amplitude — minimum for reliable detection. With only 50 ohm: V = 0.5 x 50 = 25 mV — too small to reliably distinguish from noise. The 250 ohm minimum ensures adequate signal-to-noise ratio.",
+    "exp": "Ohm's Law: V = I x R. HART digital current pulses of ~0.5 mA across 250 ohm creates 0.125V (125 mV) signal amplitude - minimum for reliable detection. With only 50 ohm: V = 0.5 x 50 = 25 mV - too small to reliably distinguish from noise. The 250 ohm minimum ensures adequate signal-to-noise ratio.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -593,7 +593,7 @@ window.loadQuizzes("T06_Sensors", [
       "The transmitter will trip the generator",
       "It will work perfectly"
     ],
-    "exp": "The HART digital voltage signal developed = 0.5 mA x 50 ohm = 25 mV. The minimum required is typically 125 mV (1200 Hz signal). Communication will fail — the communicator cannot reliably decode the 1200/2200 Hz FSK at this amplitude. Solution: Insert a 250 ohm precision resistor in series with the loop.",
+    "exp": "The HART digital voltage signal developed = 0.5 mA x 50 ohm = 25 mV. The minimum required is typically 125 mV (1200 Hz signal). Communication will fail - the communicator cannot reliably decode the 1200/2200 Hz FSK at this amplitude. Solution: Insert a 250 ohm precision resistor in series with the loop.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -632,7 +632,7 @@ window.loadQuizzes("T06_Sensors", [
       "Converting AC to DC",
       "Filtering out water from the sensor"
     ],
-    "exp": "Real sensor outputs are often non-linear — e.g., DP flow measurement requires square root extraction (Q ∝ √DP). A smart transmitter's microprocessor applies the mathematical linearisation formula digitally, outputting a 4-20 mA signal that is linear with the actual process variable (flow), not the raw sensor signal (differential pressure).",
+    "exp": "Real sensor outputs are often non-linear - e.g., DP flow measurement requires square root extraction (Q ∝ √DP). A smart transmitter's microprocessor applies the mathematical linearisation formula digitally, outputting a 4-20 mA signal that is linear with the actual process variable (flow), not the raw sensor signal (differential pressure).",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -645,7 +645,7 @@ window.loadQuizzes("T06_Sensors", [
       "Maintains the last known good value forever",
       "Starts communicating via WiFi"
     ],
-    "exp": "Per NAMUR NE43 standard: on internal failure, the transmitter drives the output to a defined fault state — either <3.6 mA (downscale/low alarm) or >21 mA (upscale/high alarm). The choice is configured by the engineer based on the safe failure direction for that process. Control system alarm responds: 'Instrument fault' rather than acting on a false process reading.",
+    "exp": "Per NAMUR NE43 standard: on internal failure, the transmitter drives the output to a defined fault state - either <3.6 mA (downscale/low alarm) or >21 mA (upscale/high alarm). The choice is configured by the engineer based on the safe failure direction for that process. Control system alarm responds: 'Instrument fault' rather than acting on a false process reading.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -658,7 +658,7 @@ window.loadQuizzes("T06_Sensors", [
       "Linear Resistance Value and Uniform Resistance Value",
       "Low Rate Velocity and Upper Rate Velocity"
     ],
-    "exp": "LRV = Lower Range Value (4 mA point) — the process value that corresponds to 4 mA output, normally set to 0% of measurement range. URV = Upper Range Value (20 mA point) — the process value that corresponds to 20 mA, normally set to 100% of range. Example: LRV = 0 bar, URV = 10 bar. These are configured digitally via HART.",
+    "exp": "LRV = Lower Range Value (4 mA point) - the process value that corresponds to 4 mA output, normally set to 0% of measurement range. URV = Upper Range Value (20 mA point) - the process value that corresponds to 20 mA, normally set to 100% of range. Example: LRV = 0 bar, URV = 10 bar. These are configured digitally via HART.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -671,7 +671,7 @@ window.loadQuizzes("T06_Sensors", [
       "No, HART interrupts the 4-20mA signal",
       "Only if you add a third wire"
     ],
-    "exp": "Yes — HART FSK and 4-20 mA analogue coexist on the same two wires simultaneously without interference. The AC HART signal (1200/2200 Hz) is filtered out by the analogue input circuitry; the DC 4-20 mA is filtered out by the HART modem. The control system reads precise process value while the engineer communicates with the transmitter.",
+    "exp": "Yes - HART FSK and 4-20 mA analogue coexist on the same two wires simultaneously without interference. The AC HART signal (1200/2200 Hz) is filtered out by the analogue input circuitry; the DC 4-20 mA is filtered out by the HART modem. The control system reads precise process value while the engineer communicates with the transmitter.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -710,7 +710,7 @@ window.loadQuizzes("T06_Sensors", [
       "A transmitter that can run on any voltage",
       "A transmitter painted multiple colors"
     ],
-    "exp": "A multivariable transmitter measures two or more physical parameters and can report all of them via HART digital communication. Example: Rosemount 3051S DP transmitter measures differential pressure, static pressure, AND temperature internally — reporting all three via HART. Only the primary variable (usually DP) is output as 4-20 mA; the rest are HART digital variables.",
+    "exp": "A multivariable transmitter measures two or more physical parameters and can report all of them via HART digital communication. Example: Rosemount 3051S DP transmitter measures differential pressure, static pressure, AND temperature internally - reporting all three via HART. Only the primary variable (usually DP) is output as 4-20 mA; the rest are HART digital variables.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -749,7 +749,7 @@ window.loadQuizzes("T06_Sensors", [
       "110V AC",
       "12V AC"
     ],
-    "exp": "24V DC is the standard instrument loop supply voltage (IEC 60381). Minimum supply voltage = V_supply - (I x R_total) must exceed transmitter minimum operating voltage (typically 10-12V). For a 20 mA loop with 600 ohm total (250 ohm load + 350 ohm cable): V_drop = 0.020 x 600 = 12V. Supply of 24V leaves 12V for the transmitter — adequate.",
+    "exp": "24V DC is the standard instrument loop supply voltage (IEC 60381). Minimum supply voltage = V_supply - (I x R_total) must exceed transmitter minimum operating voltage (typically 10-12V). For a 20 mA loop with 600 ohm total (250 ohm load + 350 ohm cable): V_drop = 0.020 x 600 = 12V. Supply of 24V leaves 12V for the transmitter - adequate.",
     "cat": "4-20mA & HART",
     "id": ""
   },
@@ -957,7 +957,7 @@ window.loadQuizzes("T06_Sensors", [
       "The generator frequency dropped",
       "The 4-20mA loop is running at 12mA"
     ],
-    "exp": "Common causes: (1) Partial blockage of the impulse line — build-up of scale, wax, or debris reduces the transmitted pressure. (2) Leak in the impulse line — pressure bleeds off causing a lower reading. (3) Air pocket trapped in the impulse line (for liquid service). (4) Different process temperatures at different measurement points.",
+    "exp": "Common causes: (1) Partial blockage of the impulse line - build-up of scale, wax, or debris reduces the transmitted pressure. (2) Leak in the impulse line - pressure bleeds off causing a lower reading. (3) Air pocket trapped in the impulse line (for liquid service). (4) Different process temperatures at different measurement points.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -983,7 +983,7 @@ window.loadQuizzes("T06_Sensors", [
       "The reading jumps to maximum immediately",
       "The transmitter blows a fuse"
     ],
-    "exp": "HP side pressure is frozen at the last static value. DP = HP (frozen) - LP (live). If flow continues, LP changes but HP doesn't. The DP reading becomes nonsensical — possibly going negative or to a fixed incorrect value. The reading will not track actual flow changes. Maintenance required: isolate, vent, and clear the blockage.",
+    "exp": "HP side pressure is frozen at the last static value. DP = HP (frozen) - LP (live). If flow continues, LP changes but HP doesn't. The DP reading becomes nonsensical - possibly going negative or to a fixed incorrect value. The reading will not track actual flow changes. Maintenance required: isolate, vent, and clear the blockage.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -1022,7 +1022,7 @@ window.loadQuizzes("T06_Sensors", [
       "Smash the glass display",
       "Close the LP block valve immediately"
     ],
-    "exp": "Step 1: Open the equalizing valve (middle valve) first — this equalizes HP and LP pressure on both sides of the sensing diaphragm. Both sides see the same pressure simultaneously, preventing one-sided overpressure from bursting the diaphragm. THEN close both block valves. Reversing this order = risk of destroying the transmitter diaphragm.",
+    "exp": "Step 1: Open the equalizing valve (middle valve) first - this equalizes HP and LP pressure on both sides of the sensing diaphragm. Both sides see the same pressure simultaneously, preventing one-sided overpressure from bursting the diaphragm. THEN close both block valves. Reversing this order = risk of destroying the transmitter diaphragm.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -1113,7 +1113,7 @@ window.loadQuizzes("T06_Sensors", [
       "The pipe bursts",
       "It works perfectly fine"
     ],
-    "exp": "Orifice plates are bevelled (sharp edge faces upstream). Backwards installation: the chamfered edge faces upstream instead of downstream, creating a different and unstable flow coefficient — actual Cd (discharge coefficient) differs significantly from the calibration value. Flow readings will be 5-20% in error. Also: the pressure tapping ports may face wrong direction. Must verify plate orientation marks during commissioning; 'FLOW' arrow on plate indicates correct direction.",
+    "exp": "Orifice plates are bevelled (sharp edge faces upstream). Backwards installation: the chamfered edge faces upstream instead of downstream, creating a different and unstable flow coefficient - actual Cd (discharge coefficient) differs significantly from the calibration value. Flow readings will be 5-20% in error. Also: the pressure tapping ports may face wrong direction. Must verify plate orientation marks during commissioning; 'FLOW' arrow on plate indicates correct direction.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -1139,7 +1139,7 @@ window.loadQuizzes("T06_Sensors", [
       "Vent both sides to atmosphere",
       "Press the reset button on the PLC"
     ],
-    "exp": "Procedure: (1) Close both block valves. (2) Open equalizing valve — transmitter now sees 0 DP (equal pressure both sides). (3) Output should read exactly 4.000 mA. If not at 4 mA, the zero has drifted and must be re-trimmed. (4) After check: close equalizer, open block valves to return to service. This verifies zero drift without process shutdown.",
+    "exp": "Procedure: (1) Close both block valves. (2) Open equalizing valve - transmitter now sees 0 DP (equal pressure both sides). (3) Output should read exactly 4.000 mA. If not at 4 mA, the zero has drifted and must be re-trimmed. (4) After check: close equalizer, open block valves to return to service. This verifies zero drift without process shutdown.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -1152,7 +1152,7 @@ window.loadQuizzes("T06_Sensors", [
       "They are completely immune to freezing",
       "They generate their own electricity"
     ],
-    "exp": "DP transmitters with orifice plates: (1) No moving parts in the flow stream — extremely reliable in marine environment. (2) Proven technology — well understood by marine engineers. (3) Maintainable on board — orifice plates can be removed and cleaned. (4) Work with liquids, gases, and steam. (5) Lower cost than Coriolis or magnetic meters.",
+    "exp": "DP transmitters with orifice plates: (1) No moving parts in the flow stream - extremely reliable in marine environment. (2) Proven technology - well understood by marine engineers. (3) Maintainable on board - orifice plates can be removed and cleaned. (4) Work with liquids, gases, and steam. (5) Lower cost than Coriolis or magnetic meters.",
     "cat": "DP Transmitter (Flow & Level)",
     "id": ""
   },
@@ -1178,7 +1178,7 @@ window.loadQuizzes("T06_Sensors", [
       "Zirconia O2 Analyser",
       "Galvanic O2 Analyser"
     ],
-    "exp": "Paramagnetic O2 Analyser — uses the unique paramagnetic property of oxygen molecules. It provides very high accuracy (±0.1% O2) and excellent long-term stability with no consumable electrolyte. Standard for continuous boiler flue gas monitoring to optimise combustion efficiency (target flue gas O2: 2-4% for efficient combustion).",
+    "exp": "Paramagnetic O2 Analyser - uses the unique paramagnetic property of oxygen molecules. It provides very high accuracy (±0.1% O2) and excellent long-term stability with no consumable electrolyte. Standard for continuous boiler flue gas monitoring to optimise combustion efficiency (target flue gas O2: 2-4% for efficient combustion).",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1204,7 +1204,7 @@ window.loadQuizzes("T06_Sensors", [
       "Other gases are burned inside the sensor",
       "Other gases are heavier and sink to the bottom"
     ],
-    "exp": "Common flue gases (CO2, N2, SO2, CO, H2O) are diamagnetic — they are weakly repelled by magnetic fields. Their effect on the suspended test body is negligible compared to paramagnetic oxygen. This property makes the paramagnetic sensor extremely selective for oxygen, unlike electrochemical cells which can be cross-sensitive to H2S.",
+    "exp": "Common flue gases (CO2, N2, SO2, CO, H2O) are diamagnetic - they are weakly repelled by magnetic fields. Their effect on the suspended test body is negligible compared to paramagnetic oxygen. This property makes the paramagnetic sensor extremely selective for oxygen, unlike electrochemical cells which can be cross-sensitive to H2S.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1217,7 +1217,7 @@ window.loadQuizzes("T06_Sensors", [
       "Zirconia O2 Analyser",
       "Infrared O2 Analyser"
     ],
-    "exp": "Electrochemical (Galvanic) O2 Analyser — a consumable cell containing a gold cathode, lead anode, and KOH electrolyte. Compact, portable, requires no calibration gases for normal use (just fresh air). Battery powered. Reads 0-25% O2 range. Lifespan typically 1-3 years as the lead anode is consumed.",
+    "exp": "Electrochemical (Galvanic) O2 Analyser - a consumable cell containing a gold cathode, lead anode, and KOH electrolyte. Compact, portable, requires no calibration gases for normal use (just fresh air). Battery powered. Reads 0-25% O2 range. Lifespan typically 1-3 years as the lead anode is consumed.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1243,7 +1243,7 @@ window.loadQuizzes("T06_Sensors", [
       "It only works at very high temperatures",
       "It is extremely large and heavy"
     ],
-    "exp": "The lead anode is consumed irreversibly in the oxidation reaction. Exposure to 20.9% O2 continuously depletes the anode. Typical service life: 1-3 years depending on use. Cannot be regenerated — entire cell must be replaced. Also temperature sensitive (must apply temperature correction) and affected by H2S which oxidises the electrolyte.",
+    "exp": "The lead anode is consumed irreversibly in the oxidation reaction. Exposure to 20.9% O2 continuously depletes the anode. Typical service life: 1-3 years depending on use. Cannot be regenerated - entire cell must be replaced. Also temperature sensitive (must apply temperature correction) and affected by H2S which oxidises the electrolyte.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1256,7 +1256,7 @@ window.loadQuizzes("T06_Sensors", [
       "Measuring oxygen in a cold storage room",
       "Portable enclosed space checks"
     ],
-    "exp": "Zirconia (ZrO2) analysers measure O2 directly in hot flue gas at operating temperature (600-900°C) without cooling the sample. The zirconia ceramic becomes an O2 ion conductor at high temperatures, generating an EMF proportional to the O2 concentration ratio (Nernst equation). No sampling line needed — probe inserted directly into the flue.",
+    "exp": "Zirconia (ZrO2) analysers measure O2 directly in hot flue gas at operating temperature (600-900°C) without cooling the sample. The zirconia ceramic becomes an O2 ion conductor at high temperatures, generating an EMF proportional to the O2 concentration ratio (Nernst equation). No sampling line needed - probe inserted directly into the flue.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1282,7 +1282,7 @@ window.loadQuizzes("T06_Sensors", [
       "Helium",
       "Hydrogen"
     ],
-    "exp": "A certified calibration gas with known O2 percentage — typically 20.9% (fresh air) or a certified mixture (e.g., 5.0% O2 in N2 for IG monitoring). For enclosed space meters: fresh clean air on deck = 20.9% O2 is used as span check. Certified mixtures have a certificate of analysis and expiry date.",
+    "exp": "A certified calibration gas with known O2 percentage - typically 20.9% (fresh air) or a certified mixture (e.g., 5.0% O2 in N2 for IG monitoring). For enclosed space meters: fresh clean air on deck = 20.9% O2 is used as span check. Certified mixtures have a certificate of analysis and expiry date.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1295,7 +1295,7 @@ window.loadQuizzes("T06_Sensors", [
       "Oscilloscope",
       "Tachometer"
     ],
-    "exp": "Galvanometer — a highly sensitive current-detecting instrument. The D'Arsonval type uses a moving coil in a permanent magnetic field. When microamp-level current flows, the coil deflects against a spring, moving a pointer proportionally. Used in: IR monitoring systems to detect earth leakage, Wheatstone bridge null detection, and early electrochemical O2 cells.",
+    "exp": "Galvanometer - a highly sensitive current-detecting instrument. The D'Arsonval type uses a moving coil in a permanent magnetic field. When microamp-level current flows, the coil deflects against a spring, moving a pointer proportionally. Used in: IR monitoring systems to detect earth leakage, Wheatstone bridge null detection, and early electrochemical O2 cells.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1308,7 +1308,7 @@ window.loadQuizzes("T06_Sensors", [
       "It uses the piezoelectric effect",
       "It relies on a vibrating tuning fork"
     ],
-    "exp": "A rectangular coil is suspended in the gap of a horseshoe permanent magnet. When current I flows through the coil, a torque is produced (F = BIL, where B = field strength, I = current, L = conductor length). This torque deflects the coil against a spiral hairspring until equilibrium. Deflection angle is directly proportional to current — the pointer position indicates the measured value.",
+    "exp": "A rectangular coil is suspended in the gap of a horseshoe permanent magnet. When current I flows through the coil, a torque is produced (F = BIL, where B = field strength, I = current, L = conductor length). This torque deflects the coil against a spiral hairspring until equilibrium. Deflection angle is directly proportional to current - the pointer position indicates the measured value.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1321,7 +1321,7 @@ window.loadQuizzes("T06_Sensors", [
       "To measure the main generator voltage",
       "To measure fuel flow"
     ],
-    "exp": "Applications: (1) Insulation Resistance Monitor — detects earth fault current in the IT system. (2) Earth fault indicator panel — displays which phase has a fault. (3) Calibration instruments — as null detector in Wheatstone bridge circuits. (4) Historical galvanic protection systems. Modern digital instruments largely replace traditional galvanometers.",
+    "exp": "Applications: (1) Insulation Resistance Monitor - detects earth fault current in the IT system. (2) Earth fault indicator panel - displays which phase has a fault. (3) Calibration instruments - as null detector in Wheatstone bridge circuits. (4) Historical galvanic protection systems. Modern digital instruments largely replace traditional galvanometers.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1334,7 +1334,7 @@ window.loadQuizzes("T06_Sensors", [
       "To measure the viscosity of fuel oil",
       "To measure the speed of the ship"
     ],
-    "exp": "A salinometer continuously monitors the salt/chloride content of water. Ship applications: (1) Fresh Water Generator distillate — diverts contaminated output to bilge if salinity > setpoint. (2) Boiler feed water — high salinity causes boiler scale and tube failure. (3) Freshwater storage monitoring. Typical setpoints: FWG <5 ppm, boiler feed <0.1 ppm (depending on boiler type).",
+    "exp": "A salinometer continuously monitors the salt/chloride content of water. Ship applications: (1) Fresh Water Generator distillate - diverts contaminated output to bilge if salinity > setpoint. (2) Boiler feed water - high salinity causes boiler scale and tube failure. (3) Freshwater storage monitoring. Typical setpoints: FWG <5 ppm, boiler feed <0.1 ppm (depending on boiler type).",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1373,7 +1373,7 @@ window.loadQuizzes("T06_Sensors", [
       "The FW generator shuts down completely",
       "Nothing, it just records the value"
     ],
-    "exp": "The salinometer output triggers a 3-way divert valve (solenoid operated) that automatically diverts the FWG distillate output overboard or to bilge — NOT to the freshwater storage tank. Simultaneously, a high salinity alarm activates on the bridge/ECR panel. The operator must investigate: check evaporator pressure, saltwater feed valve, or distillate cooler for leakage.",
+    "exp": "The salinometer output triggers a 3-way divert valve (solenoid operated) that automatically diverts the FWG distillate output overboard or to bilge - NOT to the freshwater storage tank. Simultaneously, a high salinity alarm activates on the bridge/ECR panel. The operator must investigate: check evaporator pressure, saltwater feed valve, or distillate cooler for leakage.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1451,7 +1451,7 @@ window.loadQuizzes("T06_Sensors", [
       "1 to 5 cSt",
       "380 cSt"
     ],
-    "exp": "Target injection viscosity: 10-20 centistokes (cSt) — typically 12-15 cSt for most large 2-stroke marine diesel engines. Some older engines specify slightly higher. This range ensures optimal atomisation from mechanical injectors while maintaining adequate lubrication of the fuel pump. The Viscotherm continuously controls steam heating to maintain this target.",
+    "exp": "Target injection viscosity: 10-20 centistokes (cSt) - typically 12-15 cSt for most large 2-stroke marine diesel engines. Some older engines specify slightly higher. This range ensures optimal atomisation from mechanical injectors while maintaining adequate lubrication of the fuel pump. The Viscotherm continuously controls steam heating to maintain this target.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1464,7 +1464,7 @@ window.loadQuizzes("T06_Sensors", [
       "It forces fuel through a tiny hole and measures the pressure",
       "It measures the speed of sound through the fuel"
     ],
-    "exp": "A motor drives a spindle (rotor) at a precise constant speed inside the flowing fuel. The viscous drag of the fuel resists rotation — high viscosity = more resistance = more torque required to maintain speed. The torque is measured as the feedback signal. This torque signal controls the PID temperature controller via the steam heater to maintain constant target viscosity.",
+    "exp": "A motor drives a spindle (rotor) at a precise constant speed inside the flowing fuel. The viscous drag of the fuel resists rotation - high viscosity = more resistance = more torque required to maintain speed. The torque is measured as the feedback signal. This torque signal controls the PID temperature controller via the steam heater to maintain constant target viscosity.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1477,7 +1477,7 @@ window.loadQuizzes("T06_Sensors", [
       "It adds diesel oil to thin the HFO",
       "It slows down the main engine"
     ],
-    "exp": "If measured viscosity > setpoint: fuel is too cold/viscous. Controller output increases — opens steam heater valve wider, raising fuel temperature. Higher temperature → lower viscosity → closes the error between measured and target viscosity. Classic closed-loop PID control: error = (setpoint viscosity) - (measured viscosity).",
+    "exp": "If measured viscosity > setpoint: fuel is too cold/viscous. Controller output increases - opens steam heater valve wider, raising fuel temperature. Higher temperature → lower viscosity → closes the error between measured and target viscosity. Classic closed-loop PID control: error = (setpoint viscosity) - (measured viscosity).",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1490,7 +1490,7 @@ window.loadQuizzes("T06_Sensors", [
       "It is calibrated using engine exhaust gas",
       "It does not need calibration"
     ],
-    "exp": "2-point calibration: (1) Zero: expose sensor to nitrogen or close off from atmosphere — reads 0% O2. (2) Span: expose to clean fresh air on deck (20.9% O2) — adjust span pot if needed. Most modern instruments perform automatic calibration. Calibration must be documented. Instrument must be within calibration date. Never calibrate inside the space.",
+    "exp": "2-point calibration: (1) Zero: expose sensor to nitrogen or close off from atmosphere - reads 0% O2. (2) Span: expose to clean fresh air on deck (20.9% O2) - adjust span pot if needed. Most modern instruments perform automatic calibration. Calibration must be documented. Instrument must be within calibration date. Never calibrate inside the space.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1503,7 +1503,7 @@ window.loadQuizzes("T06_Sensors", [
       "The sensor dies immediately",
       "It gets stuck at 0% forever"
     ],
-    "exp": "No harm occurs — the electrochemical reaction requires oxygen. Without O2, the anode reaction stops, and no current flows. The lead anode is preserved (not consumed). This actually extends sensor life. Some manufacturers recommend storing sensors in nitrogen when not in use. The sensor responds normally when returned to normal atmosphere.",
+    "exp": "No harm occurs - the electrochemical reaction requires oxygen. Without O2, the anode reaction stops, and no current flows. The lead anode is preserved (not consumed). This actually extends sensor life. Some manufacturers recommend storing sensors in nitrogen when not in use. The sensor responds normally when returned to normal atmosphere.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1542,7 +1542,7 @@ window.loadQuizzes("T06_Sensors", [
       "It supplies power to the bridge",
       "It measures the temperature of the resistors"
     ],
-    "exp": "A null detector (galvanometer) is connected across the bridge midpoints. When the bridge is balanced (R1/R2 = R3/R4), zero current flows through the galvanometer — the pointer sits exactly at zero (null point). This null condition indicates the unknown resistance exactly equals the calculated value. The galvanometer's sensitivity determines measurement accuracy.",
+    "exp": "A null detector (galvanometer) is connected across the bridge midpoints. When the bridge is balanced (R1/R2 = R3/R4), zero current flows through the galvanometer - the pointer sits exactly at zero (null point). This null condition indicates the unknown resistance exactly equals the calculated value. The galvanometer's sensitivity determines measurement accuracy.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1555,7 +1555,7 @@ window.loadQuizzes("T06_Sensors", [
       "Calibrate it using tap water",
       "It is factory sealed and never calibrated"
     ],
-    "exp": "2-point calibration: (1) Zero: flush with pure distilled water (0 ppm) — adjust zero until display reads 0 ppm. (2) Span: use a certified NaCl standard solution (e.g., 5.00 ppm ± 0.01 ppm) — adjust span potentiometer until display reads the certified value. Record calibration date, standard solution batch number, and technician signature in maintenance log.",
+    "exp": "2-point calibration: (1) Zero: flush with pure distilled water (0 ppm) - adjust zero until display reads 0 ppm. (2) Span: use a certified NaCl standard solution (e.g., 5.00 ppm ± 0.01 ppm) - adjust span potentiometer until display reads the certified value. Record calibration date, standard solution batch number, and technician signature in maintenance log.",
     "cat": "O2, Galvo, Salinometer, Viscotherm",
     "id": ""
   },
@@ -1581,7 +1581,7 @@ window.loadQuizzes("T06_Sensors", [
       "Liquids and gases",
       "Plastics and wood ONLY"
     ],
-    "exp": "Inductive sensors detect metallic (electrically conductive) objects only — steel, iron, aluminium, copper, brass. They cannot detect plastic, wood, rubber, glass, or ceramic. The sensing range varies by metal type: ferrous metals (iron, steel) have the longest range; non-ferrous metals (aluminium, copper) have 30-70% of the nominal sensing range.",
+    "exp": "Inductive sensors detect metallic (electrically conductive) objects only - steel, iron, aluminium, copper, brass. They cannot detect plastic, wood, rubber, glass, or ceramic. The sensing range varies by metal type: ferrous metals (iron, steel) have the longest range; non-ferrous metals (aluminium, copper) have 30-70% of the nominal sensing range.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1594,7 +1594,7 @@ window.loadQuizzes("T06_Sensors", [
       "Aluminium is too heavy",
       "Iron generates its own electricity"
     ],
-    "exp": "Iron is ferromagnetic — it concentrates the magnetic flux, increasing eddy current induction. It also has lower electrical conductivity than copper, concentrating eddy current losses. This combination produces stronger oscillator damping at the same distance. Sensing range for iron = 100% of nominal. Aluminium ≈ 50%. Copper ≈ 45%. Always specify the material when selecting a sensor.",
+    "exp": "Iron is ferromagnetic - it concentrates the magnetic flux, increasing eddy current induction. It also has lower electrical conductivity than copper, concentrating eddy current losses. This combination produces stronger oscillator damping at the same distance. Sensing range for iron = 100% of nominal. Aluminium ≈ 50%. Copper ≈ 45%. Always specify the material when selecting a sensor.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1659,7 +1659,7 @@ window.loadQuizzes("T06_Sensors", [
       "It measures the friction of the shaft",
       "It touches the shaft to feel the vibration"
     ],
-    "exp": "A toothed wheel (phonic wheel) is mounted on the shaft. The proximity sensor is mounted with 1-3 mm gap facing the teeth. As the shaft rotates, each metal tooth passes the sensor face — one pulse per tooth. A frequency counter or PLC measures pulses per time period: RPM = (pulses per second × 60) / number of teeth. Typical accuracy ±0.01%.",
+    "exp": "A toothed wheel (phonic wheel) is mounted on the shaft. The proximity sensor is mounted with 1-3 mm gap facing the teeth. As the shaft rotates, each metal tooth passes the sensor face - one pulse per tooth. A frequency counter or PLC measures pulses per time period: RPM = (pulses per second × 60) / number of teeth. Typical accuracy ±0.01%.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1698,7 +1698,7 @@ window.loadQuizzes("T06_Sensors", [
       "When you want to measure temperature",
       "When you need to switch 440V"
     ],
-    "exp": "Use capacitive when: (1) Detecting non-metallic materials — plastic containers, cardboard, wood, glass. (2) Detecting liquid level through a plastic tank wall. (3) Detecting presence of powder or granular materials in a silo. (4) Sensing through packaging. Inductive is preferred for metals due to longer range and immunity to humidity (capacitive sensors can be affected by moisture).",
+    "exp": "Use capacitive when: (1) Detecting non-metallic materials - plastic containers, cardboard, wood, glass. (2) Detecting liquid level through a plastic tank wall. (3) Detecting presence of powder or granular materials in a silo. (4) Sensing through packaging. Inductive is preferred for metals due to longer range and immunity to humidity (capacitive sensors can be affected by moisture).",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1724,7 +1724,7 @@ window.loadQuizzes("T06_Sensors", [
       "A switch that detects the earth's magnetic field",
       "A switch that operates via radio waves"
     ],
-    "exp": "Two ferromagnetic metal contacts are hermetically sealed inside a glass tube in inert gas. When a permanent magnet approaches within the activation distance, the magnetic field magnetises the contacts, attracting them together — closing the circuit. When the magnet moves away, the spring force of the contacts opens them again. Completely sealed, no external wiring on the moving part.",
+    "exp": "Two ferromagnetic metal contacts are hermetically sealed inside a glass tube in inert gas. When a permanent magnet approaches within the activation distance, the magnetic field magnetises the contacts, attracting them together - closing the circuit. When the magnet moves away, the spring force of the contacts opens them again. Completely sealed, no external wiring on the moving part.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1737,7 +1737,7 @@ window.loadQuizzes("T06_Sensors", [
       "Main engine exhaust temperature",
       "Switchboard busbar protection"
     ],
-    "exp": "Ship applications: (1) Tank level float switches — float contains a permanent magnet, rises/falls with level, activates fixed reed switch at alarm level. (2) Door and hatch open/close sensors — watertight door position. (3) Valve position switches on pipeline valves. (4) Safety interlocks on access panels. Simple, sealed, no power required for the switch itself.",
+    "exp": "Ship applications: (1) Tank level float switches - float contains a permanent magnet, rises/falls with level, activates fixed reed switch at alarm level. (2) Door and hatch open/close sensors - watertight door position. (3) Valve position switches on pipeline valves. (4) Safety interlocks on access panels. Simple, sealed, no power required for the switch itself.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1763,7 +1763,7 @@ window.loadQuizzes("T06_Sensors", [
       "Detecting smoke",
       "Measuring fuel viscosity"
     ],
-    "exp": "Marine applications: (1) Tank level measurement from the top without process contact — fuel, ballast, grey water. (2) Open channel flow measurement. (3) Distance/position detection of large objects. (4) Ship-to-quay distance measurement for mooring. Advantage over DP transmitters: no impulse lines or process wetted parts. Limitation: affected by foam on liquid surface.",
+    "exp": "Marine applications: (1) Tank level measurement from the top without process contact - fuel, ballast, grey water. (2) Open channel flow measurement. (3) Distance/position detection of large objects. (4) Ship-to-quay distance measurement for mooring. Advantage over DP transmitters: no impulse lines or process wetted parts. Limitation: affected by foam on liquid surface.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1789,7 +1789,7 @@ window.loadQuizzes("T06_Sensors", [
       "Detecting water in oil",
       "Measuring generator voltage"
     ],
-    "exp": "Engine room LVDT applications: (1) Fuel rack position measurement on the main engine — precise governor feedback. (2) Valve stem position in smart valve positioners (SIPART). (3) Measuring piston rod elongation in hydraulic actuators. (4) Governor linkage position. LVDTs are chosen for: frictionless operation (core doesn't touch the coil), infinite resolution, excellent linearity.",
+    "exp": "Engine room LVDT applications: (1) Fuel rack position measurement on the main engine - precise governor feedback. (2) Valve stem position in smart valve positioners (SIPART). (3) Measuring piston rod elongation in hydraulic actuators. (4) Governor linkage position. LVDTs are chosen for: frictionless operation (core doesn't touch the coil), infinite resolution, excellent linearity.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1815,7 +1815,7 @@ window.loadQuizzes("T06_Sensors", [
       "Incremental uses light, Absolute uses magnets",
       "Incremental is analog, Absolute is pneumatic"
     ],
-    "exp": "Incremental encoder: outputs equally spaced pulses as the shaft rotates. Counts from zero at power-on — loses position if power is interrupted. Must find a home position on restart. Lower cost. Absolute encoder: each angular position produces a unique binary code (Gray code typically). Retains position after power loss. More expensive but required for safety-critical positioning.",
+    "exp": "Incremental encoder: outputs equally spaced pulses as the shaft rotates. Counts from zero at power-on - loses position if power is interrupted. Must find a home position on restart. Lower cost. Absolute encoder: each angular position produces a unique binary code (Gray code typically). Retains position after power loss. More expensive but required for safety-critical positioning.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1841,7 +1841,7 @@ window.loadQuizzes("T06_Sensors", [
       "It outputs 4-20mA",
       "It outputs a pneumatic signal"
     ],
-    "exp": "NPN (sinking) output: when the target is detected, the output transistor switches the output terminal to 0V (negative). Load is connected between +24V and the output terminal. Also called 'sinking' because the sensor sinks current from the load to 0V. Common in Japanese/US practice. PLC input cards may require a specific type — check specifications.",
+    "exp": "NPN (sinking) output: when the target is detected, the output transistor switches the output terminal to 0V (negative). Load is connected between +24V and the output terminal. Also called 'sinking' because the sensor sinks current from the load to 0V. Common in Japanese/US practice. PLC input cards may require a specific type - check specifications.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1854,7 +1854,7 @@ window.loadQuizzes("T06_Sensors", [
       "They are made of titanium",
       "They communicate via satellite"
     ],
-    "exp": "Inductive sensors are completely encapsulated in epoxy or stainless steel — no exposed contacts, no moving parts, no mechanical wear. IP67/IP68 rated (submersible). Unaffected by: oil splash, condensation, vibration, salt atmosphere, temperature fluctuations (-25 to +85°C typical). MTBF (Mean Time Between Failures) typically >10 million operations.",
+    "exp": "Inductive sensors are completely encapsulated in epoxy or stainless steel - no exposed contacts, no moving parts, no mechanical wear. IP67/IP68 rated (submersible). Unaffected by: oil splash, condensation, vibration, salt atmosphere, temperature fluctuations (-25 to +85°C typical). MTBF (Mean Time Between Failures) typically >10 million operations.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1906,7 +1906,7 @@ window.loadQuizzes("T06_Sensors", [
       "To increase the sensing range",
       "To make it compatible with AC power"
     ],
-    "exp": "Without hysteresis: if a vibrating metal shaft sits exactly at the switching distance, the output would oscillate rapidly (chattering) between ON and OFF at vibration frequency — possibly thousands of times per second. This would confuse counting circuits and damage output transistors. Hysteresis creates a stable dead-band around the switching point, preventing this problem.",
+    "exp": "Without hysteresis: if a vibrating metal shaft sits exactly at the switching distance, the output would oscillate rapidly (chattering) between ON and OFF at vibration frequency - possibly thousands of times per second. This would confuse counting circuits and damage output transistors. Hysteresis creates a stable dead-band around the switching point, preventing this problem.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1919,7 +1919,7 @@ window.loadQuizzes("T06_Sensors", [
       "Yes, but only if the water is boiling",
       "Yes, but it will short circuit"
     ],
-    "exp": "No. Water is non-metallic (non-conductive in pure form, weakly conductive when dissolved with salts). An inductive sensor's electromagnetic field cannot induce significant eddy currents in water. A capacitive proximity sensor must be used — the water changes the dielectric constant in the sensor's electric field, increasing capacitance and triggering detection.",
+    "exp": "No. Water is non-metallic (non-conductive in pure form, weakly conductive when dissolved with salts). An inductive sensor's electromagnetic field cannot induce significant eddy currents in water. A capacitive proximity sensor must be used - the water changes the dielectric constant in the sensor's electric field, increasing capacitance and triggering detection.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1945,7 +1945,7 @@ window.loadQuizzes("T06_Sensors", [
       "They are identical",
       "Neither works at low RPM"
     ],
-    "exp": "Active inductive proximity sensor gives cleaner digital pulses at low RPM. Passive pickup amplitude is proportional to dΦ/dt (rate of flux change) — at very low RPM, teeth move slowly, amplitude drops to millivolts (hard to distinguish from noise). Active sensors maintain full 24V digital output regardless of speed — even at 1 RPM. Critical for starting speed measurement and slow-turning equipment.",
+    "exp": "Active inductive proximity sensor gives cleaner digital pulses at low RPM. Passive pickup amplitude is proportional to dΦ/dt (rate of flux change) - at very low RPM, teeth move slowly, amplitude drops to millivolts (hard to distinguish from noise). Active sensors maintain full 24V digital output regardless of speed - even at 1 RPM. Critical for starting speed measurement and slow-turning equipment.",
     "cat": "Proximity Sensors & Encoders",
     "id": ""
   },
@@ -1971,7 +1971,7 @@ window.loadQuizzes("T06_Sensors", [
       "Ring Topology",
       "Mesh Network"
     ],
-    "exp": "Modbus uses a Master/Slave architecture (also called Client/Server in Modbus TCP). One Master (typically the IAS workstation or PLC) controls all communication. Up to 247 Slaves (field devices, drives, sensors) listen and only respond when specifically addressed by the Master. No slave can initiate communication — they only reply to Master queries.",
+    "exp": "Modbus uses a Master/Slave architecture (also called Client/Server in Modbus TCP). One Master (typically the IAS workstation or PLC) controls all communication. Up to 247 Slaves (field devices, drives, sensors) listen and only respond when specifically addressed by the Master. No slave can initiate communication - they only reply to Master queries.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2062,7 +2062,7 @@ window.loadQuizzes("T06_Sensors", [
       "A protocol exclusively for internet browsing",
       "A wireless-only protocol"
     ],
-    "exp": "Modbus TCP encapsulates the standard Modbus RTU data (excluding CRC — replaced by TCP checksumming) inside a TCP/IP packet. Uses port 502. Advantages: standard Ethernet infrastructure, no distance limit, hundreds of devices, simultaneous multiple Masters. Used in modern ship networks: IAS workstations to PLCs, SCADA systems, alarm management. RFC 1900.",
+    "exp": "Modbus TCP encapsulates the standard Modbus RTU data (excluding CRC - replaced by TCP checksumming) inside a TCP/IP packet. Uses port 502. Advantages: standard Ethernet infrastructure, no distance limit, hundreds of devices, simultaneous multiple Masters. Used in modern ship networks: IAS workstations to PLCs, SCADA systems, alarm management. RFC 1900.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2075,7 +2075,7 @@ window.loadQuizzes("T06_Sensors", [
       "Tag Name, Value, Timestamp",
       "Start Bit, Stop Bit, Parity"
     ],
-    "exp": "Modbus RTU frame: (1) Slave Address (1 byte) — who to talk to. (2) Function Code (1 byte) — what to do. (3) Data field (n bytes) — register address + number of registers to read/write + data (for writes). (4) CRC (2 bytes) — error detection. Total minimum frame: 4 bytes. Maximum: 256 bytes.",
+    "exp": "Modbus RTU frame: (1) Slave Address (1 byte) - who to talk to. (2) Function Code (1 byte) - what to do. (3) Data field (n bytes) - register address + number of registers to read/write + data (for writes). (4) CRC (2 bytes) - error detection. Total minimum frame: 4 bytes. Maximum: 256 bytes.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2088,7 +2088,7 @@ window.loadQuizzes("T06_Sensors", [
       "It sets the baud rate",
       "It resets the slave"
     ],
-    "exp": "The Slave Address (1 byte, range 1-247) identifies which specific device should process the request. All slaves on the RS-485 bus receive every message, but only the slave whose programmed address matches the frame address will respond. Address 0 = broadcast (no response expected). Duplicate addresses = major error — both devices respond simultaneously causing data collision.",
+    "exp": "The Slave Address (1 byte, range 1-247) identifies which specific device should process the request. All slaves on the RS-485 bus receive every message, but only the slave whose programmed address matches the frame address will respond. Address 0 = broadcast (no response expected). Duplicate addresses = major error - both devices respond simultaneously causing data collision.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2101,7 +2101,7 @@ window.loadQuizzes("T06_Sensors", [
       "It replies with an error code",
       "It shuts down"
     ],
-    "exp": "The slave completely ignores the message — it does not respond, does not generate an error, does not acknowledge. Only the correctly addressed slave processes the request and sends a response. This is fundamental to the RS-485 shared bus architecture — all devices hear all traffic but only react to their own address.",
+    "exp": "The slave completely ignores the message - it does not respond, does not generate an error, does not acknowledge. Only the correctly addressed slave processes the request and sends a response. This is fundamental to the RS-485 shared bus architecture - all devices hear all traffic but only react to their own address.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2140,7 +2140,7 @@ window.loadQuizzes("T06_Sensors", [
       "Reads digital outputs",
       "Sets the slave address"
     ],
-    "exp": "FC04 reads 16-bit read-only registers (Input Registers, addresses 30001-39999). These store real-time measurement values from sensors. Examples: transmitter current temperature, pressure, flow reading; drive actual current, frequency, torque. Read-only to the network — only the slave device itself writes to these registers from its sensor input.",
+    "exp": "FC04 reads 16-bit read-only registers (Input Registers, addresses 30001-39999). These store real-time measurement values from sensors. Examples: transmitter current temperature, pressure, flow reading; drive actual current, frequency, torque. Read-only to the network - only the slave device itself writes to these registers from its sensor input.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2205,7 +2205,7 @@ window.loadQuizzes("T06_Sensors", [
       "The voltage of the signal",
       "The delay between messages"
     ],
-    "exp": "Baud rate = bits per second transmitted. Common Modbus RTU rates: 9600, 19200, 38400, 57600, 115200 bps. At 9600 bps, transmitting a 8-byte frame takes approximately 8.3 milliseconds. Lower baud rates = more reliable on long cables (less signal distortion). All devices on the same RS-485 segment must operate at identical baud rates — mismatch causes complete communication failure.",
+    "exp": "Baud rate = bits per second transmitted. Common Modbus RTU rates: 9600, 19200, 38400, 57600, 115200 bps. At 9600 bps, transmitting a 8-byte frame takes approximately 8.3 milliseconds. Lower baud rates = more reliable on long cables (less signal distortion). All devices on the same RS-485 segment must operate at identical baud rates - mismatch causes complete communication failure.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2231,7 +2231,7 @@ window.loadQuizzes("T06_Sensors", [
       "Change the slave to a master",
       "Increase the voltage to 220V"
     ],
-    "exp": "Systematic troubleshooting: (1) Verify slave address is configured correctly on the device. (2) Check baud rate/parity settings match. (3) Swap A and B wires — RS-485 is polarity sensitive (A+ must connect to A+). (4) Check power supply to the slave device. (5) Verify termination resistors in place. (6) Use a Modbus analyser to capture the bus traffic and verify the Master is sending the correct address.",
+    "exp": "Systematic troubleshooting: (1) Verify slave address is configured correctly on the device. (2) Check baud rate/parity settings match. (3) Swap A and B wires - RS-485 is polarity sensitive (A+ must connect to A+). (4) Check power supply to the slave device. (5) Verify termination resistors in place. (6) Use a Modbus analyser to capture the bus traffic and verify the Master is sending the correct address.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2257,7 +2257,7 @@ window.loadQuizzes("T06_Sensors", [
       "Yes, but only if they have the same address",
       "Yes, they take turns automatically"
     ],
-    "exp": "No — standard Modbus RTU permits ONLY ONE master on a serial bus. If two masters transmit simultaneously, both signals collide on the RS-485 wires, corrupting both messages. Multiple masters require: separate RS-485 buses (with a gateway between them), or migration to Modbus TCP on Ethernet (where the network infrastructure handles simultaneous transactions).",
+    "exp": "No - standard Modbus RTU permits ONLY ONE master on a serial bus. If two masters transmit simultaneously, both signals collide on the RS-485 wires, corrupting both messages. Multiple masters require: separate RS-485 buses (with a gateway between them), or migration to Modbus TCP on Ethernet (where the network infrastructure handles simultaneous transactions).",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2296,7 +2296,7 @@ window.loadQuizzes("T06_Sensors", [
       "Voltage, Current, Frequency",
       "Motor kW, RPM, Cos Phi"
     ],
-    "exp": "Mandatory VFD Modbus settings: (1) Slave Address — unique number (1-247), must not duplicate any existing device. (2) Baud Rate — must match the rest of the network (e.g., 19200 bps). (3) Parity and Stop Bits — must match network (e.g., No Parity, 1 Stop Bit). Additionally: connect to RS-485 A and B terminals correctly (polarity); check VFD manual for register map of speed command and status.",
+    "exp": "Mandatory VFD Modbus settings: (1) Slave Address - unique number (1-247), must not duplicate any existing device. (2) Baud Rate - must match the rest of the network (e.g., 19200 bps). (3) Parity and Stop Bits - must match network (e.g., No Parity, 1 Stop Bit). Additionally: connect to RS-485 A and B terminals correctly (polarity); check VFD manual for register map of speed command and status.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -2335,7 +2335,7 @@ window.loadQuizzes("T06_Sensors", [
       "It can carry more current",
       "It looks better in the cable tray"
     ],
-    "exp": "Twisted pair: each twist cancels magnetic field interference from adjacent conductors — noise induced on one wire is equally induced on the other, appearing as common-mode noise which RS-485 receivers reject. Shield (drain wire): connected to earth at ONE end only (prevents ground loop currents) to intercept capacitively-coupled electrical noise from VFDs, power cables, and radio transmitters nearby.",
+    "exp": "Twisted pair: each twist cancels magnetic field interference from adjacent conductors - noise induced on one wire is equally induced on the other, appearing as common-mode noise which RS-485 receivers reject. Shield (drain wire): connected to earth at ONE end only (prevents ground loop currents) to intercept capacitively-coupled electrical noise from VFDs, power cables, and radio transmitters nearby.",
     "cat": "Modbus Communication",
     "id": ""
   },
@@ -4005,14 +4005,14 @@ window.loadQuizzes("T06_Sensors", [
   },
   {
     "q": "Why is 4mA used as the minimum signal in a 4-20mA loop, not 0mA?",
-    "a": "0mA is reserved to indicate a wire break or complete transmitter failure, so 4mA provides a 'live zero' — proving the loop is alive",
+    "a": "0mA is reserved to indicate a wire break or complete transmitter failure, so 4mA provides a 'live zero' - proving the loop is alive",
     "opts": [
-      "0mA is reserved to indicate a wire break or complete transmitter failure, so 4mA provides a 'live zero' — proving the loop is alive",
+      "0mA is reserved to indicate a wire break or complete transmitter failure, so 4mA provides a 'live zero' - proving the loop is alive",
       "0mA would cause the DCS input card to be damaged",
       "4mA is required to power the transmitter electronics in two-wire loops",
       "Both A and C are correct"
     ],
-    "exp": "The 4-20mA range gives TWO benefits: (1) Live zero — 0mA always means fault (broken wire or dead transmitter), never a valid measurement. This makes fault detection unambiguous. (2) Loop power — the minimum 4mA provides just enough current (actually 3.5-4mA) to power the transmitter electronics in a two-wire loop-powered arrangement. Using 0mA would make it impossible to distinguish a valid zero reading from a broken circuit.",
+    "exp": "The 4-20mA range gives TWO benefits: (1) Live zero - 0mA always means fault (broken wire or dead transmitter), never a valid measurement. This makes fault detection unambiguous. (2) Loop power - the minimum 4mA provides just enough current (actually 3.5-4mA) to power the transmitter electronics in a two-wire loop-powered arrangement. Using 0mA would make it impossible to distinguish a valid zero reading from a broken circuit.",
     "cat": "4-20mA Loops",
     "id": "T06_601"
   },
@@ -4038,15 +4038,15 @@ window.loadQuizzes("T06_Sensors", [
       "Only for fresh water tanks with clean water",
       "Only for tanks on the weather deck exposed to sea spray"
     ],
-    "exp": "Capacitance level sensors: Rod probe and tank wall form two plates of a capacitor. Liquid (higher dielectric constant than air/vapour) between the plates increases capacitance proportional to immersion depth. No moving parts — suited for viscous fuel oil, dirty bilge water, or tanks where floats would stick. Output is continuous 4-20mA. Also works through non-metallic tank walls. Limitation: requires re-calibration if the liquid dielectric constant changes (e.g., water contamination in fuel).",
+    "exp": "Capacitance level sensors: Rod probe and tank wall form two plates of a capacitor. Liquid (higher dielectric constant than air/vapour) between the plates increases capacitance proportional to immersion depth. No moving parts - suited for viscous fuel oil, dirty bilge water, or tanks where floats would stick. Output is continuous 4-20mA. Also works through non-metallic tank walls. Limitation: requires re-calibration if the liquid dielectric constant changes (e.g., water contamination in fuel).",
     "cat": "Level Sensors",
     "id": "T06_603"
   },
   {
     "q": "What is a strain gauge and how does it measure pressure?",
-    "a": "A metallic resistance wire bonded to a diaphragm — applied pressure deflects the diaphragm, straining the wire and changing its resistance, measured by a Wheatstone bridge",
+    "a": "A metallic resistance wire bonded to a diaphragm - applied pressure deflects the diaphragm, straining the wire and changing its resistance, measured by a Wheatstone bridge",
     "opts": [
-      "A metallic resistance wire bonded to a diaphragm — applied pressure deflects the diaphragm, straining the wire and changing its resistance, measured by a Wheatstone bridge",
+      "A metallic resistance wire bonded to a diaphragm - applied pressure deflects the diaphragm, straining the wire and changing its resistance, measured by a Wheatstone bridge",
       "A piezoelectric crystal that generates voltage proportional to pressure",
       "A capacitor plate that changes capacitance with pressure",
       "A bimetallic strip that bends with temperature change"
@@ -4060,7 +4060,7 @@ window.loadQuizzes("T06_Sensors", [
     "a": "Transducer outputs raw millivolts (needs external amplification); transmitter outputs 4-20mA (fully conditioned, loop-powered, ready for DCS)",
     "opts": [
       "Transducer outputs raw millivolts (needs external amplification); transmitter outputs 4-20mA (fully conditioned, loop-powered, ready for DCS)",
-      "They are identical — the terms are used interchangeably",
+      "They are identical - the terms are used interchangeably",
       "Transmitter measures pressure; transducer measures temperature",
       "Transducer uses 4-20mA; transmitter uses 0-10V"
     ],
@@ -4070,12 +4070,12 @@ window.loadQuizzes("T06_Sensors", [
   },
   {
     "q": "What does LVDT stand for and what is its operating principle?",
-    "a": "Linear Variable Differential Transformer — a moving iron core shifts mutual inductance between secondary coils, giving voltage output proportional to linear displacement",
+    "a": "Linear Variable Differential Transformer - a moving iron core shifts mutual inductance between secondary coils, giving voltage output proportional to linear displacement",
     "opts": [
-      "Linear Variable Differential Transformer — a moving iron core shifts mutual inductance between secondary coils, giving voltage output proportional to linear displacement",
-      "Low Voltage Detection Transformer — detects voltages below normal level",
-      "Level and Voltage Differential Transducer — measures tank levels",
-      "Linear Voltage Divider Technology — a type of potentiometer"
+      "Linear Variable Differential Transformer - a moving iron core shifts mutual inductance between secondary coils, giving voltage output proportional to linear displacement",
+      "Low Voltage Detection Transformer - detects voltages below normal level",
+      "Level and Voltage Differential Transducer - measures tank levels",
+      "Linear Voltage Divider Technology - a type of potentiometer"
     ],
     "exp": "LVDT operation: Primary coil (AC excited) sits between two identical secondary coils. Soft iron core mechanically coupled to measured object (valve stem, rack). When core is central → equal coupling to both secondaries → they cancel → zero output. Move core towards one secondary → coupling increases to that coil, decreases to other → net differential output voltage proportional to displacement. Phase indicates direction. Advantages: contactless (no friction/wear), infinite resolution, very reliable. Ship uses: governor fuel rack, control valve stem position, rudder angle transmitter.",
     "cat": "Displacement Sensors",
@@ -4083,14 +4083,14 @@ window.loadQuizzes("T06_Sensors", [
   },
   {
     "q": "What happens if the flame eye (photocell) on a boiler is removed or fails?",
-    "a": "The controller sees 'no flame' — in auto mode it shuts off fuel immediately (fail-safe). A faulty dirty photocell window can also cause nuisance flame failure shutdowns.",
+    "a": "The controller sees 'no flame' - in auto mode it shuts off fuel immediately (fail-safe). A faulty dirty photocell window can also cause nuisance flame failure shutdowns.",
     "opts": [
-      "The controller sees 'no flame' — in auto mode it shuts off fuel immediately (fail-safe). A faulty dirty photocell window can also cause nuisance flame failure shutdowns.",
+      "The controller sees 'no flame' - in auto mode it shuts off fuel immediately (fail-safe). A faulty dirty photocell window can also cause nuisance flame failure shutdowns.",
       "The boiler continues to run on manual mode with no effect",
       "The burner runs continuously without any flame monitoring",
       "Only an alarm is given; the fuel is not cut off"
     ],
-    "exp": "Flame eye (UV photocell): Detects UV radiation from burner flame. No UV signal → flame failure relay drops → fuel solenoid valve de-energises → burner shuts down within seconds. This is a FAIL-SAFE design — if sensor fails/removed, system defaults to shutdown (no flame assumed), preventing unburnt fuel accumulation and explosion. Common fault: soot deposits on quartz viewing window absorb UV → nuisance shutdowns. Remedy: clean quartz window regularly. Also check photocell cell life (UV-sensitive material ages).",
+    "exp": "Flame eye (UV photocell): Detects UV radiation from burner flame. No UV signal → flame failure relay drops → fuel solenoid valve de-energises → burner shuts down within seconds. This is a FAIL-SAFE design - if sensor fails/removed, system defaults to shutdown (no flame assumed), preventing unburnt fuel accumulation and explosion. Common fault: soot deposits on quartz viewing window absorb UV → nuisance shutdowns. Remedy: clean quartz window regularly. Also check photocell cell life (UV-sensitive material ages).",
     "cat": "Flame & Gas Detection",
     "id": "T06_607"
   },
@@ -4103,15 +4103,15 @@ window.loadQuizzes("T06_Sensors", [
       "0% LEL only",
       "Below 25% LEL"
     ],
-    "exp": "LEL safety limits: The Lower Explosive Limit (LEL) is the minimum concentration of combustible gas in air that will ignite. Explosimeter (catalytic bead instrument) reads 0-100% LEL. Safe entry with ignition sources (tools, lights): below 10% LEL. Hot work (welding, grinding): below 1% LEL. NEVER use an explosimeter beyond 100% LEL scale — readings become unreliable in the explosive range and above. Annual calibration with certified span gas (typically 50% LEL n-pentane or methane mixture).",
+    "exp": "LEL safety limits: The Lower Explosive Limit (LEL) is the minimum concentration of combustible gas in air that will ignite. Explosimeter (catalytic bead instrument) reads 0-100% LEL. Safe entry with ignition sources (tools, lights): below 10% LEL. Hot work (welding, grinding): below 1% LEL. NEVER use an explosimeter beyond 100% LEL scale - readings become unreliable in the explosive range and above. Annual calibration with certified span gas (typically 50% LEL n-pentane or methane mixture).",
     "cat": "Flame & Gas Detection",
     "id": "T06_608"
   },
   {
     "q": "How does an OWS (Oily Water Separator) monitor the 15 ppm discharge limit?",
-    "a": "A photocell sensor measures light transmission through the treated water — oil droplets scatter/absorb light; reduced transmission triggers automatic shut-off of the overboard valve",
+    "a": "A photocell sensor measures light transmission through the treated water - oil droplets scatter/absorb light; reduced transmission triggers automatic shut-off of the overboard valve",
     "opts": [
-      "A photocell sensor measures light transmission through the treated water — oil droplets scatter/absorb light; reduced transmission triggers automatic shut-off of the overboard valve",
+      "A photocell sensor measures light transmission through the treated water - oil droplets scatter/absorb light; reduced transmission triggers automatic shut-off of the overboard valve",
       "A conductivity probe measures the electrical resistance of the water",
       "A float sensor detects if oil has separated to the surface",
       "A temperature sensor detects heat generated by oil combustion"
@@ -4122,27 +4122,27 @@ window.loadQuizzes("T06_Sensors", [
   },
   {
     "q": "What is a magnetic pick-up sensor and what is its main advantage over other speed sensors?",
-    "a": "A permanent magnet with wound coil that generates pulses as ferrous gear teeth pass — its main advantage is that it is passive (no external power needed) and very reliable in harsh environments",
+    "a": "A permanent magnet with wound coil that generates pulses as ferrous gear teeth pass - its main advantage is that it is passive (no external power needed) and very reliable in harsh environments",
     "opts": [
-      "A permanent magnet with wound coil that generates pulses as ferrous gear teeth pass — its main advantage is that it is passive (no external power needed) and very reliable in harsh environments",
+      "A permanent magnet with wound coil that generates pulses as ferrous gear teeth pass - its main advantage is that it is passive (no external power needed) and very reliable in harsh environments",
       "An active Hall-effect sensor requiring 24V DC supply",
       "A capacitive sensor that detects non-metallic targets",
       "An ultrasonic sensor that measures shaft vibration"
     ],
-    "exp": "Magnetic pick-up (variable reluctance sensor): Permanent magnet + wound coil positioned close to a ferrous toothed wheel on the shaft. As each tooth passes, magnetic flux changes → EMF induced in coil → voltage pulses generated. Frequency proportional to RPM. Formula: RPM = (Hz × 60) / number of teeth. Key advantage: completely passive — generates its own signal, no power supply needed, works in high temperatures and vibration. Ship uses: crankshaft overspeed trip detection, engine governor control, propeller shaft RPM indication. Note: minimum speed requirement — pulses become too infrequent and weak at very low RPM.",
+    "exp": "Magnetic pick-up (variable reluctance sensor): Permanent magnet + wound coil positioned close to a ferrous toothed wheel on the shaft. As each tooth passes, magnetic flux changes → EMF induced in coil → voltage pulses generated. Frequency proportional to RPM. Formula: RPM = (Hz × 60) / number of teeth. Key advantage: completely passive - generates its own signal, no power supply needed, works in high temperatures and vibration. Ship uses: crankshaft overspeed trip detection, engine governor control, propeller shaft RPM indication. Note: minimum speed requirement - pulses become too infrequent and weak at very low RPM.",
     "cat": "Speed & Position Sensors",
     "id": "T06_610"
   },
   {
     "q": "Why must the salinometer use AC supply voltage, not DC?",
-    "a": "DC causes electrode polarisation — ions accumulate on electrode surfaces, building up a counter-EMF that distorts the resistance reading. AC alternates polarity, preventing ion buildup.",
+    "a": "DC causes electrode polarisation - ions accumulate on electrode surfaces, building up a counter-EMF that distorts the resistance reading. AC alternates polarity, preventing ion buildup.",
     "opts": [
-      "DC causes electrode polarisation — ions accumulate on electrode surfaces, building up a counter-EMF that distorts the resistance reading. AC alternates polarity, preventing ion buildup.",
+      "DC causes electrode polarisation - ions accumulate on electrode surfaces, building up a counter-EMF that distorts the resistance reading. AC alternates polarity, preventing ion buildup.",
       "AC is safer and prevents electric shock to operators",
       "DC would cause corrosion of the stainless steel electrodes",
       "AC provides higher sensitivity for very low ppm readings"
     ],
-    "exp": "Salinometer uses AC supply (typically low-frequency AC, 50-1000 Hz): When DC is applied across electrodes in saline water, electrolysis occurs — Na+ and Cl- ions migrate to the electrodes and form gas bubbles and deposits (polarisation). This builds a back-EMF that reduces the measured current, giving false low-salinity readings. AC alternates direction continuously, preventing net ion migration. The conductivity measurement therefore remains accurate and stable. The potentiometer provides a calibrated reference voltage so small supply voltage variations don't affect the ppm reading.",
+    "exp": "Salinometer uses AC supply (typically low-frequency AC, 50-1000 Hz): When DC is applied across electrodes in saline water, electrolysis occurs - Na+ and Cl- ions migrate to the electrodes and form gas bubbles and deposits (polarisation). This builds a back-EMF that reduces the measured current, giving false low-salinity readings. AC alternates direction continuously, preventing net ion migration. The conductivity measurement therefore remains accurate and stable. The potentiometer provides a calibrated reference voltage so small supply voltage variations don't affect the ppm reading.",
     "cat": "Analyzers",
     "id": "T06_611"
   },
@@ -4152,10 +4152,10 @@ window.loadQuizzes("T06_Sensors", [
     "opts": [
       "Check reading shows 20.9% in fresh air, perform a bump test with depleted/enriched atmosphere, verify sensor is within its service life, and confirm the battery is charged",
       "Only verify battery level and zero the meter",
-      "Calibrate with nitrogen only — no other checks needed",
+      "Calibrate with nitrogen only - no other checks needed",
       "Only visual inspection of the sensor tip is required"
     ],
-    "exp": "Pre-use checks for portable oxygen meter: (1) Fresh air reading: must show 20.9% O2 in clean atmosphere outside the space. (2) Bump test: briefly expose to a known concentration (O2-depleted or O2-enriched atmosphere) to confirm sensor responds. (3) Sensor life: electrochemical galvanic cells are consumed over 1-3 years — check expiry date. Do not use beyond expiry. (4) Battery: confirm sufficient charge for the duration of work. (5) Calibration record: valid calibration certificate within required period. Safe range for entry: 19.5% to 23.5% O2. Below 19.5% = oxygen deficient. Above 23.5% = oxygen enriched (fire risk).",
+    "exp": "Pre-use checks for portable oxygen meter: (1) Fresh air reading: must show 20.9% O2 in clean atmosphere outside the space. (2) Bump test: briefly expose to a known concentration (O2-depleted or O2-enriched atmosphere) to confirm sensor responds. (3) Sensor life: electrochemical galvanic cells are consumed over 1-3 years - check expiry date. Do not use beyond expiry. (4) Battery: confirm sufficient charge for the duration of work. (5) Calibration record: valid calibration certificate within required period. Safe range for entry: 19.5% to 23.5% O2. Below 19.5% = oxygen deficient. Above 23.5% = oxygen enriched (fire risk).",
     "cat": "Analyzers",
     "id": "T06_612"
   }

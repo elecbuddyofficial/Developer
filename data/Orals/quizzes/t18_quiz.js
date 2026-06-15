@@ -248,12 +248,12 @@ window.loadQuizzes("T18_ElecSurvey", [
   },
   {
     "q": "What is the minimum IR test voltage to use on sensitive electronics, control cards, and PCBs?",
-    "a": "50-100V DC only — standard 500V megger will destroy semiconductor junctions",
+    "a": "50-100V DC only - standard 500V megger will destroy semiconductor junctions",
     "opts": [
-      "1000V DC — to guarantee proper stress-testing of the insulation",
-      "500V DC — same as for 440V motors",
-      "No testing required — circuit boards are pre-tested at the factory and exempt from IR testing",
-      "50-100V DC only — standard 500V megger will destroy semiconductor junctions"
+      "1000V DC - to guarantee proper stress-testing of the insulation",
+      "500V DC - same as for 440V motors",
+      "No testing required - circuit boards are pre-tested at the factory and exempt from IR testing",
+      "50-100V DC only - standard 500V megger will destroy semiconductor junctions"
     ],
     "exp": "Standard 500V meggers instantly destroy semiconductor junctions on control boards. A dedicated low-voltage insulation tester set to 50-100V DC must be used for sensitive electronics.",
     "cat": "IR",
@@ -300,12 +300,12 @@ window.loadQuizzes("T18_ElecSurvey", [
   },
   {
     "q": "In HV switchboards, what is the primary purpose of a mechanical Castell key interlock system?",
-    "a": "To enforce a strict sequence of operations — ensuring an earth switch cannot be closed until the circuit breaker is racked out and locked",
+    "a": "To enforce a strict sequence of operations - ensuring an earth switch cannot be closed until the circuit breaker is racked out and locked",
     "opts": [
       "To lock the engine telegraph in the Stop position until the HV busbars are fully synchronized",
       "To encrypt the digital HART communication signals between the MSB and the Engine Control Room",
       "To bypass the Under-Voltage Trip coil manually during a blackout start",
-      "To enforce a strict sequence of operations — ensuring an earth switch cannot be closed until the circuit breaker is racked out and locked"
+      "To enforce a strict sequence of operations - ensuring an earth switch cannot be closed until the circuit breaker is racked out and locked"
     ],
     "exp": "Castell keys are trapped-key mechanical interlocks that force the operator to follow a safe sequence. A key from a racked-out VCB is physically required to unlock and close the associated earth switch.",
     "cat": "HV",
@@ -328,7 +328,7 @@ window.loadQuizzes("T18_ElecSurvey", [
     "q": "During shore connection, if the phase sequence indicator is broken, what is a safe alternative method to verify phase sequence?",
     "a": "Connect shore power at minimal load and briefly start a small 3-phase motor to observe if its direction of rotation is correct",
     "opts": [
-      "Check the voltage between Phase L1 and Neutral — if it is 220V, the sequence is correct",
+      "Check the voltage between Phase L1 and Neutral - if it is 220V, the sequence is correct",
       "Connect shore power at minimal load and briefly start a small 3-phase motor to observe if its direction of rotation is correct",
       "Measure the resistance between the three phase conductors using a standard multimeter",
       "Connect shore power fully and rely on the Main Engine's Wrong Way Alarm to warn of sequence errors"
@@ -378,12 +378,12 @@ window.loadQuizzes("T18_ElecSurvey", [
   },
   {
     "q": "Which specific SOLAS chapter mandates the implementation of the International Safety Management (ISM) Code?",
-    "a": "SOLAS Chapter IX — Management for the Safe Operation of Ships",
+    "a": "SOLAS Chapter IX - Management for the Safe Operation of Ships",
     "opts": [
-      "SOLAS Chapter IV — Radiocommunications",
-      "SOLAS Chapter II-1 — Construction, Structure, Subdivision and Stability",
-      "SOLAS Chapter IX — Management for the Safe Operation of Ships",
-      "SOLAS Chapter XI-2 — Special measures to enhance maritime security"
+      "SOLAS Chapter IV - Radiocommunications",
+      "SOLAS Chapter II-1 - Construction, Structure, Subdivision and Stability",
+      "SOLAS Chapter IX - Management for the Safe Operation of Ships",
+      "SOLAS Chapter XI-2 - Special measures to enhance maritime security"
     ],
     "exp": "SOLAS Chapter IX formally makes the ISM Code mandatory for commercial vessels, establishing safety management objectives and certification requirements.",
     "cat": "ISM",
@@ -432,7 +432,7 @@ window.loadQuizzes("T18_ElecSurvey", [
     "q": "After locking out and tagging a 6.6 kV circuit breaker, what is the mandatory minimum wait time before applying a HV detector or earth clamps?",
     "a": "5 minutes, to allow the lethal capacitive charge stored in HV cables and equipment to fully dissipate",
     "opts": [
-      "0 seconds — earth clamps must be applied instantly to short out any incoming faults",
+      "0 seconds - earth clamps must be applied instantly to short out any incoming faults",
       "30 seconds, to allow the under-voltage trip coil to reset",
       "5 minutes, to allow the lethal capacitive charge stored in HV cables and equipment to fully dissipate",
       "1 hour, to ensure the vacuum bottles in the breaker have completely cooled down"
@@ -1711,7 +1711,7 @@ window.loadQuizzes("T18_ElecSurvey", [
       "By physically overspeeding the engine in reverse",
       "By lifting the propeller out of the water"
     ],
-    "exp": "The simulation software tests the entire logic chain—from EMS to the fuel puncture valves—without risking engine damage.",
+    "exp": "The simulation software tests the entire logic chain-from EMS to the fuel puncture valves-without risking engine damage.",
     "cat": "Trips",
     "id": "T18E_132"
   },
@@ -2146,10 +2146,10 @@ window.loadQuizzes("T18_ElecSurvey", [
   },
   {
     "q": "How should loads be applied after successfully closing the shore supply breaker?",
-    "a": "Progressively — start with minimal load, verify voltage/frequency stability, then add heavy loads sequentially",
+    "a": "Progressively - start with minimal load, verify voltage/frequency stability, then add heavy loads sequentially",
     "opts": [
       "Wait 24 hours before turning on any pumps",
-      "Progressively — start with minimal load, verify voltage/frequency stability, then add heavy loads sequentially",
+      "Progressively - start with minimal load, verify voltage/frequency stability, then add heavy loads sequentially",
       "Only run 24V DC equipment",
       "Turn everything on at once to test capacity"
     ],

@@ -307,7 +307,7 @@ window.loadQuizzes("T15_FireFighting", [
       "Applying water to absorb heat",
       "Using dry powder to absorb free radicals"
     ],
-    "exp": "Starvation involves physically removing the fuel—such as closing a quick-closing valve on a ruptured diesel pipe, preventing more fuel from feeding the flames.",
+    "exp": "Starvation involves physically removing the fuel-such as closing a quick-closing valve on a ruptured diesel pipe, preventing more fuel from feeding the flames.",
     "cat": "CLASSES",
     "id": "T15F_024"
   },
@@ -4142,7 +4142,7 @@ window.loadQuizzes("T15_FireFighting", [
       "It is highly toxic and causes immediate death upon inhalation",
       "It freezes into solid blocks of ice when released at room temperature"
     ],
-    "exp": "Halon was the ultimate firefighting gas—clean, non-toxic, and incredibly effective at stopping fires chemically. Unfortunately, it destroys the Earth's ozone layer. It was phased out and replaced by environmentally friendlier clean agents like FM-200, Novec 1230, and high-pressure water mist.",
+    "exp": "Halon was the ultimate firefighting gas-clean, non-toxic, and incredibly effective at stopping fires chemically. Unfortunately, it destroys the Earth's ozone layer. It was phased out and replaced by environmentally friendlier clean agents like FM-200, Novec 1230, and high-pressure water mist.",
     "cat": "SAFETY_REG",
     "id": "T15F_320"
   }

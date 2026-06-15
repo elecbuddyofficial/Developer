@@ -2394,12 +2394,12 @@ window.loadQuizzes("T10_ICCP", [
   {
     "id": "T10I_185",
     "cat": "ICCP",
-    "q": "During electrochemical hull corrosion, iron at anodic areas dissolves as Fe²⁺. These ions then react with hydroxyl ions to form which compound — and what is this compound commonly called?",
+    "q": "During electrochemical hull corrosion, iron at anodic areas dissolves as Fe²⁺. These ions then react with hydroxyl ions to form which compound - and what is this compound commonly called?",
     "opts": [
-      "Iron oxide (Fe₂O₃) — magnetite",
-      "Ferrous hydroxide Fe(OH)₂, later oxidised to ferric hydroxide Fe(OH)₃ — rust",
-      "Iron sulphide FeS — scale",
-      "Lead peroxide PbO₂ — passivation layer"
+      "Iron oxide (Fe₂O₃) - magnetite",
+      "Ferrous hydroxide Fe(OH)₂, later oxidised to ferric hydroxide Fe(OH)₃ - rust",
+      "Iron sulphide FeS - scale",
+      "Lead peroxide PbO₂ - passivation layer"
     ],
     "a": 1,
     "exp": "Fe²⁺ ions + OH⁻ → Fe(OH)₂ (ferrous hydroxide). Dissolved O₂ further oxidises this to Fe(OH)₃ (ferric hydroxide), which is the familiar brown rust. Cathodic protection prevents Fe²⁺ formation entirely by supplying electrons so iron atoms cannot ionise."
@@ -2409,13 +2409,13 @@ window.loadQuizzes("T10_ICCP", [
     "cat": "ICCP",
     "q": "In an ICCP system using Lead (Pb) anodes, the Lead surface undergoes a chemical change during operation. What does it convert to, and why is this beneficial?",
     "opts": [
-      "Lead chloride PbCl₂ — increases electrical resistance and reduces stray current",
-      "Lead sulphate PbSO₄ — insulating layer that controls current output",
-      "Lead peroxide PbO₂ — hard, conductive coating that stops the Lead from dissolving",
-      "Lead carbonate PbCO₃ — sacrificial coating protecting the base Lead"
+      "Lead chloride PbCl₂ - increases electrical resistance and reduces stray current",
+      "Lead sulphate PbSO₄ - insulating layer that controls current output",
+      "Lead peroxide PbO₂ - hard, conductive coating that stops the Lead from dissolving",
+      "Lead carbonate PbCO₃ - sacrificial coating protecting the base Lead"
     ],
     "a": 2,
-    "exp": "OH⁻ ions arriving at the Lead anode oxidise its surface: Pb + 2OH⁻ → PbO₂ + 2H⁺ + 2e⁻. Lead peroxide is hard, conductive, and does not dissolve in seawater — so the anode retains its shape and continues to function. This is why Lead was the preferred ICCP anode material in older systems."
+    "exp": "OH⁻ ions arriving at the Lead anode oxidise its surface: Pb + 2OH⁻ → PbO₂ + 2H⁺ + 2e⁻. Lead peroxide is hard, conductive, and does not dissolve in seawater - so the anode retains its shape and continues to function. This is why Lead was the preferred ICCP anode material in older systems."
   },
   {
     "id": "T10I_187",
@@ -2423,7 +2423,7 @@ window.loadQuizzes("T10_ICCP", [
     "q": "What are the consequences if both reference electrodes in an ICCP system fail simultaneously?",
     "opts": [
       "The system automatically reduces output to zero to prevent damage",
-      "No feedback signal — controller cannot regulate; system either over-protects (paint flaking, H₂ evolution) or under-protects (corrosion continues)",
+      "No feedback signal - controller cannot regulate; system either over-protects (paint flaking, H₂ evolution) or under-protects (corrosion continues)",
       "The system switches to sacrificial anode mode using the hull as anode",
       "Controller locks at the last valid setpoint and maintains fixed output indefinitely"
     ],
@@ -2441,17 +2441,17 @@ window.loadQuizzes("T10_ICCP", [
       "Lead is lighter and easier to flush-mount in the hull without structural reinforcement"
     ],
     "a": 1,
-    "exp": "Lead (Pb) anodes were preferred because: (1) significantly cheaper than platinised titanium, (2) the Pb surface converts to PbO₂ which neither dissolves nor reacts further — anode maintains shape for years, (3) unaffected by chemical reactions occurring at the anode. Platinised Titanium is more efficient per unit area but expensive. Modern systems use MMO (Mixed Metal Oxide) on titanium substrate."
+    "exp": "Lead (Pb) anodes were preferred because: (1) significantly cheaper than platinised titanium, (2) the Pb surface converts to PbO₂ which neither dissolves nor reacts further - anode maintains shape for years, (3) unaffected by chemical reactions occurring at the anode. Platinised Titanium is more efficient per unit area but expensive. Modern systems use MMO (Mixed Metal Oxide) on titanium substrate."
   },
   {
     "id": "T10I_189",
     "cat": "ICCP",
     "q": "Does the ICCP protection current affect the operation of the Marine Growth Prevention System (MGPS) fitted in the same vessel?",
     "opts": [
-      "Yes — ICCP current raises hull potential which augments the MGPS copper ion output",
-      "Yes — excess ICCP current can electrolyse the MGPS copper anodes prematurely, reducing their life",
-      "No — MGPS uses its own dedicated electrolysis circuit in the sea chests; it is entirely independent of ICCP",
-      "No — because ICCP is switched off whenever MGPS is active to prevent interference"
+      "Yes - ICCP current raises hull potential which augments the MGPS copper ion output",
+      "Yes - excess ICCP current can electrolyse the MGPS copper anodes prematurely, reducing their life",
+      "No - MGPS uses its own dedicated electrolysis circuit in the sea chests; it is entirely independent of ICCP",
+      "No - because ICCP is switched off whenever MGPS is active to prevent interference"
     ],
     "a": 2,
     "exp": "MGPS and ICCP are fully independent systems. MGPS uses a separate low-current circuit (1–2 A) with copper and aluminium anodes inside the sea chests to generate Cu²⁺ ions (<2 ppb) and an aluminium oxide anti-corrosive layer. ICCP protects the external hull using impressed DC and has no electrical connection to the MGPS circuit. Both can run simultaneously."
@@ -2467,7 +2467,7 @@ window.loadQuizzes("T10_ICCP", [
       "The process of aligning shaft centreline with the earthing brush assembly to within 0.1 mm tolerance"
     ],
     "a": 1,
-    "exp": "Bedding is the run-in process where the shaft earthing device (carbon brush pressing on a slip ring, or silver band) makes proper metallic contact with the rotating shaft surface. During initial operation, the contact surfaces micro-conform to each other, eliminating high-resistance air gaps. Until bedding is complete, earth continuity is unreliable — meaning the oil-film insulation in the stern tube bearing may allow shaft voltage build-up and spark erosion of bearing surfaces."
+    "exp": "Bedding is the run-in process where the shaft earthing device (carbon brush pressing on a slip ring, or silver band) makes proper metallic contact with the rotating shaft surface. During initial operation, the contact surfaces micro-conform to each other, eliminating high-resistance air gaps. Until bedding is complete, earth continuity is unreliable - meaning the oil-film insulation in the stern tube bearing may allow shaft voltage build-up and spark erosion of bearing surfaces."
   }
 
 ]);

@@ -2891,7 +2891,7 @@ window.loadQuizzes("T11_PowerFactor", [
     "q": "What is the consequence of insufficient reactive power (kVAR) in a ship's electrical network?",
     "opts": [
       "Generator overheats due to excess real power demand",
-      "Voltage collapse — inductive loads cannot maintain fields, voltage drops, cascade failure and blackout",
+      "Voltage collapse - inductive loads cannot maintain fields, voltage drops, cascade failure and blackout",
       "Frequency drops below 60 Hz, causing motor overspeed",
       "Power factor rises above unity, causing capacitive overcorrection"
     ],
@@ -2901,15 +2901,15 @@ window.loadQuizzes("T11_PowerFactor", [
   {
     "id": "T11P_224",
     "cat": "REACTIVE_POWER",
-    "q": "A surveyor asks: 'Where does reactive power go — is it lost as heat?' What is the correct answer?",
+    "q": "A surveyor asks: 'Where does reactive power go - is it lost as heat?' What is the correct answer?",
     "opts": [
-      "Yes — reactive power is dissipated as heat in the stator windings",
+      "Yes - reactive power is dissipated as heat in the stator windings",
       "It is stored permanently in the motor shaft as kinetic energy",
-      "No — it oscillates between source and load at twice supply frequency, sustaining the motor's magnetic field, and is returned to the source each half cycle",
+      "No - it oscillates between source and load at twice supply frequency, sustaining the motor's magnetic field, and is returned to the source each half cycle",
       "It is consumed by the AVR to maintain terminal voltage at the generator"
     ],
     "a": 2,
-    "exp": "Reactive power is NOT lost. It oscillates between the generator and inductive load at 2× supply frequency. In an induction motor, kVAR sustains the rotating magnetic field that produces torque — without kVAR there is no field and no torque. In a transformer, kVAR maintains core magnetisation. It is returned to the source every half cycle — never dissipated."
+    "exp": "Reactive power is NOT lost. It oscillates between the generator and inductive load at 2× supply frequency. In an induction motor, kVAR sustains the rotating magnetic field that produces torque - without kVAR there is no field and no torque. In a transformer, kVAR maintains core magnetisation. It is returned to the source every half cycle - never dissipated."
   },
   {
     "id": "T11P_225",
@@ -2930,12 +2930,12 @@ window.loadQuizzes("T11_PowerFactor", [
     "q": "What is a synchronous condenser and how does it improve power factor?",
     "opts": [
       "A large capacitor bank connected in delta to neutralise inductive current in 3-phase systems",
-      "A synchronous motor running on no-load with adjustable field excitation — over-excitation generates leading kVAR that cancels lagging kVAR from inductive loads",
+      "A synchronous motor running on no-load with adjustable field excitation - over-excitation generates leading kVAR that cancels lagging kVAR from inductive loads",
       "A variable-speed induction motor that adjusts its slip to control reactive power output",
       "A static VAR compensator using thyristor-switched capacitors for millisecond response"
     ],
     "a": 1,
-    "exp": "A synchronous condenser is a synchronous motor with its shaft disconnected from any mechanical load — it spins freely. Its field excitation is controlled by an AVR. When over-excited it draws leading current (generates kVAR) → neutralises lagging kVAR from motors → PF improves. When under-excited it absorbs kVAR. Advantage over capacitor banks: continuously variable and also provides inertia to the network."
+    "exp": "A synchronous condenser is a synchronous motor with its shaft disconnected from any mechanical load - it spins freely. Its field excitation is controlled by an AVR. When over-excited it draws leading current (generates kVAR) → neutralises lagging kVAR from motors → PF improves. When under-excited it absorbs kVAR. Advantage over capacitor banks: continuously variable and also provides inertia to the network."
   },
   {
     "id": "T11P_227",
@@ -2948,7 +2948,7 @@ window.loadQuizzes("T11_PowerFactor", [
       "Both motors are self-starting but synchronous motor requires additional starting resistors while induction motor uses star-delta"
     ],
     "a": 1,
-    "exp": "Synchronous motor: speed = 120f/P (constant regardless of load), can operate at leading/unity/lagging PF by adjusting DC field excitation, NOT self-starting (needs auxiliary starting), requires DC excitation on rotor. Induction motor: speed drops with load (slip increases), always lagging PF (absorbs kVAR), self-starting (squirrel cage), no DC excitation needed. On ships, synchronous motors are rare — induction motors dominate all auxiliary machinery."
+    "exp": "Synchronous motor: speed = 120f/P (constant regardless of load), can operate at leading/unity/lagging PF by adjusting DC field excitation, NOT self-starting (needs auxiliary starting), requires DC excitation on rotor. Induction motor: speed drops with load (slip increases), always lagging PF (absorbs kVAR), self-starting (squirrel cage), no DC excitation needed. On ships, synchronous motors are rare - induction motors dominate all auxiliary machinery."
   },
   {
     "id": "T11P_228",
@@ -2961,7 +2961,7 @@ window.loadQuizzes("T11_PowerFactor", [
       "The active power component decreases, reducing fuel consumption of the prime mover"
     ],
     "a": 1,
-    "exp": "At PF close to 1.0, apparent current ≈ active current for the same kW load. Lower current means: (1) I²R copper losses reduced — less heat in cables and windings; (2) voltage drop across cable impedance reduced — better voltage regulation at loads; (3) generator hits kW (engine) limit before kVA (current) limit — full engine capacity utilised. Example: 600 kW at PF 0.6 draws 1000A; at PF 1.0 the same 600 kW draws only 600A."
+    "exp": "At PF close to 1.0, apparent current ≈ active current for the same kW load. Lower current means: (1) I²R copper losses reduced - less heat in cables and windings; (2) voltage drop across cable impedance reduced - better voltage regulation at loads; (3) generator hits kW (engine) limit before kVA (current) limit - full engine capacity utilised. Example: 600 kW at PF 0.6 draws 1000A; at PF 1.0 the same 600 kW draws only 600A."
   }
 
 ]);

@@ -2933,7 +2933,7 @@ window.loadQuizzes("T22_Practical", [
       "Multimeter must be set to Volts AC",
       "The circuit breaker must be forced closed"
     ],
-    "exp": "A continuity meter (ohmmeter) will be destroyed—and the user shocked—if applied to a live circuit.",
+    "exp": "A continuity meter (ohmmeter) will be destroyed-and the user shocked-if applied to a live circuit.",
     "cat": "DIAG",
     "id": "T22_226"
   },

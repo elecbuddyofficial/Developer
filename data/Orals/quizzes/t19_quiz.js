@@ -1,12 +1,12 @@
 window.loadQuizzes("T19_Tanker", [
   {
     "q": "IEC 60079 Zone 0 definition and permitted equipment?",
-    "a": "Continuous flammable atmosphere (e.g. inside cargo tanks) — only Ex ia (intrinsically safe) permitted",
+    "a": "Continuous flammable atmosphere (e.g. inside cargo tanks) - only Ex ia (intrinsically safe) permitted",
     "opts": [
-      "Likely during normal operation — Ex d and Ex e permitted",
-      "Unlikely during abnormal operation — Ex n permitted",
-      "Outside cargo hold — Ex e only permitted",
-      "Continuous flammable atmosphere (e.g. inside cargo tanks) — only Ex ia (intrinsically safe) permitted"
+      "Likely during normal operation - Ex d and Ex e permitted",
+      "Unlikely during abnormal operation - Ex n permitted",
+      "Outside cargo hold - Ex e only permitted",
+      "Continuous flammable atmosphere (e.g. inside cargo tanks) - only Ex ia (intrinsically safe) permitted"
     ],
     "exp": "Zone 0 = continuous or long-period flammable atmosphere (inside tanks, void spaces). Only Ex ia = highest safety level. Zone 1 = likely during normal ops (pump rooms, manifold) = Ex d, Ex e, Ex ia. Zone 2 = unlikely during abnormal ops = Ex n also permitted.",
     "cat": "ZONES",
@@ -18,7 +18,7 @@ window.loadQuizzes("T19_Tanker", [
     "opts": [
       "Limits circuit energy below ignition threshold (that is Ex ia)",
       "Maintains inert gas overpressure to keep vapour out (that is Ex p)",
-      "Hermetically sealed vacuum — no oxygen inside",
+      "Hermetically sealed vacuum - no oxygen inside",
       "Contains any internal explosion; flame paths cool escaping gases below ignition temperature of surrounding atmosphere"
     ],
     "exp": "Ex d does NOT prevent vapour from entering. Instead: heavy cast enclosure contains any internal explosion. Machined gaps (flame paths) between enclosure parts cool escaping combustion gases below the auto-ignition temperature of the surrounding atmosphere. Never used in Zone 0.",
@@ -27,12 +27,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "Defining characteristic of Ex ia (Intrinsically Safe) equipment for tanker instrumentation?",
-    "a": "Zener barriers limit circuit energy below ignition threshold — even under fault conditions cannot ignite surrounding vapour",
+    "a": "Zener barriers limit circuit energy below ignition threshold - even under fault conditions cannot ignite surrounding vapour",
     "opts": [
       "Thick cast iron enclosure for blast containment (that is Ex d)",
       "Operates on compressed air instead of electricity (that is Ex p purging)",
       "Auto-sprays halon gas if spark detected",
-      "Zener barriers limit circuit energy below ignition threshold — even under fault conditions cannot ignite surrounding vapour"
+      "Zener barriers limit circuit energy below ignition threshold - even under fault conditions cannot ignite surrounding vapour"
     ],
     "exp": "Ex ia = highest intrinsic safety level. Zener barriers/galvanic isolators in safe area limit voltage and current to field device. Even two simultaneous faults cannot produce an incendive spark. Used for sensors and instruments in Zone 0 and Zone 1. Never megger Ex ia circuits.",
     "cat": "EX_EQUIPMENT",
@@ -40,12 +40,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "Why connect ship-to-shore bonding cable before cargo transfer on tanker?",
-    "a": "Equalises electrical potential between ship and terminal — prevents incendive static spark discharge during initial cargo flow",
+    "a": "Equalises electrical potential between ship and terminal - prevents incendive static spark discharge during initial cargo flow",
     "opts": [
       "Provides shore power to cargo pumps",
       "Creates lightning strike path to shore earthing grid",
       "Grounds ICCP to prevent interference with terminal cathodic protection",
-      "Equalises electrical potential between ship and terminal — prevents incendive static spark discharge during initial cargo flow"
+      "Equalises electrical potential between ship and terminal - prevents incendive static spark discharge during initial cargo flow"
     ],
     "exp": "Fluid movement generates static electricity. Before connecting cargo hose flanges, bond cable brings ship and terminal to same potential. Without bonding, approaching flange (creating a closing air gap) = capacitor discharging = incendive spark near flammable cargo vapour. Connect bond FIRST, disconnect LAST.",
     "cat": "BONDING",
@@ -53,12 +53,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "MGPS working principle and copper ion concentration?",
-    "a": "Electrolytically dissolves copper anodes releasing Cu2+ ions at ~2 ppb — toxic to marine larvae preventing attachment",
+    "a": "Electrolytically dissolves copper anodes releasing Cu2+ ions at ~2 ppb - toxic to marine larvae preventing attachment",
     "opts": [
       "High-voltage AC pulses electrocute incoming barnacles",
       "Injects chlorine gas at 15 ppm into cooling pipes",
       "Dissolves zinc anodes creating inert gas barrier",
-      "Electrolytically dissolves copper anodes releasing Cu2+ ions at ~2 ppb — toxic to marine larvae preventing attachment"
+      "Electrolytically dissolves copper anodes releasing Cu2+ ions at ~2 ppb - toxic to marine larvae preventing attachment"
     ],
     "exp": "MGPS low DC current (0.5-4A at 0.5-4V) through copper anodes in sea chest. Cu dissolves, releasing Cu2+ at ~2 ppb. At this concentration: lethal to barnacle larvae, mussel larvae, algae spores preventing attachment in sea chests and cooling pipes. Aluminium anodes paired with copper form anti-fouling coating on pipe walls.",
     "cat": "MGPS",
@@ -66,10 +66,10 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "According to IEC 60079-10-1, what defines a Zone 0 hazardous area on a tanker?",
-    "a": "An area where an explosive gas atmosphere is present continuously, for long periods, or frequently — e.g. inside cargo tanks",
+    "a": "An area where an explosive gas atmosphere is present continuously, for long periods, or frequently - e.g. inside cargo tanks",
     "opts": [
       "Any area where a secondary explosion hazard exists but is unlikely during normal operation",
-      "An area where an explosive gas atmosphere is present continuously, for long periods, or frequently — e.g. inside cargo tanks",
+      "An area where an explosive gas atmosphere is present continuously, for long periods, or frequently - e.g. inside cargo tanks",
       "An area where explosive gas is likely only during maintenance operations",
       "An area within 3 metres of cargo vents where gas may occasionally be present"
     ],
@@ -79,12 +79,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What hazardous area classification applies to a tanker's cargo pump room and areas within 3 metres of cargo vents?",
-    "a": "Zone 1 — explosive gas atmosphere likely to occur in normal operation occasionally",
+    "a": "Zone 1 - explosive gas atmosphere likely to occur in normal operation occasionally",
     "opts": [
-      "Unclassified — pump rooms are treated as safe spaces when ventilation is running",
-      "Zone 1 — explosive gas atmosphere likely to occur in normal operation occasionally",
-      "Zone 2 — explosive gas atmosphere unlikely in normal operation",
-      "Zone 0 — explosive gas atmosphere present continuously"
+      "Unclassified - pump rooms are treated as safe spaces when ventilation is running",
+      "Zone 1 - explosive gas atmosphere likely to occur in normal operation occasionally",
+      "Zone 2 - explosive gas atmosphere unlikely in normal operation",
+      "Zone 0 - explosive gas atmosphere present continuously"
     ],
     "exp": "Zone 1 applies to pump rooms, cargo manifolds, and within 3 m of tank openings. Accepts Ex d (flameproof) or Ex e (increased safety) equipment. ETO must verify all equipment carries correct Ex certification.",
     "cat": "HazZone",
@@ -92,12 +92,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What type of Ex protection is mandated for sensors and transmitters installed in Zone 0 cargo tank spaces?",
-    "a": "Ex ia — Intrinsically Safe (circuit energy limited below ignition threshold)",
+    "a": "Ex ia - Intrinsically Safe (circuit energy limited below ignition threshold)",
     "opts": [
-      "Ex ia — Intrinsically Safe (circuit energy limited below ignition threshold)",
-      "Ex e — Increased Safety (no sparking parts)",
-      "Ex n — Non-sparking (Zone 2 only)",
-      "Ex d — Flameproof enclosure"
+      "Ex ia - Intrinsically Safe (circuit energy limited below ignition threshold)",
+      "Ex e - Increased Safety (no sparking parts)",
+      "Ex n - Non-sparking (Zone 2 only)",
+      "Ex d - Flameproof enclosure"
     ],
     "exp": "Zone 0 requires Ex ia because only intrinsically safe circuits guarantee that electrical energy in the hazardous zone is always too low to cause ignition even under two-fault conditions.",
     "cat": "HazZone",
@@ -107,7 +107,7 @@ window.loadQuizzes("T19_Tanker", [
     "q": "Why is it absolutely prohibited to use a megger to test insulation resistance on an Ex ia intrinsically safe circuit?",
     "a": "The megger's high DC voltage (500-1000V) would inject lethal ignition energy into the Zone 0 circuit, potentially causing an explosion",
     "opts": [
-      "There is no prohibition — standard 500V megger testing is routine on Ex ia circuits",
+      "There is no prohibition - standard 500V megger testing is routine on Ex ia circuits",
       "The megger would permanently magnetize the Zener barriers, rendering them useless",
       "The megger's high DC voltage (500-1000V) would inject lethal ignition energy into the Zone 0 circuit, potentially causing an explosion",
       "The high voltage would cause the Zener barriers to blow their fuses, disconnecting the sensor loop"
@@ -118,14 +118,14 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What is the core physical working principle of an Ex d (flameproof) enclosure?",
-    "a": "The enclosure withstands an internal explosion without igniting the outside atmosphere — achieved via precision flame-path gaps around mating surfaces",
+    "a": "The enclosure withstands an internal explosion without igniting the outside atmosphere - achieved via precision flame-path gaps around mating surfaces",
     "opts": [
-      "The enclosure withstands an internal explosion without igniting the outside atmosphere — achieved via precision flame-path gaps around mating surfaces",
+      "The enclosure withstands an internal explosion without igniting the outside atmosphere - achieved via precision flame-path gaps around mating surfaces",
       "The enclosure is filled with pressurized inert gas to prevent explosive gas from entering",
       "The enclosure is hermetically sealed so no gas can enter and reach the electrical components inside",
       "The enclosure is constructed from non-sparking aluminium alloy that cannot initiate an explosive reaction"
     ],
-    "exp": "Ex d does NOT prevent gas entry — gas can enter the enclosure. If internal ignition occurs, the flame-path gaps (machined to IEC tolerances) cool the hot gases before they escape, preventing external ignition.",
+    "exp": "Ex d does NOT prevent gas entry - gas can enter the enclosure. If internal ignition occurs, the flame-path gaps (machined to IEC tolerances) cool the hot gases before they escape, preventing external ignition.",
     "cat": "HazZone",
     "id": "T19T_010"
   },
@@ -133,8 +133,8 @@ window.loadQuizzes("T19_Tanker", [
     "q": "What positive pressure must the accommodation HVAC system maintain relative to the outside atmosphere on a tanker?",
     "a": "50 Pa (0.5 mbar) positive pressure to prevent hydrocarbon vapours from entering living spaces",
     "opts": [
-      "5 Pa (0.05 mbar) — just enough to prevent natural convection-driven vapour migration",
-      "No pressure difference is required — natural ventilation is sufficient on modern tankers",
+      "5 Pa (0.05 mbar) - just enough to prevent natural convection-driven vapour migration",
+      "No pressure difference is required - natural ventilation is sufficient on modern tankers",
       "50 Pa (0.5 mbar) positive pressure to prevent hydrocarbon vapours from entering living spaces",
       "500 Pa (5 mbar) to create a strong enough barrier against cargo tank vapour concentrations"
     ],
@@ -144,12 +144,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "How long may an accommodation air lock door remain open before the alarm activates and automatic safety responses are triggered?",
-    "a": "60 seconds — after which audible/visual alarms activate on the bridge and ECR, and HVAC fans may auto-trip",
+    "a": "60 seconds - after which audible/visual alarms activate on the bridge and ECR, and HVAC fans may auto-trip",
     "opts": [
-      "5 seconds — the door must be closed almost immediately to maintain pressurisation",
-      "There is no time limit — the double-door interlock alone provides sufficient protection",
-      "30 minutes — long enough for cargo operations crew to pass equipment through",
-      "60 seconds — after which audible/visual alarms activate on the bridge and ECR, and HVAC fans may auto-trip"
+      "5 seconds - the door must be closed almost immediately to maintain pressurisation",
+      "There is no time limit - the double-door interlock alone provides sufficient protection",
+      "30 minutes - long enough for cargo operations crew to pass equipment through",
+      "60 seconds - after which audible/visual alarms activate on the bridge and ECR, and HVAC fans may auto-trip"
     ],
     "exp": "If a door is held open more than 60 seconds, the positive pressure drops, triggering alarms. Extended opening can trigger auto-trip of HVAC intake fans and closure of fire dampers to isolate living spaces.",
     "cat": "HazZone",
@@ -170,12 +170,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What scientific principle does a zirconia ceramic oxygen analyser use to measure oxygen concentration in inert gas?",
-    "a": "The Nernst equation — oxygen ions migrate through a heated zirconia crystal (600-700 deg C) creating a voltage proportional to the O2 concentration ratio",
+    "a": "The Nernst equation - oxygen ions migrate through a heated zirconia crystal (600-700 deg C) creating a voltage proportional to the O2 concentration ratio",
     "opts": [
-      "Paramagnetic attraction — oxygen is drawn into a magnetic field deflecting a dumbbell indicator proportionally",
-      "Infrared absorption — O2 molecules absorb infrared light at a specific wavelength reducing detector intensity",
-      "The Nernst equation — oxygen ions migrate through a heated zirconia crystal (600-700 deg C) creating a voltage proportional to the O2 concentration ratio",
-      "Catalytic oxidation — oxygen burns a platinum filament, changing its resistance in proportion to O2 concentration"
+      "Paramagnetic attraction - oxygen is drawn into a magnetic field deflecting a dumbbell indicator proportionally",
+      "Infrared absorption - O2 molecules absorb infrared light at a specific wavelength reducing detector intensity",
+      "The Nernst equation - oxygen ions migrate through a heated zirconia crystal (600-700 deg C) creating a voltage proportional to the O2 concentration ratio",
+      "Catalytic oxidation - oxygen burns a platinum filament, changing its resistance in proportion to O2 concentration"
     ],
     "exp": "Zirconia sensors heated to 600-700 degrees C become selective oxygen ion conductors. The EMF generated by the Nernst equation is directly related to the ratio of O2 in the reference air versus the sample gas.",
     "cat": "InertGas",
@@ -183,24 +183,24 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What is the typical operational lifespan of an electrochemical galvanic fuel cell oxygen sensor used in portable gas analysers?",
-    "a": "1-2 years — the lead anode is gradually consumed by oxidation and must be replaced before full depletion",
+    "a": "1-2 years - the lead anode is gradually consumed by oxidation and must be replaced before full depletion",
     "opts": [
-      "1-2 years — the lead anode is gradually consumed by oxidation and must be replaced before full depletion",
-      "5-7 years — replacement is only required when the cell's output voltage drops below 0.1V",
-      "10-15 years — electrochemical cells have virtually unlimited lifespan if kept moist",
-      "The cell is permanent — only the electrolyte gel requires replenishment annually"
+      "1-2 years - the lead anode is gradually consumed by oxidation and must be replaced before full depletion",
+      "5-7 years - replacement is only required when the cell's output voltage drops below 0.1V",
+      "10-15 years - electrochemical cells have virtually unlimited lifespan if kept moist",
+      "The cell is permanent - only the electrolyte gel requires replenishment annually"
     ],
-    "exp": "The electrochemical O2 cell uses a gold cathode and consumable lead anode. Lead is oxidized to PbO during O2 reduction, depleting the anode over 1-2 years. Expired cells give false low O2 readings — highly dangerous.",
+    "exp": "The electrochemical O2 cell uses a gold cathode and consumable lead anode. Lead is oxidized to PbO during O2 reduction, depleting the anode over 1-2 years. Expired cells give false low O2 readings - highly dangerous.",
     "cat": "InertGas",
     "id": "T19T_015"
   },
   {
     "q": "What is the MOST critical immediate consequence if the inert gas system delivers gas with more than 5% O2 to a cargo tank during discharge?",
-    "a": "The tank atmosphere may enter the explosive range — if a static discharge or spark occurs, a catastrophic tank explosion can result",
+    "a": "The tank atmosphere may enter the explosive range - if a static discharge or spark occurs, a catastrophic tank explosion can result",
     "opts": [
       "The cargo pump efficiency is reduced by up to 15% due to the increased gas resistance in the suction line",
       "MARPOL Annex I will be violated, resulting in a Port State Control deficiency",
-      "The tank atmosphere may enter the explosive range — if a static discharge or spark occurs, a catastrophic tank explosion can result",
+      "The tank atmosphere may enter the explosive range - if a static discharge or spark occurs, a catastrophic tank explosion can result",
       "The inert gas becomes slightly corrosive, causing minor staining of the tank coating"
     ],
     "exp": "When O2 exceeds 5% in the presence of residual hydrocarbon vapours, the tank atmosphere can reach the flammable range (LEL-UEL). A single static discharge during stripping operations can then cause a catastrophic explosion.",
@@ -211,9 +211,9 @@ window.loadQuizzes("T19_Tanker", [
     "q": "Which of the following is a mandatory starting interlock on a bow thruster motor?",
     "a": "All 7 interlocks must be satisfied: hydraulic oil pressure, lub oil pressure, bearing temperature, shaft seal confirmation, local/remote selector, guard removed alarm, and zero-pitch confirmation",
     "opts": [
-      "A single interlock is sufficient — the bridge remote/local changeover switch",
+      "A single interlock is sufficient - the bridge remote/local changeover switch",
       "All 7 interlocks must be satisfied: hydraulic oil pressure, lub oil pressure, bearing temperature, shaft seal confirmation, local/remote selector, guard removed alarm, and zero-pitch confirmation",
-      "Only two interlocks are required by SOLAS — low oil pressure and shaft seal status",
+      "Only two interlocks are required by SOLAS - low oil pressure and shaft seal status",
       "Bow thrusters have no starting interlocks because they are considered non-essential machinery"
     ],
     "exp": "Bow thruster motors require all 7 interlocks satisfied before the main contactor can close. Zero-pitch confirmation prevents full-load starting torque being applied to the motor before the CPP blades are in the feathered position.",
@@ -222,24 +222,24 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What causes the zero-pitch hunting fault in a Controllable Pitch Propeller (CPP) bow thruster, and how does the ETO correct it?",
-    "a": "Slippage of the zero-pitch feedback potentiometer dead-band inside the control drive card — corrected by recalibrating the potentiometer dead-band setting",
+    "a": "Slippage of the zero-pitch feedback potentiometer dead-band inside the control drive card - corrected by recalibrating the potentiometer dead-band setting",
     "opts": [
       "Worn carbon brushes in the DC excitation circuit causing armature voltage fluctuations that force the blades to oscillate",
-      "Slippage of the zero-pitch feedback potentiometer dead-band inside the control drive card — corrected by recalibrating the potentiometer dead-band setting",
+      "Slippage of the zero-pitch feedback potentiometer dead-band inside the control drive card - corrected by recalibrating the potentiometer dead-band setting",
       "Air trapped in the hydraulic servo cylinder preventing stable blade positioning",
       "Contaminated hydraulic oil in the CPP hub causing pressure surges that physically push blades away from zero pitch"
     ],
-    "exp": "At zero pitch the CPP blades are flat, drawing minimal current. If the feedback potentiometer dead-band is miscalibrated, the drive hunts between slight positive and negative pitch — causing the main generator to oscillate in reactive current output.",
+    "exp": "At zero pitch the CPP blades are flat, drawing minimal current. If the feedback potentiometer dead-band is miscalibrated, the drive hunts between slight positive and negative pitch - causing the main generator to oscillate in reactive current output.",
     "cat": "BowThruster",
     "id": "T19T_018"
   },
   {
-    "q": "Why is introducing any metallic object — such as a sounding tape or UTI probe — into a cargo tank strictly prohibited for at least 30 minutes after loading stops?",
-    "a": "Electrostatic charge accumulated during cargo loading takes up to 30 minutes to dissipate via the cargo fluid's dielectric relaxation time constant — a metallic object bridges the gap and causes a high-energy ignition spark",
+    "q": "Why is introducing any metallic object - such as a sounding tape or UTI probe - into a cargo tank strictly prohibited for at least 30 minutes after loading stops?",
+    "a": "Electrostatic charge accumulated during cargo loading takes up to 30 minutes to dissipate via the cargo fluid's dielectric relaxation time constant - a metallic object bridges the gap and causes a high-energy ignition spark",
     "opts": [
-      "Vapour pressure in the tank is at maximum immediately after loading — any disturbance through the ullage hatch releases a toxic gas cloud",
-      "Electrostatic charge accumulated during cargo loading takes up to 30 minutes to dissipate via the cargo fluid's dielectric relaxation time constant — a metallic object bridges the gap and causes a high-energy ignition spark",
-      "The cargo fluid temperature is still rising after loading stops — a metallic object could cause thermal shock cracking of the tank coating",
+      "Vapour pressure in the tank is at maximum immediately after loading - any disturbance through the ullage hatch releases a toxic gas cloud",
+      "Electrostatic charge accumulated during cargo loading takes up to 30 minutes to dissipate via the cargo fluid's dielectric relaxation time constant - a metallic object bridges the gap and causes a high-energy ignition spark",
+      "The cargo fluid temperature is still rising after loading stops - a metallic object could cause thermal shock cracking of the tank coating",
       "The 30-minute rule applies only to ship-shore bonding cables, not to gauging equipment"
     ],
     "exp": "Non-conductive distillate cargoes build up streaming current charge during pumping. The charge decays exponentially with a time constant that can be minutes. A grounded probe inserted before decay creates a spark that can detonate residual explosive vapours.",
@@ -263,10 +263,10 @@ window.loadQuizzes("T19_Tanker", [
     "q": "What is the minimum required ventilation rate for a tanker cargo pump room to comply with SOLAS Chapter II-2?",
     "a": "At least 20 air changes per hour, confirmed by a continuous mechanical exhaust fan with airflow monitoring",
     "opts": [
-      "6 air changes per hour — the same standard as a battery room on a conventional ship",
+      "6 air changes per hour - the same standard as a battery room on a conventional ship",
       "At least 20 air changes per hour, confirmed by a continuous mechanical exhaust fan with airflow monitoring",
       "Ventilation is optional in pump rooms if fixed gas detection monitors are installed and alarmed",
-      "2 air changes per hour — sufficient to prevent accumulation of heavier-than-air vapours near the bilge"
+      "2 air changes per hour - sufficient to prevent accumulation of heavier-than-air vapours near the bilge"
     ],
     "exp": "SOLAS mandates minimum 20 air changes per hour in pump rooms due to the continuous risk of cargo vapour accumulation from seal leaks. The fan must run continuously during pump room operations.",
     "cat": "PumpRoom",
@@ -274,11 +274,11 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "Why must all electrical equipment inside a cargo pump room carry full Ex d (flameproof) certification as a minimum standard?",
-    "a": "The pump room is classified Zone 1 — cargo seal leaks mean explosive gas mixtures are likely to occur during normal pump operation",
+    "a": "The pump room is classified Zone 1 - cargo seal leaks mean explosive gas mixtures are likely to occur during normal pump operation",
     "opts": [
       "Ex d is required for pump rooms only when carrying IMDG Class 3 flammable liquid cargo",
-      "The pump room is classified Zone 1 — cargo seal leaks mean explosive gas mixtures are likely to occur during normal pump operation",
-      "Ex d is recommended but not mandatory — Ex e (increased safety) equipment is acceptable in pump rooms",
+      "The pump room is classified Zone 1 - cargo seal leaks mean explosive gas mixtures are likely to occur during normal pump operation",
+      "Ex d is recommended but not mandatory - Ex e (increased safety) equipment is acceptable in pump rooms",
       "Pump rooms are classified Zone 0 because cargo fills the bilge during discharge operations"
     ],
     "exp": "Pump room is Zone 1 due to regular occurrence of vapour from mechanical seals. All electrical equipment including motors, junction boxes, lighting, and instrumentation must be Ex d or Ex e certified to IEC 60079 standards.",
@@ -287,25 +287,25 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What action must the ETO take if a pump room gas detector activates its alarm during a discharge operation?",
-    "a": "Immediately stop all pump room operations, sound the emergency alarm, shut down pump room electrical equipment, and evacuate — do not enter without SCBA and EEx rated lighting",
+    "a": "Immediately stop all pump room operations, sound the emergency alarm, shut down pump room electrical equipment, and evacuate - do not enter without SCBA and EEx rated lighting",
     "opts": [
-      "Silence the alarm and notify the Chief Mate — gas detector false alarms are common on tankers",
-      "Immediately stop all pump room operations, sound the emergency alarm, shut down pump room electrical equipment, and evacuate — do not enter without SCBA and EEx rated lighting",
+      "Silence the alarm and notify the Chief Mate - gas detector false alarms are common on tankers",
+      "Immediately stop all pump room operations, sound the emergency alarm, shut down pump room electrical equipment, and evacuate - do not enter without SCBA and EEx rated lighting",
       "Increase pump room ventilation to maximum and continue operations while monitoring the gas readings",
       "Enter the pump room alone with a portable gas detector to locate and isolate the source of the vapour"
     ],
-    "exp": "Gas detection alarm in a Zone 1 space requires immediate cessation of all operations and evacuation. The explosive mixture in the pump room can ignite from any electrical arcing — do NOT enter without SCBA, EEx equipment, and a standby person.",
+    "exp": "Gas detection alarm in a Zone 1 space requires immediate cessation of all operations and evacuation. The explosive mixture in the pump room can ignite from any electrical arcing - do NOT enter without SCBA, EEx equipment, and a standby person.",
     "cat": "PumpRoom",
     "id": "T19T_023"
   },
   {
     "q": "Under which MARPOL Annex VI regulation is the Vapour Emission Control System (VECS) mandated for tankers loading at shore terminals?",
-    "a": "MARPOL Annex VI Regulation 15 — Volatile Organic Compound emissions",
+    "a": "MARPOL Annex VI Regulation 15 - Volatile Organic Compound emissions",
     "opts": [
-      "MARPOL Annex II Regulation 18 — Noxious liquid substance emissions",
-      "MARPOL Annex VI Regulation 15 — Volatile Organic Compound emissions",
-      "MARPOL Annex I Regulation 34 — Oil discharge monitoring requirements",
-      "MARPOL Annex VI Regulation 12 — Ozone depleting substances"
+      "MARPOL Annex II Regulation 18 - Noxious liquid substance emissions",
+      "MARPOL Annex VI Regulation 15 - Volatile Organic Compound emissions",
+      "MARPOL Annex I Regulation 34 - Oil discharge monitoring requirements",
+      "MARPOL Annex VI Regulation 12 - Ozone depleting substances"
     ],
     "exp": "MARPOL Annex VI Reg 15 requires VECS on tankers operating at terminals that have shore-side vapour recovery facilities. The ETO maintains the VECS solenoids, interlocks, and VOC monitoring sensors.",
     "cat": "VECS",
@@ -315,10 +315,10 @@ window.loadQuizzes("T19_Tanker", [
     "q": "What explosion protection standard must all VECS electrical components, solenoid valves, and pressure transmitters comply with?",
     "a": "Ex d (flameproof) or Ex e (increased safety) because the VECS manifold routes explosive hydrocarbon vapour mixtures",
     "opts": [
-      "Standard IP65 weatherproof rating — VECS operates with inert gas providing a non-explosive atmosphere",
+      "Standard IP65 weatherproof rating - VECS operates with inert gas providing a non-explosive atmosphere",
       "No Ex rating is required because VECS pipework is always under positive vapour pressure preventing air ingress",
       "Ex d (flameproof) or Ex e (increased safety) because the VECS manifold routes explosive hydrocarbon vapour mixtures",
-      "Ex ia (intrinsically safe) only — VECS operates at very low power levels"
+      "Ex ia (intrinsically safe) only - VECS operates at very low power levels"
     ],
     "exp": "VECS routes dense VOC mixtures at concentrations well above LEL. All electrical components in the vapour path must be Ex d or Ex e certified to IEC 60079 to prevent ignition from solenoid switching or sensor wiring faults.",
     "cat": "VECS",
@@ -339,12 +339,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "On a modern auto-tensioning mooring system, at what load percentage above the preset tension boundary does the drive software automatically pay out rope to prevent line breakage?",
-    "a": "125% of the preset tension boundary — the drive clips the torque loop reference and dynamically pays out rope in a controlled manner",
+    "a": "125% of the preset tension boundary - the drive clips the torque loop reference and dynamically pays out rope in a controlled manner",
     "opts": [
-      "90% — the system pays out rope well before maximum tension to maintain a safety margin",
-      "150% — only at this point does the system override the operator's set tension",
-      "125% of the preset tension boundary — the drive clips the torque loop reference and dynamically pays out rope in a controlled manner",
-      "200% — the mooring line must reach double the preset tension before any automatic response occurs"
+      "90% - the system pays out rope well before maximum tension to maintain a safety margin",
+      "150% - only at this point does the system override the operator's set tension",
+      "125% of the preset tension boundary - the drive clips the torque loop reference and dynamically pays out rope in a controlled manner",
+      "200% - the mooring line must reach double the preset tension before any automatic response occurs"
     ],
     "exp": "At 125% of preset tension, the auto-tensioning VFD clips its torque reference. The motor dynamically pays out line rather than maintaining tension, preventing catastrophic wire rope or deck fitting breakage.",
     "cat": "IGF",
@@ -391,12 +391,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "During a Port State Control inspection of a tanker, the inspector finds a standard IP44 junction box in the cargo pump room. What is the immediate PSC finding?",
-    "a": "Detention or deficiency — the junction box must be Ex d or Ex e certified for Zone 1; standard IP44 is only suitable for safe spaces",
+    "a": "Detention or deficiency - the junction box must be Ex d or Ex e certified for Zone 1; standard IP44 is only suitable for safe spaces",
     "opts": [
-      "Advisory only — IP44 boxes are permitted if the pump room has continuous gas detection monitoring",
-      "No finding — IP44 is an internationally accepted standard for pump room equipment on tankers",
-      "Minor observation — the inspector will note it for correction at next scheduled drydock",
-      "Detention or deficiency — the junction box must be Ex d or Ex e certified for Zone 1; standard IP44 is only suitable for safe spaces"
+      "Advisory only - IP44 boxes are permitted if the pump room has continuous gas detection monitoring",
+      "No finding - IP44 is an internationally accepted standard for pump room equipment on tankers",
+      "Minor observation - the inspector will note it for correction at next scheduled drydock",
+      "Detention or deficiency - the junction box must be Ex d or Ex e certified for Zone 1; standard IP44 is only suitable for safe spaces"
     ],
     "exp": "The cargo pump room is a Zone 1 hazardous area requiring Ex d or Ex e certified equipment per IEC 60079 and SOLAS Chapter II-2. A standard IP44 box is not explosion-proof and constitutes an immediate safety deficiency.",
     "cat": "ExEquip",
@@ -404,12 +404,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "On a tanker under the IEC 60079 hazardous area classification, what zone classification applies to the 3-5 metre annular ring around Zone 1 areas on the open cargo deck?",
-    "a": "Zone 2 — explosive gas atmosphere not likely in normal operation but possible for short periods; accepts Ex n (non-sparking) equipment",
+    "a": "Zone 2 - explosive gas atmosphere not likely in normal operation but possible for short periods; accepts Ex n (non-sparking) equipment",
     "opts": [
-      "Zone 2 — explosive gas atmosphere not likely in normal operation but possible for short periods; accepts Ex n (non-sparking) equipment",
-      "Unclassified — beyond 3 metres from the cargo vents, no hazardous area restrictions apply",
-      "Zone 1 — the risk is identical to the pump room because the open deck has no ventilation",
-      "Zone 0 — the entire cargo deck must be treated as continuously hazardous regardless of distance from vents"
+      "Zone 2 - explosive gas atmosphere not likely in normal operation but possible for short periods; accepts Ex n (non-sparking) equipment",
+      "Unclassified - beyond 3 metres from the cargo vents, no hazardous area restrictions apply",
+      "Zone 1 - the risk is identical to the pump room because the open deck has no ventilation",
+      "Zone 0 - the entire cargo deck must be treated as continuously hazardous regardless of distance from vents"
     ],
     "exp": "Zone 2 surrounds Zone 1 boundaries. It is low probability and short duration. Ex n (non-sparking in normal operation) is the minimum acceptable equipment class. The ETO must verify equipment certificates for all deck fittings and light fixtures in this annular zone.",
     "cat": "HazZone",
@@ -417,12 +417,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "A tanker ETO notices the cargo pump room bilge shows traces of oil despite the pump mechanical seals appearing intact externally. What is the MOST likely cause?",
-    "a": "Internal seal face wear — the lapped carbon/ceramic seal faces have worn to a point where fluid is bypassing under the seal face loading pressure",
+    "a": "Internal seal face wear - the lapped carbon/ceramic seal faces have worn to a point where fluid is bypassing under the seal face loading pressure",
     "opts": [
       "The cargo is expanding due to temperature rise during sea passage and is forced through the vent pipes into the bilge",
       "The ship's cathodic protection system is creating galvanic corrosion in the pump casing, causing microscopic weepage",
       "The bilge level sensor is malfunctioning and the reported oil is actually residual water from cargo washing",
-      "Internal seal face wear — the lapped carbon/ceramic seal faces have worn to a point where fluid is bypassing under the seal face loading pressure"
+      "Internal seal face wear - the lapped carbon/ceramic seal faces have worn to a point where fluid is bypassing under the seal face loading pressure"
     ],
     "exp": "Mechanical seal face wear on cargo pumps is the most common source of pump room oil accumulation. Carbon/ceramic face contact surfaces degrade over time. ETO must verify bilge contents with a calibrated OWS meter and log any accumulation as per MARPOL ORB Part I.",
     "cat": "PumpRoom",
@@ -443,25 +443,25 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What is the function of the deck water seal (DWS) in a tanker's inert gas system?",
-    "a": "It acts as a hydraulic non-return valve — a water column prevents cargo gas from back-flowing through the IG main into the engine room when IG pressure falls below deck pressure",
+    "a": "It acts as a hydraulic non-return valve - a water column prevents cargo gas from back-flowing through the IG main into the engine room when IG pressure falls below deck pressure",
     "opts": [
       "It monitors the oxygen content of the gas flowing to the cargo deck and isolates flow if O2 exceeds 5%",
       "It cools the hot flue gas from the boiler before it enters the cargo distribution piping",
       "It filters water droplets from the inert gas to prevent liquid ingress into the cargo tanks",
-      "It acts as a hydraulic non-return valve — a water column prevents cargo gas from back-flowing through the IG main into the engine room when IG pressure falls below deck pressure"
+      "It acts as a hydraulic non-return valve - a water column prevents cargo gas from back-flowing through the IG main into the engine room when IG pressure falls below deck pressure"
     ],
-    "exp": "The deck water seal uses a water loop as a hydraulic check valve. It allows IG to flow to cargo tanks but prevents the reverse flow of flammable cargo vapours back to the engine room — a critical safety device under SOLAS Regulation II-2/4.",
+    "exp": "The deck water seal uses a water loop as a hydraulic check valve. It allows IG to flow to cargo tanks but prevents the reverse flow of flammable cargo vapours back to the engine room - a critical safety device under SOLAS Regulation II-2/4.",
     "cat": "InertGas",
     "id": "T19T_035"
   },
   {
     "q": "What is the maximum permissible oxygen content inside a cargo tank immediately before any hot work is permitted in adjacent spaces?",
-    "a": "Less than 1% oxygen by volume in the tank atmosphere — achieved through inerting and gas-freeing verification",
+    "a": "Less than 1% oxygen by volume in the tank atmosphere - achieved through inerting and gas-freeing verification",
     "opts": [
-      "Less than 1% oxygen by volume in the tank atmosphere — achieved through inerting and gas-freeing verification",
-      "Less than 20% oxygen — the same as normal atmospheric oxygen",
-      "Less than 10% oxygen by volume — sufficiently below the lower explosive limit",
-      "Less than 5% oxygen by volume — the same as the IG delivery standard"
+      "Less than 1% oxygen by volume in the tank atmosphere - achieved through inerting and gas-freeing verification",
+      "Less than 20% oxygen - the same as normal atmospheric oxygen",
+      "Less than 10% oxygen by volume - sufficiently below the lower explosive limit",
+      "Less than 5% oxygen by volume - the same as the IG delivery standard"
     ],
     "exp": "Before hot work in adjacent spaces, cargo tanks must be inerted to below 1% O2 AND gas-freed (hydrocarbon vapour below 1% LEL). The ETO must personally verify both conditions with a calibrated multi-gas meter and issue a Hot Work Permit.",
     "cat": "InertGas",
@@ -469,12 +469,12 @@ window.loadQuizzes("T19_Tanker", [
   },
   {
     "q": "What is the typical pressure range maintained inside an inerted cargo tank during sea passage to prevent tank structure collapse or overpressure?",
-    "a": "100 to 1000 Pa (1 to 10 mbar) positive pressure — just enough to prevent air ingress without stressing the tank structure",
+    "a": "100 to 1000 Pa (1 to 10 mbar) positive pressure - just enough to prevent air ingress without stressing the tank structure",
     "opts": [
-      "Atmospheric pressure exactly — tanks are maintained at 0 Pa to avoid any structural load on the venting system",
-      "5000 to 10000 Pa (50 to 100 mbar) — enough positive pressure to prevent all possible sea water ingress through vents",
-      "100 to 1000 Pa (1 to 10 mbar) positive pressure — just enough to prevent air ingress without stressing the tank structure",
-      "Slight negative pressure of minus 100 Pa — to allow natural ventilation of any residual vapours"
+      "Atmospheric pressure exactly - tanks are maintained at 0 Pa to avoid any structural load on the venting system",
+      "5000 to 10000 Pa (50 to 100 mbar) - enough positive pressure to prevent all possible sea water ingress through vents",
+      "100 to 1000 Pa (1 to 10 mbar) positive pressure - just enough to prevent air ingress without stressing the tank structure",
+      "Slight negative pressure of minus 100 Pa - to allow natural ventilation of any residual vapours"
     ],
     "exp": "Tanks are kept at slight positive pressure (100-1000 Pa) to prevent air ingress that could create an explosive atmosphere. Pressure/vacuum relief valves (P/V valves) open at typically 1400 Pa to prevent overpressure during thermal expansion.",
     "cat": "InertGas",
@@ -1464,7 +1464,7 @@ window.loadQuizzes("T19_Tanker", [
       "They are exactly the same",
       "Inductive sparks (metal to metal) are sharp, energetic, and incendiary. Resistive discharges (liquid to metal) are diffuse and less incendiary"
     ],
-    "exp": "This is why ungrounded metal objects (like a dropped wrench or unbonded tape) in a tank are so deadly—they produce the sharp, concentrated sparks.",
+    "exp": "This is why ungrounded metal objects (like a dropped wrench or unbonded tape) in a tank are so deadly-they produce the sharp, concentrated sparks.",
     "cat": "BONDING",
     "id": "T19T_113"
   },

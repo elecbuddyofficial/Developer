@@ -14,10 +14,10 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What is the purpose of the sealed reference tube inside an OMD?",
-    "a": "Provides a clean-air baseline that degrades at the same rate as the measuring tube — compensates for lamp aging",
+    "a": "Provides a clean-air baseline that degrades at the same rate as the measuring tube - compensates for lamp aging",
     "opts": [
       "Filters large oil droplets before measuring tube",
-      "Provides a clean-air baseline that degrades at the same rate as the measuring tube — compensates for lamp aging",
+      "Provides a clean-air baseline that degrades at the same rate as the measuring tube - compensates for lamp aging",
       "Cools crankcase gases to prevent condensation on lenses",
       "Contains a chemical reagent neutralising explosive gases"
     ],
@@ -39,7 +39,7 @@ window.loadQuizzes("T09_ShipMachinery", [
     "id": "T09S_003"
   },
   {
-    "q": "After OMD alarm — why must you wait minimum 20 minutes before opening the crankcase?",
+    "q": "After OMD alarm - why must you wait minimum 20 minutes before opening the crankcase?",
     "a": "Hot surfaces + residual oil mist + introduced oxygen = crankcase explosion risk",
     "opts": [
       "To allow the bearing to cool to safe touching temperature",
@@ -53,10 +53,10 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "How does a Viscotherm measure HFO viscosity?",
-    "a": "Rotational viscometer — motor current required to spin a spindle at constant speed is proportional to viscosity",
+    "a": "Rotational viscometer - motor current required to spin a spindle at constant speed is proportional to viscosity",
     "opts": [
       "PT100 temperature sensor + ISO fuel tables to calculate viscosity",
-      "Rotational viscometer — motor current required to spin a spindle at constant speed is proportional to viscosity",
+      "Rotational viscometer - motor current required to spin a spindle at constant speed is proportional to viscosity",
       "Acoustic resonance measuring speed of sound through fuel",
       "Differential pressure across a fixed orifice plate"
     ],
@@ -66,11 +66,11 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "Why is viscosity control better than temperature control for HFO injection?",
-    "a": "Different HFO grades have different viscosity-temperature curves — same temperature gives different injection viscosity",
+    "a": "Different HFO grades have different viscosity-temperature curves - same temperature gives different injection viscosity",
     "opts": [
       "Temperature controllers cannot handle fuel injection pump pressure fluctuations",
       "Viscosity controllers require less steam for heating",
-      "Different HFO grades have different viscosity-temperature curves — same temperature gives different injection viscosity",
+      "Different HFO grades have different viscosity-temperature curves - same temperature gives different injection viscosity",
       "Temperature sensors degrade from high sulphur content in HFO"
     ],
     "exp": "RMG 380 needs ~130-140°C for 14 cSt; RME 180 only needs ~100-110°C for 14 cSt. Temperature control set to 130°C would give wrong viscosity for RME 180. Viscosity control directly measures what the injector needs.",
@@ -79,11 +79,11 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "Under SOLAS, how must steering gear motor overload protection be configured?",
-    "a": "Alarm only on bridge and engine room — must NOT automatically trip the motor",
+    "a": "Alarm only on bridge and engine room - must NOT automatically trip the motor",
     "opts": [
       "Must automatically trip motor and start standby unit within 45 seconds",
       "Must bypass MSB and draw from 24V battery before tripping",
-      "Alarm only on bridge and engine room — must NOT automatically trip the motor",
+      "Alarm only on bridge and engine room - must NOT automatically trip the motor",
       "Triggers preferential trip to shed non-essential loads first"
     ],
     "exp": "SOLAS Ch II-1 Reg 29: alarm only for steering gear motor overload. Loss of steering during manoeuvring is more dangerous than a burned motor. Crew investigates while maintaining steering capability.",
@@ -92,10 +92,10 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "Why is a phase failure relay mandatory for steering gear motors?",
-    "a": "Single-phasing draws 1.73× normal current causing burnout; phase reversal drives rudder wrong way — navigation hazard",
+    "a": "Single-phasing draws 1.73× normal current causing burnout; phase reversal drives rudder wrong way - navigation hazard",
     "opts": [
       "Phase failure boils hydraulic oil causing high-pressure trip",
-      "Single-phasing draws 1.73× normal current causing burnout; phase reversal drives rudder wrong way — navigation hazard",
+      "Single-phasing draws 1.73× normal current causing burnout; phase reversal drives rudder wrong way - navigation hazard",
       "Allows steering gear to switch from 440V to 24V emergency supply",
       "Prevents hunting gear oscillation during autopilot operation"
     ],
@@ -105,14 +105,14 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What is the correct BMS response to Low-Low Water Level in a boiler?",
-    "a": "Immediate burner shutdown with zero time delay — manual reset required",
+    "a": "Immediate burner shutdown with zero time delay - manual reset required",
     "opts": [
       "30-second delay alarm then trip if level not restored",
-      "Immediate burner shutdown with zero time delay — manual reset required",
+      "Immediate burner shutdown with zero time delay - manual reset required",
       "Reduce firing rate to 50% to conserve water",
       "Activate preferential trip to shed steam heating loads"
     ],
-    "exp": "Low-Low water exposes boiler heating tubes. Continued firing = tubes overheat and rupture = catastrophic steam explosion. Zero delay is mandatory — no time for a grace period. Manual reset ensures engineer investigates before restart.",
+    "exp": "Low-Low water exposes boiler heating tubes. Continued firing = tubes overheat and rupture = catastrophic steam explosion. Zero delay is mandatory - no time for a grace period. Manual reset ensures engineer investigates before restart.",
     "cat": "BOILER",
     "id": "T09S_009"
   },
@@ -131,10 +131,10 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "Why does boiler High Steam Pressure cutout require manual reset?",
-    "a": "Auto-reset would allow burner to short-cycle against uncleared high pressure — forces engineer to investigate",
+    "a": "Auto-reset would allow burner to short-cycle against uncleared high pressure - forces engineer to investigate",
     "opts": [
       "Manual reset is legally required outside engine room",
-      "Auto-reset would allow burner to short-cycle against uncleared high pressure — forces engineer to investigate",
+      "Auto-reset would allow burner to short-cycle against uncleared high pressure - forces engineer to investigate",
       "Pressure drops naturally via safety valve over 24 hours",
       "Auto-resets consume too much control voltage risking UV scanner dropout"
     ],
@@ -144,11 +144,11 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "How does an EM brake on a deck crane achieve the fail-safe condition?",
-    "a": "Spring-applied (ON) when de-energised — electrically released (OFF) only when brake coil is energised",
+    "a": "Spring-applied (ON) when de-energised - electrically released (OFF) only when brake coil is energised",
     "opts": [
       "Electrically applied by motor starter; springs release when power lost",
       "Permanent magnet holds load; reverse-polarity pulse disengages",
-      "Spring-applied (ON) when de-energised — electrically released (OFF) only when brake coil is energised",
+      "Spring-applied (ON) when de-energised - electrically released (OFF) only when brake coil is energised",
       "Hydraulic brake with pilot solenoid dumping pressure in emergency"
     ],
     "exp": "SAER (Spring Applied, Electrically Released): default state = brake ON = load held = safe. Energising the electromagnet overcomes the spring force and releases the brake. Power failure = spring applies brake automatically = load cannot drop.",
@@ -157,12 +157,12 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What happens when the EM brake air gap becomes too large due to wear?",
-    "a": "Electromagnetic force insufficient to overcome spring — brake drags and overheats the motor",
+    "a": "Electromagnetic force insufficient to overcome spring - brake drags and overheats the motor",
     "opts": [
-      "Motor draws excessively low current — undervoltage relay trips",
-      "Electromagnetic force insufficient to overcome spring — brake drags and overheats the motor",
-      "Springs lose tension — load slowly slips downward",
-      "Brake coil short-circuits — blows main control fuses"
+      "Motor draws excessively low current - undervoltage relay trips",
+      "Electromagnetic force insufficient to overcome spring - brake drags and overheats the motor",
+      "Springs lose tension - load slowly slips downward",
+      "Brake coil short-circuits - blows main control fuses"
     ],
     "exp": "Magnetic pull decreases inversely with air gap. Too large a gap (>0.5mm typically) and the coil cannot fully release the brake disc. Motor strains against partially engaged brake → overheating → OLR trips. Check air gap at every survey.",
     "cat": "CRANE",
@@ -177,20 +177,20 @@ window.loadQuizzes("T09_ShipMachinery", [
       "Pitch bypasses sequential starting timers drawing from ESB",
       "Prevents shaft earth brush contact causing bearing erosion"
     ],
-    "exp": "Unloaded motor: high inrush current drops quickly as motor accelerates. Starting with pitch = motor fights hydrodynamic load and cannot accelerate — sustained inrush current overloads generator ACB. All CPP thrusters must start at zero pitch.",
+    "exp": "Unloaded motor: high inrush current drops quickly as motor accelerates. Starting with pitch = motor fights hydrodynamic load and cannot accelerate - sustained inrush current overloads generator ACB. All CPP thrusters must start at zero pitch.",
     "cat": "BOW_THRUSTER",
     "id": "T09S_014"
   },
   {
-    "q": "LP cutout on refrigeration compressor uses automatic reset but HP cutout needs manual reset — why?",
+    "q": "LP cutout on refrigeration compressor uses automatic reset but HP cutout needs manual reset - why?",
     "a": "LP trips on normal operating variations (auto-reset safe); HP indicates serious fault (auto-reset risks dangerous pressure cycling)",
     "opts": [
-      "LP cutout is hydraulic, HP is electrical — different reset mechanisms",
+      "LP cutout is hydraulic, HP is electrical - different reset mechanisms",
       "LP trips on normal operating variations (auto-reset safe); HP indicates serious fault (auto-reset risks dangerous pressure cycling)",
-      "LP is set by class; HP is set by manufacturer — different regulatory requirements",
+      "LP is set by class; HP is set by manufacturer - different regulatory requirements",
       "Both should be manual reset but LP auto-reset is a common engineering shortcut"
     ],
-    "exp": "LP trips from normal load variation, defrost cycles, low refrigerant — condition self-corrects. HP trips from condenser fouling, overcharge, fan failure — dangerous fault. Auto-resetting against HP fault risks repeated destructive over-pressure cycling.",
+    "exp": "LP trips from normal load variation, defrost cycles, low refrigerant - condition self-corrects. HP trips from condenser fouling, overcharge, fan failure - dangerous fault. Auto-resetting against HP fault risks repeated destructive over-pressure cycling.",
     "cat": "REFRIGERATION",
     "id": "T09S_015"
   },
@@ -201,7 +201,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "Slow-down is bridge command; trip is automatic only",
       "Slow-down reduces to minimum RPM (bridge can override in emergency); Trip stops engine completely (cannot override)",
       "Slow-down is for electrical faults; trip is for mechanical faults only",
-      "Both can be overridden by bridge — trip just takes longer to activate"
+      "Both can be overridden by bridge - trip just takes longer to activate"
     ],
     "exp": "Slow-down = advisory protection, bridge can override to prevent collision/grounding. Trip = hardware interlock, absolute. Lube oil low-low, overspeed, crankcase explosion = trip = no override possible. Engineer must investigate slow-down cause immediately even if overridden.",
     "cat": "MAINENGINE",
@@ -209,38 +209,38 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What causes 'hunting' in a diesel engine speed governor, and what is the role of the dashpot in preventing it?",
-    "a": "Hunting is oscillation of engine speed above and below the set point due to excessive governor gain. The dashpot adds viscous damping — its needle valve orifice limits the rate of fuel rack movement, preventing overcorrection",
+    "a": "Hunting is oscillation of engine speed above and below the set point due to excessive governor gain. The dashpot adds viscous damping - its needle valve orifice limits the rate of fuel rack movement, preventing overcorrection",
     "opts": [
-      "Hunting is caused by air bubbles in the fuel injection system creating irregular combustion cycles — the dashpot bleeds air from the fuel line",
-      "Hunting is caused by high exhaust back pressure — the dashpot measures exhaust pressure and adjusts the governor reference",
-      "Hunting is oscillation of engine speed above and below the set point due to excessive governor gain. The dashpot adds viscous damping — its needle valve orifice limits the rate of fuel rack movement, preventing overcorrection",
-      "Hunting occurs when the governor spring is too weak — the dashpot provides additional spring tension to stiffen the control response"
+      "Hunting is caused by air bubbles in the fuel injection system creating irregular combustion cycles - the dashpot bleeds air from the fuel line",
+      "Hunting is caused by high exhaust back pressure - the dashpot measures exhaust pressure and adjusts the governor reference",
+      "Hunting is oscillation of engine speed above and below the set point due to excessive governor gain. The dashpot adds viscous damping - its needle valve orifice limits the rate of fuel rack movement, preventing overcorrection",
+      "Hunting occurs when the governor spring is too weak - the dashpot provides additional spring tension to stiffen the control response"
     ],
-    "exp": "A governor with too much gain oscillates because it overcorrects. The dashpot is a viscous damper — a piston in oil with a needle valve orifice. Narrow orifice = slow piston = more damping. Critical damping produces stable speed control without oscillation.",
+    "exp": "A governor with too much gain oscillates because it overcorrects. The dashpot is a viscous damper - a piston in oil with a needle valve orifice. Narrow orifice = slow piston = more damping. Critical damping produces stable speed control without oscillation.",
     "cat": "Governor",
     "id": "T09S_017"
   },
   {
     "q": "What happens to the speed of a DC series motor if its mechanical load is suddenly removed while running?",
-    "a": "The motor undergoes a dangerous uncontrolled speed increase (runaway) — potentially reaching destructive mechanical speed because back-EMF falls and armature current rises with no load counter-torque",
+    "a": "The motor undergoes a dangerous uncontrolled speed increase (runaway) - potentially reaching destructive mechanical speed because back-EMF falls and armature current rises with no load counter-torque",
     "opts": [
       "The motor speed remains perfectly constant because the series winding provides inherent speed regulation",
       "The motor immediately trips on its overcurrent protection relay because the no-load current exceeds the thermal rating",
       "The motor slows down and stops because the field winding collapses without load current flowing through it",
-      "The motor undergoes a dangerous uncontrolled speed increase (runaway) — potentially reaching destructive mechanical speed because back-EMF falls and armature current rises with no load counter-torque"
+      "The motor undergoes a dangerous uncontrolled speed increase (runaway) - potentially reaching destructive mechanical speed because back-EMF falls and armature current rises with no load counter-torque"
     ],
-    "exp": "DC series motor: field winding in series with armature. No load = low current = weak field flux. Speed N is proportional to V/(flux). As flux falls, speed rises uncontrollably. This is why series motors are NEVER used without a coupled load — always used on hoists and cranes where the load is always present.",
+    "exp": "DC series motor: field winding in series with armature. No load = low current = weak field flux. Speed N is proportional to V/(flux). As flux falls, speed rises uncontrollably. This is why series motors are NEVER used without a coupled load - always used on hoists and cranes where the load is always present.",
     "cat": "Motors",
     "id": "T09S_018"
   },
   {
     "q": "How does the salinometer installed in a freshwater generator system provide an interlock to protect boiler and jacket water circuits?",
-    "a": "The salinometer measures the conductivity of the distillate — if salinity exceeds the setpoint (typically 10 ppm), it automatically diverts the distillate overboard via a 3-way diverter valve before it can enter the storage tanks",
+    "a": "The salinometer measures the conductivity of the distillate - if salinity exceeds the setpoint (typically 10 ppm), it automatically diverts the distillate overboard via a 3-way diverter valve before it can enter the storage tanks",
     "opts": [
       "The salinometer measures the temperature of the distillate and opens the overboard valve if temperature falls below 60 degrees C to prevent contamination of potable water",
       "The salinometer measures the flow rate of distillate production and stops the FWG if production falls below the minimum efficient rate",
-      "The salinometer is only an alarm instrument — it alerts the OOW but has no automatic diverting interlock function",
-      "The salinometer measures the conductivity of the distillate — if salinity exceeds the setpoint (typically 10 ppm), it automatically diverts the distillate overboard via a 3-way diverter valve before it can enter the storage tanks"
+      "The salinometer is only an alarm instrument - it alerts the OOW but has no automatic diverting interlock function",
+      "The salinometer measures the conductivity of the distillate - if salinity exceeds the setpoint (typically 10 ppm), it automatically diverts the distillate overboard via a 3-way diverter valve before it can enter the storage tanks"
     ],
     "exp": "High salinity in distillate indicates a leak in the evaporator heat exchanger allowing seawater contamination. The 3-way diverter valve automatically routes contaminated water overboard. The ETO tests this interlock by adjusting the setpoint during monthly rounds.",
     "cat": "Sensors",
@@ -261,12 +261,12 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What is the function of the Jacket Cooling Water (JCW) temperature interlock on a main diesel engine, and what are the critical temperature limits?",
-    "a": "Below 55 degrees C the JCW thermostat alarm activates — cold corrosion occurs as sulphuric acid condenses in cylinders. Above 90 degrees C an alarm and possible slowdown trip activate to prevent overheating and seizure",
+    "a": "Below 55 degrees C the JCW thermostat alarm activates - cold corrosion occurs as sulphuric acid condenses in cylinders. Above 90 degrees C an alarm and possible slowdown trip activate to prevent overheating and seizure",
     "opts": [
-      "The JCW temperature interlock monitors coolant flow rate — low flow triggers an alarm regardless of temperature",
-      "JCW temperature is only monitored in port — the ship can safely operate at any JCW temperature at sea",
-      "Below 55 degrees C the JCW thermostat alarm activates — cold corrosion occurs as sulphuric acid condenses in cylinders. Above 90 degrees C an alarm and possible slowdown trip activate to prevent overheating and seizure",
-      "The JCW thermostat opens and closes automatically without any alarm function — it only controls the bypass valve"
+      "The JCW temperature interlock monitors coolant flow rate - low flow triggers an alarm regardless of temperature",
+      "JCW temperature is only monitored in port - the ship can safely operate at any JCW temperature at sea",
+      "Below 55 degrees C the JCW thermostat alarm activates - cold corrosion occurs as sulphuric acid condenses in cylinders. Above 90 degrees C an alarm and possible slowdown trip activate to prevent overheating and seizure",
+      "The JCW thermostat opens and closes automatically without any alarm function - it only controls the bypass valve"
     ],
     "exp": "Cold corrosion: below 55 deg C, sulphur combustion products condense as H2SO4 and attack cylinder liners. Hot cracking: above 90 deg C, thermal stress causes micro-cracks in cylinder heads and liners. The ETO verifies these setpoints on the IAS during UMS rounds.",
     "cat": "Alarms",
@@ -274,11 +274,11 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "Under UMS (Unmanned Machinery Space) regulations, what is the maximum period the engine room may be left unattended and what pre-departure checks are mandatory?",
-    "a": "UMS allows unmanned operation typically for periods of up to 16 hours. Pre-departure: verify all alarms active, fuel levels, IAS alarm routing to bridge, engineer call system, and fire detection — logged in the UMS checklist",
+    "a": "UMS allows unmanned operation typically for periods of up to 16 hours. Pre-departure: verify all alarms active, fuel levels, IAS alarm routing to bridge, engineer call system, and fire detection - logged in the UMS checklist",
     "opts": [
-      "UMS allows unmanned operation typically for periods of up to 16 hours. Pre-departure: verify all alarms active, fuel levels, IAS alarm routing to bridge, engineer call system, and fire detection — logged in the UMS checklist",
-      "UMS permits only 4 hours of unmanned operation — an engineer must physically enter the engine room every 4 hours",
-      "UMS requires a watchkeeper to remain physically in the engine room at all times — only the watch position may move to the ECR",
+      "UMS allows unmanned operation typically for periods of up to 16 hours. Pre-departure: verify all alarms active, fuel levels, IAS alarm routing to bridge, engineer call system, and fire detection - logged in the UMS checklist",
+      "UMS permits only 4 hours of unmanned operation - an engineer must physically enter the engine room every 4 hours",
+      "UMS requires a watchkeeper to remain physically in the engine room at all times - only the watch position may move to the ECR",
       "UMS allows permanently unmanned operation at sea with no time limit as long as the fire detection system is operational"
     ],
     "exp": "SOLAS II-1/54 and Class requirements specify UMS watchkeeping. The ETO is responsible for verifying all IAS alarm routing to the bridge, BNWAS-equivalent engineer call system, and completing the UMS pre-departure checklist before the engine room is left unmanned.",
@@ -287,10 +287,10 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What are the standard calibration gases used to test a multi-gas personal gas detector (O2, LEL, CO, H2S) before an enclosed space entry?",
-    "a": "O2 calibration gas at approximately 18% (below normal to test low O2 alarm); LEL calibration at 50% of known hydrocarbon gas; CO at 50 ppm; H2S at 10 ppm — using certified standard mixtures",
+    "a": "O2 calibration gas at approximately 18% (below normal to test low O2 alarm); LEL calibration at 50% of known hydrocarbon gas; CO at 50 ppm; H2S at 10 ppm - using certified standard mixtures",
     "opts": [
-      "Calibration gases are not required — bump testing with workplace air confirms the instrument is reading correctly",
-      "O2 calibration gas at approximately 18% (below normal to test low O2 alarm); LEL calibration at 50% of known hydrocarbon gas; CO at 50 ppm; H2S at 10 ppm — using certified standard mixtures",
+      "Calibration gases are not required - bump testing with workplace air confirms the instrument is reading correctly",
+      "O2 calibration gas at approximately 18% (below normal to test low O2 alarm); LEL calibration at 50% of known hydrocarbon gas; CO at 50 ppm; H2S at 10 ppm - using certified standard mixtures",
       "Any combustible gas at 100% LEL to confirm the instrument trips at the LEL threshold",
       "Pure nitrogen to zero all sensors, then atmospheric air to set the 100% scale for all sensor types simultaneously"
     ],
@@ -302,8 +302,8 @@ window.loadQuizzes("T09_ShipMachinery", [
     "q": "On an auto-tensioning mooring winch, what is the role of the load cell connected to the winch frame, and what happens when the design tension is exceeded by 25%?",
     "a": "The load cell measures actual mooring line tension continuously. At 125% of preset tension, the drive software clips the torque reference and dynamically pays out rope to prevent line breakage",
     "opts": [
-      "The load cell provides an indication only — automatic payout does not occur until the line physically slips on the drum",
-      "The load cell is used only for recording purposes — the tension setpoint must be manually adjusted by the officer on watch",
+      "The load cell provides an indication only - automatic payout does not occur until the line physically slips on the drum",
+      "The load cell is used only for recording purposes - the tension setpoint must be manually adjusted by the officer on watch",
       "The load cell measures actual mooring line tension continuously. At 125% of preset tension, the drive software clips the torque reference and dynamically pays out rope to prevent line breakage",
       "The load cell monitors motor temperature and reduces winch speed when thermal limits approach"
     ],
@@ -502,7 +502,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "Because loss of a single phase causes the motor to draw massive current and rapidly burn out, and a phase reversal would cause the rudder to turn in the wrong direction",
       "Because it prevents harmonic distortion from affecting the ship's main switchboard"
     ],
-    "exp": "If one phase drops, the motor single-phases, drawing 1.7x normal current and burning out rapidly. If two phases are accidentally swapped during maintenance, the motor runs backwards, meaning a command to steer Port will steer Starboard—a catastrophic navigation hazard. The relay protects against both.",
+    "exp": "If one phase drops, the motor single-phases, drawing 1.7x normal current and burning out rapidly. If two phases are accidentally swapped during maintenance, the motor runs backwards, meaning a command to steer Port will steer Starboard-a catastrophic navigation hazard. The relay protects against both.",
     "cat": "STG",
     "id": "T09S_039"
   },
@@ -580,7 +580,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "The BMS triggers an alarm but keeps the fuel valve open to prevent losing steam pressure",
       "The BMS automatically switches over to the pilot burner to sustain the flame"
     ],
-    "exp": "Loss of flame means fuel is pouring into a hot, unlit furnace—creating a massive explosion hazard. The BMS shuts the fuel valve instantly and goes into 'Lockout'. A lockout cannot clear itself; an engineer must physically go to the panel, investigate the cause (e.g., dirty UV lens, water in fuel), and press the manual reset button.",
+    "exp": "Loss of flame means fuel is pouring into a hot, unlit furnace-creating a massive explosion hazard. The BMS shuts the fuel valve instantly and goes into 'Lockout'. A lockout cannot clear itself; an engineer must physically go to the panel, investigate the cause (e.g., dirty UV lens, water in fuel), and press the manual reset button.",
     "cat": "BLR",
     "id": "T09S_045"
   },
@@ -2244,7 +2244,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "As the ship pulls away using its engines, the winch will try to maintain the 5-tonne tension by endlessly paying out all the rope into the water until the drum is empty",
       "The winch motor will catch fire immediately"
     ],
-    "exp": "The system is dumb—it just wants to keep 5 tonnes of tension. If the ship drives away, the tension spikes, so the winch pays out rope. It will keep paying out forever until the rope runs out and drops into the propeller. It MUST be switched to manual and braked before unmooring.",
+    "exp": "The system is dumb-it just wants to keep 5 tonnes of tension. If the ship drives away, the tension spikes, so the winch pays out rope. It will keep paying out forever until the rope runs out and drops into the propeller. It MUST be switched to manual and braked before unmooring.",
     "cat": "CRA",
     "id": "T09S_173"
   },
@@ -2426,7 +2426,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "At low loads, the engine requires all the cooling water to prevent cold corrosion",
       "At low engine loads, the jacket cooling water does not contain enough waste heat to effectively boil the seawater in the FWG vacuum chamber"
     ],
-    "exp": "The FWG is a scavenger—it survives entirely on the waste heat rejected by the main engine jacket water. If the engine is idling or maneuvering, the water isn't hot enough (e.g., drops to 65°C), the vacuum boiling stops, and the FWG loses efficiency.",
+    "exp": "The FWG is a scavenger-it survives entirely on the waste heat rejected by the main engine jacket water. If the engine is idling or maneuvering, the water isn't hot enough (e.g., drops to 65°C), the vacuum boiling stops, and the FWG loses efficiency.",
     "cat": "GAP",
     "id": "T09S_187"
   },
@@ -3427,7 +3427,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "The bypass divert valve is stuck open",
       "The water is dangerously salty (Over Load)"
     ],
-    "exp": "Open Loop means infinite resistance—no current is flowing between the electrodes. This happens if the wire snaps, if the pipe empties out (air doesn't conduct), or if the electrodes are smothered in a thick insulating layer of oil or scale.",
+    "exp": "Open Loop means infinite resistance-no current is flowing between the electrodes. This happens if the wire snaps, if the pipe empties out (air doesn't conduct), or if the electrodes are smothered in a thick insulating layer of oil or scale.",
     "cat": "SAL",
     "id": "T09S_264"
   },
@@ -5780,7 +5780,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "It is driven exclusively by a series of pushrods and rocker arms",
       "It is opened and closed by massive steel mechanical coil springs"
     ],
-    "exp": "Old engines used massive steel springs to close exhaust valves. These springs were prone to breaking under the immense, continuous cyclic stress. Modern engines use an 'Air Spring'—compressed air acts as an unbreakable, highly responsive cushion to snap the valve closed smoothly, while hydraulics force it open.",
+    "exp": "Old engines used massive steel springs to close exhaust valves. These springs were prone to breaking under the immense, continuous cyclic stress. Modern engines use an 'Air Spring'-compressed air acts as an unbreakable, highly responsive cushion to snap the valve closed smoothly, while hydraulics force it open.",
     "cat": "MAINENGINE",
     "id": "T09S_445"
   },
@@ -5890,14 +5890,14 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "A boiler is running on 1-element feedwater control. The main engine suddenly increases load. What misleading event occurs at the drum level gauge?",
-    "a": "The drum level rises falsely (swell) because steam bubbles form rapidly inside the water mass, making the controller reduce feedwater — the exact opposite of what is needed",
+    "a": "The drum level rises falsely (swell) because steam bubbles form rapidly inside the water mass, making the controller reduce feedwater - the exact opposite of what is needed",
     "opts": [
-      "The drum level rises falsely (swell) because steam bubbles form rapidly inside the water mass, making the controller reduce feedwater — the exact opposite of what is needed",
+      "The drum level rises falsely (swell) because steam bubbles form rapidly inside the water mass, making the controller reduce feedwater - the exact opposite of what is needed",
       "The drum level drops immediately as extra steam demand draws water out",
       "The drum pressure rises, causing the feedwater pump to stall",
       "The level gauge reads zero because the sensor is swamped by steam"
     ],
-    "exp": "When steam demand suddenly increases, pressure temporarily drops inside the drum. This causes water to flash into bubbles, swelling the water volume and showing a falsely HIGH level. The 1-element controller sees high level and cuts feedwater just when the boiler needs more — a dangerous situation corrected only by 3-element control.",
+    "exp": "When steam demand suddenly increases, pressure temporarily drops inside the drum. This causes water to flash into bubbles, swelling the water volume and showing a falsely HIGH level. The 1-element controller sees high level and cuts feedwater just when the boiler needs more - a dangerous situation corrected only by 3-element control.",
     "cat": "BLR",
     "id": "T09S_454"
   },
@@ -5923,7 +5923,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "A gravity settling chamber measures the weight of oil that separates over 5 minutes",
       "An electrode measures the change in electrical conductivity as oil displaces water"
     ],
-    "exp": "The OCM uses the nephelometric (light-scatter) principle. Clean water transmits light straight through with minimal scatter. Oil droplets, being a different refractive index, scatter light sideways. A photodetector positioned at 90° to the light beam measures this scatter — more scatter means more oil.",
+    "exp": "The OCM uses the nephelometric (light-scatter) principle. Clean water transmits light straight through with minimal scatter. Oil droplets, being a different refractive index, scatter light sideways. A photodetector positioned at 90° to the light beam measures this scatter - more scatter means more oil.",
     "cat": "OWS",
     "id": "T09S_456"
   },
@@ -5936,7 +5936,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "The pressure switch cuts power until the coolers reach operating temperature",
       "A centrifugal clutch gradually couples the piston rods to the crankshaft to prevent mechanical shock"
     ],
-    "exp": "An induction motor already draws 6-8x full load current during start. If the compressor were also trying to compress air against existing bottle pressure, the combined mechanical load would far exceed the motor's capacity. The unloader opens a bypass path, so the pistons simply shuttle air back and forth to atmosphere during run-up — zero compression work.",
+    "exp": "An induction motor already draws 6-8x full load current during start. If the compressor were also trying to compress air against existing bottle pressure, the combined mechanical load would far exceed the motor's capacity. The unloader opens a bypass path, so the pistons simply shuttle air back and forth to atmosphere during run-up - zero compression work.",
     "cat": "COMP",
     "id": "T09S_457"
   },
@@ -5947,7 +5947,7 @@ window.loadQuizzes("T09_ShipMachinery", [
       "Maximum 1 hour total running time per bottle fill cycle, with no single compressor running continuously for more than 30 minutes; drains must be blown before and after each run",
       "Maximum 4 hours total with no restriction on continuous running per compressor",
       "Maximum 30 minutes total; after this the compressor must be overhauled",
-      "No time limit — run continuously until the bottle is full"
+      "No time limit - run continuously until the bottle is full"
     ],
     "exp": "The 1-hour total / 30-minute per-compressor rule prevents overheating of cylinder walls, coolers, and valve seats. Moisture accumulates rapidly in the inter-stage coolers; blowing the drains before and after prevents water carry-over into the air bottles and starting air lines, which could hydrolock a main engine.",
     "cat": "COMP",
@@ -5981,11 +5981,11 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "During a purifier start sequence, why is the motor's overcurrent (OC) relay bypassed by a timer, and for approximately how long?",
-    "a": "The heavy stainless-steel bowl takes 3–8 minutes to accelerate to operating speed via the centrifugal clutch; sustained current during this slow acceleration would falsely trip the OC relay — the timer bypasses it for approximately 10 minutes to allow safe bowl run-up",
+    "a": "The heavy stainless-steel bowl takes 3–8 minutes to accelerate to operating speed via the centrifugal clutch; sustained current during this slow acceleration would falsely trip the OC relay - the timer bypasses it for approximately 10 minutes to allow safe bowl run-up",
     "opts": [
-      "The heavy stainless-steel bowl takes 3–8 minutes to accelerate to operating speed via the centrifugal clutch; sustained current during this slow acceleration would falsely trip the OC relay — the timer bypasses it for approximately 10 minutes to allow safe bowl run-up",
+      "The heavy stainless-steel bowl takes 3–8 minutes to accelerate to operating speed via the centrifugal clutch; sustained current during this slow acceleration would falsely trip the OC relay - the timer bypasses it for approximately 10 minutes to allow safe bowl run-up",
       "The OC relay is bypassed permanently on purifiers because they always draw excess current",
-      "The timer bypasses the relay for 30 seconds only — just long enough for DOL starting inrush to pass",
+      "The timer bypasses the relay for 30 seconds only - just long enough for DOL starting inrush to pass",
       "The bypass prevents the purifier from tripping when the heated feed oil is introduced"
     ],
     "exp": "A purifier centrifugal clutch deliberately slips during run-up, slowly transferring torque to the 200+ kg bowl over several minutes. During this period the motor draws elevated (but not fault-level) current continuously. An un-bypassed OC relay would trip this normal operating condition. The 10-minute timer allows full bowl acceleration; after it expires, the OC relay re-arms to protect against genuine faults.",
@@ -5994,35 +5994,35 @@ window.loadQuizzes("T09_ShipMachinery", [
   },
   {
     "q": "What is the purpose of the centrifugal friction clutch on a marine purifier motor, and what would happen without it?",
-    "a": "The clutch prevents the full motor torque from hitting the stationary bowl instantaneously; at low speed the weights retract, the clutch slips, and the bowl accelerates gradually — without it the drive belt would snap and the motor would stall or trip on the instant high torque demand",
+    "a": "The clutch prevents the full motor torque from hitting the stationary bowl instantaneously; at low speed the weights retract, the clutch slips, and the bowl accelerates gradually - without it the drive belt would snap and the motor would stall or trip on the instant high torque demand",
     "opts": [
-      "The clutch prevents the full motor torque from hitting the stationary bowl instantaneously; at low speed the weights retract, the clutch slips, and the bowl accelerates gradually — without it the drive belt would snap and the motor would stall or trip on the instant high torque demand",
+      "The clutch prevents the full motor torque from hitting the stationary bowl instantaneously; at low speed the weights retract, the clutch slips, and the bowl accelerates gradually - without it the drive belt would snap and the motor would stall or trip on the instant high torque demand",
       "The clutch allows the bowl to continue spinning after power is cut, harvesting kinetic energy",
       "The clutch provides variable-speed control matching the feed pump throughput",
       "The clutch is a vibration isolator that prevents bowl resonance from reaching the motor bearings"
     ],
-    "exp": "Centrifugal clutch mechanics: at rest, spring-loaded weights are held inward — no contact with the drive drum. As the motor accelerates, centrifugal force throws the weights outward against the drum, gradually increasing friction torque. Near full motor speed, the weights lock hard and the bowl is driven directly. This spreading of the load-transfer period over 3-8 minutes is what protects the motor, belt, and gearbox.",
+    "exp": "Centrifugal clutch mechanics: at rest, spring-loaded weights are held inward - no contact with the drive drum. As the motor accelerates, centrifugal force throws the weights outward against the drum, gradually increasing friction torque. Near full motor speed, the weights lock hard and the bowl is driven directly. This spreading of the load-transfer period over 3-8 minutes is what protects the motor, belt, and gearbox.",
     "cat": "PUR",
     "id": "T09S_462"
   },
   {
     "q": "Before entering a pump room on a tanker, what atmosphere checks must be completed, and what are the acceptable limits?",
-    "a": "Oxygen: 20.5–23.5%; Hydrocarbon gas: below 1% LEL; H₂S: below 10 ppm; CO: below 35 ppm — all measured using a calibrated multi-gas detector after at least 10 minutes of continuous mechanical ventilation",
+    "a": "Oxygen: 20.5–23.5%; Hydrocarbon gas: below 1% LEL; H₂S: below 10 ppm; CO: below 35 ppm - all measured using a calibrated multi-gas detector after at least 10 minutes of continuous mechanical ventilation",
     "opts": [
-      "Oxygen: 20.5–23.5%; Hydrocarbon gas: below 1% LEL; H₂S: below 10 ppm; CO: below 35 ppm — all measured using a calibrated multi-gas detector after at least 10 minutes of continuous mechanical ventilation",
+      "Oxygen: 20.5–23.5%; Hydrocarbon gas: below 1% LEL; H₂S: below 10 ppm; CO: below 35 ppm - all measured using a calibrated multi-gas detector after at least 10 minutes of continuous mechanical ventilation",
       "Oxygen above 19.5% is sufficient; no HC or H₂S check is required if the space has been ventilated",
       "Only an explosimeter reading below 5% LEL is required; oxygen measurement is optional",
       "Atmosphere checks are only required for entry into cargo tanks, not pump rooms"
     ],
-    "exp": "Pump rooms are enclosed spaces under SOLAS and require a full atmosphere assessment. Oxygen deficit (below 20.5%) indicates displacement by inert gas or vapour. HC above 1% LEL is explosive risk. H₂S (from cargo or sludge) is acutely toxic above 10 ppm and causes rapid olfactory paralysis — you cannot smell it at dangerous concentrations. CO from incomplete combustion is a chronic asphyxiant.",
+    "exp": "Pump rooms are enclosed spaces under SOLAS and require a full atmosphere assessment. Oxygen deficit (below 20.5%) indicates displacement by inert gas or vapour. HC above 1% LEL is explosive risk. H₂S (from cargo or sludge) is acutely toxic above 10 ppm and causes rapid olfactory paralysis - you cannot smell it at dangerous concentrations. CO from incomplete combustion is a chronic asphyxiant.",
     "cat": "SAFETY",
     "id": "T09S_463"
   },
   {
     "q": "What electrical interlock exists between the pump room exhaust fan and the cargo pump motor starters?",
-    "a": "The exhaust fan must be confirmed running (via a current relay or airflow switch) before any cargo pump motor starter will accept a start command — starting a pump without ventilation is physically prevented",
+    "a": "The exhaust fan must be confirmed running (via a current relay or airflow switch) before any cargo pump motor starter will accept a start command - starting a pump without ventilation is physically prevented",
     "opts": [
-      "The exhaust fan must be confirmed running (via a current relay or airflow switch) before any cargo pump motor starter will accept a start command — starting a pump without ventilation is physically prevented",
+      "The exhaust fan must be confirmed running (via a current relay or airflow switch) before any cargo pump motor starter will accept a start command - starting a pump without ventilation is physically prevented",
       "The fan and pumps are on the same busbar and start simultaneously when the panel key is turned",
       "The interlock only operates during gas-free operations; during cargo transfer the fan runs independently",
       "Pump starters have a warning buzzer but can still be started if the fan trips"

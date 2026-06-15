@@ -1607,7 +1607,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "The setpoint given by the operator",
       "Non-linearities, friction, and supply disturbances associated with the actuator and control medium"
     ],
-    "exp": "The master controller just asks for 'X amount of heat flow'. It doesn't have to worry about sticky valves or fluctuating steam pressure—the slave handles all that dirty work.",
+    "exp": "The master controller just asks for 'X amount of heat flow'. It doesn't have to worry about sticky valves or fluctuating steam pressure-the slave handles all that dirty work.",
     "cat": "CASCADE",
     "id": "T07_124"
   },
@@ -3284,7 +3284,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "Main engine must be running",
       "Valve must be removed from the pipe"
     ],
-    "exp": "SIPART calibration prerequisites: (1) Instrument air connected at 4-7 bar, clean and dry. (2) 24V DC / 4-20 mA loop supply present. (3) Valve mechanically free to travel full stroke — no manual locking pins, no jammed actuator. (4) Physical linkage between positioner and valve stem correctly installed and secured. (5) No downstream process pressure that would prevent valve movement.",
+    "exp": "SIPART calibration prerequisites: (1) Instrument air connected at 4-7 bar, clean and dry. (2) 24V DC / 4-20 mA loop supply present. (3) Valve mechanically free to travel full stroke - no manual locking pins, no jammed actuator. (4) Physical linkage between positioner and valve stem correctly installed and secured. (5) No downstream process pressure that would prevent valve movement.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3362,7 +3362,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "It measures the travel time",
       "It purges the air lines"
     ],
-    "exp": "RUN 5: Friction and hysteresis characterisation. The positioner applies a series of small incremental setpoint step changes and measures the exact response. It determines: (1) Deadband — how large a step is needed to initiate movement. (2) Stiction force — how much air pressure to apply to break static friction. (3) Hysteresis — difference between upward and downward response.",
+    "exp": "RUN 5: Friction and hysteresis characterisation. The positioner applies a series of small incremental setpoint step changes and measures the exact response. It determines: (1) Deadband - how large a step is needed to initiate movement. (2) Stiction force - how much air pressure to apply to break static friction. (3) Hysteresis - difference between upward and downward response.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3375,7 +3375,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "To calculate the remaining lifespan of the valve",
       "To reduce the air pressure to zero"
     ],
-    "exp": "Valve stiction (static friction) causes a valve to stick at its current position until sufficient force builds up, then jump past the setpoint ('stick-slip'). RUN 5 quantifies this. The positioner then applies the minimum pneumatic impulse to nudge the valve without overshooting — essential for tight process control and preventing valve wear.",
+    "exp": "Valve stiction (static friction) causes a valve to stick at its current position until sufficient force builds up, then jump past the setpoint ('stick-slip'). RUN 5 quantifies this. The positioner then applies the minimum pneumatic impulse to nudge the valve without overshooting - essential for tight process control and preventing valve wear.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3427,7 +3427,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "It reverses the valve direction",
       "It drops the air pressure"
     ],
-    "exp": "Valve packing tightening directly increases stem friction — often doubling or tripling the original friction value. The SIPART's RUN 5 stiction data becomes invalid. If not recalibrated, the positioner will apply insufficient impulse to overcome the new friction, causing the valve to sit offset from setpoint. Recalibration records the new friction profile.",
+    "exp": "Valve packing tightening directly increases stem friction - often doubling or tripling the original friction value. The SIPART's RUN 5 stiction data becomes invalid. If not recalibrated, the positioner will apply insufficient impulse to overcome the new friction, causing the valve to sit offset from setpoint. Recalibration records the new friction profile.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3440,7 +3440,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "The valve is fully open",
       "The fluid is too hot"
     ],
-    "exp": "Continuous hunting causes: (1) Valve friction has changed significantly since last calibration (worn packing, seized actuator). (2) Feedback linkage is loose — giving false position signal. (3) Instrument air pressure fluctuating. (4) Control parameters (from RUN 4) no longer match the actuator response. Solution: Re-run full RUN 1-5 calibration sequence.",
+    "exp": "Continuous hunting causes: (1) Valve friction has changed significantly since last calibration (worn packing, seized actuator). (2) Feedback linkage is loose - giving false position signal. (3) Instrument air pressure fluctuating. (4) Control parameters (from RUN 4) no longer match the actuator response. Solution: Re-run full RUN 1-5 calibration sequence.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3518,7 +3518,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "It is checking the air supply pressure",
       "It is learning the HART address"
     ],
-    "exp": "RUN 2 learns the physical CLOSED limit — maps 4 mA command to the actual stem position at the closed mechanical stop. RUN 3 learns the physical OPEN limit — maps 20 mA command to the actual stem position at the open mechanical stop. Together they define the 0-100% stroke and ensure the valve uses its full mechanical travel, regardless of how the actuator or linkage is set.",
+    "exp": "RUN 2 learns the physical CLOSED limit - maps 4 mA command to the actual stem position at the closed mechanical stop. RUN 3 learns the physical OPEN limit - maps 20 mA command to the actual stem position at the open mechanical stop. Together they define the 0-100% stroke and ensure the valve uses its full mechanical travel, regardless of how the actuator or linkage is set.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3570,7 +3570,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "0.5 bar",
       "30 bar"
     ],
-    "exp": "Instrument air supply = 4-7 bar (typically 6 bar nominal). Must be: clean (filtered to 25 micron), dry (dewpoint below -20 deg C), oil-free. SIPART PS2 input port marked 'Z' or 'Supply'. If pressure falls below 3.5 bar, valve typically fails to its spring-return safe position. Air quality is critical — moisture blocks pneumatic pilots within the positioner.",
+    "exp": "Instrument air supply = 4-7 bar (typically 6 bar nominal). Must be: clean (filtered to 25 micron), dry (dewpoint below -20 deg C), oil-free. SIPART PS2 input port marked 'Z' or 'Supply'. If pressure falls below 3.5 bar, valve typically fails to its spring-return safe position. Air quality is critical - moisture blocks pneumatic pilots within the positioner.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3609,7 +3609,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "Hit the positioner with a hammer",
       "Increase the 4-20mA signal to maximum"
     ],
-    "exp": "Check the SIPART manual for the specific error code. Common codes: E1 (air leak — check connections), E2 (travel too small — check for mechanical obstruction or incorrect linkage), E3 (no travel detected — confirm instrument air connected, actuator not jammed). Rectify the physical issue first, then restart the calibration sequence from RUN 1.",
+    "exp": "Check the SIPART manual for the specific error code. Common codes: E1 (air leak - check connections), E2 (travel too small - check for mechanical obstruction or incorrect linkage), E3 (no travel detected - confirm instrument air connected, actuator not jammed). Rectify the physical issue first, then restart the calibration sequence from RUN 1.",
     "cat": "SIPART PS2",
     "id": ""
   },
@@ -3622,7 +3622,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "Stop the PLC program (HALT mode) before replacing",
       "Isolate all I/O modules before battery replacement"
     ],
-    "exp": "Battery-backed RAM holds the user program. With power ON, the internal DC bus supplies the RAM — the battery is not the sole source. Replacing with power OFF removes all power from RAM the instant the battery is lifted, erasing the user program immediately.",
+    "exp": "Battery-backed RAM holds the user program. With power ON, the internal DC bus supplies the RAM - the battery is not the sole source. Replacing with power OFF removes all power from RAM the instant the battery is lifted, erasing the user program immediately.",
     "cat": "PLC Maintenance",
     "id": "T07_601"
   },
@@ -3687,7 +3687,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "Sequentially restore loads after a blackout in priority order",
       "Transfer load from an overloaded generator to shore supply"
     ],
-    "exp": "Preferential trip detects busbar overload (typically >85% generator rating) and automatically disconnects non-essential consumers (galley, HVAC, laundry) in milliseconds — faster than the overcurrent relay acts. This keeps the generator online and preserves power to essential services.",
+    "exp": "Preferential trip detects busbar overload (typically >85% generator rating) and automatically disconnects non-essential consumers (galley, HVAC, laundry) in milliseconds - faster than the overcurrent relay acts. This keeps the generator online and preserves power to essential services.",
     "cat": "PMS",
     "id": "T07_606"
   },
@@ -3700,7 +3700,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "Air conditioning plant",
       "Accommodation hot water heater"
     ],
-    "exp": "Steering gear is a Safety Priority 1 (essential) load — shedding it would create an immediate navigation hazard. Preferential trip only disconnects non-essential loads (galley, HVAC, laundry, hotel services) that can tolerate temporary interruption without risk to life or safety.",
+    "exp": "Steering gear is a Safety Priority 1 (essential) load - shedding it would create an immediate navigation hazard. Preferential trip only disconnects non-essential loads (galley, HVAC, laundry, hotel services) that can tolerate temporary interruption without risk to life or safety.",
     "cat": "PMS",
     "id": "T07_607"
   },
@@ -3726,7 +3726,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "The control panel polls each detector in sequence every 60 seconds",
       "A separate earth-fault monitor checks insulation resistance once per hour"
     ],
-    "exp": "A supervised loop carries a small continuous current through all detectors and wiring. A fire raises an ALARM; an open-circuit fault (broken wire, removed detector) drops the loop current and raises a FAULT alarm. This ensures the monitoring system cannot silently fail — you always know if the circuit is healthy.",
+    "exp": "A supervised loop carries a small continuous current through all detectors and wiring. A fire raises an ALARM; an open-circuit fault (broken wire, removed detector) drops the loop current and raises a FAULT alarm. This ensures the monitoring system cannot silently fail - you always know if the circuit is healthy.",
     "cat": "Alarm Systems",
     "id": "T07_609"
   },
@@ -3739,7 +3739,7 @@ window.loadQuizzes("T07_Control_PLC", [
       "It allows detectors to be removed for maintenance without interrupting the circuit",
       "It automatically resets after an alarm without operator intervention"
     ],
-    "exp": "In an unsupervised circuit, a broken wire produces no alarm — the fault goes undetected until a real hazard occurs and the detector fails to respond. A supervised (self-monitoring) circuit detects this open-circuit condition immediately, giving a FAULT alarm at the panel so the fault can be repaired before a real emergency.",
+    "exp": "In an unsupervised circuit, a broken wire produces no alarm - the fault goes undetected until a real hazard occurs and the detector fails to respond. A supervised (self-monitoring) circuit detects this open-circuit condition immediately, giving a FAULT alarm at the panel so the fault can be repaired before a real emergency.",
     "cat": "Alarm Systems",
     "id": "T07_610"
   },
@@ -3749,10 +3749,10 @@ window.loadQuizzes("T07_Control_PLC", [
     "opts": [
       "Single-point star grounding with instrument earth kept separate from power earth",
       "Multi-point grounding with all earths bonded to the nearest steel structure",
-      "Float the instrument earth completely — no connection to hull",
+      "Float the instrument earth completely - no connection to hull",
       "Connect instrument earth and power earth at every junction box"
     ],
-    "exp": "Multi-point grounding creates ground loops — different earth potentials between panels drive circulating currents through signal cables, adding noise. Single-point star grounding ensures all instrument earths meet at one clean earth bar. Power (dirty) and instrument (clean) earths are kept separate to prevent motor-switching transients reaching the analogue signals.",
+    "exp": "Multi-point grounding creates ground loops - different earth potentials between panels drive circulating currents through signal cables, adding noise. Single-point star grounding ensures all instrument earths meet at one clean earth bar. Power (dirty) and instrument (clean) earths are kept separate to prevent motor-switching transients reaching the analogue signals.",
     "cat": "PLC Noise Protection",
     "id": "T07_611"
   }

@@ -21,20 +21,20 @@ window.loadQuizzes("T08_Electronics", [
       "Converts AC to DC through high-frequency switching",
       "Isolates PLC logic from high-voltage surges using light"
     ],
-    "exp": "Zener diodes are heavily doped to operate safely in reverse breakdown — maintaining a constant voltage regardless of current. Standard diodes are destroyed by reverse breakdown. Optical isolation describes optocouplers. Amplification describes transistors.",
+    "exp": "Zener diodes are heavily doped to operate safely in reverse breakdown - maintaining a constant voltage regardless of current. Standard diodes are destroyed by reverse breakdown. Optical isolation describes optocouplers. Amplification describes transistors.",
     "cat": "DIODE",
     "id": "T08E_002"
   },
   {
     "q": "How is an N-type semiconductor created?",
-    "a": "Adding pentavalent impurity atoms (e.g. phosphorus) to pure silicon — provides free electrons",
+    "a": "Adding pentavalent impurity atoms (e.g. phosphorus) to pure silicon - provides free electrons",
     "opts": [
-      "Adding trivalent impurity atoms like boron — creates holes",
-      "Adding pentavalent impurity atoms (e.g. phosphorus) to pure silicon — provides free electrons",
+      "Adding trivalent impurity atoms like boron - creates holes",
+      "Adding pentavalent impurity atoms (e.g. phosphorus) to pure silicon - provides free electrons",
       "Removing all impurities to create perfectly crystalline silicon",
       "Heating silicon until covalent bonds break and release holes"
     ],
-    "exp": "N-type doping: pentavalent atoms (phosphorus, arsenic) have 5 valence electrons — the extra electron becomes a free carrier. P-type uses trivalent atoms (boron) creating holes. Pure intrinsic silicon has insufficient free carriers for practical devices.",
+    "exp": "N-type doping: pentavalent atoms (phosphorus, arsenic) have 5 valence electrons - the extra electron becomes a free carrier. P-type uses trivalent atoms (boron) creating holes. Pure intrinsic silicon has insufficient free carriers for practical devices.",
     "cat": "DIODE",
     "id": "T08E_003"
   },
@@ -47,7 +47,7 @@ window.loadQuizzes("T08_Electronics", [
       "OL in both directions (open circuit)",
       "Exactly 3.3V in reverse bias only"
     ],
-    "exp": "A shorted diode conducts freely in both directions — 0V drop both ways. A healthy diode shows 0.5–0.7V forward, OL reverse. OL in both directions = open circuit (burned junction). Rotating rectifier diodes can be checked by stroboscope or by testing removed diodes individually.",
+    "exp": "A shorted diode conducts freely in both directions - 0V drop both ways. A healthy diode shows 0.5–0.7V forward, OL reverse. OL in both directions = open circuit (burned junction). Rotating rectifier diodes can be checked by stroboscope or by testing removed diodes individually.",
     "cat": "DIODE",
     "id": "T08E_004"
   },
@@ -60,7 +60,7 @@ window.loadQuizzes("T08_Electronics", [
       "BJT uses an insulated gate drawing zero current",
       "BJT is current-controlled (needs base current); MOSFET is voltage-controlled (no gate current)"
     ],
-    "exp": "BJT: small base current controls large collector current — current-controlled. MOSFET: gate voltage controls drain current with negligible gate current — voltage-controlled. MOSFETs switch faster and drive ICs easily. BJTs have slightly better linearity for some audio applications.",
+    "exp": "BJT: small base current controls large collector current - current-controlled. MOSFET: gate voltage controls drain current with negligible gate current - voltage-controlled. MOSFETs switch faster and drive ICs easily. BJTs have slightly better linearity for some audio applications.",
     "cat": "BJT",
     "id": "T08E_005"
   },
@@ -73,7 +73,7 @@ window.loadQuizzes("T08_Electronics", [
       "Active (linear) region",
       "Avalanche region"
     ],
-    "exp": "Saturation = fully ON (closed switch) — base overdrive, minimal collector-emitter voltage. Cutoff = fully OFF (open switch) — no base current, no collector current. Active region = used for linear amplification, not switching. Avalanche = destructive breakdown.",
+    "exp": "Saturation = fully ON (closed switch) - base overdrive, minimal collector-emitter voltage. Cutoff = fully OFF (open switch) - no base current, no collector current. Active region = used for linear amplification, not switching. Avalanche = destructive breakdown.",
     "cat": "BJT",
     "id": "T08E_006"
   },
@@ -86,16 +86,16 @@ window.loadQuizzes("T08_Electronics", [
       "SCRs have lower on-state losses than IGBTs",
       "IGBTs cannot handle the high voltages in VFD applications"
     ],
-    "exp": "IGBTs are gate-controlled — removing gate voltage turns them OFF at any time, enabling PWM at 20kHz. SCRs are latching devices — once triggered they stay ON until current drops below holding current. In a DC-fed inverter, the current never naturally falls to zero, making SCRs unusable.",
+    "exp": "IGBTs are gate-controlled - removing gate voltage turns them OFF at any time, enabling PWM at 20kHz. SCRs are latching devices - once triggered they stay ON until current drops below holding current. In a DC-fed inverter, the current never naturally falls to zero, making SCRs unusable.",
     "cat": "BJT",
     "id": "T08E_007"
   },
   {
     "q": "What happens to a Thyristor (SCR) once fired by a positive gate pulse in a DC circuit?",
-    "a": "It latches ON completely — the gate loses all control until main current drops below holding current",
+    "a": "It latches ON completely - the gate loses all control until main current drops below holding current",
     "opts": [
       "It stays ON only while gate pulse is applied",
-      "It latches ON completely — the gate loses all control until main current drops below holding current",
+      "It latches ON completely - the gate loses all control until main current drops below holding current",
       "It turns OFF if gate voltage is reversed to negative",
       "It oscillates to convert DC to AC output"
     ],
@@ -105,11 +105,11 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "What is the primary effect of increasing the firing angle (α) of a thyristor in a soft starter?",
-    "a": "Delays turn-on in the AC cycle — decreases average output voltage and reduces motor starting torque",
+    "a": "Delays turn-on in the AC cycle - decreases average output voltage and reduces motor starting torque",
     "opts": [
-      "Accelerates turn-on — gives higher average voltage",
+      "Accelerates turn-on - gives higher average voltage",
       "Increases output AC frequency without changing voltage",
-      "Delays turn-on in the AC cycle — decreases average output voltage and reduces motor starting torque",
+      "Delays turn-on in the AC cycle - decreases average output voltage and reduces motor starting torque",
       "Reverses phase sequence to brake the motor"
     ],
     "exp": "Firing angle α = delay from AC voltage zero-crossing to SCR triggering. α=0° = full voltage. α=90° = ~50% voltage. α=180° = near zero. Soft starters ramp α from 90° down to 0° during motor startup, limiting inrush current.",
@@ -125,7 +125,7 @@ window.loadQuizzes("T08_Electronics", [
       "The AC supply current crosses zero each half-cycle, dropping below holding current and turning off the SCR",
       "The SCR has an insulated gate to cleanly chop AC waveform"
     ],
-    "exp": "In AC circuits, current naturally reverses each half-cycle, automatically falling through zero — this natural zero crossing extinguishes the SCR. In DC circuits, forced commutation (capacitor circuit) must artificially force current to zero. Gate removal never turns off a latched thyristor.",
+    "exp": "In AC circuits, current naturally reverses each half-cycle, automatically falling through zero - this natural zero crossing extinguishes the SCR. In DC circuits, forced commutation (capacitor circuit) must artificially force current to zero. Gate removal never turns off a latched thyristor.",
     "cat": "THYRISTOR",
     "id": "T08E_010"
   },
@@ -144,14 +144,14 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "Which rectifier type is used in VFD DC links due to lowest ripple?",
-    "a": "3-phase bridge rectifier with 6 diodes — ripple factor ~4.2%",
+    "a": "3-phase bridge rectifier with 6 diodes - ripple factor ~4.2%",
     "opts": [
-      "Half-wave single-phase — 121% ripple",
-      "Single-phase full-wave bridge — 48% ripple",
-      "3-phase bridge rectifier with 6 diodes — ripple factor ~4.2%",
-      "Centre-tap with 2 diodes — 48% ripple"
+      "Half-wave single-phase - 121% ripple",
+      "Single-phase full-wave bridge - 48% ripple",
+      "3-phase bridge rectifier with 6 diodes - ripple factor ~4.2%",
+      "Centre-tap with 2 diodes - 48% ripple"
     ],
-    "exp": "3-phase bridge produces near-DC output with only 4.2% ripple — ideal for VFDs where smooth DC is essential. Single-phase bridge has 48% ripple requiring much larger filter capacitors. Half-wave at 121% ripple is completely unsuitable for power electronics.",
+    "exp": "3-phase bridge produces near-DC output with only 4.2% ripple - ideal for VFDs where smooth DC is essential. Single-phase bridge has 48% ripple requiring much larger filter capacitors. Half-wave at 121% ripple is completely unsuitable for power electronics.",
     "cat": "POWER",
     "id": "T08E_012"
   },
@@ -159,22 +159,22 @@ window.loadQuizzes("T08_Electronics", [
     "q": "Why is SMPS smaller and lighter than a linear power supply?",
     "a": "Switches DC at high frequencies (20kHz–1MHz) allowing tiny high-frequency transformer instead of large 50Hz transformer",
     "opts": [
-      "Burns excess voltage as heat using series-pass transistor — no transformer needed",
+      "Burns excess voltage as heat using series-pass transistor - no transformer needed",
       "Uses heavy 50Hz iron-core transformers to filter EMI naturally",
       "Switches DC at high frequencies (20kHz–1MHz) allowing tiny high-frequency transformer instead of large 50Hz transformer",
       "Uses mechanical commutators to chop 440V AC into 24V DC"
     ],
-    "exp": "SMPS switches at 20kHz–1MHz — high-frequency transformers are much smaller (transformer size ∝ 1/frequency). Linear PSU uses 50Hz transformer — large and heavy. SMPS generates more EMI than linear PSU due to switching (EMI filters needed).",
+    "exp": "SMPS switches at 20kHz–1MHz - high-frequency transformers are much smaller (transformer size ∝ 1/frequency). Linear PSU uses 50Hz transformer - large and heavy. SMPS generates more EMI than linear PSU due to switching (EMI filters needed).",
     "cat": "POWER",
     "id": "T08E_013"
   },
   {
     "q": "What is the purpose of a freewheeling diode (flyback diode) across an inductive load?",
-    "a": "Provides a current path for the collapsing magnetic field energy when the switch opens — prevents voltage spike",
+    "a": "Provides a current path for the collapsing magnetic field energy when the switch opens - prevents voltage spike",
     "opts": [
       "Amplifies gate signal to increase switching speed",
       "Filters 50Hz AC ripple from the DC supply",
-      "Provides a current path for the collapsing magnetic field energy when the switch opens — prevents voltage spike",
+      "Provides a current path for the collapsing magnetic field energy when the switch opens - prevents voltage spike",
       "Acts as a short circuit to test relay coil integrity"
     ],
     "exp": "When a relay coil or motor winding switch opens, the collapsing magnetic field generates a high-voltage back-EMF spike (Lenz's Law). The freewheeling diode short-circuits this spike, preventing destruction of the controlling transistor or PLC output. Also called a snubber diode or flyback diode.",
@@ -190,16 +190,16 @@ window.loadQuizzes("T08_Electronics", [
       "0mA at 0% and 24mA at 100%",
       "2mA at 0% and 22mA at 100%"
     ],
-    "exp": "The 4-20mA standard uses a live zero of 4mA — allows differentiation between 0% reading (4mA) and a broken wire/power failure (0mA). The 4mA minimum also powers the transmitter in 2-wire configurations. 20mA at full scale. Any reading below 3.8mA or above 20.5mA indicates a fault.",
+    "exp": "The 4-20mA standard uses a live zero of 4mA - allows differentiation between 0% reading (4mA) and a broken wire/power failure (0mA). The 4mA minimum also powers the transmitter in 2-wire configurations. 20mA at full scale. Any reading below 3.8mA or above 20.5mA indicates a fault.",
     "cat": "ADC",
     "id": "T08E_015"
   },
   {
     "q": "A 4-20mA sensor reading drops to 0mA while the process is operating normally. What is the most likely cause?",
-    "a": "Open circuit — broken wire or failed transmitter — not a valid process reading",
+    "a": "Open circuit - broken wire or failed transmitter - not a valid process reading",
     "opts": [
       "Process variable has dropped to below minimum range",
-      "Open circuit — broken wire or failed transmitter — not a valid process reading",
+      "Open circuit - broken wire or failed transmitter - not a valid process reading",
       "Signal is being amplified by the I/P converter in the panel",
       "Zener barrier has clamped the signal to zero for safety"
     ],
@@ -255,7 +255,7 @@ window.loadQuizzes("T08_Electronics", [
       "The half-controlled bridge allows faster braking by allowing freewheeling, reducing firing circuit complexity",
       "It provides regenerative braking capability back to the supply"
     ],
-    "exp": "Half-controlled (3 SCRs + 3 diodes) allows the output current to freewheel through the diodes when thyristors are off — simpler and cheaper. Fully-controlled bridges (6 SCRs) can provide regenerative braking by reversing power flow. Half-controlled cannot regenerate but is sufficient for simple speed control.",
+    "exp": "Half-controlled (3 SCRs + 3 diodes) allows the output current to freewheel through the diodes when thyristors are off - simpler and cheaper. Fully-controlled bridges (6 SCRs) can provide regenerative braking by reversing power flow. Half-controlled cannot regenerate but is sufficient for simple speed control.",
     "cat": "THYRISTOR",
     "id": "T08E_020"
   },
@@ -294,15 +294,15 @@ window.loadQuizzes("T08_Electronics", [
       "BJT is used exclusively for high-power applications above 6.6 kV; MOSFET is limited to 24V control circuits",
       "BJT is current-controlled (base current drives switching); MOSFET is voltage-controlled (gate voltage drives switching with near-zero gate current)"
     ],
-    "exp": "BJT requires a continuous base current to stay on. MOSFET requires only a gate voltage — the gate input impedance is near-infinite (no current flows). This makes MOSFET far more efficient for high-frequency switching in VFDs.",
+    "exp": "BJT requires a continuous base current to stay on. MOSFET requires only a gate voltage - the gate input impedance is near-infinite (no current flows). This makes MOSFET far more efficient for high-frequency switching in VFDs.",
     "cat": "Transistor",
     "id": "T08E_023"
   },
   {
     "q": "Why are IGBTs (Insulated Gate Bipolar Transistors) specifically used in marine Variable Frequency Drives (VFDs) for motors above 100 kW?",
-    "a": "IGBTs combine the high input impedance voltage control of MOSFETs with the low saturation voltage (high current capacity) of BJTs — making them ideal for high-power, high-frequency switching in motor drives",
+    "a": "IGBTs combine the high input impedance voltage control of MOSFETs with the low saturation voltage (high current capacity) of BJTs - making them ideal for high-power, high-frequency switching in motor drives",
     "opts": [
-      "IGBTs combine the high input impedance voltage control of MOSFETs with the low saturation voltage (high current capacity) of BJTs — making them ideal for high-power, high-frequency switching in motor drives",
+      "IGBTs combine the high input impedance voltage control of MOSFETs with the low saturation voltage (high current capacity) of BJTs - making them ideal for high-power, high-frequency switching in motor drives",
       "IGBTs are the only semiconductor that can withstand the high humidity and salt atmosphere of the engine room without derating",
       "IGBTs generate less heat than MOSFETs because they use a magnetic field rather than current flow to switch power",
       "IGBTs are chosen because they can operate bidirectionally without any additional circuit components"
@@ -315,10 +315,10 @@ window.loadQuizzes("T08_Electronics", [
     "q": "In a current-to-voltage (I/V) converter op-amp circuit using a 4-20mA sensor signal and a 250 ohm feedback resistor, what output voltage range is produced?",
     "a": "1V to 5V output (4mA x 250 ohm = 1V minimum; 20mA x 250 ohm = 5V maximum)",
     "opts": [
-      "4V to 20V output — directly equal to the milliamp signal multiplied by 1000",
-      "0.4V to 2.0V output — the op-amp divides the current by a factor of 10",
+      "4V to 20V output - directly equal to the milliamp signal multiplied by 1000",
+      "0.4V to 2.0V output - the op-amp divides the current by a factor of 10",
       "1V to 5V output (4mA x 250 ohm = 1V minimum; 20mA x 250 ohm = 5V maximum)",
-      "0V to 10V output — the standard industrial signal range for all 4-20mA sensors"
+      "0V to 10V output - the standard industrial signal range for all 4-20mA sensors"
     ],
     "exp": "Vout = Iin x Rf. For a 250 ohm resistor: 4mA x 250 = 1V (process minimum) and 20mA x 250 = 5V (process maximum). This 1-5V signal is then fed to the PLC analogue input module.",
     "cat": "OpAmp",
@@ -326,11 +326,11 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "What does the intrinsic safety parameter 'ia' (versus 'ib') indicate about an Ex ia certified instrument?",
-    "a": "'ia' means the instrument remains safe under TWO simultaneous faults; 'ib' means safe under ONE fault — making 'ia' suitable for Zone 0 and 'ib' for Zone 1 only",
+    "a": "'ia' means the instrument remains safe under TWO simultaneous faults; 'ib' means safe under ONE fault - making 'ia' suitable for Zone 0 and 'ib' for Zone 1 only",
     "opts": [
-      "'ia' means the instrument remains safe under TWO simultaneous faults; 'ib' means safe under ONE fault — making 'ia' suitable for Zone 0 and 'ib' for Zone 1 only",
+      "'ia' means the instrument remains safe under TWO simultaneous faults; 'ib' means safe under ONE fault - making 'ia' suitable for Zone 0 and 'ib' for Zone 1 only",
       "'ia' indicates the instrument is immersion-proof to 1 metre; 'ib' indicates resistance to high-pressure washdown",
-      "'ia' and 'ib' are interchangeable designations — there is no functional difference between them",
+      "'ia' and 'ib' are interchangeable designations - there is no functional difference between them",
       "'ia' indicates the instrument uses an internal battery; 'ib' indicates it is powered from the ship's 24V DC system"
     ],
     "exp": "Ex ia certification (two-fault tolerance) is required for Zone 0 because the hazardous atmosphere is present continuously. Ex ib (one-fault tolerance) is acceptable for Zone 1 where the atmosphere is only occasional.",
@@ -339,12 +339,12 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "What is the peak voltage of the standard 440V AC shore or generator supply, and why is this value important for circuit protection?",
-    "a": "Peak voltage = 440 x root 2 = approximately 622V — important because capacitors, insulation, and surge suppressors must be rated above this peak value, not just the 440V RMS value",
+    "a": "Peak voltage = 440 x root 2 = approximately 622V - important because capacitors, insulation, and surge suppressors must be rated above this peak value, not just the 440V RMS value",
     "opts": [
-      "Peak voltage = 440 x 2 = 880V — double the RMS value due to the full-wave rectification effect",
-      "Peak voltage = 440 x root 2 = approximately 622V — important because capacitors, insulation, and surge suppressors must be rated above this peak value, not just the 440V RMS value",
-      "Peak voltage = 440 / root 2 = 311V — the RMS is always higher than the peak in AC systems",
-      "Peak voltage = 440V — the RMS and peak values are identical for AC systems"
+      "Peak voltage = 440 x 2 = 880V - double the RMS value due to the full-wave rectification effect",
+      "Peak voltage = 440 x root 2 = approximately 622V - important because capacitors, insulation, and surge suppressors must be rated above this peak value, not just the 440V RMS value",
+      "Peak voltage = 440 / root 2 = 311V - the RMS is always higher than the peak in AC systems",
+      "Peak voltage = 440V - the RMS and peak values are identical for AC systems"
     ],
     "exp": "RMS (440V) is the equivalent heating value. Peak voltage is 440 x 1.414 = 622V. All insulation, capacitors, and protection devices must withstand this peak value. A capacitor rated 600V would fail on a 440V AC supply.",
     "cat": "Formula",
@@ -354,10 +354,10 @@ window.loadQuizzes("T08_Electronics", [
     "q": "In a 555 timer astable circuit used for generating timing pulses in control systems, what formula determines the output period?",
     "a": "T = 1.1 x R x C seconds (for a monostable pulse width); astable period T = 0.693 x C x (R1 + 2R2)",
     "opts": [
-      "T = R / C seconds — the time constant is the resistance divided by the capacitance",
-      "T = R x C / 1000 milliseconds — the standard formula for all timer ICs regardless of configuration",
+      "T = R / C seconds - the time constant is the resistance divided by the capacitance",
+      "T = R x C / 1000 milliseconds - the standard formula for all timer ICs regardless of configuration",
       "T = 1.1 x R x C seconds (for a monostable pulse width); astable period T = 0.693 x C x (R1 + 2R2)",
-      "T = 2 x pi x R x C seconds — the same formula used for an RC filter's cutoff frequency"
+      "T = 2 x pi x R x C seconds - the same formula used for an RC filter's cutoff frequency"
     ],
     "exp": "555 monostable: T = 1.1RC. 555 astable: T = 0.693C(R1+2R2), frequency = 1.44/((R1+2R2)C). These are frequently used in test equipment and control panel timing circuits on ships.",
     "cat": "Formula",
@@ -365,23 +365,23 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "What is the capacitive reactance (Xc) of a 10 microfarad capacitor at 50 Hz, and what does this value tell us?",
-    "a": "Xc = 1 / (2 x pi x 50 x 10x10^-6) = approximately 318 ohms — at this frequency, the capacitor presents 318 ohms impedance to AC but blocks DC completely",
+    "a": "Xc = 1 / (2 x pi x 50 x 10x10^-6) = approximately 318 ohms - at this frequency, the capacitor presents 318 ohms impedance to AC but blocks DC completely",
     "opts": [
-      "Xc = 10x10^-6 x 50 = 0.0005 ohms — the reactance equals capacitance times frequency",
-      "Xc = 1 / (2 x pi x 50 x 10x10^-6) = approximately 318 ohms — at this frequency, the capacitor presents 318 ohms impedance to AC but blocks DC completely",
-      "Xc = 50 / (10x10^-6) = 5,000,000 ohms — capacitors are essentially open circuits at power frequencies",
-      "Xc = 2 x pi x 50 x 10x10^-6 = approximately 0.00314 ohms — capacitors are near-short-circuits at 50 Hz"
+      "Xc = 10x10^-6 x 50 = 0.0005 ohms - the reactance equals capacitance times frequency",
+      "Xc = 1 / (2 x pi x 50 x 10x10^-6) = approximately 318 ohms - at this frequency, the capacitor presents 318 ohms impedance to AC but blocks DC completely",
+      "Xc = 50 / (10x10^-6) = 5,000,000 ohms - capacitors are essentially open circuits at power frequencies",
+      "Xc = 2 x pi x 50 x 10x10^-6 = approximately 0.00314 ohms - capacitors are near-short-circuits at 50 Hz"
     ],
-    "exp": "Xc = 1/(2*pi*f*C). At 50Hz, Xc for 10uF = 1/(2*pi*50*10e-6) = 318 ohms. Xc decreases as frequency increases — capacitors pass high-frequency signals but block DC and low-frequency signals.",
+    "exp": "Xc = 1/(2*pi*f*C). At 50Hz, Xc for 10uF = 1/(2*pi*50*10e-6) = 318 ohms. Xc decreases as frequency increases - capacitors pass high-frequency signals but block DC and low-frequency signals.",
     "cat": "Formula",
     "id": "T08E_029"
   },
   {
     "q": "What does the Open Circuit Voltage (Uo) parameter specify on an Ex ia safety barrier?",
-    "a": "The maximum voltage that can appear at the hazardous area terminals of the barrier under open circuit conditions — must be kept below the ignition voltage for the specific gas group",
+    "a": "The maximum voltage that can appear at the hazardous area terminals of the barrier under open circuit conditions - must be kept below the ignition voltage for the specific gas group",
     "opts": [
       "The output voltage of the sensor when the process is at its maximum design value (20mA output)",
-      "The maximum voltage that can appear at the hazardous area terminals of the barrier under open circuit conditions — must be kept below the ignition voltage for the specific gas group",
+      "The maximum voltage that can appear at the hazardous area terminals of the barrier under open circuit conditions - must be kept below the ignition voltage for the specific gas group",
       "The voltage drop across the barrier when the circuit is operating at maximum sensor current (20mA)",
       "The minimum supply voltage required for the barrier to regulate correctly and protect the sensor circuit"
     ],
@@ -391,14 +391,14 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "On a ship CCTV system, what does a constant-current LED driver do that makes it superior to a simple resistor for powering LEDs?",
-    "a": "It maintains constant current through the LED regardless of supply voltage fluctuations or temperature changes — preventing under-brightness or premature LED failure from over-current",
+    "a": "It maintains constant current through the LED regardless of supply voltage fluctuations or temperature changes - preventing under-brightness or premature LED failure from over-current",
     "opts": [
       "It converts the 440V AC supply directly to 3.3V DC for LED operation without any transformer",
-      "It maintains constant current through the LED regardless of supply voltage fluctuations or temperature changes — preventing under-brightness or premature LED failure from over-current",
+      "It maintains constant current through the LED regardless of supply voltage fluctuations or temperature changes - preventing under-brightness or premature LED failure from over-current",
       "It stores energy during the day cycle and uses it to keep the LED lit during the night cycle",
       "It provides surge protection to prevent lightning strikes from destroying the CCTV camera module"
     ],
-    "exp": "LEDs have exponential V-I characteristics — a small voltage increase causes a large current increase. A resistor cannot compensate for this. A constant-current driver maintains safe LED operating current regardless of supply or junction temperature variations.",
+    "exp": "LEDs have exponential V-I characteristics - a small voltage increase causes a large current increase. A resistor cannot compensate for this. A constant-current driver maintains safe LED operating current regardless of supply or junction temperature variations.",
     "cat": "Transistor",
     "id": "T08E_031"
   },
@@ -2972,7 +2972,7 @@ window.loadQuizzes("T08_Electronics", [
       "It waits for a manual trigger",
       "It acts as a microphone amplifier"
     ],
-    "exp": "Astable means 'no stable state'—it flips back and forth constantly based on RC timing.",
+    "exp": "Astable means 'no stable state'-it flips back and forth constantly based on RC timing.",
     "cat": "Amplifier",
     "id": "T08E_229"
   },
@@ -3381,14 +3381,14 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "A synchroconverter uses thyristor stages at both its rectifier and inverter ends. What type of commutation does it rely on?",
-    "a": "Natural (line) commutation — the supply voltage turns off each thyristor",
+    "a": "Natural (line) commutation - the supply voltage turns off each thyristor",
     "opts": [
       "Forced commutation using capacitors",
       "Gate turn-off (GTO) switching",
-      "Natural (line) commutation — the supply voltage turns off each thyristor",
+      "Natural (line) commutation - the supply voltage turns off each thyristor",
       "PWM pulse-width modulation"
     ],
-    "exp": "Thyristors in a synchroconverter cannot self-extinguish — they rely on natural line voltage reversal to commutate. No forced turn-off circuit is needed. This limits operating frequency but suits high-power drives.",
+    "exp": "Thyristors in a synchroconverter cannot self-extinguish - they rely on natural line voltage reversal to commutate. No forced turn-off circuit is needed. This limits operating frequency but suits high-power drives.",
     "cat": "VFD",
     "id": "T08_601"
   },
@@ -3440,16 +3440,16 @@ window.loadQuizzes("T08_Electronics", [
       "500V DC",
       "1000V AC"
     ],
-    "exp": "500V DC is the standard for LV (400–440V) systems. HV equipment uses 1000V, 2500V or 5000V DC meggering. The voltage must be high enough to stress insulation realistically — equal to or greater than the working voltage.",
+    "exp": "500V DC is the standard for LV (400–440V) systems. HV equipment uses 1000V, 2500V or 5000V DC meggering. The voltage must be high enough to stress insulation realistically - equal to or greater than the working voltage.",
     "cat": "Testing",
     "id": "T08_605"
   },
   {
     "q": "Before meggering a generator's insulation, what critical precaution must be taken regarding the AVR?",
-    "a": "Disconnect the AVR (and all electronic components) from the generator terminals — the 500V megger surge will destroy AVR semiconductors",
+    "a": "Disconnect the AVR (and all electronic components) from the generator terminals - the 500V megger surge will destroy AVR semiconductors",
     "opts": [
       "Set the AVR to manual control mode",
-      "Disconnect the AVR (and all electronic components) from the generator terminals — the 500V megger surge will destroy AVR semiconductors",
+      "Disconnect the AVR (and all electronic components) from the generator terminals - the 500V megger surge will destroy AVR semiconductors",
       "Increase AVR set-point voltage before testing",
       "Ensure AVR is in automatic mode to protect winding"
     ],
@@ -3503,7 +3503,7 @@ window.loadQuizzes("T08_Electronics", [
       "Immediate voltage collapse and total loss of output",
       "Partial loss of excitation causing reduced or unstable output voltage; AVR will increase field current attempting to compensate",
       "Output voltage increases beyond limits",
-      "No effect — the other diodes compensate fully"
+      "No effect - the other diodes compensate fully"
     ],
     "exp": "An open-circuit diode removes one conducting path from the rotating rectifier bridge. The remaining diodes still conduct, but excitation becomes asymmetrical with AC ripple appearing in the DC field current. The AVR may partially compensate. Symptoms: slight voltage instability, increased AVR output current, possible AC hum from the alternator.",
     "cat": "Machines",
@@ -3524,14 +3524,14 @@ window.loadQuizzes("T08_Electronics", [
   },
   {
     "q": "How are rotating rectifier diodes on a brushless alternator tested?",
-    "a": "The alternator must be stopped. Each diode is disconnected and tested individually with a multimeter in diode mode — forward drop ~0.5–0.7V, reverse should read OL",
+    "a": "The alternator must be stopped. Each diode is disconnected and tested individually with a multimeter in diode mode - forward drop ~0.5–0.7V, reverse should read OL",
     "opts": [
       "Megger at 500V while the machine is running",
       "Current clamp on the rotor shaft while at full load",
-      "The alternator must be stopped. Each diode is disconnected and tested individually with a multimeter in diode mode — forward drop ~0.5–0.7V, reverse should read OL",
+      "The alternator must be stopped. Each diode is disconnected and tested individually with a multimeter in diode mode - forward drop ~0.5–0.7V, reverse should read OL",
       "Connect an oscilloscope to the main terminals and observe waveform"
     ],
-    "exp": "There is no way to test rotating diodes while the machine is running — they spin inside the rotor. The machine must be stopped, opened, and each diode tested with a multimeter. A shorted diode reads near 0V in both directions; an open diode reads OL in both directions.",
+    "exp": "There is no way to test rotating diodes while the machine is running - they spin inside the rotor. The machine must be stopped, opened, and each diode tested with a multimeter. A shorted diode reads near 0V in both directions; an open diode reads OL in both directions.",
     "cat": "Machines",
     "id": "T08_612"
   }
