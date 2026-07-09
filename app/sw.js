@@ -1,6 +1,6 @@
 // ─── ETO Oral Prep — Service Worker ───────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v12';
+const VERSION = 'v13';
 const CACHE = 'elec-buddy-' + VERSION;
 
 const PRECACHE = [
