@@ -826,6 +826,37 @@ a.sb-item{text-decoration:none}
     #guide-slide-card { padding: 28px 22px; }
     #guide-tooltip { width: min(280px, calc(100vw - 24px)); padding: 14px 16px 14px; }
     .guide-tt-body { font-size: 12.5px; margin-bottom: 12px; }
+    /* Hide logo subtitle on mobile — prevents topbar overflow */
+    .logo span { display: none; }
+    /* Video tab segment: tighter padding so two buttons fit on small screens */
+    .qb-seg-btn { padding: 9px 14px; }
+    /* Score breakdown: 2 cols on mobile (3 cols at ~90px each is too tight) */
+    .score-breakdown { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Floating video player — mobile layout ── */
+@media (max-width: 600px) {
+    /* Stack player on top, playlist scrollable below */
+    .vid-float-inner { flex-direction: column; }
+    .vid-float-player { flex: none; width: 100%; }
+    .vid-float-sidebar {
+        flex: 0 0 auto;
+        border-left: none;
+        border-top: 1px solid var(--border2);
+        max-height: 36vh;
+    }
+    /* Use dvh so iOS browser chrome doesn't clip the bottom */
+    .vid-float-box { max-height: 90dvh; }
+    /* Bigger close button tap target */
+    .vid-float-close {
+        padding: 10px 16px;
+        font-size: 18px;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 /* ── VIDEOS TAB STYLES ── */
