@@ -62,7 +62,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-h1" id="s3-induction-principle">⚙️ Induction Motor - Complete Working Principle</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Most asked topic - every surveyor without exception.</strong> Based on Faraday's law of electromagnetic induction and the interaction between magnetic fields.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-induction-motor.png" alt="Induction motor construction — stator, rotor, windings, shaft">
+    <img src="../data/diagrams/t03-induction-motor.png" alt="Induction motor construction — stator, rotor, windings, shaft">
     <div class="note-diagram-cap">Fig. Induction Motor — stator winding, squirrel-cage rotor, air gap, end rings</div>
   </div>
   <div class="n-h2">Construction</div>
@@ -131,7 +131,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Slip frequency</strong> = frequency of rotor currents = s × f (supply frequency × slip). At standstill: rotor frequency = 50 Hz. At full load (s = 0.04): rotor frequency = 0.04 × 50 = 2 Hz. This low frequency at running speed means rotor reactance (X = 2πfL) is very low → rotor current shifts to near-unity power factor → good running efficiency.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q (Deswal, Nair): What is slip and why is it important?</strong><br><strong>Ideal Answer:</strong> Slip = (Ns − N)/Ns × 100%. Slip must always exist - without it, no relative motion between RMF and rotor, no induced EMF, no rotor current, no torque → motor stops. No-load slip is 0.1–0.5%, full-load slip is 3–8% for a cage motor. More mechanical load → more slip needed → more rotor current → more torque. Slip also determines rotor frequency (s × f) and hence rotor impedance. Excessive slip means inefficient operation and winding overheating.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-slip-torque-curve.png" alt="Torque-slip curve showing relationship between torque and slip for various rotor resistances">
+    <img src="../data/diagrams/t03-slip-torque-curve.png" alt="Torque-slip curve showing relationship between torque and slip for various rotor resistances">
     <div class="note-diagram-cap">Fig. Torque–Slip Curve — max torque at different rotor resistances; slip-ring motor shifts curve right</div>
   </div>
 
@@ -182,7 +182,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   </table>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Effects of high DOL starting current:</strong> (1) Busbar voltage dip 10–15% affecting relays, contactors, automation. (2) Cable overheating - I²R losses proportional to current². (3) Generator overcurrent protection may trip. (4) Mechanical shock to shaft, coupling, and driven machinery. (5) Repeated starts accumulate thermal stress in windings.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-dol-starter.png" alt="DOL starter circuit — main contactor, thermal overload relay, start/stop pushbuttons">
+    <img src="../data/diagrams/t03-dol-starter.png" alt="DOL starter circuit — main contactor, thermal overload relay, start/stop pushbuttons">
     <div class="note-diagram-cap">Fig. DOL Starter Circuit — supply, main contactor (KM), thermal overload, motor terminals</div>
   </div>
 
@@ -212,7 +212,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   </table>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Delta connection link sequence (the A2-B1, B2-C1, C2-A1 rule):</strong> Each winding <em>end</em> (U2, V2, W2) is linked to the <em>start</em> of the <em>next</em> phase's winding (V1, W1, U1 respectively), forming a closed delta loop. In the older A/B/C terminal notation: A2→B1, B2→C1, C2→A1. Verify with continuity tester across each pair before energising - and always megger after any terminal-box work.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-star-delta-terminals.png" alt="Star and delta terminal-box connections — W2/U2/V2 links for star; cross-links for delta">
+    <img src="../data/diagrams/t03-star-delta-terminals.png" alt="Star and delta terminal-box connections — W2/U2/V2 links for star; cross-links for delta">
     <div class="note-diagram-cap">Fig. Terminal-Box Reconnection — star (U2-V2-W2 shorted) vs. delta (U2→V1, V2→W1, W2→U1)</div>
   </div>
 
@@ -242,7 +242,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Critical Interlock:</strong> KY and KD are ELECTRICALLY AND MECHANICALLY interlocked - both cannot close simultaneously under any fault condition. If both closed together, the winding ends would form a direct three-phase short circuit across the supply → catastrophic arc, busbar fault, possible fire. The interlock is the most safety-critical feature of the star-delta starter.</div></div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Star = √3 less volts per winding → 1/√3 winding current → 1/3 line current → 1/3 torque. The 1/3 factor comes from two separate √3 reductions multiplied together: (1/√3)² = 1/3.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-star-delta-starter.png" alt="Star-delta starter circuit with KM main contactor, KY star contactor, KD delta contactor and timer">
+    <img src="../data/diagrams/t03-star-delta-starter.png" alt="Star-delta starter circuit with KM main contactor, KY star contactor, KD delta contactor and timer">
     <div class="note-diagram-cap">Fig. Star-Delta Starter — KM (main), KY (star), KD (delta), timer KT1; electrical interlock shown</div>
   </div>
 
@@ -301,7 +301,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: Where are VFDs used on ships?</strong><br><strong>Ideal Answer:</strong> Ballast water pumps (variable flow rate control), HVAC fans (variable air volume), cargo pumps on tankers (discharge rate control), bow thrusters, seawater cooling pumps, crane hoists, reefer compressors, and main propulsion on electric drive vessels. Energy saving: for centrifugal loads, power reduces with cube of speed - 80% speed = 51% power - significant daily fuel saving. VFD also eliminates water hammer on pump start/stop.</div></div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Soft starter = "voltage ramp, then bypass" - start and stop ramp only, full speed running. VFD = "AC → DC → AC, V/f constant" - full life speed control. Soft starter saves your coupling and pipe fittings; VFD saves your fuel bill.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-vfd-block.png" alt="VFD block diagram — rectifier, DC link capacitors, IGBT inverter, motor">
+    <img src="../data/diagrams/t03-vfd-block.png" alt="VFD block diagram — rectifier, DC link capacitors, IGBT inverter, motor">
     <div class="note-diagram-cap">Fig. VFD Block Diagram — rectifier → DC bus → IGBT inverter (PWM) → variable-frequency AC output</div>
   </div>
 
@@ -450,7 +450,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   </table>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q (Sanjib, Kamath): What is armature reaction and how is it overcome?</strong><br><strong>Ideal Answer:</strong> Armature reaction is the effect of the armature current's magnetic field distorting and weakening the main field flux. It has a cross-magnetising effect (shifts the magnetic neutral axis, causing brush sparking and commutator damage) and a demagnetising effect (reduces flux and torque at the same current). Overcome by interpoles - small auxiliary poles connected in series with the armature to neutralise the armature reaction at the brush zone - and by compensating windings embedded in the main pole faces for large machines.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-armature-reaction.png" alt="Armature reaction in DC machines — main field, armature field, resultant flux, MNA shift">
+    <img src="../data/diagrams/t03-armature-reaction.png" alt="Armature reaction in DC machines — main field, armature field, resultant flux, MNA shift">
     <div class="note-diagram-cap">Fig. Armature Reaction — GNA, MNA shift under load, cross-magnetising distortion, interpole position</div>
   </div>
 
@@ -483,7 +483,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q (Kamath, Sanjib): Explain the Ward-Leonard system.</strong><br><strong>Ideal Answer:</strong> A motor-generator set where a constant-speed AC motor drives a DC generator, whose variable voltage output feeds the armature of the main DC motor. By varying the generator field rheostat, the armature voltage - and hence motor speed - is controlled smoothly from zero to maximum. Reversing the generator field reverses motor direction. It gives stepless wide-range speed control in both directions with inherent regenerative braking, but requires three machines making it bulky, inefficient and expensive to maintain - now largely replaced by thyristor and VFD drives.</div></div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Ward-Leonard:</strong> "Vary the generator's field, and you steer the motor's speed and direction." Constant AC in → variable DC generator out → smooth DC motor speed control - with free regenerative braking when the load drives the motor.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-ward-leonard.png" alt="Ward-Leonard M-G set — AC driving motor, DC generator, exciter, DC drive motor">
+    <img src="../data/diagrams/t03-ward-leonard.png" alt="Ward-Leonard M-G set — AC driving motor, DC generator, exciter, DC drive motor">
     <div class="note-diagram-cap">Fig. Ward-Leonard System — AC motor + DC generator (M-G set) feeding DC drive motor via field rheostat</div>
   </div>
 
@@ -514,11 +514,11 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q (Vishwanathan): What is regenerative braking?</strong><br><strong>Ideal Answer:</strong> When the load drives the motor above synchronous speed (e.g. a heavy load being lowered by a crane), slip becomes negative and the induction machine acts as a generator, feeding power back into the supply busbar. This provides controlled braking while recovering the gravitational energy of the load. It is efficient, smooth, and produces no heat in the motor itself. Used in cranes, lifts, and electric propulsion. VFDs with regenerative capability can return this energy directly to the vessel's busbar.</div></div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Four Braking Types:</strong> <strong>R</strong>egenerative = "give energy back to supply" (over-speed). <strong>D</strong>C injection = "freeze the field with DC" (stationary DC field brakes rotor). <strong>P</strong>lugging = "throw RMF in reverse" (abrupt, high current). <strong>R</strong>heostatic = "burn energy in resistors" (DC and slip-ring machines).</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-dc-injection-braking.png" alt="DC injection braking circuit — AC supply disconnected, DC injected to stator, stationary field brakes rotor">
+    <img src="../data/diagrams/t03-dc-injection-braking.png" alt="DC injection braking circuit — AC supply disconnected, DC injected to stator, stationary field brakes rotor">
     <div class="note-diagram-cap">Fig. DC Injection Braking — AC disconnected, DC applied to two stator phases, stationary field brakes spinning rotor</div>
   </div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-plugging-braking.png" alt="Plugging braking — two supply phases swapped, reverse RMF creates braking torque">
+    <img src="../data/diagrams/t03-plugging-braking.png" alt="Plugging braking — two supply phases swapped, reverse RMF creates braking torque">
     <div class="note-diagram-cap">Fig. Plugging (Reverse-Phase Braking) — two phases interchanged, RMF reverses, strong reverse torque to standstill</div>
   </div>
 
@@ -682,7 +682,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   </ul>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory:</strong> Wound rotor = three-phase winding + slip rings + brushes + external resistance. Max starting torque when R_external makes R_total = X_rotor. Speed control by adding resistance = higher slip = lower speed. Running: short-circuit the rings to reduce brush wear. Ship uses: cranes, windlasses, high-inertia loads.</div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-slip-ring-motor.png" alt="Slip-ring induction motor — rotor winding, slip rings on shaft, brushes, external resistance bank">
+    <img src="../data/diagrams/t03-slip-ring-motor.png" alt="Slip-ring induction motor — rotor winding, slip rings on shaft, brushes, external resistance bank">
     <div class="note-diagram-cap">Fig. Wound-Rotor (Slip-Ring) Motor — rotor winding, slip rings, brush gear, external resistance for starting/speed control</div>
   </div>
 
@@ -784,7 +784,7 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
   <div class="n-h2">5 kW 440V Motor - FLC Calculation &amp; Starter Selection</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Surveyor asked motor nameplate data and starter selection for a specific 5 kW pump motor.</strong></div></div>
   <div class="note-diagram-wrap">
-    <img src="data/diagrams/t03-motor-nameplate.png" alt="Motor nameplate with annotated fields — kW, voltage, current, RPM, frame, IP, insulation class, duty">
+    <img src="../data/diagrams/t03-motor-nameplate.png" alt="Motor nameplate with annotated fields — kW, voltage, current, RPM, frame, IP, insulation class, duty">
     <div class="note-diagram-cap">Fig. Motor Nameplate — kW, V, A, RPM, Hz, frame size, IP rating, insulation class, efficiency, duty cycle</div>
   </div>
   <ul class="n-list">
