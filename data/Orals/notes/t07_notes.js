@@ -73,7 +73,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-open-closed-loop.png" alt="Open loop vs closed loop control block diagrams — open loop without feedback, closed loop with feedback path and error signal">
+    <img src="data/diagrams/t07-open-closed-loop.png" alt="Open loop vs closed loop control block diagrams — open loop without feedback, closed loop with feedback path and error signal">
     <div class="note-diagram-cap">Fig. Open Loop vs Closed Loop — open loop: input → controller → process (no feedback); closed loop: output measured → error (SP−PV) → controller → process (self-correcting)</div>
   </div>
 
@@ -233,7 +233,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-cascade-control.png" alt="Cascade control block diagram — primary (outer) controller sets SP for secondary (inner) controller, inner loop manipulates final element">
+    <img src="data/diagrams/t07-cascade-control.png" alt="Cascade control block diagram — primary (outer) controller sets SP for secondary (inner) controller, inner loop manipulates final element">
     <div class="note-diagram-cap">Fig. Cascade Control — outer (primary) controller measures main variable (e.g. HFO temp); its output is SP for inner (secondary) controller which measures fast-changing variable (e.g. steam flow); inner loop corrects disturbances before they reach outer loop</div>
   </div>
 
@@ -255,7 +255,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Scan time</strong> is typically <span class="n-val">1–50 ms</span>. <strong>Watchdog Timer:</strong> If scan does not complete within set maximum time, PLC detects hang and goes to SAFE STATE (outputs de-energised). Critical safety feature. The watchdog is a hardware timer reset at the start of each scan - if CPU freezes mid-scan, the watchdog expires and drives outputs to their fail-safe state.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-plc-scan-cycle.png" alt="PLC scan cycle — input scan, program execution, output scan, housekeeping, watchdog timer">
+    <img src="data/diagrams/t07-plc-scan-cycle.png" alt="PLC scan cycle — input scan, program execution, output scan, housekeeping, watchdog timer">
     <div class="note-diagram-cap">Fig. PLC Scan Cycle — 4 phases: (1) Input Scan → input image register; (2) Program Execution using stored inputs; (3) Output Scan → physical outputs; (4) Housekeeping/comms; watchdog reset each cycle</div>
   </div>
 
@@ -285,7 +285,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </ul>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-plc-ladder-logic.png" alt="PLC ladder logic diagram — rungs with NO/NC contacts, output coils, motor start-stop interlock example">
+    <img src="data/diagrams/t07-plc-ladder-logic.png" alt="PLC ladder logic diagram — rungs with NO/NC contacts, output coils, motor start-stop interlock example">
     <div class="note-diagram-cap">Fig. Ladder Logic Diagram — left/right power rails; rungs with normally-open [ ] and normally-closed [/] contacts; output coil activates when rung is true; example: motor start-stop with seal-in auxiliary contact</div>
   </div>
 
@@ -374,7 +374,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </ol>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-three-element-boiler.png" alt="3-element boiler feedwater control — steam flow (FF), feedwater flow (FF), drum level (FB), feedwater control valve">
+    <img src="data/diagrams/t07-three-element-boiler.png" alt="3-element boiler feedwater control — steam flow (FF), feedwater flow (FF), drum level (FB), feedwater control valve">
     <div class="note-diagram-cap">Fig. 3-Element Boiler Feedwater Control — Element 1: steam flow (feedforward, fast); Element 2: feedwater flow (feedforward, confirming); Element 3: drum level (feedback, slow trim); eliminates swell/shrink error</div>
   </div>
 
@@ -528,7 +528,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t07-master-slave-arch.png" alt="Master-slave IAS architecture — master PLC/DCS server communicates with distributed slave PLC nodes over redundant network">
+    <img src="data/diagrams/t07-master-slave-arch.png" alt="Master-slave IAS architecture — master PLC/DCS server communicates with distributed slave PLC nodes over redundant network">
     <div class="note-diagram-cap">Fig. Master-Slave IAS Architecture — master server handles supervisory control and HMI; slave PLC nodes execute local loop control and I/O; redundant Ethernet backbone; Historian logs all parameter trends</div>
   </div>
 

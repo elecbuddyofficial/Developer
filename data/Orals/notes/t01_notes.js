@@ -48,7 +48,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-principle">⚡ Working Principle &amp; Construction</div>
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t01-ac-generator-principle.png" alt="AC Generator - Working Principle">
+    <img src="data/diagrams/t01-ac-generator-principle.png" alt="AC Generator - Working Principle">
     <div class="note-diagram-cap">Fig. AC Generator — N/S poles, rotating coil, slip ring &amp; AC output waveform</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Faraday's Law of Electromagnetic Induction:</strong> EMF is induced in a conductor when there is a relative change in magnetic flux linkage. In a marine alternator, the rotating DC-excited rotor field cuts the stationary stator armature conductors - balanced 3-phase AC EMF is induced. Foundation question asked by every surveyor.</div></div>
@@ -100,7 +100,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-brushless">🔄 Brushless Alternator - Full Chain</div>
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t01-brushless-system.png" alt="Brushless Alternator System">
+    <img src="data/diagrams/t01-brushless-system.png" alt="Brushless Alternator System">
     <div class="note-diagram-cap">Fig. Brushless Alternator — AVR, exciter stator (DC), exciter rotor (3PH AC), rotating rectifier, surge suppressor, main field (DC), stator output with CT feedback</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>The Three-Machine System on One Shaft.</strong> All rotating together, eliminating electrical transfer via physical contact. Essential for hazardous areas due to zero brush sparking.</div></div>
@@ -236,7 +236,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-synchroscope">🕐 Synchroscope - Construction, Working &amp; Paralleling</div>
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t01-synchroscope-construction.png" alt="Synchroscope Construction">
+    <img src="data/diagrams/t01-synchroscope-construction.png" alt="Synchroscope Construction">
     <div class="note-diagram-cap">Fig. Synchroscope — poles, armature, resistance, inductance coil; connected to incoming alternator &amp; main bus-bars via instrument transformer</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Asked by EVERY Surveyor.</strong> Indicates frequency difference and phase angle difference between the incoming generator and the running busbar.</div></div>
@@ -279,7 +279,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
 
   <div class="n-h2">Paralleling Without Synchroscope</div>
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t01-dark-lamp-sync.png" alt="Dark Lamp Synchronizing Circuit">
+    <img src="data/diagrams/t01-dark-lamp-sync.png" alt="Dark Lamp Synchronizing Circuit">
     <div class="note-diagram-cap">Fig. Dark Lamp Method — busbars (R₁Y₁B₁), synchronising switches, synchronising lamps, incoming machine</div>
   </div>
   <div class="n-grid" style="grid-template-columns:1fr 1fr">
@@ -564,7 +564,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-dashpot">⏱️ Dashpot - How It Works</div>
   <div class="note-diagram-wrap">
-    <img src="../../data/diagrams/t01-dashpot.png" alt="Dashpot Preferential Trip">
+    <img src="data/diagrams/t01-dashpot.png" alt="Dashpot Preferential Trip">
     <div class="note-diagram-cap">Fig. Dashpot preferential trip — 5s/10s non-essential trips, 15s main breaker trip, delayed &amp; instantaneous contacts, alarm circuit</div>
   </div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Dashpot Assembly:</strong> A pneumatic or hydraulic time-delay device used in mechanical preferential trip relays to provide a configurable delay before shedding loads.<br>

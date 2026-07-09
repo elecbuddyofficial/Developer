@@ -57,7 +57,7 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
 </div></div>
 
 <div class="note-diagram-wrap">
-  <img src="../../data/diagrams/t05-transformer-principle.png" alt="Transformer working principle — primary winding, core flux, secondary winding, turns ratio">
+  <img src="data/diagrams/t05-transformer-principle.png" alt="Transformer working principle — primary winding, core flux, secondary winding, turns ratio">
   <div class="note-diagram-cap">Fig. Transformer Working Principle — mutual induction, core flux, V₁/V₂ = N₁/N₂ turns ratio</div>
 </div>
 
@@ -649,7 +649,7 @@ Conditions (1), (4), and (5) affect load sharing quality and performance but not
 </table>
 
 <div class="note-diagram-wrap">
-  <img src="../../data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer OC and SC test circuits — open circuit test on LV side, short circuit test on HV side">
+  <img src="data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer OC and SC test circuits — open circuit test on LV side, short circuit test on HV side">
   <div class="note-diagram-cap">Fig. OC &amp; SC Test Circuits — OC test (LV side, full voltage, HV open) measures iron losses; SC test (HV side, reduced voltage, LV shorted) measures copper losses</div>
 </div>
 
