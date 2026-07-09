@@ -235,8 +235,8 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-ct-pt-connection.png" alt="CT and PT connection to protection relay — CT in series with load, PT in parallel with busbar, relay inputs">
-    <div class="note-diagram-cap">Fig. CT &amp; PT Connections to Relay — CT (series, 5 A secondary to relay current coil); PT (parallel, stepped-down voltage to relay voltage coil); basis of OCR, differential and reverse-power relays</div>
+    <img src="../data/diagrams/t04-ct-pt-connection.png" alt="PT connection to protection relay — PT in parallel with busbar, stepped-down voltage feeds relay voltage coil">
+    <div class="note-diagram-cap">Fig. PT Connection to Relay — PT in parallel with busbar; stepped-down voltage to relay voltage coil; basis of OCR, differential and reverse-power relays</div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════

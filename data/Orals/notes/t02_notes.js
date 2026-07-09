@@ -641,8 +641,8 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t02-ct-pt-connection.png" alt="CT and PT connection to switchboard — CT in series with primary, ammeter on secondary; PT in parallel, voltmeter on secondary; protection relays">
-    <div class="note-diagram-cap">Fig. CT &amp; PT Connections — CT (series, secondary shorted via shorting terminal, feeds ammeter/relay); PT (parallel, secondary fused, feeds voltmeter/relay)</div>
+    <img src="../data/diagrams/t02-ct-pt-connection.png" alt="PT connection to switchboard — PT in parallel with busbar, secondary fused, feeds voltmeter and protection relay">
+    <div class="note-diagram-cap">Fig. PT Connection to Switchboard — PT in parallel with busbar; secondary fused; feeds voltmeter and relay voltage coil</div>
   </div>
 
   <!-- ═══════════════════════════════════════════════════════════
