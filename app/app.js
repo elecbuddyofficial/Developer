@@ -1735,6 +1735,7 @@ var GUIDE_STEPS = [
         body: 'Type any keyword and jump straight to the right topic across all notes. Try "alternator", "earth fault", or "MARPOL". Works across oral and written sections.',
         prefer: 'bottom'
     },
+    { type: 'slide', id: 'videos' },
     { type: 'slide', id: 'support' }
 ];
 
@@ -1793,7 +1794,7 @@ function _guideSlide(step) {
     var wrap = document.getElementById('guide-slide-wrap');
     var card = document.getElementById('guide-slide-card');
     wrap.style.display = 'flex';
-    card.innerHTML = step.id === 'welcome' ? _guideWelcomeHTML() : _guideSupportHTML();
+    card.innerHTML = step.id === 'welcome' ? _guideWelcomeHTML() : step.id === 'videos' ? _guideVideosHTML() : _guideSupportHTML();
     card.style.opacity = '0';
     card.style.transform = 'scale(0.96) translateY(18px)';
     requestAnimationFrame(function() {
@@ -1810,6 +1811,19 @@ function _guideWelcomeHTML() {
         + '<p style="font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:28px">Your complete ETO exam prep companion. Let\'s take a quick tour so you know exactly how to use this.</p>'
         + '<button class="guide-btn-primary" onclick="guideNext()">Take the tour</button>'
         + '<div style="margin-top:13px"><button class="guide-btn-text" onclick="guideDismiss(true)">Skip for now</button></div>'
+        + '</div>';
+}
+
+function _guideVideosHTML() {
+    return '<div style="text-align:center">'
+        + '<div style="font-size:46px;margin-bottom:16px">▶️</div>'
+        + '<h2 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:14px;line-height:1.3">My Videos</h2>'
+        + '<div style="text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:24px">'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">📄▶️</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Tab switcher on every topic</strong> — switch between Study Notes and My Videos inside any topic.</div></div>'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🌐</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Language filter</strong> — videos are tagged by language. Filter by Malayalam, English, or any language to see only what you need.</div></div>'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🎬</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Inline player with playlist</strong> — tap any video to open it with a playlist sidebar. Switch tracks without closing the player.</div></div>'
+        + '</div>'
+        + '<button class="guide-btn-primary" onclick="guideNext()">Next</button>'
         + '</div>';
 }
 
