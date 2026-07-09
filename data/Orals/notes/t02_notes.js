@@ -57,6 +57,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
        SECTION 1 - HV BASICS
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="t2-basics">⚡ High Voltage Systems - Basics &amp; Definition</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-hv-protection-scheme.png" alt="HV Protection Scheme">
+    <div class="note-diagram-cap">Fig. HV Protection Scheme — G1–G4 generators, 3×6.6kV HV MSB, 3×440V LV MSB, protection relays per feeder type</div>
+  </div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Definition (IEC 60092):</strong> High Voltage is above <span class="n-val">1000V AC</span> or <span class="n-val">1500V DC</span>. Typical HV on ships: <strong><span class="n-val">3.3 kV</span></strong>, <strong><span class="n-val">6.6 kV</span></strong> (most common), <strong><span class="n-val">11 kV</span></strong> (very large ships - LNG carriers, cruise ships, VLCCs). HV is justified when total electrical power demand exceeds approximately <span class="n-val">3–5 MW</span>.</div></div>
   <div class="n-formula">P = √3 × V × I × PF<div class="label">Doubling V halves I for the same power output - the entire HV justification in one equation</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Worked example:</strong> <span class="n-val">6.6 kV</span> at <span class="n-val">1000 A</span> delivers the SAME power as <span class="n-val">440 V</span> at <span class="n-val">15,000 A</span>. The cable sized for 1000 A vs 15,000 A represents a massive saving in copper weight, cost, and cable routing space. This is the single most important exam justification for HV.</div></div>
@@ -112,6 +116,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
        SECTION 4 - NER
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="t2-ner">🔌 Neutral Earthing Resistor (NER)</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-earth-neutral-system.png" alt="Earth Neutral System">
+    <div class="note-diagram-cap">Fig. Earth Neutral System — earthing switch, NER, generator circuit breaker, HV switchboard, earth fault path via NER</div>
+  </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Exam Must Know:</strong> "The compromise between solid earth (too much current) and floating (too much voltage)." Every surveyor asks this - know the formula, typical values, and why it is needed.</div></div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--red-border)">
@@ -159,6 +167,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
        SECTION 5 - VCB & SF6
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="t2-vcb">🔘 HV Switchgear - VCB &amp; SF6</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-vcb-construction.png" alt="VCB Construction">
+    <div class="note-diagram-cap">Fig. Vacuum Circuit Breaker — terminal, insulator support rod, fixed &amp; moving contacts, metallic bellows, glass fibre rod, opening spring, mechanism linkage</div>
+  </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Why VCB and not ACB on HV?</strong> Arc energy ∝ V². At <span class="n-val">6.6 kV</span>, arc energy is (6600/440)² = <strong>225× more energetic</strong> than at 440 V. Air (in an ACB) ionises under the intense HV arc and becomes conducting - it cannot quench the arc. Continued arcing in air = fire and explosion. ACB is limited to ≤ 1000 V (LV only).</div></div>
 
   <div class="n-h2">VCB - How Arc Quenching Works</div>
@@ -189,6 +201,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
        SECTION 6 - SF6 HAZARDS
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="t2-sf6-full">☁️ SF6 Gas - Properties, Hazards &amp; Arc Decomposition</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-sf6-breaker.png" alt="SF6 Circuit Breaker">
+    <div class="note-diagram-cap">Fig. SF6 Breaker — SF₆ gas inlet, moving member, contacts, arc chamber, arcing horn, fixed member, gas outlet, insulated operating rods</div>
+  </div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is SF6 gas and what are its properties?<br><strong>Ideal Answer:</strong> Sulphur Hexafluoride (1 S + 6 F atoms). Colourless, odourless, non-toxic when <em>pure</em>, non-flammable. Dielectric strength <strong>2.5× air</strong> at atmospheric pressure - rises to <strong>5–8× air at ~4 bar</strong>. <strong>Electronegative</strong> - strongly attracts and captures free electrons, breaking the arc ionisation chain. Environmental concern: GWP = <span class="n-val">23,500 × CO₂</span>, atmospheric lifetime <span class="n-val">3200 years</span>. Strict leak controls mandatory. Arc decomposition products are highly toxic - ventilate area and wear full PPE before opening any SF6 equipment after an arcing event.</div></div>
 
   <div class="n-h2">SF6 Arc Decomposition Products - Complete List</div>
@@ -359,6 +375,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
        SECTION 14 - VCB MAINTENANCE & RACK OUT
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="t2-vcb-maint">🔧 VCB Maintenance &amp; Rack Out Procedure</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-vcb-racking.png" alt="VCB Racking Mechanism">
+    <div class="note-diagram-cap">Fig. VCB Drawout Racking — racking handle, VCB truck, primary disconnect contacts, automatic shutter, stationary bus contacts, vacuum interrupter, secondary control plug (test position)</div>
+  </div>
   <div class="n-h2">VCB Rack Out - Three Positions</div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--green-border)"><div class="card-title" style="color:var(--green)">SERVICE Position</div><div class="card-desc">Fully inserted. Main contacts connected to HV busbars. Control circuits connected. Normal operating position.</div></div>
@@ -620,6 +640,10 @@ window.loadNotes("T02", `<div class="view" id="view-notes-t02">
     </div>
   </div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t02-ct-pt-connection.png" alt="CT and PT connection to switchboard — CT in series with primary, ammeter on secondary; PT in parallel, voltmeter on secondary; protection relays">
+    <div class="note-diagram-cap">Fig. CT &amp; PT Connections — CT (series, secondary shorted via shorting terminal, feeds ammeter/relay); PT (parallel, secondary fused, feeds voltmeter/relay)</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════
        SECTION 28 - PREFERENTIAL TRIP

@@ -1,6 +1,11 @@
 // Dynamic Loader System
 window.QD = {}; // Quiz Data Store
 window.NOTE_HTML = {}; // HTML Store
+window.VIDEO_DATA = {}; // Video Data Store
+
+window.loadVideos = function(topicId, data) {
+    window.VIDEO_DATA[topicId] = data;
+};
 
 // ── Search Index ──────────────────────────────────────────
 var SEARCH_INDEX = [];
@@ -18,6 +23,7 @@ window.loadNotes = function(topicId, htmlContent) {
     // Skip display update if this was a background index load (not user-requested)
     if (window._bgIndexing && topicId !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = htmlContent;
+    injectVideoTab(topicId);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
     let so = document.getElementById('si-oral'); if(so) so.classList.add('active');
@@ -41,6 +47,7 @@ window.loadWrittenNotes = function(topicCode, html) {
     // Skip display update if this was a background index load (not user-requested)
     if (window._bgIndexing && topicCode !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = html;
+    injectVideoTab(topicCode);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
     let sw = document.getElementById('si-written'); if(sw) sw.classList.add('active');
@@ -78,6 +85,7 @@ window.fetchTopicData = function(topicId, topicKey) {
         document.head.appendChild(noteScript);
     } else {
         document.getElementById('notes-container').innerHTML = window.NOTE_HTML[topicId];
+        injectVideoTab(topicId);
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
         let so = document.getElementById('si-oral'); if(so) so.classList.add('active');
@@ -92,6 +100,12 @@ window.fetchTopicData = function(topicId, topicKey) {
         let quizScript = document.createElement('script');
         quizScript.src = '../data/Orals/quizzes/' + topicId.toLowerCase() + '_quiz.js';
         document.head.appendChild(quizScript);
+    }
+
+    if (!topicId.startsWith('W') && !window.VIDEO_DATA[topicId]) {
+        let vidScript = document.createElement('script');
+        vidScript.src = '../data/Orals/videos/' + topicId.toLowerCase() + '_videos.js';
+        document.head.appendChild(vidScript);
     }
     
     // URL Routing
@@ -535,8 +549,10 @@ function showView(n){
   // URL Routing
   if (!window._isRouting) {
       try {
-        if (n === 'welcome') window.history.pushState(null, '', window.location.pathname);
-        else window.history.pushState(null, '', '#' + n);
+        if (window.location.protocol !== 'file:') {
+            if (n === 'welcome') window.history.pushState(null, '', window.location.pathname);
+            else window.history.pushState(null, '', '#' + n);
+        }
       } catch(e) {}
   }
 }
@@ -2032,10 +2048,17 @@ window.addEventListener('popstate', handleHashRouting);
 
 // ── Service Worker registration ───────────────────────────
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('./sw.js')
-      .catch(function() {}); // fail silently
-  });
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    // Dev: unregister any existing SW so it doesn't intercept local requests
+    navigator.serviceWorker.getRegistrations().then(function(regs) {
+      regs.forEach(function(r) { r.unregister(); });
+    });
+  } else {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js')
+        .catch(function() {}); // fail silently
+    });
+  }
 }
 
 startBackgroundIndexing();
@@ -2177,4 +2200,198 @@ function openSqDetail(surveyorName) {
     }
     
     container.innerHTML = html;
+}
+
+// ── DIAGRAM ZOOM TOGGLE ───────────────────────────────────────
+document.addEventListener('click', function(e) {
+    if (e.target.matches('.note-diagram-wrap img')) {
+        e.target.classList.toggle('zoomed');
+    }
+});
+
+// ── VIDEOS TAB LOGIC ──────────────────────────────────────────
+
+function injectVideoTab(topicId) {
+    let noteDoc = document.querySelector('#notes-container .note-doc');
+    let noteContent = document.querySelector('#notes-container .note-content');
+    if (!noteDoc || !noteContent) return;
+
+    if (document.querySelector('#video-tabs-wrap')) return;
+
+    let tabsWrap = document.createElement('div');
+    tabsWrap.id = 'video-tabs-wrap';
+    tabsWrap.className = 'qb-seg';
+    tabsWrap.style.marginBottom = '24px';
+    tabsWrap.style.justifyContent = 'flex-start';
+
+    let btnNotes = document.createElement('button');
+    btnNotes.className = 'qb-seg-btn active';
+    btnNotes.innerHTML = '<span style="font-size:16px;margin-right:6px">📄</span> Study Notes';
+
+    let btnVideos = document.createElement('button');
+    btnVideos.className = 'qb-seg-btn';
+    btnVideos.innerHTML = '<span style="font-size:16px;margin-right:6px">▶️</span> My Videos';
+
+    tabsWrap.appendChild(btnNotes);
+    tabsWrap.appendChild(btnVideos);
+
+    let videosContent = document.createElement('div');
+    videosContent.id = 'videos-content';
+    videosContent.style.display = 'none';
+    videosContent.innerHTML = '<div id="vid-playlist-root"></div>';
+
+    noteDoc.insertBefore(tabsWrap, noteContent);
+    noteContent.parentNode.insertBefore(videosContent, noteContent.nextSibling);
+
+    btnNotes.onclick = function() {
+        btnNotes.classList.add('active');
+        btnVideos.classList.remove('active');
+        noteContent.style.display = 'block';
+        videosContent.style.display = 'none';
+    };
+
+    btnVideos.onclick = function() {
+        btnVideos.classList.add('active');
+        btnNotes.classList.remove('active');
+        noteContent.style.display = 'none';
+        videosContent.style.display = 'block';
+        renderVideos(topicId);
+    };
+}
+
+function getYouTubeID(url) {
+    let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    let match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+var KNOWN_LANGS = ['Malayalam', 'English', 'Hindi', 'Tamil', 'Telugu'];
+var _vidTopicId = null;
+var _vidVids = [];
+var _vidLangs = ['All'];
+
+function getVideoLang(header) {
+    let m = header.match(/\s*[-–]\s*([A-Za-z]+)\s*$/);
+    if (m && KNOWN_LANGS.indexOf(m[1]) !== -1) return m[1];
+    return 'English';
+}
+
+function stripLangSuffix(header) {
+    return header.replace(/\s*[-–]\s*([A-Za-z]+)\s*$/, function(_, lang) {
+        return KNOWN_LANGS.indexOf(lang) !== -1 ? '' : (_ );
+    }).trim();
+}
+
+function renderVideos(topicId) {
+    let root = document.getElementById('vid-playlist-root');
+    if (!root) return;
+
+    let data = window.VIDEO_DATA[topicId];
+    let vids = data ? data.filter(function(v) { return v.url && v.url.trim(); }) : [];
+
+    if (vids.length === 0) {
+        root.innerHTML = '<div style="color:var(--text3);font-size:14px;padding:40px 0;text-align:center;">No videos curated yet for this topic.</div>';
+        return;
+    }
+
+    _vidTopicId = topicId;
+    _vidVids = vids;
+    _vidLangs = ['All'];
+    vids.forEach(function(v) {
+        var l = getVideoLang(v.header);
+        if (_vidLangs.indexOf(l) === -1) _vidLangs.push(l);
+    });
+
+    vidRenderList('All');
+}
+
+function vidRenderList(activeLang) {
+    var root = document.getElementById('vid-playlist-root');
+    if (!root) return;
+
+    var filtered = activeLang === 'All'
+        ? _vidVids
+        : _vidVids.filter(function(v) { return getVideoLang(v.header) === activeLang; });
+
+    var chipsHtml = _vidLangs.length > 1
+        ? '<div class="vid-lang-chips">' + _vidLangs.map(function(l) {
+            return '<button class="vid-lang-chip' + (l === activeLang ? ' active' : '') + '" onclick="vidRenderList(\'' + l + '\')">' + l + '</button>';
+          }).join('') + '</div>'
+        : '';
+
+    var listHtml = filtered.length === 0
+        ? '<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center;">No ' + activeLang + ' videos for this topic.</div>'
+        : '<div class="vid-list">' + filtered.map(function(v) {
+            var realIdx = _vidVids.indexOf(v);
+            var lang = getVideoLang(v.header);
+            var title = stripLangSuffix(v.header);
+            var badge = lang !== 'English' ? '<span class="vid-lang-badge">' + lang.slice(0, 2).toUpperCase() + '</span>' : '';
+            return '<button class="vid-list-item" onclick="vidOpenFloat(\'' + _vidTopicId + '\',' + realIdx + ')">' +
+                '<span class="vid-list-icon">▶</span>' +
+                '<span class="vid-list-label">' + title.replace(/</g, '&lt;') + '</span>' +
+                badge + '</button>';
+          }).join('') + '</div>';
+
+    root.innerHTML = chipsHtml + listHtml;
+}
+
+function vidOpenFloat(topicId, startIdx) {
+    let vids = (window.VIDEO_DATA[topicId] || []).filter(function(v) { return v.url && v.url.trim(); });
+    if (!vids.length) return;
+
+    vidFloatClose();
+
+    let backdrop = document.createElement('div');
+    backdrop.id = 'vid-float-backdrop';
+    backdrop.className = 'vid-float-backdrop';
+    backdrop.addEventListener('click', function(e) { if (e.target === backdrop) vidFloatClose(); });
+
+    function buildEmbed(v) {
+        let ytid = getYouTubeID(v.url);
+        if (ytid) {
+            return '<div class="vid-float-iframe-wrap"><iframe src="https://www.youtube.com/embed/' + ytid + '?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+        }
+        return '<div style="padding:40px;text-align:center;"><a href="' + v.url.replace(/"/g, '&quot;') + '" target="_blank" style="color:var(--blue);font-weight:700;font-size:15px;">🔗 Open Link</a></div>';
+    }
+
+    function render(idx) {
+        let v = vids[idx];
+        let sidebar = vids.map(function(sv, si) {
+            return '<button class="vid-float-pl-item' + (si === idx ? ' active' : '') + '" onclick="vidFloatSwitch(' + si + ')">' +
+                '<span class="vid-float-pl-icon">' + (si === idx ? '▶' : '▷') + '</span>' +
+                '<span class="vid-float-pl-label">' + sv.header.replace(/</g, '&lt;') + '</span>' +
+                '</button>';
+        }).join('');
+
+        backdrop.innerHTML =
+            '<div class="vid-float-box">' +
+            '<div class="vid-float-topbar"><button class="vid-float-close" onclick="vidFloatClose()">✕</button></div>' +
+            '<div class="vid-float-inner">' +
+            '<div class="vid-float-player">' + buildEmbed(v) +
+            '<div class="vid-float-now-playing">' + v.header.replace(/</g, '&lt;') + '</div></div>' +
+            '<div class="vid-float-sidebar">' + sidebar + '</div>' +
+            '</div></div>';
+
+        backdrop._render = render;
+    }
+
+    render(startIdx);
+    document.body.appendChild(backdrop);
+
+    document.addEventListener('keydown', vidFloatEsc);
+}
+
+function vidFloatSwitch(idx) {
+    let backdrop = document.getElementById('vid-float-backdrop');
+    if (backdrop && backdrop._render) backdrop._render(idx);
+}
+
+function vidFloatClose() {
+    let el = document.getElementById('vid-float-backdrop');
+    if (el) el.remove();
+    document.removeEventListener('keydown', vidFloatEsc);
+}
+
+function vidFloatEsc(e) {
+    if (e.key === 'Escape') vidFloatClose();
 }

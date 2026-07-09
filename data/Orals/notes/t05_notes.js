@@ -56,6 +56,11 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
   <strong>Cannot work on DC</strong>: DC gives constant flux → dΦ/dt = 0 → no induction → no output. (See Section 6 for full DC hazard analysis.)
 </div></div>
 
+<div class="note-diagram-wrap">
+  <img src="../../data/diagrams/t05-transformer-principle.png" alt="Transformer working principle — primary winding, core flux, secondary winding, turns ratio">
+  <div class="note-diagram-cap">Fig. Transformer Working Principle — mutual induction, core flux, V₁/V₂ = N₁/N₂ turns ratio</div>
+</div>
+
 <div class="n-h2">EMF Equation</div>
 <div class="n-formula">E = 4.44 × f × N × Φ<sub>max</sub>
 <div class="label">where 4.44 = 2π / √2 × 2 = 4 × form-factor. Form factor of a sine wave = RMS/Average = π/(2√2) ≈ 1.11. Therefore 4 × 1.11 = 4.44.</div></div>
@@ -96,7 +101,6 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
 </div></div>
 
 <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Turns/Current Rule:</strong> "Transformer is a magnetic machine. Voltage ratio = turns ratio (same direction). Current ratio = INVERSE of turns ratio. Step-UP voltage → step-DOWN current. More turns = more EMF. No AC → no change → no induction."</div></div>
-
 
 <!-- ═══════════════════════════════════════════════════════════════
      SECTION 2 - IRON & COPPER LOSSES
@@ -644,7 +648,15 @@ Conditions (1), (4), and (5) affect load sharing quality and performance but not
   <tr><td class="hl">Short Circuit (SC)</td><td>HV (high voltage side)</td><td>LV - short circuit</td><td class="bad">Reduced (4–8% of rated)</td><td>Copper losses, Z%, V<sub>sc</sub></td></tr>
 </table>
 
+<div class="note-diagram-wrap">
+  <img src="../../data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer OC and SC test circuits — open circuit test on LV side, short circuit test on HV side">
+  <div class="note-diagram-cap">Fig. OC &amp; SC Test Circuits — OC test (LV side, full voltage, HV open) measures iron losses; SC test (HV side, reduced voltage, LV shorted) measures copper losses</div>
+</div>
+
 <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> "OC test - Open secondary, rated voltage on LV side → Iron losses. SC test - Short secondary, reduced voltage on HV side → Copper losses and %Z."</div></div>
+
+<div class="n-h2">Continuity / Winding-Resistance Test</div>
+<div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> confirm each winding is electrically continuous (no broken turn, joint or tap-changer fault) and that the phases are balanced. <strong>Method:</strong> isolate and discharge the transformer; with a <strong>low-resistance ohmmeter / micro-ohmmeter</strong> (a normal multimeter cannot read the very low winding resistance accurately) measure each winding end-to-end. A reading close to the expected few-ohm value = continuous; <strong>infinity / OL = open winding or broken tap connection</strong>. Compare the three phases - they should match within about 1-2%; a large difference points to a shorted turn or a bad joint. Also megger between windings and to earth for insulation.</div></div>
 
 
 <!-- ═══════════════════════════════════════════════════════════════

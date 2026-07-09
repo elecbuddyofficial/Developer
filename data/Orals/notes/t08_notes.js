@@ -55,6 +55,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <!-- ═══════════════════════════════════════════════ -->
   <div class="n-h1" id="s-diodes">1. P-N Junction Diode &amp; Zener Diode</div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-diode-zener-vi-char.png" alt="Diode and Zener V-I characteristics — forward bias, reverse bias, breakdown region">
+    <div class="note-diagram-cap">Fig. P-N Diode &amp; Zener V-I Characteristics — forward knee at 0.6 V, Zener breakdown voltage Vz in reverse</div>
+  </div>
+
   <div class="n-h2">P-N Junction Diode - Fundamentals</div>
   <div class="n-p">P-type and N-type semiconductor joined together. A built-in potential barrier forms at the junction: <span class="n-val">0.6–0.7 V</span> for silicon, <span class="n-val">0.2–0.3 V</span> for germanium.</div>
 
@@ -108,6 +113,10 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
 
   <div class="n-ok"><div class="icon">🟢</div><div class="body"><strong>Memory Aid - Zener vs Normal Diode:</strong> "Normal diode works FORWARD (opens the door). Zener works REVERSE (holds the door at fixed voltage)."</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-types-of-diodes.png" alt="Types of diodes — P-N junction, Zener, Schottky, Varactor, LED, photodiode symbols and applications">
+    <div class="note-diagram-cap">Fig. Types of Diodes — P-N (rectifier), Zener (voltage reference), Schottky (fast switching), Varactor (variable capacitor), LED (light emission), Photodiode (light detection)</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- SECTION 2 - RECTIFIERS -->
@@ -125,6 +134,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-formula">γ = V_rms(ripple) / V_dc(output)<div class="label">Ripple Factor γ - lower = smoother DC output - 3-phase bridge at 0.042 is nearly pure DC</div></div>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why 3-Phase Bridge Ripple is So Low:</strong> The 6-diode bridge (3 positive + 3 negative rail diodes) produces six output pulses per mains cycle. Ripple frequency = <span class="n-val">6 × 50 Hz = 300 Hz</span>. At 300 Hz, a small filter capacitor easily smooths the remaining ripple to produce a near-pure DC link for the VFD inverter stage.</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-rectifier-circuits.png" alt="Half-wave, full-wave centre-tap, and bridge rectifier circuits with output waveforms">
+    <div class="note-diagram-cap">Fig. Rectifier Circuits — half-wave (1 diode), full-wave bridge (4 diodes, D1D3/D2D4 pairs), output waveform and ripple comparison</div>
+  </div>
 
   <div class="n-h2">Full Wave Bridge - Working (Critical for Oral)</div>
   <div class="n-p"><strong>4 diodes D1–D4 in an H-bridge arrangement:</strong></div>
@@ -184,6 +198,16 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
         </ul>
       </div>
     </div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-bjt-structure.png" alt="BJT NPN transistor structure — emitter, base, collector, depletion regions, current flow directions">
+    <div class="note-diagram-cap">Fig. BJT Structure — NPN: emitter (heavily doped N), thin base (P), collector (N); I_C = β × I_B; current-controlled device; CE, CB, CC configurations</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-mosfet-structure.png" alt="N-channel enhancement MOSFET structure — source, drain, gate oxide, inversion channel formed when V_GS exceeds threshold">
+    <div class="note-diagram-cap">Fig. N-channel Enhancement MOSFET — gate oxide (SiO₂) insulates gate; V_GS &gt; V_th creates inversion channel (electrons) linking source to drain; voltage-controlled, zero gate current</div>
   </div>
 
   <div class="n-h2">BJT Configurations - CE, CB, CC</div>
@@ -255,6 +279,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <tr><td>α = 180°</td><td class="bad">Zero (no conduction)</td><td class="bad">Zero output</td><td>Fully OFF</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-scr-thyristor.png" alt="SCR thyristor structure — PNPN four-layer device, anode, cathode, gate trigger, latching characteristic">
+    <div class="note-diagram-cap">Fig. SCR (Thyristor) — PNPN four-layer structure; gate pulse fires when anode is forward-biased; latches ON until I_A falls below holding current I_h; firing angle α controls output voltage</div>
+  </div>
+
   <div class="n-p"><strong>Ship Applications of SCR:</strong> Soft starters (slow motor acceleration), battery chargers, AVR excitation control, DC motor speed controllers, electro-hydraulic thrusters.</div>
 
   <div class="n-h2">IGBT - Insulated Gate Bipolar Transistor</div>
@@ -298,6 +327,12 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
       <div class="card-desc">Bidirectional SCR - conducts on BOTH half-cycles of AC. Can be triggered in all four quadrants. Used in AC lamp dimmers, heating controls, fan speed regulators on ships.</div>
     </div>
   </div>
+
+  <div class="n-h2">IGCT - Integrated Gate-Commutated Thyristor</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">A <strong>hard-driven GTO</strong> with its gate-drive unit built into the device package. At turn-off the whole cathode current is momentarily diverted through the gate, so it switches off almost instantly with very low storage time. It combines the <strong>low conduction loss of a thyristor</strong> with near <strong>IGBT-like switching speed</strong> - it sits between the GTO and the IGBT. Used in <strong>medium-voltage drives and electric-propulsion converters</strong> (multi-MW); rugged and allows snubberless turn-off.</div></div>
+
+  <div class="n-h2">Snubber Circuit</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">A small <strong>R-C network (sometimes with a diode)</strong> connected across a thyristor / IGBT / power switch. It limits the <strong>rate of rise of voltage (dv/dt)</strong> and absorbs the turn-off voltage spike caused by circuit inductance, preventing <strong>false triggering</strong> and device breakdown. Fitted across SCRs in converters, across VFD inverter switches, and across contactor coils. (See also the surge-suppression zener across the rotating diode wheel in Topic 1.)</div></div>
 
 
   <!-- ═══════════════════════════════════════════════ -->
@@ -360,6 +395,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </div>
 
   <div class="n-p"><strong>Ship Application:</strong> Large low-speed synchronous motors on LNG carriers and icebreakers for direct-drive propulsion. No gearbox required. Motor runs at <span class="n-val">0–16 rpm equivalent</span> electrical speed. Full torque available from standstill - ideal for ice-breaking where hull resistance is maximum at low speed.</div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-cycloconverter.png" alt="Cycloconverter — back-to-back thyristor P and N groups per phase, synthesising lower-frequency AC output directly from 3-phase mains">
+    <div class="note-diagram-cap">Fig. Cycloconverter — P-group and N-group thyristors per output phase; firing angle control synthesises low-frequency AC directly from mains; no DC link; output max ≈ ⅓ input frequency</div>
+  </div>
 
   <div class="n-ok"><div class="icon">🟢</div><div class="body"><strong>Memory Aid - Cycloconverter vs VFD:</strong> "CycloConverter = <strong>C</strong>uts (thyristors) segments directly. <strong>C</strong>annot go above 1/3 freq. <strong>C</strong>argo ships (LNG, icebreakers)." No DC link. No IGBTs. All thyristors. Slow and powerful.</div></div>
 
@@ -424,6 +464,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
         </ul>
       </div>
     </div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-optocoupler.png" alt="Optocoupler — LED on input side emits IR light, phototransistor on output side conducts, complete electrical isolation">
+    <div class="note-diagram-cap">Fig. Optocoupler (Opto-Isolator) — LED emits IR when input current flows; phototransistor conducts proportionally; no conductive path between input and output; typical isolation 2.5–5 kV</div>
   </div>
 
   <div class="n-h2">Isolation Amplifier</div>
@@ -507,6 +552,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <tr><td><strong>Comparator</strong></td><td>HIGH if V+ &gt; V−; LOW if V+ &lt; V−</td><td>N/A</td><td>Overvoltage alarm, AVR threshold detection</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-opamp-circuits.png" alt="Op-amp configurations — inverting, non-inverting, differential amplifier, I/V converter">
+    <div class="note-diagram-cap">Fig. Op-Amp Configurations — inverting (−Rf/Rin), non-inverting (1+Rf/Rin), differential, integrator, and I/V converter (transimpedance)</div>
+  </div>
+
   <div class="n-h2">Current-to-Voltage (I/V) Converter - 4–20 mA to Voltage</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Application:</strong> Many analogue inputs (PLC, DCS, ADC) can only read voltage, not current. An op-amp with a feedback resistor converts the 4–20 mA loop signal to a proportional voltage. The op-amp's virtual earth (inverting input held at 0 V by feedback) forces all input current through R_f.</div></div>
 
@@ -518,7 +568,6 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   This gives a standard 1–5 V range at the analogue input card. The op-amp I/V stage produces this voltage from the loop current.</div></div>
 
   <div class="n-p"><strong>Op-Amp in AVR:</strong> The error amplifier stage in a shipboard AVR uses an op-amp comparator. V+ = sensed terminal voltage (rectified &amp; scaled). V− = Zener reference (desired voltage setpoint). Op-amp output error signal drives the SCR firing angle - more error → earlier firing → more field excitation → higher output voltage.</div>
-
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- SECTION 12 - LOGIC & DIGITAL -->
@@ -535,6 +584,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <tr><td><strong>NOR</strong></td><td>NOT OR - inverted OR output (universal)</td><td>0+0=1, 0+1=0</td><td>Any logic (NOR alone can build all other gates)</td></tr>
     <tr><td><strong>XOR</strong></td><td>Output HIGH if inputs DIFFERENT</td><td>0⊕0=0, 1⊕1=0, 0⊕1=1</td><td>Parity checking, comparator circuits</td></tr>
   </table>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-all-gates.png" alt="Logic gate symbols — AND, OR, NOT, NAND, NOR, XOR with truth tables">
+    <div class="note-diagram-cap">Fig. Logic Gate Symbols — AND (D-shape), OR (curved), NOT (triangle + bubble), NAND/NOR (universal gates with inversion bubble), XOR (curved with extra arc)</div>
+  </div>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>De Morgan's Theorem:</strong> NOT(A AND B) = NOT A OR NOT B - i.e. NAND(A,B) = NOR(NOT A, NOT B). Allows logic circuit simplification and conversion between gate types. A NAND gate with both inputs tied together = a NOT gate.</div></div>
 
@@ -612,6 +666,10 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why High Switching Frequency Helps:</strong> Transformer and inductor size is inversely proportional to frequency (V = N × dΦ/dt). At 100 kHz instead of 50 Hz, the transformer can be 2000× smaller for the same power throughput. This is why an SMPS charger fits in your palm while a 50 Hz transformer charger of the same rating would be the size of a toolbox.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t08-smps.png" alt="SMPS block diagram — AC input, rectifier/filter, HF MOSFET switch, HF transformer, output rectifier, PWM feedback loop">
+    <div class="note-diagram-cap">Fig. SMPS Block Diagram — AC mains → rectify to DC → MOSFET switches at 20–100 kHz → HF transformer (small/light) → output rectify/filter → PWM controller closes feedback loop to regulate output voltage</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════ -->
   <!-- SECTION 14 - VFD & IGBT -->
@@ -835,6 +893,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
     <li><strong>Ebonite:</strong> Hard vulcanised rubber - excellent electrical insulator but brittle, degrades with UV. Used in older switchboard handles and bus bar supports.</li>
     <li><strong>Impulse Voltage Generator (Marx Generator):</strong> Produces high-voltage 1.2/50 µs lightning impulse waveform (1.2 µs rise time, 50 µs to half-value decay) for testing cable and transformer insulation to simulate lightning strikes.</li>
     <li><strong>Rotary Converter:</strong> A single machine that acts as both synchronous motor and DC generator. AC is fed in via slip rings on one shaft end (motor action); DC is extracted from the commutator on the other end (generator action). The field and armature coils are similar to a standard DC generator. Used on older vessels to convert AC to DC for alternator excitation current. Now replaced by solid-state rectifiers (rotating diode assemblies) on modern ships.</li>
+    <li><strong>PCB (Printed Circuit Board):</strong> Insulating base board that mechanically supports and electrically connects components through etched copper tracks. Standard substrate is <strong>FR-4</strong> (woven glass-fibre reinforced epoxy laminate, flame-retardant grade 4), clad with copper foil and finished with a solder mask and silkscreen. Cheaper boards use FR-2 (phenolic/paper). Multi-layer boards stack several copper layers with prepreg insulation between them.</li>
   </ul>
 
 

@@ -47,6 +47,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
        SECTION 1 - WORKING PRINCIPLE & CONSTRUCTION
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-principle">⚡ Working Principle &amp; Construction</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t01-ac-generator-principle.png" alt="AC Generator - Working Principle">
+    <div class="note-diagram-cap">Fig. AC Generator — N/S poles, rotating coil, slip ring &amp; AC output waveform</div>
+  </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Faraday's Law of Electromagnetic Induction:</strong> EMF is induced in a conductor when there is a relative change in magnetic flux linkage. In a marine alternator, the rotating DC-excited rotor field cuts the stationary stator armature conductors - balanced 3-phase AC EMF is induced. Foundation question asked by every surveyor.</div></div>
   <div class="n-grid">
     <div class="n-card"><div class="card-title">ROTOR (Rotating)</div><div class="card-val">DC Field Winding</div><div class="card-desc">Carries excitation current supplied by the AVR. Creates the rotating magnetic field. Low DC current means small slip rings if a brush-type unit is used.</div></div>
@@ -95,6 +99,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
        SECTION 4 - BRUSHLESS ALTERNATOR FULL CHAIN
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-brushless">🔄 Brushless Alternator - Full Chain</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t01-brushless-system.png" alt="Brushless Alternator System">
+    <div class="note-diagram-cap">Fig. Brushless Alternator — AVR, exciter stator (DC), exciter rotor (3PH AC), rotating rectifier, surge suppressor, main field (DC), stator output with CT feedback</div>
+  </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>The Three-Machine System on One Shaft.</strong> All rotating together, eliminating electrical transfer via physical contact. Essential for hazardous areas due to zero brush sparking.</div></div>
   <ol class="n-steps">
     <li><strong>PMG (Permanent Magnet Generator):</strong> Permanent magnets on rotor shaft generate initial AC voltage without external excitation. Feeds the AVR directly, bypassing residual magnetism dependency.</li>
@@ -152,6 +160,15 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
     <tr><td>Reliability</td><td class="ok">Very robust - no semiconductors to fail from surges</td><td class="bad">Semiconductors sensitive to transient overvoltage</td></tr>
     <tr><td>Still found on</td><td>Very old tonnage, coastal vessels, some navy auxiliaries</td><td>All modern vessels</td></tr>
   </table>
+
+  <div class="n-h2">Dynamic vs Static vs Trimming AVR - Surveyor Terms</div>
+  <table class="n-table">
+    <tr><th>Type</th><th>How It Works</th><th>Where Used</th></tr>
+    <tr><td><strong>Dynamic AVR</strong></td><td>Electro-mechanical regulator with a moving control element (the carbon pile above, or a rotating amplifier / amplidyne). Slow, mechanical, needs maintenance.</td><td>Old tonnage</td></tr>
+    <tr><td><strong>Static AVR</strong></td><td>Fully solid-state - no moving parts. PT senses voltage → rectifier → comparator vs reference → thyristor (SCR) firing angle sets the exciter-field DC. Fast and accurate.</td><td>All modern brushless sets</td></tr>
+    <tr><td><strong>Trimming AVR</strong></td><td>A small auxiliary regulator that fine-trims excitation on top of the main AVR - used to balance <span class="n-val">kVAR</span> and match voltage precisely between machines in parallel.</td><td>Paralleling / load sharing</td></tr>
+  </table>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Alternator Running Under-Voltage - Effects:</strong> If terminal voltage falls below rated (AVR fault, loss of excitation, or overload): connected motors draw more current for the same power (I &prop; 1/V) → stator and feeder overheating; motor torque falls (T &prop; V<sup>2</sup>) so large motors may stall or fail to start; lighting dims and contactors may drop out. Sustained under-voltage overheats windings and should trip the under-voltage / overcurrent protection.</div></div>
 
   <!-- ═══════════════════════════════════════════════════════════
        SECTION 5b - VOLTAGE REGULATION METHODS
@@ -218,6 +235,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
        SECTION 7 - SYNCHROSCOPE & PARALLELING
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-synchroscope">🕐 Synchroscope - Construction, Working &amp; Paralleling</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t01-synchroscope-construction.png" alt="Synchroscope Construction">
+    <div class="note-diagram-cap">Fig. Synchroscope — poles, armature, resistance, inductance coil; connected to incoming alternator &amp; main bus-bars via instrument transformer</div>
+  </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Asked by EVERY Surveyor.</strong> Indicates frequency difference and phase angle difference between the incoming generator and the running busbar.</div></div>
   <p class="n-p">The synchroscope is a small single-phase induction-motor-type instrument designed for phase comparison.</p>
   <ul class="n-list">
@@ -257,6 +278,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   • <strong>Protection Response:</strong> The <strong>Reverse Power Relay</strong> of the idle machine should detect power flowing <em>into</em> it instead of <em>out</em> of it and trip its ACB within 3–5 seconds. If the reverse power relay fails to trip, the running generator's <strong>Overcurrent Relay (OCR)</strong> will trip, causing a total ship <strong>blackout</strong>.</div></div>
 
   <div class="n-h2">Paralleling Without Synchroscope</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t01-dark-lamp-sync.png" alt="Dark Lamp Synchronizing Circuit">
+    <div class="note-diagram-cap">Fig. Dark Lamp Method — busbars (R₁Y₁B₁), synchronising switches, synchronising lamps, incoming machine</div>
+  </div>
   <div class="n-grid" style="grid-template-columns:1fr 1fr">
     <div class="n-card"><div class="card-title">Dark Lamp Method</div><div class="card-desc">Three lamps connected across corresponding phases of incoming and busbar. When all three lamps go dark simultaneously, the generators are in phase. <em>Limitation:</em> Cannot detect wrong phase sequence (all dark even at 180° out of phase if sequence is reversed).</div></div>
     <div class="n-card"><div class="card-title">Bright Lamp Method</div><div class="card-desc">Lamps are cross-connected. Perfect in-phase condition is reached when one lamp is completely dark and two are at maximum, equal brightness. <em>Advantage:</em> Detects phase sequence error (lamps never all dark).</div></div>
@@ -538,6 +563,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
        SECTION 16 - DASHPOT
   ════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-dashpot">⏱️ Dashpot - How It Works</div>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t01-dashpot.png" alt="Dashpot Preferential Trip">
+    <div class="note-diagram-cap">Fig. Dashpot preferential trip — 5s/10s non-essential trips, 15s main breaker trip, delayed &amp; instantaneous contacts, alarm circuit</div>
+  </div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Dashpot Assembly:</strong> A pneumatic or hydraulic time-delay device used in mechanical preferential trip relays to provide a configurable delay before shedding loads.<br>
   • <strong>Construction:</strong> Comprises a piston moving inside an oil or air cylinder. The rate of fluid displacement is controlled by a micro-orifice with an adjustable needle valve.<br>
   • <strong>Adjustment:</strong> Turning the needle valve alters the flow restriction. Opening the valve reduces flow resistance, speeding up piston travel and shortening the delay. Closing the valve restricts flow, lengthening the delay (typically set for <span class="n-val">5–10 seconds</span>).<br>

@@ -1,4 +1,4 @@
-﻿window.loadNotes("T20", `<div class="view" id="view-notes-t20">
+window.loadNotes("T20", `<div class="view" id="view-notes-t20">
 <div class="note-doc">
   <div style="margin-bottom:16px; display:flex; justify-content:space-between;">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -230,6 +230,15 @@
     <li><strong>Permeability:</strong> The fraction of a compartment's volume that can flood. Cargo hold ≈ 60–95%; engine room ≈ 85%; accommodation ≈ 95%. Used in damage stability calculations.</li>
   </ul>
 
+  <div class="n-h2">Gross, Net &amp; Deadweight Tonnage</div>
+  <table class="n-table">
+    <tr><th>Term</th><th>What It Is</th></tr>
+    <tr><td><strong>Gross Tonnage (GT)</strong></td><td>A dimensionless index of the <strong>total enclosed volume</strong> of the ship (GT = K × V). Used for manning, safety rules, registration and port dues.</td></tr>
+    <tr><td><strong>Net Tonnage (NT)</strong></td><td>Index of the <strong>useful earning (cargo) volume</strong> - GT less spaces such as machinery, crew and tanks. Used for canal and port charging.</td></tr>
+    <tr><td><strong>Deadweight (DWT)</strong></td><td>The <strong>mass the ship can carry</strong> = cargo + fuel + stores + fresh water + crew = loaded displacement − lightship. Quoted in tonnes.</td></tr>
+  </table>
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory:</strong> GT/NT = <em>volume</em> indices (no units). DWT and displacement = <em>weight</em> in tonnes. DWT = laden displacement − lightship.</div></div>
+
 
   <!-- ═══ SECTION 7 - FREE SURFACE EFFECT ═══ -->
   <div class="n-h1" id="s-fse">💧 7. Free Surface Effect (FSE) &amp; Anti-Roll Tanks</div>
@@ -357,6 +366,10 @@
   </ul>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>CO₂ in Hold - ETO role:</strong> The ETO maintains the fixed CO₂ fire-fighting system including pressure/weight monitoring of CO₂ cylinders, the detection panel, the manual release cabinet, and the gas detection loops in the hold. On receiving a hold fire alarm, the ETO must verify the detection circuit integrity, confirm which hold is affected, and support the Master's decision to release CO₂. CO₂ pipe sections are tested at <span class="n-val">7 bar (air - nozzle branch)</span>, <span class="n-val">80 bar (master valve to branch)</span>, and <span class="n-val">190 bar (cylinder to master valve)</span>. Cylinder filling ratio: CO₂ stored as liquid, <span class="n-val">0.75 kg/L</span> filling ratio.</div></div>
+
+  <div class="n-h2">Container Dimensions &amp; the Torsion Box</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>ISO container sizes (ISO 668):</strong> standard <strong>20 ft</strong> (1 TEU) and <strong>40 ft</strong> (1 FEU) long, <strong>8 ft</strong> wide, and <strong>8 ft 6 in</strong> high standard or <strong>9 ft 6 in</strong> high-cube. Corner castings carry all the stacking and lashing loads.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Torsion box:</strong> because a container ship has wide open hatches, the deck cannot resist twisting on its own. A <strong>closed box-girder</strong> is built along each side under the hatch coamings, running the length of the cargo block. This "torsion box" gives the hull the torsional (twisting) strength to resist the asymmetric loading and quartering-sea forces that would otherwise distort the open hull.</div></div>
 
 
   <!-- ═══ SECTION 12 - DRYDOCK ═══ -->

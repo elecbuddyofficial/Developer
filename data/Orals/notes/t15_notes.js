@@ -1,4 +1,4 @@
-﻿window.loadNotes("T15", `<div class="view" id="view-notes-t15">
+window.loadNotes("T15", `<div class="view" id="view-notes-t15">
 <div class="note-doc">
   <div style="margin-bottom:16px;display:flex;justify-content:space-between">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -362,7 +362,7 @@
 
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <div class="n-h1" id="s-watermist">💦 High-Pressure Water Mist System (Hi-Fog)</div>
+  <div class="n-h1" id="s-watermist">💦 High-Pressure Water Mist System (Hi-Fog / Hyper Mist)</div>
   <!-- ═══════════════════════════════════════════════════════════ -->
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working Principle:</strong> Water discharged at very high pressure (<span class="n-val">70–200 bar</span>) through specially designed fine-orifice nozzles. This atomises the water into extremely fine droplets (<span class="n-val">50–200 µm</span> diameter - typically &lt;200 µm for "mist" classification). The system extinguishes by two simultaneous mechanisms working together.</div></div>
 
@@ -388,6 +388,15 @@
     <tr><td>Water consumption</td><td>Zero water</td><td class="ok">Very low - ~90% less water than a conventional sprinkler for same suppression</td></tr>
   </table>
   <p class="n-p">Water mist is increasingly used in <strong>engine rooms, machinery spaces, and galleys</strong> as a SOLAS-accepted alternative to CO2 total flooding. The key advantage is that operations crew do not need to evacuate the space before activation.</p>
+
+  <div class="n-h2">Testing the Water-Mist System</div>
+  <ol class="n-steps">
+    <li>Inform bridge / ECR; flag it as a test so a release is not treated as a real fire.</li>
+    <li><strong>Pump auto-start test:</strong> bleed the system pressure down - the jockey / main high-pressure pump must auto-start on the pressure-drop switch and restore pressure.</li>
+    <li><strong>Section valve test:</strong> operate each zone / section valve and confirm the correct zone indication and flow.</li>
+    <li>Verify the low-pressure and running alarms at the fire panel, and the pump-running indication.</li>
+    <li>Check the nozzle heads are clean and unobstructed; restore standby pressure and reset.</li>
+  </ol>
 
 
   <!-- ═══════════════════════════════════════════════════════════ -->
@@ -556,6 +565,8 @@
   </ol>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Why Water is Forbidden in Sealed Cargo Holds:</strong> (1) Water dilutes the existing CO2 gas blanket, reducing its effectiveness. (2) Unknown container cargo may be IMDG Class 4.3 water-reactive substances - violent exothermic reactions or explosive gas releases. (3) Massive water accumulation creates a <strong>free surface effect</strong> that destroys vessel stability and can capsize the ship. CO2 starvation protocol is the only approved method.</div></div>
+
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Piercing (penetrating) applicator:</strong> a hardened spike-tipped lance / nozzle used to fight a fire <em>inside</em> a shipping container without opening it. The tip is driven through the container wall or door, then water fog (or CO2 / foam) is injected through the applicator straight into the seat of the fire. This attacks the fire while keeping oxygen ingress minimal - no need to open the door. Part of the container-ship / cargo-hold firefighting outfit.</div></div>
 
   <div class="n-h2">Mandatory 2026 Ro-Ro Passenger Ship Safety Overhaul (SOLAS II-2/20)</div>
   <p class="n-p">SOLAS Chapter II-2 Regulation 20 and FSS Code updates enter full global enforcement on <span class="n-val">1 January 2026</span>. New builds and retrofit ships must deploy three electronic safety architectures:</p>

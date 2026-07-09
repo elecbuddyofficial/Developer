@@ -106,13 +106,17 @@
     </tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t19-zener-barrier.png" alt="Zener barrier intrinsic safety — series resistor, back-to-back Zener diodes, IS earth connection, hazardous area field instrument">
+    <div class="note-diagram-cap">Fig. Zener Barrier (Ex i) — series resistor limits fault current; back-to-back Zener diodes clamp voltage; IS earth (&lt;1 Ω) essential; safe area to hazardous area field instrument</div>
+  </div>
+
   <div class="n-h2">Intrinsic Safety - Exia vs Exib Fault Counts</div>
   <div class="n-info"><div class="icon">📖</div><div class="body">
     <strong>Exia (Category 1G - Zone 0):</strong> Safe with <strong>two independent faults</strong> simultaneously. Provides the highest level of protection. Two separate Zener barriers or a certified galvanic isolator required in the safe area.<br><br>
     <strong>Exib (Category 2G - Zone 1):</strong> Safe with <strong>one fault</strong>. Single Zener barrier sufficient. Used for sensors and transmitters mounted on deck (Zone 1) rather than inside tanks (Zone 0).<br><br>
     <strong>Key values to quote:</strong> Ex i circuits must operate at <span class="n-val">&lt;30 V</span> and <span class="n-val">&lt;50 mA</span>. Never apply Megger (500V test) to an Ex i circuit - it will destroy the Zener barrier and potentially the sensor.
   </div></div>
-
 
   <!-- ═══ SECTION 3 ═══ -->
   <div class="n-h1" id="s-atex-label">3. ATEX Certification Label Reading</div>

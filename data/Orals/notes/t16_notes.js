@@ -1,4 +1,4 @@
-﻿window.loadNotes("T16", `<div class="view" id="view-notes-t16">
+window.loadNotes("T16", `<div class="view" id="view-notes-t16">
 <div class="note-doc">
   <div style="margin-bottom:16px;display:flex;justify-content:space-between">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -488,6 +488,12 @@
   ❌ Falsifying rest hour logs = PSC detention violation</div></div>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Memory Aid - Rest Hours:</strong> <strong>10-77-6</strong> = 10 hours rest per day, 77 hours rest per week, 6 hours minimum single block. Maximum work = <strong>14-72</strong> = 14 hrs/day, 72 hrs/week. Think: "10 rest, 14 work = 24" ✓ and "77 rest, 72 work = 149 ≈ 7×24 = 168" - not exact but helps anchor the numbers.</div></div>
+
+  <div class="n-h2">MLC Certificate &amp; DMLC Part 1 and Part 2 - Who Issues</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">A ship of <span class="n-val">500 GT</span> or more on international voyages carries the <strong>Maritime Labour Certificate (MLC)</strong> plus the two-part <strong>Declaration of Maritime Labour Compliance (DMLC)</strong>:<br>
+  • <strong>DMLC Part I</strong> - drawn up and issued by the <strong>flag State</strong>. It lists the national laws and requirements implementing the 14 inspectable MLC areas.<br>
+  • <strong>DMLC Part II</strong> - drawn up by the <strong>shipowner</strong> and approved by the flag State (or its Recognised Organisation). It states the specific measures the ship has put in place to comply on a continuing basis.<br>
+  The MLC Certificate itself is issued by the flag State / RO after inspection; both DMLC parts are attached to it and kept onboard.</div></div>
 
   <div class="n-h2">STCW - Manila Amendment 2010 &amp; ETO Certification</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Key change for ETOs:</strong> The Manila Amendment formally created the Electro-Technical Officer (ETO) as a recognised officer under STCW Chapter III, Regulation III/6. It established the minimum standard of competency (Table A-III/6) and introduced mandatory security training, leadership/teamwork modules, and 5-year refresher training (revalidation).</div></div>

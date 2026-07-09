@@ -93,6 +93,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><td class="bad">Below <span class="n-val">−1100 mV</span><br>(e.g. −1200 mV)</td><td class="bad">OVER-PROTECTION - DANGEROUS</td><td class="bad">Hydrogen evolution: 2H⁺ + 2e⁻ → H₂. Cathodic paint disbondment. Hydrogen embrittlement of high-strength steel fasteners and propeller shafts. See coating section.</td><td>IMMEDIATELY reduce output. Check setpoint. Recalibrate or replace reference electrode.</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-iccp-protection-levels.png" alt="ICCP protection potential levels — under-protection, target, normal zone, over-protection vs Ag/AgCl reference">
+    <div class="note-diagram-cap">Fig. ICCP Protection Levels vs Ag/AgCl — above −800 mV = under-protection (hull corrodes); −850 mV = target setpoint; −800 to −1050 mV = normal zone; below −1100 mV = over-protection (hydrogen evolution, paint disbondment)</div>
+  </div>
+
   <div class="n-h2">Controller Output Values</div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--blue-border)"><div class="card-title">DC Output Voltage</div><div class="card-val"><span class="n-val">6–25 V DC</span></div><div class="card-desc">Increases as hull paint ages and more bare steel is exposed. New ship (fresh paint): low end. Midlife: high end.</div></div>
@@ -117,6 +122,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><td>Standard Hydrogen<br>(SHE)</td><td class="hl"><span class="n-val">0.000 V</span> (definition)</td><td>Pt electrode in H₂ atmosphere, H⁺ activity = 1. Laboratory only.</td><td>Universal reference datum. Never used in the field. All other electrode potentials are quoted relative to SHE.</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-portable-ref-anode.png" alt="Portable silver-silver chloride reference anode — Ag wire, AgCl coating, KCl gel, porous ceramic junction">
+    <div class="note-diagram-cap">Fig. Portable Ag/AgCl Reference Electrode — used for drydock hull potential surveys and sensor verification; Ag wire coated with AgCl in KCl gel electrolyte; porous ceramic junction allows ionic contact with seawater; potential +0.222 V vs SHE</div>
+  </div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Why reference electrodes drift and fail:</strong> (1) Gel electrolyte slowly leaches out through the porous ceramic junction → ionic concentration changes → Nernst equation shifts → wrong reading. (2) Marine bio-fouling partially blocks the porous junction → response time increases. (3) Physical cracking of the ceramic housing → seawater ingress contaminates gel. All three mechanisms cause progressive reading drift, not sudden failure - so the ICCP appears to run normally while silently over- or under-protecting the hull. Mandatory replacement at each drydock (every ~2.5 years).</div></div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
@@ -135,6 +145,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><td>Berth / canal</td><td class="ok">No stray current risk - passive system</td><td class="bad">Must switch OFF at berth and during canal transits - stray current hazard</td></tr>
     <tr><td>Best application</td><td>Small vessels, rudder/fin/thruster tunnel areas, backup anodes alongside ICCP</td><td class="ok">Large vessels (&gt;100 m LOA), trading in varying temperatures and salinities</td></tr>
   </table>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-sacrificial-vs-iccp.png" alt="Sacrificial anode vs ICCP comparison — zinc/aluminium block dissolving vs MMO/Ti anode with controller">
+    <div class="note-diagram-cap">Fig. Sacrificial Anode vs ICCP — sacrificial: Zn/Al block bolted to hull, dissolves passively, replaced at drydock; ICCP: inert MMO/Ti anode + controller maintains −850 mV via Ag/AgCl feedback; ICCP OFF at berth to prevent stray current</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- SECTION 6 - ICCP OPERATION                                 -->
@@ -169,6 +184,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <tr><td class="hl"><strong>MANUAL</strong></td><td>After drydock recommissioning; reference electrode suspected faulty</td><td>ETO manually sets output voltage/current; monitors hull potential with portable reference electrode</td><td class="bad">Human error - over/under protect if not monitored carefully</td></tr>
     <tr><td class="bad"><strong>OFF</strong></td><td>At berth, canal transit, drydock</td><td>System de-energised - no corrosion protection from ICCP (sacrificial anodes provide backup)</td><td class="bad">Hull relies solely on sacrificial anodes and paint coating</td></tr>
   </table>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-iccp-system.png" alt="ICCP system schematic — MMO/Ti anodes, Ag/AgCl reference electrodes, controller, hull connection">
+    <div class="note-diagram-cap">Fig. ICCP System — controller converts AC to adjustable DC; (+) to flush MMO/Ti anodes; (−) to hull; Ag/AgCl reference electrodes feed PID loop to maintain −850 mV</div>
+  </div>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- SECTION 7 - COATINGS & CATHODIC DISBONDMENT                -->
@@ -243,6 +263,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Double problem at berth:</strong> (1) Stray current corrodes jetty infrastructure and nearby vessels (liability). (2) Nearby metallic structures at different potentials cause ship's Ag/AgCl reference electrode to read a falsely negative potential → controller sees "under-protection" → increases output → actual over-protection → hydrogen evolution and cathodic paint disbondment on own hull. ICCP OFF + fit galvanic isolator on shore earth conductor (prevents metallic bonding to terminal earthing system).</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-stray-current-jetty.png" alt="Stray current corrosion at berth — ICCP current paths through mooring wires and seawater to jetty">
+    <div class="note-diagram-cap">Fig. Stray Current at Berth — ICCP current escapes via mooring wires/shore power earth into seawater; current exits jetty piling back into water = anode reaction = jetty corrosion; 10 A DC dissolves ~91 kg iron/year; switch ICCP OFF at berth</div>
+  </div>
+
   <div class="n-h2">Stray Current Sources and Monitoring</div>
   <table class="n-table">
     <tr><th>Source</th><th>Mechanism</th><th>Prevention</th></tr>
@@ -304,6 +329,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
   <strong>Difference in one sentence:</strong> Bonding = corrosion prevention (equalise potential). Earthing = electrical safety (fault current path).<br>
   Bonding resistance target: <span class="n-val">&lt;1 Ω</span> between any bonded component and hull.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-bonding-arrangement.png" alt="Bonding arrangement of shaft, hull and propeller — bonding straps, copper conductors, hull earth bar">
+    <div class="note-diagram-cap">Fig. Electrical Bonding — shaft earthing brush bonds propeller shaft to hull; bonding straps connect rudder, fin stabilisers, and piping to hull earth bar; all components at same electrical potential prevents bimetallic galvanic corrosion; target &lt;1 Ω between any bonded component and hull</div>
+  </div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Shaft earthing brush:</strong> Carbon brush maintains electrical continuity between the rotating propeller shaft and the hull. Without it: stray currents from propulsion VFDs and natural galvanic potential difference (bronze propeller at ~+0.3V vs steel hull at ~−0.5V) arc through the thin oil film in bearings → electrolytic corrosion and spark pitting of bearing surfaces → progressive bearing failure. Check brush wear and slip ring condition at every survey. Target resistance: <span class="n-val">&lt;1 Ω</span> shaft to hull.</div></div>
 
   <div class="n-h2">Hull Continuity Testing</div>
@@ -330,6 +360,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
     <li>Some vessels fit two brushes (main and standby) in parallel for redundancy</li>
   </ul>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-shaft-earthing-brush.png" alt="Shaft earthing brush and slip ring — carbon brush, slip ring, spring holder, mV monitor, hull earth">
+    <div class="note-diagram-cap">Fig. Shaft Earthing Brush — carbon brush spring-loaded against smooth slip ring on propeller shaft; flexible cable bonds to hull earth bar; mV monitor verifies shaft-to-hull potential is near zero; target resistance &lt;1 Ω</div>
+  </div>
+
   <div class="n-h2">ETO Checks and Testing Procedure</div>
   <ol class="n-steps">
     <li>Measure shaft-to-hull resistance with Ducter or low-resistance ohmmeter: must be <span class="n-val">&lt;1 Ω</span>. If higher: brush worn, slip ring contaminated, or cable connection corroded.</li>
@@ -350,6 +385,11 @@ window.loadNotes("T10", `<div class="view" id="view-notes-t10">
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>MGPS Purpose:</strong> Prevents biological fouling (barnacles, mussels, algae, tube worms) inside sea chests, internal seawater cooling pipework, and heat exchangers. Bio-fouling inside pipes reduces flow area, degrades heat transfer, and can mechanically damage pump impellers and valve seats.<br><br>
   <strong>MGPS Working Principle:</strong> Low DC (<span class="n-val">0.5–4 V</span>, <span class="n-val">0.5–4 A</span> per anode pair) passed through copper anodes mounted in the sea chest. Copper anode dissolves slowly → Cu²⁺ ions released at <span class="n-val">~2 ppb</span> concentration - highly toxic to marine larvae at the settlement stage (prevents attachment). The ion-laden water flows through all seawater pipework providing system-wide protection. Aluminium anodes are paired with copper: Al³⁺ ions form a thin protective anti-corrosive coating on copper alloy heat exchanger tube surfaces.</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t10-mgps.png" alt="MGPS system — sea chest, copper and aluminium anodes, controller, seawater pipework distribution">
+    <div class="note-diagram-cap">Fig. MGPS (Marine Growth Prevention System) — Cu and Al anodes in sea chest; DC controller 0.5–4 V; Cu²⁺ ions (~2 ppb) carried through all seawater pipework; prevents barnacle/mussel settlement inside pipes; distinct from ICCP which protects external hull</div>
+  </div>
 
   <table class="n-table">
     <tr><th>Feature</th><th>MGPS</th><th>ICCP</th></tr>

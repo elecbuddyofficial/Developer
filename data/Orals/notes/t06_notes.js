@@ -90,6 +90,16 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td>Ship use</td><td>LO temps, CW temps, bearing temps (accurate, moderate range)</td><td>Exhaust gas, boiler flue (high temp range)</td></tr>
   </table>
 
+<div class="note-diagram-wrap">
+  <img src="../../data/diagrams/t06-thermocouple.png" alt="Thermocouple Seebeck effect — hot junction, cold junction, dissimilar metal wires, millivolt EMF output">
+  <div class="note-diagram-cap">Fig. Thermocouple — Seebeck effect: dissimilar metals (e.g. Type K: Chromel/Alumel) generate EMF proportional to temperature difference between hot and cold junctions</div>
+</div>
+
+<div class="note-diagram-wrap">
+  <img src="../../data/diagrams/t06-rtd-wiring.png" alt="RTD PT100 2-wire, 3-wire and 4-wire connection methods — lead resistance compensation">
+  <div class="note-diagram-cap">Fig. RTD Wiring Methods — 2-wire (uncompensated), 3-wire (lead resistance cancels in Wheatstone bridge, standard shipboard use), 4-wire Kelvin (laboratory accuracy)</div>
+</div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (All):</strong> What is cold junction compensation?<br><strong>Ideal Answer:</strong> Thermocouple output (mV) represents the temperature DIFFERENCE between the hot junction (measurement point) and the cold junction (instrument terminals). If terminal temperature changes (e.g. hot engine room), the reading shifts. CJC: the instrument contains its own temperature sensor (RTD or thermistor) measuring the actual terminal temperature, then electronically ADDS the equivalent mV to give true hot-junction temperature. Without CJC, accuracy holds only if cold junction is at a fixed known temperature - traditionally an ice bath at 0 °C.</div></div>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (Kamath, Sanjib):</strong> Why must thermocouple extension cable be the same material as the TC?<br><strong>Ideal Answer:</strong> The TC works by the Seebeck effect - EMF generated where two dissimilar metals meet. If ordinary copper extension cable is used, a NEW thermocouple junction is created where copper meets the thermocouple wire at the junction box. This parasitic junction generates its own EMF that adds to or subtracts from the measurement signal, causing a temperature error. Matching extension cable (same alloy or compensating cable) has the same Seebeck coefficient as the TC wire, so no additional EMF is generated and accuracy is preserved.</div></div>
@@ -145,9 +155,24 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Why 4 mA and not 0 mA? (The Live Zero concept):</strong> 4 mA is the "live zero" - it proves the entire loop (power supply, wiring, transmitter) is functional. A 0 mA reading unambiguously indicates a broken wire or dead transmitter. If the standard were 0–20 mA, a valid zero measurement and a wire break would both read 0 mA - indistinguishable. The 4 mA offset makes fault detection certain. It also powers the transmitter electronics from the loop current - the electronics need a minimum of ~3–4 mA to operate.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why 20 mA maximum? (Safety rationale):</strong> The human heart can withstand approximately <span class="n-val">30 mA</span> before ventricular fibrillation becomes a risk. The 4–20 mA standard was deliberately set so that even a direct contact with the full-scale signal loop current of 20 mA remains below the cardiac threshold with a safety margin. This makes 4–20 mA inherently safer to handle than higher-current systems, particularly relevant in damp engine room environments.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-two-wire-transmitter.png" alt="Two-wire loop-powered transmitter — 24 V DC supply, 4-20 mA signal on same two wires, DCS input card">
+    <div class="note-diagram-cap">Fig. Two-Wire Loop-Powered Transmitter — 24 V DC power and 4–20 mA process signal share the same pair of wires; transmitter modulates loop current proportional to measured variable</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-4-20ma-current-loop.png" alt="4-20 mA current loop — live zero 4 mA, full scale 20 mA, wire break = 0 mA fault">
+    <div class="note-diagram-cap">Fig. 4–20 mA Current Loop — live zero (4 mA = 0%, 20 mA = 100%), wire break detectable as 0 mA fault; linear conversion formula mA = 4 + (PV/span × 16)</div>
+  </div>
+
   <div class="n-h2">HART Protocol - Superimposed Digital on Analogue</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Highway Addressable Remote Transducer (HART):</strong> HART superimposes a low-level FSK (Frequency Shift Keying) digital signal onto the existing 4-20mA analogue wire - <span class="n-val">1200 Hz = logic 1</span>, <span class="n-val">2200 Hz = logic 0</span>. The digital signal amplitude is only ±0.5mA, so it does not disturb the analogue reading. Both analogue and digital signals coexist on the same pair of wires simultaneously.</div></div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>HART Resistor Requirement:</strong> A minimum resistance of <span class="n-val">250 Ω</span> must be present in the loop (DCS input card or added resistor) to develop sufficient voltage for the HART communicator to read the FSK signal. Voltage developed = I × R = 20mA × 250Ω = <span class="n-val">5V</span> (max). The HART communicator clips across this resistor to communicate with the transmitter. Without 250Ω, the FSK voltage amplitude is too small to decode reliably.</div></div>
+
+<div class="note-diagram-wrap">
+  <img src="../../data/diagrams/t06-hart-communicator.png" alt="HART communicator connected to 4-20 mA loop — FSK digital signal superimposed, 250 Ω resistor, DCS input">
+  <div class="note-diagram-cap">Fig. HART Communication — FSK digital signal (1200/2200 Hz, ±0.5 mA) superimposed on 4–20 mA analogue loop; HART communicator clips across 250 Ω burden resistor</div>
+</div>
 
   <div class="n-h2">HART - What It Allows (Remote Operations)</div>
   <ul class="n-list">
@@ -206,6 +231,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td>Ship use examples</td><td>Older retrofit to cargo pump room level transmitters</td><td>New IMACS/IAS field instruments in hazardous zones</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-zener-barrier.png" alt="Zener barrier circuit — series resistor, back-to-back Zener diodes, IS earth, safe area to hazardous area">
+    <div class="note-diagram-cap">Fig. Zener Barrier — series resistor limits fault current (I_max = V/R); Zener diodes clamp voltage (V_max = Vz); IS earth (&lt;1 Ω) essential for clamping action; safe area DCS to hazardous area field instrument</div>
+  </div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is a Zener barrier and why is the earth connection critical?<br><strong>Answer:</strong> A Zener barrier is a passive IS interface device using series resistors (to limit current) and back-to-back Zener diodes (to clamp voltage) to restrict energy in a hazardous area below ignition levels. The earth connection is critical because the Zener diodes conduct excess voltage to earth. If the IS earth is missing or its resistance exceeds 1Ω, the Zener cannot clamp properly - the full supply voltage can pass to the hazardous area, defeating the IS protection and creating an ignition risk.</div></div>
 
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> <strong>Zener = Cheap but earthed</strong> (needs that &lt;1Ω clean earth or fails). <strong>Galvanic = Isolated</strong> (galvanic = disconnected, like sacrificial anode logic - no common path at all). Galvanic isolators are the modern preference for new installations.</div></div>
@@ -255,6 +285,16 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </ol>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Never</strong> open the HP isolation valve with equalising valve closed and LP valve closed - full process pressure applied to only one side of the DP capsule causes over-range damage (burst diaphragm). Always equalise before opening to process.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-dp-flow-sensor.png" alt="DP transmitter on orifice plate — HP and LP taps, 3-valve manifold, DP capsule, 4-20 mA output">
+    <div class="note-diagram-cap">Fig. DP Flow Measurement — orifice plate creates differential pressure; HP/LP taps connect via 3-valve manifold to DP capsule; output 4–20 mA proportional to √ΔP</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-dp-three-way-valve.png" alt="DP transmitter 3-valve manifold — HP isolation valve, LP isolation valve, equalising valve, startup sequence">
+    <div class="note-diagram-cap">Fig. 3-Valve Manifold — HP isolation, LP isolation, equalising valve; startup: open LP → open HP → close equalising (never apply full HP with equaliser closed)</div>
+  </div>
+
   <div class="n-h2">Wet Leg and Zero Suppression</div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Zero Suppression (Wet Leg):</strong> On level measurement in closed tanks or boiler drums, the HP connecting impulse leg from the tap at the bottom of the tank fills with the process liquid (wet leg) - this creates a constant hydrostatic head pressure on the HP side even when the tank is empty. The transmitter reads HIGH at empty. A <strong>zero trim</strong> is applied during commissioning to suppress this constant offset so that empty tank = 4mA and full tank = 20mA.<br><br>On open tanks or DP flow measurement, a <strong>dry leg</strong> is used - HP and LP impulse lines contain only gas/vapour, no static liquid head. Simpler to calibrate but care needed for condensation blocking lines.</div></div>
 
@@ -298,6 +338,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
 
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Coriolis:</strong> Think of a spinning sprinkler - water flying outward twists the arms (Coriolis force on rotating mass). In the meter, flowing fluid through vibrating tubes creates a twist proportional to mass flow. <strong>Phase lag = Mass flow. Frequency shift = Density.</strong></div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-coriolis-flowmeter.png" alt="Coriolis flowmeter — vibrating U-tubes, phase shift between inlet and outlet pickups proportional to mass flow">
+    <div class="note-diagram-cap">Fig. Coriolis Flowmeter — vibrating U-tubes; flowing mass twists tubes (Coriolis force); phase lag between inlet/outlet pick-up coils ∝ mass flow; resonant frequency shift ∝ fluid density</div>
+  </div>
+
   <div class="n-h2">Turbine Flowmeter</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle:</strong> A multi-bladed rotor (turbine) is mounted on bearings in the flow stream. The flowing fluid imparts a torque proportional to velocity, causing the turbine to spin. The rotational speed is measured by a magnetic or inductive pick-up counting the blade passing frequency. Pulse output: frequency proportional to volumetric flow rate.<br><br><strong>Flow range:</strong> Accurate over about 10:1 turndown ratio. Best accuracy at mid-range (10:1 to 5:1).<br><br><strong>Limitation:</strong> Measures VOLUMETRIC flow only (m³/s). To get mass flow, density must be known. Has moving parts (bearings, rotor) - subject to wear. Not suitable for dirty or viscous fluids (clogs bearings). Requires straight pipe runs (10× D upstream, 5× D downstream) for accuracy.</div></div>
 
@@ -319,6 +364,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td>Ship applications</td><td>Lube oil monitoring, clean fuel lines</td><td>Steam flow, boiler water, compressed air</td><td>Bunkering, HFO consumption, chemical dosing</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-turbine-flowmeter.png" alt="Turbine flowmeter — rotor spins in flow, magnetic pickup counts rotation frequency to give volumetric flow rate">
+    <div class="note-diagram-cap">Fig. Turbine Flowmeter — multi-bladed rotor in pipe; flow spins rotor; magnetic pick-up counts rotations per second → volumetric flow Q ∝ frequency; moving parts susceptible to viscous fluids and contamination</div>
+  </div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> Why is a Coriolis meter preferred for bunkering? Why not a turbine meter?<br><strong>Answer:</strong> Bunkering involves custody transfer - the mass of fuel received must be accurately measured for payment and consumption records. Coriolis directly measures mass flow regardless of fuel density (which varies between bunker grades and temperatures). A turbine meter only measures volume - it requires a density correction which introduces additional uncertainty. Coriolis also measures bidirectionally, accounting for any backflow. For financial and legal accuracy in custody transfer, Coriolis is the accepted standard.</div></div>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -336,6 +386,12 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td><strong>Electrochemical (Galvanic cell)</strong></td><td>O₂ diffuses through a gas-permeable membrane, then is reduced at a gold/platinum cathode. A zinc or lead anode is simultaneously oxidised. The current produced is proportional to O₂ partial pressure. Cell is <em>consumed over time</em> - typical life 1–3 years.</td><td>Portable enclosed space entry checks (personal O₂ meter)</td></tr>
     <tr><td><strong>Zirconia (ZrO₂)</strong></td><td>Zirconia ceramic cell heated to 650–900 °C acts as an O₂ ion conductor. EMF (Nernst voltage) is generated proportional to the logarithm of the O₂ concentration ratio between the measured flue gas and a reference air pocket. In-situ, no sample conditioning needed.</td><td>Direct high-temperature exhaust O₂ measurement in boiler/main engine flue</td></tr>
   </table>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-paramagnetic-o2.png" alt="Paramagnetic oxygen analyser — dumbbell suspension type and thermomagnetic magnetic-wind type">
+    <div class="note-diagram-cap">Fig. Paramagnetic O₂ Analyser — dumbbell suspension type (O₂ displaces N₂-filled spheres in magnetic field); thermomagnetic type (magnetic wind flow cools Pt wire, shifts Wheatstone bridge)</div>
+  </div>
+
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Calibration - Oxygen Analyser:</strong> Zero = pass pure nitrogen gas (0% O₂), adjust zero trim to 0.0%. Span = pass certified span gas or clean atmospheric air (<span class="n-val">20.9% O₂</span>), adjust span trim to match. Record gas certificate reference numbers for traceability.</div></div>
 
   <div class="n-h2">Exhaust Gas Analyser - SOx, NOx, CO (MARPOL Monitoring)</div>
@@ -377,6 +433,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-h2">Explosion Meter (Combustible Gas Indicator) - Pellistor/Catalytic Bead</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle (Catalytic bead / Pellistor):</strong> Air-gas mixture drawn over a heated catalytic platinum bead. Combustible gas oxidises on the catalyst surface, releasing heat → bead temperature rises → bead resistance rises → Wheatstone bridge goes off-null → reading in % LEL (Lower Explosive Limit).<br><strong>Scale:</strong> 0–100% LEL. <strong>NEVER read beyond 100% LEL</strong> - meter cannot be accurate in explosive or overly rich mixtures.<br><strong>Safe entry limits:</strong> Space must be below <span class="n-val">10% LEL</span> for entry with ignition sources. Below <span class="n-val">1% LEL</span> for hot work.<br><strong>Annual calibration:</strong> With certified span gas (50% LEL n-pentane or methane). Bump test before each use.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-pellistor-catalytic.png" alt="Pellistor catalytic bead gas detector — active and reference bead Wheatstone bridge, % LEL output">
+    <div class="note-diagram-cap">Fig. Pellistor (Catalytic Bead) — active bead oxidises combustible gas → resistance rises → Wheatstone bridge off-null → % LEL reading; reference bead compensates for temperature drift</div>
+  </div>
+
   <div class="n-h2">Oxygen Meter - Checks Before Use</div>
   <ul class="n-list">
     <li><strong>Bump test:</strong> Expose sensor to enriched O₂ or depleted (inert gas) atmosphere - reading must respond correctly. Confirms sensor is alive and responding.</li>
@@ -407,6 +468,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-h2">Inductive Proximity Sensor - Eddy Current Principle</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> An internal oscillator drives a coil at high frequency (<span class="n-val">10 kHz – 1 MHz</span>), projecting a high-frequency alternating electromagnetic field ahead of the sensor face. When a metallic target enters this field, eddy currents are induced in the metal surface - these eddy currents draw energy from the oscillator (eddy current damping). The oscillator amplitude drops → detection circuit triggers → output switches. <strong>Metallic targets only.</strong><br><br><strong>Sensing range correction factor for non-ferrous metals:</strong> Ferrous steel = 100% rated range. Aluminium ≈ 60%. Copper ≈ 40% (higher eddy current conductivity means different interaction).<br><br><strong>Advantages:</strong> Completely unaffected by oil film, water, dust, or contamination on sensor face. No moving parts. No physical contact with target. Response time &lt;1 ms.<br><br><strong>Ship uses:</strong> Shaft RPM sensing (reluctor ring on crankshaft), valve position (open/closed limit detection), crankshaft TDC detection for timing reference, gear tooth counting.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-inductive-proximity.png" alt="Inductive proximity sensor — oscillator coil, eddy currents in metallic target, amplitude damping triggers output">
+    <div class="note-diagram-cap">Fig. Inductive Proximity Sensor — high-frequency EM field from oscillator coil; metallic target induces eddy currents; energy drain damps oscillator amplitude → switch triggers; metallic targets only</div>
+  </div>
+
   <div class="n-h2">Sensor Comparison Table</div>
   <table class="n-table">
     <tr><th>Type</th><th>Principle</th><th>Target Materials</th><th>Ship Application</th></tr>
@@ -417,6 +483,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td><strong>Photoelectric</strong></td><td>Light beam interruption or reflection - emitter + receiver pair</td><td>Any opaque object</td><td>Conveyor systems, counting, bin overflow detection</td></tr>
     <tr><td><strong>LVDT</strong></td><td>Moving iron core shifts mutual inductance between primary and secondary coils</td><td>Mechanical linkage/stem only</td><td>Governor fuel rack, control valve stem feedback, rudder angle</td></tr>
   </table>
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-capacitive-proximity.png" alt="Capacitive proximity sensor — oscillator plate forms capacitor with target, change in capacitance modifies oscillation frequency">
+    <div class="note-diagram-cap">Fig. Capacitive Proximity Sensor — sensor face forms one capacitor plate; target (metal, liquid, or non-metal) changes dielectric constant → oscillation frequency shifts → detector triggers; works on all materials including liquids</div>
+  </div>
+
   <div class="n-formula">RPM = (Pulses per second × 60) / Number of teeth on gear wheel<div class="label">Toothed gear wheel + inductive/magnetic pick-up counting teeth per second</div></div>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -426,6 +497,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Magnetic Pick-Up (Variable Reluctance Sensor):</strong> A permanent magnet with a coil wound around it. As a ferrous gear tooth (on flywheel, crankshaft, or reluctor ring) passes close to the sensor tip, the magnetic flux through the coil changes → rate of flux change induces an EMF in the coil (Faraday's Law). Each tooth passing = one voltage pulse. Frequency of pulses directly = shaft speed.<br><br><strong>Typical output:</strong> 1V–50V AC sine wave at low speed, increasing to higher amplitude and frequency at higher RPM. Frequency range: 1 Hz to 10 kHz depending on tooth count and speed.<br><br><strong>Key property - Passive / Self-generating:</strong> No external power supply needed whatsoever. EMF is generated purely by the changing magnetic flux. Very reliable in high-temperature and high-vibration environments (engine room conditions).<br><br><strong>Ship Applications:</strong> Crankshaft RPM measurement for engine governor control, overspeed trip detection (if pulse frequency exceeds limit → immediate fuel shut-off), propeller shaft speed, turbocharger RPM monitoring.</div></div>
 
   <div class="n-formula">RPM = (f × 60) / N<div class="label">f = pulse frequency (Hz), N = number of teeth on the gear wheel (reluctor ring tooth count)</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-magnetic-pickup.png" alt="Magnetic pick-up sensor — permanent magnet with coil, ferrous gear tooth changes flux, induces EMF pulse">
+    <div class="note-diagram-cap">Fig. Magnetic Pick-Up (Variable Reluctance) — permanent magnet + coil; each gear tooth changes flux → Faraday EMF pulse; pulse frequency ∝ RPM; passive, self-generating, no power supply needed</div>
+  </div>
 
   <div class="n-h2">Electric Tachometer - Types Comparison</div>
   <table class="n-table">
@@ -591,6 +667,21 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td><strong>Magnetic Float (Sight Glass type)</strong></td><td>A sealed float with embedded permanent magnets rides on liquid surface inside a non-magnetic chamber. External magnetic followers (flippers/indicators) on the chamber wall flip between coloured sides as the magnet level changes - provides visual local indication. Can also drive a 4-20mA transmitter via magnetic coupling.</td><td>LO sump tanks, HFO tank local sight gauges, boiler water sight glasses</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-capacitive-level.png" alt="Capacitive level sensor — probe as one plate, tank wall as other plate, liquid increases capacitance proportional to level">
+    <div class="note-diagram-cap">Fig. Capacitive Level Sensor — probe + tank wall form capacitor; liquid (higher dielectric constant) increases capacitance proportional to immersion depth; electronics convert to 4–20 mA</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-ultrasonic-level.png" alt="Ultrasonic level sensor — transducer emits pulse, measures echo time from liquid surface, level = height minus distance">
+    <div class="note-diagram-cap">Fig. Ultrasonic Level Sensor — piezoelectric transducer emits pulse downward; echo time from liquid surface → level = tank height − (v × t/2); non-contact, no moving parts</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-radar-level.png" alt="Radar level sensor — microwave pulse time-of-flight, unaffected by vapour or temperature">
+    <div class="note-diagram-cap">Fig. Radar Level Sensor — microwave pulse (5–80 GHz) reflects from liquid surface; speed of light TOF measurement; unaffected by vapour, foam, temperature changes; used for cargo oil and LNG custody transfer</div>
+  </div>
+
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q (All):</strong> Salinometer - how does it detect salinity and why must it use AC?<br><strong>Answer:</strong> Measures electrical conductivity of the water. Dissolved Na⁺ and Cl⁻ ions carry current - higher salt content = higher conductivity. <strong>AC must be used</strong> because DC causes electrolysis - ions migrate toward electrodes and form a film (polarisation) that increases electrode resistance over time, giving a false high reading. AC reverses ion migration with each half-cycle, preventing polarisation. Output in ppm. If ppm exceeds the setpoint alarm, the dump valve opens to divert distillate to bilge instead of FW tanks. Boiler feed water limit: 5–15 ppm.</div></div>
 
 <!-- ═══════════════════════════════════════════════════════════════════ -->
@@ -604,6 +695,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-formula">V_out = V_supply × [ R3/(R3+R4) − R2/(R1+R2) ]<div class="label">Bridge output voltage. At balance (null): R1/R2 = R3/R4, V_out = 0. Strain gauge replaces one or more of R1–R4.</div></div>
   <p class="n-p">In a pressure transmitter, four strain gauges are deposited onto a metal diaphragm (two in compression, two in tension when pressure is applied - full bridge configuration). Applied pressure deflects the diaphragm, straining all four gauges simultaneously. Two gauges increase in resistance while two decrease - this differential effect doubles the sensitivity and cancels temperature error. Bridge output voltage is proportional to applied pressure. This mV signal is amplified and conditioned to 4-20mA.</p>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-wheatstone-strain-gauge.png" alt="Wheatstone bridge with strain gauges — full bridge configuration, two in tension, two in compression, mV output">
+    <div class="note-diagram-cap">Fig. Wheatstone Bridge with Strain Gauges — full bridge: two gauges in tension (R↑), two in compression (R↓) when pressure applied; differential bridge output doubles sensitivity and cancels temperature error</div>
+  </div>
+
   <div class="n-h2">Pressure Transducer vs Pressure Transmitter</div>
   <table class="n-table">
     <tr><th>Device</th><th>Output Signal</th><th>Power Supply</th><th>Signal Conditioning</th></tr>
@@ -614,6 +710,11 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
 
   <div class="n-h2">LVDT - Linear Variable Differential Transformer</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Construction:</strong> One primary coil (driven by AC excitation, typically 1–10 kHz) and two secondary coils (S1 and S2) wound in opposition and placed symmetrically on either side of the primary. A soft iron core is mechanically connected to the object whose position is being measured (valve stem, governor fuel rack, rudder shaft).<br><br><strong>Working:</strong> AC in primary induces voltage in both secondaries by mutual induction. Output = V_S1 − V_S2 (connected in series opposition).<br>• Core central (null position): V_S1 = V_S2 → V_out = 0 (no net output)<br>• Core moves toward S1: V_S1 increases, V_S2 decreases → V_out = positive voltage proportional to displacement<br>• Core moves toward S2: V_S1 decreases, V_S2 increases → V_out = negative voltage proportional to displacement<br>• Phase of output (0° or 180° relative to primary) indicates direction of movement<br><br><strong>Advantages:</strong> Contactless - no physical friction or wear between core and coils. Infinite resolution (analogue, not digital steps). Highly accurate (±0.25% full scale). Rugged - sealed in oil or epoxy, suitable for harsh conditions.</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t06-lvdt.png" alt="LVDT — primary coil, two secondary coils S1 and S2, moving iron core, output voltage proportional to displacement">
+    <div class="note-diagram-cap">Fig. LVDT (Linear Variable Differential Transformer) — iron core displaced from null: V_S1−V_S2 ≠ 0; output polarity indicates direction; used for governor fuel rack, valve stem, rudder angle feedback</div>
+  </div>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Surveyor Q:</strong> What is an LVDT and where is it used onboard?<br><strong>Answer:</strong> Linear Variable Differential Transformer - converts linear mechanical displacement into an AC voltage proportional to displacement. Used for: (1) Engine governor fuel rack position feedback - the governor controller needs to know exactly how much fuel is being injected, (2) Main engine telegraph repeater system, (3) Autopilot rudder angle feedback transmitter, (4) Stabiliser fin angle measurement, (5) Control valve stem position indication. Key advantage: no physical contact between the moving iron core and the coil assembly - no friction, no wear, suitable for continuous and high-cycle operation in all sea conditions.</div></div>
 

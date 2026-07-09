@@ -45,6 +45,11 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
 
   <div class="n-formula">PF = kW / kVA = cos φ<div class="label">Active Power (kW) = V × I × cos φ &nbsp;·&nbsp; Reactive Power (kVAR) = V × I × sin φ &nbsp;·&nbsp; Apparent Power (kVA) = V × I = √(kW² + kVAR²)</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t11-power-triangle.png" alt="Power triangle — kW active power, kVAR reactive power, kVA apparent power, phase angle φ">
+    <div class="note-diagram-cap">Fig. Power Triangle — kW (base), kVAR (vertical), kVA (hypotenuse); PF = cos φ = kW/kVA</div>
+  </div>
+
   <table class="n-table">
     <tr><th>Power Type</th><th>Symbol</th><th>Unit</th><th>Description</th><th>Formula</th></tr>
     <tr><td><strong>Active Power</strong></td><td class="hl">P</td><td class="hl">kW</td><td>Does useful work - heats, drives motors, lights. Real energy consumed.</td><td>P = V × I × cos φ</td></tr>
@@ -154,6 +159,11 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
     <tr><td><strong>Reduce lightly-loaded motors</strong></td><td>Stop or replace motors running at very low load - they draw proportionally more kVAR than at full load</td><td class="ok">No extra equipment. Reduces I²R losses and wear.</td><td class="bad">Not always operationally practical - many pumps must run continuously for safety.</td></tr>
     <tr><td><strong>Active Front-End (AFE) VFD</strong></td><td>IGBT rectifier stage draws near-sinusoidal current at near-unity PF from supply - no lagging kVAR generation</td><td class="ok">Near-zero harmonics and near-unity PF at source. Regenerative braking possible.</td><td class="bad">High capital cost. More complex than standard VFD. Requires clean supply for IGBT firing.</td></tr>
   </table>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t11-capacitor-banks.png" alt="Capacitor bank PF correction — capacitors in parallel with inductive loads, leading kVAR cancels lagging kVAR">
+    <div class="note-diagram-cap">Fig. Capacitor Bank Power Factor Correction — capacitors connected in parallel with motor loads; leading kVAR cancels lagging kVAR, reducing apparent power (kVA) and improving PF</div>
+  </div>
 
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Synchronous Condenser - Detailed Working (Kamath, Sanjib, Upendra Kumar):</strong> A synchronous motor connected to the busbars running with NO mechanical load on its shaft - the shaft is connected to nothing, just spins freely. When the DC field excitation current is increased above the normal (synchronous) level → the motor is <em>over-excited</em> → it generates leading reactive current (kVAR) into the busbars. This leading kVAR exactly cancels the lagging kVAR drawn by induction motors on the same busbar. The amount of leading kVAR is varied by adjusting the DC field current - giving continuous, smooth, stepless control. When the excitation is reduced below normal → the condenser absorbs leading kVAR (useful if capacitor banks have over-corrected). Construction: mechanically identical to a synchronous motor but shaft is not connected to any driven equipment.</div></div>
 

@@ -115,6 +115,11 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
   </table>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why LSZH is mandated by SOLAS:</strong> In a ship fire, the primary cause of incapacitation and death is toxic smoke inhalation, not heat. PVC cables burning in a confined accommodation passageway produce HCl (hydrogen chloride) gas and dense black smoke that cause immediate respiratory failure and zero visibility. LSZH cables produce minimal smoke and no acid gas - passengers and crew retain vision and lung function long enough to escape. SOLAS 2002 amendments (Reg. II-2/3) and IEC 60092-353 mandate halogen-free cables in all accommodation, service spaces, and escape routes. An ETO must enforce this requirement when purchasing replacement cables.</div></div>
 
+  <div class="n-h2">Dielectric, Dielectric Loss &amp; Stray Loss</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Dielectric</strong> = the insulating material between conductor and earth/screen (XLPE, EPR, PVC). Under AC it stores and releases energy each cycle like a capacitor.<br>
+  • <strong>Dielectric loss:</strong> the small power dissipated as heat inside the insulation as the alternating field repeatedly polarises it. Measured by the loss angle / <strong>tan δ</strong> (dissipation factor) - a rising tan δ on test means the insulation is ageing or wet. Significant on HV cables, negligible on LV.<br>
+  • <strong>Stray loss:</strong> extra I<sup>2</sup>R heating from eddy currents and circulating currents induced by the cable's own magnetic field in the metallic screen, armour and nearby steelwork. Minimised by bonding the screen/armour at one end only (single-point bonding) on HV runs.</div></div>
+
 
   <!-- ═══ SECTION 3: SCREENING / SHIELDING ═══ -->
   <div class="n-h1" id="s-screening">🛡️ Cable Screening &amp; Shielding</div>
@@ -277,6 +282,9 @@ window.loadNotes("T12", `<div class="view" id="view-notes-t12">
   • <strong>Deflecting Coil (Current Coil):</strong> Connected in series with insulation under test - generates deflecting torque proportional to leakage current<br>
   • <strong>Crossing Coil:</strong> Positioned at an angle to deflecting coil - stabilises pointer and controls scale distribution across MΩ/GΩ ranges<br>
   Pointer deflection = ratio of currents through the two coils (R = V/I). Self-compensating - independent of exact hand-cranking speed. Modern digital variants use electronic DC/DC converter to generate stabilised high DC test voltage from batteries.</div></div>
+
+  <div class="n-h2">Digital Megger - Generating 500V from a 9V Battery</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>How a battery megger makes the high test voltage:</strong> the low DC from the internal battery (e.g. <span class="n-val">9V</span>) feeds an electronic <strong>oscillator</strong> that chops it into AC → a <strong>step-up transformer</strong> raises the voltage → a <strong>rectifier and voltage-multiplier</strong> (diode/capacitor ladder) converts it back to a stabilised high DC test voltage (<span class="n-val">500 / 1000 / 2500 / 5000V DC</span>, selectable). This is the DC/DC converter principle. Older instruments instead used a <strong>hand-cranked permanent-magnet generator</strong> to produce the 500V directly.</div></div>
 
   <div class="n-h2">Alternator IR Test - Full Procedure</div>
   <ol class="n-steps">

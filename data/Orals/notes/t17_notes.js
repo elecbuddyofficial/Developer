@@ -1,4 +1,4 @@
-﻿window.loadNotes("T17", `<div class="view" id="view-notes-t17">
+window.loadNotes("T17", `<div class="view" id="view-notes-t17">
 <div class="note-doc">
   <div style="margin-bottom:16px;display:flex;justify-content:space-between">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -43,6 +43,11 @@
   <div class="n-h2">Oily Water Separator (OWS) - Working Principle</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Treats machinery space bilge water through gravity separation and a coalescing filter. Maximum oil content for overboard discharge: <span class="n-val">15 ppm</span>. The Oil Content Monitor (OCM) uses an <strong>infrared absorption (optical)</strong> sensor to continuously measure effluent. If oil exceeds <span class="n-val">15 ppm</span>: alarm activates + fail-safe 3-way solenoid valve automatically diverts effluent back to the bilge holding tank. Required on all ships <span class="n-val">&gt; 400 GT</span>.</div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t17-ows-system.png" alt="OWS oily water separator system — coalescing filter, oil content monitor, 3-way fail-safe solenoid valve">
+    <div class="note-diagram-cap">Fig. OWS System — gravity separation chamber, coalescing filter, OCM infrared sensor (15 ppm limit), fail-safe 3-way solenoid valve diverts to bilge holding tank on alarm</div>
+  </div>
+
   <div class="n-h2">OWS Discharge Criteria - ALL four must be satisfied simultaneously</div>
   <ul class="n-list">
     <li>Oil content <span class="n-val">&lt; 15 ppm</span> (continuously confirmed by OCM)</li>
@@ -55,7 +60,6 @@
   <p class="n-p">The OCM relies on an infrared absorption or light-scattering optical sensor to sample effluent transparency. Over time, a microscopic film of oil or iron rust scale deposits onto the internal quartz sensor window. This coating dampens the infrared light absorption path, tricking the OCM into recording a <strong>false low reading (well below 15 ppm)</strong> even when highly contaminated bilge water is being pumped overboard - a severe MARPOL non-compliance risk that can trigger criminal prosecution.</p>
   <p class="n-p">ETO maintenance obligations: physically clean the sensor cell window monthly using an approved chemical solvent; replace coalescing filter cartridges every <span class="n-val">6–12 months</span>; periodically flush the separation chamber; verify the 3-way solenoid valve drops immediately to its fail-safe recirculating port during a local power failure test.</p>
 
-  <div class="n-h2">Oil Discharge Monitoring Equipment (ODME) - Tankers Only</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> Regulates cargo-related discharges (cargo tank ballast washings) on crude oil and product tankers. Uses optical oil content sensor, flow meter, and GPS to calculate instantaneous discharge rate and cumulative quantity. Discharge valve closes automatically if any criterion is exceeded.</div></div>
 
   <div class="n-h2">ODME Discharge Criteria - ALL must be met</div>
@@ -206,6 +210,8 @@
   <p class="n-p">Ships subject to Annex IV must carry an <strong>International Sewage Pollution Prevention (ISPP) Certificate</strong>, issued after inspection of sewage treatment/holding arrangements. The ETO's maintenance responsibilities for Annex IV include: UV lamp hour tracking and replacement; pump contactor and starter condition; holding tank level and overflow alarms; air supply to biological STP; sampling port cleanliness; and recording any STP malfunction that forces sewage to holding tank - this must be noted in the logbook.</p>
 
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Annex IV limits:</strong> <strong>3-12-STP:</strong> "Less than 3 miles = Stop (holding tank). 3–12 miles = STP only. Over 12 miles = comminute + disinfect + 4 knots."</div></div>
+
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>BOD &amp; COD - treated-sewage quality:</strong> <strong>BOD</strong> (Biochemical Oxygen Demand) is the oxygen used by bacteria to break down the organic matter in the effluent - a measure of organic pollution load (mg/L). <strong>COD</strong> (Chemical Oxygen Demand) is the oxygen needed to chemically oxidise all matter, organic and inorganic - always higher than BOD. Low BOD/COD = well-treated effluent. STP performance is judged against the Annex IV / IMO MEPC.227(64) discharge limits for BOD, suspended solids and faecal coliforms.</div></div>
 
 
   <!-- ═══════════════════════════════════════════════════════════════ -->

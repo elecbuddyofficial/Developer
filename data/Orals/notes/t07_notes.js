@@ -72,6 +72,11 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     </div>
   </div>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-open-closed-loop.png" alt="Open loop vs closed loop control block diagrams — open loop without feedback, closed loop with feedback path and error signal">
+    <div class="note-diagram-cap">Fig. Open Loop vs Closed Loop — open loop: input → controller → process (no feedback); closed loop: output measured → error (SP−PV) → controller → process (self-correcting)</div>
+  </div>
+
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Key Terms:</strong><br>
   <strong>Setpoint (SP):</strong> Desired value we want.<br>
   <strong>Process Variable (PV):</strong> Actual measured value.<br>
@@ -227,6 +232,11 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <tr><td><strong>3. Cargo Pump Discharge Pressure:</strong> Outer loop: vessel tank level controller. Inner loop: pump flow controller. Controls pump VFD speed.</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-cascade-control.png" alt="Cascade control block diagram — primary (outer) controller sets SP for secondary (inner) controller, inner loop manipulates final element">
+    <div class="note-diagram-cap">Fig. Cascade Control — outer (primary) controller measures main variable (e.g. HFO temp); its output is SP for inner (secondary) controller which measures fast-changing variable (e.g. steam flow); inner loop corrects disturbances before they reach outer loop</div>
+  </div>
+
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Why Cascade is Better:</strong> With simple feedback on HFO temperature, a steam pressure drop hits the heater first, temperature drops, error builds, controller responds - all delayed. With cascade, the inner steam FLOW loop sees the pressure drop immediately and corrects the valve - temperature barely moves. The outer temperature loop just trims slowly. Inner loop = fast guard. Outer loop = accurate master.</div></div>
 
   <!-- ═══════════════════════════════════════════
@@ -243,6 +253,11 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   </ol>
 
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Scan time</strong> is typically <span class="n-val">1–50 ms</span>. <strong>Watchdog Timer:</strong> If scan does not complete within set maximum time, PLC detects hang and goes to SAFE STATE (outputs de-energised). Critical safety feature. The watchdog is a hardware timer reset at the start of each scan - if CPU freezes mid-scan, the watchdog expires and drives outputs to their fail-safe state.</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-plc-scan-cycle.png" alt="PLC scan cycle — input scan, program execution, output scan, housekeeping, watchdog timer">
+    <div class="note-diagram-cap">Fig. PLC Scan Cycle — 4 phases: (1) Input Scan → input image register; (2) Program Execution using stored inputs; (3) Output Scan → physical outputs; (4) Housekeeping/comms; watchdog reset each cycle</div>
+  </div>
 
   <table class="n-table">
     <tr><th>PLC MEMORY TYPES</th><th>FUNCTION</th></tr>
@@ -268,6 +283,11 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <li><strong>Relay Logic (Hardwired):</strong> Physical components wired together. Bulky, hard to troubleshoot/modify. Failure of one physical relay can shut down entire panel.</li>
     <li><strong>Ladder Logic (Software):</strong> Software representation in PLC. Easy to modify - change program, not wiring. Built-in diagnostics, online monitoring, forced I/O for fault-finding. Requires programming knowledge. Single hardware PLC replaces entire relay panel.</li>
   </ul>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-plc-ladder-logic.png" alt="PLC ladder logic diagram — rungs with NO/NC contacts, output coils, motor start-stop interlock example">
+    <div class="note-diagram-cap">Fig. Ladder Logic Diagram — left/right power rails; rungs with normally-open [ ] and normally-closed [/] contacts; output coil activates when rung is true; example: motor start-stop with seal-in auxiliary contact</div>
+  </div>
 
   <div class="n-h2">Latching Circuit (Seal-In)</div>
   <p class="n-p">Maintains energised state after momentary START signal is removed via a parallel NO auxiliary contact. Requires NC STOP button to unlatch. In PLC, uses SET and RESET coils. The SET coil latches the bit TRUE; RESET coil forces it FALSE regardless of other logic. Typical use: motor start/stop circuits, alarm latching.</p>
@@ -300,6 +320,15 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <tr><td><strong>Communication</strong></td><td>Serial or Ethernet network links</td><td>Modbus RTU/TCP, Profibus, Foundation Fieldbus interfaces</td></tr>
     <tr><td><strong>Power Supply</strong></td><td>Delivers stable internal voltages</td><td>Regulated 24 V / 5 V DC - often redundant on safety-critical networks</td></tr>
   </table>
+
+  <div class="n-h2">Backplane Technology</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body">The <strong>backplane</strong> is the printed circuit board at the rear of the PLC rack into which the CPU, I/O and power modules plug. It carries the internal <strong>data/address bus</strong> (module ↔ CPU communication) and the <strong>power bus</strong> (24 V / 5 V rails) between slots, so modules can be added or swapped without rewiring. A cracked backplane or a badly seated module shows up as intermittent I/O faults.</div></div>
+
+  <div class="n-h2">Sourcing vs Sinking I/O</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Sourcing vs sinking</strong> describes the direction of current flow at a digital I/O point, set by the field device's transistor type.<br>
+  • <strong>Sourcing:</strong> the I/O point <em>supplies</em> (sources) current to the load - PNP field devices; current flows out of the point, through the load, to 0 V.<br>
+  • <strong>Sinking:</strong> the I/O point <em>receives</em> (sinks) current - NPN field devices; current flows from +24 V, through the load, into the point.<br>
+  A sourcing output pairs with a sinking input (and vice-versa); the PLC card polarity must match the sensor/actuator or the circuit will not work.</div></div>
 
   <!-- ═══════════════════════════════════════════
        SECTION 7 - TIMERS & COUNTERS
@@ -343,6 +372,12 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <li><strong>Element 2 - Feedwater Flow (Feedforward):</strong> Confirms feedwater valve is responding correctly - verifies flow is actually following the steam demand command.</li>
     <li><strong>Element 3 - Drum Water Level (Feedback):</strong> Slow trim correction for any long-term level drift - corrects modelling errors in the feedforward path.</li>
   </ol>
+
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-three-element-boiler.png" alt="3-element boiler feedwater control — steam flow (FF), feedwater flow (FF), drum level (FB), feedwater control valve">
+    <div class="note-diagram-cap">Fig. 3-Element Boiler Feedwater Control — Element 1: steam flow (feedforward, fast); Element 2: feedwater flow (feedforward, confirming); Element 3: drum level (feedback, slow trim); eliminates swell/shrink error</div>
+  </div>
+
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Result:</strong> Eliminates swell/shrink effect, giving fast response and accurate control. This is the classic combined feedforward + feedback system on a ship. Elements 1 &amp; 2 = feedforward (speed). Element 3 = feedback (accuracy).</div></div>
 
   <!-- ═══════════════════════════════════════════
@@ -492,6 +527,11 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
     <tr><td><strong>On ships</strong></td><td>Often used loosely to mean the monitoring display system</td><td class="ok">Correct term - combines PLCs + HMI + historian + alarm management</td></tr>
   </table>
 
+  <div class="note-diagram-wrap">
+    <img src="../../data/diagrams/t07-master-slave-arch.png" alt="Master-slave IAS architecture — master PLC/DCS server communicates with distributed slave PLC nodes over redundant network">
+    <div class="note-diagram-cap">Fig. Master-Slave IAS Architecture — master server handles supervisory control and HMI; slave PLC nodes execute local loop control and I/O; redundant Ethernet backbone; Historian logs all parameter trends</div>
+  </div>
+
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> IAS = Historian + Mimics + Alarms + Remote trim + UMS extension. SCADA is the supervisory layer that sits above the PLC/DCS layer - it supervises but the PLCs do the actual loop control.</div></div>
 
   <!-- ═══════════════════════════════════════════
@@ -544,6 +584,9 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
 
   <div class="n-h2">Signal Conditioning &amp; 4–20 mA Live Zero</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why 4–20 mA instead of 0–20 mA?</strong> The "live zero" of <span class="n-val">4 mA</span> allows the system to distinguish between: (a) a valid zero-process reading (4 mA flowing), and (b) a broken wire / open circuit (0 mA - no current at all). A <span class="n-val">0 mA</span> signal → wire break alarm. A <span class="n-val">4 mA</span> signal → process is at minimum value, circuit is healthy. Also, the loop power supply powers the field transmitter from the <span class="n-val">4 mA</span> quiescent current - 2-wire transmitters need no separate power supply cable.</div></div>
+
+  <div class="n-h2">NEMA vs IEC - Which for Shipping?</div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Shipping follows IEC</strong> (IEC 60092 marine series and class rules), not NEMA. <strong>IEC</strong> (International Electrotechnical Commission, European origin) rates enclosure protection by the <strong>IP code</strong> (e.g. IP55 = dust-protected and jet-proof). <strong>NEMA</strong> (US National Electrical Manufacturers Association) uses NEMA type numbers. Rough map: NEMA 4/4X ≈ <span class="n-val">IP66</span>, NEMA 12 ≈ <span class="n-val">IP54</span>, NEMA 7 ≈ Ex d. On a ship you quote the <strong>IP rating and IEC standard</strong>; NEMA appears only on US-sourced equipment.</div></div>
 
   <div class="n-h2">Relay Logic vs Ladder Logic</div>
   <ul class="n-list">
@@ -598,6 +641,7 @@ window.loadNotes("T07", `<div class="view" id="view-notes-t07">
   <div class="n-h1" id="s-cyber">17. IACS UR E26/E27 - Maritime Cybersecurity (Mandatory 2024)</div>
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Brand new mandatory regulation - surveyors asking this from 2024.</strong> All ships contracted on or after <span class="n-val">1 July 2024</span>. PLC, SCADA, and IAS systems are directly in scope.</div></div>
+  <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Cybercrime &amp; the ETO's role:</strong> cybercrime is any malicious attack on the ship's IT/OT systems - malware / ransomware, infected USB, phishing, or unauthorised access to navigation, PMS or engine controls. The ETO helps prevent it by scanning every laptop / USB before it is connected, keeping OT networks segregated from crew and business IT, controlling access and passwords, applying only approved updates, and reporting suspicious activity. This is the operational side of the IACS E26 / E27 requirements below.</div></div>
   <div class="n-grid">
     <div class="n-card" style="border-color:var(--blue-border)">
       <div class="card-title" style="color:var(--blue)">UR E26 - Ship Level</div>

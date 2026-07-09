@@ -1,4 +1,4 @@
-﻿window.loadNotes("T22", `<div class="view" id="view-notes-t22">
+window.loadNotes("T22", `<div class="view" id="view-notes-t22">
 <div class="note-doc">
   <div style="margin-bottom:16px; display:flex; justify-content:space-between;">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -588,6 +588,14 @@
     <li><strong>Precaution:</strong> Circuit must be de-energised and LOTO applied before any continuity test.</li>
     <li><strong>Method:</strong> Probe both ends of the conductor - low resistance (buzz) = continuous. High resistance or OL = break in conductor.</li>
     <li><strong>Cable Identification:</strong> Use figure-8 method - short one end of suspect cable, measure resistance from other end. Each core will have different total resistance identifying it uniquely.</li>
+  </ul>
+
+  <div class="n-h2">Circuit / Cable Tracing</div>
+  <ul class="n-list">
+    <li><strong>Tone generator &amp; probe:</strong> inject an audio tone at one end of the de-energised cable, then sweep the inductive receiver (wand) along the run and at panels to find where the tone is loudest - identifies the route and the far end without disconnecting anything.</li>
+    <li><strong>Ring-out / continuity method:</strong> short one end (or one core to earth), then megger / ohm from the other end to find the matching core - the figure-8 method above extended along the run.</li>
+    <li><strong>From the drawings:</strong> trace the circuit on the wiring / single-line diagram first, then confirm on site by ferrule and cable numbers and gland tags.</li>
+    <li><strong>Always confirm the correct breaker</strong> feeds the circuit (isolate, prove dead) before any work.</li>
   </ul>
 
   <div class="n-h2">Electrical Work Safety Precautions (Comprehensive)</div>

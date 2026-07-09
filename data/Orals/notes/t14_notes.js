@@ -1,4 +1,4 @@
-﻿window.loadNotes("T14", `<div class="view" id="view-notes-t14">
+window.loadNotes("T14", `<div class="view" id="view-notes-t14">
 <div class="note-doc">
   <div style="margin-bottom:16px;display:flex;justify-content:space-between">
     <button class="anc-btn" onclick="showView('notes-picker')" style="border-color:var(--blue);color:var(--blue)">← All Topics</button>
@@ -253,13 +253,14 @@
     <tr><td><strong>FMCW Radar</strong></td><td>Frequency Modulated Continuous Wave microwave beam directed downward. Frequency difference between transmitted and reflected signal gives time-of-flight → distance.</td><td class="ok">±1–3 mm (non-contact)</td><td>Crude oil, chemical, LPG pressure tanks (no moving parts)</td></tr>
     <tr><td><strong>Hydrostatic DP</strong></td><td>Measures differential pressure between tank bottom and upper vapour seal. DP = ρ·g·h → height.</td><td>±10–20 mm</td><td>Fuel oil settling, ballast, brine tanks</td></tr>
     <tr><td><strong>Capacitance Probe</strong></td><td>Vertical rod arrays evaluate shifts in dielectric capacitance as fluid rises around the rod.</td><td>±5–10 mm</td><td>Engine bilges, overflow alarms, sludge tanks</td></tr>
+    <tr><td><strong>Pneumatic (Bubbler)</strong></td><td>Air or N₂ bubbled through a dip-pipe to the tank bottom; the back-pressure needed to force a bubble out equals the liquid head → level (P = ρ·g·h).</td><td>±10–20 mm</td><td>Cargo/ballast tanks; simple and intrinsically safe (no electrics inside the tank)</td></tr>
   </table>
 
   <!-- ═══════════════════════════════════════════════════════════════ -->
   <div class="n-h1" id="s-cargo-computer">💻 Cargo Computer / Loading Instrument</div>
   <!-- ═══════════════════════════════════════════════════════════════ -->
 
-  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Examiner Note: The ETO is expected to know basic loading instrument operation, class approval requirements, and what it calculates - particularly shear force and bending moment. ETOs on container vessels are responsible for maintaining and verifying the approved loading computer.</strong></div></div>
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Examiner Note: The ETO is expected to know basic loading instrument operation, class approval requirements, and what it calculates - particularly shear force and bending moment. ETOs on container vessels are responsible for maintaining and verifying the approved loading computer (also called the loadicator).</strong></div></div>
 
   <div class="n-h2">Purpose and Class Approval</div>
   <p class="n-p">A cargo computer (also called a loading instrument, loading calculator, or stability computer) is an approved software system that calculates the vessel's stability and structural loading condition for any proposed loading plan. <strong>Class approval:</strong> The loading instrument is type-approved by the Classification Society (DNV, Lloyd's, Bureau Veritas, Class NK, IRS). The vessel must carry a valid <strong>Type Approval Certificate</strong> and an approved method of operation. An independent manual calculation method (trim and stability booklet) must also be available as backup.</p>
