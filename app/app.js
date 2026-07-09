@@ -2269,6 +2269,7 @@ var KNOWN_LANGS = ['Malayalam', 'English', 'Hindi', 'Tamil', 'Telugu'];
 var _vidTopicId = null;
 var _vidVids = [];
 var _vidLangs = ['All'];
+var _vidActiveLang = 'All';
 
 function getVideoLang(header) {
     let m = header.match(/\s*[-–]\s*([A-Za-z]+)\s*$/);
@@ -2319,6 +2320,8 @@ function vidRenderList(activeLang) {
           }).join('') + '</div>'
         : '';
 
+    _vidActiveLang = activeLang;
+
     var listHtml = filtered.length === 0
         ? '<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center;">No ' + activeLang + ' videos for this topic.</div>'
         : '<div class="vid-list">' + filtered.map(function(v) {
@@ -2336,8 +2339,11 @@ function vidRenderList(activeLang) {
 }
 
 function vidOpenFloat(topicId, startIdx) {
-    let vids = (window.VIDEO_DATA[topicId] || []).filter(function(v) { return v.url && v.url.trim(); });
+    let allVids = (window.VIDEO_DATA[topicId] || []).filter(function(v) { return v.url && v.url.trim(); });
+    let vids = (_vidActiveLang === 'All') ? allVids : allVids.filter(function(v) { return getVideoLang(v.header) === _vidActiveLang; });
     if (!vids.length) return;
+    let floatIdx = vids.indexOf(allVids[startIdx]);
+    if (floatIdx === -1) floatIdx = 0;
 
     vidFloatClose();
 
@@ -2375,7 +2381,7 @@ function vidOpenFloat(topicId, startIdx) {
         backdrop._render = render;
     }
 
-    render(startIdx);
+    render(floatIdx);
     document.body.appendChild(backdrop);
 
     document.addEventListener('keydown', vidFloatEsc);
