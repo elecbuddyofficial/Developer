@@ -31,8 +31,8 @@ window.loadVideos("T01", [
   },
   {
     "section": "s-avr",
-    "header": "AVR - Automatic Voltage Regulator",
-    "url": ""
+    "header": "AVR - Automatic Voltage Regulator - Malayalam",
+    "url": "https://youtu.be/Teii4Pj-3oo"
   },
   {
     "section": "s-voltage-regulation",
