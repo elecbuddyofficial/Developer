@@ -113,11 +113,6 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
 
   <div class="n-ok"><div class="icon">🟢</div><div class="body"><strong>Memory Aid - Zener vs Normal Diode:</strong> "Normal diode works FORWARD (opens the door). Zener works REVERSE (holds the door at fixed voltage)."</div></div>
 
-  <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-types-of-diodes.png" alt="Types of diodes — P-N junction, Zener, Schottky, Varactor, LED, photodiode symbols and applications">
-    <div class="note-diagram-cap">Fig. Types of Diodes — P-N (rectifier), Zener (voltage reference), Schottky (fast switching), Varactor (variable capacitor), LED (light emission), Photodiode (light detection)</div>
-  </div>
-
   <!-- ═══════════════════════════════════════════════ -->
   <!-- SECTION 2 - RECTIFIERS -->
   <!-- ═══════════════════════════════════════════════ -->
@@ -707,6 +702,11 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-p">When a current-carrying conductor is placed in a magnetic field perpendicular to the current flow, a voltage (<strong>Hall voltage, V_H</strong>) is developed across the conductor perpendicular to both the current and the magnetic field. This voltage is proportional to the product of the current and the field strength.</div>
 
   <div class="n-formula">V_H = (I × B) / (n × e × t)<div class="label">V_H = Hall voltage · I = current through conductor · B = magnetic flux density · n = carrier density · e = electron charge · t = thickness</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t08-hall-effect-sensor.png" alt="Hall Effect Sensor — magnet providing directional magnetic field H, P-type semiconductor Hall element with constant current flow, Hall voltage V_H measured across the element">
+    <div class="note-diagram-cap">Fig. Hall Effect Principle — current through P-type semiconductor + perpendicular magnetic field → Hall voltage V_H proportional to both</div>
+  </div>
 
   <div class="n-h2">Hall Effect Current Transformer (HECT)</div>
   <div class="n-grid">

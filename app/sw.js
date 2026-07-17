@@ -1,6 +1,6 @@
 // ─── ETO Oral Prep — Service Worker ───────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v17';
+const VERSION = 'v18';
 const CACHE = 'elec-buddy-' + VERSION;
 
 const PRECACHE = [
@@ -133,7 +133,7 @@ const PRECACHE = [
   '../data/diagrams/t08-cycloconverter.png',
   '../data/diagrams/t08-optocoupler.png',
   // Diagrams - Topic 8 (additional 2)
-  '../data/diagrams/t08-types-of-diodes.png',
+  '../data/diagrams/t08-hall-effect-sensor.png',
   '../data/diagrams/t08-smps.png',
   '../data/diagrams/t08-all-gates.png',
   // Diagrams - Topic 9 (additional)
