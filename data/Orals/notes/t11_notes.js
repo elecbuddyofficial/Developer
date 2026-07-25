@@ -47,7 +47,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
 
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t11-power-triangle.png" alt="Power triangle — kW active power, kVAR reactive power, kVA apparent power, phase angle φ">
-    <div class="note-diagram-cap">Fig. Power Triangle — kW (base), kVAR (vertical), kVA (hypotenuse); PF = cos φ = kW/kVA</div>
+    <div class="note-diagram-cap">Fig. Power Triangle — kW (base), kVAR (vertical), kVA (hypotenuse); PF = cos φ = kW/kVA (note: Power Factor = Active Power ÷ Apparent Power, not Reactive Power)</div>
   </div>
 
   <table class="n-table">

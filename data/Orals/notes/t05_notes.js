@@ -649,8 +649,8 @@ Conditions (1), (4), and (5) affect load sharing quality and performance but not
 </table>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer OC and SC test circuits — open circuit test on LV side, short circuit test on HV side">
-  <div class="note-diagram-cap">Fig. OC &amp; SC Test Circuits — OC test (LV side, full voltage, HV open) measures iron losses; SC test (HV side, reduced voltage, LV shorted) measures copper losses</div>
+  <img src="../data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer SC (short circuit) test circuit — reduced voltage applied to HV side, LV side short-circuited; ammeter, voltmeter and wattmeter measure copper losses">
+  <div class="note-diagram-cap">Fig. SC Test Circuit — reduced voltage applied to HV side until rated current flows; LV side shorted; wattmeter reads copper losses (I²R); voltmeter reads V_sc used to calculate percentage impedance Z%</div>
 </div>
 
 <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> "OC test - Open secondary, rated voltage on LV side → Iron losses. SC test - Short secondary, reduced voltage on HV side → Copper losses and %Z."</div></div>

@@ -518,8 +518,8 @@ window.loadNotes("T03", `<div class="view" id="view-notes-t03">
     <div class="note-diagram-cap">Fig. DC Injection Braking — AC disconnected, DC applied to two stator phases, stationary field brakes spinning rotor</div>
   </div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t03-plugging-braking.png" alt="Plugging braking — two supply phases swapped, reverse RMF creates braking torque">
-    <div class="note-diagram-cap">Fig. Plugging (Reverse-Phase Braking) — two phases interchanged, RMF reverses, strong reverse torque to standstill</div>
+    <img src="../data/diagrams/t03-plugging-braking.png" alt="Plugging (counter-current) braking — DC motor circuit with armature A1-A2, field F1-F2, and braking resistor Rb limiting reverse current">
+    <div class="note-diagram-cap">Fig. Plugging (Counter-Current Braking) — DC motor: supply polarity reversed with braking resistor Rb inserted to limit current; reverse torque decelerates motor to standstill; supply tripped before motor can run in reverse direction</div>
   </div>
 
   <!-- ═══ SYNCHRONOUS MOTOR DETAIL ═══ -->
