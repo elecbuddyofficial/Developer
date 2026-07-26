@@ -594,11 +594,12 @@
   }
 
   function showGate() {
-    document.getElementById('gate-overlay').classList.add('open');
+    var el = document.getElementById('gate-overlay');
+    el.style.display = 'flex';
   }
 
   window.closeGate = function() {
-    document.getElementById('gate-overlay').classList.remove('open');
+    document.getElementById('gate-overlay').style.display = 'none';
   };
 
   // Escape key closes gate
@@ -726,7 +727,7 @@
             banner.id = '_access-banner';
             banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#C8A44A;color:#070D1A;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;';
             banner.textContent = 'Your trial has ended. Tap here to see upgrade options.';
-            banner.onclick = function() { document.getElementById('gate-overlay').classList.add('open'); };
+            banner.onclick = function() { document.getElementById('gate-overlay').style.display = 'flex'; };
             document.body.appendChild(banner);
           }
         }
