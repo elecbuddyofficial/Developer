@@ -695,7 +695,41 @@
       if (!window._sbClient) return;
       try {
         const { data: { session } } = await window._sbClient.getSession();
-        if (!session) kick();
+        if (!session) { kick(); return; }
+
+        // Also re-check subscription plan so expiry takes effect mid-session
+        const { data: profile } = await window._sbClient
+          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at')
+          .eq('id', session.user.id).single();
+        if (!profile) return;
+
+        var plan = profile.subscription_plan;
+        var wasFullAccess = window._fullAccess;
+
+        if (plan === 'lifetime') {
+          window._fullAccess = true;
+        } else if (plan === 'trial') {
+          var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
+          window._fullAccess = Date.now() < trialEnd.getTime();
+        } else if (['starter','standard','pro'].indexOf(plan) !== -1) {
+          window._fullAccess = profile.subscription_expires_at
+            ? Date.now() < new Date(profile.subscription_expires_at).getTime() : false;
+        } else {
+          window._fullAccess = false;
+        }
+
+        // If access just got revoked mid-session, show a notice (don't hard-kick)
+        if (wasFullAccess && !window._fullAccess) {
+          var banner = document.getElementById('_access-banner');
+          if (!banner) {
+            banner = document.createElement('div');
+            banner.id = '_access-banner';
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#C8A44A;color:#070D1A;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;';
+            banner.textContent = 'Your trial has ended. Tap here to see upgrade options.';
+            banner.onclick = function() { document.getElementById('gate-overlay').classList.add('open'); };
+            document.body.appendChild(banner);
+          }
+        }
       } catch(e) { /* network blip — stay put */ }
     }
 
