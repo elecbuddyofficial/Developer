@@ -6,7 +6,7 @@
 <title>ETO MMD Exam Prep</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="written.css">
-<style>body { visibility: hidden; }</style>
+<style>html { visibility: hidden; }</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   (async () => {
@@ -22,10 +22,10 @@
         window.location.replace('./auth.html');
       } else {
         window._sbUser = session.user;
-        document.body.style.visibility = 'visible';
+        document.documentElement.style.visibility = 'visible';
       }
     } catch(e) {
-      document.body.style.visibility = 'visible';
+      document.documentElement.style.visibility = 'visible';
       console.error('Auth check failed:', e);
     }
   })();
