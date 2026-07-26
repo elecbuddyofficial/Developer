@@ -468,5 +468,26 @@
 <button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0, behavior:'smooth'})" style="display:flex; position:fixed; bottom:30px; right:30px; z-index:999; background:var(--blue); color:#fff; border:none; width:48px; height:48px; border-radius:50%; font-size:24px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); align-items:center; justify-content:center; padding-bottom:4px; opacity:0; visibility:hidden; transition:opacity 0.25s,visibility 0.25s;">&#x2191;</button>
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+  (function() {
+    function kick() { window.location.replace('./auth.html'); }
+
+    async function checkSession() {
+      if (!window._sbClient) return;
+      try {
+        const { data: { session } } = await window._sbClient.getSession();
+        if (!session) kick();
+      } catch(e) { /* network blip — stay put */ }
+    }
+
+    // Re-check every 10 minutes
+    setInterval(checkSession, 10 * 60 * 1000);
+
+    // Re-check when user returns to this tab
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') checkSession();
+    });
+  })();
+</script>
 </body>
 </html>
