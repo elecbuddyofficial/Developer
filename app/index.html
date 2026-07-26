@@ -6,7 +6,10 @@
 <title>ETO MMD Exam Prep</title>
 <link rel="stylesheet" href="style.css">
 <link rel="stylesheet" href="written.css">
-<style>html { visibility: hidden; }</style>
+<style>
+  html { visibility: hidden; }
+  @media print { body { display: none !important; } }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   (async () => {
@@ -470,6 +473,7 @@
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
   (function() {
+    // ── Session watcher ──────────────────────────────────────
     function kick() { window.location.replace('./auth.html'); }
 
     async function checkSession() {
@@ -480,13 +484,48 @@
       } catch(e) { /* network blip — stay put */ }
     }
 
-    // Re-check every 10 minutes
     setInterval(checkSession, 10 * 60 * 1000);
-
-    // Re-check when user returns to this tab
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState === 'visible') checkSession();
     });
+
+    // ── Content protection ───────────────────────────────────
+    document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
+    document.addEventListener('keydown', function(e) {
+      const k = e.key.toLowerCase();
+      if (e.ctrlKey && ['u', 's', 'p'].includes(k)) { e.preventDefault(); return; }
+      if (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) { e.preventDefault(); return; }
+      if (e.key === 'F12') { e.preventDefault(); }
+    });
+
+    // ── Watermark ────────────────────────────────────────────
+    function buildWatermark() {
+      const user = window._sbUser;
+      if (!user || document.getElementById('_wm')) return;
+
+      const label = user.email || 'elec-buddy user';
+      const el = document.createElement('div');
+      el.id = '_wm';
+      el.setAttribute('aria-hidden', 'true');
+      el.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;';
+
+      const cols = Math.ceil(window.innerWidth  / 280) + 2;
+      const rows = Math.ceil(window.innerHeight / 110) + 2;
+      let html = '';
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          const x = c * 280 - 60;
+          const y = r * 110 - 30;
+          html += `<span style="position:absolute;left:${x}px;top:${y}px;transform:rotate(-25deg);font-size:12px;color:rgba(200,164,74,0.07);font-family:monospace;white-space:nowrap;user-select:none;">${label}</span>`;
+        }
+      }
+      el.innerHTML = html;
+      document.body.appendChild(el);
+    }
+
+    if (document.readyState === 'complete') buildWatermark();
+    else window.addEventListener('load', buildWatermark);
   })();
 </script>
 </body>
