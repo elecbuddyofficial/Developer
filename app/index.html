@@ -685,6 +685,15 @@
 
   if (document.readyState === 'complete') installGate();
   else window.addEventListener('load', installGate);
+
+  // Auto-reload when a new SW activates so users always get fresh HTML
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'SW_UPDATED') {
+        window.location.reload();
+      }
+    });
+  }
 })();
 </script>
 <script>
