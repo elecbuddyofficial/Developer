@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elec-Buddy — Sign In</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: #070D1A;
+      color: #DDE5EF;
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      background: #0D1E33;
+      border: 1px solid #1A3050;
+      border-radius: 6px;
+      width: 100%; max-width: 400px;
+      padding: 36px 32px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-name {
+      font-family: Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: normal;
+      color: #C8A44A;
+      letter-spacing: 0.04em;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: #4A6880;
+      margin-top: 4px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #1A3050;
+      margin-bottom: 24px;
+    }
+    .tab {
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      font-size: 13.5px; color: #4A6880;
+      cursor: pointer; text-align: center;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab.active { color: #C8A44A; border-bottom-color: #C8A44A; }
+
+    .form { display: none; flex-direction: column; gap: 14px; }
+    .form.active { display: flex; }
+
+    label { font-size: 12px; color: #8FA3B8; display: block; margin-bottom: 5px; letter-spacing: 0.04em; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: #0A1828;
+      border: 1px solid #1A3050;
+      border-radius: 4px;
+      color: #DDE5EF;
+      font-size: 14px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    input:focus { border-color: #3A6898; }
+    input::placeholder { color: #2E5577; }
+
+    .btn {
+      width: 100%;
+      background: #C8A44A;
+      color: #070D1A;
+      border: none;
+      border-radius: 4px;
+      padding: 11px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.15s;
+      margin-top: 4px;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .link-btn {
+      background: none; border: none;
+      color: #7AB8E0; font-size: 12.5px;
+      cursor: pointer; padding: 0;
+      text-align: center; width: 100%;
+      margin-top: 4px;
+    }
+    .link-btn:hover { text-decoration: underline; }
+
+    .msg {
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      display: none;
+      line-height: 1.5;
+    }
+    .msg.error   { background: #1A0A0A; border: 1px solid #CC4444; color: #E07070; display: block; }
+    .msg.success { background: #0A1F12; border: 1px solid #3A9E5F; color: #5DC87A; display: block; }
+    .msg.info    { background: #0A1828; border: 1px solid #3A6898; color: #7AB8E0; display: block; }
+
+    .divider { height: 1px; background: #1A3050; }
+
+    .footer-note {
+      font-size: 11.5px; color: #2E5577;
+      text-align: center; margin-top: 20px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="brand">
+    <div class="brand-name">Elec-Buddy</div>
+    <div class="brand-sub">ETO Exam Preparation</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" onclick="switchTab('register')">Create Account</button>
+  </div>
+
+  <!-- Message -->
+  <div class="msg" id="msg"></div>
+
+  <!-- Sign In -->
+  <form class="form active" id="form-login" onsubmit="handleLogin(event)">
+    <div>
+      <label>Email address</label>
+      <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+    <button class="btn" type="submit" id="login-btn">Sign In</button>
+    <button type="button" class="link-btn" onclick="switchTab('reset')">Forgot password?</button>
+  </form>
+
+  <!-- Create Account -->
+  <form class="form" id="form-register" onsubmit="handleRegister(event)">
+    <div>
+      <label>Full name</label>
+      <input type="text" id="reg-name" placeholder="Your name" required autocomplete="name">
+    </div>
+    <div>
+      <label>Email address</label>
+      <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" id="reg-password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+    </div>
+    <div>
+      <label>Confirm password</label>
+      <input type="password" id="reg-confirm" placeholder="Repeat password" required autocomplete="new-password">
+    </div>
+    <button class="btn" type="submit" id="reg-btn">Create Account &amp; Start Free Trial</button>
+  </form>
+
+  <!-- Reset Password -->
+  <form class="form" id="form-reset" onsubmit="handleReset(event)">
+    <div>
+      <label>Enter your email address</label>
+      <input type="email" id="reset-email" placeholder="you@example.com" required autocomplete="email">
+    </div>
+    <button class="btn" type="submit" id="reset-btn">Send Reset Link</button>
+    <button type="button" class="link-btn" onclick="switchTab('login')">Back to Sign In</button>
+  </form>
+
+  <div class="footer-note" id="footer-note">
+    New accounts get a 3-day free trial — no payment required.
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL  = 'https://vcofgjuwprylojgyfbtr.supabase.co';
+  const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // If already logged in, go straight to app
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session) window.location.replace('./index.html');
+  });
+
+  function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + type;
+  }
+  function clearMsg() {
+    const el = document.getElementById('msg');
+    el.className = 'msg';
+    el.textContent = '';
+  }
+
+  function switchTab(tab) {
+    clearMsg();
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('form-' + tab).classList.add('active');
+    const note = document.getElementById('footer-note');
+    if (tab === 'login') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      note.style.display = '';
+    } else if (tab === 'register') {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      note.style.display = '';
+    } else {
+      note.style.display = 'none';
+    }
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    clearMsg();
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true; btn.textContent = 'Signing in...';
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      showMsg(error.message === 'Invalid login credentials'
+        ? 'Incorrect email or password.' : error.message, 'error');
+      btn.disabled = false; btn.textContent = 'Sign In';
+    } else {
+      window.location.replace('./index.html');
+    }
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    clearMsg();
+    const name     = document.getElementById('reg-name').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm  = document.getElementById('reg-confirm').value;
+    if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
+    const btn = document.getElementById('reg-btn');
+    btn.disabled = true; btn.textContent = 'Creating account...';
+    const { error } = await sb.auth.signUp({
+      email, password,
+      options: { data: { full_name: name } }
+    });
+    if (error) {
+      showMsg(error.message, 'error');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+    } else {
+      showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+      document.getElementById('form-register').reset();
+    }
+  }
+
+  async function handleReset(e) {
+    e.preventDefault();
+    clearMsg();
+    const email = document.getElementById('reset-email').value.trim();
+    const btn   = document.getElementById('reset-btn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/app/auth.html'
+    });
+    if (error) {
+      showMsg(error.message, 'error');
+    } else {
+      showMsg('Reset link sent. Check your inbox.', 'success');
+    }
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+  }
+</script>
+</body>
+</html>
