@@ -262,14 +262,18 @@
     if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
     const btn = document.getElementById('reg-btn');
     btn.disabled = true; btn.textContent = 'Creating account...';
-    const { error } = await sb.auth.signUp({
+    const { data, error } = await sb.auth.signUp({
       email, password,
       options: { data: { full_name: name } }
     });
     if (error) {
       showMsg(error.message, 'error');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+    } else if (data.session) {
+      // Email confirmation disabled — user is logged in immediately
+      window.location.replace('./index.html');
     } else {
+      // Email confirmation enabled — ask them to verify
       showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
       document.getElementById('form-register').reset();
