@@ -1,6 +1,6 @@
 // ─── ETO Oral Prep — Service Worker ───────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v19';
+const VERSION = 'v20';
 const CACHE = 'elec-buddy-' + VERSION;
 
 const PRECACHE = [
@@ -231,31 +231,35 @@ self.addEventListener('activate', e => {
   );
 });
 
-// ── Fetch: cache-first, update in background ─────────────
+// ── Fetch ─────────────────────────────────────────────────
 self.addEventListener('fetch', e => {
-  // Only handle GET requests for same-origin assets
   if (e.request.method !== 'GET') return;
 
-  // Let hard-refresh (cache: reload/no-cache) bypass SW cache entirely
+  // HTML navigation requests: always network-first so users get fresh code.
+  // Fall back to cache only if completely offline.
+  if (e.request.mode === 'navigate') {
+    e.respondWith(
+      fetch(e.request).catch(() => caches.match('./'))
+    );
+    return;
+  }
+
+  // Hard-refresh: bypass SW cache entirely
   if (e.request.cache === 'reload' || e.request.cache === 'no-cache') {
     e.respondWith(fetch(e.request));
     return;
   }
 
+  // Assets (JS, CSS, data files): cache-first, update in background
   e.respondWith(
     caches.open(CACHE).then(cache =>
-      // ignoreSearch: true so app.js?v=2 hits the cached ./app.js
       cache.match(e.request, { ignoreSearch: true }).then(cached => {
-        // Fetch from network bypassing browser HTTP cache so we always get fresh files
         const networkFetch = fetch(new Request(e.request, { cache: 'no-cache' })).then(response => {
           if (response && response.status === 200) {
             cache.put(e.request, response.clone());
           }
           return response;
-        }).catch(err => {
-          if (cached) return cached;
-          throw err;
-        });
+        }).catch(() => cached);
 
         return cached || networkFetch;
       })
