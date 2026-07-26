@@ -9,13 +9,14 @@
 <style>body { visibility: hidden; }</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  const _sb = supabase.createClient(
-    'https://vcofgjuwprylojgyfbtr.supabase.co',
-    'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
-  );
-  window._sbClient = _sb;
   (async () => {
     try {
+      if (typeof supabase === 'undefined') throw new Error('Supabase CDN unavailable');
+      const _sb = supabase.createClient(
+        'https://vcofgjuwprylojgyfbtr.supabase.co',
+        'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+      );
+      window._sbClient = _sb;
       const { data: { session } } = await _sb.auth.getSession();
       if (!session) {
         window.location.replace('./auth.html');
@@ -24,7 +25,6 @@
         document.body.style.visibility = 'visible';
       }
     } catch(e) {
-      // Supabase failed to load — show body so page isn't stuck black
       document.body.style.visibility = 'visible';
       console.error('Auth check failed:', e);
     }
