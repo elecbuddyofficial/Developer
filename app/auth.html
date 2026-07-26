@@ -282,8 +282,9 @@
     const email = document.getElementById('reset-email').value.trim();
     const btn   = document.getElementById('reset-btn');
     btn.disabled = true; btn.textContent = 'Sending...';
+    const base = window.location.href.replace(/\/app\/auth\.html.*$/, '');
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/app/auth.html'
+      redirectTo: base + '/app/auth.html'
     });
     if (error) {
       showMsg(error.message, 'error');
