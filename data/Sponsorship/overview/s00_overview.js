@@ -9,28 +9,28 @@ window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-w
   <p style="font-size:14.5px;color:#c2c2cc;max-width:460px;margin:0 auto;line-height:1.7">What the ETO cadetship is, how sponsorship works in India, and what the selection process tests.</p>\
 </div>\
 \
-<div style="background:#0c0c10;border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin-bottom:14px">\
+<div style="background:#18181f;border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin-bottom:14px">\
   <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.9px;margin-bottom:8px">What is an ETO?</div>\
   <p style="font-size:14.5px;color:#c2c2cc;line-height:1.75;margin:0">An Electro-Technical Officer (ETO) is the dedicated electrical and electronics specialist on a merchant ship. Every modern vessel runs on large electrical systems: high-voltage switchboards, automation PLCs, navigation electronics (ECDIS, RADAR, AIS), refrigeration, and satellite communications. The ETO is responsible for maintaining and troubleshooting all of it. The rank was formalized under the STCW Manila Amendments 2010 and is now a globally recognized competency. A certified ETO on a foreign-going vessel earns a minimum of $4,000 to $5,000 per month, tax-free, on 4 to 5 month contracts followed by equivalent leave ashore. On tankers this rises to $8,000 to $10,000, passenger vessels go up to $18,000, and luxury yachts pay even higher.</p>\
 </div>\
 \
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px">\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">4</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Pre-Sea</div></div>\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">8</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Sea Time</div></div>\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">12</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Total</div></div>\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--blue);line-height:1">Bond</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">After COC</div></div>\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">4</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Pre-Sea</div></div>\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">8</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Sea Time</div></div>\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">12</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Total</div></div>\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:800;color:var(--blue);line-height:1">Bond</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">After COC</div></div>\
 </div>\
 \
 <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:3px">What Sponsorship Actually Means</div>\
 <div style="font-size:11.5px;color:#c2c2cc;margin-bottom:10px">In the Indian DG Shipping context</div>\
 \
-<div style="background:#0c0c10;border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin-bottom:14px">\
+<div style="background:#18181f;border:1px solid var(--border2);border-radius:12px;padding:18px 20px;margin-bottom:14px">\
   <p style="font-size:14.5px;color:#c2c2cc;line-height:1.75;margin:0 0 12px">Sponsorship means a shipping company agrees to take you as their ETO cadet and give you a berth (a confirmed position) on their vessel after you complete your training and examinations. The core benefit is a <strong style="color:var(--text)">guaranteed job placement</strong>, which is otherwise nearly impossible to get as a fresh candidate with no sea experience.</p>\
-  <div style="background:rgba(245,158,11,.06);border:1px solid var(--blue-border);border-radius:8px;padding:12px 14px;font-size:14px;color:#c2c2cc;line-height:1.7"><strong style="color:var(--blue)">Important:</strong> Sponsorship terms vary by company. Whether a company covers your pre-sea course fees, pays a campus stipend, or reimburses any costs is defined in your individual training agreement. Do not assume any financial support beyond the sea-phase trainee allowance without confirming it in writing.</div>\
+  <div style="background:rgba(245,158,11,.14);border:1px solid var(--blue-border);border-radius:8px;padding:12px 14px;font-size:14px;color:#c2c2cc;line-height:1.7"><strong style="color:var(--blue)">Important:</strong> Sponsorship terms vary by company. Whether a company covers your pre-sea course fees, pays a campus stipend, or reimburses any costs is defined in your individual training agreement. Do not assume any financial support beyond the sea-phase trainee allowance without confirming it in writing.</div>\
 </div>\
 \
 <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px">\
-  <div style="background:rgba(34,197,94,.07);border:1px solid var(--green-border);border-radius:10px;padding:14px 16px">\
+  <div style="background:rgba(34,197,94,.14);border:1px solid var(--green-border);border-radius:10px;padding:14px 16px">\
     <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Typically included</div>\
     <ul style="margin:0;padding-left:16px;font-size:14px;color:#c2c2cc;line-height:1.85">\
       <li>Guaranteed berth on their vessel</li>\
@@ -38,7 +38,7 @@ window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-w
       <li>Defined career path after COC</li>\
     </ul>\
   </div>\
-  <div style="background:rgba(245,158,11,.07);border:1px solid var(--blue-border);border-radius:10px;padding:14px 16px">\
+  <div style="background:rgba(245,158,11,.14);border:1px solid var(--blue-border);border-radius:10px;padding:14px 16px">\
     <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Varies by company</div>\
     <ul style="margin:0;padding-left:16px;font-size:14px;color:#c2c2cc;line-height:1.85">\
       <li>Pre-sea course fee coverage</li>\
@@ -111,21 +111,21 @@ window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-w
 <div style="font-size:11.5px;color:#c2c2cc;margin-bottom:10px">Three rounds. Each one eliminates candidates.</div>\
 \
 <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">\
       <div style="width:26px;height:26px;border-radius:50%;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#070D1A;flex-shrink:0">1</div>\
       <div style="font-size:14.5px;font-weight:700;color:var(--text)">Registration and Shortlisting</div>\
     </div>\
     <div style="font-size:14px;color:#c2c2cc;line-height:1.65;padding-left:36px">Companies open applications through their website, campus drives, or placement portals. Your resume, 10+2 marks, and eligibility (Physics and Maths, typically 60% aggregate, age below 25) are checked. Shortlisted candidates are called for the written test.</div>\
   </div>\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">\
       <div style="width:26px;height:26px;border-radius:50%;background:rgba(245,158,11,.15);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--blue);flex-shrink:0">2</div>\
       <div style="font-size:14.5px;font-weight:700;color:var(--text)">Written Aptitude Test</div>\
     </div>\
     <div style="font-size:14px;color:#c2c2cc;line-height:1.65;padding-left:36px">A computer-based test covering four sections: Quantitative Aptitude, Verbal Ability, Logical Reasoning, and Psychometric Assessment. Typically 60 to 90 minutes. Most candidates are eliminated here, not because they lack knowledge, but because they have never practiced under time pressure. Speed and accuracy together is the skill being tested.</div>\
   </div>\
-  <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
+  <div style="background:#18181f;border:1px solid var(--border2);border-radius:10px;padding:14px 16px">\
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">\
       <div style="width:26px;height:26px;border-radius:50%;background:rgba(245,158,11,.15);border:2px solid var(--blue);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--blue);flex-shrink:0">3</div>\
       <div style="font-size:14.5px;font-weight:700;color:var(--text)">Interview Day</div>\
