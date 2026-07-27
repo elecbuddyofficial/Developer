@@ -645,9 +645,15 @@
       if (!stored) return null;
       if (stored.userId && stored.userId !== userId) return null; // different user on same device
       if (stored.expiresAt !== null && Date.now() > stored.expiresAt) {
-        var db2 = await _openKeyDB();
-        var tx2 = db2.transaction(_IDB_STORE, 'readwrite');
-        tx2.objectStore(_IDB_STORE).delete('ck');
+        try {
+          var db2 = await _openKeyDB();
+          await new Promise(function(res, rej) {
+            var tx2 = db2.transaction(_IDB_STORE, 'readwrite');
+            tx2.objectStore(_IDB_STORE).delete('ck');
+            tx2.oncomplete = res;
+            tx2.onerror = function(e) { rej(e.target.error); };
+          });
+        } catch(e2) {}
         return null;
       }
       return stored;
@@ -839,7 +845,7 @@
     async function checkSession() {
       if (!window._sbClient) return;
       try {
-        const { data: { session } } = await window._sbClient.getSession();
+        const { data: { session } } = await window._sbClient.auth.getSession();
         if (!session) { kick(); return; }
 
         // Also re-check subscription plan so expiry takes effect mid-session

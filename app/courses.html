@@ -528,17 +528,18 @@
   function confirmEnter() {
     if (!_pendingTrack) return;
     var skip = document.getElementById('dialog-skip').checked;
-    if (skip) {
-      localStorage.setItem('eb_track', _pendingTrack);
-    } else {
-      localStorage.removeItem('eb_track');
-    }
     var dest = TRACKS[_pendingTrack].dest;
     if (dest) {
+      // Only save track preference when the destination actually exists
+      if (skip) {
+        localStorage.setItem('eb_track', _pendingTrack);
+      } else {
+        localStorage.removeItem('eb_track');
+      }
       window.location.href = dest;
     } else {
       document.getElementById('dialog-backdrop').classList.remove('open');
-      alert('Sponsorship Prep is coming soon.');
+      alert('Sponsorship Prep is coming soon. Check back for updates!');
     }
   }
 
