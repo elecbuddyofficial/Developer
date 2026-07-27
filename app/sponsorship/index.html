@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETO Sponsorship Prep</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+  html { visibility: hidden; }
+  @media print { body { display: none !important; } }
+
+  /* Orange theme override */
+  :root {
+    --blue:#f59e0b;
+    --blue-dim:rgba(245,158,11,.12);
+    --blue-border:rgba(245,158,11,.35);
+  }
+  .sb-item.active .cnt { background:rgba(245,158,11,.18);color:var(--blue) }
+  .note-title { background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(168,85,247,.05)) }
+
+  /* ── HOME ── */
+  .spon-home { max-width:860px;margin:0 auto;padding-bottom:40px }
+  .spon-hero { text-align:center;padding:20px 0 22px }
+  .spon-hero h1 { font-size:26px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:8px }
+  .spon-hero h1 span { color:var(--blue) }
+  .spon-hero p { font-size:14px;color:var(--text2);max-width:480px;margin:0 auto;line-height:1.65 }
+
+  .section-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px }
+
+  .section-card {
+    background:var(--surface);border:1px solid var(--border2);border-radius:var(--r12);
+    padding:22px;display:flex;flex-direction:column;gap:12px;cursor:pointer;
+    transition:border-color .2s,box-shadow .2s,transform .2s;position:relative;overflow:hidden;
+  }
+  .section-card:hover {
+    border-color:var(--sc-color,var(--blue));
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 20px 40px var(--sc-glow,rgba(245,158,11,.18)), 0 0 20px var(--sc-glow,rgba(245,158,11,.10));
+  }
+  .section-card .sc-icon { font-size:32px;line-height:1;transition:transform .2s,filter .2s }
+  .section-card:hover .sc-icon { transform:translateY(-6px);filter:drop-shadow(0 8px 12px var(--sc-drop,rgba(245,158,11,.6))) }
+  .section-card h3 { font-size:15px;font-weight:800;color:var(--text);margin:0 }
+  .section-card p { font-size:12.5px;color:var(--text2);line-height:1.6;margin:0;flex:1 }
+  .section-card .sc-meta { display:flex;align-items:center;gap:8px;margin-top:4px }
+  .sc-badge {
+    font-size:10.5px;font-weight:700;padding:3px 10px;border-radius:100px;
+    background:var(--sc-dim,var(--blue-dim));border:1px solid var(--sc-border,var(--blue-border));
+    color:var(--sc-color,var(--blue));letter-spacing:.2px;white-space:nowrap;
+  }
+  .sc-arrow { margin-left:auto;color:var(--text3);font-size:16px;transition:transform .2s }
+  .section-card:hover .sc-arrow { transform:translateX(4px) }
+  .section-card .sc-stripe {
+    position:absolute;top:0;left:0;width:3px;height:100%;
+    background:var(--sc-color,var(--blue));border-radius:3px 0 0 3px;
+  }
+
+  /* ── SECTION LANDING ── */
+  .section-landing { max-width:860px }
+  .sec-header { display:flex;align-items:center;gap:14px;margin-bottom:24px }
+  .sec-header-icon { font-size:32px;line-height:1;flex-shrink:0 }
+  .sec-header h2 { font-size:20px;font-weight:800;color:var(--text);margin:0 0 4px }
+  .sec-header p { font-size:13px;color:var(--text2);margin:0;line-height:1.5 }
+
+  /* ── TOPIC CARDS in section ── */
+  .topic-card-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin-bottom:28px }
+  .topic-card {
+    background:var(--surface);border:1px solid var(--border2);border-radius:var(--r8);
+    padding:16px;cursor:pointer;transition:border-color .15s;display:flex;flex-direction:column;gap:6px;
+    position:relative;
+  }
+  .topic-card:hover { border-color:var(--blue) }
+  .topic-card .tc-id { font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px }
+  .topic-card .tc-name { font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35 }
+  .topic-card .tc-status { font-size:11px;color:var(--text3);margin-top:2px }
+  .topic-card.coming-soon { opacity:.55;cursor:default }
+  .topic-card.coming-soon:hover { border-color:var(--border2) }
+  .topic-card .gate-lock { position:absolute;top:10px;right:10px;font-size:12px }
+
+  /* ── SECTION QUIZ STRIP ── */
+  .section-quiz-strip {
+    background:var(--surface);border:1px solid var(--border2);border-radius:var(--r8);
+    padding:18px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .section-quiz-strip .sqz-text { flex:1;min-width:180px }
+  .section-quiz-strip h4 { font-size:14px;font-weight:700;color:var(--text);margin:0 0 3px }
+  .section-quiz-strip p { font-size:12px;color:var(--text2);margin:0 }
+  .sqz-btn {
+    background:var(--blue);color:#070D1A;border:none;border-radius:var(--r6);
+    padding:10px 22px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;
+  }
+  .sqz-btn:disabled { opacity:.4;cursor:default }
+
+  /* ── COMPANY Q&A ── */
+  .cqa-layout { display:flex;gap:16px;height:calc(100vh - 130px);min-height:400px }
+  .cqa-list { width:220px;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px }
+  .cqa-list-item {
+    padding:10px 14px;border-radius:var(--r6);border:1px solid transparent;
+    cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;
+  }
+  .cqa-list-item:hover { background:var(--surface2);color:var(--text) }
+  .cqa-list-item.active { background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue);font-weight:700 }
+  .cqa-list-item .cqa-count { font-size:10.5px;color:var(--text3);margin-top:2px }
+  .cqa-detail { flex:1;overflow-y:auto;padding-right:4px }
+  .cqa-empty { display:flex;align-items:center;justify-content:center;height:100%;color:var(--text3);font-size:14px }
+  .cqa-company-header { margin-bottom:20px }
+  .cqa-company-header h2 { font-size:18px;font-weight:800;color:var(--text);margin:0 0 6px }
+  .cqa-chips { display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px }
+  .cqa-chip { font-size:11px;padding:3px 10px;border-radius:100px;background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-weight:600 }
+  .cqa-style-note { font-size:12.5px;color:var(--text2);line-height:1.6;padding:10px 14px;background:var(--surface2);border-radius:var(--r6);margin-bottom:18px }
+  .cqa-fav-list { list-style:none;padding:0;display:flex;flex-direction:column;gap:8px }
+  .cqa-fav-item { padding:12px 16px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r6);font-size:13.5px;color:var(--text);line-height:1.6 }
+  .cqa-section-label { font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:18px 0 8px }
+  @media(max-width:600px){
+    .cqa-layout { flex-direction:column;height:auto }
+    .cqa-list { width:100%;flex-direction:row;overflow-x:auto;overflow-y:visible;flex-wrap:nowrap }
+    .cqa-list-item { white-space:nowrap;flex-shrink:0 }
+  }
+
+  /* ── MISC ── */
+  .anc-btn { background:none;border:1px solid var(--border2);border-radius:var(--r6);color:var(--text2);font-size:12.5px;padding:6px 14px;cursor:pointer;transition:border-color .15s }
+  .anc-btn:hover { border-color:var(--blue);color:var(--blue) }
+  .coming-soon-banner { text-align:center;padding:60px 20px;color:var(--text3) }
+  .coming-soon-banner .cs-icon { font-size:40px;margin-bottom:12px }
+  .coming-soon-banner h3 { font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px }
+  .coming-soon-banner p { font-size:13px;line-height:1.65 }
+
+  /* gate, profile reuse */
+  .gate-plan { display:flex;align-items:center;justify-content:space-between;background:#0D1E33;border:1px solid #1A3050;border-radius:8px;padding:14px 16px }
+  #gate-overlay { display:none }
+  #gate-overlay.open { display:flex }
+  #profile-panel { position:absolute;right:14px;top:54px;width:296px;background:#0D1E33;border:1px solid #1A3050;border-radius:10px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.6) }
+  @media(max-width:360px){ #profile-panel { right:8px;left:8px;width:auto } }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(async () => {
+  try {
+    if (typeof supabase === 'undefined') throw new Error('CDN unavailable');
+    const _sb = supabase.createClient('https://vcofgjuwprylojgyfbtr.supabase.co','sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW');
+    window._sbClient = _sb;
+    const { data:{ session } } = await _sb.auth.getSession();
+    if (!session) { window.location.replace('../auth.html'); return; }
+    window._sbUser = session.user;
+    document.documentElement.style.visibility = 'visible';
+  } catch(e) {
+    document.documentElement.style.visibility = 'visible';
+  }
+})();
+</script>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+    <svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18"/></svg>
+  </button>
+  <div class="logo">ETO <b style="color:var(--text);font-weight:inherit;">Sponsorship</b> Prep <span>Pre-Sea · Get Sponsored</span></div>
+  <div class="spacer"></div>
+  <button id="profile-btn" onclick="openProfile()" title="Account" aria-label="Account" style="width:34px;height:34px;border-radius:50%;background:#C8A44A;color:#070D1A;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:Georgia,serif;flex-shrink:0;margin-left:6px;"></button>
+  <div class="tb-badge" id="topbar-badge">Sponsorship Prep</div>
+</div>
+
+<div id="layout">
+<div id="sidebar-overlay" onclick="toggleMobileMenu()"></div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-section">Navigation</div>
+  <button class="sb-item active" id="si-home" onclick="showHome()">
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></g></svg></span>
+    <span class="label">Home</span>
+  </button>
+  <div class="sb-divider"></div>
+  <!-- search -->
+  <div id="gsearch-area" style="padding:6px 10px 10px">
+    <div style="position:relative">
+      <svg style="position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--text3);pointer-events:none" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="gsearch-input" type="text" placeholder="Search notes..." oninput="gSearch(this.value)" onfocus="gSearch(this.value)" autocomplete="off" spellcheck="false" style="width:100%;padding:8px 12px 8px 28px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12.5px;outline:none;box-sizing:border-box;transition:border-color .2s" onfocusin="this.style.borderColor='var(--blue)'" onfocusout="this.style.borderColor='var(--border2)'">
+    </div>
+    <div id="gsearch-panel" style="display:none;margin-top:6px;background:var(--surface);border:1px solid var(--border2);border-radius:10px;overflow:hidden">
+      <div id="gsearch-results" class="gsearch-scroll"></div>
+    </div>
+  </div>
+  <div id="sb-nav-sections">
+    <button class="sb-item" id="si-overview" onclick="openSection('overview')">
+      <span class="ic">🗺️</span><span class="label">Overview</span>
+    </button>
+    <button class="sb-item" id="si-fundamentals" onclick="openSection('fundamentals')">
+      <span class="ic">⚡</span><span class="label">Fundamentals</span>
+    </button>
+    <button class="sb-item" id="si-aptitude" onclick="openSection('aptitude')">
+      <span class="ic">🧮</span><span class="label">Aptitude</span>
+    </button>
+    <button class="sb-item" id="si-companyqa" onclick="openSection('companyqa')">
+      <span class="ic">🏢</span><span class="label">Company Q&A</span>
+    </button>
+    <button class="sb-item" id="si-interview" onclick="openSection('interview')">
+      <span class="ic">🎙️</span><span class="label">Interview Prep</span>
+    </button>
+  </div>
+  <div id="topic-side-list"></div>
+  <div class="sb-spacer"></div>
+  <a class="sb-item" href="mailto:jojiblesson@gmail.com?subject=Sponsorship%20Prep%20Feedback" style="color:var(--blue);font-weight:700;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);margin-top:8px;">
+    <span class="ic">✉️</span><span class="label">Feedback / Bug</span>
+  </a>
+  <div class="sb-divider"></div>
+  <a class="sb-item" href="../courses.html">
+    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></g></svg></span>
+    <span class="label">All Courses</span>
+  </a>
+</div>
+
+<!-- MAIN -->
+<div id="main"><div id="content">
+
+<!-- ═══ HOME ═══ -->
+<div class="view active" id="view-home">
+  <div class="spon-home">
+    <div class="spon-hero">
+      <h1>ETO <span>Sponsorship</span> Prep</h1>
+      <p>Everything you need to land a company sponsorship for your ETO cadetship: understanding the pathway, cracking the interview.</p>
+    </div>
+    <div class="section-grid">
+
+      <div class="section-card" onclick="openSection('overview')" style="--sc-color:var(--green);--sc-dim:var(--green-dim);--sc-border:var(--green-border);--sc-glow:rgba(34,197,94,.18);--sc-drop:rgba(34,197,94,.6)">
+        <div class="sc-stripe"></div>
+        <div class="sc-icon">🗺️</div>
+        <h3>Overview</h3>
+        <p>The full cadetship pathway: what a sponsorship is, what it unlocks, and how the journey from pre-sea to COC unfolds.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="--sc-dim:var(--green-dim);--sc-border:var(--green-border);--sc-color:var(--green)">Free</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('fundamentals')" style="--sc-color:var(--blue);--sc-dim:var(--blue-dim);--sc-border:var(--blue-border)">
+        <div class="sc-stripe"></div>
+        <div class="sc-icon">⚡</div>
+        <h3>Fundamentals</h3>
+        <p>Electrical and electronics concepts tested in the written exam and face-to-face technical interview. Ohm's Law to power systems.</p>
+        <div class="sc-meta">
+          <span class="sc-badge">7 Topics · Quiz</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('aptitude')" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247,.35);--sc-glow:rgba(168,85,247,.18);--sc-drop:rgba(168,85,247,.6)">
+        <div class="sc-stripe" style="background:var(--purple)"></div>
+        <div class="sc-icon">🧮</div>
+        <h3>Aptitude</h3>
+        <p>Quantitative, verbal, logical reasoning, and psychometric drills. Plus a current affairs bank for maritime awareness questions.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">Aptitude · Current Affairs</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('companyqa')" style="--sc-color:var(--cyan);--sc-dim:var(--cyan-dim);--sc-border:rgba(6,182,212,.35);--sc-glow:rgba(6,182,212,.18);--sc-drop:rgba(6,182,212,.6)">
+        <div class="sc-stripe" style="background:var(--cyan)"></div>
+        <div class="sc-icon">🏢</div>
+        <h3>Company Q&amp;A</h3>
+        <p>Company-specific interview question patterns: what MSC, BSM, Anglo Eastern, and others have asked real candidates.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--cyan-dim);border-color:rgba(6,182,212,.35);color:var(--cyan)">Browse by Company</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('interview')" style="--sc-color:var(--orange);--sc-dim:var(--orange-dim);--sc-border:var(--orange-border);--sc-glow:rgba(245,158,11,.18);--sc-drop:rgba(245,158,11,.6)">
+        <div class="sc-stripe" style="background:var(--orange)"></div>
+        <div class="sc-icon">🎙️</div>
+        <h3>Interview Prep</h3>
+        <p>Group discussion tactics, HR interview answers, body language, and the mistakes that eliminate candidates at each stage.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--orange-dim);border-color:var(--orange-border);color:var(--orange)">GD · HR · Soft Skills</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION LANDING ═══ -->
+<div class="view" id="view-section">
+  <div class="section-landing">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button class="anc-btn" onclick="showHome()">← Home</button>
+    </div>
+    <div class="sec-header" id="sec-header">
+      <div class="sec-header-icon" id="sec-icon"></div>
+      <div><h2 id="sec-title"></h2><p id="sec-desc"></p></div>
+    </div>
+    <div class="topic-card-grid" id="sec-topic-grid"></div>
+    <div class="section-quiz-strip" id="sec-quiz-strip" style="display:none">
+      <div class="sqz-text">
+        <h4 id="sqz-title">Practice Quiz</h4>
+        <p id="sqz-desc">Test yourself on all topics in this section.</p>
+      </div>
+      <button class="sqz-btn" id="sqz-btn" onclick="openSectionQuiz()">Start Quiz →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMPANY Q&A ═══ -->
+<div class="view" id="view-companyqa">
+  <div style="max-width:920px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+      <button class="anc-btn" onclick="showHome()">← Home</button>
+      <h2 style="font-size:17px;font-weight:800;color:var(--text)">🏢 Company Interview Q&amp;A</h2>
+    </div>
+    <div class="cqa-layout">
+      <div class="cqa-list" id="cqa-list"></div>
+      <div class="cqa-detail" id="cqa-detail">
+        <div class="cqa-empty">Select a company to see their interview questions</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ QUIZ VIEW ═══ -->
+<div class="view" id="view-quiz">
+  <div id="quiz-home">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <button class="anc-btn" id="quiz-back-btn" onclick="exitQuizToSection()">← Back</button>
+      <span id="quiz-topic-label" style="font-size:13px;color:var(--text2)"></span>
+    </div>
+    <div class="quiz-topic-header">
+      <div class="icon">🧠</div>
+      <div><h2 id="quiz-topic-h2">Quiz</h2><p id="quiz-topic-desc">Select a category to drill, or run all questions in random order.</p></div>
+      <div class="total"><div class="num" id="total-q-count">0</div><div class="lbl">Questions</div></div>
+    </div>
+    <div id="qcat-grid" class="qcat-grid"></div>
+  </div>
+  <div id="quiz-active" style="display:none">
+    <div class="quiz-progress">
+      <div class="quiz-progress-top">
+        <span class="qnum" id="qnum">Q 1 / 0</span>
+        <span class="cat-tag" id="qcat-tag"> - </span>
+        <span class="score" id="qscore">Score: 0</span>
+      </div>
+      <div class="qbar"><div class="qfill" id="qfill" style="width:0%"></div></div>
+    </div>
+    <div class="quiz-card">
+      <div class="quiz-q-area"><div class="qtext" id="qtext">Loading…</div></div>
+      <div class="quiz-opts" id="qopts"></div>
+      <div class="quiz-exp" id="qexp"></div>
+      <div class="quiz-actions">
+        <span class="hint" id="qhint">Choose an answer above</span>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" onclick="skipQ()">Skip →</button>
+          <button class="btn btn-primary" id="nextBtn" onclick="nextQ()" style="display:none">Next →</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px;text-align:center">
+      <button class="btn btn-ghost" onclick="exitQuiz()" style="font-size:12px">← Back to categories</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ NOTES CONTAINER ═══ -->
+<div id="notes-container"></div>
+
+<button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0,behavior:'smooth'})" style="display:flex;position:fixed;bottom:30px;right:30px;z-index:999;background:var(--blue);color:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3);align-items:center;justify-content:center;padding-bottom:4px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;">↑</button>
+
+<!-- ═══ GATE ═══ -->
+<div id="gate-overlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(7,13,26,.94);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:8px 0 24px">
+    <div style="font-size:40px;margin-bottom:12px">🔒</div>
+    <div style="font-size:19px;font-weight:700;color:#DDE5EF;margin-bottom:10px">Full Access Required</div>
+    <div id="gate-sub" style="font-size:13.5px;color:#8FA3B8;margin-bottom:28px;line-height:1.65">Upgrade to unlock all Sponsorship Prep content.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left">
+      <div class="gate-plan" data-plan="starter"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Starter</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">2 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹499</div><button class="gate-buy-btn" data-plan="starter" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
+      <div class="gate-plan" data-plan="standard" style="border-color:#C8A44A;position:relative"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#C8A44A;color:#070D1A;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.04em">BEST VALUE</div><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Standard</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">5 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹999</div><button class="gate-buy-btn" data-plan="standard" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
+      <div class="gate-plan" data-plan="pro"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Pro</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">12 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹1,999</div><button class="gate-buy-btn" data-plan="pro" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
+      <div class="gate-plan" data-plan="lifetime"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Lifetime</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">Pay once, forever</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹4,999</div><button class="gate-buy-btn" data-plan="lifetime" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
+    </div>
+    <button onclick="closeGate()" style="background:none;border:none;color:#4A6880;font-size:13px;cursor:pointer;text-decoration:underline">Continue with free preview</button>
+  </div>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)">
+  <div id="profile-panel">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <div id="pm-avatar" style="width:46px;height:46px;border-radius:50%;background:#C8A44A;color:#070D1A;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif"></div>
+      <div style="min-width:0"><div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div><div id="pm-email" style="font-size:11.5px;color:#4A6880;margin-top:3px;word-break:break-all;line-height:1.4"></div></div>
+    </div>
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px">
+      <div style="font-size:10.5px;color:#4A6880;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">Current Plan</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div id="pm-plan-label" style="font-size:14px;font-weight:700"></div>
+        <div id="pm-plan-expiry" style="font-size:11.5px;color:#8FA3B8;text-align:right"></div>
+      </div>
+    </div>
+    <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">Upgrade to Full Access</button>
+    <button onclick="window.location.href='../courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+    <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════
+window.QD = {};
+window.NOTE_HTML = {};
+
+var BASE = '../../data/Sponsorship/';
+var ACTIVE_SECTION_ID = null;
+var ACTIVE_TOPIC_ID   = null;
+
+var CAT_NAMES = {
+  ELEC:'Electrical Circuits', ELECTRON:'Electronics', MARINE:'Marine Systems', SAFETY:'Electrical Safety',
+  QUANT:'Quantitative Aptitude', VERB:'Verbal Ability', LOGIC:'Logical Reasoning', PSYCHO:'Psychometric',
+  CA:'Current Affairs', GD:'Group Discussion', HR:'HR Interview', INTRO:'Self Introduction', MOTIV:'Motivation',
+  COMP:'Company Research', PROC:'Sponsorship Process', TIME:'Timeline', ELIG:'Eligibility'
+};
+
+var SECTIONS = {
+  overview: {
+    label:'Overview', icon:'🗺️', sbId:'si-overview',
+    desc:'The cadetship pathway: pre-sea, sea time, COC exams, and what sponsorship actually means.',
+    color:'var(--green)', quizLabel:null,
+    topics:[
+      {id:'S00', key:'S00_Overview', name:'ETO Cadetship Overview', icon:'🗺️',
+       notesFile:'overview/s00_overview.js', quizFile:null, notesReady:true, free:true}
+    ]
+  },
+  fundamentals: {
+    label:'Fundamentals', icon:'⚡', sbId:'si-fundamentals',
+    desc:'Electrical and electronics concepts for the written test and face-to-face technical interview.',
+    color:'var(--blue)', quizLabel:'Practice all Fundamentals questions',
+    topics:[
+      {id:'F01', key:'F01_DCCircuits',      name:'DC Circuits',          icon:'🔌', notesFile:'fundamentals/f01_notes.js', quizFile:'fundamentals/f01_quiz.js', notesReady:true,  free:true},
+      {id:'F02', key:'F02_ACCircuits',      name:'AC Circuits',          icon:'〰️', notesFile:'fundamentals/f02_notes.js', quizFile:'fundamentals/f02_quiz.js', notesReady:false, free:false},
+      {id:'F03', key:'F03_Transformers',    name:'Transformers',         icon:'🔄', notesFile:'fundamentals/f03_notes.js', quizFile:'fundamentals/f03_quiz.js', notesReady:false, free:false},
+      {id:'F04', key:'F04_Machines',        name:'Electrical Machines',  icon:'⚙️', notesFile:'fundamentals/f04_notes.js', quizFile:'fundamentals/f04_quiz.js', notesReady:false, free:false},
+      {id:'F05', key:'F05_Electronics',     name:'Electronics Basics',   icon:'💡', notesFile:'fundamentals/f05_notes.js', quizFile:'fundamentals/f05_quiz.js', notesReady:false, free:false},
+      {id:'F06', key:'F06_PowerSystems',    name:'Power Systems',        icon:'🏭', notesFile:'fundamentals/f06_notes.js', quizFile:'fundamentals/f06_quiz.js', notesReady:false, free:false},
+      {id:'F07', key:'F07_Safety',          name:'Electrical Safety',    icon:'🦺', notesFile:'fundamentals/f07_notes.js', quizFile:'fundamentals/f07_quiz.js', notesReady:false, free:false}
+    ]
+  },
+  aptitude: {
+    label:'Aptitude', icon:'🧮', sbId:'si-aptitude',
+    desc:'Aptitude test drills (QUANT, VERB, LOGIC, PSYCHO) and maritime current affairs.',
+    color:'var(--purple)', quizLabel:'Practice Aptitude questions',
+    topics:[
+      {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:true,  free:true},
+      {id:'CA',  key:'CA_CurrentAffairs',  name:'Current Affairs',        icon:'📰', notesFile:'aptitude/ca_notes.js',  quizFile:'aptitude/ca_quiz.js',  notesReady:false, free:false}
+    ]
+  },
+  interview: {
+    label:'Interview Prep', icon:'🎙️', sbId:'si-interview',
+    desc:'Group discussion, HR interview, body language, and the mistakes that get candidates eliminated.',
+    color:'var(--orange)', quizLabel:'Practice Interview scenarios',
+    topics:[
+      {id:'IP01', key:'IP01_GD',           name:'Group Discussion',             icon:'🗣️', notesFile:'interview/ip01_notes.js', quizFile:'interview/ip01_quiz.js', notesReady:true,  free:true},
+      {id:'IP02', key:'IP02_HR',           name:'HR Interview',                 icon:'🤝', notesFile:'interview/ip02_notes.js', quizFile:'interview/ip02_quiz.js', notesReady:false, free:false},
+      {id:'IP03', key:'IP03_BodyLanguage', name:'Body Language & Presentation', icon:'🪞', notesFile:'interview/ip03_notes.js', quizFile:'interview/ip03_quiz.js', notesReady:false, free:false},
+      {id:'IP04', key:'IP04_Mistakes',     name:'Common Mistakes',              icon:'⚠️', notesFile:'interview/ip04_notes.js', quizFile:'interview/ip04_quiz.js', notesReady:false, free:false}
+    ]
+  }
+};
+
+// ── Search ──
+var SEARCH_INDEX = [], SEARCH_INDEX_BUILT = {}, SEARCH_INDEX_DONE = 0, SEARCH_INDEX_TOTAL = 0;
+
+window.loadQuizzes = function(key, data) { window.QD[key] = data; };
+window.loadNotes   = function(id, html) {
+  window.NOTE_HTML[id] = html;
+  buildSearchIndexForTopic(id, html);
+  if (window._bgIndexing && id !== ACTIVE_TOPIC_ID) return;
+  renderNotesView(id);
+};
+
+function renderNotesView(id) {
+  document.getElementById('notes-container').innerHTML = window.NOTE_HTML[id];
+  setAllViewsInactive();
+  var inj = document.getElementById('notes-container').querySelector('.view');
+  if (inj) inj.classList.add('active');
+  buildTopicSideList(id);
+  document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+  if (window._pendingScroll) {
+    var s = window._pendingScroll; window._pendingScroll = null;
+    setTimeout(function(){ var el=document.getElementById(s); if(el){document.getElementById('content').scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});} }, 200);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════
+function setAllViewsInactive() {
+  document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+  document.querySelectorAll('.sb-item').forEach(function(b){ b.classList.remove('active'); });
+}
+
+function toggleMobileMenu() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('open');
+}
+function closeMobileMenu() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+}
+
+function showHome() {
+  if (window.innerWidth <= 768) closeMobileMenu();
+  setAllViewsInactive();
+  document.getElementById('view-home').classList.add('active');
+  document.getElementById('si-home').classList.add('active');
+  document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('topbar-badge').textContent = 'Sponsorship Prep';
+  ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
+  try { if (location.protocol !== 'file:') history.pushState(null,'', location.pathname); } catch(e){}
+}
+
+function openSection(sectionId) {
+  if (window.innerWidth <= 768) closeMobileMenu();
+  if (sectionId === 'companyqa') { showCompanyQA(); return; }
+  if (sectionId === 'overview') {
+    ACTIVE_SECTION_ID = 'overview';
+    document.getElementById('si-overview').classList.add('active');
+    document.getElementById('si-home').classList.remove('active');
+    document.getElementById('topbar-badge').textContent = 'Overview';
+    fetchTopicData('S00', SECTIONS.overview.topics[0]);
+    try { if (location.protocol !== 'file:') history.pushState(null,'','#notes=S00'); } catch(e){}
+    return;
+  }
+  var sec = SECTIONS[sectionId]; if (!sec) return;
+  ACTIVE_SECTION_ID = sectionId;
+
+  setAllViewsInactive();
+  document.getElementById('view-section').classList.add('active');
+  var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
+  document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('topbar-badge').textContent = sec.label;
+
+  document.getElementById('sec-icon').textContent  = sec.icon;
+  document.getElementById('sec-title').textContent = sec.label;
+  document.getElementById('sec-desc').textContent  = sec.desc;
+
+  buildSectionTopicGrid(sec);
+  document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+
+  try { if (location.protocol !== 'file:') history.pushState(null,'','#section='+sectionId); } catch(e){}
+}
+
+function buildSectionTopicGrid(sec) {
+  var grid = document.getElementById('sec-topic-grid');
+  grid.innerHTML = '';
+  var hasQuiz = false;
+
+  sec.topics.forEach(function(t) {
+    var locked = !t.free && isLocked(t.id);
+    var card = document.createElement('div');
+    card.className = 'topic-card' + (!t.notesReady ? ' coming-soon' : '');
+    card.setAttribute('data-topic-id', t.id);
+    if (t.notesReady && !locked) card.style.cursor = 'pointer';
+    card.innerHTML = '<div class="tc-id">' + t.icon + ' ' + t.id + '</div>'
+      + '<div class="tc-name">' + t.name + '</div>'
+      + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + (t.quizFile ? ' · Quiz' : '') + '</div>';
+    if (locked && t.notesReady) {
+      var lk = document.createElement('span'); lk.className = 'gate-lock'; lk.textContent = '🔒';
+      card.appendChild(lk);
+    }
+    if (t.notesReady) {
+      card.onclick = function() {
+        if (isLocked(t.id) && !t.free) { showGate(); return; }
+        fetchTopicData(t.id, t);
+      };
+    }
+    grid.appendChild(card);
+    if (t.quizFile) hasQuiz = true;
+  });
+
+  var strip = document.getElementById('sec-quiz-strip');
+  if (hasQuiz && sec.quizLabel) {
+    strip.style.display = 'flex';
+    document.getElementById('sqz-title').textContent = sec.label + ' Quiz';
+    document.getElementById('sqz-desc').textContent  = sec.quizLabel;
+  } else {
+    strip.style.display = 'none';
+  }
+}
+
+function openSectionQuiz() {
+  var sec = SECTIONS[ACTIVE_SECTION_ID]; if (!sec) return;
+  if (isLocked('__section__')) { showGate(); return; }
+  var allQ = [];
+  sec.topics.forEach(function(t) {
+    if (t.quizFile && window.QD[t.key]) allQ = allQ.concat(window.QD[t.key]);
+  });
+  if (!allQ.length) {
+    sec.topics.forEach(function(t) {
+      if (t.quizFile) window._loadEncryptedScript(BASE + t.quizFile).catch(function(){});
+    });
+    alert('Loading quiz questions... try again in a moment.');
+    return;
+  }
+  ACTIVE_TOPIC_ID = '__section_' + ACTIVE_SECTION_ID;
+  document.getElementById('quiz-topic-label').textContent = sec.label + ': All Questions';
+  document.getElementById('quiz-topic-h2').textContent    = sec.label + ' Quiz';
+  buildCatGrid(allQ);
+  setAllViewsInactive();
+  document.getElementById('view-quiz').classList.add('active');
+  var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
+}
+
+// ═══════════════════════════════════════════════
+// TOPIC LOADING
+// ═══════════════════════════════════════════════
+window.fetchTopicData = function(topicId, topicObj) {
+  ACTIVE_TOPIC_ID = topicId;
+  if (!topicObj) {
+    for (var sid in SECTIONS) {
+      var found = SECTIONS[sid].topics.find(function(t){ return t.id === topicId; });
+      if (found) { topicObj = found; ACTIVE_SECTION_ID = sid; break; }
+    }
+  }
+  if (!topicObj) return;
+
+  var tNum = topicId.replace(/[^0-9]/g,'') || '0';
+  document.getElementById('topbar-badge').textContent = topicObj.icon + ' ' + topicObj.id;
+
+  if (!window.NOTE_HTML[topicId]) {
+    window._loadEncryptedScript(BASE + topicObj.notesFile).catch(function() {
+      var c = document.getElementById('notes-container');
+      if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes. Check your connection.</div>';
+    });
+  } else {
+    renderNotesView(topicId);
+  }
+  if (topicObj.quizFile && !window.QD[topicObj.key]) {
+    window._loadEncryptedScript(BASE + topicObj.quizFile).catch(function(){});
+  }
+  try { if (location.protocol !== 'file:') history.pushState(null,'','#notes='+topicId); } catch(e){}
+};
+
+// ── Sidebar topic list while reading notes ──
+function buildTopicSideList(activeId) {
+  var sec = SECTIONS[ACTIVE_SECTION_ID];
+  if (!sec || ACTIVE_SECTION_ID === 'overview') { document.getElementById('topic-side-list').style.display = 'none'; return; }
+  var panel = document.getElementById('topic-side-list');
+  panel.style.display = 'block'; panel.innerHTML = '';
+  sec.topics.forEach(function(t) {
+    var btn = document.createElement('button');
+    btn.className = 'tl-item' + (t.id === activeId ? ' tl-active' : '');
+    btn.innerHTML = '<span class="tl-ic">' + t.icon + '</span><span class="tl-label">' + t.name + '</span><span class="tl-num">' + t.id + '</span>';
+    btn.onclick = function() {
+      if (isLocked(t.id) && !t.free) { showGate(); return; }
+      fetchTopicData(t.id, t);
+    };
+    panel.appendChild(btn);
+  });
+  setTimeout(function(){
+    var a = panel.querySelector('.tl-active'); if(a) a.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }, 150);
+}
+
+// ═══════════════════════════════════════════════
+// COMPANY Q&A
+// ═══════════════════════════════════════════════
+var _cqaData = null;
+
+function showCompanyQA() {
+  setAllViewsInactive();
+  document.getElementById('view-companyqa').classList.add('active');
+  document.getElementById('si-companyqa').classList.add('active');
+  document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('topbar-badge').textContent = 'Company Q&A';
+  ACTIVE_SECTION_ID = 'companyqa';
+  try { if (location.protocol !== 'file:') history.pushState(null,'','#companyqa'); } catch(e){}
+
+  if (_cqaData) { renderCQAList(); return; }
+  window._loadEncryptedScript(BASE + 'CompanyQA/company_data.js').then(function() {
+    _cqaData = window.COMPANY_DATA;
+    renderCQAList();
+  }).catch(function() {
+    document.getElementById('cqa-detail').innerHTML = '<div class="cqa-empty">Could not load company data. Check your connection.</div>';
+  });
+}
+
+function renderCQAList() {
+  var list = document.getElementById('cqa-list'); list.innerHTML = '';
+  var companies = (_cqaData && _cqaData.companies) ? _cqaData.companies : {};
+  var names = Object.keys(companies);
+  if (!names.length) {
+    list.innerHTML = '<div style="padding:16px;color:var(--text3);font-size:13px">No company data yet. Check back soon.</div>';
+    return;
+  }
+  names.forEach(function(name) {
+    var co = companies[name];
+    var el = document.createElement('div');
+    el.className = 'cqa-list-item';
+    el.innerHTML = '<div style="font-weight:600">' + esc(name) + '</div><div class="cqa-count">' + (co.total_questions||0) + ' questions</div>';
+    el.onclick = function() {
+      document.querySelectorAll('.cqa-list-item').forEach(function(x){ x.classList.remove('active'); });
+      el.classList.add('active');
+      renderCQADetail(name, co);
+    };
+    list.appendChild(el);
+  });
+}
+
+function renderCQADetail(name, co) {
+  var d = document.getElementById('cqa-detail');
+  var topicsHtml = (co.top_topics||[]).map(function(t){ return '<span class="cqa-chip">' + esc(t) + '</span>'; }).join('');
+  var favsHtml   = (co.favourite_questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
+  d.innerHTML = '<div class="cqa-company-header">'
+    + '<h2>' + esc(name) + '</h2>'
+    + (topicsHtml ? '<div class="cqa-section-label">Top Topics Asked</div><div class="cqa-chips">' + topicsHtml + '</div>' : '')
+    + (co.style_notes ? '<div class="cqa-style-note">' + esc(co.style_notes) + '</div>' : '')
+    + '</div>'
+    + (favsHtml ? '<div class="cqa-section-label">Frequently Asked Questions</div><ul class="cqa-fav-list">' + favsHtml + '</ul>' : '<p style="color:var(--text3);font-size:13px;padding:12px 0">No questions collected yet for this company.</p>');
+}
+
+// ═══════════════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════════════
+function goToQuizFromNotes(topicId) {
+  var topicObj = null;
+  for (var sid in SECTIONS) {
+    topicObj = SECTIONS[sid].topics.find(function(t){ return t.id === topicId; });
+    if (topicObj) { ACTIVE_SECTION_ID = sid; break; }
+  }
+  if (!topicObj || !topicObj.quizFile) return;
+  if (isLocked(topicId) && !topicObj.free) { showGate(); return; }
+
+  ACTIVE_TOPIC_ID = topicId;
+  document.getElementById('quiz-topic-label').textContent = topicObj.id + ' - ' + topicObj.name;
+  document.getElementById('quiz-topic-h2').textContent    = topicObj.name + ' Quiz';
+
+  var launch = function() {
+    var qs = window.QD[topicObj.key] || [];
+    buildCatGrid(qs);
+    setAllViewsInactive();
+    document.getElementById('view-quiz').classList.add('active');
+    var sbEl = document.getElementById(SECTIONS[ACTIVE_SECTION_ID].sbId); if(sbEl) sbEl.classList.add('active');
+    try { if (location.protocol !== 'file:') history.pushState(null,'','#quiz='+topicId); } catch(e){}
+  };
+
+  if (!window.QD[topicObj.key]) {
+    window._loadEncryptedScript(BASE + topicObj.quizFile).then(launch).catch(launch);
+  } else { launch(); }
+}
+
+function exitQuizToSection() {
+  if (ACTIVE_SECTION_ID && ACTIVE_SECTION_ID !== 'companyqa') openSection(ACTIVE_SECTION_ID);
+  else showHome();
+}
+
+function buildCatGrid(qs) {
+  var total = document.getElementById('total-q-count'); if (total) total.textContent = qs.length;
+  var cats = {}; qs.forEach(function(q){ cats[q.cat] = (cats[q.cat]||0)+1; });
+  var grid = document.getElementById('qcat-grid'); if (!grid) return; grid.innerHTML = '';
+  if (!qs.length) { grid.innerHTML = '<div style="padding:30px;text-align:center;color:var(--text2)">Quiz questions coming soon.</div>'; return; }
+  var ab = document.createElement('button'); ab.className = 'qcat-btn all-btn';
+  var prog = getProgress(ACTIVE_TOPIC_ID||'');
+  var pc = prog>=80?'var(--green)':prog>=50?'var(--purple)':'var(--blue)';
+  ab.innerHTML = '<div class="cat-name">🎲 All Categories - Mixed</div><div class="cat-count">'+qs.length+' questions</div><div class="cat-bar"><div class="cat-fill" style="width:'+prog+'%;background:'+pc+'"></div></div>';
+  ab.onclick = function(){ startQuiz('All','All Categories - Mixed',qs); };
+  grid.appendChild(ab);
+  var savedP = JSON.parse(localStorage.getItem('spon_progress')||'{}');
+  var catScores = (savedP[ACTIVE_TOPIC_ID||''] && savedP[ACTIVE_TOPIC_ID||''].cats)||{};
+  Object.keys(cats).forEach(function(cat){
+    var n = cats[cat]; if(!n) return;
+    var btn = document.createElement('button'); btn.className = 'qcat-btn';
+    var cp = catScores[cat]||0; var cc = cp>=80?'var(--green)':cp>=50?'var(--purple)':'var(--blue)';
+    var dn = CAT_NAMES[cat]||cat;
+    btn.innerHTML = '<div class="cat-name">📘 '+dn+'</div><div class="cat-count">'+n+' questions</div><div class="cat-bar"><div class="cat-fill" style="width:'+cp+'%;background:'+cc+'"></div></div>';
+    btn.onclick = function(){ startQuiz(cat,dn,qs.filter(function(q){ return q.cat===cat; })); };
+    grid.appendChild(btn);
+  });
+  document.getElementById('quiz-home').style.display = 'block';
+  document.getElementById('quiz-active').style.display = 'none';
+}
+
+var QZ = {qs:[],i:0,correct:0,catId:'',catName:'',answered:false};
+var _quizActiveHtml = null;
+document.addEventListener('DOMContentLoaded', function(){ _quizActiveHtml = document.getElementById('quiz-active').innerHTML; });
+function _restoreQuizActive(){ if(_quizActiveHtml) document.getElementById('quiz-active').innerHTML = _quizActiveHtml; }
+
+function startQuiz(catId,catName,qs){
+  QZ={qs:shuffle(qs.slice()),i:0,correct:0,catId:catId,catName:catName,answered:false};
+  document.getElementById('quiz-home').style.display='none';
+  document.getElementById('quiz-active').style.display='block';
+  renderQ();
+}
+function shuffle(a){ for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+var LETTERS=['A','B','C','D'];
+function renderQ(){
+  if(QZ.i>=QZ.qs.length){showScore();return;}
+  var q=QZ.qs[QZ.i]; QZ.answered=false;
+  document.getElementById('qnum').textContent='Q '+(QZ.i+1)+' / '+QZ.qs.length;
+  document.getElementById('qfill').style.width=Math.round(QZ.i/QZ.qs.length*100)+'%';
+  document.getElementById('qcat-tag').textContent=CAT_NAMES[q.cat]||q.cat||'';
+  document.getElementById('qscore').textContent='Score: '+QZ.correct+'/'+QZ.i;
+  document.getElementById('qtext').textContent=q.q;
+  var opts=shuffle(q.opts.slice()); var optsEl=document.getElementById('qopts'); optsEl.innerHTML='';
+  opts.forEach(function(opt,idx){
+    var btn=document.createElement('button'); btn.className='qopt'; btn.dataset.answer=opt;
+    btn.innerHTML='<span class="opt-letter">'+LETTERS[idx]+'</span><span class="opt-text">'+esc(opt)+'</span>';
+    btn.addEventListener('click',function(){ chooseAnswer(opt,q.a,btn); });
+    optsEl.appendChild(btn);
+  });
+  var expEl=document.getElementById('qexp');
+  expEl.innerHTML=q.exp?'<strong>Explanation:</strong> '+esc(q.exp):'';
+  expEl.classList.remove('show');
+  document.getElementById('qhint').textContent='Choose an answer above';
+  document.getElementById('nextBtn').style.display='none';
+}
+function chooseAnswer(chosen,correct,btn){
+  if(QZ.answered)return; QZ.answered=true;
+  var ok=(chosen===correct); if(ok)QZ.correct++;
+  QZ.i++;
+  document.querySelectorAll('.qopt').forEach(function(b){
+    b.disabled=true;
+    if(b.dataset.answer===correct)b.classList.add('correct');
+    else if(b===btn&&!ok)b.classList.add('wrong');
+  });
+  document.getElementById('qhint').textContent=ok?'✓ Correct!':'✗ Incorrect, see explanation';
+  document.getElementById('qscore').textContent='Score: '+QZ.correct+'/'+QZ.i;
+  document.getElementById('qexp').classList.add('show');
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+function skipQ(){ QZ.i++; renderQ(); }
+function nextQ(){ renderQ(); }
+function exitQuiz(){ _restoreQuizActive(); buildCatGrid(QZ.qs); }
+function saveProgress(topic,cat,score,total){
+  var p=JSON.parse(localStorage.getItem('spon_progress')||'{}');
+  if(!p[topic])p[topic]={cats:{},best:0};
+  if(cat!=='All'&&cat!=='All Categories - Mixed'){var pct=total?Math.round(score/total*100):0;if(!p[topic].cats[cat]||p[topic].cats[cat]<pct)p[topic].cats[cat]=pct;}
+  var sum=0,cnt=0; for(var k in p[topic].cats){sum+=p[topic].cats[k];cnt++;}
+  p[topic].best=cnt?Math.round(sum/cnt):0;
+  localStorage.setItem('spon_progress',JSON.stringify(p));
+}
+function getProgress(topic){ var p=JSON.parse(localStorage.getItem('spon_progress')||'{}'); return(p[topic]&&p[topic].best)||0; }
+function showScore(){
+  var tot=QZ.qs.length,pct=tot?Math.round(QZ.correct/tot*100):0;
+  saveProgress(ACTIVE_TOPIC_ID||'misc',QZ.catId,QZ.correct,tot);
+  var tier=pct>=90?'perfect':pct>=60?'good':'bad';
+  var hc=tier==='perfect'?'#FFD700':tier==='good'?'var(--green)':'var(--orange)';
+  var ill=tier==='perfect'?'🏆':tier==='good'?'🚀':'💪';
+  var ht=tier==='perfect'?'Flawless!':tier==='good'?'Great Job!':"Keep Going!";
+  document.getElementById('quiz-active').innerHTML='<div class="duo-score-container">'
+    +'<div class="duo-score-ill">'+ill+'</div>'
+    +'<div class="duo-score-header"><h2 style="color:'+hc+'">'+ht+'</h2></div>'
+    +'<div class="duo-score-stats">'
+    +'<div class="duo-score-stat-box" style="border-color:var(--green)"><div class="n" style="color:var(--green)">'+QZ.correct+'</div><div class="l">Correct</div></div>'
+    +'<div class="duo-score-stat-box" style="border-color:var(--orange)"><div class="n" style="color:var(--orange)">'+(tot-QZ.correct)+'</div><div class="l">Missed</div></div>'
+    +'<div class="duo-score-stat-box" style="border-color:var(--blue)"><div class="n" style="color:var(--blue)">'+pct+'%</div><div class="l">Score</div></div>'
+    +'</div>'
+    +'<div class="duo-score-actions">'
+    +'<button class="duo-btn duo-btn-primary" onclick="exitQuizAfterScore()">Continue</button>'
+    +'<button class="duo-btn duo-btn-secondary" onclick="retryQuiz()">Try Again</button>'
+    +'</div></div>';
+}
+function exitQuizAfterScore(){ _restoreQuizActive(); exitQuiz(); }
+function retryQuiz(){ _restoreQuizActive(); startQuiz(QZ.catId,QZ.catName,QZ.qs); }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
+
+// ── back to top ──
+document.getElementById('content').addEventListener('scroll', function(){
+  var self=this; if(self._raf)return;
+  self._raf=requestAnimationFrame(function(){
+    self._raf=null;
+    var btn=document.getElementById('back-to-top'); if(!btn)return;
+    var st=self.scrollTop;
+    if(st>300){btn.style.opacity='1';btn.style.visibility='visible';}
+    else if(st<220){btn.style.opacity='0';btn.style.visibility='hidden';}
+  });
+});
+
+// ── Search ──
+function buildSearchIndexForTopic(id, html) {
+  if (SEARCH_INDEX_BUILT[id]) return; SEARCH_INDEX_BUILT[id] = true;
+  var topicName = id; SEARCH_INDEX_DONE++;
+  try {
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    doc.querySelectorAll('[id^="s-"]').forEach(function(sec) {
+      var heading = sec.textContent.trim().replace(/\s+/g,' ');
+      var next = sec.nextElementSibling;
+      SEARCH_INDEX.push({topicId:id, topicName:topicName, sectionId:sec.id, heading:heading, snippet:next?next.textContent.trim().replace(/\s+/g,' ').substring(0,120):''});
+    });
+  } catch(e){}
+}
+function gSearch(query) {
+  var panel=document.getElementById('gsearch-panel'), res=document.getElementById('gsearch-results');
+  if(!query||query.trim().length<2){panel.style.display='none';res.innerHTML='';return;}
+  var q=query.trim().toLowerCase();
+  var out=SEARCH_INDEX.filter(function(item){return item.heading.toLowerCase().includes(q)||item.snippet.toLowerCase().includes(q);}).slice(0,10);
+  if(!out.length){res.innerHTML='<div class="sr-empty">No results</div>';panel.style.display='block';return;}
+  res.innerHTML=out.map(function(item){
+    return '<div class="sr-item" onclick="goToSearchResult(\''+item.topicId+'\',\''+item.sectionId+'\')">'
+      +'<div class="sr-badge">'+item.topicId+'</div>'
+      +'<div class="sr-content"><div class="sr-heading">'+esc(item.heading)+'</div><div class="sr-meta">'+esc(item.topicName)+'</div></div></div>';
+  }).join('');
+  panel.style.display='block';
+}
+function goToSearchResult(topicId, sectionId) {
+  document.getElementById('gsearch-input').value='';
+  document.getElementById('gsearch-panel').style.display='none';
+  closeMobileMenu();
+  window._pendingScroll = sectionId;
+  for (var sid in SECTIONS) {
+    var t = SECTIONS[sid].topics.find(function(x){return x.id===topicId;});
+    if (t) { ACTIVE_SECTION_ID = sid; fetchTopicData(topicId, t); return; }
+  }
+}
+document.addEventListener('click', function(e){
+  if (!e.target.closest('#gsearch-area')) document.getElementById('gsearch-panel').style.display='none';
+});
+
+// ── Background indexing ──
+function startBackgroundIndexing() {
+  var allTopics = [];
+  for (var sid in SECTIONS) SECTIONS[sid].topics.forEach(function(t){ if(t.notesReady) allTopics.push(t); });
+  SEARCH_INDEX_TOTAL = allTopics.length;
+  window._bgIndexing = true; var i = 0;
+  function next() {
+    if (i >= allTopics.length) { window._bgIndexing = false; return; }
+    var t = allTopics[i++];
+    if (window.NOTE_HTML[t.id]) { buildSearchIndexForTopic(t.id, window.NOTE_HTML[t.id]); setTimeout(next, 30); return; }
+    window._loadEncryptedScript(BASE + t.notesFile).then(function(){ setTimeout(next,100); }).catch(function(){ SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[t.id]=true; setTimeout(next,100); });
+  }
+  setTimeout(next, 2500);
+}
+
+// ── Routing ──
+window.addEventListener('DOMContentLoaded', function(){
+  var hash = location.hash.substring(1);
+  if (!hash) { showHome(); }
+  else if (hash.startsWith('section=')) { openSection(hash.split('=')[1]); }
+  else if (hash.startsWith('notes='))   { var id=hash.split('=')[1]; for(var sid in SECTIONS){var t=SECTIONS[sid].topics.find(function(x){return x.id===id;});if(t){ACTIVE_SECTION_ID=sid;fetchTopicData(id,t);break;}} }
+  else if (hash === 'companyqa')         { showCompanyQA(); }
+  else { showHome(); }
+});
+window.addEventListener('popstate', function(){
+  var hash = location.hash.substring(1);
+  if (!hash) showHome();
+  else if (hash.startsWith('section=')) openSection(hash.split('=')[1]);
+  else if (hash === 'companyqa') showCompanyQA();
+  else showHome();
+});
+
+// ── SW ──
+if ('serviceWorker' in navigator) {
+  if (location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('../sw.js').catch(function(){}); });
+  }
+}
+
+// ── Diagram zoom ──
+document.addEventListener('click', function(e){ if(e.target.matches('.note-diagram-wrap img')) e.target.classList.toggle('zoomed'); });
+
+startBackgroundIndexing();
+</script>
+
+<!-- ═══ GATE + ENCRYPTION + SESSION + PROFILE SCRIPTS ═══ -->
+<script>
+(function() {
+  var FREE_TOPIC_IDS = ['S00','F01','APT','IP01'];
+
+  function isLocked(id) {
+    if (window._fullAccess) return false;
+    if (FREE_TOPIC_IDS.indexOf(id) !== -1) return false;
+    if (id && id.startsWith('__section__')) return false;
+    return true;
+  }
+  window.isLocked = isLocked;
+
+  function showGate() { document.getElementById('gate-overlay').style.display='flex'; }
+  window.showGate = showGate;
+  window.closeGate = function() { document.getElementById('gate-overlay').style.display='none'; };
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') window.closeGate(); });
+
+  var _IDB_NAME='eb_secure', _IDB_STORE='keys', _AC_CACHE='_eb_ac';
+  function _openKeyDB(){ return new Promise(function(res,rej){ var r=indexedDB.open(_IDB_NAME,1); r.onupgradeneeded=function(e){e.target.result.createObjectStore(_IDB_STORE);}; r.onsuccess=function(e){res(e.target.result);}; r.onerror=function(e){rej(e.target.error);}; }); }
+  async function _saveKey(k,exp,uid){ try{ var db=await _openKeyDB(); await new Promise(function(res,rej){ var tx=db.transaction(_IDB_STORE,'readwrite'); tx.objectStore(_IDB_STORE).put({key:k,expiresAt:exp,userId:uid},'ck'); tx.oncomplete=res; tx.onerror=function(e){rej(e.target.error);}; }); }catch(e){} }
+  async function _loadKey(uid){ try{ var db=await _openKeyDB(); var s=await new Promise(function(res,rej){ var tx=db.transaction(_IDB_STORE,'readonly'); var r=tx.objectStore(_IDB_STORE).get('ck'); r.onsuccess=function(e){res(e.target.result||null);}; r.onerror=function(e){rej(e.target.error);}; }); if(!s)return null; if(s.userId&&s.userId!==uid)return null; if(s.expiresAt!==null&&Date.now()>s.expiresAt){ try{ var db2=await _openKeyDB(); await new Promise(function(res,rej){ var tx2=db2.transaction(_IDB_STORE,'readwrite'); tx2.objectStore(_IDB_STORE).delete('ck'); tx2.oncomplete=res; tx2.onerror=function(e){rej(e.target.error);}; }); }catch(e2){} return null; } return s; }catch(e){return null;} }
+  function _saveAccessCache(ok,exp){ try{localStorage.setItem(_AC_CACHE,JSON.stringify({ok:ok,exp:exp!==undefined?exp:null}));}catch(e){} }
+  function _loadAccessCache(){ try{ var c=JSON.parse(localStorage.getItem(_AC_CACHE)||'null'); if(!c)return null; if(c.exp!==null&&Date.now()>c.exp)return null; return c.ok; }catch(e){return null;} }
+
+  async function initContentKey(){
+    if(!window._sbClient||!window._sbUser)return;
+    var uid=window._sbUser.id; var s=await _loadKey(uid); if(s){window._contentKey=s.key;return;}
+    try{
+      var sess=await window._sbClient.auth.getSession(); var session=sess.data&&sess.data.session; if(!session)return;
+      var resp=await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/get-content-key',{headers:{'Authorization':'Bearer '+session.access_token}});
+      if(!resp.ok)return; var json=await resp.json(); if(!json.key)return;
+      var hex=json.key; var kb=new Uint8Array(hex.length/2); for(var ki=0;ki<hex.length;ki+=2)kb[ki/2]=parseInt(hex.substr(ki,2),16);
+      var ck=await crypto.subtle.importKey('raw',kb,{name:'AES-GCM'},false,['decrypt']);
+      await _saveKey(ck,json.expiresAt,uid); window._contentKey=ck;
+    }catch(e){}
+  }
+
+  window._decryptContent=async function(enc){ var p=JSON.parse(enc); var iv=Uint8Array.from(atob(p.iv),function(c){return c.charCodeAt(0);}); var data=Uint8Array.from(atob(p.data),function(c){return c.charCodeAt(0);}); var tag=Uint8Array.from(atob(p.tag),function(c){return c.charCodeAt(0);}); var combined=new Uint8Array(data.length+tag.length); combined.set(data); combined.set(tag,data.length); var dec=await crypto.subtle.decrypt({name:'AES-GCM',iv:iv},window._contentKey,combined); return new TextDecoder().decode(dec); };
+  window._loadEncryptedScript=async function(url){ var resp=await fetch(url); if(!resp.ok)throw new Error('HTTP '+resp.status); var text=await resp.text(); var code; if(text.trimStart().startsWith('{')){ if(!window._contentKey)throw new Error('No key'); code=await window._decryptContent(text); }else{code=text;} (0,eval)(code); };
+
+  async function determineAccess(){
+    window._fullAccess=false; if(!window._sbClient||!window._sbUser)return;
+    try{
+      var res=await window._sbClient.from('profiles').select('*').eq('id',window._sbUser.id).single();
+      var profile=res.data; if(!profile)return;
+      var plan=profile.subscription_plan, exp=null;
+      if(plan==='lifetime'){window._fullAccess=true;}
+      else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000); window._fullAccess=Date.now()<te.getTime(); exp=te.getTime();}
+      else if(['starter','standard','pro'].indexOf(plan)!==-1){var se=profile.subscription_expires_at?new Date(profile.subscription_expires_at).getTime():0; window._fullAccess=se>0&&Date.now()<se; exp=se||Date.now();}
+      _saveAccessCache(window._fullAccess,exp);
+      if(!window._fullAccess) applyLockUI();
+    }catch(e){ var c=_loadAccessCache(); window._fullAccess=c!==null?c:false; }
+  }
+
+  function applyLockUI(){
+    document.querySelectorAll('[data-topic-id]').forEach(function(el){
+      var tid=el.getAttribute('data-topic-id');
+      if(tid&&FREE_TOPIC_IDS.indexOf(tid)===-1&&!el.querySelector('.gate-lock')){
+        var lk=document.createElement('span'); lk.className='gate-lock'; lk.textContent='🔒'; lk.style.cssText='position:absolute;top:10px;right:10px;font-size:12px;'; el.style.position='relative'; el.appendChild(lk);
+      }
+    });
+  }
+  window.applyLockUI=function(){ if(window._fullAccess===false) applyLockUI(); };
+
+  function installGate(){
+    if(!window.fetchTopicData){setTimeout(installGate,100);return;}
+    window._accessPromise=Promise.all([determineAccess(),initContentKey()]);
+    var _orig=window.fetchTopicData;
+    window.fetchTopicData=async function(id,obj){ await window._accessPromise; if(isLocked(id)){showGate();return;} _orig(id,obj); };
+    var _origQ=window.goToQuizFromNotes;
+    window.goToQuizFromNotes=async function(id){ await window._accessPromise; if(isLocked(id)){showGate();return;} _origQ(id); };
+  }
+  if(document.readyState==='complete') installGate(); else window.addEventListener('load',installGate);
+
+  if('serviceWorker' in navigator){ navigator.serviceWorker.addEventListener('message',function(e){ if(e.data&&e.data.type==='SW_UPDATED') location.reload(); }); }
+})();
+</script>
+
+<script>
+(function(){
+  function kick(){ window.location.replace('../auth.html'); }
+  async function checkSession(){
+    if(!window._sbClient)return;
+    try{
+      var s=await window._sbClient.auth.getSession(); if(!s.data.session){kick();return;}
+      var p=await window._sbClient.from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at').eq('id',s.data.session.user.id).single();
+      if(!p.data)return;
+      var plan=p.data.subscription_plan, was=window._fullAccess;
+      if(plan==='lifetime'){window._fullAccess=true;}
+      else if(plan==='trial'){window._fullAccess=Date.now()<new Date(new Date(p.data.trial_started_at).getTime()+3*24*60*60*1000).getTime();}
+      else if(['starter','standard','pro'].indexOf(plan)!==-1){window._fullAccess=p.data.subscription_expires_at?Date.now()<new Date(p.data.subscription_expires_at).getTime():false;}
+      else{window._fullAccess=false;}
+      if(was&&!window._fullAccess){var b=document.getElementById('_ab'); if(!b){b=document.createElement('div');b.id='_ab';b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#C8A44A;color:#070D1A;text-align:center;padding:10px;font-size:13px;font-weight:700;cursor:pointer;';b.textContent='Your trial has ended. Tap to upgrade.';b.onclick=function(){document.getElementById('gate-overlay').style.display='flex';};document.body.appendChild(b);}}
+    }catch(e){ try{var raw=localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token'); if(raw){var tok=JSON.parse(raw);var parts=((tok&&tok.access_token)||'').split('.');if(parts.length===3){var pay=JSON.parse(atob(parts[1]));if(pay.exp&&Math.floor(Date.now()/1000)>=pay.exp)kick();}}}catch(e2){} }
+  }
+  setInterval(checkSession,10*60*1000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkSession();});
+
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('keydown',function(e){ var k=e.key.toLowerCase(); if(e.ctrlKey&&['u','s','p'].includes(k)){e.preventDefault();return;} if(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k)){e.preventDefault();return;} if(e.key==='F12'){e.preventDefault();} });
+
+  function buildWatermark(){
+    var user=window._sbUser; if(!user||document.getElementById('_wm'))return;
+    var label=user.email||'elec-buddy'; var el=document.createElement('div'); el.id='_wm'; el.setAttribute('aria-hidden','true');
+    el.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;';
+    var cols=Math.ceil(window.innerWidth/280)+2, rows=Math.ceil(window.innerHeight/110)+2, html='';
+    for(var r=0;r<rows;r++) for(var c=0;c<cols;c++) html+='<span style="position:absolute;left:'+(c*280-60)+'px;top:'+(r*110-30)+'px;transform:rotate(-25deg);font-size:12px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">'+label+'</span>';
+    el.innerHTML=html; document.body.appendChild(el);
+  }
+  if(document.readyState==='complete') buildWatermark(); else window.addEventListener('load',buildWatermark);
+
+  window.openProfile=async function(){
+    document.getElementById('profile-modal').style.display='block';
+    var user=window._sbUser; if(!user)return;
+    var name=user.user_metadata?.full_name||user.email.split('@')[0];
+    document.getElementById('pm-avatar').textContent=name.charAt(0).toUpperCase();
+    document.getElementById('pm-name').textContent=name;
+    document.getElementById('pm-email').textContent=user.email;
+    if(!window._sbClient)return;
+    var res=await window._sbClient.from('profiles').select('*').eq('id',user.id).single();
+    if(res.data)renderPlan(res.data);
+  };
+  window.closeProfile=function(e){ if(e.target===document.getElementById('profile-modal')) document.getElementById('profile-modal').style.display='none'; };
+  window.signOut=async function(){ if(window._sbClient)await window._sbClient.auth.signOut(); window.location.replace('../auth.html'); };
+
+  function renderPlan(profile){
+    var lbl=document.getElementById('pm-plan-label'), exp=document.getElementById('pm-plan-expiry'), upg=document.getElementById('pm-upgrade-btn');
+    var plan=profile.subscription_plan; upg.style.display='none';
+    if(plan==='lifetime'){lbl.textContent='Lifetime';lbl.style.color='#C8A44A';exp.textContent='Never expires';}
+    else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000);var ms=te-Date.now();if(ms>0){lbl.textContent='Free Trial';lbl.style.color='#5DC87A';exp.textContent=Math.ceil(ms/864e5)+' days remaining';}else{lbl.textContent='Trial Expired';lbl.style.color='#E07070';exp.textContent='Upgrade to continue';}upg.style.display='block';}
+    else{var names={starter:'Starter',standard:'Standard',pro:'Pro'};lbl.textContent=names[plan]||plan;lbl.style.color='#C8A44A';if(profile.subscription_expires_at){var dl=Math.ceil((new Date(profile.subscription_expires_at)-Date.now())/864e5);if(dl>0){exp.textContent=dl+' days remaining';}else{exp.textContent='Expired';lbl.style.color='#E07070';upg.style.display='block';}}}
+  }
+  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ document.getElementById('profile-modal').style.display='none'; document.getElementById('gate-overlay').style.display='flex'; });
+  window.addEventListener('load',function(){ var user=window._sbUser; if(user){var n=user.user_metadata?.full_name||user.email; document.getElementById('profile-btn').textContent=n.charAt(0).toUpperCase();} });
+})();
+</script>
+</body>
+</html>

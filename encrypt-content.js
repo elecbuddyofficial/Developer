@@ -34,10 +34,16 @@ const CONTENT_DIRS = [
     'data/Orals/videos',
     'data/Orals/SurveyorQA',
     'data/Written/notes',
+    'data/Sponsorship/overview',
+    'data/Sponsorship/fundamentals',
+    'data/Sponsorship/aptitude',
+    'data/Sponsorship/CompanyQA',
+    'data/Sponsorship/interview',
 ];
 
 // Free preview files — keep plain JS so non-subscribers can see the preview
-const FREE_PREFIXES = ['t01_', 'w01_'];
+// Sponsorship free: s00 (overview), f01 (DC circuits), apt (aptitude strategy), ip01 (GD)
+const FREE_PREFIXES = ['t01_', 'w01_', 's00_', 'f01_', 'apt_', 'ip01_'];
 
 function encrypt(plaintext) {
     const iv       = crypto.randomBytes(12); // 96-bit IV for AES-GCM
