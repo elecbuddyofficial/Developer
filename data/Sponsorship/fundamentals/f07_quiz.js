@@ -1,1 +1,1 @@
-window.loadQuizzes("F07_ElectricalSafety", []);
+window.loadQuizzes("F07_Machines", []);

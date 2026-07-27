@@ -1,1 +1,1 @@
-window.loadQuizzes("F05_ElectronicsBasics", []);
+window.loadQuizzes("F05_Generation", []);

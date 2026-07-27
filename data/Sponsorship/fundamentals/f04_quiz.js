@@ -1,1 +1,1 @@
-window.loadQuizzes("F04_ElectricalMachines", []);
+window.loadQuizzes("F04_Power", []);

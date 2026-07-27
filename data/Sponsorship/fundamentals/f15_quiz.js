@@ -1,1 +1,1 @@
-window.loadQuizzes("F15_PowerElec", []);
+window.loadQuizzes("F15_Insulation", []);

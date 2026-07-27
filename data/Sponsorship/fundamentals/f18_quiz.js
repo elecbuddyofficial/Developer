@@ -1,1 +1,1 @@
-window.loadQuizzes("F18_Losses", []);
+window.loadQuizzes("F18_Sensors", []);

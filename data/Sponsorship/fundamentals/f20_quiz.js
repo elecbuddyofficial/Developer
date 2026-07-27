@@ -1,1 +1,1 @@
-window.loadQuizzes("F20_Practical", []);
+window.loadQuizzes("F20_Cables", []);

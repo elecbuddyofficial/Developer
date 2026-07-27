@@ -1,1 +1,1 @@
-window.loadQuizzes("F01_DCCircuits", []);
+window.loadQuizzes("F01_Fundamentals", []);

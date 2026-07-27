@@ -1,1 +1,1 @@
-window.loadQuizzes("F10_Starting", []);
+window.loadQuizzes("F10_DCMotors", []);

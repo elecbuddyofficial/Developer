@@ -1,1 +1,1 @@
-window.loadQuizzes("F19_MarineElec", []);
+window.loadQuizzes("F19_Batteries", []);

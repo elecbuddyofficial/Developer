@@ -1,1 +1,1 @@
-window.loadQuizzes("F09_DCMotors", []);
+window.loadQuizzes("F09_Induction", []);

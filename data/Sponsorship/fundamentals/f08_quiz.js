@@ -1,1 +1,1 @@
-window.loadQuizzes("F08_Induction", []);
+window.loadQuizzes("F08_ThreePhase", []);

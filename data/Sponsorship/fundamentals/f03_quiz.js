@@ -1,1 +1,1 @@
-window.loadQuizzes("F03_Transformers", []);
+window.loadQuizzes("F03_Components", []);

@@ -1,1 +1,1 @@
-window.loadQuizzes("F14_Insulation", []);
+window.loadQuizzes("F14_Instruments", []);

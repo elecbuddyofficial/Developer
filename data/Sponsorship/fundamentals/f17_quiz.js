@@ -1,1 +1,1 @@
-window.loadQuizzes("F17_Refrigeration", []);
+window.loadQuizzes("F17_Electronics", []);

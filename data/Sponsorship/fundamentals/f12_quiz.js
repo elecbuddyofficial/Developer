@@ -1,1 +1,1 @@
-window.loadQuizzes("F12_Protection", []);
+window.loadQuizzes("F12_MotorProtect", []);

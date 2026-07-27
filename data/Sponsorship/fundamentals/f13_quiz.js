@@ -1,1 +1,1 @@
-window.loadQuizzes("F13_Instruments", []);
+window.loadQuizzes("F13_Protection", []);
