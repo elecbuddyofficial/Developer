@@ -500,7 +500,7 @@
       rememberClass: 'orange',
       confirmClass: 'confirm-orange',
       confirmLabel: 'Enter Sponsorship Prep',
-      dest: './sponsorship/index.html'
+      dest: null
     }
   };
 
@@ -528,13 +528,18 @@
   function confirmEnter() {
     if (!_pendingTrack) return;
     var skip = document.getElementById('dialog-skip').checked;
-    var dest = TRACKS[_pendingTrack].dest;
     if (skip) {
       localStorage.setItem('eb_track', _pendingTrack);
     } else {
       localStorage.removeItem('eb_track');
     }
-    window.location.href = dest;
+    var dest = TRACKS[_pendingTrack].dest;
+    if (dest) {
+      window.location.href = dest;
+    } else {
+      document.getElementById('dialog-backdrop').classList.remove('open');
+      alert('Sponsorship Prep is coming soon.');
+    }
   }
 
   // Escape key closes dialog
