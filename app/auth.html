@@ -192,6 +192,20 @@
     <button type="button" class="link-btn" onclick="switchTab('login')">Back to Sign In</button>
   </form>
 
+  <!-- Set New Password (recovery link flow) -->
+  <form class="form" id="form-newpassword" onsubmit="handleNewPassword(event)">
+    <p style="font-size:13px;color:#8FA3B8;margin-bottom:4px">Enter a new password for your account.</p>
+    <div>
+      <label>New password</label>
+      <input type="password" id="new-password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+    </div>
+    <div>
+      <label>Confirm new password</label>
+      <input type="password" id="new-confirm" placeholder="Repeat password" required autocomplete="new-password">
+    </div>
+    <button class="btn" type="submit" id="newpass-btn">Set New Password</button>
+  </form>
+
   <div class="footer-note" id="footer-note">
     New accounts get a 3-day free trial, no payment required.
   </div>
@@ -209,10 +223,29 @@
     else                          window.location.replace('./courses.html');
   }
 
-  // If already logged in, skip auth page
-  sb.auth.getSession().then(({ data: { session } }) => {
-    if (session) redirectAfterLogin();
+  // Detect password recovery link immediately from URL hash
+  var _recoveryMode = window.location.hash.includes('type=recovery');
+  if (_recoveryMode) showRecoveryForm();
+
+  // Supabase fires PASSWORD_RECOVERY when the hash token is processed
+  sb.auth.onAuthStateChange((event) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      _recoveryMode = true;
+      showRecoveryForm();
+    }
   });
+
+  // If already logged in, skip auth page — but NOT during password recovery
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session && !_recoveryMode) redirectAfterLogin();
+  });
+
+  function showRecoveryForm() {
+    document.getElementById('tabs').style.display = 'none';
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.getElementById('form-newpassword').classList.add('active');
+    document.getElementById('footer-note').style.display = 'none';
+  }
 
   function showMsg(text, type) {
     const el = document.getElementById('msg');
@@ -303,6 +336,24 @@
       showMsg('Reset link sent. Check your inbox.', 'success');
     }
     btn.disabled = false; btn.textContent = 'Send Reset Link';
+  }
+
+  async function handleNewPassword(e) {
+    e.preventDefault();
+    clearMsg();
+    const p1  = document.getElementById('new-password').value;
+    const p2  = document.getElementById('new-confirm').value;
+    if (p1 !== p2) { showMsg('Passwords do not match.', 'error'); return; }
+    const btn = document.getElementById('newpass-btn');
+    btn.disabled = true; btn.textContent = 'Updating...';
+    const { error } = await sb.auth.updateUser({ password: p1 });
+    if (error) {
+      showMsg(error.message, 'error');
+      btn.disabled = false; btn.textContent = 'Set New Password';
+    } else {
+      showMsg('Password updated. Taking you in...', 'success');
+      setTimeout(redirectAfterLogin, 1500);
+    }
   }
 </script>
 </body>
