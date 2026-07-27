@@ -1,1 +1,1 @@
-window.loadQuizzes("F09_Protection", []);
+window.loadQuizzes("F09_DCMotors", []);

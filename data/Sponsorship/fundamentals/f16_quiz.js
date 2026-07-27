@@ -1,1 +1,1 @@
-window.loadQuizzes("F16_Automation", []);
+window.loadQuizzes("F16_Electronics", []);

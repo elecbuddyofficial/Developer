@@ -1,1 +1,1 @@
-window.loadQuizzes("F13_Emergency", []);
+window.loadQuizzes("F13_Instruments", []);

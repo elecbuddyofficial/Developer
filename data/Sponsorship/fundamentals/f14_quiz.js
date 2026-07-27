@@ -1,1 +1,1 @@
-window.loadQuizzes("F14_Semiconductors", []);
+window.loadQuizzes("F14_Insulation", []);

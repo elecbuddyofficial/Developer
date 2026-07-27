@@ -1,1 +1,1 @@
-window.loadQuizzes("F12_Distribution", []);
+window.loadQuizzes("F12_Protection", []);

@@ -1,1 +1,1 @@
-window.loadQuizzes("F08_Batteries", []);
+window.loadQuizzes("F08_Induction", []);

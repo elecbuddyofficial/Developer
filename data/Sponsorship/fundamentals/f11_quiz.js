@@ -1,1 +1,1 @@
-window.loadQuizzes("F11_Instruments", []);
+window.loadQuizzes("F11_MotorProtect", []);

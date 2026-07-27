@@ -1,1 +1,1 @@
-window.loadQuizzes("F10_Starters", []);
+window.loadQuizzes("F10_Starting", []);

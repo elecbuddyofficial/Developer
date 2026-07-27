@@ -1,1 +1,1 @@
-window.loadQuizzes("F15_Digital", []);
+window.loadQuizzes("F15_PowerElec", []);
