@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elec-Buddy: Courses</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  html { visibility: hidden; }
+
+  .home-wrap {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(20px, 3vw, 40px) clamp(16px, 4vw, 40px);
+    gap: 20px;
+  }
+
+  /* Trial banner */
+  .trial-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    font-size: 12px;
+    color: var(--text2);
+  }
+  .trial-badge {
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 100px;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* Intro */
+  .home-intro { text-align: center; }
+  .home-intro h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.5px;
+    margin-bottom: 6px;
+  }
+  .home-intro p {
+    font-size: 13px;
+    color: var(--text2);
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Cards */
+  .track-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 14px;
+    width: 100%;
+    max-width: 840px;
+    align-items: stretch;
+  }
+  .track-card {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--r12);
+    padding: 22px 22px 20px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: border-color .18s, box-shadow .18s, transform .15s;
+    box-shadow: 0 2px 12px rgba(0,0,0,.25);
+  }
+  .track-card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,0,0,.45); }
+  .track-card.coc:hover  { border-color: var(--blue); }
+  .track-card.spon:hover { border-color: var(--orange); }
+
+  .track-badge {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .badge-blue   { background: var(--blue-dim);   border: 1px solid var(--blue-border);   color: var(--blue); }
+  .badge-orange { background: var(--orange-dim); border: 1px solid var(--orange-border); color: var(--orange); }
+
+  .track-card h3 {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.3px;
+    margin-bottom: 8px;
+  }
+  .track-desc {
+    font-size: 12.5px;
+    color: var(--text2);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .card-divider { height: 1px; background: var(--border); margin: 16px 0 12px; }
+  .features-label {
+    font-size: 9.5px;
+    font-weight: 700;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .feature-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px 10px;
+  }
+  .feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.35;
+  }
+  .feature-check {
+    flex-shrink: 0;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+  }
+  .check-blue   { background: var(--blue-dim); }
+  .check-orange { background: var(--orange-dim); }
+
+  .track-enter-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 11px;
+    border-radius: var(--r6);
+    border: none;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+    width: 100%;
+    margin-top: 16px;
+    letter-spacing: -.1px;
+  }
+  .track-enter-btn:hover  { opacity: .87; }
+  .track-enter-btn:active { transform: scale(.98); }
+  .btn-blue   { background: var(--blue);   color: #fff; }
+  .btn-orange { background: var(--orange); color: #0a0a0a; }
+
+  /* ── Confirmation dialog ── */
+  .dialog-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    backdrop-filter: blur(4px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+  }
+  .dialog-backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--r12);
+    padding: 28px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 24px 64px rgba(0,0,0,.7);
+    transform: scale(.96) translateY(8px);
+    transition: transform .2s;
+  }
+  .dialog-backdrop.open .dialog {
+    transform: scale(1) translateY(0);
+  }
+
+  .dialog-icon {
+    width: 44px; height: 44px;
+    border-radius: var(--r8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 20px;
+  }
+  .icon-blue   { background: var(--blue-dim);   border: 1px solid var(--blue-border); }
+  .icon-orange { background: var(--orange-dim); border: 1px solid var(--orange-border); }
+
+  .dialog h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.3px;
+    margin-bottom: 6px;
+  }
+  .dialog p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* Remember toggle */
+  .dialog-remember {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--r6);
+    cursor: pointer;
+    margin-bottom: 8px;
+    transition: border-color .15s;
+  }
+  .dialog-remember:hover { border-color: var(--border2); }
+  .dialog-remember input[type="checkbox"] {
+    width: 15px; height: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+    accent-color: var(--blue);
+  }
+  .dialog-remember.orange input[type="checkbox"] { accent-color: var(--orange); }
+  .dialog-remember .remember-text { flex: 1; }
+  .dialog-remember .remember-text strong {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1px;
+  }
+  .dialog-remember .remember-text span {
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* "Where to find" info row */
+  .dialog-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: var(--surface2);
+    border-radius: var(--r6);
+    margin-bottom: 20px;
+    font-size: 11.5px;
+    color: var(--text3);
+    line-height: 1.5;
+  }
+  .dialog-info svg { flex-shrink: 0; color: var(--text3); }
+
+  /* Dialog buttons */
+  .dialog-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .dialog-cancel {
+    flex: 1;
+    padding: 11px;
+    background: none;
+    border: 1px solid var(--border2);
+    border-radius: var(--r6);
+    color: var(--text2);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .12s, color .12s;
+  }
+  .dialog-cancel:hover { background: var(--surface2); color: var(--text); }
+  .dialog-confirm {
+    flex: 2;
+    padding: 11px;
+    border: none;
+    border-radius: var(--r6);
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .15s;
+  }
+  .dialog-confirm:hover { opacity: .87; }
+  .confirm-blue   { background: var(--blue);   color: #fff; }
+  .confirm-orange { background: var(--orange); color: #0a0a0a; }
+
+  /* Profile dropdown */
+  .profile-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: var(--r8);
+    min-width: 210px;
+    padding: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,.55);
+    z-index: 200;
+    display: none;
+  }
+  .profile-dropdown.open { display: block; }
+  .pd-email {
+    font-size: 11.5px;
+    color: var(--text3);
+    padding: 8px 10px 10px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pd-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 10px;
+    background: none;
+    border: none;
+    border-radius: var(--r4);
+    color: var(--text2);
+    font-size: 13px;
+    cursor: pointer;
+    text-align: left;
+    transition: background .12s, color .12s;
+  }
+  .pd-btn:hover { background: var(--surface2); color: var(--text); }
+  .pd-btn.danger:hover { background: var(--red-dim); color: var(--red); }
+
+  @media (max-width: 600px) {
+    .feature-list { grid-template-columns: 1fr; }
+    .track-grid   { grid-template-columns: 1fr; }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  (async () => {
+    try {
+      if (typeof supabase === 'undefined') throw new Error('Supabase CDN unavailable');
+      const _sb = supabase.createClient(
+        'https://vcofgjuwprylojgyfbtr.supabase.co',
+        'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+      );
+      window._sbClient = _sb;
+      const { data: { session } } = await _sb.auth.getSession();
+      if (!session) {
+        window.location.replace('./auth.html');
+      } else {
+        window._sbUser = session.user;
+        document.documentElement.style.visibility = 'visible';
+      }
+    } catch(e) {
+      document.documentElement.style.visibility = 'visible';
+      console.error('Auth check failed:', e);
+    }
+  })();
+</script>
+</head>
+<body>
+
+<!-- Topbar -->
+<div id="topbar">
+  <div class="logo">Elec-Buddy <span>ETO Exam Preparation</span></div>
+  <div class="spacer"></div>
+  <div style="position:relative">
+    <button id="profile-btn" onclick="toggleProfileMenu()" title="Your account" aria-label="Account"
+      style="width:34px;height:34px;border-radius:50%;background:#C8A44A;color:#070D1A;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:Georgia,serif;flex-shrink:0;"></button>
+    <div class="profile-dropdown" id="profile-dropdown">
+      <div class="pd-email" id="pd-email"></div>
+      <button class="pd-btn danger" onclick="signOut()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<div class="home-wrap">
+
+  <div class="trial-banner">
+    <span class="trial-badge">3-Day Free Trial</span>
+    <span>Explore both courses before subscribing</span>
+  </div>
+
+  <div class="home-intro">
+    <h2>Choose Your Course</h2>
+    <p>Pick the stage you are at. Get sponsored first, then crack the CoC. Each course has structured notes, quizzes, previous questions, and mock tests.</p>
+  </div>
+
+  <div class="track-grid">
+
+    <div class="track-card spon" onclick="openDialog('sponsorship')">
+      <div class="track-badge badge-orange">Sponsorship Prep</div>
+      <h3>ETO Sponsorship Prep</h3>
+      <p class="track-desc">Designed for fresh ETO cadets preparing for sponsorship interviews and first-job selection. Technical fundamentals, interview-focused notes, mock interviews, and quizzes.</p>
+      <div class="card-divider"></div>
+      <div class="features-label">What's included</div>
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>18-section syllabus</div>
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Electrical fundamentals</div>
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Interview study notes</div>
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Mock interviews</div>
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Chapter quizzes</div>
+        <div class="feature-item"><span class="feature-check check-orange"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--orange)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Company prep tips</div>
+      </div>
+      <button class="track-enter-btn btn-orange">Open Sponsorship Prep</button>
+    </div>
+
+    <div class="track-card coc" onclick="openDialog('coc')">
+      <div class="track-badge badge-blue">CoC Prep</div>
+      <h3>ETO CoC Course</h3>
+      <p class="track-desc">Complete preparation for the DG Shipping / MMD India ETO Certificate of Competency. Structured oral and written material, previous surveyor questions, quizzes, and mock tests.</p>
+      <div class="card-divider"></div>
+      <div class="features-label">What's included</div>
+      <div class="feature-list">
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Oral exam topics</div>
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Written exam topics</div>
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Study notes with diagrams</div>
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Surveyor questions</div>
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Chapter quizzes</div>
+        <div class="feature-item"><span class="feature-check check-blue"><svg width="8" height="8" viewBox="0 0 12 12" fill="none"><polyline points="2,6 5,9 10,3" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Fundamentals module</div>
+      </div>
+      <button class="track-enter-btn btn-blue">Open CoC Course</button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Confirmation dialog -->
+<div class="dialog-backdrop" id="dialog-backdrop" onclick="closeDialog(event)">
+  <div class="dialog" id="dialog">
+    <div class="dialog-icon" id="dialog-icon"></div>
+    <h3 id="dialog-title"></h3>
+    <p id="dialog-desc"></p>
+
+    <label class="dialog-remember" id="dialog-remember" onclick="event.stopPropagation()">
+      <input type="checkbox" id="dialog-skip">
+      <div class="remember-text">
+        <strong>Skip this page on future logins</strong>
+        <span>Go straight to this course each time you sign in</span>
+      </div>
+    </label>
+
+    <div class="dialog-info">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></svg>
+      You can switch courses anytime from the profile button at the top right of the app.
+    </div>
+
+    <div class="dialog-actions">
+      <button class="dialog-cancel" onclick="closeDialog()">Go Back</button>
+      <button class="dialog-confirm" id="dialog-confirm" onclick="confirmEnter()">Let's Go</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  var _pendingTrack = null;
+
+  var TRACKS = {
+    coc: {
+      icon: '📘',
+      iconClass: 'icon-blue',
+      title: 'Starting ETO CoC Course',
+      desc: 'You\'re about to enter the Certificate of Competency preparation course: oral topics, written topics, previous surveyor questions, and quizzes.',
+      rememberClass: '',
+      confirmClass: 'confirm-blue',
+      confirmLabel: 'Enter CoC Course',
+      dest: './index.html'
+    },
+    sponsorship: {
+      icon: '🎯',
+      iconClass: 'icon-orange',
+      title: 'Starting ETO Sponsorship Prep',
+      desc: 'You\'re about to enter the Sponsorship Preparation course: electrical fundamentals, interview study material, mock interviews, and quizzes.',
+      rememberClass: 'orange',
+      confirmClass: 'confirm-orange',
+      confirmLabel: 'Enter Sponsorship Prep',
+      dest: null
+    }
+  };
+
+  function openDialog(track) {
+    _pendingTrack = track;
+    var t = TRACKS[track];
+    document.getElementById('dialog-icon').textContent = t.icon;
+    document.getElementById('dialog-icon').className = 'dialog-icon ' + t.iconClass;
+    document.getElementById('dialog-title').textContent = t.title;
+    document.getElementById('dialog-desc').textContent = t.desc;
+    document.getElementById('dialog-remember').className = 'dialog-remember ' + t.rememberClass;
+    var confirm = document.getElementById('dialog-confirm');
+    confirm.className = 'dialog-confirm ' + t.confirmClass;
+    confirm.textContent = t.confirmLabel;
+    document.getElementById('dialog-skip').checked = false;
+    document.getElementById('dialog-backdrop').classList.add('open');
+  }
+
+  function closeDialog(e) {
+    if (e && e.target !== document.getElementById('dialog-backdrop')) return;
+    document.getElementById('dialog-backdrop').classList.remove('open');
+    _pendingTrack = null;
+  }
+
+  function confirmEnter() {
+    if (!_pendingTrack) return;
+    var skip = document.getElementById('dialog-skip').checked;
+    if (skip) {
+      localStorage.setItem('eb_track', _pendingTrack);
+    } else {
+      localStorage.removeItem('eb_track');
+    }
+    var dest = TRACKS[_pendingTrack].dest;
+    if (dest) {
+      window.location.href = dest;
+    } else {
+      document.getElementById('dialog-backdrop').classList.remove('open');
+      alert('Sponsorship Prep is coming soon.');
+    }
+  }
+
+  // Escape key closes dialog
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('dialog-backdrop').classList.remove('open');
+  });
+
+  // Profile
+  (function() {
+    var u = window._sbUser;
+    if (!u) return;
+    var btn     = document.getElementById('profile-btn');
+    var emailEl = document.getElementById('pd-email');
+    var name    = (u.user_metadata && u.user_metadata.full_name) || u.email || '?';
+    btn.textContent = name.charAt(0).toUpperCase();
+    if (emailEl) emailEl.textContent = u.email || '';
+  })();
+
+  function toggleProfileMenu() {
+    document.getElementById('profile-dropdown').classList.toggle('open');
+  }
+
+  document.addEventListener('click', function(e) {
+    var btn = document.getElementById('profile-btn');
+    var dd  = document.getElementById('profile-dropdown');
+    if (!btn.contains(e.target) && !dd.contains(e.target)) dd.classList.remove('open');
+  });
+
+  async function signOut() {
+    if (window._sbClient) await window._sbClient.auth.signOut();
+    window.location.replace('./auth.html');
+  }
+</script>
+</body>
+</html>

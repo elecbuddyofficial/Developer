@@ -73,16 +73,12 @@ window.fetchTopicData = function(topicId, topicKey) {
     var total = isW ? WRITTEN_TOPICS.filter(function(t){return t.notesReady;}).length : TOPICS.length;
     if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of ' + total;
 
-    // Inject Script tags dynamically
     if (!window.NOTE_HTML[topicId]) {
-        let noteScript = document.createElement('script');
         let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
-        noteScript.src = pathStr + topicId.toLowerCase() + '_notes.js';
-        noteScript.onerror = function() {
+        window._loadEncryptedScript(pathStr + topicId.toLowerCase() + '_notes.js').catch(function() {
             var c = document.getElementById('notes-container');
-            if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes for ' + esc(topicId) + '. Please try again.</div>';
-        };
-        document.head.appendChild(noteScript);
+            if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes. Please check your connection.</div>';
+        });
     } else {
         document.getElementById('notes-container').innerHTML = window.NOTE_HTML[topicId];
         injectVideoTab(topicId);
@@ -97,15 +93,11 @@ window.fetchTopicData = function(topicId, topicKey) {
     }
 
     if (!window.QD[topicKey] && !topicId.startsWith('W')) {
-        let quizScript = document.createElement('script');
-        quizScript.src = '../data/Orals/quizzes/' + topicId.toLowerCase() + '_quiz.js';
-        document.head.appendChild(quizScript);
+        window._loadEncryptedScript('../data/Orals/quizzes/' + topicId.toLowerCase() + '_quiz.js').catch(function(){});
     }
 
     if (!topicId.startsWith('W') && !window.VIDEO_DATA[topicId]) {
-        let vidScript = document.createElement('script');
-        vidScript.src = '../data/Orals/videos/' + topicId.toLowerCase() + '_videos.js';
-        document.head.appendChild(vidScript);
+        window._loadEncryptedScript('../data/Orals/videos/' + topicId.toLowerCase() + '_videos.js').catch(function(){});
     }
     
     // URL Routing
@@ -467,13 +459,10 @@ function buildQuizTopicGrid(){
     g.appendChild(btn);
     // Lazy-load quiz data to show real count
     if(!qCount){
-      var s=document.createElement('script');
-      s.src='../data/Orals/quizzes/'+t.id.toLowerCase()+'_quiz.js';
-      s.onload=function(){
+      window._loadEncryptedScript('../data/Orals/quizzes/'+t.id.toLowerCase()+'_quiz.js').then(function(){
         var el=document.getElementById('qtgc-'+t.id);
         if(el&&QD&&QD[t.key])el.textContent=QD[t.key].length+' questions';
-      };
-      document.head.appendChild(s);
+      }).catch(function(){});
     }
   });
 }
@@ -491,13 +480,10 @@ function goToQuizFromNotes(topicId){
   if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of 23';
   
   if (!window.QD || !window.QD[t.key]) {
-      let quizScript = document.createElement('script');
-      quizScript.src = '../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js';
-      quizScript.onload = function() {
+      window._loadEncryptedScript('../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js').then(function() {
           buildCatGrid();
           showView('quiz');
-      };
-      document.head.appendChild(quizScript);
+      }).catch(function(){});
   } else {
       buildCatGrid();
       showView('quiz');
@@ -1270,10 +1256,7 @@ function qbEnsureLoaded() {
   var toLoad = QB.allTopics ? TOPICS : TOPICS.filter(function(t){ return QB.topics[t.id]; });
   toLoad.forEach(function(t) {
     if (!window.QD || !window.QD[t.key]) {
-      var s = document.createElement('script');
-      s.src = '../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js';
-      s.onload = function() { qbUpdateCatPills(); qbUpdatePreview(); };
-      document.head.appendChild(s);
+      window._loadEncryptedScript('../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js').then(function() { qbUpdateCatPills(); qbUpdatePreview(); }).catch(function(){});
     }
   });
   // If all already loaded, update immediately
@@ -1632,13 +1615,10 @@ function startBackgroundIndexing() {
             setTimeout(indexNext, 30);
             return;
         }
-        // Use script injection (works with file:// and http://)
-        var s = document.createElement('script');
         var path = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
-        s.src = path + topicId.toLowerCase() + '_notes.js';
-        s.onload = function() { setTimeout(indexNext, 100); };
-        s.onerror = function() { SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[topicId] = true; setTimeout(indexNext, 100); };
-        document.head.appendChild(s);
+        window._loadEncryptedScript(path + topicId.toLowerCase() + '_notes.js')
+            .then(function() { setTimeout(indexNext, 100); })
+            .catch(function() { SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[topicId] = true; setTimeout(indexNext, 100); });
     }
     setTimeout(indexNext, 2500);
 }
@@ -1819,9 +1799,9 @@ function _guideVideosHTML() {
         + '<div style="font-size:46px;margin-bottom:16px">▶️</div>'
         + '<h2 style="font-size:19px;font-weight:800;color:var(--text);margin-bottom:14px;line-height:1.3">My Videos</h2>'
         + '<div style="text-align:left;display:flex;flex-direction:column;gap:12px;margin-bottom:24px">'
-        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">📄▶️</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Tab switcher on every topic</strong> — switch between Study Notes and My Videos inside any topic.</div></div>'
-        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🌐</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Language filter</strong> — videos are tagged by language. Filter by Malayalam, English, or any language to see only what you need.</div></div>'
-        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🎬</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Inline player with playlist</strong> — tap any video to open it with a playlist sidebar. Switch tracks without closing the player.</div></div>'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">📄▶️</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Tab switcher on every topic</strong>: switch between Study Notes and My Videos inside any topic.</div></div>'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🌐</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Language filter</strong>: videos are tagged by language. Filter by Malayalam, English, or any language to see only what you need.</div></div>'
+        + '<div style="display:flex;gap:12px;align-items:flex-start"><span style="font-size:18px">🎬</span><div style="font-size:13px;color:var(--text2);line-height:1.55"><strong style="color:var(--text)">Inline player with playlist</strong>: tap any video to open it with a playlist sidebar. Switch tracks without closing the player.</div></div>'
         + '</div>'
         + '<button class="guide-btn-primary" onclick="guideNext()">Next</button>'
         + '</div>';
@@ -2085,10 +2065,7 @@ const sqPageSize = 50;
 function openSurveyorQA(onReady) {
     var cb = onReady || function() { showView('sq-landing'); };
     if (!window.SQ_DATA) {
-        let script = document.createElement('script');
-        script.src = '../data/Orals/SurveyorQA/sq_data.js';
-        script.onload = cb;
-        document.body.appendChild(script);
+        window._loadEncryptedScript('../data/Orals/SurveyorQA/sq_data.js').then(cb).catch(function(){});
     } else {
         cb();
     }

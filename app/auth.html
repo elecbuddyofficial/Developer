@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elec-Buddy — Sign In</title>
+  <title>Elec-Buddy: Sign In</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -193,7 +193,7 @@
   </form>
 
   <div class="footer-note" id="footer-note">
-    New accounts get a 3-day free trial — no payment required.
+    New accounts get a 3-day free trial, no payment required.
   </div>
 </div>
 
@@ -202,9 +202,16 @@
   const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-  // If already logged in, go straight to app
+  function redirectAfterLogin() {
+    var saved = localStorage.getItem('eb_track');
+    if (saved === 'coc')          window.location.replace('./index.html');
+    else if (saved === 'sponsorship') window.location.replace('./sponsorship/index.html');
+    else                          window.location.replace('./courses.html');
+  }
+
+  // If already logged in, skip auth page
   sb.auth.getSession().then(({ data: { session } }) => {
-    if (session) window.location.replace('./index.html');
+    if (session) redirectAfterLogin();
   });
 
   function showMsg(text, type) {
@@ -248,7 +255,7 @@
         ? 'Incorrect email or password.' : error.message, 'error');
       btn.disabled = false; btn.textContent = 'Sign In';
     } else {
-      window.location.replace('./index.html');
+      redirectAfterLogin();
     }
   }
 
@@ -271,7 +278,7 @@
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
     } else if (data.session) {
       // Email confirmation disabled — user is logged in immediately
-      window.location.replace('./index.html');
+      redirectAfterLogin();
     } else {
       // Email confirmation enabled — ask them to verify
       showMsg('Account created! Check your email to verify your address, then sign in.', 'success');

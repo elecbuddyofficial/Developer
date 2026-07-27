@@ -84,9 +84,6 @@
   </div>
   <div id="topic-side-list"></div>
   <div class="sb-spacer"></div>
-  <a class="sb-item" href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" style="color:var(--orange);font-weight:700;background:rgba(245, 158, 11, 0.05);border:1px solid rgba(245, 158, 11, 0.2)">
-    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676a.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/></svg></span><span class="label">Support Project</span>
-  </a>
   <a class="sb-item" href="mailto:jojiblesson@gmail.com?subject=App%20Feedback%20%2F%20Request%20%2F%20Bug%20Report" style="color:var(--blue);font-weight:700;background:rgba(59, 130, 246, 0.05);border:1px solid rgba(59, 130, 246, 0.2);margin-top:8px;">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg></span><span class="label">Request Content / Report Bug</span>
   </a>
@@ -576,6 +573,9 @@
     <!-- Upgrade CTA (shown only for trial / expired) -->
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
 
+    <!-- Courses -->
+    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
   </div>
@@ -607,9 +607,130 @@
     if (e.key === 'Escape') window.closeGate();
   });
 
-  // Determine full access from Supabase profile
+  // ── Content key management (AES-256-GCM offline encryption) ─────────────────
+  var _IDB_NAME  = 'eb_secure';
+  var _IDB_STORE = 'keys';
+  var _AC_CACHE  = '_eb_ac'; // localStorage key for offline access cache
+
+  function _openKeyDB() {
+    return new Promise(function(resolve, reject) {
+      var req = indexedDB.open(_IDB_NAME, 1);
+      req.onupgradeneeded = function(e) { e.target.result.createObjectStore(_IDB_STORE); };
+      req.onsuccess = function(e) { resolve(e.target.result); };
+      req.onerror   = function(e) { reject(e.target.error); };
+    });
+  }
+
+  async function _saveKey(cryptoKey, expiresAt, userId) {
+    try {
+      var db = await _openKeyDB();
+      await new Promise(function(resolve, reject) {
+        var tx = db.transaction(_IDB_STORE, 'readwrite');
+        tx.objectStore(_IDB_STORE).put({ key: cryptoKey, expiresAt: expiresAt, userId: userId }, 'ck');
+        tx.oncomplete = resolve;
+        tx.onerror = function(e) { reject(e.target.error); };
+      });
+    } catch(e) {}
+  }
+
+  async function _loadKey(userId) {
+    try {
+      var db = await _openKeyDB();
+      var stored = await new Promise(function(resolve, reject) {
+        var tx  = db.transaction(_IDB_STORE, 'readonly');
+        var req = tx.objectStore(_IDB_STORE).get('ck');
+        req.onsuccess = function(e) { resolve(e.target.result || null); };
+        req.onerror   = function(e) { reject(e.target.error); };
+      });
+      if (!stored) return null;
+      if (stored.userId && stored.userId !== userId) return null; // different user on same device
+      if (stored.expiresAt !== null && Date.now() > stored.expiresAt) {
+        var db2 = await _openKeyDB();
+        var tx2 = db2.transaction(_IDB_STORE, 'readwrite');
+        tx2.objectStore(_IDB_STORE).delete('ck');
+        return null;
+      }
+      return stored;
+    } catch(e) { return null; }
+  }
+
+  function _saveAccessCache(fullAccess, expiresAt) {
+    try { localStorage.setItem(_AC_CACHE, JSON.stringify({ ok: fullAccess, exp: expiresAt !== undefined ? expiresAt : null })); }
+    catch(e) {}
+  }
+
+  function _loadAccessCache() {
+    try {
+      var c = JSON.parse(localStorage.getItem(_AC_CACHE) || 'null');
+      if (!c) return null;
+      if (c.exp !== null && Date.now() > c.exp) return null;
+      return c.ok; // true or false
+    } catch(e) { return null; }
+  }
+
+  // Fetch decryption key from Edge Function; fall back to IndexedDB when offline
+  async function initContentKey() {
+    if (!window._sbClient || !window._sbUser) return;
+    var userId = window._sbUser.id;
+
+    // Prefer IndexedDB — works offline if key was previously fetched
+    var stored = await _loadKey(userId);
+    if (stored) { window._contentKey = stored.key; return; }
+
+    try {
+      var s = await window._sbClient.auth.getSession();
+      var session = s.data && s.data.session;
+      if (!session) return;
+      var resp = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/get-content-key', {
+        headers: { 'Authorization': 'Bearer ' + session.access_token }
+      });
+      if (!resp.ok) return;
+      var json = await resp.json();
+      if (!json.key) return;
+
+      var hex = json.key;
+      var keyBytes = new Uint8Array(hex.length / 2);
+      for (var ki = 0; ki < hex.length; ki += 2) keyBytes[ki / 2] = parseInt(hex.substr(ki, 2), 16);
+
+      var cryptoKey = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
+      await _saveKey(cryptoKey, json.expiresAt, userId);
+      window._contentKey = cryptoKey;
+    } catch(e) {}
+  }
+
+  // Decrypt an AES-256-GCM encrypted content envelope produced by encrypt-content.js
+  window._decryptContent = async function(encryptedJson) {
+    var parsed  = JSON.parse(encryptedJson);
+    var iv      = Uint8Array.from(atob(parsed.iv),   function(c){ return c.charCodeAt(0); });
+    var data    = Uint8Array.from(atob(parsed.data),  function(c){ return c.charCodeAt(0); });
+    var tag     = Uint8Array.from(atob(parsed.tag),   function(c){ return c.charCodeAt(0); });
+    var combined = new Uint8Array(data.length + tag.length);
+    combined.set(data); combined.set(tag, data.length);
+    var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, window._contentKey, combined);
+    return new TextDecoder().decode(decrypted);
+  };
+
+  // Load a content file: fetch, auto-detect encrypted vs plain JS, execute
+  window._loadEncryptedScript = async function(url) {
+    var resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var text = await resp.text();
+    var code;
+    if (text.trimStart().startsWith('{')) {
+      // Encrypted envelope — needs content key
+      if (!window._contentKey) throw new Error('No content key available');
+      code = await window._decryptContent(text);
+    } else {
+      // Plain JS — free preview content, no decryption needed
+      code = text;
+    }
+    // eslint-disable-next-line no-eval
+    (0, eval)(code);
+  };
+
+  // Determine full access from Supabase profile — deny until confirmed
   async function determineAccess() {
-    window._fullAccess = true; // optimistic default so app feels snappy
+    window._fullAccess = false; // default deny; only grant after Supabase confirms
     if (!window._sbClient || !window._sbUser) return;
     try {
       var res = await window._sbClient.from('profiles').select('*').eq('id', window._sbUser.id).single();
@@ -617,18 +738,25 @@
       if (!profile) return;
 
       var plan = profile.subscription_plan;
+      var accessExpiresAt = null;
+
       if (plan === 'lifetime') {
         window._fullAccess = true;
+        accessExpiresAt = null;
       } else if (plan === 'trial') {
         var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
         window._fullAccess = Date.now() < trialEnd.getTime();
+        accessExpiresAt = trialEnd.getTime();
       } else if (['starter', 'standard', 'pro'].indexOf(plan) !== -1) {
-        window._fullAccess = profile.subscription_expires_at
-          ? Date.now() < new Date(profile.subscription_expires_at).getTime()
-          : false;
+        var subEnd = profile.subscription_expires_at ? new Date(profile.subscription_expires_at).getTime() : 0;
+        window._fullAccess = subEnd > 0 && Date.now() < subEnd;
+        accessExpiresAt = subEnd || Date.now();
       } else {
         window._fullAccess = false;
+        accessExpiresAt = Date.now();
       }
+
+      _saveAccessCache(window._fullAccess, accessExpiresAt);
 
       // Update gate subtitle if expired
       if (!window._fullAccess) {
@@ -638,7 +766,11 @@
         }
         applyLockUI();
       }
-    } catch(e) { /* network issue — keep optimistic access */ }
+    } catch(e) {
+      // Network unreachable — use the cached access status from last online session
+      var cached = _loadAccessCache();
+      window._fullAccess = cached !== null ? cached : false;
+    }
   }
 
   // Add lock icon to locked topic grid cards
@@ -662,8 +794,12 @@
   function installGate() {
     if (!window.fetchTopicData) { setTimeout(installGate, 100); return; }
 
+    // Fire access check + key init together — content can only load once both complete
+    window._accessPromise = Promise.all([determineAccess(), initContentKey()]);
+
     var _orig = window.fetchTopicData;
-    window.fetchTopicData = function(topicId, topicKey) {
+    window.fetchTopicData = async function(topicId, topicKey) {
+      await window._accessPromise; // wait for Supabase check before allowing any content load
       if (isLocked(topicId)) { showGate(); return; }
       _orig(topicId, topicKey);
     };
@@ -673,14 +809,13 @@
       var oc = btn.getAttribute('onclick') || '';
       if (oc.indexOf('quiz-bank') !== -1 || oc.indexOf('quiz-picker') !== -1 || oc.indexOf('sq') !== -1) {
         var origOnclick = btn.onclick;
-        btn.onclick = function(e) {
+        btn.onclick = async function(e) {
+          await window._accessPromise; // same guard for gated sidebar actions
           if (!window._fullAccess) { showGate(); return; }
           origOnclick && origOnclick.call(this, e);
         };
       }
     });
-
-    determineAccess();
   }
 
   if (document.readyState === 'complete') installGate();
@@ -740,7 +875,20 @@
             document.body.appendChild(banner);
           }
         }
-      } catch(e) { /* network blip — stay put */ }
+      } catch(e) {
+        // Network unreachable — decode local JWT to catch hard-expired sessions even offline
+        try {
+          var raw = localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token');
+          if (raw) {
+            var tok = JSON.parse(raw);
+            var parts = ((tok && tok.access_token) || '').split('.');
+            if (parts.length === 3) {
+              var payload = JSON.parse(atob(parts[1]));
+              if (payload.exp && Math.floor(Date.now() / 1000) >= payload.exp) kick();
+            }
+          }
+        } catch(e2) { /* token unreadable — leave session alone */ }
+      }
     }
 
     setInterval(checkSession, 10 * 60 * 1000);
