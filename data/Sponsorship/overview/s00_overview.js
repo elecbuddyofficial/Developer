@@ -1,4 +1,4 @@
-window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-width:800px;margin:-20px auto 0;padding-bottom:60px">\
+window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-width:800px;margin:-20px auto 0 0;padding-bottom:60px">\
 \
 <div style="margin-bottom:8px">\
   <button class="anc-btn" onclick="showHome()">← Home</button>\
