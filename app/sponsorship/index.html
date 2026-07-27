@@ -19,7 +19,7 @@
   .note-title { background:linear-gradient(135deg,rgba(245,158,11,.08),rgba(168,85,247,.05)) }
 
   /* ── HOME ── */
-  .spon-home { max-width:860px;margin:0 auto;padding-bottom:40px }
+  .spon-home { max-width:1060px;margin:0 auto;padding-bottom:40px }
   .spon-hero { text-align:center;padding:20px 0 22px }
   .spon-hero h1 { font-size:26px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:8px }
   .spon-hero h1 span { color:var(--blue) }
@@ -55,7 +55,7 @@
   }
 
   /* ── SECTION LANDING ── */
-  .section-landing { max-width:860px }
+  .section-landing { max-width:1060px }
   .sec-header { display:flex;align-items:center;gap:14px;margin-bottom:24px }
   .sec-header-icon { font-size:32px;line-height:1;flex-shrink:0 }
   .sec-header h2 { font-size:20px;font-weight:800;color:var(--text);margin:0 0 4px }
@@ -123,6 +123,24 @@
   .coming-soon-banner .cs-icon { font-size:40px;margin-bottom:12px }
   .coming-soon-banner h3 { font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px }
   .coming-soon-banner p { font-size:13px;line-height:1.65 }
+
+  /* ── MOBILE ── */
+  @media(max-width:600px){
+    .spon-hero { padding:14px 0 16px }
+    .spon-hero h1 { font-size:20px }
+    .spon-hero p { font-size:13px }
+    .section-card { padding:16px }
+    .section-card .sc-icon { font-size:26px }
+    .section-card h3 { font-size:14px }
+    .section-quiz-strip { padding:14px 16px }
+    .sec-header { gap:10px;margin-bottom:16px }
+    .sec-header h2 { font-size:17px }
+    .section-grid { grid-template-columns:1fr }
+  }
+  @media(max-width:360px){
+    .spon-hero h1 { font-size:18px }
+    .topic-card-grid { grid-template-columns:1fr }
+  }
 
   /* gate, profile reuse */
   .gate-plan { display:flex;align-items:center;justify-content:space-between;background:#0D1E33;border:1px solid #1A3050;border-radius:8px;padding:14px 16px }
@@ -305,7 +323,7 @@
 
 <!-- ═══ COMPANY Q&A ═══ -->
 <div class="view" id="view-companyqa">
-  <div style="max-width:920px">
+  <div style="max-width:1060px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
       <button class="anc-btn" onclick="showHome()">← Home</button>
       <h2 style="font-size:17px;font-weight:800;color:var(--text)">🏢 Company Interview Q&amp;A</h2>

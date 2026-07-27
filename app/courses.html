@@ -529,18 +529,12 @@
     if (!_pendingTrack) return;
     var skip = document.getElementById('dialog-skip').checked;
     var dest = TRACKS[_pendingTrack].dest;
-    if (dest) {
-      // Only save track preference when the destination actually exists
-      if (skip) {
-        localStorage.setItem('eb_track', _pendingTrack);
-      } else {
-        localStorage.removeItem('eb_track');
-      }
-      window.location.href = dest;
+    if (skip) {
+      localStorage.setItem('eb_track', _pendingTrack);
     } else {
-      document.getElementById('dialog-backdrop').classList.remove('open');
-      alert('Sponsorship Prep is coming soon. Check back for updates!');
+      localStorage.removeItem('eb_track');
     }
+    window.location.href = dest;
   }
 
   // Escape key closes dialog

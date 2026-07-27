@@ -1,4 +1,4 @@
-window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-width:800px;margin:-20px auto 0;padding-bottom:60px">\
+window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-width:1060px;margin:-20px auto 0;padding-bottom:60px">\
 \
 <div style="margin-bottom:8px">\
   <button class="anc-btn" onclick="showHome()">← Home</button>\
@@ -14,7 +14,7 @@ window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-w
   <p style="font-size:14.5px;color:#c2c2cc;line-height:1.75;margin:0">An Electro-Technical Officer (ETO) is the dedicated electrical and electronics specialist on a merchant ship. Every modern vessel runs on large electrical systems: high-voltage switchboards, automation PLCs, navigation electronics (ECDIS, RADAR, AIS), refrigeration, and satellite communications. The ETO is responsible for maintaining and troubleshooting all of it. The rank was formalized under the STCW Manila Amendments 2010 and is now a globally recognized competency. A certified ETO on a foreign-going vessel earns a minimum of $4,000 to $5,000 per month, tax-free, on 4 to 5 month contracts followed by equivalent leave ashore. On tankers this rises to $8,000 to $10,000, passenger vessels go up to $18,000, and luxury yachts pay even higher.</p>\
 </div>\
 \
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px">\
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px">\
   <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">4</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Pre-Sea</div></div>\
   <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">8</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Sea Time</div></div>\
   <div style="background:#0c0c10;border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center"><div style="font-size:26px;font-weight:800;color:var(--blue);line-height:1">12</div><div style="font-size:10px;color:#c2c2cc;text-transform:uppercase;letter-spacing:.5px;margin-top:5px">Mo. Total</div></div>\
@@ -29,7 +29,7 @@ window.loadNotes("S00", '<div class="view" id="view-notes-s00"><div style="max-w
   <div style="background:rgba(245,158,11,.06);border:1px solid var(--blue-border);border-radius:8px;padding:12px 14px;font-size:14px;color:#c2c2cc;line-height:1.7"><strong style="color:var(--blue)">Important:</strong> Sponsorship terms vary by company. Whether a company covers your pre-sea course fees, pays a campus stipend, or reimburses any costs is defined in your individual training agreement. Do not assume any financial support beyond the sea-phase trainee allowance without confirming it in writing.</div>\
 </div>\
 \
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">\
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:20px">\
   <div style="background:rgba(34,197,94,.07);border:1px solid var(--green-border);border-radius:10px;padding:14px 16px">\
     <div style="font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px">Typically included</div>\
     <ul style="margin:0;padding-left:16px;font-size:14px;color:#c2c2cc;line-height:1.85">\
