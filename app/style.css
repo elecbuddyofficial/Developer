@@ -517,6 +517,11 @@ a.sb-item{text-decoration:none}
   stroke-linejoin: round;
   vertical-align: text-bottom;
 }
+.sc-icon svg, .wc-icon svg {
+  width: 1em;
+  height: 1em;
+  display: block;
+}
 
 /* ─── GAMIFIED SCORE SCREEN (DUOLINGO STYLE) ─── */
 .duo-score-container {
