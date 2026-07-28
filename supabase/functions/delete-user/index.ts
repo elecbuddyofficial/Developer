@@ -32,13 +32,18 @@ serve(async (req) => {
     if (callerErr || !caller) return json({ error: 'Unauthorized' }, 401);
 
     // ── 2. Confirm caller is an admin (server-side, service role) ────
+    // Authority is profiles.is_admin, the same flag the admin panel manages
+    // and every RLS policy checks. This used to read a separate admin_users
+    // table that nothing else maintains, so removing someone via Team Admins
+    // cleared profiles.is_admin but left any admin_users row intact, and they
+    // kept the ability to delete accounts by calling this endpoint directly.
     const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
-    const { data: adminRow } = await adminClient
-      .from('admin_users')
-      .select('user_id')
-      .eq('user_id', caller.id)
+    const { data: callerProfile } = await adminClient
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', caller.id)
       .single();
-    if (!adminRow) return json({ error: 'Forbidden: admin access required' }, 403);
+    if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
 
     // ── 3. Parse and validate target ─────────────────────────────────
     const body = await req.json().catch(() => ({}));
@@ -51,12 +56,12 @@ serve(async (req) => {
     if (user_id === caller.id) return json({ error: 'You cannot delete your own account' }, 400);
 
     // Block deletion of any admin
-    const { data: targetAdminRow } = await adminClient
-      .from('admin_users')
-      .select('user_id')
-      .eq('user_id', user_id)
+    const { data: targetProfile } = await adminClient
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user_id)
       .single();
-    if (targetAdminRow) return json({ error: 'Admin accounts cannot be deleted here' }, 400);
+    if (targetProfile?.is_admin) return json({ error: 'Admin accounts cannot be deleted here' }, 400);
 
     // ── 4. Delete the user (cascades to profiles via FK) ─────────────
     const { error: deleteErr } = await adminClient.auth.admin.deleteUser(user_id);

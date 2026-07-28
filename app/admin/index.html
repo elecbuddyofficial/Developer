@@ -908,7 +908,7 @@
             </select>
           </div>
           <div class="ad-field">
-            <label class="ad-label">Access Until (blank = no expiry)</label>
+            <label class="ad-label">Access Until (required for paid plans)</label>
             <input class="ad-input" id="grant-expiry" type="date">
           </div>
         </div>
@@ -1248,7 +1248,7 @@
             </select>
           </div>
           <div class="ad-field">
-            <label class="ad-label">Access Until (blank = no expiry)</label>
+            <label class="ad-label">Access Until (required for paid plans)</label>
             <input class="ad-input" id="prof-edit-expiry" type="date">
           </div>
         </div>
@@ -1322,6 +1322,21 @@ var _dashProfiles = [];
 var TAB_NAMES = ['dashboard', 'users', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'activity', 'status'];
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* Serialise a value for embedding inside an inline handler attribute.
+   The ampersand MUST be escaped first. Escaping only the quote (the old
+   approach) left any literal "&quot;" already present in the data intact, so
+   the browser decoded it back into a real quote and the value broke out of
+   its JS string. full_name is arbitrary text chosen at signup, which made
+   that a stored XSS against any admin who viewed the user. */
+function attrJs(v) {
+  return JSON.stringify(v)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 /* ── AUDIT LOG ───────────────────────────────────────────────────────
    Fire-and-forget: an audit write must never block or fail the action the
@@ -1818,7 +1833,7 @@ function applyUserFilters() {
 function renderUsers(users) {
   document.getElementById('users-tbody').innerHTML = users.length
     ? users.map(function(u) {
-        var idAttr = JSON.stringify(u.id).replace(/"/g,'&quot;');
+        var idAttr = attrJs(u.id);
         return '<tr>'
           + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '—') + '</button></td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
@@ -1827,8 +1842,8 @@ function renderUsers(users) {
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
-          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Edit</button>'
-          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + idAttr + ',' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Delete</button>'
+          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + attrJs(u.email || '') + ')">Edit</button>'
+          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + idAttr + ',' + attrJs(u.email || '') + ')">Delete</button>'
           + '</td>'
           + '</tr>';
       }).join('')
@@ -2043,6 +2058,15 @@ async function profSaveAccess() {
   var expiry = expVal ? new Date(expVal).toISOString() : null;
   var statusEl = document.getElementById('prof-edit-status');
 
+  if (requiresExpiry(plan) && !expiry) {
+    statusEl.style.display = 'block';
+    statusEl.style.background = 'var(--red-dim)';
+    statusEl.style.color = 'var(--red)';
+    statusEl.style.border = '1px solid var(--red-border)';
+    statusEl.textContent = 'Set an expiry date, or choose Lifetime for unlimited access.';
+    return;
+  }
+
   var { error } = await _sb.from('profiles')
     .update({ subscription_plan: plan, subscription_expires_at: expiry })
     .eq('id', _profUser.id);
@@ -2118,7 +2142,7 @@ function searchGrant(q) {
   }
 
   dd.innerHTML = results.map(function(u, i) {
-    return '<div class="grant-dd-item" data-idx="' + i + '" onmousedown="selectGrantUser(' + JSON.stringify(u).replace(/"/g, '&quot;') + ')">'
+    return '<div class="grant-dd-item" data-idx="' + i + '" onmousedown="selectGrantUser(' + attrJs(u) + ')">'
       + '<span class="grant-dd-email">' + esc(u.email || '') + '</span>'
       + '<span class="grant-dd-name">' + esc(u.full_name || 'No name') + '</span>'
     + '</div>';
@@ -2164,11 +2188,24 @@ function selectGrantUser(user) {
 }
 
 
+// get-content-key only grants access to starter/standard/pro when
+// subscription_expires_at is set, so saving one of those with a blank date
+// silently leaves the user with no access at all. Catch it here rather than
+// letting an admin believe they comped someone who then cannot read anything.
+function requiresExpiry(plan) {
+  return ['starter', 'standard', 'pro'].indexOf(plan) !== -1;
+}
+
 async function grantAccess() {
   if (!_grantUserId) return;
   var plan = document.getElementById('grant-plan').value;
   var expVal = document.getElementById('grant-expiry').value;
   var expiry = expVal ? new Date(expVal).toISOString() : null;
+
+  if (requiresExpiry(plan) && !expiry) {
+    toast('Set an expiry date, or choose Lifetime for unlimited access', 'err');
+    return;
+  }
 
   var { error } = await _sb.from('profiles')
     .update({ subscription_plan: plan, subscription_expires_at: expiry })
@@ -2224,7 +2261,7 @@ async function loadNotifications() {
         + (n.target_plan ? ' · ' + esc(n.target_plan).toUpperCase() + ' ONLY' : ' · EVERYONE')
         + ' · ' + fmtDate(n.created_at) + '</div>'
       + '</div>'
-      + '<button class="notif-del" onclick="deleteNotification(\'' + n.id + '\')" title="Delete">'
+      + '<button class="notif-del" onclick="deleteNotification(' + attrJs(n.id) + ')" title="Delete">'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
       + '</button>'
       + '</div>';
@@ -2284,7 +2321,7 @@ async function loadAdmins() {
           + '<td>'
           + (isMe
             ? '<span style="font-size:11px;color:var(--text3);padding:5px 10px;display:inline-block">Cannot remove yourself</span>'
-            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(' + JSON.stringify(a.id).replace(/"/g,'&quot;') + ',' + JSON.stringify(a.email || '').replace(/"/g,'&quot;') + ')">Remove</button>')
+            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(' + attrJs(a.id) + ',' + attrJs(a.email || '') + ')">Remove</button>')
           + '</td>'
           + '</tr>';
       }).join('')
@@ -2552,10 +2589,10 @@ async function loadPayments(reset) {
       : '<span style="color:var(--muted)">—</span>';
     var dateStr = fmtDateTime(p.status === 'paid' ? p.paid_at : p.created_at);
     var userCell = p._email
-      ? '<button class="user-email-link" style="font-size:12px" onclick="openUserProfile(' + JSON.stringify(p.user_id).replace(/"/g,'&quot;') + ')">' + esc(p._email) + '</button>'
+      ? '<button class="user-email-link" style="font-size:12px" onclick="openUserProfile(' + attrJs(p.user_id) + ')">' + esc(p._email) + '</button>'
       : '<span style="font-size:12px;font-family:monospace;color:var(--text2);">' + esc((p.user_id || '').slice(0,8)) + '…</span>';
     var action = p.status === 'paid'
-      ? '<button class="ad-btn btn-danger btn-sm" onclick="refundPayment(' + JSON.stringify(p.id).replace(/"/g,'&quot;') + ')">Refund</button>'
+      ? '<button class="ad-btn btn-danger btn-sm" onclick="refundPayment(' + attrJs(p.id) + ')">Refund</button>'
       : '';
     return '<tr class="pay-row">'
       + '<td style="white-space:nowrap;font-size:12px;color:var(--text2);">' + esc(dateStr) + '</td>'
@@ -2881,8 +2918,8 @@ async function loadCoupons() {
       + '<td class="date-cell">' + (c.expires_at ? fmtDate(c.expires_at) + (expired ? ' <span style="color:var(--red);font-size:10px">expired</span>' : '') : 'Never') + '</td>'
       + '<td style="font-size:12px;color:var(--text2)">' + esc(c.note || '') + '</td>'
       + '<td>' + (c.active
-          ? '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + JSON.stringify(c.code).replace(/"/g,'&quot;') + ',false)">Disable</button>'
-          : '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + JSON.stringify(c.code).replace(/"/g,'&quot;') + ',true)">Enable</button>')
+          ? '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',false)">Disable</button>'
+          : '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',true)">Enable</button>')
       + '</td>'
       + '</tr>';
   }).join('');
@@ -2945,7 +2982,7 @@ async function loadActivity() {
     var meta  = ACTION_LABELS[a.action] || [a.action, 'var(--text3)'];
     var target = a.target_email
       ? (a.target_user_id
-          ? '<button class="user-email-link" style="font-size:12.5px" onclick="openUserProfile(' + JSON.stringify(a.target_user_id).replace(/"/g,'&quot;') + ')">' + esc(a.target_email) + '</button>'
+          ? '<button class="user-email-link" style="font-size:12.5px" onclick="openUserProfile(' + attrJs(a.target_user_id) + ')">' + esc(a.target_email) + '</button>'
           : esc(a.target_email))
       : '<span style="color:var(--text3)">—</span>';
     return '<tr>'
