@@ -516,9 +516,12 @@ function buildNotesTopicGrid(){
     btn.className='qcat-btn'+(t.notesReady?'':' disabled-topic');
     if(!t.notesReady) btn.style.opacity='0.4';
     var qs=QD&&QD[t.key]?QD[t.key].length:0;
+    var rp=Math.round((window._topicProgress[t.id]||0)*100);
+    var rpCol=rp>=100?'var(--green)':'var(--blue)';
+    var rpLabel=!t.notesReady?'Coming soon':rp===0?'Not started yet':rp===100?'Completed':rp+'% read';
     btn.innerHTML='<div class="cat-name">'+t.icon+' '+t.id+' - '+t.name+'</div>'
-      +'<div class="cat-count">'+(t.notesReady?'Notes ready':'Coming soon')+(qs?' · '+qs+' quiz questions':'')+'</div>'
-      +'<div class="cat-bar"><div class="cat-fill" style="width:'+(t.notesReady?'100':'0')+'%"></div></div>';
+      +'<div class="cat-count">'+rpLabel+(qs?' · '+qs+' quiz questions':'')+'</div>'
+      +'<div class="cat-bar"><div class="cat-fill" style="width:'+rp+'%;background:'+rpCol+'"></div></div>';
     if(t.notesReady && t.notesView){
       btn.onclick=function(){window.fetchTopicData(t.id, t.key);};
       btn.style.cursor='pointer';
@@ -536,9 +539,12 @@ function buildWrittenTopicGrid(){
     var btn=document.createElement('button');
     btn.className='qcat-btn'+(t.notesReady?'':' disabled-topic');
     if(!t.notesReady) btn.style.opacity='0.4';
+    var rp=Math.round((window._topicProgress[t.id]||0)*100);
+    var rpCol=rp>=100?'var(--green)':'var(--blue)';
+    var rpLabel=!t.notesReady?'Coming soon':rp===0?'Not started yet':rp===100?'Completed':rp+'% read';
     btn.innerHTML='<div class="cat-name">'+t.icon+' '+t.id+' - '+t.name+'</div>'
-      +'<div class="cat-count">'+(t.notesReady?'Notes ready':'Coming soon')+'</div>'
-      +'<div class="cat-bar"><div class="cat-fill" style="width:'+(t.notesReady?'100':'0')+'%"></div></div>';
+      +'<div class="cat-count">'+rpLabel+'</div>'
+      +'<div class="cat-bar"><div class="cat-fill" style="width:'+rp+'%;background:'+rpCol+'"></div></div>';
     if(t.notesReady && t.notesView){
       btn.onclick=function(){window.fetchTopicData(t.id, t.key);};
       btn.style.cursor='pointer';
