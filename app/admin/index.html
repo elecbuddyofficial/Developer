@@ -620,7 +620,7 @@ function fmtDate(iso) {
 
 function planBadge(plan) {
   var cls = { trial:'pb-trial', lifetime:'pb-lifetime', pro:'pb-pro', standard:'pb-standard', starter:'pb-starter' };
-  return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + (plan || 'trial') + '</span>';
+  return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + esc(plan || 'trial') + '</span>';
 }
 
 function expiryDisplay(iso, plan) {
@@ -775,8 +775,8 @@ function searchGrant(q) {
 
   dd.innerHTML = results.map(function(u, i) {
     return '<div class="grant-dd-item" data-idx="' + i + '" onmousedown="selectGrantUser(' + JSON.stringify(u).replace(/"/g, '&quot;') + ')">'
-      + '<span class="grant-dd-email">' + (u.email || '') + '</span>'
-      + '<span class="grant-dd-name">' + (u.full_name || 'No name') + '</span>'
+      + '<span class="grant-dd-email">' + esc(u.email || '') + '</span>'
+      + '<span class="grant-dd-name">' + esc(u.full_name || 'No name') + '</span>'
     + '</div>';
   }).join('');
   dd.classList.add('open');
