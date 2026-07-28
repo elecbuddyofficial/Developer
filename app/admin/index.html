@@ -603,10 +603,17 @@ function expiryDisplay(iso, plan) {
 
 /* ── DASHBOARD ───────────────────────────────────────────────────── */
 async function loadDashboard() {
-  var { data: all } = await _sb.from('profiles')
+  var { data: all, error } = await _sb.from('profiles')
     .select('subscription_plan, subscription_expires_at, created_at, email, full_name')
     .order('created_at', { ascending: false });
-  if (!all) return;
+  if (error || !all) {
+    document.getElementById('dash-recent').innerHTML =
+      '<tr><td colspan="4" class="empty">Failed to load. <a href="" style="color:var(--blue)">Reload page</a></td></tr>';
+    ['st-total','st-active','st-trial','st-expired'].forEach(function(id) {
+      document.getElementById(id).textContent = '—';
+    });
+    return;
+  }
 
   var now = new Date();
   var active = all.filter(function(u) {
@@ -641,9 +648,14 @@ async function loadDashboard() {
 
 /* ── USERS ───────────────────────────────────────────────────────── */
 async function loadUsers() {
-  var { data } = await _sb.from('profiles')
+  var { data, error } = await _sb.from('profiles')
     .select('id, email, full_name, subscription_plan, subscription_expires_at, created_at')
     .order('created_at', { ascending: false });
+  if (error) {
+    document.getElementById('users-tbody').innerHTML =
+      '<tr><td colspan="6" class="empty">Failed to load. <a href="" style="color:var(--blue)">Reload page</a></td></tr>';
+    return;
+  }
   _allUsers = data || [];
   renderUsers(_allUsers);
 }
@@ -808,10 +820,16 @@ async function deleteNotification(id) {
 
 /* ── TEAM ADMINS ─────────────────────────────────────────────────── */
 async function loadAdmins() {
-  var { data } = await _sb.from('profiles')
+  var { data, error } = await _sb.from('profiles')
     .select('id, email, full_name, created_at')
     .eq('is_admin', true)
     .order('created_at', { ascending: true });
+
+  if (error) {
+    document.getElementById('admins-tbody').innerHTML =
+      '<tr><td colspan="4" class="empty">Failed to load. <a href="" style="color:var(--blue)">Reload page</a></td></tr>';
+    return;
+  }
 
   document.getElementById('admins-tbody').innerHTML = data && data.length
     ? data.map(function(a) {

@@ -1,6 +1,6 @@
 // ─── ETO Oral Prep — Service Worker ───────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v26';
+const VERSION = 'v27';
 const CACHE = 'elec-buddy-' + VERSION;
 
 // App shell — always cached at install time
@@ -36,6 +36,12 @@ self.addEventListener('activate', e => {
 // ── Fetch ─────────────────────────────────────────────────
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+
+  // Never cache external CDN requests — always fetch fresh
+  if (!e.request.url.startsWith(self.location.origin)) {
+    e.respondWith(fetch(e.request));
+    return;
+  }
 
   // HTML navigation requests: always network-first so users get fresh code.
   // Fall back to cache only if completely offline.
