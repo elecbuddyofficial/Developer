@@ -730,6 +730,19 @@
         </div>
       </div>
 
+      <!-- Coupon -->
+      <div style="text-align:center;margin-bottom:18px;">
+        <button id="up-coupon-toggle" onclick="toggleCouponBox()" style="background:none;border:none;color:#4A6880;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:6px;font-family:inherit;">Have a code?</button>
+        <div id="up-coupon-box" style="display:none;margin-top:10px;">
+          <div style="display:flex;gap:8px;">
+            <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
+                   style="flex:1;background:#0A1828;border:1px solid #1A3050;border-radius:8px;color:#DDE5EF;font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
+            <button id="up-coupon-btn" onclick="redeemCoupon()"
+                    style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Payment status -->
       <div id="up-status" style="display:none;text-align:center;padding:20px;border-radius:10px;font-size:14px;font-weight:600;"></div>
 
@@ -1392,6 +1405,59 @@ function closeUpgradeModal() {
   document.body.style.overflow = '';
   clearUpStatus();
   setUpBtnsDisabled(false);
+  document.getElementById('up-coupon-box').style.display = 'none';
+  document.getElementById('up-coupon-toggle').style.display = '';
+  document.getElementById('up-coupon-input').value = '';
+}
+
+function toggleCouponBox() {
+  document.getElementById('up-coupon-box').style.display = 'block';
+  document.getElementById('up-coupon-toggle').style.display = 'none';
+  document.getElementById('up-coupon-input').focus();
+}
+
+async function redeemCoupon() {
+  var input = document.getElementById('up-coupon-input');
+  var btn   = document.getElementById('up-coupon-btn');
+  var code  = (input.value || '').trim().toUpperCase();
+  if (!code) { input.focus(); return; }
+
+  if (!window._sbClient || !window._sbUser) {
+    setUpStatus('You must be signed in to use a code.', false);
+    return;
+  }
+
+  btn.disabled = true;
+  setUpStatus('Checking code...', true);
+
+  try {
+    var sessionRes = await window._sbClient.auth.getSession();
+    var token = sessionRes.data.session && sessionRes.data.session.access_token;
+    if (!token) throw new Error('Not signed in');
+
+    var res = await fetch(SUPABASE_FN_URL + '/redeem-coupon', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code }),
+    });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'That code is not valid');
+
+    window._fullAccess = true;
+    var planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
+    var msg = data.expires_at
+      ? planLabel + ' access unlocked until ' + new Date(data.expires_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) + '.'
+      : planLabel + ' access unlocked.';
+    setUpStatus(msg, true);
+
+    setTimeout(function() {
+      closeUpgradeModal();
+      window.location.reload();
+    }, 2200);
+  } catch (e) {
+    setUpStatus(e.message || 'That code is not valid', false);
+    btn.disabled = false;
+  }
 }
 
 function setUpStatus(msg, ok) {

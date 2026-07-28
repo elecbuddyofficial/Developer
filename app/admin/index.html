@@ -794,6 +794,23 @@
       </div>
     </div>
 
+    <!-- Content engagement -->
+    <div class="dash-mid-row">
+      <div class="dash-chart-card">
+        <div class="dcc-head">
+          <div class="dcc-title">Most Studied Topics</div>
+          <div class="dcc-meta" id="eng-meta"></div>
+        </div>
+        <div id="eng-topics"><div class="ad-loading">Loading…</div></div>
+      </div>
+      <div class="dash-plan-card">
+        <div class="dcc-head">
+          <div class="dcc-title">Engagement</div>
+        </div>
+        <div id="eng-summary"><div class="ad-loading">Loading…</div></div>
+      </div>
+    </div>
+
     <!-- Automation health -->
     <div class="dash-chart-card" style="margin-bottom:20px">
       <div class="dcc-head">
@@ -1423,13 +1440,23 @@ function expiryDisplay(iso, plan) {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name')
+      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name, topic_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, created_at, paid_at, user_id, razorpay_payment_id')
       .eq('status', 'paid')
       .order('paid_at', { ascending: false }),
   ]);
+
+  // topic_progress powers the engagement panel but is not essential. If that
+  // column is missing the whole select fails, which would blank every KPI on
+  // the page, so fall back to the core fields rather than showing zeros.
+  if (profilesRes.error) {
+    console.warn('dashboard profile query failed, retrying without topic_progress:', profilesRes.error.message);
+    profilesRes = await _sb.from('profiles')
+      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name')
+      .order('created_at', { ascending: false });
+  }
 
   var all      = profilesRes.data || [];
   var payments = paymentsRes.data || [];
@@ -1475,6 +1502,7 @@ async function loadDashboard() {
   // Charts
   drawSparkline(all);
   drawPlanDist(all, now);
+  drawEngagement(all);
   if (typeof loadCronHealth === 'function') loadCronHealth();
 
   // Recent signups table
@@ -1600,6 +1628,98 @@ function drawSparkline(all) {
 
   document.getElementById('dcc-sparkline-meta').textContent =
     counts.reduce(function(a, b) { return a + b; }, 0) + ' total';
+}
+
+/* ── CONTENT ENGAGEMENT ──────────────────────────────────────────────
+   Built from profiles.topic_progress, a map of topic id to how far through
+   that topic the reader has scrolled (0 to 1). Quiz scores live only in
+   localStorage on each device, so they cannot be reported on here. */
+function topicNameMap() {
+  var map = {};
+  (window._SECTIONS || []).forEach(function(sec) {
+    (sec.topics || []).forEach(function(t) { map[t.id] = t.name; });
+  });
+  return map;
+}
+
+function drawEngagement(all) {
+  var topicsEl  = document.getElementById('eng-topics');
+  var summaryEl = document.getElementById('eng-summary');
+  if (!topicsEl) return;
+
+  var names = topicNameMap();
+  var stats = {};          // topicId -> { readers, sumRatio, finished }
+  var engagedUsers = 0;
+  var totalOpens   = 0;
+
+  all.forEach(function(u) {
+    var tp = u.topic_progress;
+    if (!tp || typeof tp !== 'object') return;
+    var ids = Object.keys(tp);
+    if (!ids.length) return;
+    engagedUsers++;
+    ids.forEach(function(id) {
+      var ratio = Number(tp[id]) || 0;
+      if (ratio <= 0) return;
+      if (!stats[id]) stats[id] = { readers: 0, sumRatio: 0, finished: 0 };
+      stats[id].readers++;
+      stats[id].sumRatio += ratio;
+      if (ratio >= 0.95) stats[id].finished++;
+      totalOpens++;
+    });
+  });
+
+  var ranked = Object.keys(stats).map(function(id) {
+    var s = stats[id];
+    return {
+      id: id,
+      name: names[id] || id,
+      readers: s.readers,
+      avg: s.sumRatio / s.readers,
+      finished: s.finished,
+    };
+  }).sort(function(a, b) { return b.readers - a.readers; });
+
+  if (!ranked.length) {
+    topicsEl.innerHTML = '<div class="ad-loading">No reading activity recorded yet.</div>';
+    summaryEl.innerHTML = '<div class="ad-loading">No data yet.</div>';
+    return;
+  }
+
+  var maxReaders = ranked[0].readers;
+  document.getElementById('eng-meta').textContent = ranked.length + ' topics opened';
+
+  topicsEl.innerHTML = ranked.slice(0, 8).map(function(t) {
+    var pct = Math.round(t.readers / maxReaders * 100);
+    return '<div class="pdist-row">'
+      + '<div class="pdist-label">'
+      +   '<span>' + esc(t.name) + '</span>'
+      +   '<span>' + t.readers + ' <span style="font-size:10px;color:var(--text3)">'
+      +     'avg ' + Math.round(t.avg * 100) + '%</span></span>'
+      + '</div>'
+      + '<div class="pdist-bar-track"><div class="pdist-bar-fill" style="width:' + Math.max(pct, 2) + '%;background:var(--blue);opacity:.75"></div></div>'
+      + '</div>';
+  }).join('');
+
+  var totalFinished = ranked.reduce(function(s, t) { return s + t.finished; }, 0);
+  var engagedPct = all.length ? Math.round(engagedUsers / all.length * 100) : 0;
+  var avgTopicsPer = engagedUsers ? (totalOpens / engagedUsers).toFixed(1) : '0';
+
+  summaryEl.innerHTML =
+      '<div style="margin-bottom:14px">'
+    +   '<div class="prof-stat-label">Users who studied</div>'
+    +   '<div style="font-size:22px;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums">'
+    +     engagedUsers + ' <span style="font-size:12px;font-weight:600;color:var(--text3)">of ' + all.length + ' (' + engagedPct + '%)</span>'
+    +   '</div>'
+    + '</div>'
+    + '<div style="margin-bottom:14px">'
+    +   '<div class="prof-stat-label">Avg topics per active user</div>'
+    +   '<div style="font-size:22px;font-weight:800;color:var(--blue);font-variant-numeric:tabular-nums">' + avgTopicsPer + '</div>'
+    + '</div>'
+    + '<div>'
+    +   '<div class="prof-stat-label">Topics read to the end</div>'
+    +   '<div style="font-size:22px;font-weight:800;color:var(--green);font-variant-numeric:tabular-nums">' + totalFinished + '</div>'
+    + '</div>';
 }
 
 function drawPlanDist(all, now) {
@@ -2249,7 +2369,8 @@ async function removeAdmin(id, email) {
 
 /* ── CONTENT STATUS BOARD ────────────────────────────────────────── */
 function buildStatusBoard() {
-  var SECTIONS = [
+  // Exposed so the engagement panel can resolve topic ids to readable names.
+  var SECTIONS = window._SECTIONS = [
     { label: 'Overview', topics: [
       { id:'S00', name:'Overview', notesReady:true, free:true }
     ]},
