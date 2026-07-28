@@ -1165,6 +1165,7 @@ var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
+var TAB_NAMES = ['dashboard', 'users', 'grant', 'notifications', 'admins', 'payments', 'status'];
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -1186,6 +1187,9 @@ function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'
     }
 
     document.documentElement.style.visibility = 'visible';
+
+    var hashTab = (location.hash || '').replace('#', '');
+    if (TAB_NAMES.indexOf(hashTab) !== -1) showTab(hashTab);
 
     var email = profile.email || session.user.email || '';
     _myId    = session.user.id;
@@ -1223,7 +1227,13 @@ function showTab(name) {
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
   document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+  if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
 }
+
+window.addEventListener('hashchange', function() {
+  var name = (location.hash || '').replace('#', '');
+  if (TAB_NAMES.indexOf(name) !== -1) showTab(name);
+});
 
 /* ── TOAST ───────────────────────────────────────────────────────── */
 function toast(msg, type) {
