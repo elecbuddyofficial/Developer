@@ -1061,8 +1061,33 @@
 
       <!-- Quick actions -->
       <div class="prof-actions">
-        <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="profEditAccess()">Edit Access</button>
+        <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="toggleProfEdit()">Edit Access</button>
         <button class="ad-btn btn-danger btn-sm" id="prof-delete-btn" onclick="profDeleteAccount()">Delete Account</button>
+      </div>
+
+      <!-- Inline access editor -->
+      <div id="prof-edit-inline" style="display:none">
+        <div class="ad-row">
+          <div class="ad-field">
+            <label class="ad-label">New Plan</label>
+            <select class="ad-select" id="prof-edit-plan">
+              <option value="trial">Trial</option>
+              <option value="starter">Starter</option>
+              <option value="standard">Standard</option>
+              <option value="pro">Pro</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+          </div>
+          <div class="ad-field">
+            <label class="ad-label">Access Until (blank = no expiry)</label>
+            <input class="ad-input" id="prof-edit-expiry" type="date">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="ad-btn btn-primary btn-sm" onclick="profSaveAccess()">Save</button>
+          <button class="ad-btn btn-ghost btn-sm" onclick="toggleProfEdit(false)">Cancel</button>
+        </div>
+        <div id="prof-edit-status" style="display:none;font-size:12px;padding:8px 11px;border-radius:var(--r8);margin-top:8px"></div>
       </div>
 
       <!-- Payment history -->
@@ -1532,6 +1557,7 @@ async function openUserProfile(userId) {
 
   document.getElementById('prof-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+  document.getElementById('prof-edit-inline').style.display = 'none';
 
   var name = u.full_name || u.email || '—';
   document.getElementById('prof-avatar').textContent = name.charAt(0).toUpperCase();
@@ -1617,10 +1643,12 @@ async function loadProfMailHistory(userId) {
 function populateProfMailSender() {
   var sel = document.getElementById('prof-mail-sender');
   var admins = _allAdmins.length ? _allAdmins : [{ id: _myId, email: _myEmail, full_name: '' }];
-  sel.innerHTML = admins.map(function(a) {
-    var label = (a.full_name || a.email) + (a.id === _myId ? ' (you)' : '');
+  var options = ['<option value="official">Official &middot; official@elec-buddy.com</option>'];
+  options = options.concat(admins.map(function(a) {
+    var label = (a.full_name || a.email) + ' · ' + a.email + (a.id === _myId ? ' (you)' : '');
     return '<option value="' + esc(a.id) + '">' + esc(label) + '</option>';
-  }).join('');
+  }));
+  sel.innerHTML = options.join('');
   if (admins.some(function(a) { return a.id === _myId; })) sel.value = _myId;
 }
 
@@ -1672,10 +1700,51 @@ async function sendAdminEmail() {
   }
 }
 
-function profEditAccess() {
+function toggleProfEdit(show) {
   if (!_profUser) return;
-  closeUserProfile();
-  prefillGrant(_profUser.email);
+  var panel = document.getElementById('prof-edit-inline');
+  var open = show !== undefined ? show : panel.style.display === 'none';
+  panel.style.display = open ? 'block' : 'none';
+  if (open) {
+    document.getElementById('prof-edit-plan').value = _profUser.subscription_plan || 'trial';
+    document.getElementById('prof-edit-expiry').value = _profUser.subscription_expires_at
+      ? _profUser.subscription_expires_at.substring(0, 10) : '';
+    document.getElementById('prof-edit-status').style.display = 'none';
+  }
+}
+
+async function profSaveAccess() {
+  if (!_profUser) return;
+  var plan = document.getElementById('prof-edit-plan').value;
+  var expVal = document.getElementById('prof-edit-expiry').value;
+  var expiry = expVal ? new Date(expVal).toISOString() : null;
+  var statusEl = document.getElementById('prof-edit-status');
+
+  var { error } = await _sb.from('profiles')
+    .update({ subscription_plan: plan, subscription_expires_at: expiry })
+    .eq('id', _profUser.id);
+
+  if (error) {
+    statusEl.style.display = 'block';
+    statusEl.className = '';
+    statusEl.style.background = 'var(--red-dim)'; statusEl.style.color = 'var(--red)'; statusEl.style.border = '1px solid var(--red-border)';
+    statusEl.textContent = 'Update failed: ' + error.message;
+    return;
+  }
+
+  // Sync local state everywhere it's cached
+  _profUser.subscription_plan = plan;
+  _profUser.subscription_expires_at = expiry;
+  var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
+  if (u) { u.subscription_plan = plan; u.subscription_expires_at = expiry; }
+
+  document.getElementById('prof-plan').innerHTML = planBadge(plan);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan);
+  toggleProfEdit(false);
+  toast('Access updated');
+  updatePillCounts(_allUsers);
+  applyUserFilters();
+  loadDashboard();
 }
 
 function profDeleteAccount() {

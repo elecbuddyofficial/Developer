@@ -108,29 +108,47 @@ serve(async (req) => {
       .single();
     if (!target?.email) return json({ error: 'User not found' }, 404);
 
-    // Who this email appears to come from. Defaults to the caller, but any
-    // admin can pick another admin from the dropdown to send "as" them.
-    // Resend can only originate mail from a domain we've verified
-    // (elec-buddy.com), so the envelope "from" always stays on that domain —
-    // only the display name changes. Replies route to the real inbox of
-    // whichever admin was picked, verified domain or not.
-    let sender = callerProfile;
-    if (from_admin_id && typeof from_admin_id === 'string' && from_admin_id !== caller.id) {
-      const { data: pickedAdmin } = await admin
-        .from('profiles')
-        .select('is_admin, email, full_name')
-        .eq('id', from_admin_id)
-        .single();
-      if (!pickedAdmin?.is_admin) return json({ error: 'Selected sender is not an admin' }, 400);
-      sender = pickedAdmin;
+    // Who this email appears to come from. "official" is a generic identity;
+    // otherwise any admin can pick another admin from the dropdown to send
+    // "as" them. Resend can only originate mail from a domain we've verified
+    // (elec-buddy.com) — if the picked admin's own address is on that
+    // domain, we use it directly as the envelope "from" (their real inbox).
+    // If their login is on some other domain (personal Gmail etc.), we
+    // can't originate from there, so "from" falls back to official@ and
+    // reply-to is set to their real address instead.
+    const ELEC_BUDDY_DOMAIN = '@elec-buddy.com';
+    let fromHeader: string;
+    let replyTo: string | undefined;
+
+    if (!from_admin_id || from_admin_id === 'official') {
+      fromHeader = 'Elec-Buddy <official@elec-buddy.com>';
+      replyTo = callerProfile.full_name ? `${callerProfile.full_name} <${callerProfile.email}>` : callerProfile.email;
+    } else {
+      let sender = callerProfile;
+      if (from_admin_id !== caller.id) {
+        const { data: pickedAdmin } = await admin
+          .from('profiles')
+          .select('is_admin, email, full_name')
+          .eq('id', from_admin_id)
+          .single();
+        if (!pickedAdmin?.is_admin) return json({ error: 'Selected sender is not an admin' }, 400);
+        sender = pickedAdmin;
+      }
+
+      const onVerifiedDomain = !!sender.email && sender.email.toLowerCase().endsWith(ELEC_BUDDY_DOMAIN);
+      if (onVerifiedDomain) {
+        fromHeader = sender.full_name ? `${sender.full_name} <${sender.email}>` : sender.email!;
+        replyTo = undefined; // replies naturally return to the from address itself
+      } else {
+        const senderName = sender.full_name ? `${sender.full_name} · Elec-Buddy` : 'Elec-Buddy';
+        fromHeader = `${senderName} <official@elec-buddy.com>`;
+        replyTo = sender.email
+          ? (sender.full_name ? `${sender.full_name} <${sender.email}>` : sender.email)
+          : undefined;
+      }
     }
 
     const html = layout(subject, escapeHtml(message).replace(/\n/g, '<br>'));
-
-    const senderName = sender.full_name ? `${sender.full_name} · Elec-Buddy` : 'Elec-Buddy';
-    const replyTo = sender.email
-      ? (sender.full_name ? `${sender.full_name} <${sender.email}>` : sender.email)
-      : undefined;
 
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -139,7 +157,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: `${senderName} <official@elec-buddy.com>`,
+        from: fromHeader,
         to: target.email,
         reply_to: replyTo,
         subject,
