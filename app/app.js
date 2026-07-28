@@ -1,6 +1,65 @@
 // Dynamic Loader System
 window.QD = {}; // Quiz Data Store
 
+// ── Topic Progress ──────────────────────────────────────────
+window._topicProgress = window._topicProgress || {};
+window._progDebounce  = {};
+window._progObserver  = null;
+
+function _saveProgress(topicId, ratio) {
+    var cur = window._topicProgress[topicId] || 0;
+    if (ratio <= cur) return;
+    window._topicProgress[topicId] = ratio;
+    localStorage.setItem('eb_tp_cache', JSON.stringify(window._topicProgress));
+    var pill = document.querySelector('.tl-item[data-id="' + topicId + '"] .tl-prog');
+    if (pill) pill.style.width = Math.round(ratio * 100) + '%';
+    clearTimeout(window._progDebounce[topicId]);
+    window._progDebounce[topicId] = setTimeout(function() {
+        if (!window._sbUser || !window._sbClient) return;
+        window._sbClient.from('profiles')
+            .update({ topic_progress: window._topicProgress })
+            .eq('id', window._sbUser.id)
+            .then();
+    }, 2000);
+}
+
+function _setupProgressObserver(topicId) {
+    if (window._progObserver) { window._progObserver.disconnect(); window._progObserver = null; }
+    var contentEl = document.getElementById('content');
+    var container = document.getElementById('notes-container');
+    if (!contentEl || !container) return;
+    var headings = container.querySelectorAll('.n-h1');
+    if (!headings.length) return;
+    var total = headings.length;
+    var seen = new Set();
+    window._progObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) { if (e.isIntersecting) seen.add(e.target); });
+        _saveProgress(topicId, Math.min(seen.size / total, 1));
+    }, { root: contentEl, threshold: 0.2 });
+    headings.forEach(function(h) { window._progObserver.observe(h); });
+}
+
+function _restoreScroll(topicId) {
+    if (window._pendingScroll) return;
+    var saved = parseInt(localStorage.getItem('eb_scroll_' + topicId), 10);
+    if (!saved || saved < 100) return;
+    var el = document.getElementById('content');
+    if (el) setTimeout(function() { el.scrollTop = saved; }, 80);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var _scrollTimer;
+    var contentEl = document.getElementById('content');
+    if (!contentEl) return;
+    contentEl.addEventListener('scroll', function() {
+        if (!window._activeTopicId) return;
+        clearTimeout(_scrollTimer);
+        _scrollTimer = setTimeout(function() {
+            localStorage.setItem('eb_scroll_' + window._activeTopicId, contentEl.scrollTop);
+        }, 600);
+    }, { passive: true });
+});
+
 function appToast(msg) {
     var el = document.getElementById('_app-toast');
     if (!el) {
@@ -52,7 +111,10 @@ window.loadNotes = function(topicId, htmlContent) {
             var el=document.getElementById(_s);
             if(el){var c=document.getElementById('content');c.scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});}
         },200);
+    } else {
+        _restoreScroll(topicId);
     }
+    _setupProgressObserver(topicId);
 };
 
 window.loadWrittenNotes = function(topicCode, html) {
@@ -76,7 +138,10 @@ window.loadWrittenNotes = function(topicCode, html) {
             var el=document.getElementById(_s);
             if(el){var c=document.getElementById('content');c.scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});}
         },200);
+    } else {
+        _restoreScroll(topicCode);
     }
+    _setupProgressObserver(topicCode);
 };
 
 window.fetchTopicData = function(topicId, topicKey) {
@@ -99,6 +164,8 @@ window.fetchTopicData = function(topicId, topicKey) {
         buildTopicSideList(topicId);
         injectTopicFooterNav(topicId);
         document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+        _restoreScroll(topicId);
+        _setupProgressObserver(topicId);
     }
 
     if (!window.QD[topicKey] && !topicId.startsWith('W')) {
@@ -129,9 +196,12 @@ function buildTopicSideList(activeId) {
         var prefix = isW ? 'W' : 'T';
         var btn = document.createElement('button');
         btn.className = 'tl-item' + (t.id === activeId ? ' tl-active' : '');
+        btn.setAttribute('data-id', t.id);
+        var _prog = Math.round((window._topicProgress[t.id] || 0) * 100);
         btn.innerHTML = '<span class="tl-ic">' + t.icon + '</span>'
             + '<span class="tl-label">' + t.name + '</span>'
-            + '<span class="tl-num">' + prefix + String(idx+1).padStart(2,'0') + '</span>';
+            + '<span class="tl-num">' + prefix + String(idx+1).padStart(2,'0') + '</span>'
+            + '<div class="tl-prog-wrap"><div class="tl-prog" style="width:' + _prog + '%"></div></div>';
         btn.onclick = function() {
             document.getElementById('content').scrollTo({top:0, behavior:'instant'});
             window.fetchTopicData(t.id, t.key);

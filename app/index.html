@@ -32,6 +32,13 @@
         window.location.replace('./auth.html');
       } else {
         window._sbUser = session.user;
+        window._topicProgress = JSON.parse(localStorage.getItem('eb_tp_cache') || '{}');
+        _sb.from('profiles').select('topic_progress').eq('id', session.user.id).single().then(function(res) {
+          if (res.data && res.data.topic_progress) {
+            window._topicProgress = res.data.topic_progress;
+            localStorage.setItem('eb_tp_cache', JSON.stringify(window._topicProgress));
+          }
+        });
         document.documentElement.style.visibility = 'visible';
       }
     } catch(e) {

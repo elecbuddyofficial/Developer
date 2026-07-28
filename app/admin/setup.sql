@@ -1,10 +1,11 @@
 -- ── Admin Setup: Run this once in the Supabase SQL Editor ──────────────────
 -- After running, create the 5 accounts in Auth > Users > Add user
 
--- 1. Add is_admin and email columns to profiles
+-- 1. Add is_admin, email, and topic_progress columns to profiles
 ALTER TABLE public.profiles
   ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE,
-  ADD COLUMN IF NOT EXISTS email TEXT;
+  ADD COLUMN IF NOT EXISTS email TEXT,
+  ADD COLUMN IF NOT EXISTS topic_progress JSONB DEFAULT '{}'::jsonb;
 
 -- 2. Backfill email for all existing users
 UPDATE public.profiles p
