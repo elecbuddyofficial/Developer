@@ -83,7 +83,6 @@ serve(async (req) => {
       .single();
 
     if (!payment) return json({ error: 'Payment not found' }, 404);
-    if (payment.status === 'paid') return json({ error: 'Already processed' }, 409);
 
     const months = PLAN_MONTHS[payment.plan];
     if (!months) return json({ error: 'Unknown plan' }, 400);
@@ -105,14 +104,38 @@ serve(async (req) => {
     }
     const expiresAt = addMonths(startDate, months);
 
-    // Mark payment as paid
-    await sb.from('payments').update({
-      razorpay_payment_id:   payment_id,
-      status:                'paid',
-      subscription_starts_at: startDate.toISOString(),
-      subscription_expires_at: expiresAt.toISOString(),
-      paid_at:               now.toISOString(),
-    }).eq('razorpay_order_id', order_id);
+    // Compare-and-swap rather than a read-then-write. The razorpay-webhook
+    // function processes the same payment independently and the two can race;
+    // guarding on status means whichever lands second matches zero rows and
+    // skips the profile write instead of applying the purchase twice.
+    const { data: claimed } = await sb
+      .from('payments')
+      .update({
+        razorpay_payment_id:     payment_id,
+        status:                  'paid',
+        subscription_starts_at:  startDate.toISOString(),
+        subscription_expires_at: expiresAt.toISOString(),
+        paid_at:                 now.toISOString(),
+      })
+      .eq('razorpay_order_id', order_id)
+      .neq('status', 'paid')
+      .select();
+
+    if (!claimed || claimed.length === 0) {
+      // The webhook already activated this purchase. Report the stored dates
+      // so the buyer still sees a success state rather than a confusing error.
+      const { data: settled } = await sb
+        .from('payments')
+        .select('plan, subscription_starts_at, subscription_expires_at')
+        .eq('razorpay_order_id', order_id)
+        .single();
+      return json({
+        ok:         true,
+        plan:       settled?.plan ?? payment.plan,
+        starts_at:  settled?.subscription_starts_at ?? startDate.toISOString(),
+        expires_at: settled?.subscription_expires_at ?? expiresAt.toISOString(),
+      });
+    }
 
     // Activate subscription on profile
     await sb.from('profiles').update({

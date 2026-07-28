@@ -102,11 +102,15 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
 
 const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
 
+// Length of the free trial in days. This must stay in sync with
+// get-content-key, which is the authoritative server-side access gate.
+const TRIAL_DAYS = 3;
+
 function trialExpiringHtml(): string {
   return baseLayout(
-    'Your free trial ends in 3 days. Upgrade to keep full access.',
-    'Your free trial ends in 3 days',
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial ends in 3 days. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
+    'Your free trial ends tomorrow. Upgrade to keep full access.',
+    'Your free trial ends tomorrow',
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial ends tomorrow. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
      <p style="margin:0;">Upgrade now to keep studying without interruption.</p>`,
     APP_URL,
     'Upgrade My Plan',
@@ -180,9 +184,10 @@ serve(async (req) => {
     ok ? results.sent++ : results.failed++;
   }
 
-  // ── 1. Trial expiring in 3 days ──────────────────────────────────────────
-  // Trial is 7 days; started 4 days ago means it expires exactly 3 days from now
-  const trialWarnDay = daysAgo(4);
+  // ── 1. Trial expiring tomorrow ───────────────────────────────────────────
+  // The trial is TRIAL_DAYS long (see get-content-key, which is the real
+  // server-side gate). Started TRIAL_DAYS-1 days ago means it ends tomorrow.
+  const trialWarnDay = daysAgo(TRIAL_DAYS - 1);
   const { data: trialWarning } = await sb
     .from('profiles')
     .select('email')
@@ -191,12 +196,12 @@ serve(async (req) => {
     .lte('trial_started_at', trialWarnDay + 'T23:59:59Z');
 
   for (const u of trialWarning ?? []) {
-    await dispatch(u.email, 'Your Elec-Buddy trial expires in 3 days', trialExpiringHtml());
+    await dispatch(u.email, 'Your Elec-Buddy trial ends tomorrow', trialExpiringHtml());
   }
 
   // ── 2. Trial expired yesterday ───────────────────────────────────────────
-  // Started 8 days ago means 7-day trial ended yesterday
-  const trialExpiredDay = daysAgo(8);
+  // Started TRIAL_DAYS+1 days ago means the trial ended yesterday
+  const trialExpiredDay = daysAgo(TRIAL_DAYS + 1);
   const { data: trialExpired } = await sb
     .from('profiles')
     .select('email')
@@ -241,6 +246,18 @@ serve(async (req) => {
       subExpiredHtml(u.subscription_plan),
     );
   }
+
+  // Record the run so the admin panel can show whether this job is actually
+  // firing. A cron that silently stops is otherwise invisible until someone
+  // notices customers never got warned their access was about to lapse.
+  await sb.from('cron_runs').insert({
+    job:     'send-expiry-emails',
+    ok:      results.failed === 0,
+    sent:    results.sent,
+    failed:  results.failed,
+    skipped: results.skipped,
+    error:   results.errors.length ? results.errors.join('; ') : null,
+  });
 
   return json({ ok: true, results, timestamp: now.toISOString() });
 });
