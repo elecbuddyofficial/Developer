@@ -300,8 +300,12 @@
     const password = document.getElementById('login-password').value;
     const { error } = await sb.auth.signInWithPassword({ email, password });
     if (error) {
-      showMsg(error.message === 'Invalid login credentials'
-        ? 'Incorrect email or password.' : error.message, 'error');
+      var msg = error.message === 'Invalid login credentials'
+        ? 'Incorrect email or password.'
+        : error.message.toLowerCase().includes('email not confirmed')
+          ? 'Please confirm your email first. Check your inbox for the confirmation link.'
+          : error.message;
+      showMsg(msg, 'error');
       btn.disabled = false; btn.textContent = 'Sign In';
     } else {
       redirectAfterLogin();
