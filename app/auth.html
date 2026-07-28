@@ -326,7 +326,10 @@
     btn.disabled = true; btn.textContent = 'Creating account...';
     const { data, error } = await sb.auth.signUp({
       email, password,
-      options: { data: { full_name: name } }
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: 'https://elecbuddyofficial.github.io/Developer/app/auth.html'
+      }
     });
     if (error) {
       showMsg(error.message, 'error');
