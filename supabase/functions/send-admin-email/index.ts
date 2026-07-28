@@ -12,7 +12,33 @@ const json = (data: unknown, status = 200) =>
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
 
-function layout(heading: string, bodyHtml: string): string {
+const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Blank-line-separated paragraphs get proper spacing instead of one long
+// <br>-riddled block, so a multi-thought message actually reads like one.
+function formatMessage(raw: string): string {
+  const paragraphs = raw.split(/\n{2,}/).filter(function(p) { return p.trim(); });
+  return paragraphs.map(function(p, i) {
+    const escaped = escapeHtml(p).replace(/\n/g, '<br>');
+    const marginBottom = i === paragraphs.length - 1 ? '0' : '16px';
+    return `<p style="margin:0 0 ${marginBottom} 0;">${escaped}</p>`;
+  }).join('');
+}
+
+function layout(opts: { heading: string; bodyHtml: string; signerName: string | null }): string {
+  const { heading, bodyHtml, signerName } = opts;
+
+  const signature = signerName
+    ? `<p style="margin:26px 0 0 0;font-size:14px;line-height:1.6;color:#8FA3B8;">
+         &mdash; ${escapeHtml(signerName)}<br>
+         <span style="font-size:12px;color:#4A6880;">Elec-Buddy Team</span>
+       </p>`
+    : '';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,26 +52,45 @@ function layout(heading: string, bodyHtml: string): string {
     <td align="center">
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:480px;background-color:#0D1E33;border:1px solid #1A3050;border-radius:16px;">
         <tr>
-          <td style="padding:40px 32px;text-align:center;">
-            <div style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#C8A44A;line-height:1.2;">
+          <td style="padding:36px 32px 4px;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#C8A44A;line-height:1.2;">
               Elec-Buddy
             </div>
-            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+            <div style="margin-top:7px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
               ETO EXAM PREPARATION
             </div>
-            <h1 style="margin:36px 0 20px 0;font-size:22px;font-weight:700;line-height:1.3;color:#DDE5EF;">
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:30px 32px 6px;">
+            <h1 style="margin:0 0 18px 0;font-size:20px;font-weight:700;line-height:1.35;color:#DDE5EF;text-align:left;">
               ${heading}
             </h1>
-            <div style="font-size:15px;line-height:1.75;color:#DDE5EF;text-align:left;white-space:pre-wrap;">
+            <div style="font-size:15px;line-height:1.75;color:#DDE5EF;text-align:left;">
               ${bodyHtml}
             </div>
+            ${signature}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:10px 32px 34px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:8px auto 0;">
+              <tr>
+                <td align="center" bgcolor="#C8A44A" style="border-radius:10px;">
+                  <a href="${APP_URL}"
+                     style="display:inline-block;padding:13px 30px;background-color:#C8A44A;color:#070D1A;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;">
+                    Open Elec-Buddy
+                  </a>
+                </td>
+              </tr>
+            </table>
           </td>
         </tr>
         <tr>
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
             <div style="font-size:12px;color:#2E5577;line-height:1.7;">
               Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
-              Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+              You can reply directly to this email.
             </div>
           </td>
         </tr>
@@ -55,10 +100,6 @@ function layout(heading: string, bodyHtml: string): string {
 </table>
 </body>
 </html>`;
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 serve(async (req) => {
@@ -119,6 +160,7 @@ serve(async (req) => {
     const ELEC_BUDDY_DOMAIN = '@elec-buddy.com';
     let fromHeader: string;
     let replyTo: string | undefined;
+    let signerProfile = callerProfile; // who signs the email — defaults to whoever's sending it
 
     if (!from_admin_id || from_admin_id === 'official') {
       fromHeader = 'Elec-Buddy <official@elec-buddy.com>';
@@ -134,6 +176,7 @@ serve(async (req) => {
         if (!pickedAdmin?.is_admin) return json({ error: 'Selected sender is not an admin' }, 400);
         sender = pickedAdmin;
       }
+      signerProfile = sender;
 
       const onVerifiedDomain = !!sender.email && sender.email.toLowerCase().endsWith(ELEC_BUDDY_DOMAIN);
       if (onVerifiedDomain) {
@@ -148,7 +191,11 @@ serve(async (req) => {
       }
     }
 
-    const html = layout(subject, escapeHtml(message).replace(/\n/g, '<br>'));
+    const html = layout({
+      heading: subject,
+      bodyHtml: formatMessage(message),
+      signerName: signerProfile.full_name || null,
+    });
 
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
