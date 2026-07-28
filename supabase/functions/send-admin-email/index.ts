@@ -92,7 +92,7 @@ serve(async (req) => {
     if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
 
     const body = await req.json().catch(() => ({}));
-    const { user_id, subject, message } = body;
+    const { user_id, subject, message, from_admin_id } = body;
 
     if (!user_id || typeof user_id !== 'string') return json({ error: 'user_id required' }, 400);
     if (!subject || typeof subject !== 'string' || !subject.trim()) return json({ error: 'subject required' }, 400);
@@ -108,10 +108,28 @@ serve(async (req) => {
       .single();
     if (!target?.email) return json({ error: 'User not found' }, 404);
 
+    // Who this email appears to come from. Defaults to the caller, but any
+    // admin can pick another admin from the dropdown to send "as" them.
+    // Resend can only originate mail from a domain we've verified
+    // (elec-buddy.com), so the envelope "from" always stays on that domain —
+    // only the display name changes. Replies route to the real inbox of
+    // whichever admin was picked, verified domain or not.
+    let sender = callerProfile;
+    if (from_admin_id && typeof from_admin_id === 'string' && from_admin_id !== caller.id) {
+      const { data: pickedAdmin } = await admin
+        .from('profiles')
+        .select('is_admin, email, full_name')
+        .eq('id', from_admin_id)
+        .single();
+      if (!pickedAdmin?.is_admin) return json({ error: 'Selected sender is not an admin' }, 400);
+      sender = pickedAdmin;
+    }
+
     const html = layout(subject, escapeHtml(message).replace(/\n/g, '<br>'));
 
-    const replyTo = callerProfile.email
-      ? (callerProfile.full_name ? `${callerProfile.full_name} <${callerProfile.email}>` : callerProfile.email)
+    const senderName = sender.full_name ? `${sender.full_name} · Elec-Buddy` : 'Elec-Buddy';
+    const replyTo = sender.email
+      ? (sender.full_name ? `${sender.full_name} <${sender.email}>` : sender.email)
       : undefined;
 
     const resendRes = await fetch('https://api.resend.com/emails', {
@@ -121,7 +139,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Elec-Buddy <official@elec-buddy.com>',
+        from: `${senderName} <official@elec-buddy.com>`,
         to: target.email,
         reply_to: replyTo,
         subject,

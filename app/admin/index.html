@@ -1077,6 +1077,10 @@
       <div>
         <div class="prof-section-title">Send Email</div>
         <div class="ad-field" style="margin-bottom:10px">
+          <label class="ad-label">Send As</label>
+          <select class="ad-select" id="prof-mail-sender"></select>
+        </div>
+        <div class="ad-field" style="margin-bottom:10px">
           <input class="ad-input" id="prof-mail-subject" placeholder="Subject">
         </div>
         <div class="ad-field" style="margin-bottom:0">
@@ -1544,6 +1548,7 @@ async function openUserProfile(userId) {
   document.getElementById('prof-mail-body').value = '';
   document.getElementById('prof-send-status').className = '';
   document.getElementById('prof-send-status').textContent = '';
+  populateProfMailSender();
 
   document.getElementById('prof-payments').innerHTML = '<div class="prof-empty">Loading…</div>';
   document.getElementById('prof-mail-history').innerHTML = '<div class="prof-empty">Loading…</div>';
@@ -1609,8 +1614,19 @@ async function loadProfMailHistory(userId) {
     : '<div class="prof-empty">No emails sent yet</div>';
 }
 
+function populateProfMailSender() {
+  var sel = document.getElementById('prof-mail-sender');
+  var admins = _allAdmins.length ? _allAdmins : [{ id: _myId, email: _myEmail, full_name: '' }];
+  sel.innerHTML = admins.map(function(a) {
+    var label = (a.full_name || a.email) + (a.id === _myId ? ' (you)' : '');
+    return '<option value="' + esc(a.id) + '">' + esc(label) + '</option>';
+  }).join('');
+  if (admins.some(function(a) { return a.id === _myId; })) sel.value = _myId;
+}
+
 async function sendAdminEmail() {
   if (!_profUser) return;
+  var fromAdminId = document.getElementById('prof-mail-sender').value;
   var subject = document.getElementById('prof-mail-subject').value.trim();
   var message = document.getElementById('prof-mail-body').value.trim();
   var statusEl = document.getElementById('prof-send-status');
@@ -1637,13 +1653,14 @@ async function sendAdminEmail() {
         'Authorization': 'Bearer ' + session.access_token,
         'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
       },
-      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message })
+      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message, from_admin_id: fromAdminId })
     });
     var data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed to send');
 
+    var sentAsOpt = document.getElementById('prof-mail-sender').selectedOptions[0];
     statusEl.className = 'ok';
-    statusEl.textContent = 'Email sent to ' + _profUser.email;
+    statusEl.textContent = 'Email sent to ' + _profUser.email + (sentAsOpt ? ' as ' + sentAsOpt.textContent : '');
     document.getElementById('prof-mail-subject').value = '';
     document.getElementById('prof-mail-body').value = '';
     loadProfMailHistory(_profUser.id);
@@ -1829,6 +1846,8 @@ async function deleteNotification(id) {
 }
 
 /* ── TEAM ADMINS ─────────────────────────────────────────────────── */
+var _allAdmins = [];
+
 async function loadAdmins() {
   var { data, error } = await _sb.from('profiles')
     .select('id, email, full_name, created_at')
@@ -1840,6 +1859,8 @@ async function loadAdmins() {
       '<tr><td colspan="4" class="empty">Failed to load. <a href="" style="color:var(--blue)">Reload page</a></td></tr>';
     return;
   }
+
+  _allAdmins = data || [];
 
   document.getElementById('admins-tbody').innerHTML = data && data.length
     ? data.map(function(a) {
