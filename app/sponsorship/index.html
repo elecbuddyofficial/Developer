@@ -729,19 +729,18 @@ function buildSectionTopicGrid(sec) {
     var card = document.createElement('div');
     card.className = 'topic-card' + (!t.notesReady ? ' coming-soon' : '');
     card.setAttribute('data-topic-id', t.id);
-    if (t.notesReady && !locked) card.style.cursor = 'pointer';
+    if (t.notesReady || locked) card.style.cursor = 'pointer';
     card.innerHTML = '<div class="tc-id">' + t.icon + ' ' + t.id + '</div>'
       + '<div class="tc-name">' + t.name + '</div>'
       + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + (t.quizFile ? ' · Quiz' : '') + '</div>';
-    if (locked && t.notesReady) {
+    if (locked) {
       var lk = document.createElement('span'); lk.className = 'gate-lock'; lk.textContent = '🔒';
       card.appendChild(lk);
     }
-    if (t.notesReady) {
-      card.onclick = function() {
-        if (isLocked(t.id) && !t.free) { showGate(); return; }
-        fetchTopicData(t.id, t);
-      };
+    if (t.notesReady && !locked) {
+      card.onclick = function() { fetchTopicData(t.id, t); };
+    } else if (locked) {
+      card.onclick = function() { showGate(); };
     }
     grid.appendChild(card);
     if (t.quizFile) hasQuiz = true;
