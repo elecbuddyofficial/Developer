@@ -571,7 +571,10 @@
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
       <div id="pm-avatar" style="width:46px;height:46px;border-radius:50%;background:#C8A44A;color:#070D1A;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif;"></div>
       <div style="min-width:0;">
-        <div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+          <div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
+          <span id="pm-admin-badge" style="display:none;font-size:9.5px;font-weight:700;background:rgba(200,164,74,.15);border:1px solid rgba(200,164,74,.4);color:#C8A44A;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.3px;">✓ admin</span>
+        </div>
         <div id="pm-email" style="font-size:11.5px;color:#4A6880;margin-top:3px;word-break:break-all;line-height:1.4;"></div>
       </div>
     </div>
@@ -587,6 +590,9 @@
 
     <!-- Upgrade CTA (shown only for trial / expired) -->
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
+
+    <!-- Admin Panel (admins only) -->
+    <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
     <!-- Courses -->
     <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
@@ -1011,7 +1017,12 @@ function setTheme(t) {
       if (!window._sbClient) return;
       const { data: profile } = await window._sbClient
         .from('profiles').select('*').eq('id', user.id).single();
-      if (profile) renderPlan(profile);
+      if (profile) {
+        renderPlan(profile);
+        const isAdmin = profile.is_admin === true;
+        document.getElementById('pm-admin-badge').style.display = isAdmin ? 'inline-flex' : 'none';
+        document.getElementById('pm-admin-btn').style.display   = isAdmin ? 'block' : 'none';
+      }
     };
 
     window.closeProfile = function(e) {
