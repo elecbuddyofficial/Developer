@@ -549,6 +549,83 @@
     .pay-badge-created { background: var(--orange-dim);  color: var(--orange); border: 1px solid var(--orange-border); border-radius: 20px; padding: 2px 9px; font-size: 11px; font-weight: 700; }
     .pay-badge-failed  { background: var(--red-dim,rgba(220,53,69,.12)); color: var(--red,#e05a6a); border: 1px solid rgba(220,53,69,.3); border-radius: 20px; padding: 2px 9px; font-size: 11px; font-weight: 700; }
     .pay-plan-tag { display: inline-block; background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue-border); border-radius: 4px; padding: 1px 7px; font-size: 11px; font-weight: 700; text-transform: capitalize; }
+
+    /* ── USER PROFILE MODAL ── */
+    .prof-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,.6); backdrop-filter: blur(4px);
+      display: none; align-items: flex-start; justify-content: center;
+      overflow-y: auto; padding: 40px 16px;
+    }
+    .prof-overlay.open { display: flex; }
+    .prof-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r12); width: 100%; max-width: 660px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    }
+    .prof-head {
+      display: flex; align-items: center; gap: 14px;
+      padding: 22px 56px 22px 24px; border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+    .prof-avatar {
+      width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0;
+      background: var(--blue); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: 800;
+    }
+    .prof-name { font-size: 16px; font-weight: 800; color: var(--text); }
+    .prof-email { font-size: 12.5px; color: var(--text2); margin-top: 2px; word-break: break-all; }
+    .prof-uid { font-size: 10.5px; color: var(--text3); margin-top: 3px; font-family: ui-monospace,monospace; }
+    .prof-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 32px; height: 32px; border-radius: var(--r8);
+      border: none; background: var(--surface2); color: var(--text2);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .15s, color .15s;
+    }
+    .prof-close:hover { background: var(--red-dim); color: var(--red); }
+    .prof-body { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 22px; max-height: 72vh; overflow-y: auto; }
+
+    .prof-stat-row { display: grid; grid-template-columns: repeat(auto-fit,minmax(115px,1fr)); gap: 10px; }
+    .prof-stat { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); padding: 11px 13px; }
+    .prof-stat-label { font-size: 9.5px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 5px; }
+    .prof-stat-val { font-size: 15px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+
+    .prof-section-title {
+      font-size: 10.5px; font-weight: 700; color: var(--text3);
+      text-transform: uppercase; letter-spacing: .6px; margin-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .prof-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .prof-pay-row, .prof-mail-item {
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 9px 12px; border-bottom: 1px solid var(--border);
+      font-size: 12.5px;
+    }
+    .prof-pay-row:last-child, .prof-mail-item:last-child { border-bottom: none; }
+    .prof-list-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); max-height: 180px; overflow-y: auto; }
+    .prof-empty { padding: 16px; text-align: center; color: var(--text3); font-size: 12.5px; }
+
+    .prof-mail-item { flex-direction: column; align-items: stretch; gap: 3px; }
+    .prof-mail-subject { font-weight: 700; color: var(--text); font-size: 12.5px; }
+    .prof-mail-meta { font-size: 10.5px; color: var(--text3); }
+    .prof-mail-body { font-size: 12px; color: var(--text2); line-height: 1.5; white-space: pre-wrap; margin-top: 2px; }
+
+    #prof-send-status { display: none; font-size: 12px; padding: 8px 11px; border-radius: var(--r8); margin-top: 8px; }
+    #prof-send-status.ok  { display: block; background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+    #prof-send-status.err { display: block; background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+
+    .user-email-link { background: none; border: none; padding: 0; cursor: pointer; color: var(--text); font-size: inherit; font-family: inherit; text-align: left; }
+    .user-email-link:hover { color: var(--blue); text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .prof-overlay { padding: 0; align-items: stretch; }
+      .prof-card { max-width: 100%; min-height: 100vh; min-height: 100dvh; border-radius: 0; border: none; }
+      .prof-body { max-height: none; }
+      .prof-stat-row { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -942,6 +1019,89 @@
 
 </main>
 
+<!-- ══ USER PROFILE MODAL ═══════════════════════════════════════ -->
+<div class="prof-overlay" id="prof-overlay" onclick="if(event.target===this) closeUserProfile()">
+  <div class="prof-card">
+    <div class="prof-head">
+      <div class="prof-avatar" id="prof-avatar">—</div>
+      <div style="min-width:0">
+        <div class="prof-name" id="prof-name">—</div>
+        <div class="prof-email" id="prof-email">—</div>
+        <div class="prof-uid" id="prof-uid">—</div>
+      </div>
+      <button class="prof-close" onclick="closeUserProfile()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <div class="prof-body">
+      <!-- Stats -->
+      <div class="prof-stat-row">
+        <div class="prof-stat">
+          <div class="prof-stat-label">Plan</div>
+          <div class="prof-stat-val" id="prof-plan">—</div>
+        </div>
+        <div class="prof-stat">
+          <div class="prof-stat-label">Expires</div>
+          <div class="prof-stat-val" id="prof-expiry" style="font-size:12.5px">—</div>
+        </div>
+        <div class="prof-stat">
+          <div class="prof-stat-label">Joined</div>
+          <div class="prof-stat-val" id="prof-joined" style="font-size:12.5px">—</div>
+        </div>
+        <div class="prof-stat">
+          <div class="prof-stat-label">Total Spent</div>
+          <div class="prof-stat-val" id="prof-spent">—</div>
+        </div>
+        <div class="prof-stat">
+          <div class="prof-stat-label">Orders</div>
+          <div class="prof-stat-val" id="prof-orders">—</div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="prof-actions">
+        <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="profEditAccess()">Edit Access</button>
+        <button class="ad-btn btn-danger btn-sm" id="prof-delete-btn" onclick="profDeleteAccount()">Delete Account</button>
+      </div>
+
+      <!-- Payment history -->
+      <div>
+        <div class="prof-section-title">Payment History</div>
+        <div class="prof-list-wrap" id="prof-payments">
+          <div class="prof-empty">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Compose email -->
+      <div>
+        <div class="prof-section-title">Send Email</div>
+        <div class="ad-field" style="margin-bottom:10px">
+          <input class="ad-input" id="prof-mail-subject" placeholder="Subject">
+        </div>
+        <div class="ad-field" style="margin-bottom:0">
+          <textarea class="ad-input ad-textarea" id="prof-mail-body" placeholder="Write your message…" style="min-height:100px"></textarea>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+          <button class="ad-btn btn-primary btn-sm" id="prof-send-btn" onclick="sendAdminEmail()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Send Email
+          </button>
+        </div>
+        <div id="prof-send-status"></div>
+      </div>
+
+      <!-- Email history -->
+      <div>
+        <div class="prof-section-title">Email History</div>
+        <div class="prof-list-wrap" id="prof-mail-history">
+          <div class="prof-empty">Loading…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ── CONFIG ─────────────────────────────────────────────────────── */
@@ -996,6 +1156,10 @@ document.addEventListener('click', function(e) {
     if (dd) dd.classList.remove('open');
     _grantDdIndex = -1;
   }
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeUserProfile();
 });
 
 /* ── TABS ────────────────────────────────────────────────────────── */
@@ -1312,15 +1476,17 @@ function applyUserFilters() {
 function renderUsers(users) {
   document.getElementById('users-tbody').innerHTML = users.length
     ? users.map(function(u) {
+        var idAttr = JSON.stringify(u.id).replace(/"/g,'&quot;');
         return '<tr>'
-          + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
+          + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '—') + '</button></td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
           + '<td>' + planBadge(u.subscription_plan) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
+          + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Edit</button>'
-          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + JSON.stringify(u.id).replace(/"/g,'&quot;') + ',' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Delete</button>'
+          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + idAttr + ',' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Delete</button>'
           + '</td>'
           + '</tr>';
       }).join('')
@@ -1350,6 +1516,156 @@ async function deleteUser(id, email) {
   _allUsers = _allUsers.filter(function(u) { return u.id !== id; });
   renderUsers(_allUsers);
   loadDashboard();
+}
+
+/* ── USER PROFILE MODAL ─────────────────────────────────────────── */
+var _profUser = null;
+
+async function openUserProfile(userId) {
+  var u = _allUsers.find(function(x) { return x.id === userId; });
+  if (!u) { toast('User not found', 'err'); return; }
+  _profUser = u;
+
+  document.getElementById('prof-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  var name = u.full_name || u.email || '—';
+  document.getElementById('prof-avatar').textContent = name.charAt(0).toUpperCase();
+  document.getElementById('prof-name').textContent = u.full_name || 'No name set';
+  document.getElementById('prof-email').textContent = u.email || '—';
+  document.getElementById('prof-uid').textContent = u.id;
+  document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan);
+  document.getElementById('prof-joined').textContent = fmtDate(u.created_at);
+  document.getElementById('prof-spent').textContent = '—';
+  document.getElementById('prof-orders').textContent = '—';
+
+  document.getElementById('prof-mail-subject').value = '';
+  document.getElementById('prof-mail-body').value = '';
+  document.getElementById('prof-send-status').className = '';
+  document.getElementById('prof-send-status').textContent = '';
+
+  document.getElementById('prof-payments').innerHTML = '<div class="prof-empty">Loading…</div>';
+  document.getElementById('prof-mail-history').innerHTML = '<div class="prof-empty">Loading…</div>';
+
+  loadProfPayments(u.id);
+  loadProfMailHistory(u.id);
+}
+
+function closeUserProfile() {
+  document.getElementById('prof-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  _profUser = null;
+}
+
+async function loadProfPayments(userId) {
+  var { data } = await _sb.from('payments')
+    .select('plan, amount, status, created_at, paid_at')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  var payments = data || [];
+  var paid = payments.filter(function(p) { return p.status === 'paid'; });
+  var totalSpent = paid.reduce(function(s, p) { return s + p.amount; }, 0);
+
+  document.getElementById('prof-spent').textContent = totalSpent ? '₹' + (totalSpent / 100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('prof-orders').textContent = paid.length;
+
+  document.getElementById('prof-payments').innerHTML = payments.length
+    ? payments.map(function(p) {
+        var badgeClass = p.status === 'paid' ? 'pay-badge-paid' : p.status === 'failed' ? 'pay-badge-failed' : 'pay-badge-created';
+        return '<div class="prof-pay-row">'
+          + '<span>' + planBadge(p.plan) + '</span>'
+          + '<span style="font-weight:700;font-variant-numeric:tabular-nums">₹' + esc((p.amount / 100).toLocaleString('en-IN')) + '</span>'
+          + '<span class="' + badgeClass + '" style="border-radius:20px;padding:2px 8px;font-size:10.5px;font-weight:700">' + esc(p.status) + '</span>'
+          + '<span style="color:var(--text3);font-size:11px;white-space:nowrap">' + fmtDate(p.status === 'paid' ? p.paid_at : p.created_at) + '</span>'
+          + '</div>';
+      }).join('')
+    : '<div class="prof-empty">No payments yet</div>';
+}
+
+async function loadProfMailHistory(userId) {
+  var { data, error } = await _sb.from('admin_emails')
+    .select('subject, message, sent_at')
+    .eq('user_id', userId)
+    .order('sent_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    document.getElementById('prof-mail-history').innerHTML = '<div class="prof-empty">Could not load history</div>';
+    return;
+  }
+
+  document.getElementById('prof-mail-history').innerHTML = data && data.length
+    ? data.map(function(m) {
+        return '<div class="prof-mail-item">'
+          + '<div style="display:flex;justify-content:space-between;gap:8px">'
+          + '<span class="prof-mail-subject">' + esc(m.subject) + '</span>'
+          + '<span class="prof-mail-meta" style="white-space:nowrap">' + fmtDate(m.sent_at) + '</span>'
+          + '</div>'
+          + '<div class="prof-mail-body">' + esc(m.message) + '</div>'
+          + '</div>';
+      }).join('')
+    : '<div class="prof-empty">No emails sent yet</div>';
+}
+
+async function sendAdminEmail() {
+  if (!_profUser) return;
+  var subject = document.getElementById('prof-mail-subject').value.trim();
+  var message = document.getElementById('prof-mail-body').value.trim();
+  var statusEl = document.getElementById('prof-send-status');
+  var btn = document.getElementById('prof-send-btn');
+
+  if (!subject || !message) {
+    statusEl.className = 'err';
+    statusEl.textContent = 'Subject and message are both required.';
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.className = '';
+  statusEl.textContent = '';
+
+  try {
+    var { data: { session } } = await _sb.auth.getSession();
+    if (!session) throw new Error('Session expired');
+
+    var res = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/send-admin-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + session.access_token,
+        'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+      },
+      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message })
+    });
+    var data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to send');
+
+    statusEl.className = 'ok';
+    statusEl.textContent = 'Email sent to ' + _profUser.email;
+    document.getElementById('prof-mail-subject').value = '';
+    document.getElementById('prof-mail-body').value = '';
+    loadProfMailHistory(_profUser.id);
+  } catch (e) {
+    statusEl.className = 'err';
+    statusEl.textContent = e.message || 'Something went wrong';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function profEditAccess() {
+  if (!_profUser) return;
+  closeUserProfile();
+  prefillGrant(_profUser.email);
+}
+
+function profDeleteAccount() {
+  if (!_profUser) return;
+  var id = _profUser.id, email = _profUser.email;
+  closeUserProfile();
+  deleteUser(id, email);
 }
 
 

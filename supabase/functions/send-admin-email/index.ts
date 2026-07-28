@@ -1,0 +1,148 @@
+import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+const json = (data: unknown, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { ...CORS, 'Content-Type': 'application/json' },
+  });
+
+function layout(heading: string, bodyHtml: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elec-Buddy</title>
+</head>
+<body style="margin:0;padding:0;background-color:#070D1A;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;color:#DDE5EF;">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#070D1A;padding:40px 16px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:480px;background-color:#0D1E33;border:1px solid #1A3050;border-radius:16px;">
+        <tr>
+          <td style="padding:40px 32px;text-align:center;">
+            <div style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#C8A44A;line-height:1.2;">
+              Elec-Buddy
+            </div>
+            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+              ETO EXAM PREPARATION
+            </div>
+            <h1 style="margin:36px 0 20px 0;font-size:22px;font-weight:700;line-height:1.3;color:#DDE5EF;">
+              ${heading}
+            </h1>
+            <div style="font-size:15px;line-height:1.75;color:#DDE5EF;text-align:left;white-space:pre-wrap;">
+              ${bodyHtml}
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
+            <div style="font-size:12px;color:#2E5577;line-height:1.7;">
+              Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
+              Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>`;
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
+  if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
+
+  try {
+    const SUPABASE_URL     = Deno.env.get('SUPABASE_URL')!;
+    const ANON_KEY         = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const RESEND_API_KEY   = Deno.env.get('RESEND_API_KEY')!;
+
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) return json({ error: 'Unauthorized' }, 401);
+
+    // Verify caller identity
+    const callerClient = createClient(SUPABASE_URL, ANON_KEY, {
+      global: { headers: { Authorization: authHeader } },
+    });
+    const { data: { user: caller }, error: callerErr } = await callerClient.auth.getUser();
+    if (callerErr || !caller) return json({ error: 'Unauthorized' }, 401);
+
+    const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
+
+    // Confirm caller is an admin
+    const { data: callerProfile } = await admin
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', caller.id)
+      .single();
+    if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
+
+    const body = await req.json().catch(() => ({}));
+    const { user_id, subject, message } = body;
+
+    if (!user_id || typeof user_id !== 'string') return json({ error: 'user_id required' }, 400);
+    if (!subject || typeof subject !== 'string' || !subject.trim()) return json({ error: 'subject required' }, 400);
+    if (!message || typeof message !== 'string' || !message.trim()) return json({ error: 'message required' }, 400);
+    if (subject.length > 200) return json({ error: 'subject too long' }, 400);
+    if (message.length > 8000) return json({ error: 'message too long' }, 400);
+
+    // Look up target user's email
+    const { data: target } = await admin
+      .from('profiles')
+      .select('email')
+      .eq('id', user_id)
+      .single();
+    if (!target?.email) return json({ error: 'User not found' }, 404);
+
+    const html = layout(subject, escapeHtml(message).replace(/\n/g, '<br>'));
+
+    const resendRes = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Elec-Buddy <support@elec-buddy.com>',
+        to: target.email,
+        subject,
+        html,
+      }),
+    });
+
+    if (!resendRes.ok) {
+      const errText = await resendRes.text();
+      console.error('Resend error:', errText);
+      return json({ error: 'Failed to send email' }, 502);
+    }
+
+    // Log for audit / profile history
+    await admin.from('admin_emails').insert({
+      user_id,
+      admin_id: caller.id,
+      to_email: target.email,
+      subject,
+      message,
+    });
+
+    return json({ ok: true });
+
+  } catch (err) {
+    console.error(err);
+    return json({ error: String(err) }, 500);
+  }
+});
