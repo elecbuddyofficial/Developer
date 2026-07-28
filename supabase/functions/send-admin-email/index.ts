@@ -29,6 +29,14 @@ function formatMessage(raw: string): string {
   }).join('');
 }
 
+// "Normal" mode: a true plain-text email with no branding, just the message
+// and a plain signature, like something typed directly in an inbox.
+function plainTextBody(message: string, signerName: string | null): string {
+  let text = message.trim();
+  if (signerName) text += `\n\nRegards,\n${signerName}\nElec-Buddy Team`;
+  return text;
+}
+
 function layout(opts: { heading: string; bodyHtml: string; signerName: string | null }): string {
   const { heading, bodyHtml, signerName } = opts;
 
@@ -134,7 +142,8 @@ serve(async (req) => {
     if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
 
     const body = await req.json().catch(() => ({}));
-    const { user_id, subject, message, from_admin_id } = body;
+    const { user_id, subject, message, from_admin_id, email_format } = body;
+    const useTemplate = email_format !== 'plain';
 
     if (!user_id || typeof user_id !== 'string') return json({ error: 'user_id required' }, 400);
     if (!subject || typeof subject !== 'string' || !subject.trim()) return json({ error: 'subject required' }, 400);
@@ -192,11 +201,10 @@ serve(async (req) => {
       }
     }
 
-    const html = layout({
-      heading: subject,
-      bodyHtml: formatMessage(message),
-      signerName: signerProfile.full_name || null,
-    });
+    const signerName = signerProfile.full_name || null;
+    const emailBody = useTemplate
+      ? { html: layout({ heading: subject, bodyHtml: formatMessage(message), signerName }) }
+      : { text: plainTextBody(message, signerName) };
 
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -209,7 +217,7 @@ serve(async (req) => {
         to: target.email,
         reply_to: replyTo,
         subject,
-        html,
+        ...emailBody,
       }),
     });
 

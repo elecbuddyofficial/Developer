@@ -620,6 +620,21 @@
     .user-email-link { background: none; border: none; padding: 0; cursor: pointer; color: var(--text); font-size: inherit; font-family: inherit; text-align: left; }
     .user-email-link:hover { color: var(--blue); text-decoration: underline; }
 
+    /* Plain / Template switch */
+    .prof-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; cursor: pointer; }
+    .prof-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .prof-switch-track { position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--border2); border-radius: 22px; transition: background .18s, border-color .18s; }
+    .prof-switch-track::before {
+      content: ''; position: absolute; height: 16px; width: 16px; left: 2px; top: 1px;
+      background: #fff; border-radius: 50%; transition: transform .18s;
+      box-shadow: 0 1px 3px rgba(0,0,0,.35);
+    }
+    .prof-switch input:checked + .prof-switch-track { background: var(--blue); border-color: var(--blue-border); }
+    .prof-switch input:checked + .prof-switch-track::before { transform: translateX(18px); }
+    .prof-switch input:focus-visible + .prof-switch-track { outline: 2px solid var(--blue); outline-offset: 2px; }
+    .prof-switch-label { font-size: 12.5px; font-weight: 600; color: var(--text3); transition: color .18s; }
+    .prof-switch-label.on { color: var(--text); }
+
     @media (max-width: 600px) {
       .prof-overlay { padding: 0; align-items: stretch; }
       .prof-card { max-width: 100%; min-height: 100vh; min-height: 100dvh; border-radius: 0; border: none; }
@@ -1106,6 +1121,17 @@
           <select class="ad-select" id="prof-mail-sender"></select>
         </div>
         <div class="ad-field" style="margin-bottom:10px">
+          <label class="ad-label">Format</label>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span id="prof-format-label-plain" class="prof-switch-label">Plain</span>
+            <label class="prof-switch">
+              <input type="checkbox" id="prof-mail-format-toggle" checked onchange="onProfFormatToggle()">
+              <span class="prof-switch-track"></span>
+            </label>
+            <span id="prof-format-label-template" class="prof-switch-label on">Template</span>
+          </div>
+        </div>
+        <div class="ad-field" style="margin-bottom:10px">
           <input class="ad-input" id="prof-mail-subject" placeholder="Subject">
         </div>
         <div class="ad-field" style="margin-bottom:0">
@@ -1574,6 +1600,8 @@ async function openUserProfile(userId) {
   document.getElementById('prof-mail-body').value = '';
   document.getElementById('prof-send-status').className = '';
   document.getElementById('prof-send-status').textContent = '';
+  document.getElementById('prof-mail-format-toggle').checked = true;
+  onProfFormatToggle();
   populateProfMailSender();
 
   document.getElementById('prof-payments').innerHTML = '<div class="prof-empty">Loading…</div>';
@@ -1652,9 +1680,16 @@ function populateProfMailSender() {
   if (admins.some(function(a) { return a.id === _myId; })) sel.value = _myId;
 }
 
+function onProfFormatToggle() {
+  var checked = document.getElementById('prof-mail-format-toggle').checked;
+  document.getElementById('prof-format-label-plain').classList.toggle('on', !checked);
+  document.getElementById('prof-format-label-template').classList.toggle('on', checked);
+}
+
 async function sendAdminEmail() {
   if (!_profUser) return;
   var fromAdminId = document.getElementById('prof-mail-sender').value;
+  var emailFormat = document.getElementById('prof-mail-format-toggle').checked ? 'template' : 'plain';
   var subject = document.getElementById('prof-mail-subject').value.trim();
   var message = document.getElementById('prof-mail-body').value.trim();
   var statusEl = document.getElementById('prof-send-status');
@@ -1681,7 +1716,7 @@ async function sendAdminEmail() {
         'Authorization': 'Bearer ' + session.access_token,
         'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
       },
-      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message, from_admin_id: fromAdminId })
+      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message, from_admin_id: fromAdminId, email_format: emailFormat })
     });
     var data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed to send');
