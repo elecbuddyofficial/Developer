@@ -291,6 +291,193 @@
     .cs-section-head { font-size:12px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.7px; margin:18px 0 10px; }
     .cs-section-head:first-child { margin-top:0; }
 
+    /* ── RESPONSIVE ── */
+    /* Tablet ≤960px: sidebar icon-only */
+    @media (max-width: 960px) {
+      #ad-side { width: 58px; }
+      .ad-logo-name, .ad-logo-sub, .ad-nav-btn span, .ad-user-email, .ad-signout span { display: none; }
+      .ad-logo { justify-content: center; padding: 14px 0; }
+      .ad-logo-icon { margin: 0; }
+      .ad-nav-btn { justify-content: center; padding: 10px 0; }
+      .ad-nav-btn svg { width: 18px; height: 18px; }
+      .ad-user-chip { justify-content: center; }
+      .ad-signout { justify-content: center; }
+      .ad-tab { padding: 20px 18px 32px; }
+      .dash-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-kpi-sm-row { grid-template-columns: repeat(3, 1fr); }
+      .dash-mid-row { grid-template-columns: 1fr; }
+      .dash-bot-row { flex-direction: column; }
+      .ad-nav-btn { position: relative; }
+      .ad-nav-btn:hover::after {
+        content: attr(title);
+        position: absolute; left: 64px; top: 50%; transform: translateY(-50%);
+        background: var(--surface3); border: 1px solid var(--border2);
+        color: var(--text); font-size: 12px; white-space: nowrap;
+        padding: 5px 10px; border-radius: 6px; z-index: 200; pointer-events: none;
+      }
+    }
+
+    /* Mobile ≤600px: hamburger drawer */
+    @media (max-width: 600px) {
+      body { flex-direction: column; }
+      #ad-side {
+        width: 100%; height: auto; flex-direction: row;
+        border-right: none; border-bottom: 1px solid var(--border);
+        overflow: visible; position: relative; z-index: 100;
+        display: none;
+      }
+      #ad-side.mob-open { display: flex; flex-direction: column; position: fixed; inset: 0; width: 260px; height: 100vh; z-index: 300; box-shadow: 0 0 0 100vw rgba(0,0,0,.6); }
+      #mob-topbar { display: flex !important; }
+      #ad-main { overflow-y: auto; }
+      .ad-tab { padding: 16px 14px 32px; }
+      .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .dash-kpi-sm-row { grid-template-columns: 1fr 1fr; }
+      .dash-mid-row { grid-template-columns: 1fr; }
+      .dash-bot-row { flex-direction: column; }
+      .ad-stats { grid-template-columns: repeat(2, 1fr); }
+      .users-controls { flex-direction: column; align-items: flex-start; }
+      .ad-row { flex-direction: column; }
+    }
+
+    /* Mobile top bar */
+    #mob-topbar {
+      display: none;
+      align-items: center; justify-content: space-between;
+      padding: 0 16px; height: 52px; flex-shrink: 0;
+      background: var(--surface); border-bottom: 1px solid var(--border);
+    }
+    #mob-topbar .mob-logo { font-size: 15px; font-weight: 800; color: var(--text); }
+    #mob-topbar .mob-logo span { color: var(--blue); }
+    #mob-ham {
+      width: 36px; height: 36px; border: 1px solid var(--border2);
+      border-radius: var(--r8); background: var(--surface2);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 4px; cursor: pointer;
+    }
+    #mob-ham span { display: block; width: 16px; height: 1.5px; background: var(--text2); border-radius: 2px; }
+    #mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; }
+    #mob-overlay.on { display: block; }
+
+    /* ── ANALYTICS DASHBOARD ── */
+    .dash-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .dash-kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r12);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .dash-kpi::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--r12);
+      opacity: 0;
+    }
+    .dki-label {
+      font-size: 10px; font-weight: 700; color: var(--text3);
+      text-transform: uppercase; letter-spacing: .7px; margin-bottom: 10px;
+    }
+    .dki-val {
+      font-size: 30px; font-weight: 800; color: var(--text);
+      letter-spacing: -1.5px; line-height: 1; font-variant-numeric: tabular-nums;
+    }
+    .dki-sub { font-size: 11px; color: var(--text3); margin-top: 6px; }
+    .dki-delta { font-size: 10.5px; font-weight: 700; margin-top: 5px; display: inline-flex; align-items: center; gap: 3px; }
+    .dki-delta.up   { color: var(--green); }
+    .dki-delta.down { color: var(--red); }
+
+    .dk-blue  .dki-val { color: var(--blue); }
+    .dk-green .dki-val { color: var(--green); }
+    .dk-amber .dki-val { color: var(--orange); }
+    .dk-purple .dki-val { color: var(--purple); }
+
+    .dash-kpi-sm-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .dash-kpi-sm {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--r8);
+      padding: 12px 14px;
+    }
+    .dki-val-sm {
+      font-size: 22px; font-weight: 800; color: var(--text);
+      letter-spacing: -1px; margin-top: 5px; font-variant-numeric: tabular-nums;
+    }
+    .dki-val-sm.red  { color: var(--red); }
+    .dki-val-sm.blue { color: var(--blue); }
+
+    .dash-mid-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .dash-chart-card, .dash-plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r12);
+      padding: 18px 20px;
+    }
+    .dcc-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .dcc-title {
+      font-size: 10.5px; font-weight: 700; color: var(--text3);
+      text-transform: uppercase; letter-spacing: .7px;
+    }
+    .dcc-meta { font-size: 11px; color: var(--text3); }
+    #signup-sparkline { width: 100%; display: block; border-radius: 4px; }
+
+    .pdist-row { margin-bottom: 12px; }
+    .pdist-row:last-child { margin-bottom: 0; }
+    .pdist-label {
+      display: flex; justify-content: space-between;
+      font-size: 11.5px; color: var(--text2); margin-bottom: 5px;
+      font-weight: 600;
+    }
+    .pdist-label span:last-child { font-weight: 400; color: var(--text3); }
+    .pdist-bar-track {
+      background: var(--surface2); border-radius: 4px; height: 6px; overflow: hidden;
+    }
+    .pdist-bar-fill { height: 100%; border-radius: 4px; transition: width .5s cubic-bezier(.4,0,.2,1); min-width: 2px; }
+
+    .dash-bot-row { display: flex; gap: 16px; }
+
+    /* ── USERS TAB CONTROLS ── */
+    .users-controls {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
+    }
+    .users-pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .upill {
+      padding: 6px 12px; border-radius: 20px;
+      border: 1.5px solid var(--border2);
+      background: var(--surface2); color: var(--text2);
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: all .15s; display: flex; align-items: center; gap: 5px;
+      font-family: inherit;
+    }
+    .upill:hover { border-color: var(--blue); color: var(--blue); }
+    .upill.active { background: var(--blue-dim); border-color: var(--blue-border); color: var(--blue); }
+    .upill-count {
+      font-size: 10px; font-weight: 700;
+      background: var(--surface3); border-radius: 10px; padding: 1px 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .upill.active .upill-count { background: rgba(59,130,246,.18); }
+
     /* Payments tab */
     .pay-stat-card {
       background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
@@ -310,6 +497,15 @@
 <body>
 
 <div id="ad-toast"></div>
+<div id="mob-overlay" onclick="closeMobNav()"></div>
+
+<!-- Mobile top bar (hidden on desktop via CSS) -->
+<div id="mob-topbar">
+  <div class="mob-logo"><span>Elec</span>-Buddy Admin</div>
+  <div id="mob-ham" onclick="toggleMobNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</div>
 
 <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
 <aside id="ad-side">
@@ -322,34 +518,34 @@
   </div>
 
   <nav class="ad-nav">
-    <button class="ad-nav-btn active" onclick="showTab('dashboard')" data-tab="dashboard">
+    <button class="ad-nav-btn active" onclick="showTab('dashboard');closeMobNav()" data-tab="dashboard" title="Dashboard">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      Dashboard
+      <span>Dashboard</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('users')" data-tab="users">
+    <button class="ad-nav-btn" onclick="showTab('users');closeMobNav()" data-tab="users" title="Users">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      Users
+      <span>Users</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('grant')" data-tab="grant">
+    <button class="ad-nav-btn" onclick="showTab('grant');closeMobNav()" data-tab="grant" title="Grant Access">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
-      Grant Access
+      <span>Grant Access</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('notifications')" data-tab="notifications">
+    <button class="ad-nav-btn" onclick="showTab('notifications');closeMobNav()" data-tab="notifications" title="Notifications">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3V11a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
-      Notifications
+      <span>Notifications</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('admins')" data-tab="admins">
+    <button class="ad-nav-btn" onclick="showTab('admins');closeMobNav()" data-tab="admins" title="Team Admins">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 3v1h16v-1c0-1-3-3-8-3z"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 13c-1-.5-2.5-.8-4-.9"/></svg>
-      Team Admins
+      <span>Team Admins</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('payments')" data-tab="payments">
+    <button class="ad-nav-btn" onclick="showTab('payments');closeMobNav()" data-tab="payments" title="Payments">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      Payments
+      <span>Payments</span>
     </button>
     <div class="ad-nav-divider"></div>
-    <button class="ad-nav-btn" onclick="showTab('status')" data-tab="status">
+    <button class="ad-nav-btn" onclick="showTab('status');closeMobNav()" data-tab="status" title="Content Status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
-      Content Status
+      <span>Content Status</span>
     </button>
   </nav>
 
@@ -371,51 +567,117 @@
   <!-- DASHBOARD ──────────────────────────────────────────────── -->
   <div class="ad-tab active" id="tab-dashboard">
     <div class="ad-ph">
-      <h1>Dashboard</h1>
-      <p>User and subscription overview at a glance.</p>
+      <h1>Analytics</h1>
+      <p>Live overview of growth, revenue, and subscription health.</p>
     </div>
-    <div class="ad-stats">
-      <div class="ad-stat">
-        <div class="ad-stat-label">Total Users</div>
-        <div class="ad-stat-val" id="st-total">—</div>
-        <div class="ad-stat-sub">All time signups</div>
+
+    <!-- Primary KPIs -->
+    <div class="dash-kpi-grid">
+      <div class="dash-kpi dk-blue">
+        <div class="dki-label">Total Users</div>
+        <div class="dki-val" id="dk-total">—</div>
+        <div class="dki-sub" id="dk-total-sub">All time signups</div>
       </div>
-      <div class="ad-stat stat-green">
-        <div class="ad-stat-label">Active Access</div>
-        <div class="ad-stat-val" id="st-active">—</div>
-        <div class="ad-stat-sub">Paid or lifetime</div>
+      <div class="dash-kpi dk-green">
+        <div class="dki-label">Active Subscribers</div>
+        <div class="dki-val" id="dk-active">—</div>
+        <div class="dki-sub" id="dk-active-sub">Paid, not expired</div>
       </div>
-      <div class="ad-stat stat-amber">
-        <div class="ad-stat-label">On Trial</div>
-        <div class="ad-stat-val" id="st-trial">—</div>
-        <div class="ad-stat-sub">Trial plan</div>
+      <div class="dash-kpi dk-amber">
+        <div class="dki-label">Total Revenue</div>
+        <div class="dki-val" id="dk-revenue">—</div>
+        <div class="dki-sub" id="dk-revenue-sub">From paid orders</div>
       </div>
-      <div class="ad-stat stat-red">
-        <div class="ad-stat-label">Expired</div>
-        <div class="ad-stat-val" id="st-expired">—</div>
-        <div class="ad-stat-sub">Access lapsed</div>
+      <div class="dash-kpi dk-purple">
+        <div class="dki-label">Conversion Rate</div>
+        <div class="dki-val" id="dk-conv">—</div>
+        <div class="dki-sub" id="dk-conv-sub">Trial → Paid</div>
       </div>
     </div>
 
-    <div class="ad-section-head">Recent Signups</div>
-    <div class="ad-table-wrap">
-      <table class="ad-table">
-        <thead><tr>
-          <th>Email</th><th>Name</th><th>Plan</th><th>Joined</th>
-        </tr></thead>
-        <tbody id="dash-recent"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
-      </table>
+    <!-- Secondary KPIs -->
+    <div class="dash-kpi-sm-row">
+      <div class="dash-kpi-sm">
+        <div class="dki-label">On Trial</div>
+        <div class="dki-val-sm" id="dk-trial">—</div>
+      </div>
+      <div class="dash-kpi-sm">
+        <div class="dki-label">Expired / Lapsed</div>
+        <div class="dki-val-sm red" id="dk-expired">—</div>
+      </div>
+      <div class="dash-kpi-sm">
+        <div class="dki-label">New This Week</div>
+        <div class="dki-val-sm blue" id="dk-week">—</div>
+      </div>
+      <div class="dash-kpi-sm">
+        <div class="dki-label">Paid Orders</div>
+        <div class="dki-val-sm" id="dk-orders">—</div>
+      </div>
+      <div class="dash-kpi-sm">
+        <div class="dki-label">Avg Order Value</div>
+        <div class="dki-val-sm" id="dk-avg-order">—</div>
+      </div>
+    </div>
+
+    <!-- Chart + Plan distribution -->
+    <div class="dash-mid-row">
+      <div class="dash-chart-card">
+        <div class="dcc-head">
+          <div class="dcc-title">Signups — last 30 days</div>
+          <div class="dcc-meta" id="dcc-sparkline-meta"></div>
+        </div>
+        <canvas id="signup-sparkline" height="90"></canvas>
+      </div>
+      <div class="dash-plan-card">
+        <div class="dcc-head">
+          <div class="dcc-title">Plan Distribution</div>
+        </div>
+        <div id="plan-dist"><div class="ad-loading">Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- Recent activity -->
+    <div class="dash-bot-row">
+      <div style="flex:3;min-width:0">
+        <div class="ad-section-head">Recent Signups</div>
+        <div class="ad-table-wrap">
+          <table class="ad-table">
+            <thead><tr>
+              <th>Email</th><th>Name</th><th>Plan</th><th>Joined</th>
+            </tr></thead>
+            <tbody id="dash-recent"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div style="flex:2;min-width:0">
+        <div class="ad-section-head">Recent Payments</div>
+        <div class="ad-table-wrap">
+          <table class="ad-table">
+            <thead><tr>
+              <th>Email</th><th>Plan</th><th style="text-align:right">Amount</th>
+            </tr></thead>
+            <tbody id="dash-recent-pay"><tr><td colspan="3" class="empty">Loading...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- USERS ──────────────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-users">
     <div class="ad-ph">
-      <h1>All Users</h1>
-      <p>Full list of registered users and their access status.</p>
+      <h1>Users</h1>
+      <p>Full list of registered accounts and their subscription status.</p>
     </div>
-    <div class="ad-search-row">
-      <input class="ad-input ad-search" id="user-search" placeholder="Search by email or name..." oninput="filterUsers(this.value)">
+    <div class="users-controls">
+      <div class="users-pill-row">
+        <button class="upill active" data-filter="all"      onclick="setUserFilter('all')">All      <span class="upill-count" id="upc-all">—</span></button>
+        <button class="upill"        data-filter="active"   onclick="setUserFilter('active')">Active   <span class="upill-count" id="upc-active">—</span></button>
+        <button class="upill"        data-filter="trial"    onclick="setUserFilter('trial')">Trial    <span class="upill-count" id="upc-trial">—</span></button>
+        <button class="upill"        data-filter="expired"  onclick="setUserFilter('expired')">Expired  <span class="upill-count" id="upc-expired">—</span></button>
+        <button class="upill"        data-filter="lifetime" onclick="setUserFilter('lifetime')">Lifetime <span class="upill-count" id="upc-lifetime">—</span></button>
+      </div>
+      <input class="ad-input" style="max-width:240px;flex-shrink:0" id="user-search" placeholder="Search email or name…" oninput="applyUserFilters()">
     </div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -425,6 +687,7 @@
         <tbody id="users-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
+    <div id="users-count" style="font-size:11.5px;color:var(--text3);margin-top:10px;text-align:right;"></div>
   </div>
 
   <!-- GRANT ACCESS ───────────────────────────────────────────── -->
@@ -629,6 +892,7 @@ var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
 var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _myId, _myEmail;
 var _allUsers = [];
+var _dashProfiles = [];
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -715,39 +979,64 @@ function expiryDisplay(iso, plan) {
 
 /* ── DASHBOARD ───────────────────────────────────────────────────── */
 async function loadDashboard() {
-  var { data: all, error } = await _sb.from('profiles')
-    .select('subscription_plan, subscription_expires_at, created_at, email, full_name')
-    .order('created_at', { ascending: false });
-  if (error || !all) {
-    document.getElementById('dash-recent').innerHTML =
-      '<tr><td colspan="4" class="empty">Failed to load. <a href="" style="color:var(--blue)">Reload page</a></td></tr>';
-    ['st-total','st-active','st-trial','st-expired'].forEach(function(id) {
-      document.getElementById(id).textContent = '—';
-    });
-    return;
-  }
+  var [profilesRes, paymentsRes] = await Promise.all([
+    _sb.from('profiles')
+      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name')
+      .order('created_at', { ascending: false }),
+    _sb.from('payments')
+      .select('amount, plan, created_at, paid_at, user_id, razorpay_payment_id')
+      .eq('status', 'paid')
+      .order('paid_at', { ascending: false }),
+  ]);
 
-  var now = new Date();
+  var all      = profilesRes.data || [];
+  var payments = paymentsRes.data || [];
+  _dashProfiles = all;
+
+  var now     = new Date();
+  var weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+
   var active = all.filter(function(u) {
     if (u.subscription_plan === 'lifetime') return true;
-    if (['starter','standard','pro'].includes(u.subscription_plan))
+    if (['starter','standard','pro'].indexOf(u.subscription_plan) !== -1)
       return !u.subscription_expires_at || new Date(u.subscription_expires_at) > now;
     return false;
   });
   var trial   = all.filter(function(u) { return !u.subscription_plan || u.subscription_plan === 'trial'; });
   var expired = all.filter(function(u) {
-    if (!['starter','standard','pro'].includes(u.subscription_plan)) return false;
+    if (['starter','standard','pro'].indexOf(u.subscription_plan) === -1) return false;
     return u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
   });
+  var newWeek = all.filter(function(u) { return new Date(u.created_at) > weekAgo; });
 
-  document.getElementById('st-total').textContent   = all.length;
-  document.getElementById('st-active').textContent  = active.length;
-  document.getElementById('st-trial').textContent   = trial.length;
-  document.getElementById('st-expired').textContent = expired.length;
+  var totalRevenue = payments.reduce(function(s, p) { return s + p.amount; }, 0);
+  var avgOrder     = payments.length ? Math.round(totalRevenue / payments.length) : 0;
+  var convRate     = all.length ? Math.round(active.length / all.length * 100) : 0;
 
-  var recent = all.slice(0, 10);
-  document.getElementById('dash-recent').innerHTML = recent.length
-    ? recent.map(function(u) {
+  // Primary KPIs
+  document.getElementById('dk-total').textContent    = all.length;
+  document.getElementById('dk-active').textContent   = active.length;
+  document.getElementById('dk-revenue').textContent  = totalRevenue ? '₹' + (totalRevenue / 100).toLocaleString('en-IN') : '₹0';
+  document.getElementById('dk-conv').textContent     = convRate + '%';
+  document.getElementById('dk-total-sub').textContent  = all.length === 1 ? '1 registered user' : all.length + ' registered users';
+  document.getElementById('dk-active-sub').textContent = active.length + ' of ' + all.length + ' users';
+  document.getElementById('dk-revenue-sub').textContent = payments.length + ' paid order' + (payments.length !== 1 ? 's' : '');
+  document.getElementById('dk-conv-sub').textContent  = active.length + ' paid / ' + all.length + ' total';
+
+  // Secondary KPIs
+  document.getElementById('dk-trial').textContent     = trial.length;
+  document.getElementById('dk-expired').textContent   = expired.length;
+  document.getElementById('dk-week').textContent      = '+' + newWeek.length;
+  document.getElementById('dk-orders').textContent    = payments.length;
+  document.getElementById('dk-avg-order').textContent = avgOrder ? '₹' + (avgOrder / 100).toLocaleString('en-IN') : '—';
+
+  // Charts
+  drawSparkline(all);
+  drawPlanDist(all, now);
+
+  // Recent signups table
+  document.getElementById('dash-recent').innerHTML = all.length
+    ? all.slice(0, 10).map(function(u) {
         return '<tr>'
           + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
@@ -756,9 +1045,151 @@ async function loadDashboard() {
           + '</tr>';
       }).join('')
     : '<tr><td colspan="4" class="empty">No users yet</td></tr>';
+
+  // Recent payments table - join email from profiles
+  var profileMap = {};
+  all.forEach(function(u) { profileMap[u.id] = u.email || u.id.slice(0, 8); });
+
+  document.getElementById('dash-recent-pay').innerHTML = payments.length
+    ? payments.slice(0, 8).map(function(p) {
+        return '<tr>'
+          + '<td class="email-cell" style="font-size:12px">' + esc(profileMap[p.user_id] || p.user_id.slice(0, 10) + '…') + '</td>'
+          + '<td>' + planBadge(p.plan) + '</td>'
+          + '<td style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums">₹' + esc((p.amount / 100).toLocaleString('en-IN')) + '</td>'
+          + '</tr>';
+      }).join('')
+    : '<tr><td colspan="3" class="empty">No payments yet</td></tr>';
+}
+
+function drawSparkline(all) {
+  var canvas = document.getElementById('signup-sparkline');
+  if (!canvas) return;
+  var dpr = window.devicePixelRatio || 1;
+  var rect = canvas.getBoundingClientRect();
+  canvas.width  = (rect.width  || 500) * dpr;
+  canvas.height = 90 * dpr;
+  canvas.style.height = '90px';
+
+  var days   = 30;
+  var counts = new Array(days).fill(0);
+  var now    = new Date();
+  all.forEach(function(u) {
+    var d = Math.floor((now - new Date(u.created_at)) / 86400000);
+    if (d >= 0 && d < days) counts[days - 1 - d]++;
+  });
+
+  var max  = Math.max.apply(null, counts.concat([1]));
+  var W    = canvas.width;
+  var H    = canvas.height;
+  var pad  = { top: 12 * dpr, right: 10 * dpr, bottom: 22 * dpr, left: 30 * dpr };
+  var cw   = W - pad.left - pad.right;
+  var ch   = H - pad.top - pad.bottom;
+  var ctx  = canvas.getContext('2d');
+  ctx.clearRect(0, 0, W, H);
+  ctx.scale(dpr, dpr);
+  W /= dpr; H /= dpr;
+  var pw   = W - pad.left / dpr - pad.right / dpr;
+  var ph   = H - pad.top / dpr - pad.bottom / dpr;
+  var pl   = pad.left / dpr;
+  var pt   = pad.top / dpr;
+  var pb   = H - pad.bottom / dpr;
+
+  var isDark      = document.documentElement.getAttribute('data-theme') !== 'light';
+  var gridColor   = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)';
+  var labelColor  = isDark ? '#475569' : '#94A3B8';
+  var lineColor   = '#3b82f6';
+  var fillStart   = 'rgba(59,130,246,0.18)';
+  var fillEnd     = 'rgba(59,130,246,0.01)';
+
+  // Grid lines + Y labels
+  [0, 0.5, 1].forEach(function(frac) {
+    var y = pt + ph * (1 - frac);
+    ctx.strokeStyle = gridColor; ctx.lineWidth = 1;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.moveTo(pl, y); ctx.lineTo(pl + pw, y); ctx.stroke();
+    ctx.setLineDash([]);
+    if (frac > 0) {
+      ctx.fillStyle = labelColor; ctx.font = '9px system-ui'; ctx.textAlign = 'right';
+      ctx.fillText(Math.round(max * frac), pl - 4, y + 3);
+    }
+  });
+
+  // X labels every ~7 days
+  ctx.fillStyle = labelColor; ctx.font = '9px system-ui'; ctx.textAlign = 'center';
+  [0, 7, 14, 21, 29].forEach(function(i) {
+    var x = pl + (i / (days - 1)) * pw;
+    var d = new Date(now.getTime() - (days - 1 - i) * 86400000);
+    ctx.fillText(d.getDate() + '/' + (d.getMonth() + 1), x, pb + 12);
+  });
+
+  // Fill gradient
+  var grad = ctx.createLinearGradient(0, pt, 0, pb);
+  grad.addColorStop(0, fillStart);
+  grad.addColorStop(1, fillEnd);
+  ctx.beginPath();
+  counts.forEach(function(v, i) {
+    var x = pl + (i / (days - 1)) * pw;
+    var y = pt + ph * (1 - v / max);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.lineTo(pl + pw, pb); ctx.lineTo(pl, pb); ctx.closePath();
+  ctx.fillStyle = grad; ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  counts.forEach(function(v, i) {
+    var x = pl + (i / (days - 1)) * pw;
+    var y = pt + ph * (1 - v / max);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  });
+  ctx.strokeStyle = lineColor; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.stroke();
+
+  // Dots on days with signups
+  counts.forEach(function(v, i) {
+    if (!v) return;
+    var x = pl + (i / (days - 1)) * pw;
+    var y = pt + ph * (1 - v / max);
+    ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = lineColor; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+  });
+
+  document.getElementById('dcc-sparkline-meta').textContent =
+    counts.reduce(function(a, b) { return a + b; }, 0) + ' total';
+}
+
+function drawPlanDist(all, now) {
+  var counts = { lifetime: 0, pro: 0, standard: 0, starter: 0, trial: 0 };
+  all.forEach(function(u) {
+    var p = u.subscription_plan || 'trial';
+    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    if (isExpired) p = 'trial';
+    counts[p] = (counts[p] || 0) + 1;
+  });
+  var total = all.length || 1;
+  var plans = [
+    { key: 'lifetime', label: 'Lifetime', color: 'var(--orange)' },
+    { key: 'pro',      label: 'Pro',      color: 'var(--purple)' },
+    { key: 'standard', label: 'Standard', color: 'var(--blue)' },
+    { key: 'starter',  label: 'Starter',  color: 'var(--green)' },
+    { key: 'trial',    label: 'Trial / Expired', color: 'var(--text3)' },
+  ];
+  document.getElementById('plan-dist').innerHTML = plans.map(function(pl) {
+    var count = counts[pl.key] || 0;
+    var pct   = Math.round(count / total * 100);
+    return '<div class="pdist-row">'
+      + '<div class="pdist-label"><span>' + pl.label + '</span>'
+      + '<span>' + count + ' <span style="font-size:10px;color:var(--text3)">(' + pct + '%)</span></span></div>'
+      + '<div class="pdist-bar-track"><div class="pdist-bar-fill" style="width:' + Math.max(pct, count ? 2 : 0) + '%;background:' + pl.color + ';opacity:.75"></div></div>'
+      + '</div>';
+  }).join('');
 }
 
 /* ── USERS ───────────────────────────────────────────────────────── */
+var _userFilter = 'all';
+
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
     .select('id, email, full_name, subscription_plan, subscription_expires_at, created_at')
@@ -769,7 +1200,56 @@ async function loadUsers() {
     return;
   }
   _allUsers = data || [];
-  renderUsers(_allUsers);
+  updatePillCounts(_allUsers);
+  applyUserFilters();
+}
+
+function updatePillCounts(users) {
+  var now = new Date();
+  function cat(u) {
+    var p = u.subscription_plan || 'trial';
+    if (p === 'lifetime') return 'lifetime';
+    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    if (isExpired) return 'expired';
+    if (['starter','standard','pro'].indexOf(p) !== -1) return 'active';
+    return 'trial';
+  }
+  var counts = { all: users.length, active: 0, trial: 0, expired: 0, lifetime: 0 };
+  users.forEach(function(u) { counts[cat(u)]++; });
+  ['all','active','trial','expired','lifetime'].forEach(function(k) {
+    var el = document.getElementById('upc-' + k);
+    if (el) el.textContent = counts[k];
+  });
+}
+
+function setUserFilter(filter) {
+  _userFilter = filter;
+  document.querySelectorAll('.upill').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.filter === filter);
+  });
+  applyUserFilters();
+}
+
+function applyUserFilters() {
+  var q   = (document.getElementById('user-search').value || '').toLowerCase();
+  var now = new Date();
+  var filtered = _allUsers.filter(function(u) {
+    if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
+    var p = u.subscription_plan || 'trial';
+    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    var isActive = !isExpired && ['starter','standard','pro'].indexOf(p) !== -1;
+    if (_userFilter === 'all')      return true;
+    if (_userFilter === 'active')   return isActive;
+    if (_userFilter === 'trial')    return p === 'trial' && !isExpired;
+    if (_userFilter === 'expired')  return isExpired;
+    if (_userFilter === 'lifetime') return p === 'lifetime';
+    return true;
+  });
+  renderUsers(filtered);
+  var cnt = document.getElementById('users-count');
+  if (cnt) cnt.textContent = filtered.length + ' user' + (filtered.length !== 1 ? 's' : '');
 }
 
 function renderUsers(users) {
@@ -815,12 +1295,6 @@ async function deleteUser(id, email) {
   loadDashboard();
 }
 
-function filterUsers(q) {
-  q = q.toLowerCase();
-  renderUsers(_allUsers.filter(function(u) {
-    return (u.email || '').toLowerCase().includes(q) || (u.full_name || '').toLowerCase().includes(q);
-  }));
-}
 
 /* ── GRANT ACCESS ────────────────────────────────────────────────── */
 var _grantDdIndex = -1;
@@ -1147,6 +1621,27 @@ async function doSignOut() {
   await _sb.auth.signOut();
   window.location.replace('../auth.html');
 }
+
+/* ── MOBILE NAV ──────────────────────────────────────────────────── */
+function toggleMobNav() {
+  var side    = document.getElementById('ad-side');
+  var overlay = document.getElementById('mob-overlay');
+  var open    = side.classList.toggle('mob-open');
+  overlay.classList.toggle('on', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeMobNav() {
+  document.getElementById('ad-side').classList.remove('mob-open');
+  document.getElementById('mob-overlay').classList.remove('on');
+  document.body.style.overflow = '';
+}
+
+/* Redraw sparkline on resize */
+window.addEventListener('resize', function() {
+  if (document.getElementById('tab-dashboard').classList.contains('active') && _dashProfiles.length) {
+    drawSparkline(_dashProfiles);
+  }
+});
 </script>
 
 <script>
