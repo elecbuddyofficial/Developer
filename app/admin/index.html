@@ -657,10 +657,38 @@ function renderUsers(users) {
           + '<td>' + planBadge(u.subscription_plan) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
-          + '<td><button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(\'' + (u.email || '') + '\')">Edit</button></td>'
+          + '<td style="display:flex;gap:6px">'
+          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(\'' + (u.email || '') + '\')">Edit</button>'
+          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(\'' + u.id + '\',\'' + (u.email || '') + '\')">Delete</button>'
+          + '</td>'
           + '</tr>';
       }).join('')
     : '<tr><td colspan="6" class="empty">No users</td></tr>';
+}
+
+async function deleteUser(id, email) {
+  if (!confirm('Permanently delete account for ' + email + '?\n\nThis cannot be undone. All their data will be removed.')) return;
+
+  var { data: { session } } = await _sb.auth.getSession();
+  if (!session) { toast('Session expired', 'err'); return; }
+
+  var res = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/delete-user', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + session.access_token,
+      'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+    },
+    body: JSON.stringify({ user_id: id })
+  });
+
+  var data = await res.json();
+  if (!res.ok) { toast(data.error || 'Delete failed', 'err'); return; }
+
+  toast('Account deleted');
+  _allUsers = _allUsers.filter(function(u) { return u.id !== id; });
+  renderUsers(_allUsers);
+  loadDashboard();
 }
 
 function filterUsers(q) {
