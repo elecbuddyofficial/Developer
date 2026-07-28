@@ -84,7 +84,7 @@ window.fetchTopicData = function(topicId, topicKey) {
         injectVideoTab(topicId);
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
-        let so = document.getElementById('si-oral'); if(so) so.classList.add('active');
+        let sNav = document.getElementById(topicId.startsWith('W') ? 'si-written' : 'si-oral'); if(sNav) sNav.classList.add('active');
         let injectedView = document.getElementById('notes-container').querySelector('.view');
         if(injectedView) injectedView.classList.add('active');
         buildTopicSideList(topicId);
