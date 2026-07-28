@@ -672,6 +672,12 @@
     window.location.replace('./auth.html');
   }
 
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'SW_UPDATED') window.location.reload();
+    });
+  }
+
   /* ── Profile panel ── */
   async function openProfile() {
     document.getElementById('profile-dropdown').classList.remove('open');
