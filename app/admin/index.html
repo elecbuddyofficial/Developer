@@ -1,0 +1,802 @@
+<!doctype html>
+<html data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin — Elec-Buddy</title>
+  <style>html{visibility:hidden}</style>
+  <script>
+    (function(){
+      var t = localStorage.getItem('eb_theme') || 'dark';
+      if (t === 'system') t = window.matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ── OVERRIDE body for two-column layout ── */
+    body { flex-direction:row; }
+
+    /* ── SIDEBAR ── */
+    #ad-side {
+      width:220px; flex-shrink:0;
+      background:var(--surface);
+      border-right:1px solid var(--border);
+      display:flex; flex-direction:column;
+      overflow:hidden;
+    }
+    .ad-logo {
+      display:flex; align-items:center; gap:11px;
+      padding:18px 16px 16px;
+      border-bottom:1px solid var(--border);
+      flex-shrink:0;
+    }
+    .ad-logo-icon {
+      width:34px; height:34px; flex-shrink:0;
+      border-radius:10px;
+      background:var(--blue-dim); border:1px solid var(--blue-border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:17px;
+    }
+    .ad-logo-name { font-size:13px; font-weight:800; color:var(--text); letter-spacing:-.2px; }
+    .ad-logo-sub  { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.7px; margin-top:2px; }
+
+    .ad-nav { flex:1; padding:10px 8px; display:flex; flex-direction:column; gap:2px; overflow-y:auto; }
+    .ad-nav-btn {
+      width:100%; text-align:left;
+      display:flex; align-items:center; gap:10px;
+      padding:9px 10px; border-radius:var(--r8);
+      border:none; background:none; cursor:pointer;
+      color:var(--text2); font-size:13px; font-weight:600;
+      transition:background .15s,color .15s;
+    }
+    .ad-nav-btn:hover { background:var(--surface2); color:var(--text); }
+    .ad-nav-btn.active {
+      background:var(--blue-dim); color:var(--blue);
+      border:1px solid var(--blue-border);
+    }
+    .ad-nav-btn svg { width:15px; height:15px; flex-shrink:0; }
+
+    .ad-nav-divider { height:1px; background:var(--border); margin:6px 2px; }
+
+    .ad-foot {
+      flex-shrink:0;
+      padding:10px 8px;
+      border-top:1px solid var(--border);
+    }
+    .ad-user-chip {
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:var(--r8);
+      margin-bottom:4px;
+    }
+    .ad-avatar {
+      width:28px; height:28px; border-radius:50%;
+      background:var(--blue); color:#fff;
+      display:flex; align-items:center; justify-content:center;
+      font-size:12px; font-weight:800; flex-shrink:0;
+    }
+    .ad-user-email {
+      font-size:11px; color:var(--text2);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1;
+    }
+    .ad-signout {
+      width:100%; text-align:left;
+      display:flex; align-items:center; gap:9px;
+      padding:8px 10px; border-radius:var(--r8);
+      border:none; background:none; cursor:pointer;
+      color:var(--red); font-size:12.5px; font-weight:600;
+      transition:background .15s;
+    }
+    .ad-signout:hover { background:var(--red-dim); }
+    .ad-signout svg { width:14px; height:14px; flex-shrink:0; }
+
+    /* ── MAIN AREA ── */
+    #ad-main {
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      background:var(--bg);
+    }
+    #ad-main::-webkit-scrollbar { width:5px; }
+    #ad-main::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+    #ad-main::-webkit-scrollbar-track { background:transparent; }
+
+    .ad-tab { display:none; padding:28px 32px 40px; max-width:980px; }
+    .ad-tab.active { display:block; }
+
+    /* ── PAGE HEADER ── */
+    .ad-ph { margin-bottom:22px; }
+    .ad-ph h1 { font-size:19px; font-weight:800; color:var(--text); letter-spacing:-.3px; }
+    .ad-ph p  { font-size:13px; color:var(--text2); margin-top:4px; }
+
+    /* ── STAT CARDS ── */
+    .ad-stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:26px; }
+    .ad-stat {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r12); padding:16px 18px;
+    }
+    .ad-stat-label { font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.7px; margin-bottom:8px; }
+    .ad-stat-val   { font-size:30px; font-weight:800; color:var(--text); letter-spacing:-1.5px; line-height:1; }
+    .ad-stat-sub   { font-size:11.5px; color:var(--text3); margin-top:5px; }
+    .stat-blue  .ad-stat-val { color:var(--blue); }
+    .stat-green .ad-stat-val { color:var(--green); }
+    .stat-amber .ad-stat-val { color:var(--orange); }
+    .stat-red   .ad-stat-val { color:var(--red); }
+
+    /* ── TABLE ── */
+    .ad-section-head { font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; }
+    .ad-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--r12); overflow:auto; }
+    .ad-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .ad-table th {
+      padding:10px 14px; text-align:left;
+      font-size:10px; font-weight:700; color:var(--text3);
+      text-transform:uppercase; letter-spacing:.6px;
+      background:var(--surface2); border-bottom:1px solid var(--border2);
+      white-space:nowrap;
+    }
+    .ad-table td {
+      padding:11px 14px; border-bottom:1px solid var(--border);
+      color:var(--text); vertical-align:middle;
+    }
+    .ad-table tr:last-child td { border-bottom:none; }
+    .ad-table tr:hover td { background:var(--surface2); }
+    .ad-table .empty { text-align:center; color:var(--text3); padding:32px; }
+    .ad-table .email-cell { font-size:12.5px; color:var(--text2); }
+    .ad-table .date-cell  { font-size:12px; color:var(--text3); white-space:nowrap; }
+
+    /* ── PLAN BADGES ── */
+    .pbadge {
+      display:inline-flex; align-items:center;
+      padding:3px 9px; border-radius:20px;
+      font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.4px;
+    }
+    .pb-trial    { background:var(--surface3); color:var(--text2); border:1px solid var(--border2); }
+    .pb-lifetime { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
+    .pb-pro      { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(168,85,247,.3); }
+    .pb-standard { background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); }
+    .pb-starter  { background:var(--green-dim); color:var(--green); border:1px solid var(--green-border); }
+
+    .expired-tag { color:var(--red); font-size:12px; }
+    .active-tag  { color:var(--green); font-size:12px; }
+
+    /* ── FORM CARD ── */
+    .ad-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:var(--r12); padding:22px 24px; margin-bottom:18px;
+    }
+    .ad-card-head { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .ad-card-sub  { font-size:12.5px; color:var(--text2); margin-bottom:18px; line-height:1.5; }
+
+    .ad-field { margin-bottom:14px; }
+    .ad-label {
+      display:block; font-size:10.5px; font-weight:700;
+      color:var(--text3); text-transform:uppercase;
+      letter-spacing:.5px; margin-bottom:6px;
+    }
+    .ad-input, .ad-select {
+      width:100%; padding:9px 12px; box-sizing:border-box;
+      background:var(--surface2); border:1.5px solid var(--border2);
+      border-radius:var(--r8); color:var(--text); font-size:13px;
+      outline:none; transition:border-color .15s;
+      font-family:inherit;
+    }
+    .ad-input:focus, .ad-select:focus { border-color:var(--blue); }
+    .ad-select { cursor:pointer; }
+    .ad-select option { background:var(--surface); }
+    .ad-textarea { min-height:80px; resize:vertical; }
+
+    .ad-row { display:flex; gap:12px; align-items:flex-end; }
+    .ad-row .ad-field { flex:1; }
+
+    /* ── BUTTONS ── */
+    .ad-btn {
+      display:inline-flex; align-items:center; gap:6px;
+      padding:9px 18px; border-radius:var(--r8);
+      border:none; cursor:pointer;
+      font-size:13px; font-weight:700; font-family:inherit;
+      transition:opacity .15s;
+    }
+    .ad-btn:hover { opacity:.82; }
+    .ad-btn svg { width:14px; height:14px; }
+    .btn-primary { background:var(--blue); color:#fff; }
+    .btn-danger  { background:var(--red-dim); color:var(--red); border:1.5px solid var(--red-border); }
+    .btn-ghost   { background:var(--surface2); color:var(--text2); border:1.5px solid var(--border2); }
+    .btn-sm { padding:5px 12px; font-size:12px; border-radius:var(--r6); }
+
+    /* ── FOUND USER INFO BOX ── */
+    #grant-found {
+      display:none; margin-top:16px; padding:14px 16px;
+      background:var(--surface2); border:1.5px solid var(--border2);
+      border-radius:var(--r8);
+    }
+    .grant-found-name { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    .grant-found-meta { font-size:12.5px; color:var(--text2); margin-bottom:14px; }
+
+    /* ── NOTIFICATION LIST ── */
+    .notif-item {
+      display:flex; align-items:flex-start; gap:12px;
+      padding:14px 16px; border-bottom:1px solid var(--border);
+    }
+    .notif-item:last-child { border-bottom:none; }
+    .notif-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+    .nd-info     { background:var(--blue); }
+    .nd-update   { background:var(--green); }
+    .nd-warning  { background:var(--orange); }
+    .nd-deadline { background:var(--red); }
+    .notif-body { flex:1; min-width:0; }
+    .notif-title { font-size:13.5px; font-weight:700; color:var(--text); }
+    .notif-text  { font-size:12.5px; color:var(--text2); margin-top:3px; line-height:1.55; }
+    .notif-meta  { font-size:11px; color:var(--text3); margin-top:5px; }
+    .notif-del {
+      background:none; border:none; cursor:pointer;
+      color:var(--text3); padding:5px; border-radius:6px;
+      transition:color .15s,background .15s; flex-shrink:0;
+    }
+    .notif-del:hover { color:var(--red); background:var(--red-dim); }
+    .notif-del svg { width:14px; height:14px; display:block; }
+
+    /* ── SEARCH BAR ── */
+    .ad-search-row { display:flex; gap:10px; margin-bottom:14px; }
+    .ad-search { max-width:300px; }
+
+    /* ── TOAST ── */
+    #ad-toast {
+      position:fixed; bottom:24px; right:24px;
+      padding:10px 18px; border-radius:var(--r8);
+      font-size:13px; font-weight:700; color:#fff;
+      opacity:0; pointer-events:none;
+      transition:opacity .2s; z-index:9999;
+    }
+    #ad-toast.show { opacity:1; }
+    #ad-toast.ok  { background:var(--green); }
+    #ad-toast.err { background:var(--red); }
+
+    /* ── LOADING ── */
+    .ad-loading { text-align:center; color:var(--text3); font-size:13px; padding:28px; }
+
+    /* ── CONTENT STATUS BOARD ── */
+    .cs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:10px; }
+    .cs-topic {
+      background:var(--surface); border:1.5px solid var(--border);
+      border-radius:var(--r8); padding:10px 12px;
+      display:flex; flex-direction:column; gap:5px;
+    }
+    .cs-id   { font-size:10px; font-weight:800; color:var(--text3); text-transform:uppercase; letter-spacing:.5px; }
+    .cs-name { font-size:11.5px; font-weight:600; color:var(--text); line-height:1.3; }
+    .cs-tags { display:flex; gap:5px; flex-wrap:wrap; margin-top:3px; }
+    .cs-tag  { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.3px; padding:2px 7px; border-radius:20px; }
+    .cs-ready   { background:var(--green-dim); color:var(--green); border:1px solid var(--green-border); }
+    .cs-locked  { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
+    .cs-free    { background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); }
+    .cs-coming  { background:var(--surface3); color:var(--text3); border:1px solid var(--border2); }
+    .cs-section-head { font-size:12px; font-weight:700; color:var(--text2); text-transform:uppercase; letter-spacing:.7px; margin:18px 0 10px; }
+    .cs-section-head:first-child { margin-top:0; }
+  </style>
+</head>
+<body>
+
+<div id="ad-toast"></div>
+
+<!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
+<aside id="ad-side">
+  <div class="ad-logo">
+    <div class="ad-logo-icon">⚡</div>
+    <div>
+      <div class="ad-logo-name">Elec-Buddy</div>
+      <div class="ad-logo-sub">Admin</div>
+    </div>
+  </div>
+
+  <nav class="ad-nav">
+    <button class="ad-nav-btn active" onclick="showTab('dashboard')" data-tab="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('users')" data-tab="users">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Users
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('grant')" data-tab="grant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+      Grant Access
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('notifications')" data-tab="notifications">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3V11a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
+      Notifications
+    </button>
+    <div class="ad-nav-divider"></div>
+    <button class="ad-nav-btn" onclick="showTab('status')" data-tab="status">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
+      Content Status
+    </button>
+  </nav>
+
+  <div class="ad-foot">
+    <div class="ad-user-chip">
+      <div class="ad-avatar" id="ad-avatar">A</div>
+      <div class="ad-user-email" id="ad-user-email">—</div>
+    </div>
+    <button class="ad-signout" onclick="doSignOut()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══════════════════════════════════════════════════════ -->
+<main id="ad-main">
+
+  <!-- DASHBOARD ──────────────────────────────────────────────── -->
+  <div class="ad-tab active" id="tab-dashboard">
+    <div class="ad-ph">
+      <h1>Dashboard</h1>
+      <p>User and subscription overview at a glance.</p>
+    </div>
+    <div class="ad-stats">
+      <div class="ad-stat">
+        <div class="ad-stat-label">Total Users</div>
+        <div class="ad-stat-val" id="st-total">—</div>
+        <div class="ad-stat-sub">All time signups</div>
+      </div>
+      <div class="ad-stat stat-green">
+        <div class="ad-stat-label">Active Access</div>
+        <div class="ad-stat-val" id="st-active">—</div>
+        <div class="ad-stat-sub">Paid or lifetime</div>
+      </div>
+      <div class="ad-stat stat-amber">
+        <div class="ad-stat-label">On Trial</div>
+        <div class="ad-stat-val" id="st-trial">—</div>
+        <div class="ad-stat-sub">Trial plan</div>
+      </div>
+      <div class="ad-stat stat-red">
+        <div class="ad-stat-label">Expired</div>
+        <div class="ad-stat-val" id="st-expired">—</div>
+        <div class="ad-stat-sub">Access lapsed</div>
+      </div>
+    </div>
+
+    <div class="ad-section-head">Recent Signups</div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Email</th><th>Name</th><th>Plan</th><th>Joined</th>
+        </tr></thead>
+        <tbody id="dash-recent"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- USERS ──────────────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-users">
+    <div class="ad-ph">
+      <h1>All Users</h1>
+      <p>Full list of registered users and their access status.</p>
+    </div>
+    <div class="ad-search-row">
+      <input class="ad-input ad-search" id="user-search" placeholder="Search by email or name..." oninput="filterUsers(this.value)">
+    </div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Email</th><th>Name</th><th>Plan</th><th>Expires</th><th>Joined</th><th></th>
+        </tr></thead>
+        <tbody id="users-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- GRANT ACCESS ───────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-grant">
+    <div class="ad-ph">
+      <h1>Grant Access</h1>
+      <p>Find a user by email and update their subscription plan.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">Find User</div>
+      <div class="ad-card-sub">Enter the user's registered email address.</div>
+      <div class="ad-row" style="align-items:flex-end">
+        <div class="ad-field" style="margin-bottom:0">
+          <label class="ad-label">Email Address</label>
+          <input class="ad-input" id="grant-email" type="email" placeholder="user@example.com" onkeydown="if(event.key==='Enter') findUser()">
+        </div>
+        <button class="ad-btn btn-primary" onclick="findUser()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Find
+        </button>
+      </div>
+
+      <div id="grant-found">
+        <div class="grant-found-name" id="gf-name">—</div>
+        <div class="grant-found-meta" id="gf-meta">—</div>
+        <div class="ad-row">
+          <div class="ad-field">
+            <label class="ad-label">New Plan</label>
+            <select class="ad-select" id="grant-plan">
+              <option value="trial">Trial</option>
+              <option value="starter">Starter</option>
+              <option value="standard">Standard</option>
+              <option value="pro">Pro</option>
+              <option value="lifetime">Lifetime</option>
+            </select>
+          </div>
+          <div class="ad-field">
+            <label class="ad-label">Access Until (blank = no expiry)</label>
+            <input class="ad-input" id="grant-expiry" type="date">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:4px">
+          <button class="ad-btn btn-primary" onclick="grantAccess()">Update Access</button>
+          <button class="ad-btn btn-danger"  onclick="revokeAccess()">Revoke to Trial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS ──────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-notifications">
+    <div class="ad-ph">
+      <h1>Notifications</h1>
+      <p>Broadcast messages visible to all users inside the app.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">New Notification</div>
+      <div class="ad-card-sub">Appears immediately in the Notifications section for every logged-in user.</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:3">
+          <label class="ad-label">Title</label>
+          <input class="ad-input" id="notif-title" placeholder="e.g. F03 notes are now live">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Type</label>
+          <select class="ad-select" id="notif-type">
+            <option value="update">Update</option>
+            <option value="info">Info</option>
+            <option value="deadline">Deadline</option>
+            <option value="warning">Warning</option>
+          </select>
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Message</label>
+        <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..."></textarea>
+      </div>
+      <button class="ad-btn btn-primary" onclick="sendNotification()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send to All Users
+      </button>
+    </div>
+
+    <div class="ad-section-head">Sent Notifications</div>
+    <div class="ad-table-wrap" id="notif-list">
+      <div class="ad-loading">Loading...</div>
+    </div>
+  </div>
+
+  <!-- CONTENT STATUS ─────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-status">
+    <div class="ad-ph">
+      <h1>Content Status</h1>
+      <p>Read-only view of every topic's current state. Edit <code style="font-size:12px;padding:1px 6px;background:var(--surface2);border-radius:4px;color:var(--blue)">SECTIONS</code> in the sponsorship app to change flags.</p>
+    </div>
+    <div id="cs-board"></div>
+  </div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ── CONFIG ─────────────────────────────────────────────────────── */
+var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
+var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+var _sb, _grantUserId;
+var _allUsers = [];
+
+/* ── AUTH GUARD ─────────────────────────────────────────────────── */
+(async function init() {
+  try {
+    _sb = supabase.createClient(SB_URL, SB_KEY);
+
+    var { data: { session } } = await _sb.auth.getSession();
+    if (!session) { window.location.replace('../sponsorship/index.html'); return; }
+
+    var { data: profile } = await _sb.from('profiles')
+      .select('is_admin, email, full_name')
+      .eq('id', session.user.id)
+      .single();
+
+    if (!profile || !profile.is_admin) {
+      window.location.replace('../sponsorship/index.html'); return;
+    }
+
+    document.documentElement.style.visibility = 'visible';
+
+    var email = profile.email || session.user.email || '';
+    document.getElementById('ad-avatar').textContent = email[0] ? email[0].toUpperCase() : 'A';
+    document.getElementById('ad-user-email').textContent = email;
+
+    loadDashboard();
+    loadUsers();
+    loadNotifications();
+    buildStatusBoard();
+  } catch (e) {
+    console.error(e);
+    window.location.replace('../sponsorship/index.html');
+  }
+})();
+
+/* ── TABS ────────────────────────────────────────────────────────── */
+function showTab(name) {
+  document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
+  document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+}
+
+/* ── TOAST ───────────────────────────────────────────────────────── */
+function toast(msg, type) {
+  var el = document.getElementById('ad-toast');
+  el.textContent = msg;
+  el.className = 'show ' + (type || 'ok');
+  clearTimeout(el._t);
+  el._t = setTimeout(function() { el.className = ''; }, 2800);
+}
+
+/* ── HELPERS ─────────────────────────────────────────────────────── */
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function planBadge(plan) {
+  var cls = { trial:'pb-trial', lifetime:'pb-lifetime', pro:'pb-pro', standard:'pb-standard', starter:'pb-starter' };
+  return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + (plan || 'trial') + '</span>';
+}
+
+function expiryDisplay(iso, plan) {
+  if (plan === 'lifetime') return '<span class="active-tag">Lifetime</span>';
+  if (!iso) return '<span class="date-cell">—</span>';
+  var d = new Date(iso);
+  if (d < new Date()) return '<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>';
+  return '<span class="active-tag">' + fmtDate(iso) + '</span>';
+}
+
+/* ── DASHBOARD ───────────────────────────────────────────────────── */
+async function loadDashboard() {
+  var { data: all } = await _sb.from('profiles')
+    .select('subscription_plan, subscription_expires_at, created_at, email, full_name')
+    .order('created_at', { ascending: false });
+  if (!all) return;
+
+  var now = new Date();
+  var active = all.filter(function(u) {
+    if (u.subscription_plan === 'lifetime') return true;
+    if (['starter','standard','pro'].includes(u.subscription_plan))
+      return !u.subscription_expires_at || new Date(u.subscription_expires_at) > now;
+    return false;
+  });
+  var trial   = all.filter(function(u) { return !u.subscription_plan || u.subscription_plan === 'trial'; });
+  var expired = all.filter(function(u) {
+    if (!['starter','standard','pro'].includes(u.subscription_plan)) return false;
+    return u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+  });
+
+  document.getElementById('st-total').textContent   = all.length;
+  document.getElementById('st-active').textContent  = active.length;
+  document.getElementById('st-trial').textContent   = trial.length;
+  document.getElementById('st-expired').textContent = expired.length;
+
+  var recent = all.slice(0, 10);
+  document.getElementById('dash-recent').innerHTML = recent.length
+    ? recent.map(function(u) {
+        return '<tr>'
+          + '<td class="email-cell">' + (u.email || '—') + '</td>'
+          + '<td>' + (u.full_name || '—') + '</td>'
+          + '<td>' + planBadge(u.subscription_plan) + '</td>'
+          + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
+          + '</tr>';
+      }).join('')
+    : '<tr><td colspan="4" class="empty">No users yet</td></tr>';
+}
+
+/* ── USERS ───────────────────────────────────────────────────────── */
+async function loadUsers() {
+  var { data } = await _sb.from('profiles')
+    .select('id, email, full_name, subscription_plan, subscription_expires_at, created_at')
+    .order('created_at', { ascending: false });
+  _allUsers = data || [];
+  renderUsers(_allUsers);
+}
+
+function renderUsers(users) {
+  document.getElementById('users-tbody').innerHTML = users.length
+    ? users.map(function(u) {
+        return '<tr>'
+          + '<td class="email-cell">' + (u.email || '—') + '</td>'
+          + '<td>' + (u.full_name || '—') + '</td>'
+          + '<td>' + planBadge(u.subscription_plan) + '</td>'
+          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
+          + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
+          + '<td><button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(\'' + (u.email || '') + '\')">Edit</button></td>'
+          + '</tr>';
+      }).join('')
+    : '<tr><td colspan="6" class="empty">No users</td></tr>';
+}
+
+function filterUsers(q) {
+  q = q.toLowerCase();
+  renderUsers(_allUsers.filter(function(u) {
+    return (u.email || '').toLowerCase().includes(q) || (u.full_name || '').toLowerCase().includes(q);
+  }));
+}
+
+/* ── GRANT ACCESS ────────────────────────────────────────────────── */
+function prefillGrant(email) {
+  showTab('grant');
+  document.getElementById('grant-email').value = email;
+  findUser();
+}
+
+async function findUser() {
+  var email = document.getElementById('grant-email').value.trim();
+  if (!email) return;
+
+  var { data, error } = await _sb.from('profiles')
+    .select('id, email, full_name, subscription_plan, subscription_expires_at')
+    .eq('email', email)
+    .single();
+
+  if (error || !data) { toast('User not found', 'err'); return; }
+
+  _grantUserId = data.id;
+  document.getElementById('gf-name').textContent = (data.full_name || 'No name set') + ' · ' + data.email;
+  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(data.subscription_plan) + ' ' + expiryDisplay(data.subscription_expires_at, data.subscription_plan);
+
+  document.getElementById('grant-plan').value = data.subscription_plan || 'trial';
+  document.getElementById('grant-expiry').value = data.subscription_expires_at
+    ? data.subscription_expires_at.substring(0, 10)
+    : '';
+
+  document.getElementById('grant-found').style.display = 'block';
+}
+
+async function grantAccess() {
+  if (!_grantUserId) return;
+  var plan = document.getElementById('grant-plan').value;
+  var expVal = document.getElementById('grant-expiry').value;
+  var expiry = expVal ? new Date(expVal).toISOString() : null;
+
+  var { error } = await _sb.from('profiles')
+    .update({ subscription_plan: plan, subscription_expires_at: expiry })
+    .eq('id', _grantUserId);
+
+  if (error) { toast('Update failed: ' + error.message, 'err'); return; }
+  toast('Access updated');
+  loadDashboard();
+  loadUsers();
+  findUser();
+}
+
+async function revokeAccess() {
+  if (!_grantUserId) return;
+  if (!confirm('Revoke access? User will be dropped back to trial.')) return;
+
+  var { error } = await _sb.from('profiles')
+    .update({ subscription_plan: 'trial', subscription_expires_at: null })
+    .eq('id', _grantUserId);
+
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  toast('Access revoked');
+  document.getElementById('grant-found').style.display = 'none';
+  loadDashboard();
+  loadUsers();
+}
+
+/* ── NOTIFICATIONS ───────────────────────────────────────────────── */
+async function loadNotifications() {
+  var { data } = await _sb.from('notifications').select('*').order('created_at', { ascending: false });
+  var container = document.getElementById('notif-list');
+  if (!data || !data.length) {
+    container.innerHTML = '<div class="ad-loading">No notifications sent yet.</div>';
+    return;
+  }
+  container.innerHTML = data.map(function(n) {
+    return '<div class="notif-item">'
+      + '<div class="notif-dot nd-' + (n.type || 'info') + '"></div>'
+      + '<div class="notif-body">'
+      + '<div class="notif-title">' + n.title + '</div>'
+      + '<div class="notif-text">' + n.body + '</div>'
+      + '<div class="notif-meta">' + (n.type || 'info').toUpperCase() + ' · ' + fmtDate(n.created_at) + '</div>'
+      + '</div>'
+      + '<button class="notif-del" onclick="deleteNotification(\'' + n.id + '\')" title="Delete">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
+      + '</button>'
+      + '</div>';
+  }).join('');
+}
+
+async function sendNotification() {
+  var title = document.getElementById('notif-title').value.trim();
+  var body  = document.getElementById('notif-body').value.trim();
+  var type  = document.getElementById('notif-type').value;
+  if (!title || !body) { toast('Title and message required', 'err'); return; }
+
+  var { error } = await _sb.from('notifications').insert({ title: title, body: body, type: type });
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  toast('Notification sent');
+  document.getElementById('notif-title').value = '';
+  document.getElementById('notif-body').value  = '';
+  loadNotifications();
+}
+
+async function deleteNotification(id) {
+  if (!confirm('Delete this notification? Users will no longer see it.')) return;
+  var { error } = await _sb.from('notifications').delete().eq('id', id);
+  if (error) { toast('Failed', 'err'); return; }
+  toast('Deleted');
+  loadNotifications();
+}
+
+/* ── CONTENT STATUS BOARD ────────────────────────────────────────── */
+function buildStatusBoard() {
+  var SECTIONS = [
+    { label: 'Overview', topics: [
+      { id:'S00', name:'Overview', notesReady:true, free:true }
+    ]},
+    { label: 'Fundamentals', topics: [
+      { id:'F01', name:'Basic Electrical Theory', notesReady:true, free:true },
+      { id:'F02', name:'Electrical Safety & Earthing', notesReady:true, free:false },
+      { id:'F03', name:'Wiring Systems', notesReady:false, free:false },
+      { id:'F04', name:'Protection Devices', notesReady:false, free:false },
+      { id:'F05', name:'Power & Energy', notesReady:false, free:false },
+      { id:'F06', name:'Transformers', notesReady:false, free:false },
+      { id:'F07', name:'Motors & Starters', notesReady:false, free:false },
+      { id:'F08', name:'Switchgear & Control', notesReady:false, free:false },
+      { id:'F09', name:'Cables & Conductors', notesReady:false, free:false },
+      { id:'F10', name:'Lighting & Illumination', notesReady:false, free:false },
+      { id:'F11', name:'Power Factor Correction', notesReady:false, free:false },
+      { id:'F12', name:'Earthing Systems', notesReady:false, free:false },
+    ]},
+    { label: 'Aptitude', topics: [
+      { id:'A01', name:'Number Systems', notesReady:false, free:false },
+      { id:'A02', name:'Algebra', notesReady:false, free:false },
+      { id:'A03', name:'Time & Work', notesReady:false, free:false },
+      { id:'A04', name:'Ratio & Proportion', notesReady:false, free:false },
+    ]},
+    { label: 'Interview Prep', topics: [
+      { id:'IP01', name:'HR Questions', notesReady:false, free:false },
+      { id:'IP02', name:'Technical Questions', notesReady:false, free:false },
+      { id:'IP03', name:'Group Discussion', notesReady:false, free:false },
+    ]},
+  ];
+
+  var html = '';
+  SECTIONS.forEach(function(sec) {
+    html += '<div class="cs-section-head">' + sec.label + '</div>';
+    html += '<div class="cs-grid">';
+    sec.topics.forEach(function(t) {
+      var tags = '';
+      if (t.notesReady) tags += '<span class="cs-tag cs-ready">Ready</span>';
+      else              tags += '<span class="cs-tag cs-coming">Coming</span>';
+      if (t.free)       tags += '<span class="cs-tag cs-free">Free</span>';
+      else if (t.notesReady) tags += '<span class="cs-tag cs-locked">Locked</span>';
+
+      html += '<div class="cs-topic">'
+        + '<div class="cs-id">' + t.id + '</div>'
+        + '<div class="cs-name">' + t.name + '</div>'
+        + '<div class="cs-tags">' + tags + '</div>'
+        + '</div>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('cs-board').innerHTML = html;
+}
+
+/* ── SIGN OUT ────────────────────────────────────────────────────── */
+async function doSignOut() {
+  await _sb.auth.signOut();
+  window.location.replace('../sponsorship/index.html');
+}
+</script>
+</body>
+</html>
