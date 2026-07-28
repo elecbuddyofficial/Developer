@@ -140,12 +140,16 @@ serve(async (req) => {
   };
 
   try {
-    // ── payment.captured: money is actually settled ────────────────────────
-    if (eventType === 'payment.captured') {
+    // ── Money is actually settled ──────────────────────────────────────────
+    // payment.captured and order.paid both fire on a successful payment and
+    // both carry payload.payment.entity, so either is enough. Subscribing to
+    // both is safe: the compare-and-swap below means whichever arrives second
+    // is a no-op rather than a double-apply.
+    if (eventType === 'payment.captured' || eventType === 'order.paid') {
       const entity    = event?.payload?.payment?.entity;
       const orderId   = entity?.order_id;
       const paymentId = entity?.id;
-      if (!orderId || !paymentId) return finish({}, 'Malformed payment.captured payload');
+      if (!orderId || !paymentId) return finish({}, `Malformed ${eventType} payload`);
 
       const { data: payment } = await sb
         .from('payments')
