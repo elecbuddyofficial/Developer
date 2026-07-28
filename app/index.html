@@ -651,6 +651,118 @@
   </div>
 </div>
 
+<!-- ── Upgrade Modal ──────────────────────────────────────── -->
+<div id="upgrade-modal" style="display:none;position:fixed;inset:0;z-index:10002;background:rgba(4,9,20,0.92);backdrop-filter:blur(8px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:520px;margin-top:20px;">
+
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
+        <div>
+          <div style="font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#C8A44A;letter-spacing:0.02em;">Elec-Buddy</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#2E5577;margin-top:3px;">Choose your plan</div>
+        </div>
+        <button onclick="closeUpgradeModal()" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:36px;height:36px;color:#4A6880;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">&times;</button>
+      </div>
+
+      <!-- Trial notice -->
+      <div id="up-trial-notice" style="display:none;background:rgba(200,164,74,0.08);border:1px solid rgba(200,164,74,0.25);border-radius:10px;padding:11px 14px;margin-bottom:20px;font-size:12.5px;color:#A88B3A;line-height:1.6;"></div>
+
+      <!-- Plan cards -->
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+
+        <!-- Starter -->
+        <div class="up-plan-card" id="up-starter">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Starter</div>
+              <div style="font-size:12px;color:#4A6880;margin-top:3px;">2 months full access</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹499</div>
+              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹250 / month</div>
+            </div>
+          </div>
+          <button class="up-buy-btn" data-plan="starter" data-amount="499" style="margin-top:14px;width:100%;background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;letter-spacing:0.03em;transition:background .15s,border-color .15s;" onmouseover="this.style.background='rgba(200,164,74,0.2)'" onmouseout="this.style.background='rgba(200,164,74,0.12)'">Pay ₹499 with Razorpay</button>
+        </div>
+
+        <!-- Standard (highlighted) -->
+        <div class="up-plan-card" id="up-standard" style="border-color:#C8A44A;position:relative;">
+          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#C8A44A;color:#070D1A;font-size:9.5px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap;letter-spacing:0.08em;text-transform:uppercase;">Best Value</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Standard</div>
+              <div style="font-size:12px;color:#4A6880;margin-top:3px;">5 months full access</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹999</div>
+              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹200 / month</div>
+            </div>
+          </div>
+          <button class="up-buy-btn" data-plan="standard" data-amount="999" style="margin-top:14px;width:100%;background:#C8A44A;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#070D1A;cursor:pointer;letter-spacing:0.03em;transition:opacity .15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">Pay ₹999 with Razorpay</button>
+        </div>
+
+        <!-- Pro -->
+        <div class="up-plan-card" id="up-pro">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Pro</div>
+              <div style="font-size:12px;color:#4A6880;margin-top:3px;">12 months full access</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹1,999</div>
+              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹167 / month</div>
+            </div>
+          </div>
+          <button class="up-buy-btn" data-plan="pro" data-amount="1999" style="margin-top:14px;width:100%;background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;letter-spacing:0.03em;transition:background .15s;" onmouseover="this.style.background='rgba(200,164,74,0.2)'" onmouseout="this.style.background='rgba(200,164,74,0.12)'">Pay ₹1,999 with Razorpay</button>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
+        <div style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2E5577;margin-bottom:12px;">All plans include</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="up-feature">All 23 oral exam topics with full study notes</div>
+          <div class="up-feature">8 written exam topics with solved papers</div>
+          <div class="up-feature">5,600+ quiz questions across all topics</div>
+          <div class="up-feature">Full Surveyor Q&A bank</div>
+          <div class="up-feature">Offline access via service worker cache</div>
+        </div>
+      </div>
+
+      <!-- Payment status -->
+      <div id="up-status" style="display:none;text-align:center;padding:20px;border-radius:10px;font-size:14px;font-weight:600;"></div>
+
+      <div style="text-align:center;font-size:11.5px;color:#2E5577;line-height:1.6;">
+        Payments are processed securely by Razorpay.<br>
+        Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+  .up-plan-card {
+    background: rgba(13,30,51,0.7);
+    border: 1px solid #1A3050;
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    transition: border-color .15s, background .15s;
+  }
+  .up-plan-card:hover { background: rgba(20,42,68,0.8); }
+  .up-feature {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; color: #8FA3B8; line-height: 1.4;
+  }
+  .up-feature::before {
+    content: ''; display: block; width: 5px; height: 5px;
+    border-radius: 50%; background: #C8A44A; flex-shrink: 0;
+  }
+  .up-buy-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
@@ -692,22 +804,21 @@ function setTheme(t) {
   document.getElementById('gate-overlay').addEventListener('click', function(e) {
     var btn = e.target.closest('.gate-buy-btn');
     if (!btn) return;
-    var plan = btn.dataset.plan;
-    var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
-    var userEmail = (window._sbUser && window._sbUser.email) || '';
-    var subject = encodeURIComponent('Elec-Buddy – Purchase: ' + planLabel + ' Plan');
-    var body = encodeURIComponent('Hi,\n\nI would like to purchase the ' + planLabel + ' plan.\n\nMy account email: ' + userEmail);
-    window.open('mailto:support@elec-buddy.com?subject=' + subject + '&body=' + body);
+    window.closeGate();
+    openUpgradeModal(btn.dataset.plan);
   });
 
   document.getElementById('pm-upgrade-btn').addEventListener('click', function() {
     document.getElementById('profile-modal').style.display = 'none';
-    showGate();
+    openUpgradeModal();
   });
 
-  // Escape key closes gate
+  // Escape key closes gate or upgrade modal
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') window.closeGate();
+    if (e.key === 'Escape') {
+      window.closeGate();
+      closeUpgradeModal();
+    }
   });
 
   // ── Content key management (AES-256-GCM offline encryption) ─────────────────
@@ -1069,6 +1180,7 @@ function setTheme(t) {
       const { data: profile } = await window._sbClient
         .from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,is_admin').eq('id', user.id).single();
       if (profile) {
+        window._profileData = profile;
         renderPlan(profile);
         const isAdmin = profile.is_admin === true;
         document.getElementById('pm-admin-badge').style.display = isAdmin ? 'inline-flex' : 'none';
@@ -1196,6 +1308,171 @@ function setTheme(t) {
     }
   });
   checkNotifsUnread();
+</script>
+
+<script>
+// ── Upgrade modal & Razorpay payment ────────────────────────────────────────
+var SUPABASE_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
+var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
+
+function openUpgradeModal(preferredPlan) {
+  var modal = document.getElementById('upgrade-modal');
+  modal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+
+  // Show trial notice if user is on trial
+  var noticeEl = document.getElementById('up-trial-notice');
+  var profile = window._profileData;
+  if (profile && profile.subscription_plan === 'trial' && profile.trial_started_at) {
+    var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 7 * 24 * 60 * 60 * 1000);
+    var now = new Date();
+    if (trialEnd > now) {
+      var daysLeft = Math.ceil((trialEnd - now) / (24 * 60 * 60 * 1000));
+      noticeEl.textContent = 'You have ' + daysLeft + ' day' + (daysLeft !== 1 ? 's' : '') + ' left in your free trial. Your paid subscription will start after the trial ends on ' + trialEnd.toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) + '.';
+      noticeEl.style.display = 'block';
+    } else {
+      noticeEl.style.display = 'none';
+    }
+  } else {
+    noticeEl.style.display = 'none';
+  }
+
+  // Highlight preferred plan card if specified
+  if (preferredPlan) {
+    document.querySelectorAll('.up-plan-card').forEach(function(c) {
+      c.style.outline = '';
+    });
+    var card = document.getElementById('up-' + preferredPlan);
+    if (card) card.style.outline = '2px solid #C8A44A';
+  }
+
+  clearUpStatus();
+}
+
+function closeUpgradeModal() {
+  document.getElementById('upgrade-modal').style.display = 'none';
+  document.body.style.overflow = '';
+  clearUpStatus();
+  setUpBtnsDisabled(false);
+}
+
+function setUpStatus(msg, ok) {
+  var el = document.getElementById('up-status');
+  el.style.display = 'block';
+  el.style.background = ok ? 'rgba(46,195,113,0.12)' : 'rgba(220,53,69,0.12)';
+  el.style.border = '1px solid ' + (ok ? 'rgba(46,195,113,0.3)' : 'rgba(220,53,69,0.3)');
+  el.style.color = ok ? '#3DBA72' : '#E05A6A';
+  el.textContent = msg;
+}
+
+function clearUpStatus() {
+  var el = document.getElementById('up-status');
+  el.style.display = 'none';
+  el.textContent = '';
+}
+
+function setUpBtnsDisabled(disabled) {
+  document.querySelectorAll('.up-buy-btn').forEach(function(b) { b.disabled = disabled; });
+}
+
+async function startPayment(plan) {
+  if (!window._sbClient || !window._sbUser) {
+    setUpStatus('You must be signed in to purchase.', false);
+    return;
+  }
+  setUpBtnsDisabled(true);
+  clearUpStatus();
+  setUpStatus('Creating order...', true);
+
+  try {
+    // Get fresh JWT
+    var sessionRes = await window._sbClient.auth.getSession();
+    var token = sessionRes.data.session && sessionRes.data.session.access_token;
+    if (!token) throw new Error('Not authenticated');
+
+    // Create Razorpay order via Edge Function
+    var orderRes = await fetch(SUPABASE_FN_URL + '/create-razorpay-order', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ plan: plan }),
+    });
+    var orderData = await orderRes.json();
+    if (!orderRes.ok) throw new Error(orderData.error || 'Could not create order');
+
+    clearUpStatus();
+
+    var user = window._sbUser;
+    var options = {
+      key: RZP_KEY_ID,
+      amount: orderData.amount,
+      currency: orderData.currency,
+      name: 'Elec-Buddy',
+      description: plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan',
+      order_id: orderData.order_id,
+      prefill: {
+        email: user.email || '',
+        name: user.user_metadata && user.user_metadata.full_name || '',
+      },
+      theme: { color: '#C8A44A' },
+      modal: { backdropclose: false },
+      handler: async function(response) {
+        setUpStatus('Verifying payment...', true);
+        setUpBtnsDisabled(true);
+        try {
+          var verifyRes = await fetch(SUPABASE_FN_URL + '/verify-razorpay-payment', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              order_id:   response.razorpay_order_id,
+              payment_id: response.razorpay_payment_id,
+              signature:  response.razorpay_signature,
+            }),
+          });
+          var verifyData = await verifyRes.json();
+          if (!verifyRes.ok) throw new Error(verifyData.error || 'Verification failed');
+
+          // Update local access state
+          window._fullAccess = true;
+          var planLabel = verifyData.plan.charAt(0).toUpperCase() + verifyData.plan.slice(1);
+          var expiryDate = new Date(verifyData.expires_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
+          setUpStatus('Payment successful! ' + planLabel + ' plan active until ' + expiryDate + '.', true);
+
+          // Close modal after 2.5s and reload to reflect new plan
+          setTimeout(function() {
+            closeUpgradeModal();
+            window.location.reload();
+          }, 2500);
+        } catch(e) {
+          setUpStatus('Payment received but verification failed. Contact support@elec-buddy.com with your payment ID: ' + response.razorpay_payment_id, false);
+          setUpBtnsDisabled(false);
+        }
+      },
+    };
+
+    var rzp = new Razorpay(options);
+    rzp.on('payment.failed', function(resp) {
+      setUpStatus('Payment failed: ' + (resp.error && resp.error.description || 'Unknown error'), false);
+      setUpBtnsDisabled(false);
+    });
+    rzp.open();
+
+  } catch(e) {
+    setUpStatus(e.message || 'Something went wrong. Please try again.', false);
+    setUpBtnsDisabled(false);
+  }
+}
+
+// Wire plan card buy buttons
+document.getElementById('upgrade-modal').addEventListener('click', function(e) {
+  var btn = e.target.closest('.up-buy-btn');
+  if (!btn || btn.disabled) return;
+  startPayment(btn.dataset.plan);
+});
+
+// Close on backdrop click
+document.getElementById('upgrade-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeUpgradeModal();
+});
 </script>
 </body>
 </html>
