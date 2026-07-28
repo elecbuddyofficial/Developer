@@ -486,7 +486,13 @@
   <div id="profile-panel">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
       <div id="pm-avatar" style="width:46px;height:46px;border-radius:50%;background:#C8A44A;color:#070D1A;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif"></div>
-      <div style="min-width:0"><div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div><div id="pm-email" style="font-size:11.5px;color:#4A6880;margin-top:3px;word-break:break-all;line-height:1.4"></div></div>
+      <div style="min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
+          <div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+          <span id="pm-admin-badge" style="display:none;font-size:9.5px;font-weight:700;background:rgba(200,164,74,.15);border:1px solid rgba(200,164,74,.4);color:#C8A44A;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">✓ admin</span>
+        </div>
+        <div id="pm-email" style="font-size:11.5px;color:#4A6880;margin-top:3px;word-break:break-all;line-height:1.4"></div>
+      </div>
     </div>
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px">
       <div style="font-size:10.5px;color:#4A6880;text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px">Current Plan</div>
@@ -496,6 +502,7 @@
       </div>
     </div>
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">Upgrade to Full Access</button>
+    <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
     <button onclick="window.location.href='../courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
   </div>
@@ -1256,7 +1263,12 @@ startBackgroundIndexing();
     document.getElementById('pm-email').textContent=user.email;
     if(!window._sbClient)return;
     var res=await window._sbClient.from('profiles').select('*').eq('id',user.id).single();
-    if(res.data)renderPlan(res.data);
+    if(res.data){
+      renderPlan(res.data);
+      var isAdmin=res.data.is_admin===true;
+      document.getElementById('pm-admin-badge').style.display=isAdmin?'inline-flex':'none';
+      document.getElementById('pm-admin-btn').style.display=isAdmin?'block':'none';
+    }
   };
   window.closeProfile=function(e){ if(e.target===document.getElementById('profile-modal')) document.getElementById('profile-modal').style.display='none'; };
   window.signOut=async function(){ if(window._sbClient)await window._sbClient.auth.signOut(); window.location.replace('../auth.html'); };
