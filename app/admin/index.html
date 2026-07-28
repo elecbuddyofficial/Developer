@@ -201,6 +201,27 @@
     .btn-ghost   { background:var(--surface2); color:var(--text2); border:1.5px solid var(--border2); }
     .btn-sm { padding:5px 12px; font-size:12px; border-radius:var(--r6); }
 
+    /* ── GRANT SEARCH DROPDOWN ── */
+    .grant-search-wrap { position:relative; flex:1; }
+    .grant-dropdown {
+      display:none; position:absolute; top:calc(100% + 4px); left:0; right:0;
+      background:var(--surface); border:1.5px solid var(--border2);
+      border-radius:var(--r8); box-shadow:0 8px 24px rgba(0,0,0,.45);
+      z-index:100; max-height:220px; overflow-y:auto;
+    }
+    .grant-dropdown.open { display:block; }
+    .grant-dd-item {
+      display:flex; flex-direction:column; gap:2px;
+      padding:10px 14px; cursor:pointer; border-bottom:1px solid var(--border);
+      transition:background .1s;
+    }
+    .grant-dd-item:last-child { border-bottom:none; }
+    .grant-dd-item:hover { background:var(--surface2); }
+    .grant-dd-email { font-size:13px; font-weight:600; color:var(--text); }
+    .grant-dd-name  { font-size:11.5px; color:var(--text3); }
+    .grant-dd-empty { padding:12px 14px; font-size:13px; color:var(--text3); text-align:center; }
+    .grant-dd-item.focused { background:var(--surface2); }
+
     /* ── FOUND USER INFO BOX ── */
     #grant-found {
       display:none; margin-top:16px; padding:14px 16px;
@@ -396,16 +417,14 @@
 
     <div class="ad-card">
       <div class="ad-card-head">Find User</div>
-      <div class="ad-card-sub">Enter the user's registered email address.</div>
-      <div class="ad-row" style="align-items:flex-end">
-        <div class="ad-field" style="margin-bottom:0">
-          <label class="ad-label">Email Address</label>
-          <input class="ad-input" id="grant-email" type="email" placeholder="user@example.com" onkeydown="if(event.key==='Enter') findUser()">
+      <div class="ad-card-sub">Search by name or email address.</div>
+      <div class="ad-field" style="margin-bottom:0">
+        <label class="ad-label">Search</label>
+        <div class="grant-search-wrap">
+          <input class="ad-input" id="grant-email" type="text" placeholder="Name or email..." autocomplete="off"
+            oninput="searchGrant(this.value)" onfocus="searchGrant(this.value)" onkeydown="grantKeyNav(event)">
+          <div class="grant-dropdown" id="grant-dropdown"></div>
         </div>
-        <button class="ad-btn btn-primary" onclick="findUser()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          Find
-        </button>
       </div>
 
       <div id="grant-found">
@@ -565,6 +584,15 @@ var _allUsers = [];
   }
 })();
 
+document.addEventListener('click', function(e) {
+  var wrap = document.querySelector('.grant-search-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    var dd = document.getElementById('grant-dropdown');
+    if (dd) dd.classList.remove('open');
+    _grantDdIndex = -1;
+  }
+});
+
 /* ── TABS ────────────────────────────────────────────────────────── */
 function showTab(name) {
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
@@ -711,10 +739,82 @@ function filterUsers(q) {
 }
 
 /* ── GRANT ACCESS ────────────────────────────────────────────────── */
+var _grantDdIndex = -1;
+
 function prefillGrant(email) {
   showTab('grant');
-  document.getElementById('grant-email').value = email;
-  findUser();
+  var user = _allUsers.find(function(u) { return u.email === email; });
+  if (user) {
+    document.getElementById('grant-email').value = email;
+    selectGrantUser(user);
+  } else {
+    document.getElementById('grant-email').value = email;
+    searchGrant(email);
+  }
+}
+
+function searchGrant(q) {
+  var dd = document.getElementById('grant-dropdown');
+  var term = (q || '').trim().toLowerCase();
+
+  if (!term) { dd.innerHTML = ''; dd.classList.remove('open'); _grantDdIndex = -1; return; }
+
+  var results = _allUsers.filter(function(u) {
+    return (u.email || '').toLowerCase().includes(term)
+        || (u.full_name || '').toLowerCase().includes(term);
+  }).slice(0, 8);
+
+  if (!results.length) {
+    dd.innerHTML = '<div class="grant-dd-empty">No users found</div>';
+    dd.classList.add('open');
+    _grantDdIndex = -1;
+    return;
+  }
+
+  dd.innerHTML = results.map(function(u, i) {
+    return '<div class="grant-dd-item" data-idx="' + i + '" onmousedown="selectGrantUser(' + JSON.stringify(u).replace(/"/g, '&quot;') + ')">'
+      + '<span class="grant-dd-email">' + (u.email || '') + '</span>'
+      + '<span class="grant-dd-name">' + (u.full_name || 'No name') + '</span>'
+    + '</div>';
+  }).join('');
+  dd.classList.add('open');
+  _grantDdIndex = -1;
+}
+
+function grantKeyNav(e) {
+  var dd = document.getElementById('grant-dropdown');
+  var items = dd.querySelectorAll('.grant-dd-item');
+  if (!items.length) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _grantDdIndex = Math.min(_grantDdIndex + 1, items.length - 1);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _grantDdIndex = Math.max(_grantDdIndex - 1, 0);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (_grantDdIndex >= 0 && items[_grantDdIndex]) items[_grantDdIndex].dispatchEvent(new MouseEvent('mousedown'));
+    return;
+  } else if (e.key === 'Escape') {
+    dd.classList.remove('open'); _grantDdIndex = -1; return;
+  } else { return; }
+
+  items.forEach(function(el, i) { el.classList.toggle('focused', i === _grantDdIndex); });
+  if (items[_grantDdIndex]) items[_grantDdIndex].scrollIntoView({ block: 'nearest' });
+}
+
+function selectGrantUser(user) {
+  _grantUserId = user.id;
+  document.getElementById('grant-email').value = user.email || '';
+  document.getElementById('grant-dropdown').classList.remove('open');
+  _grantDdIndex = -1;
+
+  document.getElementById('gf-name').textContent = (user.full_name || 'No name set') + ' · ' + user.email;
+  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan);
+  document.getElementById('grant-expiry').value = user.subscription_expires_at
+    ? user.subscription_expires_at.substring(0, 10) : '';
+  document.getElementById('grant-found').style.display = 'block';
 }
 
 async function findUser() {
@@ -752,9 +852,10 @@ async function grantAccess() {
 
   if (error) { toast('Update failed: ' + error.message, 'err'); return; }
   toast('Access updated');
+  var u = _allUsers.find(function(x) { return x.id === _grantUserId; });
+  if (u) { u.subscription_plan = plan; u.subscription_expires_at = expiry; selectGrantUser(u); }
   loadDashboard();
   loadUsers();
-  findUser();
 }
 
 async function revokeAccess() {
