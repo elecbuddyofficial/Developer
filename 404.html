@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elec-Buddy</title>
+  <meta http-equiv="refresh" content="3;url=/Developer/app/auth.html">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: #070D1A;
+      color: #DDE5EF;
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px; -webkit-font-smoothing: antialiased;
+    }
+    .wrap { text-align: center; max-width: 360px; }
+    .brand {
+      font-family: Georgia, serif;
+      font-size: 1.5rem;
+      color: #C8A44A;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+    .brand-sub {
+      font-size: 11px;
+      color: #4A6880;
+      font-family: 'Courier New', monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+    .msg { font-size: 14px; color: #7A9BBF; line-height: 1.6; margin-bottom: 24px; }
+    .btn {
+      display: inline-block;
+      padding: 11px 28px;
+      background: #C8A44A;
+      color: #070D1A;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity .15s;
+    }
+    .btn:hover { opacity: .85; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">Elec-Buddy</div>
+    <div class="brand-sub">ETO Exam Preparation</div>
+    <p class="msg">This link is no longer valid. Redirecting you to the app...</p>
+    <a class="btn" href="/Developer/app/auth.html">Go to App</a>
+  </div>
+  <script>
+    setTimeout(function() {
+      window.location.replace('/Developer/app/auth.html');
+    }, 2500);
+  </script>
+</body>
+</html>
