@@ -39,12 +39,39 @@ function _setupProgressObserver(topicId) {
     headings.forEach(function(h) { window._progObserver.observe(h); });
 }
 
+function _dismissContinueDlg() {
+    var dlg = document.getElementById('_continue-dlg');
+    if (!dlg) return;
+    clearTimeout(dlg._timer);
+    dlg.style.opacity = '0';
+    dlg.style.transform = 'translateX(-50%) translateY(16px)';
+    setTimeout(function() { if (dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 280);
+}
+
+window._doContinue = function(scroll) {
+    _dismissContinueDlg();
+    var el = document.getElementById('content');
+    if (el) el.scrollTop = scroll;
+};
+
 function _restoreScroll(topicId) {
     if (window._pendingScroll) return;
     var saved = parseInt(localStorage.getItem('eb_scroll_' + topicId), 10);
     if (!saved || saved < 100) return;
-    var el = document.getElementById('content');
-    if (el) setTimeout(function() { el.scrollTop = saved; }, 80);
+
+    _dismissContinueDlg();
+    var dlg = document.createElement('div');
+    dlg.id = '_continue-dlg';
+    dlg.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(0);background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:99990;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;color:var(--text);white-space:nowrap;opacity:0;transition:opacity .25s,transform .25s;pointer-events:auto;';
+    dlg.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--blue)"><path d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg>'
+        + '<span>Continue where you left off?</span>'
+        + '<button onclick="window._doContinue(' + saved + ')" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;">Continue</button>'
+        + '<button onclick="_dismissContinueDlg()" style="background:transparent;color:var(--text2);border:none;font-size:12px;cursor:pointer;flex-shrink:0;padding:4px 6px;">Dismiss</button>';
+    document.body.appendChild(dlg);
+    requestAnimationFrame(function() {
+        dlg.style.opacity = '1';
+    });
+    dlg._timer = setTimeout(_dismissContinueDlg, 7000);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
