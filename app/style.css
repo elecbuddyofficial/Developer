@@ -35,7 +35,7 @@
   --text:#0F172A;--text2:#475569;--text3:#94A3B8;
 }
 html{-webkit-text-size-adjust:100%}
-body{background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5}
+body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5}
 /* Respect reduced-motion */
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 /* Accessible focus ring */
@@ -1131,3 +1131,53 @@ a.sb-item{text-decoration:none}
 [data-theme="light"] .quiz-exp strong{color:var(--blue)}
 [data-theme="light"] .note-title{background:linear-gradient(135deg,rgba(37,99,235,.08),rgba(124,58,237,.05))}
 [data-theme="light"] .n-table{box-shadow:0 1px 6px rgba(0,0,0,.08)}
+
+/* ═══ MOBILE HARDENING ═══════════════════════════════════════════════ */
+
+/* iOS Safari auto-zooms the viewport when a focused input has font-size
+   under 16px, and never zooms back out. Force 16px on touch devices only,
+   so desktop keeps its tighter type scale. */
+@media (max-width: 768px) {
+  input[type="text"], input[type="email"], input[type="password"],
+  input[type="search"], input[type="number"], input[type="date"],
+  textarea, select {
+    font-size: 16px !important;
+  }
+}
+
+/* Notch / home-indicator safe areas (iPhone X+ and Android cutouts) */
+@supports (padding: max(0px)) {
+  #topbar { padding-left: max(20px, env(safe-area-inset-left));
+            padding-right: max(20px, env(safe-area-inset-right)); }
+  #sidebar { padding-bottom: env(safe-area-inset-bottom); }
+  #content { padding-bottom: max(24px, env(safe-area-inset-bottom));
+             padding-left: max(0px, env(safe-area-inset-left));
+             padding-right: max(0px, env(safe-area-inset-right)); }
+}
+
+/* Touch targets: WCAG 2.5.5 asks for 44x44 minimum */
+@media (hover: none) and (pointer: coarse) {
+  .tin-pill, .qb-seg-btn, .vid-lang-chip, .theme-btn { min-height: 40px; }
+  .quiz-opt { min-height: 48px; }
+  button, [role="button"] { touch-action: manipulation; }
+}
+
+/* Landscape phones are short — reclaim vertical space */
+@media (max-height: 480px) and (orientation: landscape) {
+  #topbar { height: 48px; }
+  #sidebar { top: 48px; height: calc(100svh - 48px); }
+  #sidebar-overlay { top: 48px; }
+  .note-title { padding: 14px 16px; }
+  .welcome h1 { font-size: 22px; }
+}
+
+/* Very small phones (iPhone SE 1st gen / Galaxy Fold cover ≈320px) */
+@media (max-width: 360px) {
+  #content { padding: 12px; }
+  .note-title { padding: 18px 12px; }
+  .note-title h1 { font-size: 19px; }
+  .welcome h1 { font-size: 24px; }
+  .n-table th, .n-table td { padding: 8px 9px; font-size: 12px; }
+  .score-breakdown { grid-template-columns: 1fr; }
+  #topbar { gap: 8px; padding: 0 12px; }
+}

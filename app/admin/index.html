@@ -326,7 +326,20 @@
         overflow: visible; position: relative; z-index: 100;
         display: none;
       }
-      #ad-side.mob-open { display: flex; flex-direction: column; position: fixed; inset: 0; width: 260px; height: 100vh; z-index: 300; box-shadow: 0 0 0 100vw rgba(0,0,0,.6); }
+      #ad-side.mob-open { display: flex; flex-direction: column; position: fixed; inset: 0; width: 260px; height: 100vh; height: 100dvh; z-index: 300; box-shadow: 0 0 0 100vw rgba(0,0,0,.6); }
+      /* The ≤960px icon-only rules also match here — restore full labels
+         inside the drawer, which has room for them. */
+      #ad-side.mob-open .ad-logo-name,
+      #ad-side.mob-open .ad-logo-sub,
+      #ad-side.mob-open .ad-nav-btn span,
+      #ad-side.mob-open .ad-user-email,
+      #ad-side.mob-open .ad-signout span { display: block; }
+      #ad-side.mob-open .ad-logo { justify-content: flex-start; padding: 18px 16px 16px; }
+      #ad-side.mob-open .ad-nav-btn { justify-content: flex-start; padding: 11px 12px; }
+      #ad-side.mob-open .ad-signout { justify-content: flex-start; }
+      #ad-side.mob-open .ad-user-chip { justify-content: flex-start; }
+      /* Tooltips are pointless in the drawer */
+      #ad-side.mob-open .ad-nav-btn:hover::after { display: none; }
       #mob-topbar { display: flex !important; }
       #ad-main { overflow-y: auto; }
       .ad-tab { padding: 16px 14px 32px; }
@@ -357,6 +370,50 @@
     #mob-ham span { display: block; width: 16px; height: 1.5px; background: var(--text2); border-radius: 2px; }
     #mob-overlay { display: none; position: fixed; inset: 0; z-index: 299; }
     #mob-overlay.on { display: block; }
+
+    /* iOS zooms in on focus when input font-size < 16px and never restores */
+    @media (max-width: 768px) {
+      .ad-input, .ad-select, .ad-textarea,
+      #pay-filter-status, #pay-filter-plan {
+        font-size: 16px !important;
+        padding: 11px 12px;
+      }
+      /* Touch targets */
+      .ad-btn { min-height: 44px; padding: 11px 18px; }
+      .btn-sm { min-height: 38px; padding: 8px 14px; font-size: 12.5px; }
+      .upill  { min-height: 38px; padding: 9px 14px; }
+      .ad-nav-btn { min-height: 46px; }
+      .notif-del { min-width: 40px; min-height: 40px; }
+      /* Action buttons in table rows stack rather than squeeze */
+      .ad-table td > div[style*="display:flex"] { flex-wrap: wrap; }
+    }
+
+    /* Tables never push the page sideways — they scroll inside their card */
+    .ad-table-wrap, #pay-table-wrap { -webkit-overflow-scrolling: touch; }
+    @media (max-width: 600px) {
+      .ad-table th, .ad-table td { padding: 9px 10px; font-size: 12.5px; }
+      .ad-table { min-width: 560px; }
+      #pay-table-wrap table { min-width: 680px; }
+      .dki-val { font-size: 25px; }
+      .dki-val-sm { font-size: 19px; }
+      .dash-chart-card, .dash-plan-card { padding: 14px 15px; }
+      .ad-ph h1 { font-size: 17px; }
+      .ad-card { padding: 18px 16px; }
+    }
+
+    /* Landscape phone: shorter header chrome */
+    @media (max-height: 480px) and (orientation: landscape) {
+      #mob-topbar { height: 44px; }
+      .ad-tab { padding-top: 14px; }
+    }
+
+    /* Notch / home indicator */
+    @supports (padding: max(0px)) {
+      #mob-topbar { padding-left: max(16px, env(safe-area-inset-left));
+                    padding-right: max(16px, env(safe-area-inset-right)); }
+      #ad-main { padding-bottom: env(safe-area-inset-bottom); }
+      #ad-side { padding-bottom: env(safe-area-inset-bottom); }
+    }
 
     /* ── ANALYTICS DASHBOARD ── */
     .dash-kpi-grid {
@@ -556,7 +613,7 @@
     </div>
     <button class="ad-signout" onclick="doSignOut()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      Sign Out
+      <span>Sign Out</span>
     </button>
   </div>
 </aside>

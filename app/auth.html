@@ -10,6 +10,7 @@
 
     body {
       min-height: 100vh;
+      min-height: 100dvh;
       background: #070D1A;
       color: #DDE5EF;
       font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -127,6 +128,52 @@
       font-size: 11.5px; color: #2E5577;
       text-align: center; margin-top: 20px;
       line-height: 1.5;
+    }
+
+    /* ── Mobile ───────────────────────────────────────────────── */
+
+    /* iOS zooms the page when a focused input is under 16px and never
+       restores scale, so bump inputs on small screens. */
+    @media (max-width: 768px) {
+      input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .btn { padding: 14px; font-size: 15px; min-height: 48px; }
+      .tab { padding: 13px 8px; min-height: 46px; font-size: 14px; }
+      .link-btn { padding: 8px 0; min-height: 40px; font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 16px; align-items: flex-start; padding-top: 32px; }
+      .card { padding: 28px 20px; border-radius: 8px; }
+      .brand { margin-bottom: 22px; }
+      .brand-name { font-size: 1.3rem; }
+    }
+
+    /* Small phones ≈320px: reclaim every pixel of width */
+    @media (max-width: 360px) {
+      body { padding: 10px; padding-top: 24px; }
+      .card { padding: 22px 15px; }
+      .tabs { margin-bottom: 18px; }
+      .footer-note { font-size: 11px; }
+    }
+
+    /* Landscape phones are vertically cramped — let the card scroll */
+    @media (max-height: 520px) and (orientation: landscape) {
+      body { align-items: flex-start; padding: 16px; }
+      .card { padding: 20px 24px; }
+      .brand { margin-bottom: 14px; }
+      .form { gap: 10px; }
+    }
+
+    /* Notch / home indicator */
+    @supports (padding: max(0px)) {
+      body {
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+      }
     }
   </style>
 </head>

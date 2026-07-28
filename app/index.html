@@ -760,6 +760,22 @@
     border-radius: 50%; background: #C8A44A; flex-shrink: 0;
   }
   .up-buy-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Upgrade modal — mobile */
+  @media (max-width: 600px) {
+    #upgrade-modal .up-plan-card { padding: 15px 15px 14px; }
+    .up-buy-btn { min-height: 46px; }
+    .up-feature { font-size: 12.5px; }
+  }
+  @media (max-width: 360px) {
+    #upgrade-modal .up-plan-card { padding: 13px; }
+    .up-feature { font-size: 12px; }
+  }
+  /* Landscape phone: modal must scroll, never trap content off-screen */
+  @media (max-height: 520px) and (orientation: landscape) {
+    #upgrade-modal > div { padding-top: 14px !important; padding-bottom: 28px !important; }
+    #upgrade-modal > div > div { margin-top: 0 !important; }
+  }
 </style>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
