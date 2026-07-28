@@ -647,31 +647,6 @@
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
-/* ── visible error display (no console needed) ── */
-(function(){
-  function _dbgToast(msg, isErr) {
-    var d = document.createElement('div');
-    d.style.cssText = 'position:fixed;bottom:14px;right:14px;z-index:99999;max-width:380px;padding:12px 16px;border-radius:10px;font-size:12px;font-family:monospace;line-height:1.5;word-break:break-all;pointer-events:none;' +
-      (isErr ? 'background:#7f1d1d;border:1px solid #ef4444;color:#fca5a5' : 'background:#14532d;border:1px solid #22c55e;color:#86efac');
-    d.textContent = msg;
-    document.body.appendChild(d);
-    setTimeout(function(){ d.remove(); }, 9000);
-  }
-  window._dbgToast = _dbgToast;
-  window.addEventListener('error', function(e){ _dbgToast('JS: ' + e.message + ' (' + (e.filename||'').split('/').pop() + ':' + e.lineno + ')', true); });
-  window.addEventListener('unhandledrejection', function(e){ _dbgToast('Promise: ' + (e.reason && (e.reason.message||e.reason)), true); });
-  setTimeout(function(){
-    if (typeof window._loadEncryptedScript === 'function') {
-      var _orig = window._loadEncryptedScript;
-      window._loadEncryptedScript = async function(url) {
-        try { var r = await _orig(url); _dbgToast('OK: ' + url.split('/').pop(), false); return r; }
-        catch(e) { _dbgToast('FAIL: ' + url.split('/').pop() + ' — ' + e.message, true); throw e; }
-      };
-    }
-  }, 0);
-})();
-</script>
-<script>
 function setTheme(t) {
   var applied = t;
   if (t === 'system') applied = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
