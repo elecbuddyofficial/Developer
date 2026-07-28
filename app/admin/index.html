@@ -535,7 +535,7 @@ var _allUsers = [];
     _sb = supabase.createClient(SB_URL, SB_KEY);
 
     var { data: { session } } = await _sb.auth.getSession();
-    if (!session) { window.location.replace('login.html'); return; }
+    if (!session) { window.location.replace('../auth.html'); return; }
 
     var { data: profile } = await _sb.from('profiles')
       .select('is_admin, email, full_name')
@@ -543,8 +543,7 @@ var _allUsers = [];
       .single();
 
     if (!profile || !profile.is_admin) {
-      await _sb.auth.signOut();
-      window.location.replace('login.html'); return;
+      window.location.replace('../auth.html'); return;
     }
 
     document.documentElement.style.visibility = 'visible';
@@ -920,7 +919,7 @@ function buildStatusBoard() {
 /* ── SIGN OUT ────────────────────────────────────────────────────── */
 async function doSignOut() {
   await _sb.auth.signOut();
-  window.location.replace('login.html');
+  window.location.replace('../auth.html');
 }
 </script>
 </body>
