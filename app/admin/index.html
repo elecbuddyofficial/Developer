@@ -838,6 +838,8 @@ async function addAdmin() {
 
   if (upErr) { toast('Failed: ' + upErr.message, 'err'); return; }
 
+  await _sb.from('admin_users').insert({ user_id: data.id });
+
   document.getElementById('new-admin-email').value = '';
   msgEl.style.display = 'block';
   msgEl.style.background = 'var(--green-dim)';
@@ -857,6 +859,9 @@ async function removeAdmin(id, email) {
     .eq('id', id);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  await _sb.from('admin_users').delete().eq('user_id', id);
+
   toast('Admin removed');
   loadAdmins();
 }

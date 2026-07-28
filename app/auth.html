@@ -223,6 +223,20 @@
     else                          window.location.replace('./courses.html');
   }
 
+  // Detect error in URL hash (e.g. expired confirmation link)
+  var _initError = null;
+  (function() {
+    var hash = window.location.hash;
+    if (hash.includes('error=')) {
+      var params = new URLSearchParams(hash.slice(1));
+      var code = params.get('error_code') || '';
+      _initError = code === 'otp_expired'
+        ? 'This confirmation link has expired. Please sign up again or request a new link.'
+        : (params.get('error_description') || 'Something went wrong. Please try again.').replace(/\+/g, ' ');
+      history.replaceState(null, '', window.location.pathname);
+    }
+  })();
+
   // Detect password recovery link immediately from URL hash
   var _recoveryMode = window.location.hash.includes('type=recovery');
   if (_recoveryMode) showRecoveryForm();
@@ -257,6 +271,8 @@
     el.className = 'msg';
     el.textContent = '';
   }
+
+  if (_initError) showMsg(_initError, 'error');
 
   function switchTab(tab) {
     clearMsg();

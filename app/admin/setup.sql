@@ -41,12 +41,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
--- 4. Helper function to check admin status (security definer bypasses RLS)
+-- 4. Separate table for admin IDs (breaks RLS recursion with profiles)
+CREATE TABLE IF NOT EXISTS public.admin_users (
+  user_id UUID PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE
+);
+ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Authenticated users can read admin list"
+  ON public.admin_users FOR SELECT TO authenticated USING (TRUE);
+CREATE POLICY "Admin can insert admin users"
+  ON public.admin_users FOR INSERT WITH CHECK (public.is_admin());
+CREATE POLICY "Admin can delete admin users"
+  ON public.admin_users FOR DELETE USING (public.is_admin());
+
+-- Helper function reads from admin_users (no recursion with profiles SELECT policy)
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
-  SELECT COALESCE(
-    (SELECT is_admin FROM public.profiles WHERE id = auth.uid()),
-    FALSE
+  SELECT EXISTS (
+    SELECT 1 FROM public.admin_users WHERE user_id = auth.uid()
   );
 $$ LANGUAGE sql SECURITY DEFINER STABLE;
 
@@ -110,3 +121,16 @@ WHERE email IN (
   'rahul@elec-buddy.com',
   'yadh@elec-buddy.com'
 );
+
+-- 10. Populate admin_users table from confirmed admin profiles
+INSERT INTO public.admin_users (user_id)
+SELECT p.id FROM public.profiles p
+JOIN auth.users u ON p.id = u.id
+WHERE u.email IN (
+  'elecbuddyofficial@gmail.com',
+  'adith@elec-buddy.com',
+  'blesson@elec-buddy.com',
+  'rahul@elec-buddy.com',
+  'yadh@elec-buddy.com'
+)
+ON CONFLICT DO NOTHING;

@@ -354,6 +354,80 @@
     .feature-list { grid-template-columns: 1fr; }
     .track-grid   { grid-template-columns: 1fr; }
   }
+
+  /* ── Profile panel ── */
+  .pm-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+    z-index: 600; opacity: 0; pointer-events: none; transition: opacity .22s;
+  }
+  .pm-overlay.open { opacity: 1; pointer-events: all; }
+  .pm-panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 320px; max-width: 92vw;
+    background: var(--surface); border-left: 1px solid var(--border2);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform: translateX(100%); transition: transform .25s cubic-bezier(.4,0,.2,1);
+    z-index: 601;
+  }
+  .pm-overlay.open .pm-panel { transform: translateX(0); }
+  .pm-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 18px 18px 14px; border-bottom: 1px solid var(--border);
+  }
+  .pm-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: #C8A44A; color: #070D1A;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; font-family: Georgia,serif; flex-shrink: 0;
+  }
+  .pm-name-row { flex: 1; min-width: 0; }
+  .pm-name {
+    font-size: 14.5px; font-weight: 700; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .pm-admin-badge {
+    display: none; font-size: 9.5px; font-weight: 700;
+    background: rgba(200,164,74,.15); border: 1px solid rgba(200,164,74,.4);
+    color: #C8A44A; padding: 2px 8px; border-radius: 20px;
+    white-space: nowrap; letter-spacing: .3px;
+  }
+  .pm-close {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: none; border: none; color: var(--text3);
+    font-size: 20px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+    transition: background .12s, color .12s;
+  }
+  .pm-close:hover { background: var(--surface2); color: var(--text); }
+  .pm-body { flex: 1; overflow-y: auto; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+  .pm-email-row { font-size: 12px; color: var(--text3); }
+  .pm-section { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); padding: 14px; }
+  .pm-section-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 8px; }
+  .pm-plan-badge {
+    display: inline-block; padding: 3px 10px;
+    border-radius: 100px; font-size: 11px; font-weight: 700;
+    letter-spacing: .3px; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .pb-trial   { background: var(--green-dim); border: 1px solid var(--green-border);   color: var(--green); }
+  .pb-active  { background: var(--blue-dim);  border: 1px solid var(--blue-border);    color: var(--blue); }
+  .pb-expired { background: var(--red-dim);   border: 1px solid var(--red-border);     color: var(--red); }
+  .pm-plan-sub { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
+  .pm-footer { padding: 14px 18px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .pm-admin-btn {
+    display: none; width: 100%; padding: 10px;
+    background: rgba(200,164,74,.12); border: 1px solid rgba(200,164,74,.35);
+    color: #C8A44A; border-radius: var(--r6);
+    font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s;
+  }
+  .pm-admin-btn:hover { background: rgba(200,164,74,.22); }
+  .pm-signout {
+    width: 100%; padding: 10px;
+    background: none; border: 1px solid var(--border2);
+    color: var(--text2); border-radius: var(--r6);
+    font-size: 13px; font-weight: 600; cursor: pointer; transition: background .12s, color .12s;
+  }
+  .pm-signout:hover { background: var(--red-dim); border-color: var(--red-border); color: var(--red); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -390,6 +464,10 @@
       style="width:34px;height:34px;border-radius:50%;background:#C8A44A;color:#070D1A;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:Georgia,serif;flex-shrink:0;"></button>
     <div class="profile-dropdown" id="profile-dropdown">
       <div class="pd-email" id="pd-email"></div>
+      <button class="pd-btn" onclick="openProfile()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        My Profile
+      </button>
       <button class="pd-btn danger" onclick="signOut()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Sign Out
@@ -449,6 +527,32 @@
 
   </div>
 
+</div>
+
+<!-- Profile panel -->
+<div class="pm-overlay" id="pm-overlay" onclick="closePmIfBg(event)">
+  <div class="pm-panel" id="pm-panel">
+    <div class="pm-head">
+      <div class="pm-avatar" id="pm-avatar">?</div>
+      <div class="pm-name-row">
+        <div class="pm-name" id="pm-name">Loading...</div>
+        <span class="pm-admin-badge" id="pm-admin-badge">✓ admin</span>
+      </div>
+      <button class="pm-close" onclick="closeProfile()">×</button>
+    </div>
+    <div class="pm-body">
+      <div class="pm-email-row" id="pm-email"></div>
+      <div class="pm-section">
+        <div class="pm-section-label">Subscription</div>
+        <div id="pm-plan-badge"></div>
+        <div class="pm-plan-sub" id="pm-plan-sub"></div>
+      </div>
+    </div>
+    <div class="pm-footer">
+      <button class="pm-admin-btn" id="pm-admin-btn" onclick="window.location.href='./admin/index.html'">⚡ Admin Panel</button>
+      <button class="pm-signout" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
 </div>
 
 <!-- Confirmation dialog -->
@@ -567,6 +671,69 @@
     if (window._sbClient) await window._sbClient.auth.signOut();
     window.location.replace('./auth.html');
   }
+
+  /* ── Profile panel ── */
+  async function openProfile() {
+    document.getElementById('profile-dropdown').classList.remove('open');
+    document.getElementById('pm-overlay').classList.add('open');
+
+    var u = window._sbUser;
+    if (!u) return;
+
+    var name = (u.user_metadata && u.user_metadata.full_name) || u.email || '?';
+    document.getElementById('pm-avatar').textContent = name.charAt(0).toUpperCase();
+    document.getElementById('pm-name').textContent = name;
+    document.getElementById('pm-email').textContent = u.email || '';
+
+    var { data: profile } = await window._sbClient
+      .from('profiles')
+      .select('subscription_plan, subscription_expires_at, trial_started_at, is_admin')
+      .eq('id', u.id)
+      .single();
+
+    if (profile) {
+      var plan = profile.subscription_plan || 'trial';
+      var badgeEl = document.getElementById('pm-plan-badge');
+      var subEl   = document.getElementById('pm-plan-sub');
+
+      if (plan === 'trial') {
+        var daysLeft = profile.trial_started_at
+          ? Math.max(0, 3 - Math.floor((Date.now() - new Date(profile.trial_started_at)) / 86400000))
+          : 0;
+        badgeEl.innerHTML = '<span class="pm-plan-badge pb-trial">Free Trial</span>';
+        subEl.textContent = daysLeft > 0 ? daysLeft + ' day' + (daysLeft === 1 ? '' : 's') + ' remaining' : 'Trial ended';
+      } else if (plan === 'monthly' || plan === 'annual') {
+        var exp = profile.subscription_expires_at ? new Date(profile.subscription_expires_at) : null;
+        var expired = exp && exp < new Date();
+        if (expired) {
+          badgeEl.innerHTML = '<span class="pm-plan-badge pb-expired">Expired</span>';
+          subEl.textContent = 'Expired ' + (exp ? exp.toLocaleDateString() : '');
+        } else {
+          badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + (plan === 'annual' ? 'Annual' : 'Monthly') + ' Plan</span>';
+          subEl.textContent = exp ? 'Active until ' + exp.toLocaleDateString() : 'Active';
+        }
+      } else {
+        badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">Active</span>';
+        subEl.textContent = '';
+      }
+
+      var isAdmin = profile.is_admin === true;
+      document.getElementById('pm-admin-badge').style.display = isAdmin ? 'inline-flex' : 'none';
+      document.getElementById('pm-admin-btn').style.display   = isAdmin ? 'block' : 'none';
+    }
+  }
+
+  function closeProfile() {
+    document.getElementById('pm-overlay').classList.remove('open');
+  }
+
+  function closePmIfBg(e) {
+    if (e.target === document.getElementById('pm-overlay')) closeProfile();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeProfile();
+  });
 </script>
 </body>
 </html>
