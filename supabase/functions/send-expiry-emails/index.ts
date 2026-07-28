@@ -35,102 +35,116 @@ async function sendEmail(
 
 // ── Email templates ────────────────────────────────────────────────────────
 
-function baseLayout(preheader: string, body: string): string {
+function baseLayout(preheader: string, heading: string, body: string, ctaUrl: string, ctaLabel: string): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="light">
 <title>Elec-Buddy</title>
-<style>
-  body{margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
-  .wrap{max-width:560px;margin:32px auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.08)}
-  .header{background:#0f172a;padding:28px 36px;display:flex;align-items:center}
-  .logo{font-size:20px;font-weight:800;letter-spacing:-.3px}
-  .logo-e{color:#3b82f6}
-  .logo-b{color:#e2e8f0}
-  .body{padding:36px}
-  .body p{margin:0 0 16px;font-size:15px;line-height:1.65;color:#334155}
-  .body p:last-child{margin-bottom:0}
-  .cta{display:inline-block;margin:24px 0;background:#3b82f6;color:#ffffff;text-decoration:none;font-size:14px;font-weight:700;padding:13px 28px;border-radius:10px;letter-spacing:.1px}
-  .box{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:18px 20px;margin:20px 0}
-  .box p{margin:0;font-size:14px;color:#64748b}
-  .footer{padding:20px 36px;border-top:1px solid #f1f5f9;text-align:center}
-  .footer p{margin:0;font-size:12px;color:#94a3b8;line-height:1.6}
-  .footer a{color:#64748b;text-decoration:none}
-</style>
 </head>
-<body>
+<body style="margin:0;padding:0;background-color:#070D1A;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif;color:#DDE5EF;">
 <span style="display:none;max-height:0;overflow:hidden">${preheader}</span>
-<div class="wrap">
-  <div class="header">
-    <span class="logo"><span class="logo-e">Elec</span><span class="logo-b">-Buddy</span></span>
-  </div>
-  <div class="body">${body}</div>
-  <div class="footer">
-    <p>
-      Elec-Buddy &mdash; ETO CoC &amp; STCW Exam Preparation<br>
-      Questions? <a href="mailto:jojiblesson@gmail.com">jojiblesson@gmail.com</a>
-    </p>
-  </div>
-</div>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color:#070D1A;padding:40px 16px;">
+  <tr>
+    <td align="center">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:480px;background-color:#0D1E33;border:1px solid #1A3050;border-radius:16px;">
+        <tr>
+          <td style="padding:40px 32px;text-align:center;">
+
+            <div style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#C8A44A;line-height:1.2;">
+              Elec-Buddy
+            </div>
+            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+              ETO EXAM PREPARATION
+            </div>
+
+            <h1 style="margin:36px 0 20px 0;font-size:24px;font-weight:700;line-height:1.3;color:#DDE5EF;">
+              ${heading}
+            </h1>
+
+            <div style="font-size:15px;line-height:1.75;color:#DDE5EF;text-align:left;">
+              ${body}
+            </div>
+
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:32px auto 8px;">
+              <tr>
+                <td align="center" bgcolor="#C8A44A" style="border-radius:10px;">
+                  <a href="${ctaUrl}"
+                     style="display:inline-block;padding:15px 32px;background-color:#C8A44A;color:#070D1A;text-decoration:none;font-size:15px;font-weight:700;border-radius:10px;">
+                    ${ctaLabel}
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:28px 0 0 0;font-size:13px;line-height:1.6;color:#4A6880;">
+              Open the app, tap your profile, then Upgrade Plan to see your options.
+            </p>
+
+          </td>
+        </tr>
+        <tr>
+          <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
+            <div style="font-size:12px;color:#2E5577;line-height:1.7;">
+              Elec-Buddy · ETO CoC and STCW Exam Preparation<br>
+              Questions? <a href="mailto:jojiblesson@gmail.com" style="color:#4A6880;text-decoration:none;">jojiblesson@gmail.com</a>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 </body>
 </html>`;
 }
 
+const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
+
 function trialExpiringHtml(): string {
   return baseLayout(
-    'Your free trial ends in 3 days — upgrade to keep full access.',
-    `<p>Hi,</p>
-    <p>Your <strong>Elec-Buddy free trial ends in 3 days</strong>. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
-    <p>Upgrade now to keep studying without interruption:</p>
-    <a class="cta" href="https://elecbuddyofficial.github.io/Developer/app/">Upgrade My Plan</a>
-    <div class="box">
-      <p>Open the app &rarr; tap your profile &rarr; Upgrade Plan to see available options.</p>
-    </div>
-    <p>If you have any questions, just reply to this email — we're happy to help.</p>`,
+    'Your free trial ends in 3 days. Upgrade to keep full access.',
+    'Your free trial ends in 3 days',
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial ends in 3 days. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
+     <p style="margin:0;">Upgrade now to keep studying without interruption.</p>`,
+    APP_URL,
+    'Upgrade My Plan',
   );
 }
 
 function trialExpiredHtml(): string {
   return baseLayout(
-    'Your Elec-Buddy trial has ended — upgrade to continue.',
-    `<p>Hi,</p>
-    <p>Your <strong>Elec-Buddy free trial has ended</strong>. Your progress is saved, and you can pick up right where you left off as soon as you upgrade.</p>
-    <a class="cta" href="https://elecbuddyofficial.github.io/Developer/app/">Upgrade My Plan</a>
-    <div class="box">
-      <p>All your reading progress and quiz scores are waiting for you — nothing is lost.</p>
-    </div>
-    <p>Questions about plans? Reply to this email and we'll get back to you.</p>`,
+    'Your Elec-Buddy trial has ended. Upgrade to continue.',
+    'Your free trial has ended',
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial has ended. Your reading progress and quiz scores are all saved, and you can pick up right where you left off as soon as you upgrade.</p>
+     <p style="margin:0;">Nothing is lost. Upgrade and continue studying today.</p>`,
+    APP_URL,
+    'Upgrade My Plan',
   );
 }
 
 function subExpiringHtml(plan: string): string {
   const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
   return baseLayout(
-    `Your ${planLabel} plan expires in 3 days — renew to stay on track.`,
-    `<p>Hi,</p>
-    <p>Your <strong>Elec-Buddy ${planLabel} plan expires in 3 days</strong>. To keep uninterrupted access to all your study materials, please renew before it lapses.</p>
-    <a class="cta" href="https://elecbuddyofficial.github.io/Developer/app/">Renew My Plan</a>
-    <div class="box">
-      <p>Open the app &rarr; tap your profile &rarr; Upgrade Plan to renew.</p>
-    </div>
-    <p>Need help or have a question about renewal? Just reply here.</p>`,
+    `Your ${planLabel} plan expires in 3 days. Renew to stay on track.`,
+    `Your ${planLabel} plan expires in 3 days`,
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${planLabel} plan expires in 3 days. Renew before it lapses to keep uninterrupted access to all your study materials.</p>
+     <p style="margin:0;">If you have any questions about renewal, just reply to this email.</p>`,
+    APP_URL,
+    'Renew My Plan',
   );
 }
 
 function subExpiredHtml(plan: string): string {
   const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
   return baseLayout(
-    `Your ${planLabel} plan has ended — renew to continue studying.`,
-    `<p>Hi,</p>
-    <p>Your <strong>Elec-Buddy ${planLabel} plan has expired</strong>. Your reading progress and quiz history are all saved — renew to get back to studying right away.</p>
-    <a class="cta" href="https://elecbuddyofficial.github.io/Developer/app/">Renew My Plan</a>
-    <div class="box">
-      <p>All your progress is intact. Renew and continue exactly where you left off.</p>
-    </div>
-    <p>Questions? Reply to this email — we'll help you sort it out quickly.</p>`,
+    `Your ${planLabel} plan has ended. Renew to continue studying.`,
+    `Your ${planLabel} plan has expired`,
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${planLabel} plan has expired. Your reading progress and quiz history are intact. Renew to get back to studying right away.</p>
+     <p style="margin:0;">Questions? Reply to this email and we will sort it out quickly.</p>`,
+    APP_URL,
+    'Renew My Plan',
   );
 }
 
