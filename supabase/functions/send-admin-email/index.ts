@@ -86,7 +86,7 @@ serve(async (req) => {
     // Confirm caller is an admin
     const { data: callerProfile } = await admin
       .from('profiles')
-      .select('is_admin')
+      .select('is_admin, email, full_name')
       .eq('id', caller.id)
       .single();
     if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
@@ -110,6 +110,10 @@ serve(async (req) => {
 
     const html = layout(subject, escapeHtml(message).replace(/\n/g, '<br>'));
 
+    const replyTo = callerProfile.email
+      ? (callerProfile.full_name ? `${callerProfile.full_name} <${callerProfile.email}>` : callerProfile.email)
+      : undefined;
+
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
@@ -117,8 +121,9 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Elec-Buddy <support@elec-buddy.com>',
+        from: 'Elec-Buddy <official@elec-buddy.com>',
         to: target.email,
+        reply_to: replyTo,
         subject,
         html,
       }),
