@@ -700,8 +700,8 @@ function renderUsers(users) {
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
-          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + JSON.stringify(u.email || '') + ')">Edit</button>'
-          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + JSON.stringify(u.id) + ',' + JSON.stringify(u.email || '') + ')">Delete</button>'
+          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Edit</button>'
+          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + JSON.stringify(u.id).replace(/"/g,'&quot;') + ',' + JSON.stringify(u.email || '').replace(/"/g,'&quot;') + ')">Delete</button>'
           + '</td>'
           + '</tr>';
       }).join('')
@@ -922,7 +922,7 @@ async function loadAdmins() {
           + '<td>'
           + (isMe
             ? '<span style="font-size:11px;color:var(--text3);padding:5px 10px;display:inline-block">Cannot remove yourself</span>'
-            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(' + JSON.stringify(a.id) + ',' + JSON.stringify(a.email || '') + ')">Remove</button>')
+            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(' + JSON.stringify(a.id).replace(/"/g,'&quot;') + ',' + JSON.stringify(a.email || '').replace(/"/g,'&quot;') + ')">Remove</button>')
           + '</td>'
           + '</tr>';
       }).join('')
