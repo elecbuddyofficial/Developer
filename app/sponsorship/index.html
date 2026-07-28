@@ -1234,8 +1234,8 @@ startBackgroundIndexing();
     var user=window._sbUser; if(!user||document.getElementById('_wm'))return;
     var label='© ElecBuddy | '+(user.email||'licensed user')+' | Unauthorized copying prohibited'; var el=document.createElement('div'); el.id='_wm'; el.setAttribute('aria-hidden','true');
     el.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;';
-    var cols=Math.ceil(window.innerWidth/420)+2, rows=Math.ceil(window.innerHeight/110)+2, html='';
-    for(var r=0;r<rows;r++) for(var c=0;c<cols;c++) html+='<span style="position:absolute;left:'+(c*420-60)+'px;top:'+(r*110-30)+'px;transform:rotate(-25deg);font-size:11px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">'+label+'</span>';
+    var cols=Math.ceil(window.innerWidth/600)+2, rows=Math.ceil(window.innerHeight/200)+2, html='';
+    for(var r=0;r<rows;r++) for(var c=0;c<cols;c++) html+='<span style="position:absolute;left:'+(c*600-60)+'px;top:'+(r*200-30)+'px;transform:rotate(-25deg);font-size:11px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">'+label+'</span>';
     el.innerHTML=html; document.body.appendChild(el);
   }
   if(document.readyState==='complete') buildWatermark(); else window.addEventListener('load',buildWatermark);
