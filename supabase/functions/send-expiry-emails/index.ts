@@ -88,7 +88,7 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
             <div style="font-size:12px;color:#2E5577;line-height:1.7;">
               Elec-Buddy · ETO CoC and STCW Exam Preparation<br>
-              Questions? <a href="mailto:jojiblesson@gmail.com" style="color:#4A6880;text-decoration:none;">jojiblesson@gmail.com</a>
+              Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
             </div>
           </td>
         </tr>
