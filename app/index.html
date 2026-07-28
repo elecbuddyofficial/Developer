@@ -688,7 +688,7 @@ function setTheme(t) {
     var plan = btn.dataset.plan;
     var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
     var userEmail = (window._sbUser && window._sbUser.email) || '';
-    var subject = encodeURIComponent('ETO Study App – Purchase: ' + planLabel + ' Plan');
+    var subject = encodeURIComponent('Elec-Buddy – Purchase: ' + planLabel + ' Plan');
     var body = encodeURIComponent('Hi,\n\nI would like to purchase the ' + planLabel + ' plan.\n\nMy account email: ' + userEmail);
     window.open('mailto:jojiblesson@gmail.com?subject=' + subject + '&body=' + body);
   });

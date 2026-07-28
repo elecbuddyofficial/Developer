@@ -1806,8 +1806,8 @@ function _guideSlide(step) {
 function _guideWelcomeHTML() {
     return '<div style="text-align:center">'
         + '<div style="font-size:50px;margin-bottom:18px;filter:drop-shadow(0 4px 18px rgba(168,85,247,0.45))">🎓</div>'
-        + '<h2 style="font-size:21px;font-weight:800;color:var(--text);margin-bottom:10px;line-height:1.3">Welcome to MMD Elec Buddy</h2>'
-        + '<p style="font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:28px">Your complete ETO exam prep companion. Let\'s take a quick tour so you know exactly how to use this.</p>'
+        + '<h2 style="font-size:21px;font-weight:800;color:var(--text);margin-bottom:10px;line-height:1.3">Welcome to Elec-Buddy</h2>'
+        + '<p style="font-size:14px;color:var(--text2);line-height:1.65;margin-bottom:28px">Your complete ETO CoC and STCW exam companion. Let\'s take a quick tour so you know exactly how to use this.</p>'
         + '<button class="guide-btn-primary" onclick="guideNext()">Take the tour</button>'
         + '<div style="margin-top:13px"><button class="guide-btn-text" onclick="guideDismiss(true)">Skip for now</button></div>'
         + '</div>';
