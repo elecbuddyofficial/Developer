@@ -1,0 +1,245 @@
+<!doctype html>
+<html data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin Login — Elec-Buddy</title>
+  <style>html{visibility:hidden}</style>
+  <script>
+    (function(){
+      document.documentElement.setAttribute('data-theme','dark');
+    })();
+  </script>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    body {
+      align-items:center; justify-content:center;
+      background:var(--bg); min-height:100vh;
+    }
+
+    .login-wrap {
+      width:100%; max-width:380px;
+      padding:0 20px;
+    }
+
+    /* Logo */
+    .login-logo {
+      display:flex; align-items:center; justify-content:center;
+      gap:12px; margin-bottom:36px;
+    }
+    .login-logo-icon {
+      width:42px; height:42px; border-radius:12px;
+      background:var(--blue-dim); border:1.5px solid var(--blue-border);
+      display:flex; align-items:center; justify-content:center;
+      font-size:20px;
+    }
+    .login-logo-text { line-height:1.2; }
+    .login-logo-name { font-size:16px; font-weight:800; color:var(--text); letter-spacing:-.3px; }
+    .login-logo-sub  { font-size:11px; font-weight:700; color:var(--text3); text-transform:uppercase; letter-spacing:.8px; margin-top:2px; }
+
+    /* Card */
+    .login-card {
+      background:var(--surface); border:1.5px solid var(--border);
+      border-radius:var(--r12); padding:28px 28px 24px;
+    }
+    .login-card h1 {
+      font-size:17px; font-weight:800; color:var(--text);
+      letter-spacing:-.3px; margin-bottom:5px;
+    }
+    .login-card p {
+      font-size:13px; color:var(--text3); margin-bottom:24px; line-height:1.5;
+    }
+
+    /* Fields */
+    .lf-field { margin-bottom:14px; }
+    .lf-label {
+      display:block; font-size:10.5px; font-weight:700;
+      color:var(--text3); text-transform:uppercase;
+      letter-spacing:.5px; margin-bottom:6px;
+    }
+    .lf-input {
+      width:100%; padding:10px 13px; box-sizing:border-box;
+      background:var(--surface2); border:1.5px solid var(--border2);
+      border-radius:var(--r8); color:var(--text); font-size:14px;
+      outline:none; transition:border-color .15s; font-family:inherit;
+    }
+    .lf-input:focus { border-color:var(--blue); }
+    .lf-input::placeholder { color:var(--text3); }
+
+    /* Password field wrapper */
+    .pw-wrap { position:relative; }
+    .pw-wrap .lf-input { padding-right:42px; }
+    .pw-toggle {
+      position:absolute; right:12px; top:50%; transform:translateY(-50%);
+      background:none; border:none; cursor:pointer; color:var(--text3);
+      padding:4px; display:flex; align-items:center; justify-content:center;
+      transition:color .15s;
+    }
+    .pw-toggle:hover { color:var(--text); }
+    .pw-toggle svg { width:16px; height:16px; }
+
+    /* Submit */
+    .lf-submit {
+      width:100%; padding:11px; margin-top:6px;
+      background:var(--blue); color:#fff;
+      border:none; border-radius:var(--r8);
+      font-size:14px; font-weight:700; font-family:inherit;
+      cursor:pointer; transition:opacity .15s;
+    }
+    .lf-submit:hover { opacity:.87; }
+    .lf-submit:disabled { opacity:.5; cursor:not-allowed; }
+
+    /* Error */
+    .lf-error {
+      display:none; margin-top:14px;
+      padding:10px 13px; border-radius:var(--r8);
+      background:var(--red-dim); border:1.5px solid var(--red-border);
+      color:var(--red); font-size:13px; font-weight:600; line-height:1.4;
+    }
+    .lf-error.show { display:block; }
+
+    /* Footer note */
+    .login-note {
+      text-align:center; margin-top:20px;
+      font-size:12px; color:var(--text3); line-height:1.6;
+    }
+    .login-note a {
+      color:var(--blue); text-decoration:none; font-weight:600;
+    }
+    .login-note a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-logo">
+    <div class="login-logo-icon">⚡</div>
+    <div class="login-logo-text">
+      <div class="login-logo-name">Elec-Buddy</div>
+      <div class="login-logo-sub">Admin Portal</div>
+    </div>
+  </div>
+
+  <div class="login-card">
+    <h1>Team Sign In</h1>
+    <p>Admin access only. Use your team email address.</p>
+
+    <div class="lf-field">
+      <label class="lf-label" for="login-email">Email</label>
+      <input class="lf-input" id="login-email" type="email" placeholder="you@elec-buddy.com" autocomplete="email">
+    </div>
+
+    <div class="lf-field">
+      <label class="lf-label" for="login-pw">Password</label>
+      <div class="pw-wrap">
+        <input class="lf-input" id="login-pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()">
+        <button class="pw-toggle" type="button" onclick="togglePw(this)" tabindex="-1" aria-label="Show password">
+          <svg id="eye-show" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          <svg id="eye-hide" style="display:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="lf-submit" id="login-btn" onclick="doLogin()">Sign In</button>
+
+    <div class="lf-error" id="login-error"></div>
+  </div>
+
+  <div class="login-note">
+    Not a team member? <a href="../sponsorship/index.html">Go to the app</a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
+var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+var _sb = supabase.createClient(SB_URL, SB_KEY);
+
+var ADMIN_EMAILS = [
+  'elecbuddyofficial@gmail.com',
+  'adith@elec-buddy.com',
+  'blesson@elec-buddy.com',
+  'rahul@elec-buddy.com',
+  'yadh@elec-buddy.com'
+];
+
+/* Check if already logged in as admin */
+(async function() {
+  var { data: { session } } = await _sb.auth.getSession();
+  if (session) {
+    var { data: profile } = await _sb.from('profiles')
+      .select('is_admin')
+      .eq('id', session.user.id)
+      .single();
+    if (profile && profile.is_admin) {
+      window.location.replace('index.html');
+      return;
+    }
+  }
+  document.documentElement.style.visibility = 'visible';
+})();
+
+function showError(msg) {
+  var el = document.getElementById('login-error');
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function clearError() {
+  document.getElementById('login-error').classList.remove('show');
+}
+
+function togglePw(btn) {
+  var input = document.getElementById('login-pw');
+  var isText = input.type === 'text';
+  input.type = isText ? 'password' : 'text';
+  document.getElementById('eye-show').style.display = isText ? '' : 'none';
+  document.getElementById('eye-hide').style.display = isText ? 'none' : '';
+}
+
+async function doLogin() {
+  clearError();
+  var email = document.getElementById('login-email').value.trim().toLowerCase();
+  var password = document.getElementById('login-pw').value;
+
+  if (!email || !password) { showError('Please enter your email and password.'); return; }
+
+  /* Client-side pre-check: only team emails can even attempt login here */
+  if (!ADMIN_EMAILS.includes(email)) {
+    showError('This portal is for the Elec-Buddy team only.');
+    return;
+  }
+
+  var btn = document.getElementById('login-btn');
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+
+  var { data, error } = await _sb.auth.signInWithPassword({ email: email, password: password });
+
+  if (error) {
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    showError('Incorrect email or password.');
+    return;
+  }
+
+  /* Verify is_admin in profiles (real server-side check) */
+  var { data: profile } = await _sb.from('profiles')
+    .select('is_admin')
+    .eq('id', data.user.id)
+    .single();
+
+  if (!profile || !profile.is_admin) {
+    await _sb.auth.signOut();
+    btn.disabled = false;
+    btn.textContent = 'Sign In';
+    showError('Your account does not have admin access.');
+    return;
+  }
+
+  window.location.replace('index.html');
+}
+</script>
+</body>
+</html>
