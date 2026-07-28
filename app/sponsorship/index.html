@@ -657,6 +657,7 @@ function showHome() {
   document.getElementById('view-home').classList.add('active');
   document.getElementById('si-home').classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('sb-nav-sections').style.display = '';
   document.getElementById('topbar-badge').textContent = 'Sponsorship Prep';
   ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
   try { if (location.protocol !== 'file:') history.pushState(null,'', location.pathname); } catch(e){}
@@ -705,6 +706,7 @@ function openSection(sectionId) {
   document.getElementById('view-section').classList.add('active');
   var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('sb-nav-sections').style.display = '';
   document.getElementById('topbar-badge').textContent = sec.label;
 
   document.getElementById('sec-icon').textContent  = sec.icon;
@@ -811,7 +813,13 @@ window.fetchTopicData = function(topicId, topicObj) {
 // ── Sidebar topic list while reading notes ──
 function buildTopicSideList(activeId) {
   var sec = SECTIONS[ACTIVE_SECTION_ID];
-  if (!sec || ACTIVE_SECTION_ID === 'overview') { document.getElementById('topic-side-list').style.display = 'none'; return; }
+  var nav = document.getElementById('sb-nav-sections');
+  if (!sec || ACTIVE_SECTION_ID === 'overview') {
+    document.getElementById('topic-side-list').style.display = 'none';
+    if (nav) nav.style.display = '';
+    return;
+  }
+  if (nav) nav.style.display = 'none';
   var panel = document.getElementById('topic-side-list');
   panel.style.display = 'block'; panel.innerHTML = '';
   sec.topics.forEach(function(t) {
