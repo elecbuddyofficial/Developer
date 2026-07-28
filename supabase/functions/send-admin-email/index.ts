@@ -34,7 +34,8 @@ function layout(opts: { heading: string; bodyHtml: string; signerName: string | 
 
   const signature = signerName
     ? `<p style="margin:26px 0 0 0;font-size:14px;line-height:1.6;color:#8FA3B8;">
-         &mdash; ${escapeHtml(signerName)}<br>
+         Regards,<br>
+         ${escapeHtml(signerName)}<br>
          <span style="font-size:12px;color:#4A6880;">Elec-Buddy Team</span>
        </p>`
     : '';
