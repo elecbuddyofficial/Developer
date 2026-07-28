@@ -241,11 +241,13 @@
   var _recoveryMode = window.location.hash.includes('type=recovery');
   if (_recoveryMode) showRecoveryForm();
 
-  // Supabase fires PASSWORD_RECOVERY when the hash token is processed
-  sb.auth.onAuthStateChange((event) => {
+  // Supabase fires PASSWORD_RECOVERY or SIGNED_IN when the hash token is processed
+  sb.auth.onAuthStateChange((event, session) => {
     if (event === 'PASSWORD_RECOVERY') {
       _recoveryMode = true;
       showRecoveryForm();
+    } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
+      redirectAfterLogin();
     }
   });
 
