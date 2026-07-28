@@ -214,14 +214,14 @@
   <button id="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">
     <svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18"/></svg>
   </button>
-  <div class="logo">Elec-Buddy <span>Sponsorship Prep</span></div>
+  <div class="logo"><span class="logo-elec">Elec</span>-Buddy <span>Sponsorship Prep</span></div>
   <div class="spacer"></div>
   <button class="notif-bell-btn" id="notif-bell-btn" onclick="openNotifs()" title="Notifications" aria-label="Notifications">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
     <span class="nb-dot" id="nb-dot"></span>
   </button>
   <button id="profile-btn" onclick="openProfile()" title="Account" aria-label="Account" style="width:34px;height:34px;border-radius:50%;background:#C8A44A;color:#070D1A;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:Georgia,serif;flex-shrink:0;margin-left:6px;"></button>
-  <div class="tb-badge" id="topbar-badge">Sponsorship Prep</div>
+
 </div>
 
 <div id="layout">
@@ -719,7 +719,6 @@ function showHome() {
   document.getElementById('si-home').classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
   document.getElementById('sb-nav-sections').style.display = '';
-  document.getElementById('topbar-badge').textContent = 'Sponsorship Prep';
   ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
   try { if (location.protocol !== 'file:') history.pushState(null,'', location.pathname); } catch(e){}
 }
@@ -730,7 +729,6 @@ function showStudyHub() {
   document.getElementById('view-study-hub').classList.add('active');
   document.getElementById('si-home').classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
-  document.getElementById('topbar-badge').textContent = 'Study Materials';
   ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   try { if (location.protocol !== 'file:') history.pushState(null,'','#study-hub'); } catch(e){}
@@ -742,7 +740,6 @@ function showNotifications() {
   document.getElementById('view-notifications').classList.add('active');
   document.getElementById('si-notifications').classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
-  document.getElementById('topbar-badge').textContent = 'Notifications';
   ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   try { if (location.protocol !== 'file:') history.pushState(null,'','#notifications'); } catch(e){}
@@ -755,7 +752,6 @@ function openSection(sectionId) {
     ACTIVE_SECTION_ID = 'overview';
     document.getElementById('si-overview').classList.add('active');
     document.getElementById('si-home').classList.remove('active');
-    document.getElementById('topbar-badge').textContent = 'Overview';
     fetchTopicData('S00', SECTIONS.overview.topics[0]);
     try { if (location.protocol !== 'file:') history.pushState(null,'','#notes=S00'); } catch(e){}
     return;
@@ -768,7 +764,6 @@ function openSection(sectionId) {
   var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
   document.getElementById('sb-nav-sections').style.display = '';
-  document.getElementById('topbar-badge').textContent = sec.label;
 
   document.getElementById('sec-icon').textContent  = sec.icon;
   document.getElementById('sec-title').textContent = sec.label;
@@ -854,7 +849,6 @@ window.fetchTopicData = function(topicId, topicObj) {
   if (!topicObj) return;
 
   var tNum = topicId.replace(/[^0-9]/g,'') || '0';
-  document.getElementById('topbar-badge').textContent = topicObj.icon + ' ' + topicObj.id;
 
   if (!window.NOTE_HTML[topicId]) {
     window._loadEncryptedScript(BASE + topicObj.notesFile).catch(function() {
@@ -907,7 +901,6 @@ function showCompanyQA() {
   document.getElementById('view-companyqa').classList.add('active');
   document.getElementById('si-companyqa').classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
-  document.getElementById('topbar-badge').textContent = 'Company Q&A';
   ACTIVE_SECTION_ID = 'companyqa';
   try { if (location.protocol !== 'file:') history.pushState(null,'','#companyqa'); } catch(e){}
 

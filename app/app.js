@@ -81,11 +81,6 @@ window.loadWrittenNotes = function(topicCode, html) {
 
 window.fetchTopicData = function(topicId, topicKey) {
     window._activeTopicId = topicId;
-    var tNum = parseInt(topicId.substring(1), 10);
-    var tbBadge = document.getElementById('topbar-badge');
-    var isW = topicId.startsWith('W');
-    var total = isW ? WRITTEN_TOPICS.filter(function(t){return t.notesReady;}).length : TOPICS.length;
-    if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of ' + total;
 
     if (!window.NOTE_HTML[topicId]) {
         let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
@@ -492,9 +487,6 @@ function goToQuizFromNotes(topicId){
   var tNum = parseInt(t.id.substring(1), 10);
   var qh2 = document.getElementById('quiz-topic-h2');
   if (qh2) qh2.textContent = 'Topic ' + tNum + ' - ' + t.name + ' Quiz';
-  var tbBadge = document.getElementById('topbar-badge');
-  if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> Topic ' + tNum + ' of 23';
-  
   if (!window.QD || !window.QD[t.key]) {
       window._loadEncryptedScript('../data/Orals/quizzes/' + t.id.toLowerCase() + '_quiz.js').then(function() {
           buildCatGrid();
@@ -529,8 +521,6 @@ function showView(n){
   if(btt){btt.style.opacity='0';btt.style.visibility='hidden';}
   if(window.innerWidth <= 768) closeMobileMenu();
   if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker') {
-     var tbBadge = document.getElementById('topbar-badge');
-     if (tbBadge) tbBadge.innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/></svg> MMD Prep';
      // Hide topic sidebar list when leaving notes
      var tsl = document.getElementById('topic-side-list');
      if (tsl) tsl.style.display = 'none';
@@ -1403,7 +1393,6 @@ function qbStart() {
   document.getElementById('si-quiz-bank').classList.add('active');
   document.getElementById('quiz-topic-label').innerHTML = label;
   document.getElementById('quiz-topic-h2').innerHTML = label;
-  document.getElementById('topbar-badge').innerHTML = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg> Quiz Bank';
   startQuiz('All Topics', label, final);
   document.getElementById('view-quiz').classList.add('active');
   document.getElementById('quiz-home').style.display = 'none';
