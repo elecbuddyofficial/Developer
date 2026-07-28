@@ -43,7 +43,7 @@ body{background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direc
 
 /* TOP BAR */
 #topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:60px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
-#topbar .logo{font-size:16px;font-weight:800;color:var(--blue);letter-spacing:-.3px}
+#topbar .logo{font-size:16px;font-weight:800;color:var(--blue);letter-spacing:-.3px;white-space:nowrap;flex-shrink:0}
 #topbar .logo span{color:var(--text2);font-weight:500;font-size:12px;margin-left:8px}
 .spacer{flex:1}
 .tb-badge{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange)}
