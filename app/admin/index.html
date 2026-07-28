@@ -302,6 +302,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3V11a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
       Notifications
     </button>
+    <button class="ad-nav-btn" onclick="showTab('admins')" data-tab="admins">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 3v1h16v-1c0-1-3-3-8-3z"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 13c-1-.5-2.5-.8-4-.9"/></svg>
+      Team Admins
+    </button>
     <div class="ad-nav-divider"></div>
     <button class="ad-nav-btn" onclick="showTab('status')" data-tab="status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
@@ -472,6 +476,40 @@
     </div>
   </div>
 
+  <!-- TEAM ADMINS ────────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-admins">
+    <div class="ad-ph">
+      <h1>Team Admins</h1>
+      <p>Manage who has access to this admin panel.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">Add Admin</div>
+      <div class="ad-card-sub">The person must already have an account in the app before you can grant them admin access.</div>
+      <div class="ad-row" style="align-items:flex-end">
+        <div class="ad-field" style="margin-bottom:0">
+          <label class="ad-label">Email Address</label>
+          <input class="ad-input" id="new-admin-email" type="email" placeholder="teammate@elec-buddy.com" onkeydown="if(event.key==='Enter') addAdmin()">
+        </div>
+        <button class="ad-btn btn-primary" onclick="addAdmin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Add
+        </button>
+      </div>
+      <div id="add-admin-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
+    </div>
+
+    <div class="ad-section-head">Current Admins</div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Email</th><th>Name</th><th>Added Since</th><th></th>
+        </tr></thead>
+        <tbody id="admins-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
   <!-- CONTENT STATUS ─────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-status">
     <div class="ad-ph">
@@ -488,7 +526,7 @@
 /* ── CONFIG ─────────────────────────────────────────────────────── */
 var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
 var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
-var _sb, _grantUserId;
+var _sb, _grantUserId, _myId, _myEmail;
 var _allUsers = [];
 
 /* ── AUTH GUARD ─────────────────────────────────────────────────── */
@@ -512,12 +550,15 @@ var _allUsers = [];
     document.documentElement.style.visibility = 'visible';
 
     var email = profile.email || session.user.email || '';
+    _myId    = session.user.id;
+    _myEmail = email;
     document.getElementById('ad-avatar').textContent = email[0] ? email[0].toUpperCase() : 'A';
     document.getElementById('ad-user-email').textContent = email;
 
     loadDashboard();
     loadUsers();
     loadNotifications();
+    loadAdmins();
     buildStatusBoard();
   } catch (e) {
     console.error(e);
@@ -736,6 +777,89 @@ async function deleteNotification(id) {
   if (error) { toast('Failed', 'err'); return; }
   toast('Deleted');
   loadNotifications();
+}
+
+/* ── TEAM ADMINS ─────────────────────────────────────────────────── */
+async function loadAdmins() {
+  var { data } = await _sb.from('profiles')
+    .select('id, email, full_name, created_at')
+    .eq('is_admin', true)
+    .order('created_at', { ascending: true });
+
+  document.getElementById('admins-tbody').innerHTML = data && data.length
+    ? data.map(function(a) {
+        var isMe = a.id === _myId;
+        return '<tr>'
+          + '<td class="email-cell">' + (a.email || '—') + (isMe ? ' <span style="font-size:10px;color:var(--text3)">(you)</span>' : '') + '</td>'
+          + '<td>' + (a.full_name || '—') + '</td>'
+          + '<td class="date-cell">' + fmtDate(a.created_at) + '</td>'
+          + '<td>'
+          + (isMe
+            ? '<span style="font-size:11px;color:var(--text3);padding:5px 10px;display:inline-block">Cannot remove yourself</span>'
+            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(\'' + a.id + '\',\'' + (a.email || '') + '\')">Remove</button>')
+          + '</td>'
+          + '</tr>';
+      }).join('')
+    : '<tr><td colspan="4" class="empty">No admins found</td></tr>';
+}
+
+async function addAdmin() {
+  var email = document.getElementById('new-admin-email').value.trim().toLowerCase();
+  var msgEl = document.getElementById('add-admin-msg');
+  msgEl.style.display = 'none';
+
+  if (!email) return;
+
+  var { data, error } = await _sb.from('profiles')
+    .select('id, email, full_name, is_admin')
+    .eq('email', email)
+    .single();
+
+  if (error || !data) {
+    msgEl.style.display = 'block';
+    msgEl.style.background = 'var(--red-dim)';
+    msgEl.style.color = 'var(--red)';
+    msgEl.style.border = '1.5px solid var(--red-border)';
+    msgEl.textContent = 'No account found for ' + email + '. They need to sign up first.';
+    return;
+  }
+
+  if (data.is_admin) {
+    msgEl.style.display = 'block';
+    msgEl.style.background = 'var(--surface2)';
+    msgEl.style.color = 'var(--text2)';
+    msgEl.style.border = '1.5px solid var(--border2)';
+    msgEl.textContent = email + ' is already an admin.';
+    return;
+  }
+
+  var { error: upErr } = await _sb.from('profiles')
+    .update({ is_admin: true })
+    .eq('id', data.id);
+
+  if (upErr) { toast('Failed: ' + upErr.message, 'err'); return; }
+
+  document.getElementById('new-admin-email').value = '';
+  msgEl.style.display = 'block';
+  msgEl.style.background = 'var(--green-dim)';
+  msgEl.style.color = 'var(--green)';
+  msgEl.style.border = '1.5px solid var(--green-border)';
+  msgEl.textContent = (data.full_name || email) + ' is now an admin.';
+  toast('Admin added');
+  loadAdmins();
+}
+
+async function removeAdmin(id, email) {
+  if (id === _myId) { toast('You cannot remove yourself', 'err'); return; }
+  if (!confirm('Remove admin access for ' + email + '?')) return;
+
+  var { error } = await _sb.from('profiles')
+    .update({ is_admin: false })
+    .eq('id', id);
+
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  toast('Admin removed');
+  loadAdmins();
 }
 
 /* ── CONTENT STATUS BOARD ────────────────────────────────────────── */
