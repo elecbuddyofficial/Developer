@@ -14,6 +14,7 @@ WHERE p.id = u.id AND p.email IS NULL;
 
 -- 3. Update handle_new_user trigger:
 --    saves email, auto-grants admin to the 5 team emails on first signup
+--    also inserts into admin_users so is_admin() works immediately
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -24,7 +25,10 @@ DECLARE
     'rahul@elec-buddy.com',
     'yadh@elec-buddy.com'
   ];
+  _is_admin BOOLEAN;
 BEGIN
+  _is_admin := NEW.email = ANY(_admin_emails);
+
   INSERT INTO public.profiles (id, full_name, email, trial_started_at, subscription_plan, is_admin)
   VALUES (
     NEW.id,
@@ -32,11 +36,17 @@ BEGIN
     NEW.email,
     NOW(),
     'trial',
-    NEW.email = ANY(_admin_emails)
+    _is_admin
   )
   ON CONFLICT (id) DO UPDATE SET
     email    = EXCLUDED.email,
     is_admin = EXCLUDED.is_admin OR public.profiles.is_admin;
+
+  IF _is_admin THEN
+    INSERT INTO public.admin_users (user_id) VALUES (NEW.id)
+    ON CONFLICT DO NOTHING;
+  END IF;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
