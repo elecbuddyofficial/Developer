@@ -156,14 +156,6 @@ var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
 var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb = supabase.createClient(SB_URL, SB_KEY);
 
-var ADMIN_EMAILS = [
-  'elecbuddyofficial@gmail.com',
-  'adith@elec-buddy.com',
-  'blesson@elec-buddy.com',
-  'rahul@elec-buddy.com',
-  'yadh@elec-buddy.com'
-];
-
 /* Check if already logged in as admin */
 (async function() {
   var { data: { session } } = await _sb.auth.getSession();
@@ -204,12 +196,6 @@ async function doLogin() {
   var password = document.getElementById('login-pw').value;
 
   if (!email || !password) { showError('Please enter your email and password.'); return; }
-
-  /* Client-side pre-check: only team emails can even attempt login here */
-  if (!ADMIN_EMAILS.includes(email)) {
-    showError('This portal is for the Elec-Buddy team only.');
-    return;
-  }
 
   var btn = document.getElementById('login-btn');
   btn.disabled = true;
