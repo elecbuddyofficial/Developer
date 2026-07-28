@@ -44,6 +44,8 @@ serve(async (req) => {
     const body = await req.json().catch(() => ({}));
     const { user_id } = body;
     if (!user_id || typeof user_id !== 'string') return json({ error: 'user_id required' }, 400);
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(user_id))
+      return json({ error: 'Invalid user_id format' }, 400);
 
     // Block self-deletion
     if (user_id === caller.id) return json({ error: 'You cannot delete your own account' }, 400);

@@ -92,7 +92,7 @@ a.sb-item{text-decoration:none}
 .n-h3{font-size:13px;font-weight:700;color:var(--text2);margin:20px 0 8px;padding:0 2px;text-transform:uppercase;letter-spacing:.6px}
 
 /* Body text */
-.n-p{font-size:17px;line-height:1.9;color:var(--text);margin:16px 0}
+.n-p{font-size:15.5px;line-height:1.78;color:var(--text);margin:14px 0}
 .n-val{display:inline;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13.5px;font-weight:600}
 
 /* Callout boxes - important info, not alarming */

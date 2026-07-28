@@ -527,8 +527,8 @@
         document.documentElement.style.visibility = 'visible';
       }
     } catch(e) {
-      document.documentElement.style.visibility = 'visible';
       console.error('Auth check failed:', e);
+      window.location.replace('./auth.html');
     }
   })();
 </script>
@@ -805,14 +805,18 @@
           : 0;
         badgeEl.innerHTML = '<span class="pm-plan-badge pb-trial">Free Trial</span>';
         subEl.textContent = daysLeft > 0 ? daysLeft + ' day' + (daysLeft === 1 ? '' : 's') + ' remaining' : 'Trial ended';
-      } else if (plan === 'monthly' || plan === 'annual') {
+      } else if (plan === 'lifetime') {
+        badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">Lifetime</span>';
+        subEl.textContent = 'Never expires';
+      } else if (plan === 'starter' || plan === 'standard' || plan === 'pro') {
         var exp = profile.subscription_expires_at ? new Date(profile.subscription_expires_at) : null;
         var expired = exp && exp < new Date();
+        var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
         if (expired) {
           badgeEl.innerHTML = '<span class="pm-plan-badge pb-expired">Expired</span>';
           subEl.textContent = 'Expired ' + (exp ? exp.toLocaleDateString() : '');
         } else {
-          badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + (plan === 'annual' ? 'Annual' : 'Monthly') + ' Plan</span>';
+          badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + planLabel + '</span>';
           subEl.textContent = exp ? 'Active until ' + exp.toLocaleDateString() : 'Active';
         }
       } else {

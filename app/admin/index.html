@@ -548,6 +548,8 @@ var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _myId, _myEmail;
 var _allUsers = [];
 
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 /* ── AUTH GUARD ─────────────────────────────────────────────────── */
 (async function init() {
   try {
@@ -580,7 +582,7 @@ var _allUsers = [];
     buildStatusBoard();
   } catch (e) {
     console.error(e);
-    window.location.replace('../sponsorship/index.html');
+    window.location.replace('../auth.html');
   }
 })();
 
@@ -665,8 +667,8 @@ async function loadDashboard() {
   document.getElementById('dash-recent').innerHTML = recent.length
     ? recent.map(function(u) {
         return '<tr>'
-          + '<td class="email-cell">' + (u.email || '—') + '</td>'
-          + '<td>' + (u.full_name || '—') + '</td>'
+          + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
+          + '<td>' + esc(u.full_name || '—') + '</td>'
           + '<td>' + planBadge(u.subscription_plan) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '</tr>';
@@ -692,14 +694,14 @@ function renderUsers(users) {
   document.getElementById('users-tbody').innerHTML = users.length
     ? users.map(function(u) {
         return '<tr>'
-          + '<td class="email-cell">' + (u.email || '—') + '</td>'
-          + '<td>' + (u.full_name || '—') + '</td>'
+          + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
+          + '<td>' + esc(u.full_name || '—') + '</td>'
           + '<td>' + planBadge(u.subscription_plan) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
-          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(\'' + (u.email || '') + '\')">Edit</button>'
-          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(\'' + u.id + '\',\'' + (u.email || '') + '\')">Delete</button>'
+          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + JSON.stringify(u.email || '') + ')">Edit</button>'
+          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + JSON.stringify(u.id) + ',' + JSON.stringify(u.email || '') + ')">Delete</button>'
           + '</td>'
           + '</tr>';
       }).join('')
@@ -817,28 +819,6 @@ function selectGrantUser(user) {
   document.getElementById('grant-found').style.display = 'block';
 }
 
-async function findUser() {
-  var email = document.getElementById('grant-email').value.trim();
-  if (!email) return;
-
-  var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, subscription_expires_at')
-    .eq('email', email)
-    .single();
-
-  if (error || !data) { toast('User not found', 'err'); return; }
-
-  _grantUserId = data.id;
-  document.getElementById('gf-name').textContent = (data.full_name || 'No name set') + ' · ' + data.email;
-  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(data.subscription_plan) + ' ' + expiryDisplay(data.subscription_expires_at, data.subscription_plan);
-
-  document.getElementById('grant-plan').value = data.subscription_plan || 'trial';
-  document.getElementById('grant-expiry').value = data.subscription_expires_at
-    ? data.subscription_expires_at.substring(0, 10)
-    : '';
-
-  document.getElementById('grant-found').style.display = 'block';
-}
 
 async function grantAccess() {
   if (!_grantUserId) return;
@@ -885,8 +865,8 @@ async function loadNotifications() {
     return '<div class="notif-item">'
       + '<div class="notif-dot nd-' + (n.type || 'info') + '"></div>'
       + '<div class="notif-body">'
-      + '<div class="notif-title">' + n.title + '</div>'
-      + '<div class="notif-text">' + n.body + '</div>'
+      + '<div class="notif-title">' + esc(n.title) + '</div>'
+      + '<div class="notif-text">' + esc(n.body) + '</div>'
       + '<div class="notif-meta">' + (n.type || 'info').toUpperCase() + ' · ' + fmtDate(n.created_at) + '</div>'
       + '</div>'
       + '<button class="notif-del" onclick="deleteNotification(\'' + n.id + '\')" title="Delete">'
@@ -936,13 +916,13 @@ async function loadAdmins() {
     ? data.map(function(a) {
         var isMe = a.id === _myId;
         return '<tr>'
-          + '<td class="email-cell">' + (a.email || '—') + (isMe ? ' <span style="font-size:10px;color:var(--text3)">(you)</span>' : '') + '</td>'
-          + '<td>' + (a.full_name || '—') + '</td>'
+          + '<td class="email-cell">' + esc(a.email || '—') + (isMe ? ' <span style="font-size:10px;color:var(--text3)">(you)</span>' : '') + '</td>'
+          + '<td>' + esc(a.full_name || '—') + '</td>'
           + '<td class="date-cell">' + fmtDate(a.created_at) + '</td>'
           + '<td>'
           + (isMe
             ? '<span style="font-size:11px;color:var(--text3);padding:5px 10px;display:inline-block">Cannot remove yourself</span>'
-            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(\'' + a.id + '\',\'' + (a.email || '') + '\')">Remove</button>')
+            : '<button class="ad-btn btn-danger btn-sm" onclick="removeAdmin(' + JSON.stringify(a.id) + ',' + JSON.stringify(a.email || '') + ')">Remove</button>')
           + '</td>'
           + '</tr>';
       }).join('')
@@ -985,7 +965,13 @@ async function addAdmin() {
 
   if (upErr) { toast('Failed: ' + upErr.message, 'err'); return; }
 
-  await _sb.from('admin_users').insert({ user_id: data.id });
+  var { error: insErr } = await _sb.from('admin_users').insert({ user_id: data.id });
+
+  if (insErr) {
+    await _sb.from('profiles').update({ is_admin: false }).eq('id', data.id);
+    toast('Failed: ' + insErr.message, 'err');
+    return;
+  }
 
   document.getElementById('new-admin-email').value = '';
   msgEl.style.display = 'block';
@@ -1007,7 +993,13 @@ async function removeAdmin(id, email) {
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
 
-  await _sb.from('admin_users').delete().eq('user_id', id);
+  var { error: delErr } = await _sb.from('admin_users').delete().eq('user_id', id);
+
+  if (delErr) {
+    await _sb.from('profiles').update({ is_admin: true }).eq('id', id);
+    toast('Failed: ' + delErr.message, 'err');
+    return;
+  }
 
   toast('Admin removed');
   loadAdmins();

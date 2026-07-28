@@ -35,8 +35,8 @@
         document.documentElement.style.visibility = 'visible';
       }
     } catch(e) {
-      document.documentElement.style.visibility = 'visible';
       console.error('Auth check failed:', e);
+      window.location.replace('./auth.html');
     }
   })();
 </script>
@@ -682,6 +682,22 @@ function setTheme(t) {
     document.getElementById('gate-overlay').style.display = 'none';
   };
 
+  document.getElementById('gate-overlay').addEventListener('click', function(e) {
+    var btn = e.target.closest('.gate-buy-btn');
+    if (!btn) return;
+    var plan = btn.dataset.plan;
+    var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+    var userEmail = (window._sbUser && window._sbUser.email) || '';
+    var subject = encodeURIComponent('ETO Study App – Purchase: ' + planLabel + ' Plan');
+    var body = encodeURIComponent('Hi,\n\nI would like to purchase the ' + planLabel + ' plan.\n\nMy account email: ' + userEmail);
+    window.open('mailto:jojiblesson@gmail.com?subject=' + subject + '&body=' + body);
+  });
+
+  document.getElementById('pm-upgrade-btn').addEventListener('click', function() {
+    document.getElementById('profile-modal').style.display = 'none';
+    showGate();
+  });
+
   // Escape key closes gate
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') window.closeGate();
@@ -993,11 +1009,14 @@ function setTheme(t) {
     });
 
     // ── Watermark ────────────────────────────────────────────
+    function _wmEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
     function buildWatermark() {
       const user = window._sbUser;
-      if (!user || document.getElementById('_wm')) return;
+      if (!user) return;
+      const old = document.getElementById('_wm');
+      if (old) old.parentNode.removeChild(old);
 
-      const label = '© ElecBuddy | ' + (user.email || 'licensed user') + ' | Unauthorized copying prohibited';
+      const label = '© ElecBuddy | ' + _wmEsc(user.email || 'licensed user') + ' | Unauthorized copying prohibited';
       const el = document.createElement('div');
       el.id = '_wm';
       el.setAttribute('aria-hidden', 'true');
@@ -1010,12 +1029,20 @@ function setTheme(t) {
         for (let c = 0; c < cols; c++) {
           const x = c * 600 - 60;
           const y = r * 200 - 30;
-          html += `<span style="position:absolute;left:${x}px;top:${y}px;transform:rotate(-25deg);font-size:11px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">${label}</span>`;
+          html += '<span style="position:absolute;left:' + x + 'px;top:' + y + 'px;transform:rotate(-25deg);font-size:11px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">' + label + '</span>';
         }
       }
       el.innerHTML = html;
       document.body.appendChild(el);
     }
+
+    var _wmResizeTimer;
+    function _rebuildWatermark() {
+      clearTimeout(_wmResizeTimer);
+      _wmResizeTimer = setTimeout(buildWatermark, 300);
+    }
+    window.addEventListener('resize', _rebuildWatermark);
+    window.addEventListener('orientationchange', buildWatermark);
 
     if (document.readyState === 'complete') buildWatermark();
     else window.addEventListener('load', buildWatermark);
@@ -1033,7 +1060,7 @@ function setTheme(t) {
 
       if (!window._sbClient) return;
       const { data: profile } = await window._sbClient
-        .from('profiles').select('*').eq('id', user.id).single();
+        .from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,is_admin').eq('id', user.id).single();
       if (profile) {
         renderPlan(profile);
         const isAdmin = profile.is_admin === true;
@@ -1080,7 +1107,6 @@ function setTheme(t) {
           expiryEl.textContent = 'Upgrade to continue';
           upgradeBtn.style.display = 'block';
         }
-        upgradeBtn.style.display = 'block';
 
       } else {
         const names = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
@@ -1155,7 +1181,13 @@ function setTheme(t) {
       if (!seen || new Date(data[0].created_at) > new Date(seen)) document.getElementById('nb-dot').classList.add('show');
     }
   }
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotifs(); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeNotifs();
+      var pm = document.getElementById('profile-modal');
+      if (pm && pm.style.display !== 'none') pm.style.display = 'none';
+    }
+  });
   checkNotifsUnread();
 </script>
 </body>

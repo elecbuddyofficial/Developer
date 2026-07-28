@@ -1,5 +1,19 @@
 // Dynamic Loader System
 window.QD = {}; // Quiz Data Store
+
+function appToast(msg) {
+    var el = document.getElementById('_app-toast');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = '_app-toast';
+        el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#e2e8f0;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:99999;pointer-events:none;transition:opacity .3s;white-space:nowrap;max-width:90vw;text-align:center;';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.opacity = '1';
+    clearTimeout(el._t);
+    el._t = setTimeout(function() { el.style.opacity = '0'; }, 3000);
+}
 window.NOTE_HTML = {}; // HTML Store
 window.VIDEO_DATA = {}; // Video Data Store
 
@@ -188,11 +202,14 @@ function injectTopicFooterNav(topicId) {
     // ── Mobile horizontal topic strip (injected at top of note-doc) ──
     var stripHtml = '<div class="mobile-topic-strip" id="mobile-topic-strip">';
     var prefix = isW ? 'W' : 'T';
+    var stripNum = 0;
     arr.forEach(function(t, i) {
         if (isW && !t.notesReady) return;
+        stripNum++;
+        var label = isW ? stripNum : i + 1;
         stripHtml += '<button class="mts-btn'+(t.id===topicId?' mts-active':'')+'"'
             + ' onclick="document.getElementById(\'content\').scrollTo({top:0,behavior:\'instant\'});fetchTopicData(\''+t.id+'\',\''+t.key+'\')">'
-            + t.icon+' '+prefix+String(i+1).padStart(2,'0')
+            + t.icon+' '+prefix+String(label).padStart(2,'0')
             + '</button>';
     });
     stripHtml += '</div>';
@@ -427,7 +444,6 @@ function buildWrittenTopicGrid(){
     var btn=document.createElement('button');
     btn.className='qcat-btn'+(t.notesReady?'':' disabled-topic');
     if(!t.notesReady) btn.style.opacity='0.4';
-    var qs=QD&&QD[t.key]?QD[t.key].length:0;
     btn.innerHTML='<div class="cat-name">'+t.icon+' '+t.id+' - '+t.name+'</div>'
       +'<div class="cat-count">'+(t.notesReady?'Notes ready':'Coming soon')+'</div>'
       +'<div class="cat-bar"><div class="cat-fill" style="width:'+(t.notesReady?'100':'0')+'%"></div></div>';
@@ -563,9 +579,10 @@ function buildCatGrid(){
   ab.onclick=function(){
       var catId = 'All Topics';
       var dName = 'All Categories - Mixed';
-      var saved = localStorage.getItem(getQuizStateKey(catId));
+      var _qk0 = getQuizStateKey(catId);
+      var saved = _qk0 ? localStorage.getItem(_qk0) : null;
       if (saved) {
-          showCustomConfirm("Resume Quiz", "You have an unfinished quiz in 'All Categories'.", "Resume Quiz", "Start Fresh", 
+          showCustomConfirm("Resume Quiz", "You have an unfinished quiz in 'All Categories'.", "Resume Quiz", "Start Fresh",
               function(){ startQuiz(catId, dName, qs, JSON.parse(saved)); },
               function(){ startQuiz(catId, dName, qs); });
       } else {
@@ -590,7 +607,8 @@ function buildCatGrid(){
     btn.innerHTML='<div class="cat-name">'+dIcon+'&nbsp;'+dName+'</div><div class="cat-count">'+n+' questions</div><div class="cat-bar"><div class="cat-fill" style="width:'+catProg+'%;background:'+catCol+'"></div></div>';
     btn.onclick=function(){
         var f=qs.filter(function(q){return q.cat===cat});
-        var saved = localStorage.getItem(getQuizStateKey(cat));
+        var _qk1 = getQuizStateKey(cat);
+        var saved = _qk1 ? localStorage.getItem(_qk1) : null;
         if (saved) {
             showCustomConfirm("Resume Quiz", "You have an unfinished quiz in '"+dName+"'.", "Resume Quiz", "Start Fresh",
                 function(){ startQuiz(cat, dName, f, JSON.parse(saved)); },
@@ -754,6 +772,7 @@ function renderQ(){
   document.getElementById('qscore').textContent='Score: '+QZ.correct+'/'+QZ.i;
   document.getElementById('qtext').textContent=q.q;
   var opts=shuffle(q.opts.slice());
+  QZ.currentShuffledOpts=opts;
   var optsEl=document.getElementById('qopts');optsEl.innerHTML='';
   opts.forEach(function(opt,idx){
     var btn=document.createElement('button');btn.className='qopt';btn.dataset.answer=opt;
@@ -770,7 +789,7 @@ function chooseAnswer(chosen,correct,btn){
   if(QZ.answered)return;QZ.answered=true;
   var wasCorrect=(chosen===correct);
   if(wasCorrect)QZ.correct++;
-  QZ.history.push({q:QZ.qs[QZ.i],chosen:chosen,correct:wasCorrect,skipped:false});
+  QZ.history.push({q:QZ.qs[QZ.i],chosen:chosen,correct:wasCorrect,skipped:false,shuffledOpts:QZ.currentShuffledOpts});
   QZ.i++;
   document.querySelectorAll('.qopt').forEach(function(b){
     b.disabled=true;
@@ -785,7 +804,7 @@ function chooseAnswer(chosen,correct,btn){
   saveActiveQuiz();
 }
 function skipQ(){
-  QZ.history.push({q:QZ.qs[QZ.i],chosen:null,correct:false,skipped:true});
+  QZ.history.push({q:QZ.qs[QZ.i],chosen:null,correct:false,skipped:true,shuffledOpts:QZ.currentShuffledOpts});
   QZ.i++;renderQ();
   saveActiveQuiz();
 }
@@ -803,7 +822,7 @@ function prevQ(){
   document.getElementById('qcat-tag').textContent=typeof CAT_NAMES!=='undefined'&&CAT_NAMES[q.cat]?CAT_NAMES[q.cat]:q.cat||'';
   document.getElementById('qscore').textContent='Score: '+QZ.correct+'/'+(QZ.i);
   document.getElementById('qtext').textContent=q.q;
-  var opts=q.opts;
+  var opts=prev.shuffledOpts||q.opts;
   var optsEl=document.getElementById('qopts');optsEl.innerHTML='';
   var LETTERS=['A','B','C','D'];
   opts.forEach(function(opt,idx){
@@ -1370,7 +1389,7 @@ function qbUpdatePreview() {
 
 function qbStart() {
   var pool = qbGetPool();
-  if (!pool.length) { alert('No questions match your filters. Try selecting more topics or categories.'); return; }
+  if (!pool.length) { appToast('No questions match your filters. Try selecting more topics or categories.'); return; }
   qbCloseDropdown();
   // Shuffle the full pool first, then take N
   var shuffled = pool.slice();
@@ -2065,7 +2084,20 @@ const sqPageSize = 50;
 function openSurveyorQA(onReady) {
     var cb = onReady || function() { showView('sq-landing'); };
     if (!window.SQ_DATA) {
-        window._loadEncryptedScript('../data/Orals/SurveyorQA/sq_data.js').then(cb).catch(function(){});
+        showView('sq-landing');
+        var landing = document.getElementById('view-sq-landing');
+        var spinner = document.createElement('div');
+        spinner.id = '_sq-spinner';
+        spinner.style.cssText = 'text-align:center;padding:40px 0;color:var(--text2);font-size:14px;';
+        spinner.textContent = 'Loading Surveyor Q&A…';
+        if (landing) landing.prepend(spinner);
+        window._loadEncryptedScript('../data/Orals/SurveyorQA/sq_data.js').then(function() {
+            if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+            cb();
+        }).catch(function() {
+            if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
+            appToast('Failed to load Surveyor Q&A. Check your connection.');
+        });
     } else {
         cb();
     }
@@ -2125,7 +2157,7 @@ function loadMoreSqAll() {
         html += renderSqCard(questions[i]);
     }
     
-    container.innerHTML += html;
+    container.insertAdjacentHTML('beforeend', html);
     sqCurrentPage++;
     
     if (end >= questions.length) {
