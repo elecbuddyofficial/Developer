@@ -10,6 +10,13 @@
   html { visibility: hidden; }
   @media print { body { display: none !important; } }
 </style>
+<script>
+  (function(){
+    var t = localStorage.getItem('eb_theme') || 'dark';
+    if(t === 'system') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   (async () => {
@@ -91,6 +98,13 @@
   <a class="sb-item" href="../index.html" title="About this app">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></g></svg></span><span class="label">About</span>
   </a>
+  <div class="sb-divider"></div>
+  <div class="theme-switcher">
+    <button class="theme-btn" data-t="dark"   onclick="setTheme('dark')"   title="Midnight Navy">🌙</button>
+    <button class="theme-btn" data-t="amoled" onclick="setTheme('amoled')" title="AMOLED Black">⬛</button>
+    <button class="theme-btn" data-t="light"  onclick="setTheme('light')"  title="Light">☀️</button>
+    <button class="theme-btn" data-t="system" onclick="setTheme('system')" title="Follow OS">💻</button>
+  </div>
 </div>
 <div id="main">
 <div id="content">
@@ -468,8 +482,8 @@
 
 <button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0, behavior:'smooth'})" style="display:flex; position:fixed; bottom:30px; right:30px; z-index:999; background:var(--blue); color:#fff; border:none; width:48px; height:48px; border-radius:50%; font-size:24px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); align-items:center; justify-content:center; padding-bottom:4px; opacity:0; visibility:hidden; transition:opacity 0.25s,visibility 0.25s;">&#x2191;</button>
 <!-- ── Content Gate Overlay ───────────────────────────────── -->
-<div id="gate-overlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(7,13,26,0.94);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:8px 0 24px;">
+<div id="gate-overlay" style="display:none;position:fixed;inset:0;z-index:9500;background:linear-gradient(to bottom,rgba(7,13,26,0) 0%,rgba(7,13,26,0.6) 30%,rgba(7,13,26,0.97) 55%);backdrop-filter:blur(2px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
+  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:28px 28px 24px;background:rgba(8,15,30,0.90);border:1px solid rgba(200,164,74,0.18);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,164,74,.06),0 0 60px rgba(7,13,26,.5);backdrop-filter:blur(40px);">
     <div style="font-size:40px;margin-bottom:12px;">🔒</div>
     <div style="font-size:19px;font-weight:700;color:#DDE5EF;margin-bottom:10px;">Full Access Required</div>
     <div id="gate-sub" style="font-size:13.5px;color:#8FA3B8;margin-bottom:28px;line-height:1.65;">Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.</div>
@@ -530,9 +544,10 @@
 <style>
   .gate-plan {
     display: flex; align-items: center; justify-content: space-between;
-    background: #0D1E33; border: 1px solid #1A3050; border-radius: 8px;
-    padding: 14px 16px;
+    background: rgba(13,30,51,0.7); border: 1px solid #1A3050; border-radius: 10px;
+    padding: 14px 16px; transition: border-color .15s, background .15s;
   }
+  .gate-plan:hover { background: rgba(20,40,65,0.85); border-color: #254070; }
   #gate-overlay { display: none; }
   #gate-overlay.open { display: flex; }
 </style>
@@ -583,6 +598,48 @@
 
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+/* ── visible error display (no console needed) ── */
+(function(){
+  function _dbgToast(msg, isErr) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;bottom:14px;right:14px;z-index:99999;max-width:380px;padding:12px 16px;border-radius:10px;font-size:12px;font-family:monospace;line-height:1.5;word-break:break-all;pointer-events:none;' +
+      (isErr ? 'background:#7f1d1d;border:1px solid #ef4444;color:#fca5a5' : 'background:#14532d;border:1px solid #22c55e;color:#86efac');
+    d.textContent = msg;
+    document.body.appendChild(d);
+    setTimeout(function(){ d.remove(); }, 9000);
+  }
+  window._dbgToast = _dbgToast;
+  window.addEventListener('error', function(e){ _dbgToast('JS: ' + e.message + ' (' + (e.filename||'').split('/').pop() + ':' + e.lineno + ')', true); });
+  window.addEventListener('unhandledrejection', function(e){ _dbgToast('Promise: ' + (e.reason && (e.reason.message||e.reason)), true); });
+  setTimeout(function(){
+    if (typeof window._loadEncryptedScript === 'function') {
+      var _orig = window._loadEncryptedScript;
+      window._loadEncryptedScript = async function(url) {
+        try { var r = await _orig(url); _dbgToast('OK: ' + url.split('/').pop(), false); return r; }
+        catch(e) { _dbgToast('FAIL: ' + url.split('/').pop() + ' — ' + e.message, true); throw e; }
+      };
+    }
+  }, 0);
+})();
+</script>
+<script>
+function setTheme(t) {
+  var applied = t;
+  if (t === 'system') applied = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', applied);
+  localStorage.setItem('eb_theme', t);
+  document.querySelectorAll('.theme-btn').forEach(function(b) {
+    b.classList.toggle('t-active', b.dataset.t === t);
+  });
+}
+(function() {
+  var stored = localStorage.getItem('eb_theme') || 'dark';
+  document.querySelectorAll('.theme-btn').forEach(function(b) {
+    b.classList.toggle('t-active', b.dataset.t === stored);
+  });
+})();
+</script>
 <script>
 (function() {
   // Topics always free regardless of plan
@@ -917,20 +974,20 @@
       const user = window._sbUser;
       if (!user || document.getElementById('_wm')) return;
 
-      const label = user.email || 'elec-buddy user';
+      const label = '© ElecBuddy | ' + (user.email || 'licensed user') + ' | Unauthorized copying prohibited';
       const el = document.createElement('div');
       el.id = '_wm';
       el.setAttribute('aria-hidden', 'true');
       el.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden;';
 
-      const cols = Math.ceil(window.innerWidth  / 280) + 2;
+      const cols = Math.ceil(window.innerWidth  / 420) + 2;
       const rows = Math.ceil(window.innerHeight / 110) + 2;
       let html = '';
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          const x = c * 280 - 60;
+          const x = c * 420 - 60;
           const y = r * 110 - 30;
-          html += `<span style="position:absolute;left:${x}px;top:${y}px;transform:rotate(-25deg);font-size:12px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">${label}</span>`;
+          html += `<span style="position:absolute;left:${x}px;top:${y}px;transform:rotate(-25deg);font-size:11px;color:rgba(200,164,74,0.13);font-family:monospace;white-space:nowrap;user-select:none;">${label}</span>`;
         }
       }
       el.innerHTML = html;

@@ -2197,6 +2197,15 @@ function openSqDetail(surveyorName) {
 document.addEventListener('click', function(e) {
     if (e.target.matches('.note-diagram-wrap img')) {
         e.target.classList.toggle('zoomed');
+    } else {
+        var z = document.querySelector('.note-diagram-wrap img.zoomed');
+        if (z) z.classList.remove('zoomed');
+    }
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        var z = document.querySelector('.note-diagram-wrap img.zoomed');
+        if (z) z.classList.remove('zoomed');
     }
 });
 
