@@ -918,9 +918,10 @@
             <input class="ad-input" id="grant-expiry" type="date">
           </div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:4px">
+        <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
           <button class="ad-btn btn-primary" onclick="grantAccess()">Update Access</button>
           <button class="ad-btn btn-danger"  onclick="revokeAccess()">Revoke to Trial</button>
+          <button class="ad-btn btn-ghost"   onclick="forceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired — for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
         </div>
       </div>
     </div>
@@ -1237,6 +1238,7 @@
       <!-- Quick actions -->
       <div class="prof-actions">
         <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="toggleProfEdit()">Edit Access</button>
+        <button class="ad-btn btn-ghost btn-sm" id="prof-trial-expiry-btn" onclick="profForceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired — for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
         <button class="ad-btn btn-danger btn-sm" id="prof-delete-btn" onclick="profDeleteAccount()">Delete Account</button>
       </div>
 
@@ -1449,8 +1451,23 @@ function planBadge(plan) {
   return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + esc(plan || 'trial') + '</span>';
 }
 
-function expiryDisplay(iso, plan) {
+// Must match the 3-day window get-content-key actually enforces server-side.
+var TRIAL_DAYS = 3;
+function isTrialExpired(trialStartedAt, now) {
+  if (!trialStartedAt) return false;
+  now = now || new Date();
+  return new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000 <= now.getTime();
+}
+
+function expiryDisplay(iso, plan, trialStartedAt) {
   if (plan === 'lifetime') return '<span class="active-tag">Lifetime</span>';
+  if (plan === 'trial' || !plan) {
+    if (!trialStartedAt) return '<span class="date-cell">—</span>';
+    var trialEnd = new Date(new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
+    return isTrialExpired(trialStartedAt)
+      ? '<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>'
+      : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>';
+  }
   if (!iso) return '<span class="date-cell">—</span>';
   var d = new Date(iso);
   if (d < new Date()) return '<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>';
@@ -1776,7 +1793,7 @@ var _userFilter = 'all';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, subscription_expires_at, created_at')
+    .select('id, email, full_name, subscription_plan, subscription_expires_at, trial_started_at, created_at')
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -1793,10 +1810,15 @@ function updatePillCounts(users) {
   function cat(u) {
     var p = u.subscription_plan || 'trial';
     if (p === 'lifetime') return 'lifetime';
-    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+    var isPaidExpired = ['starter','standard','pro'].indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
-    if (isExpired) return 'expired';
+    if (isPaidExpired) return 'expired';
     if (['starter','standard','pro'].indexOf(p) !== -1) return 'active';
+    // Trial (or unset, which defaults to trial): an aged-out trial is just
+    // as "expired" as a lapsed paid plan — get-content-key locks both out
+    // identically — so it belongs in the same bucket, not silently stuck
+    // under "Trial" forever with no visual sign anything changed.
+    if (isTrialExpired(u.trial_started_at, now)) return 'expired';
     return 'trial';
   }
   var counts = { all: users.length, active: 0, trial: 0, expired: 0, lifetime: 0 };
@@ -1821,12 +1843,14 @@ function applyUserFilters() {
   var filtered = _allUsers.filter(function(u) {
     if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
     var p = u.subscription_plan || 'trial';
-    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+    var isPaidExpired = ['starter','standard','pro'].indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
-    var isActive = !isExpired && ['starter','standard','pro'].indexOf(p) !== -1;
+    var isActive = !isPaidExpired && ['starter','standard','pro'].indexOf(p) !== -1;
+    var trialExpired = (p === 'trial' || !u.subscription_plan) && isTrialExpired(u.trial_started_at, now);
+    var isExpired = isPaidExpired || trialExpired;
     if (_userFilter === 'all')      return true;
     if (_userFilter === 'active')   return isActive;
-    if (_userFilter === 'trial')    return p === 'trial' && !isExpired;
+    if (_userFilter === 'trial')    return p === 'trial' && !trialExpired;
     if (_userFilter === 'expired')  return isExpired;
     if (_userFilter === 'lifetime') return p === 'lifetime';
     return true;
@@ -1844,7 +1868,7 @@ function renderUsers(users) {
           + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '—') + '</button></td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
           + '<td>' + planBadge(u.subscription_plan) + '</td>'
-          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan) + '</td>'
+          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
@@ -1900,7 +1924,7 @@ async function openUserProfile(userId) {
   document.getElementById('prof-email').textContent = u.email || '—';
   document.getElementById('prof-uid').textContent = u.id;
   document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan);
-  document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at);
   document.getElementById('prof-joined').textContent = fmtDate(u.created_at);
   document.getElementById('prof-spent').textContent = '—';
   document.getElementById('prof-orders').textContent = '—';
@@ -2098,9 +2122,46 @@ async function profSaveAccess() {
   if (u) { u.subscription_plan = plan; u.subscription_expires_at = expiry; }
 
   document.getElementById('prof-plan').innerHTML = planBadge(plan);
-  document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan, _profUser.trial_started_at);
   toggleProfEdit(false);
   toast('Access updated');
+  updatePillCounts(_allUsers);
+  applyUserFilters();
+  loadDashboard();
+}
+
+// Backdates trial_started_at to 4 days ago (past the 3-day trial window
+// get-content-key checks) so the user's trial reads as already expired,
+// without waiting 3 real days. Testing tool, not a way to grant/revoke a
+// specific paid plan — always lands them on plan='trial', expired.
+async function profForceTrialExpiry() {
+  if (!_profUser) return;
+  var msg = _profUser.subscription_plan === 'trial'
+    ? 'Force ' + (_profUser.email || 'this user') + '\'s trial to read as expired right now?'
+    : _profUser.email + ' is currently on ' + _profUser.subscription_plan + '. This will also drop them off that plan onto an expired trial. Continue?';
+  if (!confirm(msg)) return;
+
+  var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+  var { error } = await _sb.from('profiles')
+    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null })
+    .eq('id', _profUser.id);
+
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  logAdminAction('force_trial_expiry', _profUser, {
+    previous_plan: _profUser.subscription_plan,
+    trial_started_at: backdated,
+  });
+
+  _profUser.subscription_plan = 'trial';
+  _profUser.trial_started_at = backdated;
+  _profUser.subscription_expires_at = null;
+  var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
+  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; }
+
+  document.getElementById('prof-plan').innerHTML = planBadge('trial');
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(null, 'trial', backdated);
+  toast('Trial forced to expired');
   updatePillCounts(_allUsers);
   applyUserFilters();
   loadDashboard();
@@ -2187,7 +2248,7 @@ function selectGrantUser(user) {
   _grantDdIndex = -1;
 
   document.getElementById('gf-name').textContent = (user.full_name || 'No name set') + ' · ' + user.email;
-  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan);
+  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan, user.trial_started_at);
   document.getElementById('grant-expiry').value = user.subscription_expires_at
     ? user.subscription_expires_at.substring(0, 10) : '';
   document.getElementById('grant-found').style.display = 'block';
@@ -2245,6 +2306,36 @@ async function revokeAccess() {
     previous_plan: revoked ? revoked.subscription_plan : null,
   });
   document.getElementById('grant-found').style.display = 'none';
+  loadDashboard();
+  loadUsers();
+}
+
+// Backdates trial_started_at to 4 days ago (past the 3-day trial window
+// get-content-key checks) so the user's trial reads as already expired,
+// without waiting 3 real days. Testing tool, not a way to grant/revoke a
+// specific paid plan — always lands them on plan='trial', expired.
+async function forceTrialExpiry() {
+  if (!_grantUserId) return;
+  var u = _allUsers.find(function(x) { return x.id === _grantUserId; });
+  var msg = (!u || u.subscription_plan === 'trial')
+    ? 'Force this user\'s trial to read as expired right now?'
+    : 'This user is currently on ' + u.subscription_plan + '. This will also drop them off that plan onto an expired trial. Continue?';
+  if (!confirm(msg)) return;
+
+  var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+  var { error } = await _sb.from('profiles')
+    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null })
+    .eq('id', _grantUserId);
+
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  logAdminAction('force_trial_expiry', u || { id: _grantUserId }, {
+    previous_plan: u ? u.subscription_plan : null,
+    trial_started_at: backdated,
+  });
+
+  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; selectGrantUser(u); }
+  toast('Trial forced to expired');
   loadDashboard();
   loadUsers();
 }
@@ -2940,12 +3031,13 @@ async function setCouponActive(code, active) {
 
 /* ── ACTIVITY LOG ─────────────────────────────────────────────────── */
 var ACTION_LABELS = {
-  grant_access:   ['Access granted',  'var(--green)'],
-  revoke_access:  ['Access revoked',  'var(--orange)'],
-  delete_user:    ['User deleted',    'var(--red)'],
-  refund_payment: ['Refund issued',   'var(--purple)'],
-  send_email:     ['Email sent',      'var(--blue)'],
-  create_coupon:  ['Coupon created',  'var(--blue)'],
+  grant_access:       ['Access granted',      'var(--green)'],
+  revoke_access:      ['Access revoked',      'var(--orange)'],
+  delete_user:        ['User deleted',        'var(--red)'],
+  refund_payment:     ['Refund issued',       'var(--purple)'],
+  send_email:         ['Email sent',          'var(--blue)'],
+  create_coupon:      ['Coupon created',      'var(--blue)'],
+  force_trial_expiry: ['Trial forced expired', 'var(--orange)'],
 };
 
 function actionSummary(a) {
@@ -2961,6 +3053,7 @@ function actionSummary(a) {
   }
   if (a.action === 'create_coupon') return d.code ? d.code + ' · ' + d.plan : '';
   if (a.action === 'send_email') return d.subject ? String(d.subject) : '';
+  if (a.action === 'force_trial_expiry') return d.previous_plan ? 'was ' + d.previous_plan : '';
   return '';
 }
 
