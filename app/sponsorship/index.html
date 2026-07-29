@@ -982,7 +982,16 @@ function exitQuizToSection() {
   else showHome();
 }
 
+// Remembers the full (unfiltered) question set behind whatever picker grid
+// is currently shown, so exitQuiz() can restore it correctly. Without this,
+// exitQuiz() rebuilt the grid from QZ.qs — the *last quiz taken's* question
+// set, which is already filtered down to one category once the user drills
+// into a single topic. That made every category but the one just quizzed
+// vanish from the grid after clicking Continue.
+var _catGridQs = [];
+
 function buildCatGrid(qs) {
+  _catGridQs = qs;
   var total = document.getElementById('total-q-count'); if (total) total.textContent = qs.length;
   var cats = {}; qs.forEach(function(q){ cats[q.cat] = (cats[q.cat]||0)+1; });
   var grid = document.getElementById('qcat-grid'); if (!grid) return; grid.innerHTML = '';
@@ -1058,7 +1067,7 @@ function chooseAnswer(chosen,correct,btn){
 }
 function skipQ(){ QZ.i++; renderQ(); }
 function nextQ(){ renderQ(); }
-function exitQuiz(){ _restoreQuizActive(); buildCatGrid(QZ.qs); }
+function exitQuiz(){ _restoreQuizActive(); buildCatGrid(_catGridQs); }
 function saveProgress(topic,cat,score,total){
   var p=JSON.parse(localStorage.getItem('spon_progress')||'{}');
   if(!p[topic])p[topic]={cats:{},best:0};
