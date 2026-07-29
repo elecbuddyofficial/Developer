@@ -1478,7 +1478,7 @@ function expiryDisplay(iso, plan, trialStartedAt) {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name, topic_progress')
+      .select('id, subscription_plan, subscription_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, created_at, paid_at, user_id, razorpay_payment_id')
@@ -1492,7 +1492,7 @@ async function loadDashboard() {
   if (profilesRes.error) {
     console.warn('dashboard profile query failed, retrying without topic_progress:', profilesRes.error.message);
     profilesRes = await _sb.from('profiles')
-      .select('id, subscription_plan, subscription_expires_at, created_at, email, full_name')
+      .select('id, subscription_plan, subscription_expires_at, trial_started_at, created_at, email, full_name')
       .order('created_at', { ascending: false });
   }
 
@@ -1509,10 +1509,16 @@ async function loadDashboard() {
       return !u.subscription_expires_at || new Date(u.subscription_expires_at) > now;
     return false;
   });
-  var trial   = all.filter(function(u) { return !u.subscription_plan || u.subscription_plan === 'trial'; });
+  var trial   = all.filter(function(u) {
+    var isTrialPlan = !u.subscription_plan || u.subscription_plan === 'trial';
+    return isTrialPlan && !isTrialExpired(u.trial_started_at, now);
+  });
   var expired = all.filter(function(u) {
-    if (['starter','standard','pro'].indexOf(u.subscription_plan) === -1) return false;
-    return u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    var isPaidExpired = ['starter','standard','pro'].indexOf(u.subscription_plan) !== -1
+      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    var isTrialLapsed = (!u.subscription_plan || u.subscription_plan === 'trial')
+      && isTrialExpired(u.trial_started_at, now);
+    return isPaidExpired || isTrialLapsed;
   });
   var newWeek = all.filter(function(u) { return new Date(u.created_at) > weekAgo; });
 
