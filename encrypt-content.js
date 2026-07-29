@@ -3,23 +3,54 @@
  * Elec-Buddy content encryption / decryption script
  *
  * Usage:
- *   node encrypt-content.js           — encrypt all plain content files
- *   node encrypt-content.js --decrypt — restore plain files for editing
+ *   node encrypt-content.js --group=oral      — encrypt all plain Oral files
+ *   node encrypt-content.js --group=written   — encrypt all plain Written files
+ *   node encrypt-content.js --group=oral --decrypt     — restore Oral files for editing
+ *   node encrypt-content.js --group=written --decrypt  — restore Written files for editing
  *
- * Required env var:
- *   CONTENT_KEY  — 64 hex characters (32 bytes / 256-bit AES key)
+ * data/Sponsorship/** is deliberately NOT in any group — it's permanently
+ * public/plaintext and this script never touches it.
+ *
+ * Required env var (matching the chosen --group):
+ *   CONTENT_KEY_ORAL / CONTENT_KEY_WRITTEN — 64 hex characters (32 bytes / 256-bit AES key)
  *
  * Generate a key once and store it in Supabase secrets + your own notes:
- *   node -e "require('crypto').randomBytes(32).toString('hex').then?.(console.log):console.log(require('crypto').randomBytes(32).toString('hex'))"
+ *   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
  */
 
 const crypto = require('crypto');
 const fs     = require('fs');
 const path   = require('path');
 
-const KEY_HEX = process.env.CONTENT_KEY;
+const KEY_GROUPS = {
+    oral: {
+        keyEnv: 'CONTENT_KEY_ORAL',
+        dirs: [
+            'data/Orals/notes',
+            'data/Orals/quizzes',
+            'data/Orals/videos',
+            'data/Orals/SurveyorQA',
+        ],
+    },
+    written: {
+        keyEnv: 'CONTENT_KEY_WRITTEN',
+        dirs: [
+            'data/Written/notes',
+        ],
+    },
+};
+
+const groupArg = process.argv.find(a => a.startsWith('--group='));
+const groupName = groupArg && groupArg.split('=')[1];
+const group = groupName && KEY_GROUPS[groupName];
+if (!group) {
+    console.error('ERROR: Pass --group=oral or --group=written');
+    process.exit(1);
+}
+
+const KEY_HEX = process.env[group.keyEnv];
 if (!KEY_HEX || KEY_HEX.length !== 64) {
-    console.error('ERROR: Set CONTENT_KEY to a 64-hex-character string (32 bytes).');
+    console.error(`ERROR: Set ${group.keyEnv} to a 64-hex-character string (32 bytes).`);
     console.error('Generate one with: node -e "console.log(require(\'crypto\').randomBytes(32).toString(\'hex\'))"');
     process.exit(1);
 }
@@ -27,29 +58,8 @@ if (!KEY_HEX || KEY_HEX.length !== 64) {
 const KEY     = Buffer.from(KEY_HEX, 'hex');
 const DECRYPT = process.argv.includes('--decrypt');
 
-// All directories containing content JS files
-const CONTENT_DIRS = [
-    'data/Orals/notes',
-    'data/Orals/quizzes',
-    'data/Orals/videos',
-    'data/Orals/SurveyorQA',
-    'data/Written/notes',
-    'data/Sponsorship/overview',
-    'data/Sponsorship/fundamentals',
-    'data/Sponsorship/aptitude',
-    'data/Sponsorship/CompanyQA',
-    'data/Sponsorship/interview',
-    // Legacy s01-s09 content. No longer referenced by the sponsorship app,
-    // but still tracked in git and therefore still served publicly, so it
-    // was leaking in plaintext even after everything else was encrypted.
-    'data/Sponsorship/notes',
-    'data/Sponsorship/quizzes',
-    'data/Sponsorship/videos',
-];
-
 // Free preview files — keep plain JS so non-subscribers can see the preview
-// Sponsorship free: s00 (overview), f01 (DC circuits), apt (aptitude strategy), ip01 (GD)
-const FREE_PREFIXES = ['t01_', 'w01_', 's00_', 'f01_', 'apt_', 'ip01_'];
+const FREE_PREFIXES = ['t01_', 'w01_'];
 
 function encrypt(plaintext) {
     const iv       = crypto.randomBytes(12); // 96-bit IV for AES-GCM
@@ -74,7 +84,7 @@ function isEncrypted(content) {
 const base = __dirname;
 let count = 0;
 
-for (const dir of CONTENT_DIRS) {
+for (const dir of group.dirs) {
     const fullDir = path.join(base, dir);
     if (!fs.existsSync(fullDir)) { console.warn('Skipping (not found):', dir); continue; }
 
@@ -103,10 +113,10 @@ for (const dir of CONTENT_DIRS) {
     }
 }
 
-console.log(`\nDone: ${count} file(s) ${DECRYPT ? 'decrypted' : 'encrypted'}.`);
+console.log(`\nDone: ${count} file(s) ${DECRYPT ? 'decrypted' : 'encrypted'} in group "${groupName}".`);
 if (!DECRYPT && count > 0) {
     console.log('\nNext steps:');
-    console.log('  1. Deploy the get-content-key Edge Function to Supabase');
-    console.log('  2. Set CONTENT_KEY as a Supabase secret: supabase secrets set CONTENT_KEY=' + KEY_HEX);
-    console.log('  3. Deploy the updated app (sw.js v22 will cache encrypted files)');
+    console.log('  1. Make sure get-content-key is deployed with the matching secret set:');
+    console.log(`     supabase secrets set ${group.keyEnv}=${KEY_HEX}`);
+    console.log('  2. Bump sw.js VERSION so the re-encrypted files aren\'t served stale from cache.');
 }

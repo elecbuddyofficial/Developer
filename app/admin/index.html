@@ -698,6 +698,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a2 2 0 0 1 2-2V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v4a2 2 0 0 1 0 4v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 1-2-2z"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="15" x2="15.01" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>
       <span>Coupons</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('plans');closeMobNav()" data-tab="plans" title="Plans">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 7h20M2 17h20"/></svg>
+      <span>Plans</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('activity');closeMobNav()" data-tab="activity" title="Activity Log">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
       <span>Activity Log</span>
@@ -905,12 +909,25 @@
         <div class="ad-row">
           <div class="ad-field">
             <label class="ad-label">New Plan</label>
-            <select class="ad-select" id="grant-plan">
+            <select class="ad-select" id="grant-plan" onchange="grantPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="starter">Starter</option>
-              <option value="standard">Standard</option>
-              <option value="pro">Pro</option>
+              <option value="3mo">3 Months — Launch</option>
+              <option value="6mo">6 Months — Mariner</option>
+              <option value="12mo">12 Months — Master</option>
               <option value="lifetime">Lifetime</option>
+              <optgroup label="Legacy (no longer sold)">
+                <option value="starter">Starter</option>
+                <option value="standard">Standard</option>
+                <option value="pro">Pro</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="ad-field" id="grant-scope-field">
+            <label class="ad-label">Scope</label>
+            <select class="ad-select" id="grant-scope">
+              <option value="written">Written Only — Passage</option>
+              <option value="oral">Oral Only — Voyage</option>
+              <option value="both" selected>Both — Expedition</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1058,9 +1075,18 @@
       </select>
       <select id="pay-filter-plan" onchange="loadPayments()" style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">
         <option value="">All plans</option>
-        <option value="starter">Starter</option>
-        <option value="standard">Standard</option>
-        <option value="pro">Pro</option>
+        <option value="3mo">3 Months</option>
+        <option value="6mo">6 Months</option>
+        <option value="12mo">12 Months</option>
+        <option value="starter">Starter (legacy)</option>
+        <option value="standard">Standard (legacy)</option>
+        <option value="pro">Pro (legacy)</option>
+      </select>
+      <select id="pay-filter-scope" onchange="loadPayments()" style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">
+        <option value="">All scopes</option>
+        <option value="written">Written — Passage</option>
+        <option value="oral">Oral — Voyage</option>
+        <option value="both">Both — Expedition</option>
       </select>
       <input class="ad-input" id="pay-filter-from" type="date" onchange="loadPayments()" title="From date" style="max-width:150px">
       <input class="ad-input" id="pay-filter-to" type="date" onchange="loadPayments()" title="To date" style="max-width:150px">
@@ -1125,10 +1151,18 @@
         <div class="ad-field">
           <label class="ad-label">Grants Plan</label>
           <select class="ad-select" id="cp-plan" onchange="cpPlanChanged()">
-            <option value="starter">Starter</option>
-            <option value="standard">Standard</option>
-            <option value="pro">Pro</option>
+            <option value="3mo">3 Months — Launch</option>
+            <option value="6mo">6 Months — Mariner</option>
+            <option value="12mo">12 Months — Master</option>
             <option value="lifetime">Lifetime</option>
+          </select>
+        </div>
+        <div class="ad-field" id="cp-scope-field">
+          <label class="ad-label">Scope</label>
+          <select class="ad-select" id="cp-scope">
+            <option value="written">Written Only — Passage</option>
+            <option value="oral">Oral Only — Voyage</option>
+            <option value="both" selected>Both — Expedition</option>
           </select>
         </div>
       </div>
@@ -1163,6 +1197,16 @@
         <tbody id="cp-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
+  </div>
+
+  <!-- PLANS ──────────────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-plans">
+    <div class="ad-ph">
+      <h1>Plans</h1>
+      <p>Duration &times; scope pricing shown in the upgrade modal. Edits here go live immediately, no deploy needed.</p>
+    </div>
+
+    <div id="plans-groups"><div class="ad-loading">Loading…</div></div>
   </div>
 
   <!-- ACTIVITY LOG ───────────────────────────────────────────── -->
@@ -1247,12 +1291,25 @@
         <div class="ad-row">
           <div class="ad-field">
             <label class="ad-label">New Plan</label>
-            <select class="ad-select" id="prof-edit-plan">
+            <select class="ad-select" id="prof-edit-plan" onchange="profEditPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="starter">Starter</option>
-              <option value="standard">Standard</option>
-              <option value="pro">Pro</option>
+              <option value="3mo">3 Months — Launch</option>
+              <option value="6mo">6 Months — Mariner</option>
+              <option value="12mo">12 Months — Master</option>
               <option value="lifetime">Lifetime</option>
+              <optgroup label="Legacy (no longer sold)">
+                <option value="starter">Starter</option>
+                <option value="standard">Standard</option>
+                <option value="pro">Pro</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="ad-field" id="prof-edit-scope-field">
+            <label class="ad-label">Scope</label>
+            <select class="ad-select" id="prof-edit-scope">
+              <option value="written">Written Only — Passage</option>
+              <option value="oral">Oral Only — Voyage</option>
+              <option value="both" selected>Both — Expedition</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1327,7 +1384,7 @@ var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
-var TAB_NAMES = ['dashboard', 'users', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'activity', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'activity', 'status'];
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -1393,6 +1450,7 @@ function logAdminAction(action, target, details) {
     document.getElementById('ad-avatar').textContent = email[0] ? email[0].toUpperCase() : 'A';
     document.getElementById('ad-user-email').textContent = email;
 
+    await loadPricingPlanCache(); // populate before rendering any plan badge
     loadDashboard();
     loadUsers();
     loadNotifications();
@@ -1446,9 +1504,47 @@ function fmtDate(iso) {
   return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
 
-function planBadge(plan) {
-  var cls = { trial:'pb-trial', lifetime:'pb-lifetime', pro:'pb-pro', standard:'pb-standard', starter:'pb-starter' };
-  return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + esc(plan || 'trial') + '</span>';
+var LEGACY_PAID_PLANS = ['starter', 'standard', 'pro'];
+var NEW_PAID_PLANS    = ['3mo', '6mo', '12mo'];
+var ALL_PAID_PLANS    = LEGACY_PAID_PLANS.concat(NEW_PAID_PLANS);
+
+// Cached once per admin session so every plan-display site below is a cheap
+// lookup instead of a query. Populated by loadPricingPlanCache() at startup.
+var _pricingPlanCache = {}; // key: "duration|scope" -> { track_name, tier_name }
+var _pricingPlanCachePromise = null;
+function loadPricingPlanCache() {
+  if (!_pricingPlanCachePromise) {
+    _pricingPlanCachePromise = _sb.from('pricing_plans').select('duration,scope,track_name,tier_name').then(function(res) {
+      (res.data || []).forEach(function(row) {
+        _pricingPlanCache[row.duration + '|' + row.scope] = row;
+      });
+    }).catch(function() {});
+  }
+  return _pricingPlanCachePromise;
+}
+
+// Branded "Track Tier" name (e.g. "Voyage Mariner") for a duration+scope
+// pair; falls back to the old plain name for legacy/trial/lifetime values
+// that have no track/tier concept.
+function planLabel(plan, scope) {
+  var legacyNames = { trial: 'Trial', lifetime: 'Lifetime', starter: 'Starter', standard: 'Standard', pro: 'Pro' };
+  if (NEW_PAID_PLANS.indexOf(plan) !== -1) {
+    var row = _pricingPlanCache[plan + '|' + (scope || 'both')];
+    if (row) return row.track_name + ' ' + row.tier_name;
+  }
+  return legacyNames[plan] || plan || 'Trial';
+}
+
+// Just the tier name (Launch/Mariner/Master) for duration-only contexts —
+// shared across all three tracks in the seed data, so scope isn't needed.
+function tierLabel(duration) {
+  var names = { '3mo': 'Launch', '6mo': 'Mariner', '12mo': 'Master' };
+  return names[duration] || duration;
+}
+
+function planBadge(plan, scope) {
+  var cls = { trial:'pb-trial', lifetime:'pb-lifetime', pro:'pb-pro', standard:'pb-standard', starter:'pb-starter', '3mo':'pb-starter', '6mo':'pb-standard', '12mo':'pb-pro' };
+  return '<span class="pbadge ' + (cls[plan] || 'pb-trial') + '">' + esc(planLabel(plan, scope)) + '</span>';
 }
 
 // Must match the 3-day window get-content-key actually enforces server-side.
@@ -1478,10 +1574,10 @@ function expiryDisplay(iso, plan, trialStartedAt) {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, subscription_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
-      .select('amount, plan, created_at, paid_at, user_id, razorpay_payment_id')
+      .select('amount, plan, scope, created_at, paid_at, user_id, razorpay_payment_id')
       .eq('status', 'paid')
       .order('paid_at', { ascending: false }),
   ]);
@@ -1492,7 +1588,7 @@ async function loadDashboard() {
   if (profilesRes.error) {
     console.warn('dashboard profile query failed, retrying without topic_progress:', profilesRes.error.message);
     profilesRes = await _sb.from('profiles')
-      .select('id, subscription_plan, subscription_expires_at, trial_started_at, created_at, email, full_name')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at, email, full_name')
       .order('created_at', { ascending: false });
   }
 
@@ -1505,7 +1601,7 @@ async function loadDashboard() {
 
   var active = all.filter(function(u) {
     if (u.subscription_plan === 'lifetime') return true;
-    if (['starter','standard','pro'].indexOf(u.subscription_plan) !== -1)
+    if (ALL_PAID_PLANS.indexOf(u.subscription_plan) !== -1)
       return !u.subscription_expires_at || new Date(u.subscription_expires_at) > now;
     return false;
   });
@@ -1514,7 +1610,7 @@ async function loadDashboard() {
     return isTrialPlan && !isTrialExpired(u.trial_started_at, now);
   });
   var expired = all.filter(function(u) {
-    var isPaidExpired = ['starter','standard','pro'].indexOf(u.subscription_plan) !== -1
+    var isPaidExpired = ALL_PAID_PLANS.indexOf(u.subscription_plan) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
     var isTrialLapsed = (!u.subscription_plan || u.subscription_plan === 'trial')
       && isTrialExpired(u.trial_started_at, now);
@@ -1555,7 +1651,7 @@ async function loadDashboard() {
         return '<tr>'
           + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
-          + '<td>' + planBadge(u.subscription_plan) + '</td>'
+          + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '</tr>';
       }).join('')
@@ -1569,7 +1665,7 @@ async function loadDashboard() {
     ? payments.slice(0, 8).map(function(p) {
         return '<tr>'
           + '<td class="email-cell" style="font-size:12px">' + esc(profileMap[p.user_id] || p.user_id.slice(0, 10) + '…') + '</td>'
-          + '<td>' + planBadge(p.plan) + '</td>'
+          + '<td>' + planBadge(p.plan, p.scope) + '</td>'
           + '<td style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums">₹' + esc((p.amount / 100).toLocaleString('en-IN')) + '</td>'
           + '</tr>';
       }).join('')
@@ -1767,22 +1863,34 @@ function drawEngagement(all) {
 }
 
 function drawPlanDist(all, now) {
-  var counts = { lifetime: 0, pro: 0, standard: 0, starter: 0, trial: 0 };
+  // Data-driven bucket list rather than hand-maintained fixed keys, so a
+  // future new duration value doesn't silently become invisible here again.
+  var PLAN_META = [
+    { key: 'lifetime', label: 'Lifetime',         color: 'var(--orange)' },
+    { key: '12mo',     label: 'Master (12mo)',     color: 'var(--purple)' },
+    { key: '6mo',      label: 'Mariner (6mo)',     color: 'var(--blue)' },
+    { key: '3mo',      label: 'Launch (3mo)',      color: 'var(--green)' },
+    { key: 'pro',      label: 'Pro (legacy)',      color: 'var(--purple)' },
+    { key: 'standard', label: 'Standard (legacy)', color: 'var(--blue)' },
+    { key: 'starter',  label: 'Starter (legacy)',  color: 'var(--green)' },
+    { key: 'trial',    label: 'Trial / Expired',   color: 'var(--text3)' },
+  ];
+  var counts = {};
+  PLAN_META.forEach(function(pl) { counts[pl.key] = 0; });
   all.forEach(function(u) {
     var p = u.subscription_plan || 'trial';
-    var isExpired = ['starter','standard','pro'].indexOf(p) !== -1
+    var isExpired = ALL_PAID_PLANS.indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
     if (isExpired) p = 'trial';
+    if (!(p in counts)) p = 'trial'; // unrecognised value — don't drop the user silently
     counts[p] = (counts[p] || 0) + 1;
   });
   var total = all.length || 1;
-  var plans = [
-    { key: 'lifetime', label: 'Lifetime', color: 'var(--orange)' },
-    { key: 'pro',      label: 'Pro',      color: 'var(--purple)' },
-    { key: 'standard', label: 'Standard', color: 'var(--blue)' },
-    { key: 'starter',  label: 'Starter',  color: 'var(--green)' },
-    { key: 'trial',    label: 'Trial / Expired', color: 'var(--text3)' },
-  ];
+  // Skip legacy buckets once nobody is left on them, keeps the chart from
+  // permanently showing three empty rows post-migration.
+  var plans = PLAN_META.filter(function(pl) {
+    return counts[pl.key] > 0 || LEGACY_PAID_PLANS.indexOf(pl.key) === -1;
+  });
   document.getElementById('plan-dist').innerHTML = plans.map(function(pl) {
     var count = counts[pl.key] || 0;
     var pct   = Math.round(count / total * 100);
@@ -1799,7 +1907,7 @@ var _userFilter = 'all';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, subscription_expires_at, trial_started_at, created_at')
+    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at')
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -1816,10 +1924,10 @@ function updatePillCounts(users) {
   function cat(u) {
     var p = u.subscription_plan || 'trial';
     if (p === 'lifetime') return 'lifetime';
-    var isPaidExpired = ['starter','standard','pro'].indexOf(p) !== -1
+    var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
     if (isPaidExpired) return 'expired';
-    if (['starter','standard','pro'].indexOf(p) !== -1) return 'active';
+    if (ALL_PAID_PLANS.indexOf(p) !== -1) return 'active';
     // Trial (or unset, which defaults to trial): an aged-out trial is just
     // as "expired" as a lapsed paid plan — get-content-key locks both out
     // identically — so it belongs in the same bucket, not silently stuck
@@ -1849,9 +1957,9 @@ function applyUserFilters() {
   var filtered = _allUsers.filter(function(u) {
     if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
     var p = u.subscription_plan || 'trial';
-    var isPaidExpired = ['starter','standard','pro'].indexOf(p) !== -1
+    var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
-    var isActive = !isPaidExpired && ['starter','standard','pro'].indexOf(p) !== -1;
+    var isActive = !isPaidExpired && ALL_PAID_PLANS.indexOf(p) !== -1;
     var trialExpired = (p === 'trial' || !u.subscription_plan) && isTrialExpired(u.trial_started_at, now);
     var isExpired = isPaidExpired || trialExpired;
     if (_userFilter === 'all')      return true;
@@ -1873,7 +1981,7 @@ function renderUsers(users) {
         return '<tr>'
           + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '—') + '</button></td>'
           + '<td>' + esc(u.full_name || '—') + '</td>'
-          + '<td>' + planBadge(u.subscription_plan) + '</td>'
+          + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
@@ -1929,7 +2037,7 @@ async function openUserProfile(userId) {
   document.getElementById('prof-name').textContent = u.full_name || 'No name set';
   document.getElementById('prof-email').textContent = u.email || '—';
   document.getElementById('prof-uid').textContent = u.id;
-  document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan);
+  document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan, u.plan_scope);
   document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at);
   document.getElementById('prof-joined').textContent = fmtDate(u.created_at);
   document.getElementById('prof-spent').textContent = '—';
@@ -1958,7 +2066,7 @@ function closeUserProfile() {
 
 async function loadProfPayments(userId) {
   var { data } = await _sb.from('payments')
-    .select('plan, amount, status, created_at, paid_at')
+    .select('plan, scope, amount, status, created_at, paid_at')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -1973,7 +2081,7 @@ async function loadProfPayments(userId) {
     ? payments.map(function(p) {
         var badgeClass = p.status === 'paid' ? 'pay-badge-paid' : p.status === 'failed' ? 'pay-badge-failed' : 'pay-badge-created';
         return '<div class="prof-pay-row">'
-          + '<span>' + planBadge(p.plan) + '</span>'
+          + '<span>' + planBadge(p.plan, p.scope) + '</span>'
           + '<span style="font-weight:700;font-variant-numeric:tabular-nums">₹' + esc((p.amount / 100).toLocaleString('en-IN')) + '</span>'
           + '<span class="' + badgeClass + '" style="border-radius:20px;padding:2px 8px;font-size:10.5px;font-weight:700">' + esc(p.status) + '</span>'
           + '<span style="color:var(--text3);font-size:11px;white-space:nowrap">' + fmtDate(p.status === 'paid' ? p.paid_at : p.created_at) + '</span>'
@@ -2081,11 +2189,35 @@ function toggleProfEdit(show) {
   panel.style.display = open ? 'block' : 'none';
   if (open) {
     document.getElementById('prof-edit-plan').value = _profUser.subscription_plan || 'trial';
+    document.getElementById('prof-edit-scope').value = _profUser.plan_scope || 'both';
     document.getElementById('prof-edit-expiry').value = _profUser.subscription_expires_at
       ? _profUser.subscription_expires_at.substring(0, 10) : '';
     document.getElementById('prof-edit-status').style.display = 'none';
+    profEditPlanChanged();
   }
 }
+
+function requiresScope(plan) { return NEW_PAID_PLANS.indexOf(plan) !== -1; }
+
+function _syncScopeField(planSelectId, fieldId, scopeSelectId) {
+  var plan = document.getElementById(planSelectId).value;
+  var field = document.getElementById(fieldId);
+  var sel = document.getElementById(scopeSelectId);
+  if (requiresScope(plan)) {
+    field.style.display = '';
+    sel.disabled = false;
+  } else if (LEGACY_PAID_PLANS.indexOf(plan) !== -1) {
+    // Legacy plans never had partial scope — always full access.
+    field.style.display = '';
+    sel.value = 'both';
+    sel.disabled = true;
+  } else {
+    // trial / lifetime — scope is meaningless.
+    field.style.display = 'none';
+  }
+}
+function grantPlanChanged() { _syncScopeField('grant-plan', 'grant-scope-field', 'grant-scope'); }
+function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-scope-field', 'prof-edit-scope'); }
 
 async function profSaveAccess() {
   if (!_profUser) return;
@@ -2093,6 +2225,10 @@ async function profSaveAccess() {
   var expVal = document.getElementById('prof-edit-expiry').value;
   var expiry = expVal ? new Date(expVal).toISOString() : null;
   var statusEl = document.getElementById('prof-edit-status');
+  // trial/lifetime -> no scope; legacy plans -> always 'both'; new duration
+  // plans -> whatever the admin picked.
+  var scope = requiresScope(plan) ? document.getElementById('prof-edit-scope').value
+    : (LEGACY_PAID_PLANS.indexOf(plan) !== -1 ? 'both' : null);
 
   if (requiresExpiry(plan) && !expiry) {
     statusEl.style.display = 'block';
@@ -2104,7 +2240,7 @@ async function profSaveAccess() {
   }
 
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: plan, subscription_expires_at: expiry })
+    .update({ subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope })
     .eq('id', _profUser.id);
 
   if (error) {
@@ -2116,18 +2252,19 @@ async function profSaveAccess() {
   }
 
   logAdminAction('grant_access', _profUser, {
-    plan: plan, expires_at: expiry,
+    plan: plan, scope: scope, expires_at: expiry,
     previous_plan: _profUser.subscription_plan,
     source: 'profile_modal',
   });
 
   // Sync local state everywhere it's cached
   _profUser.subscription_plan = plan;
+  _profUser.plan_scope = scope;
   _profUser.subscription_expires_at = expiry;
   var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
-  if (u) { u.subscription_plan = plan; u.subscription_expires_at = expiry; }
+  if (u) { u.subscription_plan = plan; u.plan_scope = scope; u.subscription_expires_at = expiry; }
 
-  document.getElementById('prof-plan').innerHTML = planBadge(plan);
+  document.getElementById('prof-plan').innerHTML = planBadge(plan, scope);
   document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan, _profUser.trial_started_at);
   toggleProfEdit(false);
   toast('Access updated');
@@ -2149,7 +2286,7 @@ async function profForceTrialExpiry() {
 
   var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null })
+    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null, plan_scope: null })
     .eq('id', _profUser.id);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -2162,8 +2299,9 @@ async function profForceTrialExpiry() {
   _profUser.subscription_plan = 'trial';
   _profUser.trial_started_at = backdated;
   _profUser.subscription_expires_at = null;
+  _profUser.plan_scope = null;
   var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
-  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; }
+  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; u.plan_scope = null; }
 
   document.getElementById('prof-plan').innerHTML = planBadge('trial');
   document.getElementById('prof-expiry').innerHTML = expiryDisplay(null, 'trial', backdated);
@@ -2254,19 +2392,21 @@ function selectGrantUser(user) {
   _grantDdIndex = -1;
 
   document.getElementById('gf-name').textContent = (user.full_name || 'No name set') + ' · ' + user.email;
-  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan, user.trial_started_at);
+  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan, user.plan_scope) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan, user.trial_started_at);
   document.getElementById('grant-expiry').value = user.subscription_expires_at
     ? user.subscription_expires_at.substring(0, 10) : '';
+  document.getElementById('grant-scope').value = user.plan_scope || 'both';
+  grantPlanChanged();
   document.getElementById('grant-found').style.display = 'block';
 }
 
 
-// get-content-key only grants access to starter/standard/pro when
-// subscription_expires_at is set, so saving one of those with a blank date
-// silently leaves the user with no access at all. Catch it here rather than
-// letting an admin believe they comped someone who then cannot read anything.
+// get-content-key only grants access to paid plans when subscription_expires_at
+// is set, so saving one with a blank date silently leaves the user with no
+// access at all. Catch it here rather than letting an admin believe they
+// comped someone who then cannot read anything.
 function requiresExpiry(plan) {
-  return ['starter', 'standard', 'pro'].indexOf(plan) !== -1;
+  return ALL_PAID_PLANS.indexOf(plan) !== -1;
 }
 
 async function grantAccess() {
@@ -2274,6 +2414,8 @@ async function grantAccess() {
   var plan = document.getElementById('grant-plan').value;
   var expVal = document.getElementById('grant-expiry').value;
   var expiry = expVal ? new Date(expVal).toISOString() : null;
+  var scope = requiresScope(plan) ? document.getElementById('grant-scope').value
+    : (LEGACY_PAID_PLANS.indexOf(plan) !== -1 ? 'both' : null);
 
   if (requiresExpiry(plan) && !expiry) {
     toast('Set an expiry date, or choose Lifetime for unlimited access', 'err');
@@ -2281,18 +2423,18 @@ async function grantAccess() {
   }
 
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: plan, subscription_expires_at: expiry })
+    .update({ subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope })
     .eq('id', _grantUserId);
 
   if (error) { toast('Update failed: ' + error.message, 'err'); return; }
   toast('Access updated');
   var u = _allUsers.find(function(x) { return x.id === _grantUserId; });
   logAdminAction('grant_access', u || { id: _grantUserId }, {
-    plan: plan, expires_at: expiry,
+    plan: plan, scope: scope, expires_at: expiry,
     previous_plan: u ? u.subscription_plan : null,
     source: 'grant_tab',
   });
-  if (u) { u.subscription_plan = plan; u.subscription_expires_at = expiry; selectGrantUser(u); }
+  if (u) { u.subscription_plan = plan; u.plan_scope = scope; u.subscription_expires_at = expiry; selectGrantUser(u); }
   loadDashboard();
   loadUsers();
 }
@@ -2302,7 +2444,7 @@ async function revokeAccess() {
   if (!confirm('Revoke access? User will be dropped back to trial.')) return;
 
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', subscription_expires_at: null })
+    .update({ subscription_plan: 'trial', subscription_expires_at: null, plan_scope: null })
     .eq('id', _grantUserId);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -2330,7 +2472,7 @@ async function forceTrialExpiry() {
 
   var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null })
+    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null, plan_scope: null })
     .eq('id', _grantUserId);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -2340,7 +2482,7 @@ async function forceTrialExpiry() {
     trial_started_at: backdated,
   });
 
-  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; selectGrantUser(u); }
+  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; u.plan_scope = null; selectGrantUser(u); }
   toast('Trial forced to expired');
   loadDashboard();
   loadUsers();
@@ -2619,6 +2761,7 @@ function payFilters() {
   return {
     status: document.getElementById('pay-filter-status').value,
     plan:   document.getElementById('pay-filter-plan').value,
+    scope:  document.getElementById('pay-filter-scope').value,
     from:   document.getElementById('pay-filter-from').value,
     to:     document.getElementById('pay-filter-to').value,
   };
@@ -2627,6 +2770,7 @@ function payFilters() {
 function applyPayFilters(query, f) {
   if (f.status) query = query.eq('status', f.status);
   if (f.plan)   query = query.eq('plan', f.plan);
+  if (f.scope)  query = query.eq('scope', f.scope);
   if (f.from)   query = query.gte('created_at', f.from + 'T00:00:00Z');
   if (f.to)     query = query.lte('created_at', f.to + 'T23:59:59Z');
   return query;
@@ -2656,7 +2800,7 @@ async function loadPayments(reset) {
   var f = payFilters();
 
   var query = _sb.from('payments')
-    .select('id,created_at,paid_at,plan,amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,refund_amount,refunded_at,subscription_expires_at,user_id', { count: 'exact' })
+    .select('id,created_at,paid_at,plan,scope,amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,refund_amount,refunded_at,subscription_expires_at,user_id', { count: 'exact' })
     .order('created_at', { ascending: false })
     .range(_payOffset, _payOffset + _payPageSize - 1);
 
@@ -2700,7 +2844,7 @@ async function loadPayments(reset) {
     return '<tr class="pay-row">'
       + '<td style="white-space:nowrap;font-size:12px;color:var(--text2);">' + esc(dateStr) + '</td>'
       + '<td>' + userCell + '</td>'
-      + '<td><span class="pay-plan-tag">' + esc(p.plan) + '</span></td>'
+      + '<td>' + planBadge(p.plan, p.scope) + '</td>'
       + '<td style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums;">' + esc(fmtINR(p.amount)) + '</td>'
       + '<td><span class="' + badgeClass + '">' + esc(p.status) + '</span></td>'
       + '<td>' + paymentId + '</td>'
@@ -2803,7 +2947,7 @@ async function exportPaymentsCsv() {
 
   // Export the whole filtered set, not just the page on screen.
   var query = _sb.from('payments')
-    .select('created_at,paid_at,refunded_at,plan,amount,refund_amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,subscription_starts_at,subscription_expires_at,user_id')
+    .select('created_at,paid_at,refunded_at,plan,scope,amount,refund_amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,subscription_starts_at,subscription_expires_at,user_id')
     .order('created_at', { ascending: false })
     .limit(5000);
 
@@ -2814,7 +2958,7 @@ async function exportPaymentsCsv() {
   var emailMap = await resolvePayEmails(data);
 
   var headers = [
-    'Date','Paid At','Refunded At','Email','User ID','Plan','Amount (INR)',
+    'Date','Paid At','Refunded At','Email','User ID','Plan','Scope','Amount (INR)',
     'Refund (INR)','Currency','Status','Order ID','Payment ID','Refund ID',
     'Access Starts','Access Expires'
   ];
@@ -2823,7 +2967,7 @@ async function exportPaymentsCsv() {
   data.forEach(function(p) {
     lines.push([
       p.created_at, p.paid_at, p.refunded_at,
-      emailMap[p.user_id] || '', p.user_id, p.plan,
+      emailMap[p.user_id] || '', p.user_id, p.plan, p.scope,
       (p.amount / 100).toFixed(2),
       p.refund_amount ? (p.refund_amount / 100).toFixed(2) : '',
       p.currency || 'INR', p.status,
@@ -2932,18 +3076,21 @@ async function loadCronHealth() {
 }
 
 /* ── COUPONS ──────────────────────────────────────────────────────── */
-var PLAN_DEFAULT_MONTHS = { starter: 2, standard: 5, pro: 12, lifetime: 0 };
+var PLAN_DEFAULT_MONTHS = { '3mo': 3, '6mo': 6, '12mo': 12, lifetime: 0 };
 
 function cpPlanChanged() {
   var plan = document.getElementById('cp-plan').value;
   var monthsEl = document.getElementById('cp-months');
+  var scopeField = document.getElementById('cp-scope-field');
   if (plan === 'lifetime') {
     monthsEl.value = '';
     monthsEl.disabled = true;
     monthsEl.placeholder = 'Never expires';
+    scopeField.style.display = 'none'; // lifetime grants everything, scope is meaningless
   } else {
     monthsEl.disabled = false;
     monthsEl.placeholder = 'Defaults to ' + PLAN_DEFAULT_MONTHS[plan] + ' months';
+    scopeField.style.display = '';
   }
 }
 
@@ -2959,6 +3106,7 @@ function cpMsg(text, ok) {
 async function createCoupon() {
   var code = (document.getElementById('cp-code').value || '').trim().toUpperCase();
   var plan = document.getElementById('cp-plan').value;
+  var scope = plan === 'lifetime' ? null : document.getElementById('cp-scope').value;
   var monthsRaw = document.getElementById('cp-months').value;
   var max  = parseInt(document.getElementById('cp-max').value, 10) || 1;
   var exp  = document.getElementById('cp-expires').value;
@@ -2975,7 +3123,7 @@ async function createCoupon() {
     : (monthsRaw ? parseInt(monthsRaw, 10) : PLAN_DEFAULT_MONTHS[plan]);
 
   var { error } = await _sb.from('coupons').insert({
-    code: code, plan: plan, months: months,
+    code: code, plan: plan, scope: scope, months: months,
     max_redemptions: max,
     expires_at: exp ? new Date(exp).toISOString() : null,
     note: note || null,
@@ -2988,7 +3136,7 @@ async function createCoupon() {
   }
 
   cpMsg(code + ' created.', true);
-  logAdminAction('create_coupon', null, { code: code, plan: plan, months: months, max: max });
+  logAdminAction('create_coupon', null, { code: code, plan: plan, scope: scope, months: months, max: max });
   document.getElementById('cp-code').value = '';
   document.getElementById('cp-note').value = '';
   loadCoupons();
@@ -2996,7 +3144,7 @@ async function createCoupon() {
 
 async function loadCoupons() {
   var { data, error } = await _sb.from('coupons')
-    .select('code,plan,months,max_redemptions,times_redeemed,expires_at,note,active,created_at')
+    .select('code,plan,scope,months,max_redemptions,times_redeemed,expires_at,note,active,created_at')
     .order('created_at', { ascending: false });
 
   var tbody = document.getElementById('cp-tbody');
@@ -3016,7 +3164,7 @@ async function loadCoupons() {
     var dead = !c.active || spent || expired;
     return '<tr' + (dead ? ' style="opacity:.55"' : '') + '>'
       + '<td style="font-family:monospace;font-weight:700">' + esc(c.code) + '</td>'
-      + '<td>' + planBadge(c.plan) + (c.months ? ' <span style="font-size:11px;color:var(--text3)">' + c.months + 'mo</span>' : '') + '</td>'
+      + '<td>' + planBadge(c.plan, c.scope) + (c.months ? ' <span style="font-size:11px;color:var(--text3)">' + c.months + 'mo</span>' : '') + '</td>'
       + '<td style="font-variant-numeric:tabular-nums">' + used + (spent ? ' <span style="font-size:10px;color:var(--orange)">spent</span>' : '') + '</td>'
       + '<td class="date-cell">' + (c.expires_at ? fmtDate(c.expires_at) + (expired ? ' <span style="color:var(--red);font-size:10px">expired</span>' : '') : 'Never') + '</td>'
       + '<td style="font-size:12px;color:var(--text2)">' + esc(c.note || '') + '</td>'
@@ -3033,6 +3181,111 @@ async function setCouponActive(code, active) {
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
   toast(active ? 'Coupon enabled' : 'Coupon disabled');
   loadCoupons();
+}
+
+/* ── PLANS (pricing editor) ──────────────────────────────────────────
+   Duration x scope = 9 fixed rows (this is an editor, not a creator —
+   pricing_v2_setup.sql seeds all 9). Edits here are what the upgrade modal
+   and every plan-display surface in the app read live, no redeploy. */
+var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
+var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
+var TRACK_LABEL_ADMIN = { written: 'Passage — Written Only', oral: 'Voyage — Oral Only', both: 'Expedition — Both' };
+
+async function loadPlansTab() {
+  var wrap = document.getElementById('plans-groups');
+  var { data, error } = await _sb.from('pricing_plans').select('*').order('scope').order('duration');
+  if (error) {
+    wrap.innerHTML = '<div class="ad-loading">Run pricing_v2_setup.sql to enable Plans.</div>';
+    return;
+  }
+  window._plansRows = data || [];
+  renderPlansTab();
+}
+
+function planEffectiveAmount(row) {
+  var now = new Date();
+  var active = row.discount_percent > 0
+    && (!row.discount_starts_at || new Date(row.discount_starts_at) <= now)
+    && (!row.discount_ends_at   || new Date(row.discount_ends_at)   >= now);
+  return active ? Math.round(row.base_amount * (1 - row.discount_percent / 100)) : row.base_amount;
+}
+
+function renderPlansTab() {
+  var wrap = document.getElementById('plans-groups');
+  if (!window._plansRows || !window._plansRows.length) {
+    wrap.innerHTML = '<div class="ad-loading">No pricing rows found. Run pricing_v2_setup.sql to seed them.</div>';
+    return;
+  }
+  wrap.innerHTML = TRACK_ORDER_ADMIN.map(function(scope) {
+    var rows = TIER_ORDER_ADMIN.map(function(dur) {
+      return window._plansRows.filter(function(r) { return r.scope === scope && r.duration === dur; })[0];
+    }).filter(Boolean);
+    if (!rows.length) return '';
+    return '<div class="ad-card" style="margin-bottom:16px">'
+      + '<div class="ad-card-head">' + esc(TRACK_LABEL_ADMIN[scope] || scope) + '</div>'
+      + '<div class="ad-table-wrap"><table class="ad-table">'
+      + '<thead><tr><th>Duration</th><th>Track Name</th><th>Tier Name</th><th>Base Price (₹)</th><th>Discount %</th>'
+      + '<th>Discount From</th><th>Discount Until</th><th>Effective</th><th>Promo Label</th><th>Description</th><th>Active</th><th></th></tr></thead>'
+      + '<tbody>' + rows.map(planRowHtml).join('') + '</tbody>'
+      + '</table></div></div>';
+  }).join('');
+}
+
+function planRowHtml(r) {
+  var rid = r.duration + '-' + r.scope;
+  var eff = planEffectiveAmount(r);
+  var dFrom = r.discount_starts_at ? r.discount_starts_at.substring(0, 10) : '';
+  var dTo   = r.discount_ends_at   ? r.discount_ends_at.substring(0, 10)   : '';
+  return '<tr>'
+    + '<td style="font-weight:700;white-space:nowrap">' + esc(tierLabel(r.duration)) + ' (' + esc(r.duration) + ')</td>'
+    + '<td><input class="ad-input" style="min-width:100px" id="pp-track-' + rid + '" value="' + esc(r.track_name) + '"></td>'
+    + '<td><input class="ad-input" style="min-width:100px" id="pp-tier-' + rid + '" value="' + esc(r.tier_name) + '"></td>'
+    + '<td><input class="ad-input" type="number" min="0" step="1" style="width:90px" id="pp-amount-' + rid + '" value="' + (r.base_amount / 100) + '"></td>'
+    + '<td><input class="ad-input" type="number" min="0" max="100" style="width:70px" id="pp-discount-' + rid + '" value="' + r.discount_percent + '"></td>'
+    + '<td><input class="ad-input" type="date" style="width:140px" id="pp-dfrom-' + rid + '" value="' + dFrom + '"></td>'
+    + '<td><input class="ad-input" type="date" style="width:140px" id="pp-dto-' + rid + '" value="' + dTo + '"></td>'
+    + '<td style="font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap" id="pp-eff-' + rid + '">' + fmtINR(eff) + '</td>'
+    + '<td><input class="ad-input" style="min-width:110px" id="pp-label-' + rid + '" value="' + esc(r.label || '') + '" placeholder="e.g. Friday Special"></td>'
+    + '<td><input class="ad-input" style="min-width:130px" id="pp-desc-' + rid + '" value="' + esc(r.description || '') + '" placeholder="optional"></td>'
+    + '<td style="text-align:center"><input type="checkbox" id="pp-active-' + rid + '" ' + (r.active ? 'checked' : '') + '></td>'
+    + '<td><button class="ad-btn btn-primary btn-sm" onclick="savePlanRow(' + attrJs(r.duration) + ',' + attrJs(r.scope) + ')">Save</button></td>'
+    + '</tr>';
+}
+
+async function savePlanRow(duration, scope) {
+  var rid = duration + '-' + scope;
+  var amountRaw   = parseFloat(document.getElementById('pp-amount-' + rid).value);
+  var discountRaw = parseInt(document.getElementById('pp-discount-' + rid).value, 10) || 0;
+  if (!(amountRaw > 0)) { toast('Enter a valid base price', 'err'); return; }
+
+  var dFromVal = document.getElementById('pp-dfrom-' + rid).value;
+  var dToVal   = document.getElementById('pp-dto-' + rid).value;
+
+  var payload = {
+    track_name:         (document.getElementById('pp-track-' + rid).value || '').trim(),
+    tier_name:          (document.getElementById('pp-tier-' + rid).value || '').trim(),
+    base_amount:        Math.round(amountRaw * 100),
+    discount_percent:   Math.max(0, Math.min(100, discountRaw)),
+    discount_starts_at: dFromVal ? new Date(dFromVal).toISOString() : null,
+    discount_ends_at:   dToVal   ? new Date(dToVal).toISOString()   : null,
+    label:              (document.getElementById('pp-label-' + rid).value || '').trim() || null,
+    description:        (document.getElementById('pp-desc-' + rid).value || '').trim() || null,
+    active:             document.getElementById('pp-active-' + rid).checked,
+  };
+  if (!payload.track_name || !payload.tier_name) { toast('Track and tier name are required', 'err'); return; }
+
+  var { error } = await _sb.from('pricing_plans').update(payload).eq('duration', duration).eq('scope', scope);
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  logAdminAction('update_plan', null, Object.assign({ duration: duration, scope: scope }, payload));
+  toast('Plan updated');
+
+  // Keep local caches (planBadge everywhere reads _pricingPlanCache) and the
+  // row list in sync so the rest of the admin UI reflects the edit at once.
+  var row = window._plansRows.filter(function(r) { return r.duration === duration && r.scope === scope; })[0];
+  if (row) { for (var k in payload) row[k] = payload[k]; }
+  _pricingPlanCache[duration + '|' + scope] = { track_name: payload.track_name, tier_name: payload.tier_name };
+  renderPlansTab();
 }
 
 /* ── ACTIVITY LOG ─────────────────────────────────────────────────── */
@@ -3113,6 +3366,10 @@ window.showTab = function(name) {
     _tabLoaded.coupons = true;
     cpPlanChanged();
     loadCoupons();
+  }
+  if (name === 'plans' && !_tabLoaded.plans) {
+    _tabLoaded.plans = true;
+    loadPlansTab();
   }
   if (name === 'activity') loadActivity();
 };

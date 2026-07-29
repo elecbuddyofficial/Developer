@@ -790,7 +790,7 @@
 
     var { data: profile } = await window._sbClient
       .from('profiles')
-      .select('subscription_plan, subscription_expires_at, trial_started_at, is_admin')
+      .select('subscription_plan, subscription_expires_at, trial_started_at, plan_scope, is_admin')
       .eq('id', u.id)
       .single();
 
@@ -798,6 +798,7 @@
       var plan = profile.subscription_plan || 'trial';
       var badgeEl = document.getElementById('pm-plan-badge');
       var subEl   = document.getElementById('pm-plan-sub');
+      var ALL_PAID_PLANS = ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'];
 
       if (plan === 'trial') {
         var daysLeft = profile.trial_started_at
@@ -808,15 +809,26 @@
       } else if (plan === 'lifetime') {
         badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">Lifetime</span>';
         subEl.textContent = 'Never expires';
-      } else if (plan === 'starter' || plan === 'standard' || plan === 'pro') {
+      } else if (ALL_PAID_PLANS.indexOf(plan) !== -1) {
         var exp = profile.subscription_expires_at ? new Date(profile.subscription_expires_at) : null;
         var expired = exp && exp < new Date();
-        var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+        var legacyNames = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
+        var scope = profile.plan_scope || 'both';
+        var planLabel = legacyNames[plan] || (plan + ' · ' + scope);
+        // Same track/tier lookup as the main app's profile display — same
+        // plan should read the same everywhere in the product.
+        var planRowRes = await window._sbClient
+          .from('pricing_plans')
+          .select('track_name, tier_name')
+          .eq('duration', plan).eq('scope', scope).maybeSingle();
+        if (planRowRes && planRowRes.data) {
+          planLabel = planRowRes.data.track_name + ' ' + planRowRes.data.tier_name;
+        }
         if (expired) {
           badgeEl.innerHTML = '<span class="pm-plan-badge pb-expired">Expired</span>';
           subEl.textContent = 'Expired ' + (exp ? exp.toLocaleDateString() : '');
         } else {
-          badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + planLabel + '</span>';
+          badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + escNf(planLabel) + '</span>';
           subEl.textContent = exp ? 'Active until ' + exp.toLocaleDateString() : 'Active';
         }
       } else {

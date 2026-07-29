@@ -1,1 +1,1 @@
-{"v":1,"iv":"YrqQpp9aXOP22gWL","data":"uvFhny01dVdbbtV+mo1u8A5die9rv3hPLcrvjMh78ZdoRKey8A==","tag":"CTWrBOUFTpgg+8dtE6l+xQ=="}
+window.loadQuizzes("F20_Cables", []);

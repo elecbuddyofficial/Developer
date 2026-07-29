@@ -10,6 +10,9 @@ const PLAN_MONTHS: Record<string, number> = {
   starter: 2,
   standard: 5,
   pro: 12,
+  '3mo': 3,
+  '6mo': 6,
+  '12mo': 12,
 };
 
 const json = (data: unknown, status = 200) =>
@@ -126,26 +129,32 @@ serve(async (req) => {
       // so the buyer still sees a success state rather than a confusing error.
       const { data: settled } = await sb
         .from('payments')
-        .select('plan, subscription_starts_at, subscription_expires_at')
+        .select('plan, scope, subscription_starts_at, subscription_expires_at')
         .eq('razorpay_order_id', order_id)
         .single();
       return json({
         ok:         true,
         plan:       settled?.plan ?? payment.plan,
+        scope:      settled?.scope ?? payment.scope ?? 'both',
         starts_at:  settled?.subscription_starts_at ?? startDate.toISOString(),
         expires_at: settled?.subscription_expires_at ?? expiresAt.toISOString(),
       });
     }
 
-    // Activate subscription on profile
+    // Activate subscription on profile. A NULL payment.scope means this
+    // order was created before the scope split (or during the deploy
+    // window) — that always meant full access under the old model, so fall
+    // back to 'both' rather than leaving the buyer with nothing.
     await sb.from('profiles').update({
       subscription_plan:       payment.plan,
       subscription_expires_at: expiresAt.toISOString(),
+      plan_scope:               payment.scope || 'both',
     }).eq('id', user.id);
 
     return json({
       ok: true,
       plan:       payment.plan,
+      scope:      payment.scope || 'both',
       starts_at:  startDate.toISOString(),
       expires_at: expiresAt.toISOString(),
     });

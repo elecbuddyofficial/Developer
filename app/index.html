@@ -497,57 +497,13 @@
   <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:28px 28px 24px;background:rgba(8,15,30,0.90);border:1px solid rgba(200,164,74,0.18);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,164,74,.06),0 0 60px rgba(7,13,26,.5);backdrop-filter:blur(40px);">
     <div style="font-size:40px;margin-bottom:12px;">🔒</div>
     <div style="font-size:19px;font-weight:700;color:#DDE5EF;margin-bottom:10px;">Full Access Required</div>
-    <div id="gate-sub" style="font-size:13.5px;color:#8FA3B8;margin-bottom:28px;line-height:1.65;">Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.</div>
+    <div id="gate-sub" style="font-size:13.5px;color:#8FA3B8;margin-bottom:14px;line-height:1.65;">Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.</div>
+    <div id="gate-track-name" style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#C8A44A;margin-bottom:14px;"></div>
 
-    <!-- Plan cards -->
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;">
+    <!-- Tier cards, rendered from pricing_plans for whichever scope locked this content -->
+    <div id="gate-plan-cards" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;"></div>
 
-      <div class="gate-plan" data-plan="starter">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:#DDE5EF;">Starter</div>
-          <div style="font-size:11.5px;color:#4A6880;margin-top:2px;">2 months access</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:16px;font-weight:700;color:#C8A44A;">₹499</div>
-          <button class="gate-buy-btn" data-plan="starter" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button>
-        </div>
-      </div>
-
-      <div class="gate-plan" data-plan="standard" style="border-color:#C8A44A;position:relative;">
-        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#C8A44A;color:#070D1A;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap;letter-spacing:0.04em;">BEST VALUE</div>
-        <div>
-          <div style="font-size:13px;font-weight:700;color:#DDE5EF;">Standard</div>
-          <div style="font-size:11.5px;color:#4A6880;margin-top:2px;">5 months access</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:16px;font-weight:700;color:#C8A44A;">₹999</div>
-          <button class="gate-buy-btn" data-plan="standard" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button>
-        </div>
-      </div>
-
-      <div class="gate-plan" data-plan="pro">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:#DDE5EF;">Pro</div>
-          <div style="font-size:11.5px;color:#4A6880;margin-top:2px;">12 months access</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:16px;font-weight:700;color:#C8A44A;">₹1,999</div>
-          <button class="gate-buy-btn" data-plan="pro" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button>
-        </div>
-      </div>
-
-      <div class="gate-plan" data-plan="lifetime">
-        <div>
-          <div style="font-size:13px;font-weight:700;color:#DDE5EF;">Lifetime</div>
-          <div style="font-size:11.5px;color:#4A6880;margin-top:2px;">Pay once, study forever</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-size:16px;font-weight:700;color:#C8A44A;">₹4,999</div>
-          <button class="gate-buy-btn" data-plan="lifetime" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button>
-        </div>
-      </div>
-    </div>
-
+    <button onclick="openUpgradeModal()" style="background:none;border:none;color:#6E8AA6;font-size:12px;cursor:pointer;text-decoration:underline;margin-bottom:8px;display:block;width:100%;">See all tracks &amp; durations</button>
     <button onclick="closeGate()" style="background:none;border:none;color:#4A6880;font-size:13px;cursor:pointer;text-decoration:underline;">Continue with free preview</button>
   </div>
 </div>
@@ -635,6 +591,7 @@
         <div id="pm-plan-label" style="font-size:14px;font-weight:700;"></div>
         <div id="pm-plan-expiry" style="font-size:11.5px;color:#8FA3B8;text-align:right;"></div>
       </div>
+      <div id="pm-plan-sub" style="font-size:10.5px;color:#4A6880;margin-top:3px;"></div>
     </div>
 
     <!-- Upgrade CTA (shown only for trial / expired) -->
@@ -680,66 +637,17 @@
       <!-- Trial notice -->
       <div id="up-trial-notice" style="display:none;background:rgba(200,164,74,0.08);border:1px solid rgba(200,164,74,0.25);border-radius:10px;padding:11px 14px;margin-bottom:20px;font-size:12.5px;color:#A88B3A;line-height:1.6;"></div>
 
-      <!-- Plan cards -->
-      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;">
+      <!-- Track tabs (Passage / Voyage / Expedition) -->
+      <div id="up-track-tabs" style="display:flex;gap:8px;margin-bottom:16px;"></div>
+      <div id="up-track-subhead" style="font-size:12px;color:#5A7B98;margin-bottom:16px;margin-top:-6px;"></div>
 
-        <!-- Starter -->
-        <div class="up-plan-card" id="up-starter">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Starter</div>
-              <div style="font-size:12px;color:#4A6880;margin-top:3px;">2 months full access</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹499</div>
-              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹250 / month</div>
-            </div>
-          </div>
-          <button class="up-buy-btn" data-plan="starter" data-amount="499" style="margin-top:14px;width:100%;background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;letter-spacing:0.03em;transition:background .15s,border-color .15s;" onmouseover="this.style.background='rgba(200,164,74,0.2)'" onmouseout="this.style.background='rgba(200,164,74,0.12)'">Pay ₹499 with Razorpay</button>
-        </div>
-
-        <!-- Standard (highlighted) -->
-        <div class="up-plan-card" id="up-standard" style="border-color:#C8A44A;position:relative;">
-          <div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#C8A44A;color:#070D1A;font-size:9.5px;font-weight:700;padding:3px 12px;border-radius:20px;white-space:nowrap;letter-spacing:0.08em;text-transform:uppercase;">Best Value</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Standard</div>
-              <div style="font-size:12px;color:#4A6880;margin-top:3px;">5 months full access</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹999</div>
-              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹200 / month</div>
-            </div>
-          </div>
-          <button class="up-buy-btn" data-plan="standard" data-amount="999" style="margin-top:14px;width:100%;background:#C8A44A;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#070D1A;cursor:pointer;letter-spacing:0.03em;transition:opacity .15s;" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">Pay ₹999 with Razorpay</button>
-        </div>
-
-        <!-- Pro -->
-        <div class="up-plan-card" id="up-pro">
-          <div style="display:flex;align-items:center;justify-content:space-between;">
-            <div>
-              <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Pro</div>
-              <div style="font-size:12px;color:#4A6880;margin-top:3px;">12 months full access</div>
-            </div>
-            <div style="text-align:right;">
-              <div style="font-size:20px;font-weight:700;color:#C8A44A;letter-spacing:-0.5px;">₹1,999</div>
-              <div style="font-size:10px;color:#3A5570;margin-top:1px;">₹167 / month</div>
-            </div>
-          </div>
-          <button class="up-buy-btn" data-plan="pro" data-amount="1999" style="margin-top:14px;width:100%;background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;letter-spacing:0.03em;transition:background .15s;" onmouseover="this.style.background='rgba(200,164,74,0.2)'" onmouseout="this.style.background='rgba(200,164,74,0.12)'">Pay ₹1,999 with Razorpay</button>
-        </div>
-      </div>
+      <!-- Tier cards (Launch / Mariner / Master), rendered from pricing_plans -->
+      <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
 
       <!-- Features -->
       <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
-        <div style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2E5577;margin-bottom:12px;">All plans include</div>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <div class="up-feature">All 23 oral exam topics with full study notes</div>
-          <div class="up-feature">8 written exam topics with solved papers</div>
-          <div class="up-feature">5,600+ quiz questions across all topics</div>
-          <div class="up-feature">Full Surveyor Q&A bank</div>
-          <div class="up-feature">Offline access via service worker cache</div>
-        </div>
+        <div id="up-features-title" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2E5577;margin-bottom:12px;">This track includes</div>
+        <div id="up-track-features" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
 
       <!-- Coupon -->
@@ -768,14 +676,47 @@
 </div>
 
 <style>
+  .up-track-tab {
+    flex: 1; background: rgba(13,30,51,0.7); border: 1px solid #1A3050; border-radius: 8px;
+    padding: 9px 6px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em;
+    color: #6E8AA6; cursor: pointer; transition: border-color .15s, background .15s, color .15s;
+    font-family: inherit;
+  }
+  .up-track-tab:hover { background: rgba(20,42,68,0.8); }
+  .up-track-tab.active { background: #C8A44A; border-color: #C8A44A; color: #070D1A; }
+
   .up-plan-card {
     background: rgba(13,30,51,0.7);
     border: 1px solid #1A3050;
     border-radius: 12px;
     padding: 18px 18px 16px;
+    position: relative;
     transition: border-color .15s, background .15s;
   }
   .up-plan-card:hover { background: rgba(20,42,68,0.8); }
+  .up-plan-card-best { border-color: #C8A44A; }
+  .up-ribbon {
+    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: #C8A44A; color: #070D1A; font-size: 9.5px; font-weight: 700;
+    padding: 3px 12px; border-radius: 20px; white-space: nowrap;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .up-ribbon-promo { background: #5DC87A; }
+  .up-tier-name { font-size: 15px; font-weight: 700; color: #DDE5EF; }
+  .up-tier-duration { font-size: 12px; color: #4A6880; margin-top: 3px; }
+  .up-price { font-size: 20px; font-weight: 700; color: #C8A44A; letter-spacing: -0.5px; }
+  .up-price-strike { font-size: 13px; color: #3A5570; text-decoration: line-through; }
+  .up-card-desc { font-size: 11.5px; color: #5DC87A; margin-top: 6px; }
+  .up-buy-btn {
+    margin-top: 14px; width: 100%; background: rgba(200,164,74,0.12);
+    border: 1px solid rgba(200,164,74,0.35); border-radius: 8px; padding: 10px;
+    font-size: 13px; font-weight: 700; color: #C8A44A; cursor: pointer;
+    letter-spacing: 0.03em; transition: background .15s, border-color .15s;
+    font-family: inherit;
+  }
+  .up-buy-btn:hover { background: rgba(200,164,74,0.2); }
+  .up-plan-card-best .up-buy-btn { background: #C8A44A; border: none; color: #070D1A; }
+  .up-plan-card-best .up-buy-btn:hover { opacity: 0.88; background: #C8A44A; }
   .up-feature {
     display: flex; align-items: center; gap: 9px;
     font-size: 13px; color: #8FA3B8; line-height: 1.4;
@@ -791,6 +732,7 @@
     #upgrade-modal .up-plan-card { padding: 15px 15px 14px; }
     .up-buy-btn { min-height: 46px; }
     .up-feature { font-size: 12.5px; }
+    .up-track-tab { font-size: 10.5px; padding: 8px 4px; }
   }
   @media (max-width: 360px) {
     #upgrade-modal .up-plan-card { padding: 13px; }
@@ -827,16 +769,29 @@ function setTheme(t) {
 (function() {
   // Topics always free regardless of plan
   var FREE_TOPICS = ['T01', 'W01'];
+  window.ALL_PAID_PLANS = ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'];
+
+  function topicScope(topicId) {
+    return topicId && topicId.charAt(0) === 'W' ? 'written' : 'oral';
+  }
+  window._topicScope = topicScope;
 
   function isLocked(topicId) {
-    if (window._fullAccess) return false;
-    return FREE_TOPICS.indexOf(topicId) === -1;
+    if (FREE_TOPICS.indexOf(topicId) !== -1) return false;
+    var access = window._access || { oral: false, written: false };
+    return !access[topicScope(topicId)];
   }
+  window.isLocked = isLocked;
 
-  function showGate() {
+  function showGate(triggerScope) {
+    window._gateTriggerScope = triggerScope || null;
     var el = document.getElementById('gate-overlay');
     el.style.display = 'flex';
+    if (window.loadPricingPlans) {
+      window.loadPricingPlans().then(function() { if (window.renderGateCards) window.renderGateCards(); });
+    }
   }
+  window.showGate = showGate;
 
   window.closeGate = function() {
     document.getElementById('gate-overlay').style.display = 'none';
@@ -846,7 +801,7 @@ function setTheme(t) {
     var btn = e.target.closest('.gate-buy-btn');
     if (!btn) return;
     window.closeGate();
-    openUpgradeModal(btn.dataset.plan);
+    openUpgradeModal(btn.dataset.plan, btn.dataset.scope);
   });
 
   document.getElementById('pm-upgrade-btn').addEventListener('click', function() {
@@ -863,9 +818,11 @@ function setTheme(t) {
   });
 
   // ── Content key management (AES-256-GCM offline encryption) ─────────────────
+  // Two independent keys now — Oral and Written are encrypted separately so a
+  // scope-restricted buyer's key literally cannot decrypt the other section.
   var _IDB_NAME  = 'eb_secure';
   var _IDB_STORE = 'keys';
-  var _AC_CACHE  = '_eb_ac'; // localStorage key for offline access cache
+  var _AC_CACHE  = '_eb_ac2'; // localStorage key for offline access cache (v2: per-scope, not a single boolean)
 
   function _openKeyDB() {
     return new Promise(function(resolve, reject) {
@@ -876,24 +833,24 @@ function setTheme(t) {
     });
   }
 
-  async function _saveKey(cryptoKey, expiresAt, userId) {
+  async function _saveKeys(keys, expiresAt, userId) {
     try {
       var db = await _openKeyDB();
       await new Promise(function(resolve, reject) {
         var tx = db.transaction(_IDB_STORE, 'readwrite');
-        tx.objectStore(_IDB_STORE).put({ key: cryptoKey, expiresAt: expiresAt, userId: userId }, 'ck');
+        tx.objectStore(_IDB_STORE).put({ keys: keys, expiresAt: expiresAt, userId: userId }, 'ck2');
         tx.oncomplete = resolve;
         tx.onerror = function(e) { reject(e.target.error); };
       });
     } catch(e) {}
   }
 
-  async function _loadKey(userId) {
+  async function _loadKeys(userId) {
     try {
       var db = await _openKeyDB();
       var stored = await new Promise(function(resolve, reject) {
         var tx  = db.transaction(_IDB_STORE, 'readonly');
-        var req = tx.objectStore(_IDB_STORE).get('ck');
+        var req = tx.objectStore(_IDB_STORE).get('ck2');
         req.onsuccess = function(e) { resolve(e.target.result || null); };
         req.onerror   = function(e) { reject(e.target.error); };
       });
@@ -904,7 +861,7 @@ function setTheme(t) {
           var db2 = await _openKeyDB();
           await new Promise(function(res, rej) {
             var tx2 = db2.transaction(_IDB_STORE, 'readwrite');
-            tx2.objectStore(_IDB_STORE).delete('ck');
+            tx2.objectStore(_IDB_STORE).delete('ck2');
             tx2.oncomplete = res;
             tx2.onerror = function(e) { rej(e.target.error); };
           });
@@ -915,8 +872,8 @@ function setTheme(t) {
     } catch(e) { return null; }
   }
 
-  function _saveAccessCache(fullAccess, expiresAt) {
-    try { localStorage.setItem(_AC_CACHE, JSON.stringify({ ok: fullAccess, exp: expiresAt !== undefined ? expiresAt : null })); }
+  function _saveAccessCache(access, expiresAt) {
+    try { localStorage.setItem(_AC_CACHE, JSON.stringify({ oral: !!access.oral, written: !!access.written, exp: expiresAt !== undefined ? expiresAt : null })); }
     catch(e) {}
   }
 
@@ -925,18 +882,19 @@ function setTheme(t) {
       var c = JSON.parse(localStorage.getItem(_AC_CACHE) || 'null');
       if (!c) return null;
       if (c.exp !== null && Date.now() > c.exp) return null;
-      return c.ok; // true or false
+      return { oral: !!c.oral, written: !!c.written };
     } catch(e) { return null; }
   }
 
-  // Fetch decryption key from Edge Function; fall back to IndexedDB when offline
-  async function initContentKey() {
+  // Fetch decryption key(s) from Edge Function; fall back to IndexedDB when offline.
+  // The response only ever contains the key(s) the caller is entitled to.
+  async function initContentKeys() {
     if (!window._sbClient || !window._sbUser) return;
     var userId = window._sbUser.id;
 
-    // Prefer IndexedDB — works offline if key was previously fetched
-    var stored = await _loadKey(userId);
-    if (stored) { window._contentKey = stored.key; return; }
+    // Prefer IndexedDB — works offline if keys were previously fetched
+    var stored = await _loadKeys(userId);
+    if (stored) { window._contentKeys = stored.keys; return; }
 
     try {
       var s = await window._sbClient.auth.getSession();
@@ -947,27 +905,29 @@ function setTheme(t) {
       });
       if (!resp.ok) return;
       var json = await resp.json();
-      if (!json.key) return;
+      if (!json.keys) return;
 
-      var hex = json.key;
-      var keyBytes = new Uint8Array(hex.length / 2);
-      for (var ki = 0; ki < hex.length; ki += 2) keyBytes[ki / 2] = parseInt(hex.substr(ki, 2), 16);
-
-      var cryptoKey = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
-      await _saveKey(cryptoKey, json.expiresAt, userId);
-      window._contentKey = cryptoKey;
+      var cryptoKeys = {};
+      for (var scope in json.keys) {
+        var hex = json.keys[scope];
+        var keyBytes = new Uint8Array(hex.length / 2);
+        for (var ki = 0; ki < hex.length; ki += 2) keyBytes[ki / 2] = parseInt(hex.substr(ki, 2), 16);
+        cryptoKeys[scope] = await crypto.subtle.importKey('raw', keyBytes, { name: 'AES-GCM' }, false, ['decrypt']);
+      }
+      await _saveKeys(cryptoKeys, json.expiresAt, userId);
+      window._contentKeys = cryptoKeys;
     } catch(e) {}
   }
 
   // Decrypt an AES-256-GCM encrypted content envelope produced by encrypt-content.js
-  window._decryptContent = async function(encryptedJson) {
+  window._decryptContent = async function(encryptedJson, cryptoKey) {
     var parsed  = JSON.parse(encryptedJson);
     var iv      = Uint8Array.from(atob(parsed.iv),   function(c){ return c.charCodeAt(0); });
     var data    = Uint8Array.from(atob(parsed.data),  function(c){ return c.charCodeAt(0); });
     var tag     = Uint8Array.from(atob(parsed.tag),   function(c){ return c.charCodeAt(0); });
     var combined = new Uint8Array(data.length + tag.length);
     combined.set(data); combined.set(tag, data.length);
-    var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, window._contentKey, combined);
+    var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, cryptoKey, combined);
     return new TextDecoder().decode(decrypted);
   };
 
@@ -978,9 +938,12 @@ function setTheme(t) {
     var text = await resp.text();
     var code;
     if (text.trimStart().startsWith('{')) {
-      // Encrypted envelope — needs content key
-      if (!window._contentKey) throw new Error('No content key available');
-      code = await window._decryptContent(text);
+      // Encrypted envelope — which key applies is inferred from the path
+      var scope = url.indexOf('/data/Orals/') !== -1 ? 'oral'
+                : url.indexOf('/data/Written/') !== -1 ? 'written' : null;
+      var key = scope && window._contentKeys && window._contentKeys[scope];
+      if (!key) throw new Error('No content key available' + (scope ? ' for scope: ' + scope : ''));
+      code = await window._decryptContent(text, key);
     } else {
       // Plain JS — free preview content, no decryption needed
       code = text;
@@ -989,56 +952,71 @@ function setTheme(t) {
     (0, eval)(code);
   };
 
-  // Determine full access from Supabase profile — deny until confirmed
+  // Derive per-scope access from a profiles row. Shared by determineAccess()
+  // and checkSession() so the two don't drift the way subscription_plan and
+  // plan_scope handling has drifted across other duplicate copies elsewhere.
+  window._deriveAccess = function _deriveAccess(profile) {
+    var plan = profile.subscription_plan;
+    var access = { oral: false, written: false };
+    var expiresAt = null;
+
+    if (plan === 'lifetime') {
+      access.oral = access.written = true;
+      expiresAt = null;
+    } else if (plan === 'trial') {
+      // Trial is never scope-restricted — full preview of both sections.
+      var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
+      var trialActive = Date.now() < trialEnd.getTime();
+      access.oral = access.written = trialActive;
+      expiresAt = trialEnd.getTime();
+    } else if (window.ALL_PAID_PLANS.indexOf(plan) !== -1) {
+      var subEnd = profile.subscription_expires_at ? new Date(profile.subscription_expires_at).getTime() : 0;
+      var paidActive = subEnd > 0 && Date.now() < subEnd;
+      // Legacy rows and any payment caught mid-deploy-skew have plan_scope
+      // null — those resolve to 'both' (what they actually paid for under
+      // the old all-or-nothing model), never fail closed to neither.
+      var scope = profile.plan_scope || 'both';
+      access.oral    = paidActive && (scope === 'oral' || scope === 'both');
+      access.written = paidActive && (scope === 'written' || scope === 'both');
+      expiresAt = subEnd || Date.now();
+    } else {
+      expiresAt = Date.now();
+    }
+    return { access: access, expiresAt: expiresAt };
+  }
+
+  // Determine access from Supabase profile — deny until confirmed
   async function determineAccess() {
-    window._fullAccess = false; // default deny; only grant after Supabase confirms
+    window._access = { oral: false, written: false }; // default deny; only grant after Supabase confirms
     if (!window._sbClient || !window._sbUser) return;
     try {
       var res = await window._sbClient.from('profiles').select('*').eq('id', window._sbUser.id).single();
       var profile = res.data;
       if (!profile) return;
 
-      var plan = profile.subscription_plan;
-      var accessExpiresAt = null;
+      var derived = window._deriveAccess(profile);
+      window._access = derived.access;
+      _saveAccessCache(window._access, derived.expiresAt);
 
-      if (plan === 'lifetime') {
-        window._fullAccess = true;
-        accessExpiresAt = null;
-      } else if (plan === 'trial') {
-        var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
-        window._fullAccess = Date.now() < trialEnd.getTime();
-        accessExpiresAt = trialEnd.getTime();
-      } else if (['starter', 'standard', 'pro'].indexOf(plan) !== -1) {
-        var subEnd = profile.subscription_expires_at ? new Date(profile.subscription_expires_at).getTime() : 0;
-        window._fullAccess = subEnd > 0 && Date.now() < subEnd;
-        accessExpiresAt = subEnd || Date.now();
-      } else {
-        window._fullAccess = false;
-        accessExpiresAt = Date.now();
-      }
-
-      _saveAccessCache(window._fullAccess, accessExpiresAt);
-
-      // Update gate subtitle if expired
-      if (!window._fullAccess) {
+      if (!window._access.oral && !window._access.written) {
         var sub = document.getElementById('gate-sub');
-        if (sub && plan === 'trial') {
+        if (sub && profile.subscription_plan === 'trial') {
           sub.innerHTML = 'Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.';
         }
-        applyLockUI();
       }
+      if (!window._access.oral || !window._access.written) applyLockUI();
     } catch(e) {
       // Network unreachable — use the cached access status from last online session
       var cached = _loadAccessCache();
-      window._fullAccess = cached !== null ? cached : false;
+      window._access = cached !== null ? cached : { oral: false, written: false };
     }
   }
 
-  // Add lock icon to locked topic grid cards
+  // Add lock icon to topic grid cards the viewer doesn't have scope access to
   function applyLockUI() {
     document.querySelectorAll('[data-topic-id]').forEach(function(el) {
       var tid = el.getAttribute('data-topic-id');
-      if (tid && FREE_TOPICS.indexOf(tid) === -1) {
+      if (tid && isLocked(tid)) {
         if (!el.querySelector('.gate-lock')) {
           var lk = document.createElement('span');
           lk.className = 'gate-lock';
@@ -1047,6 +1025,9 @@ function setTheme(t) {
           el.style.position = 'relative';
           el.appendChild(lk);
         }
+      } else if (tid) {
+        var existing = el.querySelector('.gate-lock');
+        if (existing) existing.remove();
       }
     });
   }
@@ -1056,23 +1037,24 @@ function setTheme(t) {
     if (!window.fetchTopicData) { setTimeout(installGate, 100); return; }
 
     // Fire access check + key init together — content can only load once both complete
-    window._accessPromise = Promise.all([determineAccess(), initContentKey()]);
+    window._accessPromise = Promise.all([determineAccess(), initContentKeys()]);
 
     var _orig = window.fetchTopicData;
     window.fetchTopicData = async function(topicId, topicKey) {
       await window._accessPromise; // wait for Supabase check before allowing any content load
-      if (isLocked(topicId)) { showGate(); return; }
+      if (isLocked(topicId)) { showGate(topicScope(topicId)); return; }
       _orig(topicId, topicKey);
     };
 
-    // Gate sidebar quiz-bank and surveyor Q&A buttons
+    // Gate sidebar quiz-bank, quiz-picker and Surveyor Q&A buttons — all
+    // three are Oral-only surfaces (data/Written has no quiz/video content).
     document.querySelectorAll('.sb-item[onclick]').forEach(function(btn) {
       var oc = btn.getAttribute('onclick') || '';
       if (oc.indexOf('quiz-bank') !== -1 || oc.indexOf('quiz-picker') !== -1 || oc.indexOf('sq') !== -1) {
         var origOnclick = btn.onclick;
         btn.onclick = async function(e) {
           await window._accessPromise; // same guard for gated sidebar actions
-          if (!window._fullAccess) { showGate(); return; }
+          if (!window._access.oral) { showGate('oral'); return; }
           origOnclick && origOnclick.call(this, e);
         };
       }
@@ -1105,34 +1087,22 @@ function setTheme(t) {
 
         // Also re-check subscription plan so expiry takes effect mid-session
         const { data: profile } = await window._sbClient
-          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at')
+          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope')
           .eq('id', session.user.id).single();
         if (!profile) return;
 
-        var plan = profile.subscription_plan;
-        var wasFullAccess = window._fullAccess;
-
-        if (plan === 'lifetime') {
-          window._fullAccess = true;
-        } else if (plan === 'trial') {
-          var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
-          window._fullAccess = Date.now() < trialEnd.getTime();
-        } else if (['starter','standard','pro'].indexOf(plan) !== -1) {
-          window._fullAccess = profile.subscription_expires_at
-            ? Date.now() < new Date(profile.subscription_expires_at).getTime() : false;
-        } else {
-          window._fullAccess = false;
-        }
+        var wasAccess = window._access || { oral: false, written: false };
+        window._access = window._deriveAccess(profile).access;
 
         // If access just got revoked mid-session, show a notice (don't hard-kick)
-        if (wasFullAccess && !window._fullAccess) {
+        if ((wasAccess.oral || wasAccess.written) && !window._access.oral && !window._access.written) {
           var banner = document.getElementById('_access-banner');
           if (!banner) {
             banner = document.createElement('div');
             banner.id = '_access-banner';
             banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:#C8A44A;color:#070D1A;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;cursor:pointer;';
             banner.textContent = 'Your trial has ended. Tap here to see upgrade options.';
-            banner.onclick = function() { document.getElementById('gate-overlay').style.display = 'flex'; };
+            banner.onclick = function() { window.showGate(); };
             document.body.appendChild(banner);
           }
         }
@@ -1219,8 +1189,10 @@ function setTheme(t) {
       document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
 
       if (!window._sbClient) return;
-      const { data: profile } = await window._sbClient
-        .from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,is_admin').eq('id', user.id).single();
+      const [{ data: profile }] = await Promise.all([
+        window._sbClient.from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,plan_scope,is_admin').eq('id', user.id).single(),
+        window.loadPricingPlans(),
+      ]);
       if (profile) {
         window._profileData = profile;
         renderPlan(profile);
@@ -1243,10 +1215,12 @@ function setTheme(t) {
     function renderPlan(profile) {
       const labelEl  = document.getElementById('pm-plan-label');
       const expiryEl = document.getElementById('pm-plan-expiry');
+      const subEl    = document.getElementById('pm-plan-sub');
       const upgradeBtn = document.getElementById('pm-upgrade-btn');
       const plan = profile.subscription_plan;
 
       upgradeBtn.style.display = 'none';
+      if (subEl) subEl.textContent = '';
 
       if (plan === 'lifetime') {
         labelEl.textContent = 'Lifetime';
@@ -1270,8 +1244,21 @@ function setTheme(t) {
         }
 
       } else {
-        const names = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
-        labelEl.textContent = names[plan] || plan;
+        // New duration plans: show the branded track+tier name ("Voyage
+        // Mariner"), with a plain technical subtext underneath so the user
+        // can always tell literally what they have. Legacy plans (pre-scope
+        // split) show their old plain name and were always full access.
+        const legacyNames = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
+        const scope = profile.plan_scope || 'both';
+        const planRow = (window._pricingPlansCache || []).find(function(p) { return p.duration === plan && p.scope === scope; });
+        const scopeLabel = scope === 'written' ? 'Written' : scope === 'oral' ? 'Oral' : 'Written + Oral';
+        if (planRow) {
+          labelEl.textContent = planRow.track_name + ' ' + planRow.tier_name;
+          if (subEl) subEl.textContent = scopeLabel + ' · ' + plan.replace('mo', ' months');
+        } else {
+          labelEl.textContent = legacyNames[plan] || plan;
+          if (subEl) subEl.textContent = scopeLabel;
+        }
         labelEl.style.color = '#C8A44A';
         if (profile.subscription_expires_at) {
           const dLeft = Math.ceil((new Date(profile.subscription_expires_at) - Date.now()) / 864e5);
@@ -1328,11 +1315,12 @@ function setTheme(t) {
     var p = window._profileData;
     var plan = p && p.subscription_plan;
     if (plan === 'lifetime') return 'paid';
-    if (['starter','standard','pro'].indexOf(plan) !== -1) {
+    if (window.ALL_PAID_PLANS.indexOf(plan) !== -1) {
       var exp = p.subscription_expires_at;
       return (!exp || new Date(exp) > new Date()) ? 'paid' : 'expired';
     }
-    return window._fullAccess ? 'trial' : 'expired';
+    var access = window._access || { oral: false, written: false };
+    return (access.oral || access.written) ? 'trial' : 'expired';
   }
   function nfVisible(n) {
     return !n.target_plan || n.target_plan === nfAudience();
@@ -1379,10 +1367,171 @@ function setTheme(t) {
 var SUPABASE_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
 var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
 
-function openUpgradeModal(preferredPlan) {
+// ── Pricing data (admin-editable via the Plans tab, fetched live) ───────────
+var TRACK_ORDER = ['written', 'oral', 'both'];   // Passage, Voyage, Expedition
+var TIER_ORDER  = ['3mo', '6mo', '12mo'];        // Launch, Mariner, Master
+var TRACK_FALLBACK_NAME = { written: 'Passage', oral: 'Voyage', both: 'Expedition' };
+var SCOPE_SUBHEAD = {
+  written: 'Written exam prep',
+  oral:    'Oral exam prep, quizzes & Surveyor Q&A',
+  both:    'Everything — Written + Oral',
+};
+var SCOPE_FEATURES = {
+  written: ['7 written exam topics with solved papers', 'Offline access via service worker cache'],
+  oral:    ['All 23 oral exam topics with full study notes', '5,600+ quiz questions', 'Full Surveyor Q&A bank', 'Offline access via service worker cache'],
+  both:    ['All 23 oral exam topics with full study notes', '7 written exam topics with solved papers', '5,600+ quiz questions', 'Full Surveyor Q&A bank', 'Offline access via service worker cache'],
+};
+
+window._pricingPlansCache = [];
+window._pricingPlansPromise = null;
+window.loadPricingPlans = function() {
+  if (!window._pricingPlansPromise) {
+    window._pricingPlansPromise = (window._sbClient
+      ? window._sbClient.from('pricing_plans')
+          .select('duration,scope,track_name,tier_name,base_amount,discount_percent,label,description,discount_starts_at,discount_ends_at')
+          .eq('active', true)
+      : Promise.resolve({ data: [] })
+    ).then(function(res) {
+      window._pricingPlansCache = res.data || [];
+      return window._pricingPlansCache;
+    }).catch(function() { return window._pricingPlansCache; });
+  }
+  return window._pricingPlansPromise;
+};
+
+function findPlanRow(duration, scope) {
+  return (window._pricingPlansCache || []).filter(function(p) {
+    return p.duration === duration && p.scope === scope;
+  })[0];
+}
+
+function effectivePrice(row) {
+  var now = new Date();
+  var active = row.discount_percent > 0
+    && (!row.discount_starts_at || new Date(row.discount_starts_at) <= now)
+    && (!row.discount_ends_at   || new Date(row.discount_ends_at)   >= now);
+  return { active: active, amount: active ? Math.round(row.base_amount * (1 - row.discount_percent / 100)) : row.base_amount };
+}
+
+function fmtRupees(paise) { return '₹' + Math.round(paise / 100).toLocaleString('en-IN'); }
+function escUp(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function bestValueDuration(scope) {
+  // Whichever tier has the lowest effective ₹/month for this scope — computed
+  // from live data so an admin price edit can't leave a stale ribbon behind.
+  var months = { '3mo': 3, '6mo': 6, '12mo': 12 };
+  var best = null, bestRate = Infinity;
+  TIER_ORDER.forEach(function(dur) {
+    var row = findPlanRow(dur, scope);
+    if (!row) return;
+    var rate = effectivePrice(row).amount / months[dur];
+    if (rate < bestRate) { bestRate = rate; best = dur; }
+  });
+  return best;
+}
+
+var _upActiveTrack = 'both';
+
+function renderUpgradeTrackTabs() {
+  var wrap = document.getElementById('up-track-tabs');
+  if (!wrap) return;
+  wrap.innerHTML = TRACK_ORDER.map(function(scope) {
+    var row = findPlanRow('3mo', scope);
+    var name = row ? row.track_name : TRACK_FALLBACK_NAME[scope];
+    return '<button type="button" class="up-track-tab' + (scope === _upActiveTrack ? ' active' : '') + '" data-scope="' + scope + '">' + escUp(name).toUpperCase() + '</button>';
+  }).join('');
+}
+
+function renderUpgradeCards() {
+  var wrap = document.getElementById('up-tier-cards');
+  if (!wrap) return;
+  var scope = _upActiveTrack;
+  var bestDur = bestValueDuration(scope);
+
+  var subhead = document.getElementById('up-track-subhead');
+  if (subhead) subhead.textContent = SCOPE_SUBHEAD[scope] || '';
+  var featEl = document.getElementById('up-track-features');
+  if (featEl) {
+    featEl.innerHTML = (SCOPE_FEATURES[scope] || []).map(function(f) {
+      return '<div class="up-feature">' + escUp(f) + '</div>';
+    }).join('');
+  }
+
+  wrap.innerHTML = TIER_ORDER.map(function(dur) {
+    var row = findPlanRow(dur, scope);
+    if (!row) return '';
+    var price = effectivePrice(row);
+    var isBest = dur === bestDur;
+    var ribbon = row.label
+      ? '<div class="up-ribbon up-ribbon-promo">' + escUp(row.label) + '</div>'
+      : (isBest ? '<div class="up-ribbon">Best Value</div>' : '');
+    var priceHtml = price.active
+      ? '<span class="up-price-strike">' + fmtRupees(row.base_amount) + '</span> <span class="up-price">' + fmtRupees(price.amount) + '</span>'
+      : '<span class="up-price">' + fmtRupees(price.amount) + '</span>';
+    var descHtml = row.description ? '<div class="up-card-desc">' + escUp(row.description) + '</div>' : '';
+    return '<div class="up-plan-card' + (isBest ? ' up-plan-card-best' : '') + '" id="up-card-' + dur + '-' + scope + '" data-duration="' + dur + '">'
+      + ribbon
+      + '<div style="display:flex;align-items:center;justify-content:space-between;">'
+      +   '<div><div class="up-tier-name">' + escUp(row.tier_name) + '</div><div class="up-tier-duration">' + escUp(dur.replace('mo', ' Months')) + '</div></div>'
+      +   '<div style="text-align:right;">' + priceHtml + '</div>'
+      + '</div>'
+      + descHtml
+      + '<button class="up-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '">Pay ' + fmtRupees(price.amount) + ' with Razorpay</button>'
+      + '</div>';
+  }).join('');
+
+  if (window._upPreferredScope === scope) {
+    var wantDur = window._upPreferredPlan || bestDur;
+    var card = document.getElementById('up-card-' + wantDur + '-' + scope);
+    if (card) card.style.outline = '2px solid #C8A44A';
+  }
+}
+
+function renderGateCards() {
+  var wrap = document.getElementById('gate-plan-cards');
+  if (!wrap) return;
+  var scope = window._gateTriggerScope || 'both';
+  var bestDur = bestValueDuration(scope);
+  var trackRow = findPlanRow('3mo', scope);
+  var trackNameEl = document.getElementById('gate-track-name');
+  if (trackNameEl) trackNameEl.textContent = (trackRow ? trackRow.track_name : TRACK_FALLBACK_NAME[scope]).toUpperCase();
+
+  wrap.innerHTML = TIER_ORDER.map(function(dur) {
+    var row = findPlanRow(dur, scope);
+    if (!row) return '';
+    var price = effectivePrice(row);
+    var isBest = dur === bestDur;
+    return '<div class="gate-plan"' + (isBest ? ' style="border-color:#C8A44A"' : '') + '>'
+      + '<div><div style="font-size:13px;font-weight:700;color:#DDE5EF;">' + escUp(row.tier_name) + (isBest ? ' <span style="color:#C8A44A;font-size:9.5px;letter-spacing:.04em;">BEST VALUE</span>' : '') + '</div>'
+      +   '<div style="font-size:11.5px;color:#4A6880;margin-top:2px;">' + escUp(dur.replace('mo', ' months')) + ' access</div></div>'
+      + '<div style="text-align:right;"><div style="font-size:16px;font-weight:700;color:#C8A44A;">' + fmtRupees(price.amount) + '</div>'
+      +   '<button class="gate-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button></div>'
+      + '</div>';
+  }).join('');
+}
+window.renderGateCards = renderGateCards;
+
+document.getElementById('up-track-tabs').addEventListener('click', function(e) {
+  var tab = e.target.closest('.up-track-tab');
+  if (!tab) return;
+  _upActiveTrack = tab.dataset.scope;
+  renderUpgradeTrackTabs();
+  renderUpgradeCards();
+});
+
+function openUpgradeModal(preferredPlan, preferredScope) {
   var modal = document.getElementById('upgrade-modal');
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
+
+  window._upPreferredPlan  = preferredPlan || (preferredScope ? '12mo' : null);
+  window._upPreferredScope = preferredScope || null;
+  if (preferredScope) _upActiveTrack = preferredScope;
+
+  window.loadPricingPlans().then(function() {
+    renderUpgradeTrackTabs();
+    renderUpgradeCards();
+  });
 
   // Show trial notice if user is on trial
   var noticeEl = document.getElementById('up-trial-notice');
@@ -1399,15 +1548,6 @@ function openUpgradeModal(preferredPlan) {
     }
   } else {
     noticeEl.style.display = 'none';
-  }
-
-  // Highlight preferred plan card if specified
-  if (preferredPlan) {
-    document.querySelectorAll('.up-plan-card').forEach(function(c) {
-      c.style.outline = '';
-    });
-    var card = document.getElementById('up-' + preferredPlan);
-    if (card) card.style.outline = '2px solid #C8A44A';
   }
 
   clearUpStatus();
@@ -1456,8 +1596,10 @@ async function redeemCoupon() {
     var data = await res.json();
     if (!res.ok) throw new Error(data.error || 'That code is not valid');
 
-    window._fullAccess = true;
-    var planLabel = data.plan.charAt(0).toUpperCase() + data.plan.slice(1);
+    var scope = data.scope || 'both';
+    window._access = { oral: scope === 'oral' || scope === 'both', written: scope === 'written' || scope === 'both' };
+    var planRow = findPlanRow(data.plan, scope);
+    var planLabel = planRow ? (planRow.track_name + ' ' + planRow.tier_name) : (data.plan.charAt(0).toUpperCase() + data.plan.slice(1));
     var msg = data.expires_at
       ? planLabel + ' access unlocked until ' + new Date(data.expires_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'}) + '.'
       : planLabel + ' access unlocked.';
@@ -1492,7 +1634,7 @@ function setUpBtnsDisabled(disabled) {
   document.querySelectorAll('.up-buy-btn').forEach(function(b) { b.disabled = disabled; });
 }
 
-async function startPayment(plan) {
+async function startPayment(plan, scope) {
   if (!window._sbClient || !window._sbUser) {
     setUpStatus('You must be signed in to purchase.', false);
     return;
@@ -1501,17 +1643,21 @@ async function startPayment(plan) {
   clearUpStatus();
   setUpStatus('Creating order...', true);
 
+  var planRow = findPlanRow(plan, scope);
+  var planLabelForDesc = planRow ? (planRow.track_name + ' ' + planRow.tier_name) : (plan + ' ' + scope);
+
   try {
     // Get fresh JWT
     var sessionRes = await window._sbClient.auth.getSession();
     var token = sessionRes.data.session && sessionRes.data.session.access_token;
     if (!token) throw new Error('Not authenticated');
 
-    // Create Razorpay order via Edge Function
+    // Create Razorpay order via Edge Function — the amount charged is looked
+    // up server-side from pricing_plans, never trusted from the client.
     var orderRes = await fetch(SUPABASE_FN_URL + '/create-razorpay-order', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: plan }),
+      body: JSON.stringify({ plan: plan, scope: scope }),
     });
     var orderData = await orderRes.json();
     if (!orderRes.ok) throw new Error(orderData.error || 'Could not create order');
@@ -1524,7 +1670,7 @@ async function startPayment(plan) {
       amount: orderData.amount,
       currency: orderData.currency,
       name: 'Elec-Buddy',
-      description: plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan',
+      description: planLabelForDesc,
       order_id: orderData.order_id,
       prefill: {
         email: user.email || '',
@@ -1549,8 +1695,10 @@ async function startPayment(plan) {
           if (!verifyRes.ok) throw new Error(verifyData.error || 'Verification failed');
 
           // Update local access state
-          window._fullAccess = true;
-          var planLabel = verifyData.plan.charAt(0).toUpperCase() + verifyData.plan.slice(1);
+          var vScope = verifyData.scope || 'both';
+          window._access = { oral: vScope === 'oral' || vScope === 'both', written: vScope === 'written' || vScope === 'both' };
+          var vRow = findPlanRow(verifyData.plan, vScope);
+          var planLabel = vRow ? (vRow.track_name + ' ' + vRow.tier_name) : (verifyData.plan.charAt(0).toUpperCase() + verifyData.plan.slice(1));
           var expiryDate = new Date(verifyData.expires_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
           setUpStatus('Payment successful! ' + planLabel + ' plan active until ' + expiryDate + '.', true);
 
@@ -1579,11 +1727,11 @@ async function startPayment(plan) {
   }
 }
 
-// Wire plan card buy buttons
+// Wire plan card buy buttons (upgrade modal tier cards + gate overlay cards)
 document.getElementById('upgrade-modal').addEventListener('click', function(e) {
   var btn = e.target.closest('.up-buy-btn');
   if (!btn || btn.disabled) return;
-  startPayment(btn.dataset.plan);
+  startPayment(btn.dataset.plan, btn.dataset.scope);
 });
 
 // Close on backdrop click

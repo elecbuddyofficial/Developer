@@ -127,7 +127,7 @@ serve(async (req) => {
       } else {
         const { data: remaining } = await sb
           .from('payments')
-          .select('plan, subscription_expires_at')
+          .select('plan, scope, subscription_expires_at')
           .eq('user_id', payment.user_id)
           .eq('status', 'paid')
           .not('subscription_expires_at', 'is', null)
@@ -138,12 +138,14 @@ serve(async (req) => {
           await sb.from('profiles').update({
             subscription_plan:       remaining[0].plan,
             subscription_expires_at: remaining[0].subscription_expires_at,
+            plan_scope:               remaining[0].scope || 'both',
           }).eq('id', payment.user_id);
           accessResult = `downgraded_to_${remaining[0].plan}`;
         } else {
           await sb.from('profiles').update({
             subscription_plan:       'trial',
             subscription_expires_at: null,
+            plan_scope:               null,
           }).eq('id', payment.user_id);
           accessResult = 'reverted_to_trial';
         }

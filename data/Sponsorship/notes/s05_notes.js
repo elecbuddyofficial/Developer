@@ -1,1 +1,56 @@
-{"v":1,"iv":"vCf88iLQz2jd0WsM","data":"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","tag":"29lwUkRPxWDhzbFB5StK/g=="}
+window.loadNotes("S05", '<div class="view" id="view-notes-s05"><div class="note-doc">\
+<div class="mobile-topic-strip" id="mobile-topic-strip"></div>\
+<div class="note-title">\
+  <h1>S05 - Group Discussion</h1>\
+  <div class="sub">How to prepare for and perform in the Group Discussion round -- the most underestimated stage of the maritime sponsorship process.</div>\
+  <div class="tags">\
+    <span class="tag tag-orange">GD Round</span>\
+    <span class="tag tag-blue">Communication</span>\
+    <span class="tag tag-purple">S05</span>\
+  </div>\
+</div>\
+\
+<div class="n-h1" id="s-gd-purpose">What the GD Round Assesses</div>\
+<p class="n-p">The Group Discussion is not a debate. It is not about who talks the most or who has the most facts. Assessors observe: Do you listen? Do you respond to what others say, or do you just push your prepared points? Can you communicate a coherent idea under mild social pressure? Are you aggressive or collaborative? Maritime officers work in close quarters with multinational crew under high-stakes conditions. The GD reveals your social intelligence.</p>\
+\
+<div class="n-h1" id="s-gd-format">Typical GD Format</div>\
+<ul class="n-list">\
+  <li>8-12 candidates per group</li>\
+  <li>Topic announced on a chit or displayed on a screen</li>\
+  <li>1-2 minutes reading/thinking time (use it -- jot 3-4 key points)</li>\
+  <li>15-20 minutes of open discussion</li>\
+  <li>Often followed by a 1-minute individual summary (some companies include this, some do not)</li>\
+</ul>\
+\
+<div class="n-h1" id="s-gd-roles">Roles That Stand Out (Positively)</div>\
+<ul class="n-list">\
+  <li><strong>Initiator:</strong> Opens the discussion with a crisp definition or framing of the topic. High reward, some risk. Only initiate if you have something substantive to say in the first 10 seconds.</li>\
+  <li><strong>Idea Builder:</strong> Builds on someone else\'s point, adds evidence or a counterpoint, and moves the discussion forward. Very well regarded.</li>\
+  <li><strong>Consensus Seeker:</strong> Connects opposing views or summarises where the group has reached agreement. Excellent if done naturally, not forced.</li>\
+  <li><strong>Summariser:</strong> Wraps up the discussion when time is near. Demonstrates listening and synthesis.</li>\
+</ul>\
+<div class="n-warn"><span class="icon">⚠️</span><div class="body">Roles that hurt you: Fish-market shouter (talks over everyone), Icebreaker-monopoliser (opens and never lets anyone else speak), Silent observer (says nothing meaningful). Quality of contribution always outweighs quantity of words spoken.</div></div>\
+\
+<div class="n-h1" id="s-gd-topics">Common GD Topics for Maritime Sponsorship</div>\
+<div class="n-h2" id="s-gd-maritime">Maritime and Industry Topics</div>\
+<ul class="n-list">\
+  <li>Impact of automation and AI on seafarers</li>\
+  <li>Should shipping prioritise speed or sustainability?</li>\
+  <li>Women at sea -- challenges and opportunities</li>\
+  <li>Is a sea career still attractive for Indian youth?</li>\
+  <li>Shore-based vs. sea-based careers: which is better long-term?</li>\
+</ul>\
+<div class="n-h2" id="s-gd-general">General / Social Topics</div>\
+<ul class="n-list">\
+  <li>Social media: boon or bane for youth?</li>\
+  <li>Is discipline more important than creativity in a professional setting?</li>\
+  <li>Leadership is born, not made -- agree or disagree?</li>\
+  <li>Work-life balance vs. career ambition</li>\
+  <li>Environmental responsibility: individual vs. corporate</li>\
+</ul>\
+\
+<div class="n-h1" id="s-gd-preparation">How to Prepare</div>\
+<p class="n-p">Read one quality article per day from a news source (The Hindu, Mint, BBC) for 2-3 weeks before your drive. For maritime topics, read MarineInsight and Splash247. You do not need to become an expert. You need 3-4 coherent, evidence-backed points on any topic in the domain. Practice out loud with a friend or record yourself. Most candidates have never heard themselves argue a point -- it is always more chaotic than you think it is internally.</p>\
+\
+<div class="n-info"><span class="icon">💡</span><div class="body">Full GD preparation with sample arguments for all major topics, dos and donts checklist, and self-evaluation rubric are coming to this module. Quiz section includes a psychometric practice drill aligned to communication and teamwork traits.</div></div>\
+</div></div>');

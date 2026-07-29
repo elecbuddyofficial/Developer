@@ -132,6 +132,7 @@ serve(async (req) => {
     await sb.from('profiles').update({
       subscription_plan:       coupon.plan,
       subscription_expires_at: expiresAt,
+      plan_scope:               coupon.plan === 'lifetime' ? null : (coupon.scope || 'both'),
     }).eq('id', user.id);
 
     await sb.from('admin_actions').insert({
@@ -146,6 +147,7 @@ serve(async (req) => {
     return json({
       ok:         true,
       plan:       coupon.plan,
+      scope:      coupon.plan === 'lifetime' ? null : (coupon.scope || 'both'),
       expires_at: expiresAt,
     });
 

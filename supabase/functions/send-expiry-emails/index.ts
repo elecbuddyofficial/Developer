@@ -128,8 +128,13 @@ function trialExpiredHtml(): string {
   );
 }
 
+const DURATION_LABELS: Record<string, string> = { '3mo': '3-Month', '6mo': '6-Month', '12mo': '12-Month' };
+function planDisplayName(plan: string): string {
+  return DURATION_LABELS[plan] || (plan.charAt(0).toUpperCase() + plan.slice(1));
+}
+
 function subExpiringHtml(plan: string): string {
-  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+  const planLabel = planDisplayName(plan);
   return baseLayout(
     `Your ${planLabel} plan expires in 3 days. Renew to stay on track.`,
     `Your ${planLabel} plan expires in 3 days`,
@@ -141,7 +146,7 @@ function subExpiringHtml(plan: string): string {
 }
 
 function subExpiredHtml(plan: string): string {
-  const planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
+  const planLabel = planDisplayName(plan);
   return baseLayout(
     `Your ${planLabel} plan has ended. Renew to continue studying.`,
     `Your ${planLabel} plan has expired`,
@@ -218,7 +223,7 @@ serve(async (req) => {
   const { data: subWarning } = await sb
     .from('profiles')
     .select('email, subscription_plan')
-    .in('subscription_plan', ['starter', 'standard', 'pro'])
+    .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
     .gte('subscription_expires_at', subWarnDay + 'T00:00:00Z')
     .lte('subscription_expires_at', subWarnDay + 'T23:59:59Z');
 
@@ -235,7 +240,7 @@ serve(async (req) => {
   const { data: subExpired } = await sb
     .from('profiles')
     .select('email, subscription_plan')
-    .in('subscription_plan', ['starter', 'standard', 'pro'])
+    .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
     .gte('subscription_expires_at', subExpiredDay + 'T00:00:00Z')
     .lte('subscription_expires_at', subExpiredDay + 'T23:59:59Z');
 

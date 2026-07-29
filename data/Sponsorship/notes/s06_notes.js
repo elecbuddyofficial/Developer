@@ -1,1 +1,69 @@
-{"v":1,"iv":"Ixilz7E2+hZpuZ+U","data":"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","tag":"RnguFWO7c0jeSBNOoCHagQ=="}
+window.loadNotes("S06", '<div class="view" id="view-notes-s06"><div class="note-doc">\
+<div class="mobile-topic-strip" id="mobile-topic-strip"></div>\
+<div class="note-title">\
+  <h1>S06 - Technical Interview: Basic ETO Knowledge</h1>\
+  <div class="sub">What interviewers ask at the cadet stage, which fundamentals to revise, and how to structure your answers when you know the concept but are not sure of exact values.</div>\
+  <div class="tags">\
+    <span class="tag tag-orange">Technical Interview</span>\
+    <span class="tag tag-blue">ETO Fundamentals</span>\
+    <span class="tag tag-purple">S06</span>\
+  </div>\
+</div>\
+\
+<div class="n-h1" id="s-tech-expectation">What the Interviewer Expects from a Cadet</div>\
+<p class="n-p">They do not expect you to know how a ship\'s switchboard works. They expect you to have solid 12th-standard Physics (Electricity chapter) fundamentals, basic circuit theory, and an awareness of what an ETO does on board. The interview is a calibration check: are your basics solid? Can you think out loud? Do you panic when you do not know something, or do you reason from first principles?</p>\
+<div class="n-ok"><span class="icon">✅</span><div class="body">If you do not know an answer, never bluff. Say: "I am not certain of the exact value, but based on the concept I understand it works like..." and reason through it. Interviewers respect honest reasoning far more than a wrong confident answer.</div></div>\
+\
+<div class="n-h1" id="s-elec-basics">Electrical Fundamentals Most Asked</div>\
+<div class="n-h2" id="s-ohms-law">Ohm\'s Law and Kirchhoff\'s Laws</div>\
+<ul class="n-list">\
+  <li>V = IR. State it, define each term, and give a practical example.</li>\
+  <li>KCL: Sum of currents entering a node equals sum of currents leaving it.</li>\
+  <li>KVL: Sum of voltage drops around a closed loop equals zero.</li>\
+  <li>Series vs. parallel circuits: resistance addition rules, current and voltage behaviour.</li>\
+</ul>\
+\
+<div class="n-h2" id="s-transformer">Transformers</div>\
+<ul class="n-list">\
+  <li>Working principle: mutual inductance, changing flux induces EMF.</li>\
+  <li>Turns ratio: Vp/Vs = Np/Ns = Is/Ip.</li>\
+  <li>Step-up vs. step-down. Frequency does not change in a transformer.</li>\
+  <li>Why is AC used on ships? Easier to step up/down for transmission efficiency.</li>\
+</ul>\
+\
+<div class="n-h2" id="s-motors">Electric Motors</div>\
+<ul class="n-list">\
+  <li>DC Motor: F = BIL principle (Lorentz force). Fleming\'s Left Hand Rule.</li>\
+  <li>AC Induction Motor: Rotating magnetic field induces current in rotor, rotor follows field.</li>\
+  <li>Why induction motors are preferred on ships: robust, no brushes/commutator, low maintenance.</li>\
+  <li>Synchronous speed: Ns = 120f/P.</li>\
+</ul>\
+\
+<div class="n-h2" id="s-semiconductors">Basic Semiconductors</div>\
+<ul class="n-list">\
+  <li>Diode: allows current in one direction only. P-N junction. Forward bias vs. reverse bias.</li>\
+  <li>Zener diode: used for voltage regulation (reverse breakdown voltage).</li>\
+  <li>Transistor (BJT): NPN/PNP. Three regions: cutoff, active (amplification), saturation (switch ON).</li>\
+  <li>Rectifier circuits: half-wave, full-wave, bridge rectifier. Purpose: AC to DC conversion.</li>\
+</ul>\
+\
+<div class="n-h1" id="s-safety-basics">Safety Awareness Questions</div>\
+<ul class="n-list">\
+  <li>What is earthing and why is it important? (Provides a low-resistance path to ground, prevents shock.)</li>\
+  <li>What are the classes of fire? (A: solid, B: liquid, C: gas, D: metals, E: electrical.)</li>\
+  <li>What is PPE? Give examples relevant to an electrical officer. (Insulated gloves, safety boots, helmet, safety glasses.)</li>\
+  <li>What is a permit-to-work system? (A formal written procedure authorising maintenance on equipment that is locked out of service.)</li>\
+</ul>\
+\
+<div class="n-h1" id="s-eto-role">Questions About the ETO Role</div>\
+<ul class="n-list">\
+  <li>What does an ETO do on board? (Maintains all electrical, electronic, and automation systems: generators, motors, navigation electronics, communication equipment, automation systems.)</li>\
+  <li>What is GMDSS? (Global Maritime Distress and Safety System. A set of communication procedures and equipment required on all ships.)</li>\
+  <li>How many certificates does an ETO need? (At minimum: ETO STCW Table A-III/6 certificate, Basic Safety Training.)</li>\
+</ul>\
+\
+<div class="n-h1" id="s-answer-structure">How to Structure a Technical Answer</div>\
+<p class="n-p">Use the WHAT-HOW-WHY structure: Define the concept (WHAT), explain how it works (HOW), and state why it matters or where it is used (WHY/WHERE). A 45-second well-structured answer is better than a 2-minute rambling one.</p>\
+\
+<div class="n-info"><span class="icon">💡</span><div class="body">This module will expand with 80+ company-reported technical interview questions with model answers. The quiz section already has a starter set of electrical fundamentals MCQs -- use it to identify gaps before your interview.</div></div>\
+</div></div>');

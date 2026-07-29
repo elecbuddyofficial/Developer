@@ -150,10 +150,7 @@
     .topic-card-grid { grid-template-columns:1fr }
   }
 
-  /* gate, profile reuse */
-  .gate-plan { display:flex;align-items:center;justify-content:space-between;background:#0D1E33;border:1px solid #1A3050;border-radius:8px;padding:14px 16px }
-  #gate-overlay { display:none }
-  #gate-overlay.open { display:flex }
+  /* profile reuse */
   #profile-panel { position:absolute;right:14px;top:54px;width:296px;background:#0D1E33;border:1px solid #1A3050;border-radius:10px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.6) }
   @media(max-width:360px){ #profile-panel { right:8px;left:8px;width:auto } }
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
@@ -494,22 +491,6 @@
 <div id="notes-container"></div>
 
 <button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0,behavior:'smooth'})" style="display:flex;position:fixed;bottom:30px;right:30px;z-index:999;background:var(--blue);color:#fff;border:none;width:48px;height:48px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3);align-items:center;justify-content:center;padding-bottom:4px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;">↑</button>
-
-<!-- ═══ GATE ═══ -->
-<div id="gate-overlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(7,13,26,.94);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:8px 0 24px">
-    <div style="font-size:40px;margin-bottom:12px">🔒</div>
-    <div style="font-size:19px;font-weight:700;color:#DDE5EF;margin-bottom:10px">Full Access Required</div>
-    <div id="gate-sub" style="font-size:13.5px;color:#8FA3B8;margin-bottom:28px;line-height:1.65">Upgrade to unlock all Sponsorship Prep content.</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left">
-      <div class="gate-plan" data-plan="starter"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Starter</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">2 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹499</div><button class="gate-buy-btn" data-plan="starter" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
-      <div class="gate-plan" data-plan="standard" style="border-color:#C8A44A;position:relative"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#C8A44A;color:#070D1A;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;white-space:nowrap;letter-spacing:.04em">BEST VALUE</div><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Standard</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">5 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹999</div><button class="gate-buy-btn" data-plan="standard" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
-      <div class="gate-plan" data-plan="pro"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Pro</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">12 months</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹1,999</div><button class="gate-buy-btn" data-plan="pro" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
-      <div class="gate-plan" data-plan="lifetime"><div><div style="font-size:13px;font-weight:700;color:#DDE5EF">Lifetime</div><div style="font-size:11.5px;color:#4A6880;margin-top:2px">Pay once, forever</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:#C8A44A">₹4,999</div><button class="gate-buy-btn" data-plan="lifetime" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer">Buy</button></div></div>
-    </div>
-    <button onclick="closeGate()" style="background:none;border:none;color:#4A6880;font-size:13px;cursor:pointer;text-decoration:underline">Continue with free preview</button>
-  </div>
-</div>
 
 <div id="nf-overlay" class="nf-overlay" onclick="closeNotifsIfBg(event)">
   <div class="nf-panel" id="nf-panel">
@@ -1201,90 +1182,29 @@ startBackgroundIndexing();
 <!-- ═══ GATE + ENCRYPTION + SESSION + PROFILE SCRIPTS ═══ -->
 <script>
 (function() {
-  var FREE_TOPIC_IDS = ['S00','F01','F02','APT','IP01'];
+  // Sponsorship is fully public as of the pricing-scope redesign — "a
+  // glimpse of what's coming," no key, no gate, no purchase flow. Kept as
+  // no-ops rather than ripped out at every call site, since isLocked/showGate
+  // are still referenced from several places elsewhere in this file.
+  window.isLocked = function() { return false; };
+  window.showGate = function() {};
+  window.closeGate = function() {};
 
-  function isLocked(id) {
-    if (window._fullAccess) return false;
-    if (FREE_TOPIC_IDS.indexOf(id) !== -1) return false;
-    if (id && id.startsWith('__section__')) return false;
-    return true;
-  }
-  window.isLocked = isLocked;
+  // Content files under data/Sponsorship are always plaintext now — no
+  // decrypt path needed, just fetch and execute.
+  window._loadEncryptedScript = async function(url) {
+    var resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var code = await resp.text();
+    // eslint-disable-next-line no-eval
+    (0, eval)(code);
+  };
 
-  function showGate() { document.getElementById('gate-overlay').style.display='flex'; }
-  window.showGate = showGate;
-  window.closeGate = function() { document.getElementById('gate-overlay').style.display='none'; };
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') window.closeGate(); });
-
-  document.getElementById('gate-overlay').addEventListener('click', function(e) {
-    var btn = e.target.closest('.gate-buy-btn');
-    if (!btn) return;
-    var plan = btn.dataset.plan;
-    var planLabel = plan.charAt(0).toUpperCase() + plan.slice(1);
-    var userEmail = (window._sbUser && window._sbUser.email) || '';
-    var subject = encodeURIComponent('Elec-Buddy – Purchase: ' + planLabel + ' Plan');
-    var body = encodeURIComponent('Hi,\n\nI would like to purchase the ' + planLabel + ' plan.\n\nMy account email: ' + userEmail);
-    window.open('mailto:support@elec-buddy.com?subject=' + subject + '&body=' + body);
-  });
-
-  var _IDB_NAME='eb_secure', _IDB_STORE='keys', _AC_CACHE='_eb_ac';
-  function _openKeyDB(){ return new Promise(function(res,rej){ var r=indexedDB.open(_IDB_NAME,1); r.onupgradeneeded=function(e){e.target.result.createObjectStore(_IDB_STORE);}; r.onsuccess=function(e){res(e.target.result);}; r.onerror=function(e){rej(e.target.error);}; }); }
-  async function _saveKey(k,exp,uid){ try{ var db=await _openKeyDB(); await new Promise(function(res,rej){ var tx=db.transaction(_IDB_STORE,'readwrite'); tx.objectStore(_IDB_STORE).put({key:k,expiresAt:exp,userId:uid},'ck'); tx.oncomplete=res; tx.onerror=function(e){rej(e.target.error);}; }); }catch(e){} }
-  async function _loadKey(uid){ try{ var db=await _openKeyDB(); var s=await new Promise(function(res,rej){ var tx=db.transaction(_IDB_STORE,'readonly'); var r=tx.objectStore(_IDB_STORE).get('ck'); r.onsuccess=function(e){res(e.target.result||null);}; r.onerror=function(e){rej(e.target.error);}; }); if(!s)return null; if(s.userId&&s.userId!==uid)return null; if(s.expiresAt!==null&&Date.now()>s.expiresAt){ try{ var db2=await _openKeyDB(); await new Promise(function(res,rej){ var tx2=db2.transaction(_IDB_STORE,'readwrite'); tx2.objectStore(_IDB_STORE).delete('ck'); tx2.oncomplete=res; tx2.onerror=function(e){rej(e.target.error);}; }); }catch(e2){} return null; } return s; }catch(e){return null;} }
-  function _saveAccessCache(ok,exp){ try{localStorage.setItem(_AC_CACHE,JSON.stringify({ok:ok,exp:exp!==undefined?exp:null}));}catch(e){} }
-  function _loadAccessCache(){ try{ var c=JSON.parse(localStorage.getItem(_AC_CACHE)||'null'); if(!c)return null; if(c.exp!==null&&Date.now()>c.exp)return null; return c.ok; }catch(e){return null;} }
-
-  async function initContentKey(){
-    if(!window._sbClient||!window._sbUser)return;
-    var uid=window._sbUser.id; var s=await _loadKey(uid); if(s){window._contentKey=s.key;return;}
-    try{
-      var sess=await window._sbClient.auth.getSession(); var session=sess.data&&sess.data.session; if(!session)return;
-      var resp=await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/get-content-key',{headers:{'Authorization':'Bearer '+session.access_token}});
-      if(!resp.ok)return; var json=await resp.json(); if(!json.key)return;
-      var hex=json.key; var kb=new Uint8Array(hex.length/2); for(var ki=0;ki<hex.length;ki+=2)kb[ki/2]=parseInt(hex.substr(ki,2),16);
-      var ck=await crypto.subtle.importKey('raw',kb,{name:'AES-GCM'},false,['decrypt']);
-      await _saveKey(ck,json.expiresAt,uid); window._contentKey=ck;
-    }catch(e){}
-  }
-
-  window._decryptContent=async function(enc){ var p=JSON.parse(enc); var iv=Uint8Array.from(atob(p.iv),function(c){return c.charCodeAt(0);}); var data=Uint8Array.from(atob(p.data),function(c){return c.charCodeAt(0);}); var tag=Uint8Array.from(atob(p.tag),function(c){return c.charCodeAt(0);}); var combined=new Uint8Array(data.length+tag.length); combined.set(data); combined.set(tag,data.length); var dec=await crypto.subtle.decrypt({name:'AES-GCM',iv:iv},window._contentKey,combined); return new TextDecoder().decode(dec); };
-  window._loadEncryptedScript=async function(url){ var resp=await fetch(url); if(!resp.ok)throw new Error('HTTP '+resp.status); var text=await resp.text(); var code; if(text.trimStart().startsWith('{')){ if(!window._contentKey)throw new Error('No key'); code=await window._decryptContent(text); }else{code=text;} (0,eval)(code); };
-
-  async function determineAccess(){
-    window._fullAccess=false; if(!window._sbClient||!window._sbUser)return;
-    try{
-      var res=await window._sbClient.from('profiles').select('*').eq('id',window._sbUser.id).single();
-      var profile=res.data; if(!profile)return;
-      var plan=profile.subscription_plan, exp=null;
-      if(plan==='lifetime'){window._fullAccess=true;}
-      else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000); window._fullAccess=Date.now()<te.getTime(); exp=te.getTime();}
-      else if(['starter','standard','pro'].indexOf(plan)!==-1){var se=profile.subscription_expires_at?new Date(profile.subscription_expires_at).getTime():0; window._fullAccess=se>0&&Date.now()<se; exp=se||Date.now();}
-      _saveAccessCache(window._fullAccess,exp);
-      if(!window._fullAccess) applyLockUI();
-    }catch(e){ var c=_loadAccessCache(); window._fullAccess=c!==null?c:false; }
-  }
-
-  function applyLockUI(){
-    document.querySelectorAll('[data-topic-id]').forEach(function(el){
-      var tid=el.getAttribute('data-topic-id');
-      if(tid&&FREE_TOPIC_IDS.indexOf(tid)===-1&&!el.querySelector('.gate-lock')){
-        var lk=document.createElement('span'); lk.className='gate-lock'; lk.textContent='🔒'; lk.style.cssText='position:absolute;top:10px;right:10px;font-size:12px;'; el.style.position='relative'; el.appendChild(lk);
-      }
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', function(e) {
+      if (e.data && e.data.type === 'SW_UPDATED') location.reload();
     });
   }
-  window.applyLockUI=function(){ if(window._fullAccess===false) applyLockUI(); };
-
-  function installGate(){
-    if(!window.fetchTopicData){setTimeout(installGate,100);return;}
-    window._accessPromise=Promise.all([determineAccess(),initContentKey()]);
-    var _orig=window.fetchTopicData;
-    window.fetchTopicData=async function(id,obj){ await window._accessPromise; if(isLocked(id)){showGate();return;} _orig(id,obj); };
-    var _origQ=window.goToQuizFromNotes;
-    window.goToQuizFromNotes=async function(id){ await window._accessPromise; if(isLocked(id)){showGate();return;} _origQ(id); };
-  }
-  if(document.readyState==='complete') installGate(); else window.addEventListener('load',installGate);
-
-  if('serviceWorker' in navigator){ navigator.serviceWorker.addEventListener('message',function(e){ if(e.data&&e.data.type==='SW_UPDATED') location.reload(); }); }
 })();
 </script>
 
@@ -1292,17 +1212,11 @@ startBackgroundIndexing();
 (function(){
   function kick(){ window.location.replace('../auth.html'); }
   async function checkSession(){
+    // Sponsorship content isn't gated, so this only needs to catch an
+    // invalid/expired session — no plan/access tracking required here.
     if(!window._sbClient)return;
     try{
       var s=await window._sbClient.auth.getSession(); if(!s.data.session){kick();return;}
-      var p=await window._sbClient.from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at').eq('id',s.data.session.user.id).single();
-      if(!p.data)return;
-      var plan=p.data.subscription_plan, was=window._fullAccess;
-      if(plan==='lifetime'){window._fullAccess=true;}
-      else if(plan==='trial'){window._fullAccess=Date.now()<new Date(new Date(p.data.trial_started_at).getTime()+3*24*60*60*1000).getTime();}
-      else if(['starter','standard','pro'].indexOf(plan)!==-1){window._fullAccess=p.data.subscription_expires_at?Date.now()<new Date(p.data.subscription_expires_at).getTime():false;}
-      else{window._fullAccess=false;}
-      if(was&&!window._fullAccess){var b=document.getElementById('_ab'); if(!b){b=document.createElement('div');b.id='_ab';b.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99999;background:#C8A44A;color:#070D1A;text-align:center;padding:10px;font-size:13px;font-weight:700;cursor:pointer;';b.textContent='Your trial has ended. Tap to upgrade.';b.onclick=function(){document.getElementById('gate-overlay').style.display='flex';};document.body.appendChild(b);}}
     }catch(e){ try{var raw=localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token'); if(raw){var tok=JSON.parse(raw);var parts=((tok&&tok.access_token)||'').split('.');if(parts.length===3){var pay=JSON.parse(atob(parts[1]));if(pay.exp&&Math.floor(Date.now()/1000)>=pay.exp)kick();}}}catch(e2){} }
   }
   setInterval(checkSession,10*60*1000);
@@ -1345,9 +1259,11 @@ startBackgroundIndexing();
     var plan=profile.subscription_plan; upg.style.display='none';
     if(plan==='lifetime'){lbl.textContent='Lifetime';lbl.style.color='#C8A44A';exp.textContent='Never expires';}
     else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000);var ms=te-Date.now();if(ms>0){lbl.textContent='Free Trial';lbl.style.color='#5DC87A';exp.textContent=Math.ceil(ms/864e5)+' days remaining';}else{lbl.textContent='Trial Expired';lbl.style.color='#E07070';exp.textContent='Upgrade to continue';}upg.style.display='block';}
-    else{var names={starter:'Starter',standard:'Standard',pro:'Pro'};lbl.textContent=names[plan]||plan;lbl.style.color='#C8A44A';if(profile.subscription_expires_at){var dl=Math.ceil((new Date(profile.subscription_expires_at)-Date.now())/864e5);if(dl>0){exp.textContent=dl+' days remaining';}else{exp.textContent='Expired';lbl.style.color='#E07070';upg.style.display='block';}}}
+    else{var names={starter:'Starter',standard:'Standard',pro:'Pro','3mo':'3-Month','6mo':'6-Month','12mo':'12-Month'};lbl.textContent=names[plan]||plan;lbl.style.color='#C8A44A';if(profile.subscription_expires_at){var dl=Math.ceil((new Date(profile.subscription_expires_at)-Date.now())/864e5);if(dl>0){exp.textContent=dl+' days remaining';}else{exp.textContent='Expired';lbl.style.color='#E07070';upg.style.display='block';}}}
   }
-  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ document.getElementById('profile-modal').style.display='none'; document.getElementById('gate-overlay').style.display='flex'; });
+  // Sponsorship itself is free — this button sends the user to the main app
+  // to manage their Oral/Written plan, since there's nothing to gate here.
+  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ window.location.href='../index.html'; });
   window.addEventListener('load',function(){ var user=window._sbUser; if(user){var n=user.user_metadata?.full_name||user.email; document.getElementById('profile-btn').textContent=n.charAt(0).toUpperCase();} });
 })();
 

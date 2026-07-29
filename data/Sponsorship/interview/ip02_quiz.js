@@ -1,1 +1,1 @@
-{"v":1,"iv":"IK8G008TlCD066TE","data":"t3BzWxkK3pckBXBQVkhr9mXfw7gdaVvj3nV2iJYakqIWnTz9t4DK5UHG7Q==","tag":"eYEqmtjTzVvldz6Ys0+oFw=="}
+window.loadQuizzes("IP02_HRInterview", []);

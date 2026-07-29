@@ -1,1 +1,64 @@
-{"v":1,"iv":"GYz3SwSgejcimeRr","data":"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","tag":"tuqTkPsogaZ0IIsRylkj6Q=="}
+window.loadNotes("S02", '<div class="view" id="view-notes-s02"><div class="note-doc">\
+<div class="mobile-topic-strip" id="mobile-topic-strip"></div>\
+<div class="note-title">\
+  <h1>S02 - Targeting the Right Companies</h1>\
+  <div class="sub">How to research, rank, and prioritise shipping companies for your ETO cadetship based on fleet type, training quality, salary, and long-term career prospects.</div>\
+  <div class="tags">\
+    <span class="tag tag-orange">Company Research</span>\
+    <span class="tag tag-blue">Strategy</span>\
+    <span class="tag tag-purple">S02</span>\
+  </div>\
+</div>\
+\
+<div class="n-h1" id="s-why-targeting-matters">Why Targeting Matters</div>\
+<p class="n-p">There are over 200 companies that recruit ETO cadets in India. Applying to all of them blindly wastes time and dilutes your preparation. Targeting means identifying the 8-12 companies best suited to your goals and building company-specific knowledge for each -- so your interview answers show genuine interest, not generic enthusiasm.</p>\
+\
+<div class="n-h1" id="s-criteria">Key Criteria for Ranking Companies</div>\
+\
+<div class="n-h2" id="s-criteria-fleet">Fleet Type and Trade Route</div>\
+<p class="n-p">The ship type you sail on as a cadet will shape your entire early career. Consider:</p>\
+<ul class="n-list">\
+  <li><strong>Tankers (Chemical/Product/Crude):</strong> Higher safety rigor, STCW additional endorsements required, strong demand globally. Good starting point.</li>\
+  <li><strong>Container Vessels:</strong> Fast turnaround ports, extensive automation, large crew. Technically interesting for an ETO.</li>\
+  <li><strong>Bulk Carriers:</strong> Simpler cargo operations, longer voyages, fewer port stops. Good for focused study at sea.</li>\
+  <li><strong>Offshore (AHTS, PSV):</strong> Dynamic positioning exposure, technically demanding, higher day rates.</li>\
+  <li><strong>Passenger/Cruise:</strong> Extremely competitive entry, very different culture and work pace.</li>\
+</ul>\
+\
+<div class="n-h2" id="s-criteria-training">Training Quality and Structure</div>\
+<p class="n-p">Look for: structured cadet training record books (TRB), a designated training officer on board, a cadet pool with clear progression timelines to your first watch-keeping certificate, and feedback mechanisms. Ask in the interview about their cadet-to-officer promotion timeline.</p>\
+\
+<div class="n-h2" id="s-criteria-salary">Cadet Stipend and Officer Salary</div>\
+<p class="n-p">Training stipend ranges from ₹5,000-₹25,000/month depending on the company. This matters less than the post-training officer salary and contract terms. Research approximate CES (Competence Evaluation System) salary data for ETO officers by fleet type to benchmark.</p>\
+\
+<div class="n-h1" id="s-major-companies">Major Companies Recruiting ETO Cadets (India)</div>\
+<p class="n-p">The following are well-established names. Detailed Company Q&A profiles with interview questions, style notes, and fleet details will be added to the Company Interviews section as content is built out.</p>\
+<ul class="n-list">\
+  <li>Bernhard Schulte Shipmanagement (BSM)</li>\
+  <li>Anglo Eastern Ship Management</li>\
+  <li>Fleet Management Ltd</li>\
+  <li>Synergy Marine Group</li>\
+  <li>Columbia Shipmanagement</li>\
+  <li>V.Group / Garvel Marine</li>\
+  <li>Shipping Corporation of India (SCI)</li>\
+  <li>Wallem Shipmanagement</li>\
+  <li>Thome Ship Management</li>\
+  <li>Pacific Basin / Pacific International Lines</li>\
+  <li>Stolt-Nielsen (Chemical Tankers)</li>\
+</ul>\
+\
+<div class="n-h1" id="s-research-method">How to Research a Company Before Applying</div>\
+<div class="n-h2" id="s-research-sources">Sources to Use</div>\
+<ul class="n-list">\
+  <li><strong>Company website:</strong> Fleet page, recruitment section, core values.</li>\
+  <li><strong>Sea-career forums and Deckee/Marine Cafe forums:</strong> Real experiences from serving officers.</li>\
+  <li><strong>LinkedIn:</strong> Search "[Company Name] ETO" to find officers. Look at their career progression.</li>\
+  <li><strong>Maritime India (marineinsight.com, maritime-connector.com):</strong> Salary benchmarks and fleet data.</li>\
+  <li><strong>IMU/MERI notice boards:</strong> Companies that recruit from your target institute.</li>\
+</ul>\
+\
+<div class="n-h1" id="s-application-strategy">Application Strategy</div>\
+<p class="n-p">Apply in batches, not all at once. Target 3-4 companies per drive cycle so you can give each company tailored answers in their interview. Track your applications in a simple sheet: company, applied date, stage reached, outcome, feedback notes. Every rejection is data about what to improve.</p>\
+\
+<div class="n-info"><span class="icon">💡</span><div class="body">Content for this module is being actively developed. The Company Interviews section will contain company-specific interview Q&A as data is built out. Check back for updates.</div></div>\
+</div></div>');

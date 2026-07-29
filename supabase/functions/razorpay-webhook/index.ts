@@ -23,6 +23,9 @@ const PLAN_MONTHS: Record<string, number> = {
   starter: 2,
   standard: 5,
   pro: 12,
+  '3mo': 3,
+  '6mo': 6,
+  '12mo': 12,
 };
 
 // Must stay in sync with get-content-key, the authoritative access gate.
@@ -211,6 +214,7 @@ serve(async (req) => {
         await sb.from('profiles').update({
           subscription_plan:       payment.plan,
           subscription_expires_at: expiresAt.toISOString(),
+          plan_scope:               payment.scope || 'both',
         }).eq('id', payment.user_id);
       }
 

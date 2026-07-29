@@ -1,1 +1,1 @@
-{"v":1,"iv":"ZcwkYPBi1TBwg9li","data":"GJ1YropIosOyWjsEiusA/xltwGdMqXbXfHnwekrfaG98Ob18RpQlJ8Cd1w==","tag":"frh88w8nyCnvz0wyc42LLg=="}
+window.loadQuizzes("F12_MotorProtect", []);

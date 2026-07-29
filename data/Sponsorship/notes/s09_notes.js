@@ -1,1 +1,59 @@
-{"v":1,"iv":"ZwYY6ztfUvNWaltI","data":"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","tag":"Zsf1ScUmGsX0lVIPMlyYtw=="}
+window.loadNotes("S09", '<div class="view" id="view-notes-s09"><div class="note-doc">\
+<div class="mobile-topic-strip" id="mobile-topic-strip"></div>\
+<div class="note-title">\
+  <h1>S09 - Pre-Sea Training and What to Expect</h1>\
+  <div class="sub">Life at a maritime training institute, the ETO pre-sea curriculum, how to make the most of your 1-year cadetship ashore, and what the transition to your first ship looks like.</div>\
+  <div class="tags">\
+    <span class="tag tag-orange">Pre-Sea Training</span>\
+    <span class="tag tag-blue">Campus Life</span>\
+    <span class="tag tag-purple">S09</span>\
+  </div>\
+</div>\
+\
+<div class="n-h1" id="s-presea-overview">What Pre-Sea Training Is</div>\
+<p class="n-p">Pre-sea training for ETO cadets is a 12-month residential course at a DGS-approved maritime training institute. It combines classroom theory (electrical engineering, electronics, marine systems), practical lab work (workshop, electrical machines, automation lab), and physical training (maritime fitness, swimming). At the end, you sit the MEO (Marine Electro-Technical Officer) Class IV exam conducted by MMD.</p>\
+\
+<div class="n-h1" id="s-institutes">Major ETO Pre-Sea Training Institutes (India)</div>\
+<ul class="n-list">\
+  <li>International Maritime Institute (IMI) - Greater Noida</li>\
+  <li>Lal Bahadur Shastri College of Advanced Maritime Studies (LBSCAMS) - Mumbai</li>\
+  <li>International Institute of Maritime Studies (IIMS) - Pune</li>\
+  <li>National Maritime Academy (NMA) - Chennai</li>\
+  <li>Samundra Institute of Maritime Studies (SIMS) - Mumbai</li>\
+  <li>ITM Institute of Maritime Studies - Navi Mumbai</li>\
+</ul>\
+<p class="n-p">Your sponsoring company will assign you to a specific institute. They often have tie-ups or preferred partners. The institute\'s DGS approval status and exam pass rate matter more than its brand name.</p>\
+\
+<div class="n-h1" id="s-curriculum">ETO Cadet Curriculum Overview</div>\
+<div class="n-h2" id="s-curriculum-theory">Theory Subjects</div>\
+<ul class="n-list">\
+  <li>Electrical Machines (generators, motors, transformers -- in depth)</li>\
+  <li>Marine Electrical Systems (high voltage systems, switchboard, distribution)</li>\
+  <li>Electronics and Instrumentation</li>\
+  <li>Control Systems and Automation (PLCs, SCADA basics, ship automation)</li>\
+  <li>Power Electronics (drives, converters, rectifiers)</li>\
+  <li>Navigation Electronics (RADAR, ECDIS, AIS -- awareness level for ETO)</li>\
+  <li>GMDSS Communications Theory</li>\
+  <li>Ship Stability and Construction (basic, for safety awareness)</li>\
+  <li>Maritime Law and STCW Regulations</li>\
+</ul>\
+<div class="n-h2" id="s-curriculum-practical">Practical and Lab Components</div>\
+<ul class="n-list">\
+  <li>Electrical machines lab: winding, testing, fault-finding on motors and generators</li>\
+  <li>Electronics lab: circuit construction, oscilloscope, soldering</li>\
+  <li>Automation lab: PLC programming basics, control panel familiarisation</li>\
+  <li>Workshop: basic machining, welding awareness, pipe fitting</li>\
+  <li>Fire fighting practical (FFFF component)</li>\
+  <li>Swimming certification (mandatory for seafarers)</li>\
+  <li>Fire and boat drill familiarisation</li>\
+</ul>\
+\
+<div class="n-h1" id="s-institute-life">Life at the Institute</div>\
+<p class="n-p">Maritime institutes are largely residential, with a structured daily schedule: morning PT (physical training), classes through the day, study hours in the evening, lights-out policy at night. It is closer to a disciplined residential school than a university. This is intentional -- it mirrors the watch-keeping routine at sea. Adapting early to the structure is a significant part of the cadetship.</p>\
+<div class="n-info"><span class="icon">💡</span><div class="body">Institute life tips: Keep your uniform and kit inspection-ready at all times. Build a study group early -- ETO subjects are densely mathematical and peer learning accelerates progress. The Training Record Book (TRB) needs consistent entries. Do not leave it to the last month.</div></div>\
+\
+<div class="n-h1" id="s-first-ship">The Transition to Your First Ship</div>\
+<p class="n-p">After passing your MMD exam and completing STCW BST (if not done before), you will be issued a joining letter for your first vessel. Expect: a joining notice of 2-6 weeks, a pre-joining medical at the company\'s approved clinic, a briefing from the company\'s port captain or superintendent, and your first embarkation. Your first contract is typically 4-6 months. You will sail as a cadet under the supervision of the ship\'s ETO. Your Training Record Book continues on board.</p>\
+\
+<div class="n-ok"><span class="icon">✅</span><div class="body">The pre-sea year is the foundation of your entire sea career. The cadets who do well are the ones who treat it as a professional training programme, not a repeat of college. Full module content with exam preparation guides for MMD Class IV is being developed. Check back as this module expands.</div></div>\
+</div></div>');

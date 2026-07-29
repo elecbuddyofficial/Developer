@@ -1,1 +1,1 @@
-{"v":1,"iv":"jIK41SFsMviiUnn3","data":"zPBu7YguVXQySxQTiR38DkfdGpX8hxqfKWQPcd6yNIv9HBemu4A2dmY=","tag":"q85I/tSkwk2+uGx7mxY+dw=="}
+window.loadQuizzes("F24_MarineElec", []);

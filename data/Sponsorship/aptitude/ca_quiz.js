@@ -1,1 +1,1 @@
-{"v":1,"iv":"1wSjEIo334LFUmwM","data":"/JaQeatcEAqSpRBMykHHEpniJKTnQJG7rALiJCw+euoCAT3WKtBUR8ZklWM=","tag":"eUP1UtVYSQwV2871wfjHag=="}
+window.loadQuizzes("CA_CurrentAffairs", []);
