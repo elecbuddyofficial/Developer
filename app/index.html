@@ -619,8 +619,13 @@
   <div id="settings-panel">
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-      <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Settings</div>
-      <button onclick="document.getElementById('settings-modal').style.display='none'" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#4A6880;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="backToProfile()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Settings</div>
+      </div>
+      <button onclick="document.getElementById('settings-modal').style.display='none'" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#4A6880;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
     </div>
 
     <!-- Data Saver -->
@@ -1247,6 +1252,11 @@ function setTheme(t) {
     window.closeSettings = function(e) {
       if (!e || e.target === document.getElementById('settings-modal'))
         document.getElementById('settings-modal').style.display = 'none';
+    };
+
+    window.backToProfile = function() {
+      document.getElementById('settings-modal').style.display = 'none';
+      window.openProfile();
     };
 
     // Two-tap confirm: first tap arms it, second tap (within 4s) actually
