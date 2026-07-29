@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:f
 /* TOP BAR */
 #topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:60px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
 #topbar .logo{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px;white-space:nowrap;flex-shrink:0}
-#topbar .logo .logo-mark{width:26px;height:26px;flex-shrink:0;display:block}
+#topbar .logo .logo-mark{width:32px;height:32px;flex-shrink:0;display:block}
 #topbar .logo .logo-elec{color:var(--blue);font-size:inherit;font-weight:inherit;margin:0}
 #topbar .logo .logo-sub{color:var(--text2);font-weight:500;font-size:12px;margin-left:8px}
 .spacer{flex:1}

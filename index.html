@@ -33,8 +33,9 @@ button:focus-visible,a:focus-visible{outline:2px solid var(--blue-bright);outlin
 
 /* ─── TOPBAR ─── */
 #topbar{position:fixed;top:0;inset-inline:0;z-index:100;height:60px;display:flex;align-items:center;gap:16px;padding:0 clamp(16px,4vw,32px);background:rgba(0,0,0,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
-.tb-logo{font-size:15px;font-weight:800;color:var(--blue);letter-spacing:-.3px;white-space:nowrap}
-.tb-logo span{color:var(--t3);font-weight:400;font-size:12px;margin-left:8px}
+.tb-logo{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:800;color:var(--blue);letter-spacing:-.3px;white-space:nowrap}
+.tb-logo-mark{width:32px;height:32px;flex-shrink:0;display:block}
+.tb-logo .tb-logo-sub{color:var(--t3);font-weight:400;font-size:12px;margin-left:8px}
 .tb-spacer{flex:1;min-width:0}
 .tb-cta{display:inline-flex;align-items:center;gap:6px;padding:0 20px;height:38px;background:var(--blue);color:#fff;border:none;border-radius:24px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:background .2s,box-shadow .2s,transform .2s;white-space:nowrap;letter-spacing:.1px}
 .tb-cta:hover{background:#2563eb;box-shadow:0 4px 16px rgba(59,130,246,.4);transform:translateY(-1px)}
@@ -207,7 +208,7 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
   .disc{flex-direction:column;gap:10px}
   .footer-inner{flex-direction:column;text-align:center}
   .footer-text{text-align:center}
-  .tb-logo span{display:none}
+  .tb-logo .tb-logo-sub{display:none}
   .tb-nav-link{display:none}
 }
 @media(max-width:380px){
@@ -236,7 +237,10 @@ footer{border-top:1px solid var(--border);padding:clamp(24px,4vw,36px) clamp(20p
 <!-- TOPBAR -->
 <header role="banner">
   <nav id="topbar" aria-label="Primary navigation">
-    <div class="tb-logo" aria-label="Elec-Buddy">Elec<b style="color:#fff; font-weight:inherit;">-Buddy</b> <span>ETO Exam Prep</span></div>
+    <div class="tb-logo" aria-label="Elec-Buddy">
+      <img class="tb-logo-mark" src="app/assets/logo-blue.svg" alt="">
+      <span>Elec<b style="color:#fff; font-weight:inherit;">-Buddy</b></span> <span class="tb-logo-sub">ETO Exam Prep</span>
+    </div>
     <div class="tb-spacer"></div>
     <a href="#access" class="tb-nav-link" style="font-size:13px;color:var(--t2);text-decoration:none;margin-right:20px;white-space:nowrap;transition:color .2s" onmouseover="this.style.color='var(--t1)'" onmouseout="this.style.color='var(--t2)'">Get the App</a>
     <a href="app/auth.html" class="tb-cta" role="button">Open App →</a>
