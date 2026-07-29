@@ -107,7 +107,7 @@ window.loadNotes("T19", `<div class="view" id="view-notes-t19">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t19-zener-barrier.webp" alt="Zener barrier intrinsic safety — series resistor, back-to-back Zener diodes, IS earth connection, hazardous area field instrument" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t19-zener-barrier.webp" alt="Zener barrier intrinsic safety — series resistor, back-to-back Zener diodes, IS earth connection, hazardous area field instrument" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACQAwCdASocAA8APu1iqU2ppaOiMAgBMB2JZ1/2ADdX/1VQEF60AP7wZfeHCStrp/A5TWZgyYqQh36JKtWsL5D/E4AfUW6PP/BtWGwUCrKVCPFKl+j9AAAA">
     <div class="note-diagram-cap">Fig. Zener Barrier (Ex i) — series resistor limits fault current; back-to-back Zener diodes clamp voltage; IS earth (&lt;1 Ω) essential; safe area to hazardous area field instrument</div>
   </div>
 

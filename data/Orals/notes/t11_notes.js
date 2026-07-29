@@ -46,7 +46,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   <div class="n-formula">PF = kW / kVA = cos φ<div class="label">Active Power (kW) = V × I × cos φ &nbsp;·&nbsp; Reactive Power (kVAR) = V × I × sin φ &nbsp;·&nbsp; Apparent Power (kVA) = V × I = √(kW² + kVAR²)</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t11-power-triangle.webp" alt="Power triangle — kW active power, kVAR reactive power, kVA apparent power, phase angle φ" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t11-power-triangle.webp" alt="Power triangle — kW active power, kVAR reactive power, kVA apparent power, phase angle φ" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRo4AAABXRUJQVlA4IIIAAACQBACdASocABMAPu1qqFAppiOiqA1RMB2JZwDO8azAugZQJHSEhG+MGiIihwAA/vOCsb5evX4mWqvkjsVVBFYBnp9wicx4AGPihoorpekhgL9NV84olu/StFePk+jVPv4aKKk/uBA6BNOYojqsTc7dCXqXC5zgYtKWfWqJDAhs0AAA">
     <div class="note-diagram-cap">Fig. Power Triangle — kW (base), kVAR (vertical), kVA (hypotenuse); PF = cos φ = kW/kVA (note: Power Factor = Active Power ÷ Apparent Power, not Reactive Power)</div>
   </div>
 
@@ -161,7 +161,7 @@ window.loadNotes("T11", `<div class="view" id="view-notes-t11">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t11-capacitor-banks.webp" alt="Capacitor bank PF correction — capacitors in parallel with inductive loads, leading kVAR cancels lagging kVAR" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t11-capacitor-banks.webp" alt="Capacitor bank PF correction — capacitors in parallel with inductive loads, leading kVAR cancels lagging kVAR" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRqYAAABXRUJQVlA4IJoAAABQBACdASocABwAPu1mq06ppaOiKA1RMB2JaQAAO735OXneSu0H+sLI10AAAP7wNDmSes85FhC/TntAUeQOzMzvcA3qiuf6NrdN0UfKdRIJZoiCv0OsKJpwuzE/f7G1zRWCXaH2wkcIqYV8tq+7BlVjxaA1IjI1UeLHGVL+WJnxOtluFoIWXMMm+ehVhvyLnG3fn7n/B4HcAAAA">
     <div class="note-diagram-cap">Fig. Capacitor Bank Power Factor Correction — capacitors connected in parallel with motor loads; leading kVAR cancels lagging kVAR, reducing apparent power (kVA) and improving PF</div>
   </div>
 

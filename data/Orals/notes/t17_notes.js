@@ -44,7 +44,7 @@ window.loadNotes("T17", `<div class="view" id="view-notes-t17">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> Treats machinery space bilge water through gravity separation and a coalescing filter. Maximum oil content for overboard discharge: <span class="n-val">15 ppm</span>. The Oil Content Monitor (OCM) uses an <strong>infrared absorption (optical)</strong> sensor to continuously measure effluent. If oil exceeds <span class="n-val">15 ppm</span>: alarm activates + fail-safe 3-way solenoid valve automatically diverts effluent back to the bilge holding tank. Required on all ships <span class="n-val">&gt; 400 GT</span>.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t17-ows-system.webp" alt="OWS oily water separator system — coalescing filter, oil content monitor, 3-way fail-safe solenoid valve" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t17-ows-system.webp" alt="OWS oily water separator system — coalescing filter, oil content monitor, 3-way fail-safe solenoid valve" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAACwAwCdASocABUAPu1oq08ppiOiMBgIATAdiWlf9gAaMR1uHkXawAD+8E6RZRQ9LRNS9edkldBpiDd5DT+WBZIHNF+eqJsAAmA45q7KPiK8TeGkyF5A9fxho4XagZ+cvjFEA1JUSUqulKQCdJBTtadGcvLIIAAA">
     <div class="note-diagram-cap">Fig. OWS System — gravity separation chamber, coalescing filter, OCM infrared sensor (15 ppm limit), fail-safe 3-way solenoid valve diverts to bilge holding tank on alarm</div>
   </div>
 

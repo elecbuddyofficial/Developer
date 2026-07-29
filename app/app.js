@@ -110,14 +110,24 @@ window.VIDEO_DATA = {}; // Video Data Store
 // it just changes how the same cached HTML gets rendered.
 window._dataSaver = localStorage.getItem('eb_data_saver') === '1';
 
-var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async">/g;
+// data-blur is a ~200-byte inline base64 WebP (28px wide) baked into every
+// note file at build time — a real, heavily-blurred preview of the actual
+// diagram, shown under the overlay exactly like WhatsApp/Telegram media
+// placeholders. It costs one extra HTML attribute, never a network request.
+var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async" data-blur="([^"]*)">/g;
 var _DGM_ICON = '<span class="dgm-dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>';
+
+function _dgmPlaceholderHtml(src, alt, blur) {
+    return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to download diagram">'
+        + '<img class="dgm-blur-bg" src="' + blur + '" alt="" aria-hidden="true">'
+        + '<div class="dgm-overlay">' + _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span></div>'
+        + '</div>';
+}
 
 function _applyDataSaver(html) {
     if (!window._dataSaver) return html;
-    return html.replace(_DGM_IMG_RE, function(_m, src, alt) {
-        return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to download diagram">'
-            + _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span></div>';
+    return html.replace(_DGM_IMG_RE, function(_m, src, alt, blur) {
+        return _dgmPlaceholderHtml(src, alt, blur);
     });
 }
 
@@ -150,15 +160,13 @@ window.toggleDataSaver = function(on) {
     if (!container) return;
     if (on) {
         container.querySelectorAll('.note-diagram-wrap img[loading="lazy"]').forEach(function(img) {
-            var ph = document.createElement('div');
-            ph.className = 'dgm-placeholder';
-            ph.setAttribute('role', 'button');
-            ph.setAttribute('tabindex', '0');
-            ph.setAttribute('aria-label', 'Tap to download diagram');
-            ph.setAttribute('data-src', img.getAttribute('src'));
-            ph.setAttribute('data-alt', img.getAttribute('alt') || '');
-            ph.innerHTML = _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span>';
-            img.replaceWith(ph);
+            var wrap = document.createElement('div');
+            wrap.innerHTML = _dgmPlaceholderHtml(
+                img.getAttribute('src'),
+                img.getAttribute('alt') || '',
+                img.getAttribute('data-blur') || ''
+            );
+            img.replaceWith(wrap.firstElementChild);
         });
     } else {
         container.querySelectorAll('.dgm-placeholder').forEach(_dgmLoad);

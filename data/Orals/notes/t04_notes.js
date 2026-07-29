@@ -98,7 +98,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Shunt Trip vs Trip Coil:</strong> The <strong>Shunt Trip (TC)</strong> is an energise-to-trip coil - protection relay output energises it momentarily to fire the latch and spring-open the contacts. The <strong>Close Coil (CC)</strong> is an electromagnet energised to close the main contacts against the closing spring on a close command from the synchroscope panel or PMS. Both are low-voltage (typically 24 V DC or 110 V DC) control circuits, not the 440 V main circuit.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>ACB Contact Sequence on Opening (arc quenching - most asked):</strong> Main contacts open first → arcing contacts (silver–tungsten tips) remain closed momentarily so the arc forms on them, not on the main contacts → arcing contacts then open → arc drawn into the arc chute (ceramic splitter plates divide the single arc into many shorter series arcs) → total arc voltage &gt; <span class="n-val">440 V</span> supply → arc extinguishes. The main contacts are protected from erosion by this sequence. Current-zero extinction happens naturally on AC each half-cycle.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-acb-arc-chute.webp" alt="ACB arc chute — arc contacts, main contacts, arc runners, ceramic splitter plates" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-acb-arc-chute.webp" alt="ACB arc chute — arc contacts, main contacts, arc runners, ceramic splitter plates" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAADwAwCdASocABAAPu1iqU2ppaOiMAgBMB2JaTyFAKj/k/XNiHGEb05AAP7v9YguhNF8xMpnzsnmu8a/KYGaLY6t1Oq5iH3pJUGbgbAuXS5NbkCMZ35ovxlDDXA75ASrMMvJIvQXAK+zvm1h04phooWEUuCqlCJKMcerIKDV7aPOS3MKmss5z0obGAAAAA==">
     <div class="note-diagram-cap">Fig. ACB Arc Chute — arc contact, main contact, arc runner, ceramic splitter plates dividing arc into series arcs</div>
   </div>
 
@@ -193,7 +193,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   </div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q (Deswal, Sanjib): What type of fuse is used on 440 V ship circuits and why?</strong><br><strong>Ideal Answer:</strong> HRC - High Rupturing Capacity fuse. Rated current stamped on end cap: accurate and repeatable. Breaking capacity 80–100 kA: safely interrupts the highest fault currents on ship without explosive failure. Current-limiting: interrupts fault before current peaks, minimising I²t damage to equipment. Internal silver element with notched cross-section for controlled blow point; silica sand filler to quench the arc. Non-replaceable after operation - entire fuse unit replaced. Rewirable fuses must NEVER be used on MSB feeders: inaccurate current rating, low breaking capacity, unsafe for high fault levels.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-hrc-fuse.webp" alt="HRC fuse cross-section — brass end cap, silver fuse element with notches, silica sand filler, ceramic body" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-hrc-fuse.webp" alt="HRC fuse cross-section — brass end cap, silver fuse element with notches, silica sand filler, ceramic body" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAwBACdASocABMAPu1mrE+ppSQiMBgIATAdiWkAAC7XxP4wKr/K0j0BSgAA/vHhFoNLcxQRFOQt56LKHET7KC9Jq6FhOJkENjV/dskObWKmWONYxLCrynSJA3OSHwBHJ4aAAAAA">
     <div class="note-diagram-cap">Fig. HRC Fuse — ceramic body, silver element (notched), silica sand arc quench filler, brass end caps</div>
   </div>
 
@@ -230,12 +230,12 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Fuse vs OCR - key difference:</strong> A fuse is sacrificial (single-use) - operates once and must be replaced. An OCR is a relay that resets after fault clearance - reusable and adjustable. Both may be present in the same circuit: HRC fuse provides backup short-circuit protection; OCR provides time-graded overload and fault protection with selectivity. The fuse rating must be higher than the OCR setting for correct coordination - fuse catches extreme faults, OCR handles sustained overloads.</div></div>
   <div class="n-warn"><div class="icon">Q</div><div class="body"><strong>Surveyor Q: What is a differential relay and how does it differ from a fuse?</strong><br><strong>Ideal Answer:</strong> A differential relay monitors current flowing INTO a protected zone (generator, transformer, busbar section) via CTs at the entry points, and current flowing OUT via CTs at the exit. Under normal conditions IN = OUT. If there is an internal fault - earth fault, winding short, insulation breakdown inside the zone - current leaks internally: IN ≠ OUT. The relay operates immediately with no delay. It detects very small internal faults (as low as 5–10% rated current) that would not cause enough current to blow a fuse or operate an OCR. A fuse only responds to overcurrent from any cause - it cannot distinguish internal from external faults, and cannot detect low-level internal faults. Differential relay is used for large generators, large transformers, and main busbars where early internal fault detection is critical to prevent winding damage.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-differential-protection.webp" alt="Merz-Price differential protection — star CTs at generator terminals, pilot wires, relay coil, operate/restraint windings" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-differential-protection.webp" alt="Merz-Price differential protection — star CTs at generator terminals, pilot wires, relay coil, operate/restraint windings" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAADwAwCdASocABMAPu1mrE+ppSQiMBgIATAdiWlocAAaHf6iucG47EAAAP7wZhK9bW4BnxrQ8VsGQJLavKVP8/6Qpx/RdAUT03pa00clrllSN+LnYfYGQAAA">
     <div class="note-diagram-cap">Fig. Merz-Price Differential Protection — CTs at both ends, pilot wires, operate coil (IN−OUT), restraint coil (IN+OUT)</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-ct-pt-connection.webp" alt="PT connection to protection relay — PT in parallel with busbar, stepped-down voltage feeds relay voltage coil" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-ct-pt-connection.webp" alt="PT connection to protection relay — PT in parallel with busbar, stepped-down voltage feeds relay voltage coil" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAABQAwCdASocAA8APu1iqU2ppaOiMAgBMB2JaVefADc1mFN4kAD+8GQDVMY4R5vbNhjUROfPAHvjzp/scBsA4Uu9d2+yoJWuUZo4ho66aHiwFAAA">
     <div class="note-diagram-cap">Fig. PT Connection to Relay — PT in parallel with busbar; stepped-down voltage to relay voltage coil; basis of OCR, differential and reverse-power relays</div>
   </div>
 
@@ -315,11 +315,11 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   </table>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> "Generator turns into a motor." Power direction defines reverse power - not current magnitude. CT + PT + phase-angle multiplication = wattmetric principle. The phasor angle, not just magnitude, is what the relay measures - that is why a standard current-only test set is insufficient; a true power relay test set must apply both V and I at the correct relative angle.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-reverse-power-schematic.webp" alt="Reverse power protection schematic — CT, PT, directional wattmetric relay, ACB trip coil" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-reverse-power-schematic.webp" alt="Reverse power protection schematic — CT, PT, directional wattmetric relay, ACB trip coil" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAAAQAwCdASocABEAPu1ur1KppiQiqAgBMB2JaWqgABu53gAA/vCUBuDmnaJI1m3zf5Srd8w18cxBsL5mQ8vnSXcPQa60QAAA">
     <div class="note-diagram-cap">Fig. Reverse Power Protection Schematic — CT + PT inputs, wattmetric relay, trip output to generator ACB</div>
   </div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-reverse-power-relay.webp" alt="Reverse power relay internal — operating coil, voltage coil, disc, contacts" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-reverse-power-relay.webp" alt="Reverse power relay internal — operating coil, voltage coil, disc, contacts" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAAAwBACdASocABEAPu1orFEppaQiqAqpMB2JaQAALnZSL/A0b/qy+YenXIAA/vHRxy/kBS2cQSKGqSG4Bp2X73XnGIeIxkWrdYlRqrIR/hUigXAgAAA=">
     <div class="note-diagram-cap">Fig. Reverse Power Relay — voltage coil, current coil, directional disc, trip contact, time-delay setting</div>
   </div>
 
@@ -414,7 +414,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   <div class="n-formula">PI = IR(10 min) / IR(1 min) &nbsp;→&nbsp; Good insulation: <span class="n-val">PI ≥ 2.0</span></div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Think of insulation molecules as tiny compass needles. Good insulation = disciplined needles that line up slowly in the electric field (large absorption current). Wet insulation = disordered needles that barely respond (small absorption current, low PI). If the needles respond well, the insulation is healthy.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-pi-test-curve.webp" alt="PI test curve — IR vs time graph showing clean insulation rising steeply vs contaminated staying low" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-pi-test-curve.webp" alt="PI test curve — IR vs time graph showing clean insulation rising steeply vs contaminated staying low" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAAAQBACdASocABYAPu1kq0+ppSOiMBgIATAdiWkAAD3ofmJvq7TUVlXoAAD+8Jb8oZRcAhApQ5Cvwyzgh0gOpttIZ7LLsJV82QQVcYMrDMR81DjBiPEyj56VJn2cZelclUQU2AAA">
     <div class="note-diagram-cap">Fig. PI Test Curve — IR(MΩ) vs time(min); clean/dry insulation rises steeply; wet/contaminated insulation stays flat</div>
   </div>
 
@@ -507,7 +507,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   </div>
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid:</strong> Online = always through inverter = zero switchover. Offline = switches on failure = small gap. Static bypass = thyristor = automatic = for UPS fault. Maintenance bypass = manual = for UPS servicing. GMDSS needs UPS because mains can fail in a blackout but radio watch must continue.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-ups-types.webp" alt="UPS types diagram — offline, line interactive, online double-conversion with bypass paths" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-ups-types.webp" alt="UPS types diagram — offline, line interactive, online double-conversion with bypass paths" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRvYAAABXRUJQVlA4IOoAAAAwBwCdASocACoAPu1mqk6ppaOiMBqoATAdiWkACwgnTDgAcbx52/OP8FDpVUiBfD20M9DQkRRLv/IIUeWjrp725wAA/vHbRg1x0QyRfYneVCAc8HFYuGgc8TqTt7N63Zx5Mz10Bk+LeH1sDxjxByYaVS4qmN8DaoO0ubHnvR1qrwM0u58k/2dXACXwVkfTE5wurt20pZdWhII0yNYjcJpzXUQnhTONC4BgO6AAv5pYIWgfLFyVFm8rlsYE/VL0bo5lC78V061NH7t3I7RjYOgqXHcbLTSrusHUM8uWdc77aOxqpRBnmCngAAA=">
     <div class="note-diagram-cap">Fig. UPS Types — Offline (standby), Line Interactive, Online (double-conversion); static and maintenance bypass paths shown</div>
   </div>
 
@@ -703,7 +703,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>A surveyor's favourite practical question: "Earth fault alarm came on watch - what do you do?"</strong> Must give the complete step-by-step isolation hunt, including why isolated neutral is used on ships.</div></div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>How earth fault indication works on ships (isolated neutral / IT system):</strong> Ships use an IT (Isolated Terra / Insulated neutral) system - neither conductor is solidly connected to the hull (earth). Three monitoring lamps are connected in star between the three phases and earth (hull). Under normal conditions all three glow at equal (reduced) brightness. When one phase develops a fault to earth (hull), that phase is pulled toward earth potential - its lamp dims to near-off. The other two phases now sit at a higher voltage relative to earth (line voltage instead of phase voltage) and their lamps brighten significantly. The IRM (Insulation Resistance Monitor) gives a continuous digital readout in kΩ - alarm activates typically below <span class="n-val">50 kΩ</span>.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-earth-lamps.webp" alt="Earth fault indication lamps — three lamps in star to hull, normal brightness vs one phase fault" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-earth-lamps.webp" alt="Earth fault indication lamps — three lamps in star to hull, normal brightness vs one phase fault" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRooAAABXRUJQVlA4IH4AAACQAwCdASocABMAPu1orVCppaQiqAqpMB2JQAAFzot5i+RlsewAAP7v2Cd1/06tdjYbEnJa7IVbm3VZAmezjEhp8D98WUkPProhRkQvxTFJ6ZYnlqaue2SYl7OfrcrbEZFxA1hAgVHly1Ni0ljsLUE0e/ErRTtQAtFnMWwgAAA=">
     <div class="note-diagram-cap">Fig. Earth Fault Lamps — three lamps star-connected to hull; normal (all dim); fault on R-phase (R lamp out, Y/B bright)</div>
   </div>
 
@@ -781,7 +781,7 @@ window.loadNotes("T04", `<div class="view" id="view-notes-t04">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Addressable fire detection systems:</strong> Each detector has a unique address code (programmed at installation). When a detector activates, it transmits its address digitally on the loop. The panel displays exact location (deck, frame, space name) immediately - no zone ambiguity. Also allows individual detector testing from the panel without physically accessing each detector location.</div></div>
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>SOLAS requirement (FSS Code Ch.9):</strong> The fire detection system must give a "fault" alarm that is clearly distinct from a "fire" alarm when any circuit breaks. This is the entire purpose of the EOL resistor - it converts the ambiguous "no signal" into a defined detectable fault state.</div></div>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t04-fire-detection-eol.webp" alt="EOL resistor fire detection circuit — panel, loop wiring, detectors, EOL resistor, three current states" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t04-fire-detection-eol.webp" alt="EOL resistor fire detection circuit — panel, loop wiring, detectors, EOL resistor, three current states" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQBACdASocAA8APu1kqk4ppaQiMAgBMB2JaQAAW+ztIiLqfsvoL7dqAAD+78eNUcbwNzXnnfHVjdtIfYwyw0FcLABnu1uEsSGyUo1Pvigs/lg1WaxzSpirnJnLa6GkFoiAAA==">
     <div class="note-diagram-cap">Fig. EOL Fire Detection Circuit — fire panel, detection loop, detector heads, EOL resistor; normal/fire/open/short current levels</div>
   </div>
 

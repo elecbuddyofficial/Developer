@@ -73,7 +73,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle - Photoelectric Light Extinction:</strong> Rotary sampling valve draws crankcase gas from each cylinder unit in sequence. Calibrated light source shines through measuring tube onto photocell. Oil mist droplets scatter and absorb light - photocell output decreases proportional to concentration. <strong>Reference tube:</strong> Sealed clean-air tube with identical optical path length - differential comparison compensates for lamp aging and contamination drift. Make: <span class="n-val">Graviner</span> (most common), Dräger MK8, Kidde.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-omd.webp" alt="Oil Mist Detector — rotary sampling valve, measuring tube, reference tube, photocell, lamp" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-omd.webp" alt="Oil Mist Detector — rotary sampling valve, measuring tube, reference tube, photocell, lamp" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwAwCdASocABEAPu1ur1IppiQiqAgBMB2JaWScABu/yG8AAP7wlY7yR1p2AxmNfdr3P4r59EB8HQWNTsxndMI9e/By+g+uul7FqPpRDk1WyHtUcVBhtmAAAAA=">
     <div class="note-diagram-cap">Fig. OMD (Graviner) — rotary valve samples each cylinder in sequence; photocell compares measuring tube (crankcase gas) vs reference tube (clean air); differential output triggers alarm at 2.5 mg/L</div>
   </div>
 
@@ -122,7 +122,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Construction &amp; Working:</strong> Spring-loaded disc valve fitted to the crankcase at each cylinder unit. Normally held closed by spring force. During explosion: pressure pulse opens valve against spring → pressure vents to atmosphere rapidly. <strong>Oil deflector/flame trap (mesh gauze):</strong> Fitted in front of valve. Allows pressure to vent but prevents flame jet from exiting - traps burning droplets and quenches flame. As pressure falls after venting, spring closes valve immediately - prevents air ingress (re-oxygenation prevents secondary explosion).<br><br><strong>SOLAS requirement:</strong> One relief valve per cylinder for bore &gt; 200 mm. Also mandatory crankcase ventilation to funnel/safe location to prevent accumulation of crankcase oil vapour in ER.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-crankcase-relief.webp" alt="Crankcase explosion relief valve cross-section — spring, disc, flame trap gauze" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-crankcase-relief.webp" alt="Crankcase explosion relief valve cross-section — spring, disc, flame trap gauze" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAAAwBACdASocABEAPu1oqk8ppiOiMBgIATAdiWcADCsNwAK55teWsaqxTXwA/u3QdCySLoXL7GlsGhPMu2+MpUx081HzbKxZDVBIok8TycMP6Ba1RrRb+n/A6V9s2jACvuIkMU0ZEkcvZw+CGBU5d5IgVsaLPgAAAAA=">
     <div class="note-diagram-cap">Fig. Crankcase Relief Valve (Heartland/Burgess) — spring holds disc closed; explosion pressure lifts disc; mesh flame trap quenches exiting gas; spring re-closes immediately to prevent air ingress</div>
   </div>
 
@@ -182,7 +182,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-steering-gear.webp" alt="Steering gear electrical system — FU/NFU control, solenoid valve, hunting gear feedback, phase failure relay" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-steering-gear.webp" alt="Steering gear electrical system — FU/NFU control, solenoid valve, hunting gear feedback, phase failure relay" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRqgAAABXRUJQVlA4IJwAAACwBACdASocABoAPu1urlKppiQiqAgBMB2JaRwAAANMficE52yP+NNmpbH0usfAAP7x0T6/ppyEbEw/v/AdWYuBXQiLqh5uhmnb9GHZtqRcxF3e1RiiEnAUiqm9466yrEKhupN019UJAfBDeGsPdUyciJMiOXk8sXIIj0ZQ2/pGGR/C9Tz2fFs/X1JhJlIEp5/A86tbHM86/EAAAAA=">
     <div class="note-diagram-cap">Fig. Steering Gear Electrical System — FU closed-loop servo with hunting gear feedback, solenoid directional control valve, phase failure relay</div>
   </div>
 
@@ -253,7 +253,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>BMS Working Principle:</strong> Dedicated safety PLC or hardwired interlock system supervising all safety conditions before, during, and after burner operation. Enforces mandatory pre-purge using FD fan before ignition. Flame scanner continuously monitors for flame - fuel solenoid closes immediately on flame loss → lockout state.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-boiler-bms.webp" alt="Boiler management system block diagram — sensors, BMS controller, solenoids, FD fan, UV scanner" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-boiler-bms.webp" alt="Boiler management system block diagram — sensors, BMS controller, solenoids, FD fan, UV scanner" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACQAwCdASocABEAPu1wsFKppiSiqAgBMB2JaQAALkKm/n2bw8FAAP7xzMM3+7VKoXWPazASdkQbfP86QxzvGifEvL+9xBoxvig5LDsSMtpdSY0HNP5ScoAAAAA=">
     <div class="note-diagram-cap">Fig. Boiler BMS — sensors (steam pressure, drum level, fuel pressure) feed BMS controller; controller sequences pre-purge → ignition → flame detection (UV scanner) → modulating control; any trip closes fuel solenoid and locks out</div>
   </div>
 
@@ -326,7 +326,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-boiler-types.webp" alt="Types of boiler — water-tube vs fire-tube vs composite construction" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-boiler-types.webp" alt="Types of boiler — water-tube vs fire-tube vs composite construction" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpgAAABXRUJQVlA4IIwAAABQBACdASocABAAPu1kqU2ppaQiMAgBMB2JZAC32IjDCQoDClXfFFSYhlgAAP7x3vWw7wA3WNh6qXjOK1ereDlqTWKeca4kzOWilaTLcBE21r8aTdGqo5dmDIVNEUHGy+hAwaqd0EZblvqnIXtnF1lDfogxl/XryAU6qM4uKyJTUGh744hXRqEOeolAAA==">
     <div class="note-diagram-cap">Fig. Boiler Types — water-tube (water in tubes, high pressure/fast response), fire-tube/smoke-tube (hot gas inside tubes, large water volume/low pressure), composite (combined oil-fired + EGB sections)</div>
   </div>
 
@@ -442,7 +442,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Vibration Trip:</strong> Purifier bowl becomes unbalanced → excessive vibration → vibration sensor (accelerometer or proximity switch on frame) → trips motor. Causes of imbalance: incorrect assembly after cleaning (bowl parts not properly seated), foreign object in bowl, worn spindle bearing, bowl not properly closed before start.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-purifier-screw.webp" alt="Purifier and screw conveyor — bowl, screw conveyor, sludge discharge, clean oil/water outlets" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-purifier-screw.webp" alt="Purifier and screw conveyor — bowl, screw conveyor, sludge discharge, clean oil/water outlets" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAADQBACdASocABcAPu1grFAppSQisBgIATAdiWcAACn9T63Lj/6sDnjAFN4Io7SSoAD+8eFnb7s53J0sz20NXMjAcUnCAHsCydUWLzYGrCQXwL4qW9NioeO/6cQ4zFtTJ0QdXjn8BwJmtEqRa8+Mkyg3Cz3KOncfnOIAAAAA">
     <div class="note-diagram-cap">Fig. Purifier (Separator) — centrifugal bowl spins at 7,000–9,000 RPM; screw conveyor (in decanter type) moves sludge to discharge port; clean oil exits top, separated water exits separately; high vibration trips motor</div>
   </div>
 
@@ -495,7 +495,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Vapour Compression Cycle (basic):</strong> Low-pressure liquid refrigerant in evaporator absorbs heat from cargo space → boils to vapour → suction by compressor → compressed to high-pressure hot vapour → condenser rejects heat to seawater/air → high-pressure liquid → expansion device → low-pressure liquid back to evaporator. Cycle repeats continuously.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-refrigeration-cycle.webp" alt="Vapour compression refrigeration cycle — evaporator, compressor, condenser, expansion valve" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-refrigeration-cycle.webp" alt="Vapour compression refrigeration cycle — evaporator, compressor, condenser, expansion valve" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAACQBACdASocABMAPu1kqk2ppaQiMAgBMB2JZwDFyCFsHM/5vZ+XolEbPwldmAAA/vN1MLp7rTHiMS6pmp9AMsAHSJ+v6cRCzohbLQi5riuYdIqg3ywOpI/Y6/q81puuohD17IsEWfqNjv4vH5+TbCxstdO3JGL3nJkJtzqDqJrSeB3BsAA=">
     <div class="note-diagram-cap">Fig. Vapour Compression Refrigeration Cycle — refrigerant evaporates (absorbs heat) → compressor raises pressure/temp → condenser rejects heat to seawater → expansion valve drops pressure → cycle repeats</div>
   </div>
 
@@ -548,7 +548,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-tev-schema.webp" alt="Thermostatic Expansion Valve — sensor bulb, bellows, needle valve, superheat adjustment" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-tev-schema.webp" alt="Thermostatic Expansion Valve — sensor bulb, bellows, needle valve, superheat adjustment" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQAwCdASocABIAPu1oqVAppiOiqA1RMB2JaWqgABsLNgAA/vBPqu9uUbKjMQFJjL/YeTPF1dbDYyiC3hlv8t/ePjp+FNYQjvcR8N6JfsZEoAET3wqPw9gMM15sCDAAAAA=">
     <div class="note-diagram-cap">Fig. TEV (Thermostatic Expansion Valve) — bulb on suction line senses superheat; bellows push needle open with rising superheat; spring closes needle; set for 4–6°C superheat to prevent liquid slugging while ensuring evaporator is fully used</div>
   </div>
 
@@ -626,12 +626,12 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Summary Answer:</strong> "DG typically uses hydraulic-mechanical Woodward governor. ME uses electronic governor on modern ships."</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-flyball-governor.webp" alt="Flyball (centrifugal) governor — rotating flyweights, sleeve, fuel rack linkage" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-flyball-governor.webp" alt="Flyball (centrifugal) governor — rotating flyweights, sleeve, fuel rack linkage" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRoQAAABXRUJQVlA4IHgAAADQBACdASocABYAPu1qrVEppaQiqAqpMB2JaQAOeqHafxPyPrZxX+R2JLMQ/olVYAD+83vJEc6vm53+3d09CNNWno6nH9e1xTbTXUCHIV4riA2u5QYENE1JYOn2BNvh7JUAyAw/dPipQptYfafm5GKTp+hiRUgAAAA=">
     <div class="note-diagram-cap">Fig. Flyball Governor — flyweights rotate with engine; speed rises → centrifugal force lifts sleeve → fuel rack reduces; speed falls → weights drop → more fuel; purely mechanical, used on older diesel engines</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-hydraulic-governor.webp" alt="Hydraulic governor (Woodward) — flyball, pilot valve, hydraulic servo, fuel rack" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-hydraulic-governor.webp" alt="Hydraulic governor (Woodward) — flyball, pilot valve, hydraulic servo, fuel rack" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRogAAABXRUJQVlA4IHwAAACQAwCdASocABkAPuFYpU2opSOiN/qoARAcCWlocAAy9m+G14AAAP7w09ikydV3QQRrcvO4fVw7kugh2tFvamrIk+N62CjNZQqcD9ZCeeai3wjfITeYwNufXia5z5AG3B7/7D7ZXt5qVKrXzBPCCA6VTve9KnebpzUgAAAA">
     <div class="note-diagram-cap">Fig. Hydraulic-Mechanical Governor (Woodward) — flyball pilot valve positions hydraulic servo piston; servo amplifies force to move fuel rack precisely; more stable than pure mechanical; standard on diesel generators</div>
   </div>
 
@@ -928,7 +928,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working Principle (Optical Transmission):</strong> LED/halogen lamp on one side of exhaust duct projects a beam to a photocell on the opposite side. Measures opacity %. 0% = clear, 100% = black smoke (alarm at 30–40%). Ensures MARPOL Annex VI compliance.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-smoke-density-meter.webp" alt="Smoke density meter — lamp, exhaust duct, photocell, air purge nozzles, opacity display" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-smoke-density-meter.webp" alt="Smoke density meter — lamp, exhaust duct, photocell, air purge nozzles, opacity display" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADQAwCdASocABMAPu1qrVEppaQiqAqpMB2JaQAALl5SfCAg0ZddlEAA/vHQbdhRawjN82AesgDCF1JHYl15wYRRgbMAiOkJj35ywT9eTDeaFv2XO+1TQcNHoq/TIg94jbzGnXxkR8XYXDoAAAA=">
     <div class="note-diagram-cap">Fig. Smoke Density Meter — light source and photocell face each other across exhaust duct; smoke particles reduce transmitted light; air purge keeps optical windows clean; 0% = clear, alarm at 30–40% opacity</div>
   </div>
 
@@ -954,7 +954,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>FWG working:</strong> Distils seawater at low temperature (<span class="n-val">35–40°C</span>) under deep vacuum (<span class="n-val">45–60 mbar</span>). Heat source: main engine jacket cooling water (<span class="n-val">70–90°C</span>). Main engine load interlock: blocks FWG operation below <span class="n-val">40% MCR</span> - insufficient jacket water temperature at low load.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-fresh-water-generator.webp" alt="Fresh water generator — evaporator, condenser, vacuum pump, salinometer, dump valve" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-fresh-water-generator.webp" alt="Fresh water generator — evaporator, condenser, vacuum pump, salinometer, dump valve" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRqIAAABXRUJQVlA4IJYAAAAwBACdASocACcAPu1iqk6ppSOiKqwBMB2JaQAAT1/TJTEPIRAmQjZNuAAA/vBoRBr29Z6lV/z0ZltLjXQh/0kFkBJuteJ1NuSXPJQPJNWwNeuU77MwPmMZFUSc9B4JqBpLJjvPf554/JYXFIN+Ehw7AeqftjwIEZ7HN3kFh5tgfP2wyft0OilS5JIl7vlCKYNw1EdAAAA=">
     <div class="note-diagram-cap">Fig. Fresh Water Generator — JCW heat in evaporator boils seawater at 35–40°C under vacuum (45–60 mbar); vapour rises to condenser (cooled by SW); distillate falls to salinometer; dump valve diverts to bilge if salinity &gt;5 ppm</div>
   </div>
 
@@ -965,7 +965,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Purpose:</strong> Transfers ballast between port and starboard tanks to maintain ship upright during one-sided cargo loading/discharging.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-anti-heeling.webp" alt="Anti-heeling system — port and starboard ballast tanks, transfer pump, remote valves, inclinometer, control panel" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-anti-heeling.webp" alt="Anti-heeling system — port and starboard ballast tanks, transfer pump, remote valves, inclinometer, control panel" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAAAQAwCdASocABIAPu1sq08ppqQiMBgIATAdiWkAADqwqgAA/vB6NU/+2KbYvmI7FCaJzvxRkCKmhrLUB8yZ2YVlyAAAAA==">
     <div class="note-diagram-cap">Fig. Anti-Heeling System — inclinometer detects heel angle; control panel drives transfer pump between port/starboard ballast tanks; remote valve actuators on cross-flooding valves; ETO maintains pump motor, sensors, and valve position feedback</div>
   </div>
 
@@ -986,7 +986,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>NEVER use for normal bilge pumping</strong> - it uses the main cooling pump, which cannot simultaneously cool the engine while pumping the bilge. Valve is sealed shut normally.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-seawater-injection-valve.webp" alt="Seawater injection / bilge injection valve — large-bore valve on main SW pump suction" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-seawater-injection-valve.webp" alt="Seawater injection / bilge injection valve — large-bore valve on main SW pump suction" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAABQBACdASocABUAPu1uq1EppiOiqAqpMB2JaQAALo3AKjFFRUGmJQZpIwQAAP7v2s710GoNuTJO/mRCNW1xIuSKWvBFWb7szz3Wme9zMrYSNS3JbNHwMA/UynKT9YnHhSaI4PdofyoLkbg+vIAAAA==">
     <div class="note-diagram-cap">Fig. Seawater/Bilge Injection Valve — large-bore valve (100–150 mm) on main SW cooling pump suction; opened in emergency to pump bilge water overboard at 200–600 m³/hr; cooling water to machinery must be shut first</div>
   </div>
 
@@ -1007,12 +1007,12 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   </ol>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-blackout.webp" alt="Blackout scenario — all generators tripped, dead bus, emergency switchboard isolated" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-blackout.webp" alt="Blackout scenario — all generators tripped, dead bus, emergency switchboard isolated" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAABQBACdASocACgAPu1srlIppaQipWsxMB2JaWfkABMfjrdu7R1MNI33BkgAAP7wSQoT1cCTffQAdhUtKkCiJOPLYNz4my0p/V8btI9vPlnpPXp/ie+IgB9XN5X7owKt7wru0KGlMBrc+SME5iqrVJXd++f+6EIhIgrTJnFOE3c/cEUgBQAAAA==">
     <div class="note-diagram-cap">Fig. Blackout — all ACBs open, main bus dead; emergency switchboard feeds emergency loads from emergency generator; sequential restoration required before re-energising main bus</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-dead-ship-recovery.webp" alt="Dead ship recovery procedure — battery start emergency gen, air compressor, AE1, manual synchronising" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-dead-ship-recovery.webp" alt="Dead ship recovery procedure — battery start emergency gen, air compressor, AE1, manual synchronising" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAABQBACdASocACgAPu1srlIppaQipWsxMB2JaWfkABMfjrdu7R1MNI33BkgAAP7wSQoT1cCTffQAdhUtKkCiJOPLYNz4my0p/V8btI9vPlnpPXp/ie+IgB9XN5X7owKt7wru0KGlMBrc+SME5iqrVJXd++f+6EIhIgrTJnFOE3c/cEUgBQAAAA==">
     <div class="note-diagram-cap">Fig. Dead Ship Recovery — 24V battery starts emergency generator → emergency air compressor fills starting air → compressed air starts AE1 → manual ACB close restores main bus → second AE parallel → non-essential loads restored last</div>
   </div>
 
@@ -1130,7 +1130,7 @@ window.loadNotes("T09", `<div class="view" id="view-notes-t09">
   4. <strong>Earthing conductor:</strong> Continuous earth bond from oven metalwork back to the distribution board earth bar - verified by millivolt drop test on the earth continuity conductor.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t09-electric-oven.webp" alt="Galley electric oven circuit — heating elements, thermostat, ELCB, MCB, earth bond" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t09-electric-oven.webp" alt="Galley electric oven circuit — heating elements, thermostat, ELCB, MCB, earth bond" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlgBAABXRUJQVlA4IEwBAABQCACdASocACoAPuVcok2pJSMiNVgMASAciUAXoBsjBh3uY92qqgwwmip0JxoptjxR9vykQs77Z8Ae+F8ecRqqhRTHL5GXwrtaUgAA/vHj2m8deIwp4qybtgieje7jLQWNIm5Z836qQMLHikjv29XQSkH/e6x6JOk4acqKYTAIbgh6edJ053eRtA3JThjIiMz3vj3x1TfML+BCagE09LkrALvkjW/bZmEZYn5qXkBs2fjdu3kX2ggMIdCGSOAFNgTtGlDbMpdFI66fhTREfTtJsBHMgc4xPFeHcxYeio4NAuyYgXAEF0mV2BQUoz8AsG9xcdMwsVvnmE2VYU2pCioyAV4/5bHqJmIr7jezHaq3M4LwX3X/MhHmZjcYJJ1f4g5pJd0rQQHv5Li2vmqM9FT91dpBuUxobSCjFghY3zSVKhRTz4jEIXxWW8hAAA==">
     <div class="note-diagram-cap">Fig. Galley Electric Oven Circuit — resistance heating elements (Nichrome) controlled by thermostat; ELCB trips at 30 mA earth leakage; MCB for overcurrent; earth bond from oven metalwork to distribution board; test ELCB monthly</div>
   </div>
 

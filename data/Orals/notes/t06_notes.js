@@ -91,12 +91,12 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </table>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t06-thermocouple.webp" alt="Thermocouple Seebeck effect — hot junction, cold junction, dissimilar metal wires, millivolt EMF output" loading="lazy" decoding="async">
+  <img src="../data/diagrams/t06-thermocouple.webp" alt="Thermocouple Seebeck effect — hot junction, cold junction, dissimilar metal wires, millivolt EMF output" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACQAwCdASocABMAPu1or1AppaSiqAqpMB2JZwAAOmfRoutHc4aAAP7wZUrBGE44uA0TDhW7Aw0JN7Ygmq75w7yPACOn/NF0hFpysYaUQ3muw3PFksYaov5NaAAAAA==">
   <div class="note-diagram-cap">Fig. Thermocouple — Seebeck effect: dissimilar metals (e.g. Type K: Chromel/Alumel) generate EMF proportional to temperature difference between hot and cold junctions</div>
 </div>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t06-rtd-wiring.webp" alt="RTD PT100 2-wire, 3-wire and 4-wire connection methods — lead resistance compensation" loading="lazy" decoding="async">
+  <img src="../data/diagrams/t06-rtd-wiring.webp" alt="RTD PT100 2-wire, 3-wire and 4-wire connection methods — lead resistance compensation" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAACwAwCdASocABMAPu1qqVAppiOiqA1RMB2JaWo3ABrZzZaA9dwHAAD+8H3/sJdQ3WSCF5ytZKUfJWjlSgmgZaP1egawBA7Zfwu/8lGF6VY5BidwmXkbmRzJAAAAAA==">
   <div class="note-diagram-cap">Fig. RTD Wiring Methods — 2-wire (uncompensated), 3-wire (lead resistance cancels in Wheatstone bridge, standard shipboard use), 4-wire Kelvin (laboratory accuracy)</div>
 </div>
 
@@ -156,12 +156,12 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why 20 mA maximum? (Safety rationale):</strong> The human heart can withstand approximately <span class="n-val">30 mA</span> before ventricular fibrillation becomes a risk. The 4–20 mA standard was deliberately set so that even a direct contact with the full-scale signal loop current of 20 mA remains below the cardiac threshold with a safety margin. This makes 4–20 mA inherently safer to handle than higher-current systems, particularly relevant in damp engine room environments.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-two-wire-transmitter.webp" alt="Two-wire loop-powered transmitter — 24 V DC supply, 4-20 mA signal on same two wires, DCS input card" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-two-wire-transmitter.webp" alt="Two-wire loop-powered transmitter — 24 V DC supply, 4-20 mA signal on same two wires, DCS input card" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAAAwBACdASocABMAPu1grFAppSQisBgIATAdiWkAAC51G5lPvCs8XmHBAAAA/vHbu2W8ZlYGEYbOrgOQkxsP9Xbi3pWIbHiMuj6tQzWqak3Av+MtHER5yiYAAAA=">
     <div class="note-diagram-cap">Fig. Two-Wire Loop-Powered Transmitter — 24 V DC power and 4–20 mA process signal share the same pair of wires; transmitter modulates loop current proportional to measured variable</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-4-20ma-current-loop.webp" alt="4-20 mA current loop — live zero 4 mA, full scale 20 mA, wire break = 0 mA fault" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-4-20ma-current-loop.webp" alt="4-20 mA current loop — live zero 4 mA, full scale 20 mA, wire break = 0 mA fault" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRn4AAABXRUJQVlA4IHIAAABwBACdASocABUAPu1urlIppiQiqAgBMB2JZwAHB9j//TJVk/+VkzRT/CyEwAD+7dfUuH1Tv4JNofPkhTVW2D39k6JSIkvpfTnxoJbZ2p9+Ak6JKKBJvYGrDynZVmGzk7T9IPTCnS2vkOMP/3V8X55AAAA=">
     <div class="note-diagram-cap">Fig. 4–20 mA Current Loop — live zero (4 mA = 0%, 20 mA = 100%), wire break detectable as 0 mA fault; linear conversion formula mA = 4 + (PV/span × 16)</div>
   </div>
 
@@ -170,7 +170,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>HART Resistor Requirement:</strong> A minimum resistance of <span class="n-val">250 Ω</span> must be present in the loop (DCS input card or added resistor) to develop sufficient voltage for the HART communicator to read the FSK signal. Voltage developed = I × R = 20mA × 250Ω = <span class="n-val">5V</span> (max). The HART communicator clips across this resistor to communicate with the transmitter. Without 250Ω, the FSK voltage amplitude is too small to decode reliably.</div></div>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t06-hart-communicator.webp" alt="HART communicator connected to 4-20 mA loop — FSK digital signal superimposed, 250 Ω resistor, DCS input" loading="lazy" decoding="async">
+  <img src="../data/diagrams/t06-hart-communicator.webp" alt="HART communicator connected to 4-20 mA loop — FSK digital signal superimposed, 250 Ω resistor, DCS input" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAwBACdASocABIAPu1mq08ppaOiKA1RMB2JaQAALnXjpJdLK9bAqCWQyAAA/vHPQh0iGcpURlMS8HrugK1amuI/ALsp7CXRBmZTwTbFslW4AkQsOi6zgAAA">
   <div class="note-diagram-cap">Fig. HART Communication — FSK digital signal (1200/2200 Hz, ±0.5 mA) superimposed on 4–20 mA analogue loop; HART communicator clips across 250 Ω burden resistor</div>
 </div>
 
@@ -232,7 +232,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-zener-barrier.webp" alt="Zener barrier circuit — series resistor, back-to-back Zener diodes, IS earth, safe area to hazardous area" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-zener-barrier.webp" alt="Zener barrier circuit — series resistor, back-to-back Zener diodes, IS earth, safe area to hazardous area" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAACQAwCdASocAA8APu1iqU2ppaOiMAgBMB2JZ1/2ADdX/1VQEF60AP7wZfeHCStrp/A5TWZgyYqQh36JKtWsL5D/E4AfUW6PP/BtWGwUCrKVCPFKl+j9AAAA">
     <div class="note-diagram-cap">Fig. Zener Barrier — series resistor limits fault current (I_max = V/R); Zener diodes clamp voltage (V_max = Vz); IS earth (&lt;1 Ω) essential for clamping action; safe area DCS to hazardous area field instrument</div>
   </div>
 
@@ -286,12 +286,12 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Never</strong> open the HP isolation valve with equalising valve closed and LP valve closed - full process pressure applied to only one side of the DP capsule causes over-range damage (burst diaphragm). Always equalise before opening to process.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-dp-flow-sensor.webp" alt="DP transmitter on orifice plate — HP and LP taps, 3-valve manifold, DP capsule, 4-20 mA output" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-dp-flow-sensor.webp" alt="DP transmitter on orifice plate — HP and LP taps, 3-valve manifold, DP capsule, 4-20 mA output" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRrAAAABXRUJQVlA4IKQAAADQBACdASocAB4APu1kq06ppaOiKA1RMB2JaUwGTPgWgAiNYaShajM3oO+DEvpSAAD+8DQ4GvoorerOHjt2j384TG0i2gDWCu9U0Fve9Ctn+hlsgCREZ4oeXScdGYv0L4n5ucDjkuyQtNjp6mZYFA4uYlqtkNSgs8Tb+Se0mexaEAzpxmCdx7+b5alkLcdPrQBTkvXXs4f10OYcnkTBqDGsVdwoAA==">
     <div class="note-diagram-cap">Fig. DP Flow Measurement — orifice plate creates differential pressure; HP/LP taps connect via 3-valve manifold to DP capsule; output 4–20 mA proportional to √ΔP</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-dp-three-way-valve.webp" alt="DP transmitter 3-valve manifold — HP isolation valve, LP isolation valve, equalising valve, startup sequence" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-dp-three-way-valve.webp" alt="DP transmitter 3-valve manifold — HP isolation valve, LP isolation valve, equalising valve, startup sequence" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADwAwCdASocABYAPu1ur1IppiQiqAgBMB2JaQAAPPz9kUZzlfxAhieAAP7wezu5y9waONe8Df5qqE2tRIl95zVgpfdB265yPEFg+I/drThJXfD9AQd8iihWFoAAAA==">
     <div class="note-diagram-cap">Fig. 3-Valve Manifold — HP isolation, LP isolation, equalising valve; startup: open LP → open HP → close equalising (never apply full HP with equaliser closed)</div>
   </div>
 
@@ -339,7 +339,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>Memory Aid - Coriolis:</strong> Think of a spinning sprinkler - water flying outward twists the arms (Coriolis force on rotating mass). In the meter, flowing fluid through vibrating tubes creates a twist proportional to mass flow. <strong>Phase lag = Mass flow. Frequency shift = Density.</strong></div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-coriolis-flowmeter.webp" alt="Coriolis flowmeter — vibrating U-tubes, phase shift between inlet and outlet pickups proportional to mass flow" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-coriolis-flowmeter.webp" alt="Coriolis flowmeter — vibrating U-tubes, phase shift between inlet and outlet pickups proportional to mass flow" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAADQAwCdASocABQAPu1ur1KppiQiqAgBMB2JaQAALlRhcTYODBLkJEAA/vA+EOUjWy8bFxqU5aX0wd24TzlruMDY588lXDu7AwKBiKAVgfJbO/blrPbeX550scGL+8Npzg1GJWuuAAAAAA==">
     <div class="note-diagram-cap">Fig. Coriolis Flowmeter — vibrating U-tubes; flowing mass twists tubes (Coriolis force); phase lag between inlet/outlet pick-up coils ∝ mass flow; resonant frequency shift ∝ fluid density</div>
   </div>
 
@@ -365,7 +365,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-turbine-flowmeter.webp" alt="Turbine flowmeter — rotor spins in flow, magnetic pickup counts rotation frequency to give volumetric flow rate" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-turbine-flowmeter.webp" alt="Turbine flowmeter — rotor spins in flow, magnetic pickup counts rotation frequency to give volumetric flow rate" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADQAwCdASocABEAPu1qqVAppiOiqA1RMB2JaQAAO7Cbsr6THMlmLAAA/vCAtdWRYL36ivpINFszU/0zH4lO+J7u6T53kFozbC8a5qnfwccYbgAAAAA=">
     <div class="note-diagram-cap">Fig. Turbine Flowmeter — multi-bladed rotor in pipe; flow spins rotor; magnetic pick-up counts rotations per second → volumetric flow Q ∝ frequency; moving parts susceptible to viscous fluids and contamination</div>
   </div>
 
@@ -388,7 +388,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-paramagnetic-o2.webp" alt="Paramagnetic oxygen analyser — dumbbell suspension type and thermomagnetic magnetic-wind type" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-paramagnetic-o2.webp" alt="Paramagnetic oxygen analyser — dumbbell suspension type and thermomagnetic magnetic-wind type" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAADQBACdASocABYAPu1iqlAppSOisBgIATAdiWkAA9+0Lj8uJJueoCYLFoYXoYCmgAD+7abkVdRj9QdkVpkV6x8tQ3s18gUZ3H5U5LOpOeefESV0cV/HeBTbgviFKX2oLqf34kgr0APZT++gAAA=">
     <div class="note-diagram-cap">Fig. Paramagnetic O₂ Analyser — dumbbell suspension type (O₂ displaces N₂-filled spheres in magnetic field); thermomagnetic type (magnetic wind flow cools Pt wire, shifts Wheatstone bridge)</div>
   </div>
 
@@ -434,7 +434,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Principle (Catalytic bead / Pellistor):</strong> Air-gas mixture drawn over a heated catalytic platinum bead. Combustible gas oxidises on the catalyst surface, releasing heat → bead temperature rises → bead resistance rises → Wheatstone bridge goes off-null → reading in % LEL (Lower Explosive Limit).<br><strong>Scale:</strong> 0–100% LEL. <strong>NEVER read beyond 100% LEL</strong> - meter cannot be accurate in explosive or overly rich mixtures.<br><strong>Safe entry limits:</strong> Space must be below <span class="n-val">10% LEL</span> for entry with ignition sources. Below <span class="n-val">1% LEL</span> for hot work.<br><strong>Annual calibration:</strong> With certified span gas (50% LEL n-pentane or methane). Bump test before each use.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-pellistor-catalytic.webp" alt="Pellistor catalytic bead gas detector — active and reference bead Wheatstone bridge, % LEL output" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-pellistor-catalytic.webp" alt="Pellistor catalytic bead gas detector — active and reference bead Wheatstone bridge, % LEL output" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRm4AAABXRUJQVlA4IGIAAAAQAwCdASocABMAPu1or1CppaQiqAqpMB2JZwAAOsT2TkAA/vBoFuZPwydeXis9A/g9IGk5C7aZFFzDhT6oqxeGNKgh188o8U3d06QyM+kATnbPWwqAqxR12TxUVxikj4AAAA==">
     <div class="note-diagram-cap">Fig. Pellistor (Catalytic Bead) — active bead oxidises combustible gas → resistance rises → Wheatstone bridge off-null → % LEL reading; reference bead compensates for temperature drift</div>
   </div>
 
@@ -469,7 +469,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Working:</strong> An internal oscillator drives a coil at high frequency (<span class="n-val">10 kHz – 1 MHz</span>), projecting a high-frequency alternating electromagnetic field ahead of the sensor face. When a metallic target enters this field, eddy currents are induced in the metal surface - these eddy currents draw energy from the oscillator (eddy current damping). The oscillator amplitude drops → detection circuit triggers → output switches. <strong>Metallic targets only.</strong><br><br><strong>Sensing range correction factor for non-ferrous metals:</strong> Ferrous steel = 100% rated range. Aluminium ≈ 60%. Copper ≈ 40% (higher eddy current conductivity means different interaction).<br><br><strong>Advantages:</strong> Completely unaffected by oil film, water, dust, or contamination on sensor face. No moving parts. No physical contact with target. Response time &lt;1 ms.<br><br><strong>Ship uses:</strong> Shaft RPM sensing (reluctor ring on crankshaft), valve position (open/closed limit detection), crankshaft TDC detection for timing reference, gear tooth counting.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-inductive-proximity.webp" alt="Inductive proximity sensor — oscillator coil, eddy currents in metallic target, amplitude damping triggers output" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-inductive-proximity.webp" alt="Inductive proximity sensor — oscillator coil, eddy currents in metallic target, amplitude damping triggers output" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABQAwCdASocAA4APu1iqU2ppaQiMAgBMB2JaQAAetvzJ/+uAAD+8JP4pykUeZbYGxXdkETfpzo8zsIW7ti6SfR75+ZAAA==">
     <div class="note-diagram-cap">Fig. Inductive Proximity Sensor — high-frequency EM field from oscillator coil; metallic target induces eddy currents; energy drain damps oscillator amplitude → switch triggers; metallic targets only</div>
   </div>
 
@@ -484,7 +484,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
     <tr><td><strong>LVDT</strong></td><td>Moving iron core shifts mutual inductance between primary and secondary coils</td><td>Mechanical linkage/stem only</td><td>Governor fuel rack, control valve stem feedback, rudder angle</td></tr>
   </table>
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-capacitive-proximity.webp" alt="Capacitive proximity sensor — oscillator plate forms capacitor with target, change in capacitance modifies oscillation frequency" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-capacitive-proximity.webp" alt="Capacitive proximity sensor — oscillator plate forms capacitor with target, change in capacitance modifies oscillation frequency" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAwCdASocABMAPu1kq0+ppSOiMBgIATAdiWkAAC52TJaJo9fy7+7AAP7x3C/rxKsX2c35m6rXmk+WYy1THWSFHzjBm26R5izZZO1pqzrAIyx37VLgZj0q1pM0TDqi2WVwAAAA">
     <div class="note-diagram-cap">Fig. Capacitive Proximity Sensor — sensor face forms one capacitor plate; target (metal, liquid, or non-metal) changes dielectric constant → oscillation frequency shifts → detector triggers; works on all materials including liquids</div>
   </div>
 
@@ -499,7 +499,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-formula">RPM = (f × 60) / N<div class="label">f = pulse frequency (Hz), N = number of teeth on the gear wheel (reluctor ring tooth count)</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-magnetic-pickup.webp" alt="Magnetic pick-up sensor — permanent magnet with coil, ferrous gear tooth changes flux, induces EMF pulse" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-magnetic-pickup.webp" alt="Magnetic pick-up sensor — permanent magnet with coil, ferrous gear tooth changes flux, induces EMF pulse" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRsAAAABXRUJQVlA4ILQAAABwBQCdASocAB4APu1wr1KppiQiqAgBMB2JaQAIGe4uj32JI2d4dP/ETcL17TSG7i2UAPAAAP77MTKqZK/y+VhrEzWTd7Vio7y40dMGZu7/3R0SIOHM221XsVut2yJxRZ7D4BbV2Q9PRw2AmiVqu5hHU88z+nIktlqX+bkNmAHfGSb+tqFwlyKOwczHQf/HiA2xSyS1LEjIqqPhV/k7kC5JA33xvfc0PjRacBCC7UYsqsdAAAA=">
     <div class="note-diagram-cap">Fig. Magnetic Pick-Up (Variable Reluctance) — permanent magnet + coil; each gear tooth changes flux → Faraday EMF pulse; pulse frequency ∝ RPM; passive, self-generating, no power supply needed</div>
   </div>
 
@@ -668,17 +668,17 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-capacitive-level.webp" alt="Capacitive level sensor — probe as one plate, tank wall as other plate, liquid increases capacitance proportional to level" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-capacitive-level.webp" alt="Capacitive level sensor — probe as one plate, tank wall as other plate, liquid increases capacitance proportional to level" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnoAAABXRUJQVlA4IG4AAACQBACdASocABMAPu1iqE4ppaOiMAgBMB2JZwAAWqGnptCiW/cgZatN9Ql6AAAA/vOBJBpE3h7uv30rIhGAEiKBfU7YHMYFQX3TdisaKcTOVIbAi5nYUXOgKVBiBdfunfbodyyTwYzWSgef/0AAAA==">
     <div class="note-diagram-cap">Fig. Capacitive Level Sensor — probe + tank wall form capacitor; liquid (higher dielectric constant) increases capacitance proportional to immersion depth; electronics convert to 4–20 mA</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-ultrasonic-level.webp" alt="Ultrasonic level sensor — transducer emits pulse, measures echo time from liquid surface, level = height minus distance" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-ultrasonic-level.webp" alt="Ultrasonic level sensor — transducer emits pulse, measures echo time from liquid surface, level = height minus distance" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAAAQBQCdASocACcAPu1urlIppiQipWsxMB2JaQAIEAEQ9lJAoFrJWD6BZBFNQ5wbRSZAAP7x9Q7t7qeQn1g5iU9mKJv87r0YVyBbIpLlW/1xh72yKSTd/mTo1qagmx9RJGDHqjISUIZtKiRPx9VwldtSv7atcF+mgoFcNmSPxpS5K2fSWWNKEk4fW3S7m7m1YHNdCE19n5W5AOxTN1fdiKjUiTh++mAAAAA=">
     <div class="note-diagram-cap">Fig. Ultrasonic Level Sensor — piezoelectric transducer emits pulse downward; echo time from liquid surface → level = tank height − (v × t/2); non-contact, no moving parts</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-radar-level.webp" alt="Radar level sensor — microwave pulse time-of-flight, unaffected by vapour or temperature" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-radar-level.webp" alt="Radar level sensor — microwave pulse time-of-flight, unaffected by vapour or temperature" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnQAAABXRUJQVlA4IGgAAACQBACdASocACAAPu1wsFKppiSiqAgBMB2JaQAALo26/Nx2kJPPhv8E+qJI3wAA/vHQk58Cx4OPZPGEO+1IKpVPnTjS5GD48JVbltX8/DR5fp/CJsrmk4ZSf7xXGFIUs2jKJb8sPhAAAA==">
     <div class="note-diagram-cap">Fig. Radar Level Sensor — microwave pulse (5–80 GHz) reflects from liquid surface; speed of light TOF measurement; unaffected by vapour, foam, temperature changes; used for cargo oil and LNG custody transfer</div>
   </div>
 
@@ -696,7 +696,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <p class="n-p">In a pressure transmitter, four strain gauges are deposited onto a metal diaphragm (two in compression, two in tension when pressure is applied - full bridge configuration). Applied pressure deflects the diaphragm, straining all four gauges simultaneously. Two gauges increase in resistance while two decrease - this differential effect doubles the sensitivity and cancels temperature error. Bridge output voltage is proportional to applied pressure. This mV signal is amplified and conditioned to 4-20mA.</p>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-wheatstone-strain-gauge.webp" alt="Wheatstone bridge with strain gauges — full bridge configuration, two in tension, two in compression, mV output" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-wheatstone-strain-gauge.webp" alt="Wheatstone bridge with strain gauges — full bridge configuration, two in tension, two in compression, mV output" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmQAAABXRUJQVlA4IFgAAAAQBACdASocABQAPu1mqU2ppaQiMAgBMB2JaQAAXfBUIz7BF1PdJHy4AAD+79lYJXMyY9I4XQp1vK4hMLkTEVP01RLQF888xT/xI2f7dgNgTifXmvlcAAAA">
     <div class="note-diagram-cap">Fig. Wheatstone Bridge with Strain Gauges — full bridge: two gauges in tension (R↑), two in compression (R↓) when pressure applied; differential bridge output doubles sensitivity and cancels temperature error</div>
   </div>
 
@@ -712,7 +712,7 @@ window.loadNotes("T06", `<div class="view" id="view-notes-t06">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Construction:</strong> One primary coil (driven by AC excitation, typically 1–10 kHz) and two secondary coils (S1 and S2) wound in opposition and placed symmetrically on either side of the primary. A soft iron core is mechanically connected to the object whose position is being measured (valve stem, governor fuel rack, rudder shaft).<br><br><strong>Working:</strong> AC in primary induces voltage in both secondaries by mutual induction. Output = V_S1 − V_S2 (connected in series opposition).<br>• Core central (null position): V_S1 = V_S2 → V_out = 0 (no net output)<br>• Core moves toward S1: V_S1 increases, V_S2 decreases → V_out = positive voltage proportional to displacement<br>• Core moves toward S2: V_S1 decreases, V_S2 increases → V_out = negative voltage proportional to displacement<br>• Phase of output (0° or 180° relative to primary) indicates direction of movement<br><br><strong>Advantages:</strong> Contactless - no physical friction or wear between core and coils. Infinite resolution (analogue, not digital steps). Highly accurate (±0.25% full scale). Rugged - sealed in oil or epoxy, suitable for harsh conditions.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t06-lvdt.webp" alt="LVDT — primary coil, two secondary coils S1 and S2, moving iron core, output voltage proportional to displacement" loading="lazy" decoding="async">
+    <img src="../data/diagrams/t06-lvdt.webp" alt="LVDT — primary coil, two secondary coils S1 and S2, moving iron core, output voltage proportional to displacement" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRoIAAABXRUJQVlA4IHYAAACQBACdASocABkAPu1opU2ppiMiMBgMATAdiWcAAC51nVPGWFbSGJkpLkgwh0AA/vNxUGxxaHz6Y+0rbni2ZTIFhsFohrXEm/By20uSckYR5Sm6MA8Rm11X/+TGZlL4VAplpkCXqm6dpgLn59URP/boIRQAAAAA">
     <div class="note-diagram-cap">Fig. LVDT (Linear Variable Differential Transformer) — iron core displaced from null: V_S1−V_S2 ≠ 0; output polarity indicates direction; used for governor fuel rack, valve stem, rudder angle feedback</div>
   </div>
 
