@@ -39,6 +39,12 @@ const CONTENT_DIRS = [
     'data/Sponsorship/aptitude',
     'data/Sponsorship/CompanyQA',
     'data/Sponsorship/interview',
+    // Legacy s01-s09 content. No longer referenced by the sponsorship app,
+    // but still tracked in git and therefore still served publicly, so it
+    // was leaking in plaintext even after everything else was encrypted.
+    'data/Sponsorship/notes',
+    'data/Sponsorship/quizzes',
+    'data/Sponsorship/videos',
 ];
 
 // Free preview files — keep plain JS so non-subscribers can see the preview

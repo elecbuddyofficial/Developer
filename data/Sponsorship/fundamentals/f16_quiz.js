@@ -1,1 +1,1 @@
-window.loadQuizzes("F16_PowerElec", []);
+{"v":1,"iv":"0ISYivuehW7MlUx/","data":"1HXorVaGE5qdSY28hHBWzjBhgfV1gOnrHqFGhlGtrLd2/6gwuvuXeQ==","tag":"A7CNvYERoXLyo+u7Sc6bqA=="}

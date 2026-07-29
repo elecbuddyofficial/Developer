@@ -1,1 +1,1 @@
-window.loadQuizzes("F22_Refrigeration", []);
+{"v":1,"iv":"5cI4wQmT2ckXQDxu","data":"JA4dxN1QXp7lL6qpeil6VtckvjNQEKxTtk5gt2HVFm7sr1x43JQOiEvh1zU=","tag":"7ohQsv9uq80u/qMoMqKw+w=="}

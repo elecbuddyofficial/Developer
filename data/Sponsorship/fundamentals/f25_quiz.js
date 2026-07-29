@@ -1,1 +1,1 @@
-window.loadQuizzes("F25_Practical", []);
+{"v":1,"iv":"qbl/fH0Jd434w6SQ","data":"/Opoq+AkaHe7uNH4MuNd+HK8IoaFVKPuL6Z15oNhpTMFWYNEX0RFSg==","tag":"T3+TiFKXdjhC6bMA/ypEww=="}

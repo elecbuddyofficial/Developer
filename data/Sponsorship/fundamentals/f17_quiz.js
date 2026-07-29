@@ -1,1 +1,1 @@
-window.loadQuizzes("F17_Electronics", []);
+{"v":1,"iv":"53f3NbLS1w9UKphw","data":"NUF3/1PQhsB1nXQWvWIxQBIJ4CSH8bYgw/ny14cyus6zX5kaCJC2FcSC","tag":"5WRzDzk3Qd9+crMqdPamXA=="}

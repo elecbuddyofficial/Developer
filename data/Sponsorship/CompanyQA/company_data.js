@@ -1,4 +1,1 @@
-window.COMPANY_DATA = {
-  "companies": {},
-  "questions": []
-};
+{"v":1,"iv":"SSW7raWZnXrrtUAo","data":"TQx+K8iIsf8WOdZcgCfJU2IxBUIlvqdXx3Y8SI009TdFnmBnxpmSXzpQrWRP7XpyeGAMF7UuAP2yhboNl2wm","tag":"6UfIyi97aDHpgoPUizj77w=="}

@@ -1,1 +1,1 @@
-window.loadQuizzes("F09_Induction", []);
+{"v":1,"iv":"g8rtc3VZhnLTzZgL","data":"1TMQCG3jNrRboR/+QOnXL5zrv1yyLjeNHq6jiMK+Ln41D+JJX8bSuA==","tag":"ORB4GQeOKoYmp834LLlIzw=="}

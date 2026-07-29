@@ -1,1 +1,1 @@
-window.loadQuizzes("F23_Losses", []);
+{"v":1,"iv":"oUv9+xuNzlNTywzw","data":"5amcKVSZTQQ4tM4GX2vxa7bgZMiBQh1lzBWK/qwCeVzt+Zypig==","tag":"23/9TSjO2AWQzSzMzPKsOQ=="}

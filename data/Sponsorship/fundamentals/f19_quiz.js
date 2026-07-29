@@ -1,1 +1,1 @@
-window.loadQuizzes("F19_Batteries", []);
+{"v":1,"iv":"hDNVCId2OrmBQlja","data":"sC59JCm9BSwiBwIOl/j7vt/RIpmb5uEkcuyWNgEY21qwa/0YEkAJSw==","tag":"id4mScWaf8uKgn8/j5LlqQ=="}
