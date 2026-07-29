@@ -640,6 +640,18 @@
     <!-- Upgrade CTA (shown only for trial / expired) -->
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
 
+    <!-- Data Saver -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+      <div style="min-width:0;">
+        <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Data Saver</div>
+        <div style="font-size:10.5px;color:#4A6880;margin-top:2px;line-height:1.4;">Diagrams load only when tapped</div>
+      </div>
+      <label class="ds-switch">
+        <input type="checkbox" id="pm-data-saver-toggle" onchange="toggleDataSaver(this.checked)">
+        <span class="ds-switch-track"></span>
+      </label>
+    </div>
+
     <!-- Admin Panel (admins only) -->
     <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
@@ -1204,6 +1216,7 @@ function setTheme(t) {
       document.getElementById('pm-avatar').textContent = name.charAt(0).toUpperCase();
       document.getElementById('pm-name').textContent = name;
       document.getElementById('pm-email').textContent = user.email;
+      document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
 
       if (!window._sbClient) return;
       const { data: profile } = await window._sbClient

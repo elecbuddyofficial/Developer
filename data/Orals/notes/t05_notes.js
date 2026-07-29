@@ -57,7 +57,7 @@ window.loadNotes("T05", `<div class="view" id="view-notes-t05">
 </div></div>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t05-transformer-principle.png" alt="Transformer working principle — primary winding, core flux, secondary winding, turns ratio">
+  <img src="../data/diagrams/t05-transformer-principle.webp" alt="Transformer working principle — primary winding, core flux, secondary winding, turns ratio" loading="lazy" decoding="async">
   <div class="note-diagram-cap">Fig. Transformer Working Principle — mutual induction, core flux, V₁/V₂ = N₁/N₂ turns ratio</div>
 </div>
 
@@ -649,7 +649,7 @@ Conditions (1), (4), and (5) affect load sharing quality and performance but not
 </table>
 
 <div class="note-diagram-wrap">
-  <img src="../data/diagrams/t05-transformer-oc-sc-test.png" alt="Transformer SC (short circuit) test circuit — reduced voltage applied to HV side, LV side short-circuited; ammeter, voltmeter and wattmeter measure copper losses">
+  <img src="../data/diagrams/t05-transformer-oc-sc-test.webp" alt="Transformer SC (short circuit) test circuit — reduced voltage applied to HV side, LV side short-circuited; ammeter, voltmeter and wattmeter measure copper losses" loading="lazy" decoding="async">
   <div class="note-diagram-cap">Fig. SC Test Circuit — reduced voltage applied to HV side until rated current flows; LV side shorted; wattmeter reads copper losses (I²R); voltmeter reads V_sc used to calculate percentage impedance Z%</div>
 </div>
 

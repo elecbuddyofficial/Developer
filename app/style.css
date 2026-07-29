@@ -1118,7 +1118,45 @@ a.sb-item{text-decoration:none}
     .note-diagram-wrap img { max-width: 100%; }
 }
 
+/* Data Saver placeholder — stands in for a diagram until tapped */
+.dgm-placeholder {
+    max-width: min(100%, 560px);
+    height: 140px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1.5px dashed var(--border2);
+    border-radius: var(--r8, 8px);
+    color: var(--text3, #888);
+    cursor: pointer;
+    transition: border-color .15s, color .15s, background .15s;
+}
+.dgm-placeholder:hover, .dgm-placeholder:focus-visible {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-dim);
+    outline: none;
+}
+.dgm-placeholder span { font-size: 12.5px; font-weight: 600; }
+
 /* ═══ THEME SWITCHER ═══ */
+/* Data Saver toggle switch (profile menu) */
+.ds-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; cursor: pointer; }
+.ds-switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+.ds-switch-track { position: absolute; inset: 0; background: #1A3050; border: 1px solid #2E5577; border-radius: 22px; transition: background .18s, border-color .18s; }
+.ds-switch-track::before {
+    content: ''; position: absolute; height: 16px; width: 16px; left: 2px; top: 1px;
+    background: #fff; border-radius: 50%; transition: transform .18s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.35);
+}
+.ds-switch input:checked + .ds-switch-track { background: #C8A44A; border-color: #C8A44A; }
+.ds-switch input:checked + .ds-switch-track::before { transform: translateX(18px); }
+.ds-switch input:focus-visible + .ds-switch-track { outline: 2px solid #C8A44A; outline-offset: 2px; }
+
 .theme-switcher{padding:10px 12px;display:flex;align-items:center;gap:6px;justify-content:center}
 .theme-btn{width:38px;height:34px;border-radius:var(--r8);border:1px solid var(--border2);background:var(--surface2);font-size:15px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center;flex:1;color:var(--text2)}
 .theme-btn:hover{border-color:var(--border2);background:var(--surface3);color:var(--text)}

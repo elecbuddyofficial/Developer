@@ -1,6 +1,6 @@
 // ─── Elec-Buddy — Service Worker ──────────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v27';
+const VERSION = 'v28';
 const CACHE = 'elec-buddy-' + VERSION;
 
 // App shell — always cached at install time
@@ -65,10 +65,34 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  // Content files (notes, quizzes, videos, diagrams): stale-while-revalidate.
+  // Diagram images: cache-first. These are static assets that never change
+  // once published, so revalidating them in the background on every single
+  // view was pure waste — a student reopening a topic they'd already read
+  // was silently re-downloading every diagram in it again. If a diagram
+  // genuinely needs to be replaced, the filename changes (or bump VERSION
+  // above to force everyone's cache to clear).
+  if (e.request.url.includes('/data/diagrams/')) {
+    e.respondWith(
+      caches.open(CACHE).then(cache =>
+        cache.match(e.request).then(cached => {
+          if (cached) return cached;
+          return fetch(e.request).then(response => {
+            if (response && response.status === 200) {
+              cache.put(e.request, response.clone());
+            }
+            return response;
+          });
+        })
+      )
+    );
+    return;
+  }
+
+  // Notes/quiz content: stale-while-revalidate.
   // Files are AES-256-GCM encrypted — safe to cache and serve offline.
   // First visit fetches from network and caches; subsequent visits serve from
-  // cache while updating in background. Offline: serves from cache.
+  // cache while updating in background, so corrections still propagate.
+  // Offline: serves from cache.
   if (e.request.url.includes('/data/')) {
     e.respondWith(
       caches.open(CACHE).then(cache =>

@@ -56,7 +56,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-h1" id="s-diodes">1. P-N Junction Diode &amp; Zener Diode</div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-diode-zener-vi-char.png" alt="Diode and Zener V-I characteristics — forward bias, reverse bias, breakdown region">
+    <img src="../data/diagrams/t08-diode-zener-vi-char.webp" alt="Diode and Zener V-I characteristics — forward bias, reverse bias, breakdown region" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. P-N Diode &amp; Zener V-I Characteristics — forward knee at 0.6 V, Zener breakdown voltage Vz in reverse</div>
   </div>
 
@@ -131,7 +131,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why 3-Phase Bridge Ripple is So Low:</strong> The 6-diode bridge (3 positive + 3 negative rail diodes) produces six output pulses per mains cycle. Ripple frequency = <span class="n-val">6 × 50 Hz = 300 Hz</span>. At 300 Hz, a small filter capacitor easily smooths the remaining ripple to produce a near-pure DC link for the VFD inverter stage.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-rectifier-circuits.png" alt="Half-wave, full-wave centre-tap, and bridge rectifier circuits with output waveforms">
+    <img src="../data/diagrams/t08-rectifier-circuits.webp" alt="Half-wave, full-wave centre-tap, and bridge rectifier circuits with output waveforms" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Rectifier Circuits — half-wave (1 diode), full-wave bridge (4 diodes, D1D3/D2D4 pairs), output waveform and ripple comparison</div>
   </div>
 
@@ -196,12 +196,12 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-bjt-structure.png" alt="BJT NPN transistor structure — emitter, base, collector, depletion regions, current flow directions">
+    <img src="../data/diagrams/t08-bjt-structure.webp" alt="BJT NPN transistor structure — emitter, base, collector, depletion regions, current flow directions" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. BJT Structure — NPN: emitter (heavily doped N), thin base (P), collector (N); I_C = β × I_B; current-controlled device; CE, CB, CC configurations</div>
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-mosfet-structure.png" alt="N-channel enhancement MOSFET structure — source, drain, gate oxide, inversion channel formed when V_GS exceeds threshold">
+    <img src="../data/diagrams/t08-mosfet-structure.webp" alt="N-channel enhancement MOSFET structure — source, drain, gate oxide, inversion channel formed when V_GS exceeds threshold" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. N-channel Enhancement MOSFET — gate oxide (SiO₂) insulates gate; V_GS &gt; V_th creates inversion channel (electrons) linking source to drain; voltage-controlled, zero gate current</div>
   </div>
 
@@ -275,7 +275,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-scr-thyristor.png" alt="SCR thyristor structure — PNPN four-layer device, anode, cathode, gate trigger, latching characteristic">
+    <img src="../data/diagrams/t08-scr-thyristor.webp" alt="SCR thyristor structure — PNPN four-layer device, anode, cathode, gate trigger, latching characteristic" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. SCR (Thyristor) — PNPN four-layer structure; gate pulse fires when anode is forward-biased; latches ON until I_A falls below holding current I_h; firing angle α controls output voltage</div>
   </div>
 
@@ -392,7 +392,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-p"><strong>Ship Application:</strong> Large low-speed synchronous motors on LNG carriers and icebreakers for direct-drive propulsion. No gearbox required. Motor runs at <span class="n-val">0–16 rpm equivalent</span> electrical speed. Full torque available from standstill - ideal for ice-breaking where hull resistance is maximum at low speed.</div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-cycloconverter.png" alt="Cycloconverter — back-to-back thyristor P and N groups per phase, synthesising lower-frequency AC output directly from 3-phase mains">
+    <img src="../data/diagrams/t08-cycloconverter.webp" alt="Cycloconverter — back-to-back thyristor P and N groups per phase, synthesising lower-frequency AC output directly from 3-phase mains" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Cycloconverter — P-group and N-group thyristors per output phase; firing angle control synthesises low-frequency AC directly from mains; no DC link; output max ≈ ⅓ input frequency</div>
   </div>
 
@@ -462,7 +462,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-optocoupler.png" alt="Optocoupler — LED on input side emits IR light, phototransistor on output side conducts, complete electrical isolation">
+    <img src="../data/diagrams/t08-optocoupler.webp" alt="Optocoupler — LED on input side emits IR light, phototransistor on output side conducts, complete electrical isolation" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Optocoupler (Opto-Isolator) — LED emits IR when input current flows; phototransistor conducts proportionally; no conductive path between input and output; typical isolation 2.5–5 kV</div>
   </div>
 
@@ -548,7 +548,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-opamp-circuits.png" alt="Op-amp configurations — inverting, non-inverting, differential amplifier, I/V converter">
+    <img src="../data/diagrams/t08-opamp-circuits.webp" alt="Op-amp configurations — inverting, non-inverting, differential amplifier, I/V converter" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Op-Amp Configurations — inverting (−Rf/Rin), non-inverting (1+Rf/Rin), differential, integrator, and I/V converter (transimpedance)</div>
   </div>
 
@@ -581,7 +581,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   </table>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-all-gates.png" alt="Logic gate symbols — AND, OR, NOT, NAND, NOR, XOR with truth tables">
+    <img src="../data/diagrams/t08-all-gates.webp" alt="Logic gate symbols — AND, OR, NOT, NAND, NOR, XOR with truth tables" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Logic Gate Symbols — AND (D-shape), OR (curved), NOT (triangle + bubble), NAND/NOR (universal gates with inversion bubble), XOR (curved with extra arc)</div>
   </div>
 
@@ -662,7 +662,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Why High Switching Frequency Helps:</strong> Transformer and inductor size is inversely proportional to frequency (V = N × dΦ/dt). At 100 kHz instead of 50 Hz, the transformer can be 2000× smaller for the same power throughput. This is why an SMPS charger fits in your palm while a 50 Hz transformer charger of the same rating would be the size of a toolbox.</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-smps.png" alt="SMPS block diagram — AC input, rectifier/filter, HF MOSFET switch, HF transformer, output rectifier, PWM feedback loop">
+    <img src="../data/diagrams/t08-smps.webp" alt="SMPS block diagram — AC input, rectifier/filter, HF MOSFET switch, HF transformer, output rectifier, PWM feedback loop" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. SMPS Block Diagram — AC mains → rectify to DC → MOSFET switches at 20–100 kHz → HF transformer (small/light) → output rectify/filter → PWM controller closes feedback loop to regulate output voltage</div>
   </div>
 
@@ -704,7 +704,7 @@ window.loadNotes("T08", `<div class="view" id="view-notes-t08">
   <div class="n-formula">V_H = (I × B) / (n × e × t)<div class="label">V_H = Hall voltage · I = current through conductor · B = magnetic flux density · n = carrier density · e = electron charge · t = thickness</div></div>
 
   <div class="note-diagram-wrap">
-    <img src="../data/diagrams/t08-hall-effect-sensor.png" alt="Hall Effect Sensor — magnet providing directional magnetic field H, P-type semiconductor Hall element with constant current flow, Hall voltage V_H measured across the element">
+    <img src="../data/diagrams/t08-hall-effect-sensor.webp" alt="Hall Effect Sensor — magnet providing directional magnetic field H, P-type semiconductor Hall element with constant current flow, Hall voltage V_H measured across the element" loading="lazy" decoding="async">
     <div class="note-diagram-cap">Fig. Hall Effect Principle — current through P-type semiconductor + perpendicular magnetic field → Hall voltage V_H proportional to both</div>
   </div>
 

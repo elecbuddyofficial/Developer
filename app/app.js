@@ -103,6 +103,68 @@ function appToast(msg) {
 window.NOTE_HTML = {}; // HTML Store
 window.VIDEO_DATA = {}; // Video Data Store
 
+// ── Data Saver ───────────────────────────────────────────────
+// window.NOTE_HTML always holds the pristine note HTML with real <img>
+// tags. This transform is applied only at the point of injecting it into
+// the DOM, so toggling the setting never requires re-fetching content —
+// it just changes how the same cached HTML gets rendered.
+window._dataSaver = localStorage.getItem('eb_data_saver') === '1';
+
+var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async">/g;
+var _DGM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+
+function _applyDataSaver(html) {
+    if (!window._dataSaver) return html;
+    return html.replace(_DGM_IMG_RE, function(_m, src, alt) {
+        return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to load diagram">'
+            + _DGM_ICON + '<span>Tap to load diagram</span></div>';
+    });
+}
+
+function _dgmLoad(ph) {
+    var img = document.createElement('img');
+    img.src = ph.getAttribute('data-src');
+    img.alt = ph.getAttribute('data-alt') || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    ph.replaceWith(img);
+}
+
+document.addEventListener('click', function(e) {
+    var ph = e.target.closest('.dgm-placeholder');
+    if (ph) _dgmLoad(ph);
+});
+document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('dgm-placeholder')) {
+        e.preventDefault();
+        _dgmLoad(e.target);
+    }
+});
+
+// Live-patches whatever topic is currently on screen, so flipping the
+// setting takes effect immediately instead of on next topic switch.
+window.toggleDataSaver = function(on) {
+    window._dataSaver = on;
+    localStorage.setItem('eb_data_saver', on ? '1' : '0');
+    var container = document.getElementById('notes-container');
+    if (!container) return;
+    if (on) {
+        container.querySelectorAll('.note-diagram-wrap img[loading="lazy"]').forEach(function(img) {
+            var ph = document.createElement('div');
+            ph.className = 'dgm-placeholder';
+            ph.setAttribute('role', 'button');
+            ph.setAttribute('tabindex', '0');
+            ph.setAttribute('aria-label', 'Tap to load diagram');
+            ph.setAttribute('data-src', img.getAttribute('src'));
+            ph.setAttribute('data-alt', img.getAttribute('alt') || '');
+            ph.innerHTML = _DGM_ICON + '<span>Tap to load diagram</span>';
+            img.replaceWith(ph);
+        });
+    } else {
+        container.querySelectorAll('.dgm-placeholder').forEach(_dgmLoad);
+    }
+};
+
 window.loadVideos = function(topicId, data) {
     window.VIDEO_DATA[topicId] = data;
 };
@@ -122,7 +184,7 @@ window.loadNotes = function(topicId, htmlContent) {
     buildSearchIndexForTopic(topicId, htmlContent);
     // Skip display update if this was a background index load (not user-requested)
     if (window._bgIndexing && topicId !== window._activeTopicId) return;
-    document.getElementById('notes-container').innerHTML = htmlContent;
+    document.getElementById('notes-container').innerHTML = _applyDataSaver(htmlContent);
     injectVideoTab(topicId);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
@@ -149,7 +211,7 @@ window.loadWrittenNotes = function(topicCode, html) {
     buildSearchIndexForTopic(topicCode, html);
     // Skip display update if this was a background index load (not user-requested)
     if (window._bgIndexing && topicCode !== window._activeTopicId) return;
-    document.getElementById('notes-container').innerHTML = html;
+    document.getElementById('notes-container').innerHTML = _applyDataSaver(html);
     injectVideoTab(topicCode);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
@@ -181,7 +243,7 @@ window.fetchTopicData = function(topicId, topicKey) {
             if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes. Please check your connection.</div>';
         });
     } else {
-        document.getElementById('notes-container').innerHTML = window.NOTE_HTML[topicId];
+        document.getElementById('notes-container').innerHTML = _applyDataSaver(window.NOTE_HTML[topicId]);
         injectVideoTab(topicId);
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
