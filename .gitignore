@@ -59,3 +59,4 @@ data/written_notes_data.js
 # re-expose premium content that is encrypted everywhere else.
 data/Orals/Backup/
 data/**/Backup/
+data/PLAINTEXT_BACKUP_do_not_delete/
