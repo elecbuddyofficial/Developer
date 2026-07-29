@@ -111,13 +111,13 @@ window.VIDEO_DATA = {}; // Video Data Store
 window._dataSaver = localStorage.getItem('eb_data_saver') === '1';
 
 var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async">/g;
-var _DGM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>';
+var _DGM_ICON = '<span class="dgm-dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>';
 
 function _applyDataSaver(html) {
     if (!window._dataSaver) return html;
     return html.replace(_DGM_IMG_RE, function(_m, src, alt) {
-        return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to load diagram">'
-            + _DGM_ICON + '<span>Tap to load diagram</span></div>';
+        return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to download diagram">'
+            + _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span></div>';
     });
 }
 
@@ -154,10 +154,10 @@ window.toggleDataSaver = function(on) {
             ph.className = 'dgm-placeholder';
             ph.setAttribute('role', 'button');
             ph.setAttribute('tabindex', '0');
-            ph.setAttribute('aria-label', 'Tap to load diagram');
+            ph.setAttribute('aria-label', 'Tap to download diagram');
             ph.setAttribute('data-src', img.getAttribute('src'));
             ph.setAttribute('data-alt', img.getAttribute('alt') || '');
-            ph.innerHTML = _DGM_ICON + '<span>Tap to load diagram</span>';
+            ph.innerHTML = _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span>';
             img.replaceWith(ph);
         });
     } else {

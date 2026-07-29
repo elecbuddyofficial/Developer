@@ -1118,7 +1118,9 @@ a.sb-item{text-decoration:none}
     .note-diagram-wrap img { max-width: 100%; }
 }
 
-/* Data Saver placeholder — stands in for a diagram until tapped */
+/* Data Saver placeholder — a download tile standing in for a diagram until
+   tapped, styled like the media-download overlays chat apps use: a solid
+   circular icon button that fills with the accent color on hover/focus. */
 .dgm-placeholder {
     max-width: min(100%, 560px);
     height: 140px;
@@ -1127,21 +1129,36 @@ a.sb-item{text-decoration:none}
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 10px;
     background: var(--surface2);
-    border: 1.5px dashed var(--border2);
+    border: 1px solid var(--border2);
     border-radius: var(--r8, 8px);
-    color: var(--text3, #888);
     cursor: pointer;
-    transition: border-color .15s, color .15s, background .15s;
+    transition: border-color .15s, background .15s;
 }
 .dgm-placeholder:hover, .dgm-placeholder:focus-visible {
     border-color: var(--blue);
-    color: var(--blue);
     background: var(--blue-dim);
     outline: none;
 }
-.dgm-placeholder span { font-size: 12.5px; font-weight: 600; }
+.dgm-dl-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--surface3);
+    color: var(--text2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s, color .15s, transform .15s;
+}
+.dgm-placeholder:hover .dgm-dl-icon, .dgm-placeholder:focus-visible .dgm-dl-icon {
+    background: var(--blue);
+    color: #fff;
+    transform: scale(1.06);
+}
+.dgm-dl-label { font-size: 12.5px; font-weight: 600; color: var(--text3, #888); transition: color .15s; }
+.dgm-placeholder:hover .dgm-dl-label, .dgm-placeholder:focus-visible .dgm-dl-label { color: var(--blue); }
 
 /* ═══ THEME SWITCHER ═══ */
 /* Data Saver toggle switch (profile menu) */
