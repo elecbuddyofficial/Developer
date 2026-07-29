@@ -521,14 +521,14 @@
 
 <!-- ── Profile Panel ──────────────────────────────────────── -->
 <style>
-  #profile-panel {
+  #profile-panel, #settings-panel {
     position: absolute; right: 14px; top: 54px;
     width: 296px; background: #0D1E33;
     border: 1px solid #1A3050; border-radius: 10px;
     padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
   }
   @media (max-width: 360px) {
-    #profile-panel { right: 8px; left: 8px; width: auto; }
+    #profile-panel, #settings-panel { right: 8px; left: 8px; width: auto; }
   }
 </style>
 <style>
@@ -597,6 +597,32 @@
     <!-- Upgrade CTA (shown only for trial / expired) -->
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
 
+    <!-- Settings -->
+    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
+
+    <!-- Admin Panel (admins only) -->
+    <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
+
+    <!-- Courses -->
+    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+
+    <!-- Sign out -->
+    <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+  </div>
+</div>
+
+<!-- ── Settings Modal ─────────────────────────────────────── -->
+<div id="settings-modal" onclick="closeSettings(event)" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);">
+  <div id="settings-panel">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Settings</div>
+      <button onclick="document.getElementById('settings-modal').style.display='none'" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#4A6880;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&times;</button>
+    </div>
+
     <!-- Data Saver -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <div style="min-width:0;">
@@ -609,14 +635,14 @@
       </label>
     </div>
 
-    <!-- Admin Panel (admins only) -->
-    <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
+    <!-- Reset Statistics -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
+      <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Reset Statistics</div>
+      <div style="font-size:10.5px;color:#4A6880;margin-top:2px;margin-bottom:11px;line-height:1.4;">Clears quiz scores and lesson reading progress on this account. This can't be undone.</div>
+      <button id="settings-reset-btn" onclick="resetStatistics()" style="width:100%;background:rgba(224,90,106,0.1);border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s;">Reset Statistics</button>
+      <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center;"></div>
+    </div>
 
-    <!-- Courses -->
-    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
-
-    <!-- Sign out -->
-    <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
   </div>
 </div>
 
@@ -814,6 +840,7 @@ function setTheme(t) {
     if (e.key === 'Escape') {
       window.closeGate();
       closeUpgradeModal();
+      document.getElementById('settings-modal').style.display = 'none';
     }
   });
 
@@ -1205,6 +1232,71 @@ function setTheme(t) {
     window.closeProfile = function(e) {
       if (e.target === document.getElementById('profile-modal'))
         document.getElementById('profile-modal').style.display = 'none';
+    };
+
+    window.openSettings = function() {
+      document.getElementById('profile-modal').style.display = 'none';
+      document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
+      var resetBtn = document.getElementById('settings-reset-btn');
+      resetBtn.textContent = 'Reset Statistics';
+      resetBtn.dataset.armed = '';
+      document.getElementById('settings-reset-status').style.display = 'none';
+      document.getElementById('settings-modal').style.display = 'block';
+    };
+
+    window.closeSettings = function(e) {
+      if (!e || e.target === document.getElementById('settings-modal'))
+        document.getElementById('settings-modal').style.display = 'none';
+    };
+
+    // Two-tap confirm: first tap arms it, second tap (within 4s) actually
+    // resets. Avoids a native confirm() dialog while still requiring an
+    // unambiguous second action before wiping progress data for good.
+    var _resetArmTimer = null;
+    window.resetStatistics = async function() {
+      var btn = document.getElementById('settings-reset-btn');
+      var statusEl = document.getElementById('settings-reset-status');
+
+      if (!btn.dataset.armed) {
+        btn.dataset.armed = '1';
+        btn.textContent = 'Tap again to confirm';
+        clearTimeout(_resetArmTimer);
+        _resetArmTimer = setTimeout(function() {
+          btn.dataset.armed = '';
+          btn.textContent = 'Reset Statistics';
+        }, 4000);
+        return;
+      }
+
+      clearTimeout(_resetArmTimer);
+      btn.disabled = true;
+      btn.textContent = 'Resetting…';
+      statusEl.style.display = 'none';
+
+      // Lesson reading progress: local cache + everything it's keyed off of.
+      window._topicProgress = {};
+      localStorage.removeItem('eb_tp_cache');
+
+      // Quiz category best-scores — local only, never synced to Supabase.
+      localStorage.removeItem('eto_progress');
+
+      // In-progress "resume where you left off" quiz state for every
+      // topic/category, so nothing stale resumes after a reset.
+      Object.keys(localStorage)
+        .filter(function(k) { return k.indexOf('eto_qz_state_') === 0; })
+        .forEach(function(k) { localStorage.removeItem(k); });
+
+      if (window._sbClient && window._sbUser) {
+        await window._sbClient.from('profiles')
+          .update({ topic_progress: {} })
+          .eq('id', window._sbUser.id);
+      }
+
+      statusEl.style.display = 'block';
+      statusEl.style.color = '#3DBA72';
+      statusEl.textContent = 'Statistics reset.';
+
+      setTimeout(function() { window.location.reload(); }, 1200);
     };
 
     window.signOut = async function() {
