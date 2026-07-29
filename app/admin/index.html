@@ -361,8 +361,9 @@
       padding: 0 16px; height: 52px; flex-shrink: 0;
       background: var(--surface); border-bottom: 1px solid var(--border);
     }
-    #mob-topbar .mob-logo { font-size: 15px; font-weight: 800; color: var(--text); }
-    #mob-topbar .mob-logo span { color: var(--blue); }
+    #mob-topbar .mob-logo { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: var(--text); }
+    #mob-topbar .mob-logo img { width: 22px; height: 22px; flex-shrink: 0; }
+    #mob-topbar .mob-logo .mob-logo-elec { color: var(--blue); }
     #mob-ham {
       width: 36px; height: 36px; border: 1px solid var(--border2);
       border-radius: var(--r8); background: var(--surface2);
@@ -653,7 +654,11 @@
 
 <!-- Mobile top bar (hidden on desktop via CSS) -->
 <div id="mob-topbar">
-  <div class="mob-logo"><span>Elec</span>-Buddy Admin</div>
+  <div class="mob-logo">
+    <img id="logo-mark-mob" alt="Elec-Buddy">
+    <script>document.getElementById('logo-mark-mob').src = '../assets/logo-' + (document.documentElement.getAttribute('data-theme') === 'light' ? 'blue' : 'orange') + '.svg';</script>
+    <span><span class="mob-logo-elec">Elec</span>-Buddy Admin</span>
+  </div>
   <div id="mob-ham" onclick="toggleMobNav()" aria-label="Menu">
     <span></span><span></span><span></span>
   </div>
@@ -662,7 +667,8 @@
 <!-- ══ SIDEBAR ══════════════════════════════════════════════════ -->
 <aside id="ad-side">
   <div class="ad-logo">
-    <div class="ad-logo-icon">⚡</div>
+    <div class="ad-logo-icon"><img id="logo-mark" alt="Elec-Buddy" width="22" height="22"></div>
+    <script>document.getElementById('logo-mark').src = '../assets/logo-' + (document.documentElement.getAttribute('data-theme') === 'light' ? 'blue' : 'orange') + '.svg';</script>
     <div>
       <div class="ad-logo-name">Elec-Buddy</div>
       <div class="ad-logo-sub">Admin</div>
@@ -1449,7 +1455,17 @@ function logAdminAction(action, target, details) {
     _myEmail = email;
     document.getElementById('ad-avatar').textContent = email[0] ? email[0].toUpperCase() : 'A';
     document.getElementById('ad-user-email').textContent = email;
+  } catch (e) {
+    console.error(e);
+    window.location.replace('../auth.html');
+    return;
+  }
 
+  // Auth is confirmed past this point — a failure loading any of these
+  // (e.g. pricing_plans unreachable) must not boot an already-verified
+  // admin back to the login screen, so it's deliberately outside the
+  // auth guard's try/catch above.
+  try {
     await loadPricingPlanCache(); // populate before rendering any plan badge
     loadDashboard();
     loadUsers();
@@ -1457,8 +1473,7 @@ function logAdminAction(action, target, details) {
     loadAdmins();
     buildStatusBoard();
   } catch (e) {
-    console.error(e);
-    window.location.replace('../auth.html');
+    console.error('Admin dashboard init error:', e);
   }
 })();
 
