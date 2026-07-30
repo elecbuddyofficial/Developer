@@ -43,8 +43,8 @@ body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:f
 
 /* TOP BAR */
 #topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:60px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
-#topbar .logo{display:flex;align-items:center;gap:5px;font-size:16px;font-weight:800;color:var(--text);letter-spacing:-.3px;white-space:nowrap;flex-shrink:0}
-#topbar .logo .logo-mark{height:44px;width:auto;flex-shrink:0;display:block}
+#topbar .logo{display:flex;align-items:center;gap:0px;font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;white-space:nowrap;flex-shrink:0}
+#topbar .logo .logo-mark{height:38px;width:auto;flex-shrink:0;display:block;margin-right:-2px}
 #topbar .logo .logo-elec{color:var(--blue);font-size:inherit;font-weight:inherit;margin:0}
 #topbar .logo .logo-sub{color:var(--text2);font-weight:500;font-size:12px;margin-left:8px}
 .spacer{flex:1}
@@ -375,6 +375,8 @@ a.sb-item{text-decoration:none}
 #mobile-menu-btn:hover { background: rgba(255,255,255,0.05); }
 #sidebar-overlay { display: none; }
 
+.mobile-sidebar-header { display: none; }
+
 /* MOBILE RESPONSIVE OVERRIDES */
 @media (max-width: 768px) {
   html, body {
@@ -385,16 +387,25 @@ a.sb-item{text-decoration:none}
   #mobile-menu-btn { display: inline-flex; }
   
   /* Slide-out Sidebar Morph */
+  .mobile-sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 8px;
+    background: var(--surface);
+  }
+  
   #sidebar {
     will-change: transform;
     position: fixed;
-    top: 56px; /* below topbar */
+    top: 0; /* Cover topbar */
     left: 0;
     bottom: 0;
-    width: 260px;
-    height: calc(100svh - 56px);
-    z-index: 1000;
-    transform: translateX(-280px);
+    width: 280px;
+    height: 100svh;
+    z-index: 2000;
+    transform: translateX(-300px);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: none;
   }
@@ -406,13 +417,13 @@ a.sb-item{text-decoration:none}
   #sidebar-overlay {
     display: block;
     position: fixed;
-    top: 56px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.6);
     
-    z-index: 999;
+    z-index: 1999;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s ease;
@@ -1255,8 +1266,8 @@ a.sb-item{text-decoration:none}
 /* Landscape phones are short — reclaim vertical space */
 @media (max-height: 480px) and (orientation: landscape) {
   #topbar { height: 48px; }
-  #sidebar { top: 48px; height: calc(100svh - 48px); }
-  #sidebar-overlay { top: 48px; }
+  #sidebar { top: 0; height: 100svh; width: 280px; }
+  #sidebar-overlay { top: 0; }
   .note-title { padding: 14px 16px; }
   .welcome h1 { font-size: 22px; }
 }
