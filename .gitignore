@@ -37,6 +37,7 @@ Thumbs.db
 *.txt
 *.md
 !README.md
+!GEMINI.md
 debug*.txt
 *_report.*
 gap_report.*
