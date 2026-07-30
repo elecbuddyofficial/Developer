@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Elec-Buddy: Courses</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="stylesheet" href="style.css">
 <style>
   html { visibility: hidden; }
@@ -538,17 +539,15 @@
 <body>
 
 <!-- Topbar -->
-<div id="topbar" style="justify-content: space-between;">
-  <div style="display:flex; flex:1; align-items:center;">
-    <!-- Spacer to balance centering -->
-  </div>
-  
-  <div class="logo" style="justify-content:center; flex:1;">
+<div id="topbar">
+  <div class="logo">
     <img class="logo-mark" src="assets/logo-blue-dark.svg" alt="Elec-Buddy">
     <span class="logo-word"><span class="logo-elec">Elec</span>-Buddy</span> <span class="logo-sub">ETO CoC · Oral Exam</span>
   </div>
   
-  <div style="display:flex; flex:1; justify-content:flex-end; align-items:center; position:relative;">
+  <div class="spacer"></div>
+  
+  <div style="display:flex; align-items:center; position:relative;">
     <div style="position:relative;">
       <button id="profile-btn" onclick="toggleProfileMenu()" title="Your account" aria-label="Account"
         style="width:34px;height:34px;border-radius:50%;background:#C8A44A;color:#070D1A;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:Georgia,serif;flex-shrink:0;display:block;"></button>
