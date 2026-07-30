@@ -212,7 +212,7 @@
     <svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h18M3 6h18M3 18h18"/></svg>
   </button>
   <div class="logo">
-    <img class="logo-mark" src="../assets/logo-orange.svg" alt="Elec-Buddy">
+    <img class="logo-mark" id="app-logo" src="../assets/logo-orange-dark.svg" alt="Elec-Buddy">
     <span class="logo-word"><span class="logo-elec">Elec</span>-Buddy</span> <span class="logo-sub">Sponsorship Prep</span>
   </div>
   <div class="spacer"></div>
@@ -555,12 +555,22 @@ function setTheme(t) {
   document.querySelectorAll('.theme-btn').forEach(function(b) {
     b.classList.toggle('t-active', b.dataset.t === t);
   });
+  var logo = document.getElementById('app-logo');
+  if (logo) {
+    logo.src = (applied === 'light') ? '../assets/logo-orange-light.svg' : '../assets/logo-orange-dark.svg';
+  }
 }
 (function() {
   var stored = localStorage.getItem('eb_theme') || 'dark';
   document.querySelectorAll('.theme-btn').forEach(function(b) {
     b.classList.toggle('t-active', b.dataset.t === stored);
   });
+  var applied = stored;
+  if (applied === 'system') applied = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  var logo = document.getElementById('app-logo');
+  if (logo) {
+    logo.src = (applied === 'light') ? '../assets/logo-orange-light.svg' : '../assets/logo-orange-dark.svg';
+  }
 })();
 </script>
 <script>
