@@ -17,6 +17,8 @@ This is a static site (no build step, no framework) for `app/*.html` + `index.ht
 
 `data/Orals/**` and `data/Written/**` are encrypted at rest with two separate keys (`CONTENT_KEY_ORAL`, `CONTENT_KEY_WRITTEN`). If you edit anything under those directories, run `node encrypt-content.js --group=oral` or `--group=written` (matching whichever you touched) before committing — never commit decrypted quiz/notes JSON. `data/Sponsorship/**` is the opposite: it's permanently public/plaintext by design — do not encrypt it, do not add it back into the encryption script.
 
+An encrypted file on disk looks like `{"v":1,"iv":"...","data":"...","tag":"..."}` — if you need to read or edit it, decrypt first (`node encrypt-content.js --group=written --decrypt`, edit, then `node encrypt-content.js --group=written` again before committing). **`data/Written/numericals.js` and `data/Written/notes/w08_notes.js` are both encrypted this way as of 2026-07-31** — don't edit that JSON envelope directly, and don't recreate `numericals.js` from scratch as plaintext (it used to be a plain `<script src>`-loaded file; it's now loaded on-demand via `_loadEncryptedScript()` from `app/app.js`'s `loadNumericalsIfNeeded()` — keep using that loader, don't add a static script tag back).
+
 ## Branding — logo color rule
 
 Logo color follows **section identity**, not light/dark UI theme:
