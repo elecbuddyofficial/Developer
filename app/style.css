@@ -158,6 +158,14 @@ a.sb-item{text-decoration:none}
 .n-steps li strong{color:var(--text);font-weight:600}
 .n-steps li .n-formula{margin-left:-38px}
 
+/* Numericals detail header — title + Prev/Next */
+.num-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.num-detail-nav{display:flex;gap:8px;flex-shrink:0}
+@media(max-width:768px){
+  .num-detail-head{flex-direction:column;gap:12px}
+  .num-detail-nav{width:100%;justify-content:space-between}
+}
+
 /* Section jump anchors */
 .note-anchors{display:flex;flex-wrap:wrap;gap:7px;padding:14px 16px;margin-bottom:20px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--r12)}
 .note-anchors span{font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;width:100%;margin-bottom:4px}

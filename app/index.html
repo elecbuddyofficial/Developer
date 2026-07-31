@@ -212,7 +212,7 @@
 
 <!-- ═══════════════ NUMERICALS LANDING ═══════════════ -->
 <div class="view" id="view-num-landing">
-  <div style="max-width:860px">
+  <div style="max-width:860px;margin:0 auto">
     <div style="text-align:center;padding:32px 0 28px">
       <div style="font-size:36px;margin-bottom:12px"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Numericals</h1>
@@ -295,13 +295,14 @@
       </div>
     </div>
 
-    <div class="note-anchors" style="margin-bottom: 24px;" id="numerical-cat-anchors">
-      <span>Jump to topic</span>
-      <!-- JS will inject one button per category here -->
+    <!-- Topic card grid — shown first; clicking a topic opens its question list below -->
+    <div id="numerical-cat-topics-container" class="welcome-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <!-- JS will inject one card per category here -->
     </div>
 
-    <div id="numerical-cat-container">
-      <!-- JS will inject the grouped-by-category list of numericals here -->
+    <div id="numerical-cat-container" style="display:none;">
+      <button class="anc-btn" onclick="backToCategoryTopics()" style="margin-bottom: 20px;">← Back to Topics</button>
+      <!-- JS will inject the selected category's list of numericals here -->
     </div>
 
     <div id="numerical-cat-detail-view" style="display:none;">

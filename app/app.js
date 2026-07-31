@@ -311,6 +311,30 @@ function buildTopicSideList(activeId) {
     }
 }
 
+var NUM_TABS = [
+    { id: 'num-freq', icon: '📊', name: 'By Frequency' },
+    { id: 'num-cat',  icon: '🏷️', name: 'By Category' },
+    { id: 'num-year', icon: '📅', name: 'By Year' },
+];
+
+function buildNumericalsSideList(activeView) {
+    var panel = document.getElementById('topic-side-list');
+    if (!panel) return;
+    panel.style.display = 'block';
+    panel.innerHTML = '';
+    NUM_TABS.forEach(function(t) {
+        var btn = document.createElement('button');
+        btn.className = 'tl-item' + (t.id === activeView ? ' tl-active' : '');
+        btn.innerHTML = '<span class="tl-ic">' + t.icon + '</span>'
+            + '<span class="tl-label">' + t.name + '</span>';
+        btn.onclick = function() {
+            document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+            showView(t.id);
+        };
+        panel.appendChild(btn);
+    });
+}
+
 
 // Inject previous/next footer nav + mobile topic strip
 function injectTopicFooterNav(topicId) {
@@ -694,8 +718,9 @@ function showView(n){
   var btt=document.getElementById('back-to-top');
   if(btt){btt.style.opacity='0';btt.style.visibility='hidden';}
   if(window.innerWidth <= 768) closeMobileMenu();
-  if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker') {
-     // Hide topic sidebar list when leaving notes
+  if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker' || n==='num-landing') {
+     // Hide topic sidebar list when leaving notes (num-landing is a picker
+     // page like written-notes-picker, not a content page — no sidebar there)
      var tsl = document.getElementById('topic-side-list');
      if (tsl) tsl.style.display = 'none';
   }
@@ -705,10 +730,9 @@ function showView(n){
   var s=document.getElementById('si-'+n);if(s)s.classList.add('active');
   if(n==='oral'){var so=document.getElementById('si-oral');if(so)so.classList.add('active');}
   if(n==='written-notes-picker' || n.startsWith('num-')){var sw=document.getElementById('si-written');if(sw)sw.classList.add('active');}
-  // Numericals is the practice companion to the W08 notes topic — keep the
-  // Written topic sidebar visible (with W08 highlighted) while browsing it,
-  // instead of it disappearing because these views aren't reached via fetchTopicData.
-  if(n.startsWith('num-')) buildTopicSideList('W08');
+  // Inside one of the three Numericals sub-views, show a sidebar that
+  // switches between Frequency/Category/Year — not the Written topics list.
+  if(n==='num-freq' || n==='num-cat' || n==='num-year') buildNumericalsSideList(n);
   if(n==='notes-picker')buildNotesTopicGrid();
   if(n==='written-notes-picker')buildWrittenTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
@@ -2627,9 +2651,9 @@ var NUM_TAB_CONTAINERS = {
 // buttons can jump directly between questions without returning to the list.
 var NUM_TAB_ORDER = { freq: [], cat: [], year: [] };
 
-function numCard(n, tab, badgeText) {
+function numCard(n, tab, badgeText, extraAttrs) {
   return `
-    <div onclick="loadNumerical('${n.id}', '${tab}')" style="background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+    <div onclick="loadNumerical('${n.id}', '${tab}')" ${extraAttrs || ''} style="background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
         <div style="font-size: 15px; font-weight: 600; color: var(--text);">${n.title}</div>
         <div style="background: var(--surface3); color: var(--text); font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; font-weight: 700;">${badgeText}</div>
@@ -2639,6 +2663,38 @@ function numCard(n, tab, badgeText) {
       </div>
     </div>
   `;
+}
+
+// Short summary + expandable full pill list once a question has appeared
+// often enough that the raw badge row starts reading as noise rather than
+// information (two-plus wrapped lines on a page that's otherwise clean).
+function numYearsBadges(years, tab) {
+  if (!years) return '';
+  var list = years.split(',').map(y => y.trim()).filter(Boolean);
+  if (!list.length) return '';
+  var pills = list.map(y => `<span style="background: var(--surface2); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border2);">${y}</span>`).join('');
+
+  if (list.length <= 6) {
+    return `<div style="margin-top: 12px; font-size: 12px; color: var(--text2); display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+      <span style="color: var(--text); font-weight: 500;">Appeared in:</span>
+      ${pills}
+    </div>`;
+  }
+
+  var yearNums = list.map(y => parseInt(y.split('/')[0], 10)).filter(n => !isNaN(n));
+  var minY = yearNums.length ? Math.min.apply(null, yearNums) : '';
+  var maxY = yearNums.length ? Math.max.apply(null, yearNums) : '';
+  var uid = 'years-' + tab;
+  return `<div style="margin-top: 12px; font-size: 12px; color: var(--text2);">
+    <span id="${uid}-summary" style="display:inline-flex; align-items:center; gap:8px;">
+      <span><span style="color: var(--text); font-weight: 500;">Appeared in:</span> ${list.length} times${minY ? ` (${minY}–${maxY})` : ''}</span>
+      <button class="anc-btn" style="padding:2px 8px; font-size:11px;" onclick="document.getElementById('${uid}-summary').style.display='none'; document.getElementById('${uid}-full').style.display='flex';">Show all</button>
+    </span>
+    <div id="${uid}-full" style="display:none; flex-wrap: wrap; gap: 6px; align-items: center;">
+      <span style="color: var(--text); font-weight: 500;">Appeared in:</span>
+      ${pills}
+    </div>
+  </div>`;
 }
 
 function renderNumericalList() {
@@ -2676,36 +2732,69 @@ function renderNumericalList() {
   container.innerHTML = html;
 }
 
-function renderNumericalByCategory() {
-  if (!window.NUMERICALS) return;
-  var container = document.getElementById('numerical-cat-container');
-  var anchors = document.getElementById('numerical-cat-anchors');
-  if (!container) return;
-
+function numericalsByCategory() {
   var byCat = {};
   window.NUMERICALS.forEach(n => {
     var cid = n.categoryId || 'uncategorized';
     if (!byCat[cid]) byCat[cid] = [];
     byCat[cid].push(n);
   });
+  return byCat;
+}
 
-  var order = [];
-  var anchorHtml = '<span>Jump to topic</span>';
+// Step 1: a card grid of topics (like the Numericals landing page), one per
+// category with a live question count — the front door into By Category.
+function renderNumericalCategoryTopics() {
+  if (!window.NUMERICALS) return;
+  var grid = document.getElementById('numerical-cat-topics-container');
+  if (!grid) return;
+  var byCat = numericalsByCategory();
+
   var html = '';
   NUM_CATEGORIES.forEach(cat => {
     var items = byCat[cat.id];
     if (!items || !items.length) return;
-    anchorHtml += `<button class="anc-btn" onclick="jumpTo('cat-${cat.id}')">${cat.icon} ${cat.label}</button>`;
-    html += `<div style="margin-bottom: 30px;" id="cat-${cat.id}">
-      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">${cat.icon} ${cat.label} (${items.length})</h3>
-      <div style="display: flex; flex-direction: column; gap: 12px;">`;
-    items.forEach(n => { html += numCard(n, 'cat', n.frequency + '×'); order.push(n.id); });
-    html += `</div></div>`;
+    html += `
+      <div class="welcome-card" onclick="showNumericalCategoryDetail('${cat.id}')">
+        <div class="wc-icon">${cat.icon}</div>
+        <h3>${cat.label}</h3>
+        <p>${items.length} numerical question${items.length === 1 ? '' : 's'} in this topic.</p>
+        <div class="wc-badge">${items.length} Question${items.length === 1 ? '' : 's'}</div>
+      </div>`;
   });
 
+  grid.innerHTML = html;
+  document.getElementById('numerical-cat-topics-container').style.display = 'grid';
+  document.getElementById('numerical-cat-container').style.display = 'none';
+}
+
+// Step 2: the chosen topic's own question list, reusing the same card
+// template as every other tab.
+function showNumericalCategoryDetail(catId) {
+  if (!window.NUMERICALS) return;
+  var cat = NUM_CATEGORIES.find(c => c.id === catId);
+  var byCat = numericalsByCategory();
+  var items = (byCat[catId] || []);
+  var container = document.getElementById('numerical-cat-container');
+  if (!container || !cat) return;
+
+  var order = [];
+  var html = `<button class="anc-btn" onclick="backToCategoryTopics()" style="margin-bottom: 20px;">← Back to Topics</button>
+    <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">${cat.icon} ${cat.label} (${items.length})</h3>
+    <div style="display: flex; flex-direction: column; gap: 12px;">`;
+  items.forEach(n => { html += numCard(n, 'cat', n.frequency + '×'); order.push(n.id); });
+  html += `</div>`;
+
   NUM_TAB_ORDER.cat = order;
-  if (anchors) anchors.innerHTML = anchorHtml;
   container.innerHTML = html;
+  document.getElementById('numerical-cat-topics-container').style.display = 'none';
+  container.style.display = 'block';
+  document.getElementById('content').scrollTo({top: 0, behavior: 'instant'});
+}
+
+function backToCategoryTopics() {
+  document.getElementById('numerical-cat-container').style.display = 'none';
+  document.getElementById('numerical-cat-topics-container').style.display = 'grid';
 }
 
 function renderNumericalByYear() {
@@ -2733,6 +2822,7 @@ function renderNumericalByYear() {
   });
 
   var years = Object.keys(byYear).sort().reverse();
+  var MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
   var order = [];
   var anchorHtml = '<span>Jump to year</span>';
@@ -2740,16 +2830,62 @@ function renderNumericalByYear() {
   years.forEach(year => {
     var entries = Object.keys(byYear[year]).map(id => byYear[year][id]).sort((a, b) => a.n.id.localeCompare(b.n.id));
     anchorHtml += `<button class="anc-btn" onclick="jumpTo('year-${year}')">${year}</button>`;
-    html += `<div style="margin-bottom: 30px;" id="year-${year}">
+    html += `<div style="margin-bottom: 30px;" id="year-${year}" data-year-section="${year}">
       <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">📅 ${year} (${entries.length} question${entries.length === 1 ? '' : 's'})</h3>
       <div style="display: flex; flex-direction: column; gap: 12px;">`;
-    entries.forEach(e => { html += numCard(e.n, 'year', e.months.join(', ') || year); order.push(e.n.id); });
+    entries.forEach(e => {
+      var attrs = `data-year="${year}" data-months="${e.months.join(',')}"`;
+      html += numCard(e.n, 'year', e.months.join(', ') || year, attrs);
+      order.push(e.n.id);
+    });
     html += `</div></div>`;
   });
+  html += `<div id="numerical-year-empty" style="display:none; text-align:center; padding:40px 20px; color:var(--text2);">No numericals match that filter.</div>`;
+
+  // Filter controls, pushed to the right of the jump row via margin-left:auto
+  anchorHtml += `<div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+    <select id="numerical-year-filter-year" onchange="filterNumericalYear()" style="background:var(--surface); border:1px solid var(--border2); border-radius:6px; padding:6px 10px; color:var(--text); font-size:13px;">
+      <option value="">All Years</option>
+      ${years.map(y => `<option value="${y}">${y}</option>`).join('')}
+    </select>
+    <select id="numerical-year-filter-month" onchange="filterNumericalYear()" style="background:var(--surface); border:1px solid var(--border2); border-radius:6px; padding:6px 10px; color:var(--text); font-size:13px;">
+      <option value="">All Months</option>
+      ${MONTHS.map(m => `<option value="${m}">${m}</option>`).join('')}
+    </select>
+  </div>`;
 
   NUM_TAB_ORDER.year = order;
   if (anchors) anchors.innerHTML = anchorHtml;
   container.innerHTML = html;
+}
+
+function filterNumericalYear() {
+  var yearSel = document.getElementById('numerical-year-filter-year');
+  var monthSel = document.getElementById('numerical-year-filter-month');
+  var yearFilter = yearSel ? yearSel.value : '';
+  var monthFilter = monthSel ? monthSel.value : '';
+  var container = document.getElementById('numerical-year-container');
+  if (!container) return;
+
+  var anyVisible = false;
+  container.querySelectorAll('[data-year-section]').forEach(function(section) {
+    var sectionYear = section.getAttribute('data-year-section');
+    var sectionMatches = !yearFilter || sectionYear === yearFilter;
+    var visibleInSection = 0;
+    section.querySelectorAll('[data-months]').forEach(function(card) {
+      var months = card.getAttribute('data-months').split(',');
+      // OCT1/OCT2 etc are two sittings in the same month — match by prefix.
+      var monthMatches = !monthFilter || months.some(function(m) { return m.indexOf(monthFilter) === 0; });
+      var show = sectionMatches && monthMatches;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleInSection++;
+    });
+    section.style.display = visibleInSection > 0 ? '' : 'none';
+    if (visibleInSection > 0) anyVisible = true;
+  });
+
+  var empty = document.getElementById('numerical-year-empty');
+  if (empty) empty.style.display = anyVisible ? 'none' : 'block';
 }
 
 function loadNumerical(id, tab) {
@@ -2772,24 +2908,20 @@ function loadNumerical(id, tab) {
 
   var html = `
     <div class="note-doc" style="margin-top: 0; padding: 20px; border-radius: 12px; border: 1px solid var(--border2); background: var(--surface);">
-      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:16px;">
+      <div class="num-detail-head">
         <div class="n-h1" style="margin-bottom:0;">${data.title}</div>
-        <div style="display:flex; gap:8px; flex-shrink:0;">
+        <div class="num-detail-nav">
           <button class="anc-btn" ${prevId ? `onclick="loadNumerical('${prevId}', '${tab}')"` : 'disabled style="opacity:.35;cursor:not-allowed"'}>← Prev</button>
           <button class="anc-btn" ${nextId ? `onclick="loadNumerical('${nextId}', '${tab}')"` : 'disabled style="opacity:.35;cursor:not-allowed"'}>Next →</button>
         </div>
       </div>
-      ${data.years ? `<div style="margin-top: 12px; font-size: 12px; color: var(--text2); display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
-        <span style="color: var(--text); font-weight: 500;">Appeared in:</span>
-        ${data.years.split(',').map(y => `<span style="background: var(--surface2); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border2);">${y.trim()}</span>`).join('')}
-      </div>` : ''}
-      <div class="n-info" style="margin-top: 20px;">
-        <div class="icon">❓</div>
+      <div class="n-crit" style="margin-top: 20px;">
+        <div class="icon">🔴</div>
         <div class="body">
-          <strong>Question:</strong><br>
-          ${data.givenData}
+          <strong>EXAM QUESTION:</strong> ${data.givenData}
         </div>
       </div>
+      ${numYearsBadges(data.years, tab)}
 
       <!-- THE 3-WAY TOGGLE -->
       <div style="display:inline-flex; background:var(--surface2); border-radius:8px; border:1px solid var(--border2); overflow:hidden; margin: 20px 0;">
@@ -2820,12 +2952,15 @@ function loadNumerical(id, tab) {
   `;
   detailContent.innerHTML = html;
 
-  // View transition — instant, not smooth: the list/detail swap already
-  // changes the content height, so an animated scroll on top of that reads
-  // as a jarring double-motion rather than a clean cut to the new page.
+  // View transition — instant, not smooth (the list/detail swap already
+  // changes content height, so animating on top of that is jarring), and
+  // scrolled to the detail block itself rather than #content's top:0 — the
+  // nav row/title/tags/anchors above it are unchanged between list and
+  // detail, so scrolling to top:0 just re-shows that same header instead of
+  // the question the user actually clicked.
   listContainer.style.display = 'none';
   detailView.style.display = 'block';
-  document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+  detailView.scrollIntoView({block: 'start', behavior: 'instant'});
 }
 
 function closeNumericalDetail(tab) {
@@ -2882,5 +3017,5 @@ async function ensureNumericalsLoaded(renderFn, errorContainerId) {
 }
 
 function loadNumericalsIfNeeded() { ensureNumericalsLoaded(renderNumericalList, 'numerical-list-container'); }
-function loadNumericalsByCatIfNeeded() { ensureNumericalsLoaded(renderNumericalByCategory, 'numerical-cat-container'); }
+function loadNumericalsByCatIfNeeded() { ensureNumericalsLoaded(renderNumericalCategoryTopics, 'numerical-cat-topics-container'); }
 function loadNumericalsByYearIfNeeded() { ensureNumericalsLoaded(renderNumericalByYear, 'numerical-year-container'); }
