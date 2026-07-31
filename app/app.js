@@ -2991,6 +2991,20 @@ function numToggle(btn, target, tab) {
   if (targetEl) targetEl.style.display = 'block';
 }
 
+function waitForAccessPromise() {
+  return new Promise(function(resolve) {
+    (function check() {
+      // installGate() itself only creates window._accessPromise once app.js
+      // has finished loading — there's a real window right after page load
+      // where it doesn't exist yet. Poll for it rather than skipping the
+      // wait, or a fast navigation hits isLocked() against the still-default
+      // (denied) window._access and wrongly gates a legitimate subscriber.
+      if (window._accessPromise) { window._accessPromise.then(resolve); }
+      else { setTimeout(check, 50); }
+    })();
+  });
+}
+
 async function ensureNumericalsLoaded(renderFn, errorContainerId) {
   if (window.NUMERICALS) { renderFn(); return; }
   // Content keys arrive asynchronously after login (session check + a real
@@ -2998,7 +3012,7 @@ async function ensureNumericalsLoaded(renderFn, errorContainerId) {
   // flight when the user lands on a Numericals tab. Wait for the same
   // access-check promise every other content loader (fetchTopicData) already
   // awaits, instead of racing it and failing permanently.
-  if (window._accessPromise) { await window._accessPromise; }
+  await waitForAccessPromise();
   // Numericals is Written-scope content but, unlike every other Written
   // topic, wasn't wired through fetchTopicData's isLocked()/showGate() check
   // — a non-subscriber would just see a generic "connection" error instead
