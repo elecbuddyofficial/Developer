@@ -576,6 +576,7 @@ var WRITTEN_TOPICS = [
   {id:'W05',key:'W05_Written',name:'MLC 2006 Full Notes',icon:'⚓',notesView:'notes-w05',notesReady:true},
   {id:'W06',key:'W06_Written',name:'MARPOL Full Notes',icon:'📝',notesView:'notes-w06',notesReady:true},
   {id:'W07',key:'W07_Written',name:'Fire Safety & Fighting',icon:'🔥',notesView:'notes-w07',notesReady:true},
+  {id:'W08',key:'W08_Written',name:'Numerical Theory',icon:'🧮',notesView:'notes-w08',notesReady:true},
 ];
 
 function buildNotesTopicGrid(){
@@ -703,7 +704,7 @@ function showView(n){
   var v=document.getElementById('view-'+n);if(v)v.classList.add('active');
   var s=document.getElementById('si-'+n);if(s)s.classList.add('active');
   if(n==='oral'){var so=document.getElementById('si-oral');if(so)so.classList.add('active');}
-  if(n==='written-notes-picker'){var sw=document.getElementById('si-written');if(sw)sw.classList.add('active');}
+  if(n==='written-notes-picker' || n.startsWith('num-')){var sw=document.getElementById('si-written');if(sw)sw.classList.add('active');}
   if(n==='notes-picker')buildNotesTopicGrid();
   if(n==='written-notes-picker')buildWrittenTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
@@ -1783,6 +1784,8 @@ function startBackgroundIndexing() {
     TOPICS.forEach(function(t){ if(t.notesReady) allIds.push(t.id); });
     WRITTEN_TOPICS.forEach(function(t){ if(t.notesReady) allIds.push(t.id); });
     SEARCH_INDEX_TOTAL = allIds.length;
+    window._appReady = true;
+
     window._bgIndexing = true;
     var i = 0;
     function indexNext() {
@@ -2595,3 +2598,138 @@ function vidFloatClose() {
 function vidFloatEsc(e) {
     if (e.key === 'Escape') vidFloatClose();
 }
+
+// ================= NUMERICALS LOGIC =================
+function renderNumericalList() {
+  if (!window.NUMERICALS) return;
+  var container = document.getElementById('numerical-list-container');
+  if (!container) return;
+  
+  var tiers = {
+    1: { title: '🔥 Tier 1 — Very High Frequency (10+ appearances)', items: [] },
+    2: { title: '⭐ Tier 2 — High Frequency (6–9 appearances)', items: [] },
+    3: { title: '👍 Tier 3 — Medium Frequency (3–5 appearances)', items: [] },
+    4: { title: '📄 Tier 4 — Low Frequency (1–2 appearances)', items: [] }
+  };
+  
+  window.NUMERICALS.forEach(n => {
+    if (tiers[n.tier]) tiers[n.tier].items.push(n);
+  });
+  
+  var html = '';
+  Object.keys(tiers).forEach(k => {
+    var t = tiers[k];
+    if (t.items.length === 0) return;
+    
+    html += `<div style="margin-bottom: 30px;" id="tier-${k}">
+      <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">${t.title}</h3>
+      <div style="display: flex; flex-direction: column; gap: 12px;">`;
+      
+    t.items.forEach(n => {
+      html += `
+        <div onclick="loadNumerical('${n.id}')" style="background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+            <div style="font-size: 15px; font-weight: 600; color: var(--text);">${n.title}</div>
+            <div style="background: var(--surface3); color: var(--text); font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; font-weight: 700;">${n.frequency}×</div>
+          </div>
+          <div style="font-size: 13px; color: var(--text2); margin-top: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
+            ${n.givenData.replace(/<[^>]*>?/gm, ' ')}
+          </div>
+        </div>
+      `;
+    });
+    
+    html += `</div></div>`;
+  });
+  
+  container.innerHTML = html;
+}
+
+function loadNumerical(id) {
+  if (!window.NUMERICALS) return;
+  var data = window.NUMERICALS.find(n => n.id === id);
+  if (!data) return;
+
+  var listContainer = document.getElementById('numerical-list-container');
+  var detailView = document.getElementById('numerical-detail-view');
+  var detailContent = document.getElementById('numerical-content-container');
+  
+  if (!listContainer || !detailView || !detailContent) return;
+
+  var html = `
+    <div class="note-doc" style="margin-top: 0; padding: 20px; border-radius: 12px; border: 1px solid var(--border2); background: var(--surface);">
+      <div class="n-h1">${data.title}</div>
+      ${data.years ? `<div style="margin-top: 12px; font-size: 12px; color: var(--text2); display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+        <span style="color: var(--text); font-weight: 500;">Appeared in:</span>
+        ${data.years.split(',').map(y => `<span style="background: var(--surface2); padding: 3px 8px; border-radius: 4px; border: 1px solid var(--border2);">${y.trim()}</span>`).join('')}
+      </div>` : ''}
+      <div class="n-info" style="margin-top: 20px;">
+        <div class="icon">❓</div>
+        <div class="body">
+          <strong>Question:</strong><br>
+          ${data.givenData}
+        </div>
+      </div>
+
+      <!-- THE 3-WAY TOGGLE -->
+      <div style="display:inline-flex; background:var(--surface2); border-radius:8px; border:1px solid var(--border2); overflow:hidden; margin: 20px 0;">
+        <button class="qb-seg-btn active" onclick="numToggle(this, 'num')" style="border-right:1px solid var(--border2);">Numerical Solution</button>
+        <button class="qb-seg-btn" onclick="numToggle(this, 'concept')" style="border-right:1px solid var(--border2);">Concept Explanation</button>
+        <button class="qb-seg-btn" onclick="numToggle(this, 'hand')">Handwritten Solution</button>
+      </div>
+
+      <!-- CONTENT AREAS -->
+      <div id="dyn-num" style="display:block;">
+        <div class="n-steps">
+          ${data.solutionStepsHtml}
+        </div>
+        <div style="margin-top:24px; padding:0 20px;">
+          <div style="font-weight:700; color:var(--text); margin-bottom:10px;">Final Answers:</div>
+          ${data.finalAnswersHtml}
+        </div>
+      </div>
+
+      <div id="dyn-concept" style="display:none; padding-top: 10px;">
+        ${data.conceptHtml}
+      </div>
+
+      <div id="dyn-hand" style="display:none; text-align:center; padding: 20px; background:var(--surface2); border-radius:8px; border:1px solid var(--border2); color:var(--text2);">
+        <em>[ Image of handwritten solution goes here ]</em>
+      </div>
+    </div>
+  `;
+  detailContent.innerHTML = html;
+  
+  // View transition
+  listContainer.style.display = 'none';
+  detailView.style.display = 'block';
+  document.getElementById('content').scrollTo({top:0, behavior:'smooth'});
+}
+
+function closeNumericalDetail() {
+  var listContainer = document.getElementById('numerical-list-container');
+  var detailView = document.getElementById('numerical-detail-view');
+  
+  if (!listContainer || !detailView) return;
+  
+  detailView.style.display = 'none';
+  listContainer.style.display = 'block';
+}
+
+function numToggle(btn, target) {
+  var parent = btn.parentElement;
+  var buttons = parent.querySelectorAll('.qb-seg-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  document.getElementById('dyn-num').style.display = 'none';
+  document.getElementById('dyn-concept').style.display = 'none';
+  document.getElementById('dyn-hand').style.display = 'none';
+  
+  document.getElementById('dyn-' + target).style.display = 'block';
+}
+
+// Initial render
+setTimeout(function(){
+  renderNumericalList();
+}, 500);

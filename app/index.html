@@ -200,16 +200,124 @@
         <p>Structured answers, key theory, and numerical worked examples for written exam topics.</p>
         <div class="wc-badge">8 topics ready</div>
       </div>
-      <div class="welcome-card" style="opacity:0.6;cursor:default">
+      <div class="welcome-card" onclick="showView('num-landing')">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
-        <h3>Practice Questions</h3>
-        <p>Past paper questions, numerical drills, and objective-type questions for written prep.</p>
-        <div class="wc-badge" style="background:var(--surface3);color:var(--text2);border:none">Coming Soon</div>
+        <h3>Numericals</h3>
+        <p>Past paper questions, numerical drills, and step-by-step calculated solutions.</p>
+        <div class="wc-badge" style="background:var(--blue-dim);color:var(--blue);border:none">39 Questions</div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- ═══════════════ NUMERICALS LANDING ═══════════════ -->
+<div class="view" id="view-num-landing">
+  <div style="max-width:700px;margin:0 auto">
+    <div style="text-align:center;padding:32px 0 28px">
+      <div style="font-size:36px;margin-bottom:12px"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
+      <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Numericals</h1>
+      <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · Numerical Problems</p>
+    </div>
+    <div class="welcome-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+      <div class="welcome-card" onclick="showView('num-freq')">
+        <div class="wc-icon">📊</div>
+        <h3>By Frequency</h3>
+        <p>Group numerical questions based on how frequently they have been asked.</p>
+        <div class="wc-badge">4 Tiers</div>
+      </div>
+      <div class="welcome-card" onclick="showView('num-cat')">
+        <div class="wc-icon">🏷️</div>
+        <h3>By Category</h3>
+        <p>Organize numerical questions by topic or subject area.</p>
+        <div class="wc-badge" style="background:var(--green-dim);border-color:var(--green-border);color:var(--green)">By Topic</div>
+      </div>
+      <div class="welcome-card" onclick="showView('num-year')">
+        <div class="wc-icon">📅</div>
+        <h3>By Year</h3>
+        <p>Browse numerical questions based on the year they were asked in past papers.</p>
+        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">Chronological</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ NUMERICALS SUB-VIEWS ═══════════════ -->
+<div class="view" id="view-num-freq">
+  <div style="max-width:860px; margin: 0 auto;">
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <button class="anc-btn" onclick="showView('num-landing')" style="border-color:var(--blue);color:var(--blue)">← Numericals</button>
+    </div>
+    <div class="note-title">
+      <h1>📊 Numericals by Frequency</h1>
+      <div class="sub">ETO MMD EXAMINATION · NUMERICAL PROBLEMS · Ranked by Past Paper Appearances</div>
+      <div class="tags">
+        <span class="tag tag-blue">🔥 Very High Frequency</span>
+        <span class="tag tag-orange">10+ Marks Guaranteed</span>
+        <span class="tag tag-purple">Step-by-step Solutions</span>
+      </div>
+    </div>
+    
+    <div class="note-anchors" style="margin-bottom: 24px;">
+      <span>Jump to tier</span>
+      <button class="anc-btn" onclick="jumpTo('tier-1')">🔥 10+ Times</button>
+      <button class="anc-btn" onclick="jumpTo('tier-2')">⭐ 5-9 Times</button>
+      <button class="anc-btn" onclick="jumpTo('tier-3')">👍 3-4 Times</button>
+      <button class="anc-btn" onclick="jumpTo('tier-4')">📄 1-2 Times</button>
+    </div>
+    
+    <!-- NUMERICALS LIST CONTAINER -->
+    <div id="numerical-list-container">
+      <!-- JS will inject the grouped list of numericals here -->
+    </div>
+    
+    <!-- NUMERICAL DETAIL CONTAINER -->
+    <div id="numerical-detail-view" style="display:none;">
+      <button class="anc-btn" onclick="closeNumericalDetail()" style="margin-bottom: 20px;">← Back to List</button>
+      <div id="numerical-content-container">
+        <!-- JS will inject the specific numerical detail here -->
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<div class="view" id="view-num-cat">
+  <div style="max-width:860px">
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <button class="anc-btn" onclick="showView('num-landing')" style="border-color:var(--blue);color:var(--blue)">← Numericals</button>
+    </div>
+    <div class="note-title">
+      <h1>🏷️ Numericals by Category</h1>
+      <div class="sub">ETO MMD EXAMINATION · NUMERICAL PROBLEMS · Grouped by Syllabus Topic</div>
+      <div class="tags">
+        <span class="tag tag-green">Topic Focused</span>
+        <span class="tag tag-blue">Structured Practice</span>
+      </div>
+    </div>
+    <div style="text-align:center;padding:60px 20px;color:var(--text2)">
+      Content coming soon...
+    </div>
+  </div>
+</div>
+
+<div class="view" id="view-num-year">
+  <div style="max-width:860px">
+    <div style="margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;">
+      <button class="anc-btn" onclick="showView('num-landing')" style="border-color:var(--blue);color:var(--blue)">← Numericals</button>
+    </div>
+    <div class="note-title">
+      <h1>📅 Numericals by Year</h1>
+      <div class="sub">ETO MMD EXAMINATION · NUMERICAL PROBLEMS · Organized Chronologically</div>
+      <div class="tags">
+        <span class="tag tag-purple">Past Papers</span>
+        <span class="tag tag-orange">Trend Analysis</span>
+      </div>
+    </div>
+    <div style="text-align:center;padding:60px 20px;color:var(--text2)">
+      Content coming soon...
+    </div>
+  </div>
+</div>
 
 <!-- ═══════════════ WRITTEN NOTES PICKER ═══════════════ -->
 <div class="view" id="view-written-notes-picker">
@@ -553,24 +661,6 @@
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
   .nb-dot.show{display:block}
-  .nf-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:600;opacity:0;pointer-events:none;transition:opacity .22s}
-  .nf-overlay.open{opacity:1;pointer-events:all}
-  .nf-panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:92vw;background:var(--surface);border-left:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:601}
-  .nf-overlay.open .nf-panel{transform:translateX(0)}
-  .nf-head{display:flex;align-items:center;gap:10px;padding:16px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
-  .nf-head-title{flex:1;font-size:15px;font-weight:700;color:var(--text)}
-  .nf-close{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;color:var(--text3);font-size:18px;line-height:1;cursor:pointer;transition:background .12s,color .12s}
-<div id="nf-overlay" class="nf-overlay" onclick="closeNotifsIfBg(event)">
-  <div class="nf-panel" id="nf-panel">
-    <div class="nf-head">
-      <div class="nf-head-title">Notifications</div>
-      <button class="nf-close" onclick="closeNotifs()" aria-label="Close">&#xD7;</button>
-    </div>
-    <div class="nf-list" id="nf-list"><div class="nf-loading">Loading…</div></div>
-  </div>
-</div>
-
-<style>
   .nf-list{flex:1;overflow-y:auto;padding:12px 22px;display:flex;flex-direction:column;gap:8px; margin: 0 -22px -22px -22px;}
   .nf-item{background:#11253E;border:1px solid var(--border2);border-radius:var(--r8);padding:14px;position:relative}
   .nf-item.unread{border-left:3px solid var(--blue);background:linear-gradient(90deg, rgba(37,99,235,.04) 0%, rgba(17,37,62,0) 100%), #11253E}
@@ -820,6 +910,7 @@
 </style>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="../data/Written/numericals.js"></script>
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
