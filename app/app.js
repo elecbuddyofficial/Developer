@@ -708,6 +708,7 @@ function showView(n){
   if(n==='notes-picker')buildNotesTopicGrid();
   if(n==='written-notes-picker')buildWrittenTopicGrid();
   if(n==='quiz-picker')buildQuizTopicGrid();
+  if(n==='num-freq')loadNumericalsIfNeeded();
   if(n==='quiz') buildCatGrid();
   if(n==='oral' && window.innerWidth <= 768) setTimeout(maybeShowOralHint, 600);
   else dismissOralHint(false);
@@ -2729,7 +2730,12 @@ function numToggle(btn, target) {
   document.getElementById('dyn-' + target).style.display = 'block';
 }
 
-// Initial render
-setTimeout(function(){
-  renderNumericalList();
-}, 500);
+function loadNumericalsIfNeeded() {
+  if (window.NUMERICALS) { renderNumericalList(); return; }
+  window._loadEncryptedScript('../data/Written/numericals.js')
+    .then(renderNumericalList)
+    .catch(function() {
+      var c = document.getElementById('numerical-list-container');
+      if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load numericals. Please check your connection.</div>';
+    });
+}

@@ -35,6 +35,7 @@ const KEY_GROUPS = {
     written: {
         keyEnv: 'CONTENT_KEY_WRITTEN',
         dirs: [
+            'data/Written',
             'data/Written/notes',
         ],
     },
