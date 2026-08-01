@@ -261,7 +261,15 @@ window.fetchTopicData = function(topicId, topicKey) {
         buildTopicSideList(topicId);
         injectTopicFooterNav(topicId);
         document.getElementById('content').scrollTo({top:0, behavior:'instant'});
-        _restoreScroll(topicId);
+        if(window._pendingScroll){
+            var _s=window._pendingScroll; window._pendingScroll=null;
+            setTimeout(function(){
+                var el=document.getElementById(_s);
+                if(el){var c=document.getElementById('content');c.scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});}
+            },200);
+        } else {
+            _restoreScroll(topicId);
+        }
         _setupProgressObserver(topicId);
     }
 
