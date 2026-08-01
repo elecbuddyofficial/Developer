@@ -156,7 +156,7 @@ a.sb-item{text-decoration:none}
 /* Formula - monospace focus box */
 .n-formula{background:var(--surface3);border:1px solid rgba(6,182,212,.30);border-left:4px solid rgba(6,182,212,.85);border-radius:var(--r8);padding:22px 24px;margin:20px 0;font-family:ui-monospace,SFMono-Regular,monospace;font-size:19px;color:var(--text);text-align:center;box-shadow:0 2px 20px rgba(6,182,212,.10)}
 .n-formula .label{font-family:-apple-system,sans-serif;font-size:12px;color:var(--text3);margin-top:10px;letter-spacing:.3px}
-[data-theme="dark"] .n-formula, [data-theme="amoled"] .n-formula { color: var(--orange); }
+[data-theme="dark"] .n-formula, [data-theme="amoled"] .n-formula { color: #FF9F0A; }
 [data-theme="light"] .n-formula{box-shadow:none}
 
 /* Steps - numbered procedure */
@@ -522,6 +522,11 @@ a.sb-item{text-decoration:none}
     word-break: normal;
     overflow-wrap: break-word;
   }
+  /* Desktop pulls the formula box back to the step's outer edge (level with
+     the numbered circle) via a -38px margin that cancels the step's own
+     left padding. On a narrow phone that reads as the box sitting left of
+     where the step's own text starts. Keep it under the text instead. */
+  .n-steps li .n-formula { margin-left: 0; }
   /* The solid red-circle emoji renders heavy and misaligned at small sizes on phones */
   .n-crit .icon { display: none; }
   /* Numerical card title/badge row: stack instead of squeezing the title into a
