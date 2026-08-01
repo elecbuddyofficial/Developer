@@ -844,7 +844,7 @@
         var legacyNames = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
         var scope = profile.plan_scope || 'both';
         var planLabel = legacyNames[plan] || (plan + ' · ' + scope);
-        // Same track/tier lookup as the main app's profile display — same
+        // Same track/tier lookup as the main app's profile display - same
         // plan should read the same everywhere in the product.
         var planRowRes = await window._sbClient
           .from('pricing_plans')

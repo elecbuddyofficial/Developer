@@ -295,7 +295,7 @@
       </div>
     </div>
 
-    <!-- Topic card grid — shown first; clicking a topic opens its question list below -->
+    <!-- Topic card grid - shown first; clicking a topic opens its question list below -->
     <div id="numerical-cat-topics-container" class="welcome-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
       <!-- JS will inject one card per category here -->
     </div>
@@ -484,7 +484,7 @@
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Surveyor Q&A</h1>
       <p style="font-size:14px;color:var(--text2)">Actual questions asked by MMD Surveyors, paired with AI-generated ideal answers.</p>
     </div>
-    <div class="welcome-grid">
+    <div class="welcome-grid" style="grid-template-columns: repeat(3, 1fr);">
       <div class="welcome-card sq-landing-card" onclick="renderSqAll()">
         <div class="wc-icon">📚</div>
         <h3>All Surveyors</h3>
@@ -494,6 +494,11 @@
         <div class="wc-icon">🧑‍✈️</div>
         <h3>Surveyor-Wise</h3>
         <p>Target your study by Surveyor. View their favorite topics and specific questions.</p>
+      </div>
+      <div class="welcome-card sq-landing-card" onclick="renderSqMonthly()">
+        <div class="wc-icon">📅</div>
+        <h3>Monthly Sittings</h3>
+        <p>Questions from monthly mock-exam sittings, not attributed to a specific surveyor.</p>
       </div>
     </div>
     <div style="text-align:center;margin-top:20px;">
@@ -512,9 +517,16 @@
 <!-- ═══════════════ SQ ALL QUESTIONS ═══════════════ -->
 <div class="view" id="view-sq-all">
   <div class="note-doc">
-    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
       <button class="anc-btn sq-back-btn" onclick="showView('sq-landing')">← Surveyor Q&A</button>
       <h2 style="font-size:18px;font-weight:800;color:var(--text)">All Questions</h2>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <label for="sq-all-topic-filter" style="font-size:13px;font-weight:600;color:var(--text2)">Filter by topic:</label>
+      <select id="sq-all-topic-filter" class="sq-topic-select" onchange="sqAllFilterChanged()"></select>
+      <label for="sq-all-surveyor-filter" style="font-size:13px;font-weight:600;color:var(--text2)">Filter by surveyor:</label>
+      <select id="sq-all-surveyor-filter" class="sq-topic-select" onchange="sqAllFilterChanged()"></select>
+      <span id="sq-all-count" style="font-size:13px;color:var(--text2)"></span>
     </div>
     <div id="sq-all-container"></div>
     <div style="text-align:center;margin-top:20px;margin-bottom:40px;">
@@ -534,14 +546,31 @@
   </div>
 </div>
 
+<!-- ═══════════════ SQ MONTHLY SITTINGS GRID ═══════════════ -->
+<div class="view" id="view-sq-monthly">
+  <div style="max-width:860px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <button class="anc-btn sq-back-btn" onclick="showView('sq-landing')">← Surveyor Q&A</button>
+      <h2 style="font-size:18px;font-weight:800;color:var(--text)">Monthly Sittings</h2>
+    </div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Questions from monthly mock-exam sittings, not attributed to a specific surveyor.</p>
+    <div id="sq-monthly-grid" class="qcat-grid"></div>
+  </div>
+</div>
+
 <!-- ═══════════════ SQ SURVEYOR DETAIL ═══════════════ -->
 <div class="view" id="view-sq-detail">
   <div class="note-doc">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
-      <button class="anc-btn sq-back-btn" onclick="showView('sq-grid')">← Surveyors</button>
+      <button class="anc-btn sq-back-btn" id="sq-detail-back-btn" onclick="sqDetailBack()">← Surveyors</button>
       <h2 id="sq-detail-title" style="font-size:18px;font-weight:800;color:var(--text)">Surveyor</h2>
     </div>
-    <div id="sq-detail-info" style="margin-bottom:24px"></div>
+    <div id="sq-detail-info" style="margin-bottom:16px"></div>
+    <div id="sq-detail-filter-row" style="display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <label for="sq-detail-topic-filter" style="font-size:13px;font-weight:600;color:var(--text2)">Filter by topic:</label>
+      <select id="sq-detail-topic-filter" class="sq-topic-select" onchange="sqDetailFilterChanged()"></select>
+      <span id="sq-detail-count" style="font-size:13px;color:var(--text2)"></span>
+    </div>
     <div id="sq-detail-container"></div>
   </div>
 </div>
@@ -702,7 +731,7 @@
   .badge-promo{background:rgba(200,164,74,.15);color:#C8A44A}
 </style>
 
-<div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);">
+<div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);transform:translateZ(0);isolation:isolate;">
   <div id="profile-panel">
     <div id="pm-main-view">
 
@@ -918,7 +947,7 @@
   }
   .up-buy-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-  /* Upgrade modal — mobile */
+  /* Upgrade modal - mobile */
   @media (max-width: 600px) {
     #upgrade-modal .up-plan-card { padding: 15px 15px 14px; }
     .up-buy-btn { min-height: 46px; }
@@ -1020,7 +1049,7 @@ function setTheme(t) {
   });
 
   // ── Content key management (AES-256-GCM offline encryption) ─────────────────
-  // Two independent keys now — Oral and Written are encrypted separately so a
+  // Two independent keys now - Oral and Written are encrypted separately so a
   // scope-restricted buyer's key literally cannot decrypt the other section.
   var _IDB_NAME  = 'eb_secure';
   var _IDB_STORE = 'keys';
@@ -1094,7 +1123,7 @@ function setTheme(t) {
     if (!window._sbClient || !window._sbUser) return;
     var userId = window._sbUser.id;
 
-    // Prefer IndexedDB — works offline if keys were previously fetched
+    // Prefer IndexedDB - works offline if keys were previously fetched
     var stored = await _loadKeys(userId);
     if (stored) { window._contentKeys = stored.keys; return; }
 
@@ -1140,14 +1169,14 @@ function setTheme(t) {
     var text = await resp.text();
     var code;
     if (text.trimStart().startsWith('{')) {
-      // Encrypted envelope — which key applies is inferred from the path
+      // Encrypted envelope - which key applies is inferred from the path
       var scope = url.indexOf('/data/Orals/') !== -1 ? 'oral'
                 : url.indexOf('/data/Written/') !== -1 ? 'written' : null;
       var key = scope && window._contentKeys && window._contentKeys[scope];
       if (!key) throw new Error('No content key available' + (scope ? ' for scope: ' + scope : ''));
       code = await window._decryptContent(text, key);
     } else {
-      // Plain JS — free preview content, no decryption needed
+      // Plain JS - free preview content, no decryption needed
       code = text;
     }
     // eslint-disable-next-line no-eval
@@ -1166,7 +1195,7 @@ function setTheme(t) {
       access.oral = access.written = true;
       expiresAt = null;
     } else if (plan === 'trial') {
-      // Trial is never scope-restricted — full preview of both sections.
+      // Trial is never scope-restricted - full preview of both sections.
       var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
       var trialActive = Date.now() < trialEnd.getTime();
       access.oral = access.written = trialActive;
@@ -1175,7 +1204,7 @@ function setTheme(t) {
       var subEnd = profile.subscription_expires_at ? new Date(profile.subscription_expires_at).getTime() : 0;
       var paidActive = subEnd > 0 && Date.now() < subEnd;
       // Legacy rows and any payment caught mid-deploy-skew have plan_scope
-      // null — those resolve to 'both' (what they actually paid for under
+      // null - those resolve to 'both' (what they actually paid for under
       // the old all-or-nothing model), never fail closed to neither.
       var scope = profile.plan_scope || 'both';
       access.oral    = paidActive && (scope === 'oral' || scope === 'both');
@@ -1187,7 +1216,7 @@ function setTheme(t) {
     return { access: access, expiresAt: expiresAt };
   }
 
-  // Determine access from Supabase profile — deny until confirmed
+  // Determine access from Supabase profile - deny until confirmed
   async function determineAccess() {
     window._access = { oral: false, written: false }; // default deny; only grant after Supabase confirms
     if (!window._sbClient || !window._sbUser) return;
@@ -1208,7 +1237,7 @@ function setTheme(t) {
       }
       if (!window._access.oral || !window._access.written) applyLockUI();
     } catch(e) {
-      // Network unreachable — use the cached access status from last online session
+      // Network unreachable - use the cached access status from last online session
       var cached = _loadAccessCache();
       window._access = cached !== null ? cached : { oral: false, written: false };
     }
@@ -1238,7 +1267,7 @@ function setTheme(t) {
   function installGate() {
     if (!window.fetchTopicData) { setTimeout(installGate, 100); return; }
 
-    // Fire access check + key init together — content can only load once both complete
+    // Fire access check + key init together - content can only load once both complete
     window._accessPromise = Promise.all([determineAccess(), initContentKeys()]);
 
     var _orig = window.fetchTopicData;
@@ -1248,7 +1277,7 @@ function setTheme(t) {
       _orig(topicId, topicKey);
     };
 
-    // Gate sidebar quiz-bank, quiz-picker and Surveyor Q&A buttons — all
+    // Gate sidebar quiz-bank, quiz-picker and Surveyor Q&A buttons - all
     // three are Oral-only surfaces (data/Written has no quiz/video content).
     document.querySelectorAll('.sb-item[onclick]').forEach(function(btn) {
       var oc = btn.getAttribute('onclick') || '';
@@ -1309,7 +1338,7 @@ function setTheme(t) {
           }
         }
       } catch(e) {
-        // Network unreachable — decode local JWT to catch hard-expired sessions even offline
+        // Network unreachable - decode local JWT to catch hard-expired sessions even offline
         try {
           var raw = localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token');
           if (raw) {
@@ -1320,7 +1349,7 @@ function setTheme(t) {
               if (payload.exp && Math.floor(Date.now() / 1000) >= payload.exp) kick();
             }
           }
-        } catch(e2) { /* token unreadable — leave session alone */ }
+        } catch(e2) { /* token unreadable - leave session alone */ }
       }
     }
 
@@ -1338,6 +1367,21 @@ function setTheme(t) {
       if (e.ctrlKey && e.shiftKey && ['i', 'j', 'c'].includes(k)) { e.preventDefault(); return; }
       if (e.key === 'F12') { e.preventDefault(); }
     });
+
+    // Blur the app when it loses focus or is backgrounded (app switch, screen
+    // recording overlay, taskbar/app-switcher preview). This is a deterrent,
+    // not a block - no web API can detect or prevent an OS-level screenshot.
+    (function() {
+      var layout = document.getElementById('layout');
+      var blurred = false;
+      function applyBlur() { if (blurred || !layout) return; blurred = true; layout.classList.add('_privacy-blur'); }
+      function removeBlur() { if (!blurred || !layout) return; blurred = false; layout.classList.remove('_privacy-blur'); }
+      window.addEventListener('blur', applyBlur);
+      window.addEventListener('focus', removeBlur);
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) applyBlur(); else removeBlur();
+      });
+    })();
 
     // ── Watermark ────────────────────────────────────────────
     function _wmEsc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1381,6 +1425,7 @@ function setTheme(t) {
     // ── Profile panel ────────────────────────────────────────
     window.openProfile = async function() {
       document.getElementById('profile-modal').style.display = 'block';
+      document.documentElement.classList.add('_modal-open');
       setTimeout(() => document.getElementById('profile-panel').classList.add('open'), 10);
       const user = window._sbUser;
       if (!user) return;
@@ -1408,12 +1453,14 @@ function setTheme(t) {
     window.closeProfile = function(e) {
       if (e.target === document.getElementById('profile-modal')) {
         document.getElementById('profile-panel').classList.remove('open');
+        document.documentElement.classList.remove('_modal-open');
         setTimeout(() => document.getElementById('profile-modal').style.display = 'none', 300);
       }
     };
 
     window.openSettings = function() {
       document.getElementById('profile-panel').classList.remove('open');
+      document.documentElement.classList.remove('_modal-open');
       setTimeout(() => {
         document.getElementById('profile-modal').style.display = 'none';
         document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
@@ -1469,7 +1516,7 @@ function setTheme(t) {
       window._topicProgress = {};
       localStorage.removeItem('eb_tp_cache');
 
-      // Quiz category best-scores — local only, never synced to Supabase.
+      // Quiz category best-scores - local only, never synced to Supabase.
       localStorage.removeItem('eto_progress');
 
       // In-progress "resume where you left off" quiz state for every
@@ -1663,7 +1710,7 @@ var TRACK_FALLBACK_NAME = { written: 'Passage', oral: 'Voyage', both: 'Expeditio
 var SCOPE_SUBHEAD = {
   written: 'Written exam prep',
   oral:    'Oral exam prep, quizzes & Surveyor Q&A',
-  both:    'Everything — Written + Oral',
+  both:    'Everything - Written + Oral',
 };
 var SCOPE_FEATURES = {
   written: ['7 written exam topics with solved papers', 'Offline access via service worker cache'],
@@ -1706,7 +1753,7 @@ function fmtRupees(paise) { return '₹' + Math.round(paise / 100).toLocaleStrin
 function escUp(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function bestValueDuration(scope) {
-  // Whichever tier has the lowest effective ₹/month for this scope — computed
+  // Whichever tier has the lowest effective ₹/month for this scope - computed
   // from live data so an admin price edit can't leave a stale ribbon behind.
   var months = { '3mo': 3, '6mo': 6, '12mo': 12 };
   var best = null, bestRate = Infinity;
@@ -1941,7 +1988,7 @@ async function startPayment(plan, scope) {
     var token = sessionRes.data.session && sessionRes.data.session.access_token;
     if (!token) throw new Error('Not authenticated');
 
-    // Create Razorpay order via Edge Function — the amount charged is looked
+    // Create Razorpay order via Edge Function - the amount charged is looked
     // up server-side from pricing_plans, never trusted from the client.
     var orderRes = await fetch(SUPABASE_FN_URL + '/create-razorpay-order', {
       method: 'POST',

@@ -1,6 +1,6 @@
 *{box-sizing:border-box;margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 :root{
-  /* Midnight Navy — premium dark, easy on eyes for long study sessions */
+  /* Midnight Navy - premium dark, easy on eyes for long study sessions */
   --bg:#0B1220;--surface:#141C2F;--surface2:#1C2740;--surface3:#252F45;
   --border:#2B395A;--border2:#3D4F6E;
   --blue:#3b82f6;--blue-dim:rgba(59,130,246,.14);--blue-border:rgba(59,130,246,.40);
@@ -43,6 +43,11 @@ body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:f
 
 /* TOP BAR */
 #topbar{display:flex;align-items:center;gap:12px;padding:0 20px;height:60px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:50}
+/* Guaranteed fallback for the profile/settings panel: backdrop-filter on #profile-modal
+   establishes a containing block for its fixed children, which on some WebKit versions
+   also disrupts paint order vs sticky siblings (#topbar) despite the z-index gap. Forcing
+   #topbar below any open modal removes the ambiguity outright. */
+html._modal-open #topbar{z-index:1}
 #topbar .logo{display:flex;align-items:center;gap:0px;font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.3px;white-space:nowrap;flex-shrink:0}
 #topbar .logo .logo-mark{height:38px;width:auto;flex-shrink:0;display:block;margin-right:-2px}
 #topbar .logo .logo-elec{color:var(--blue);font-size:inherit;font-weight:inherit;margin:0}
@@ -50,7 +55,8 @@ body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:f
 .spacer{flex:1}
 
 /* LAYOUT */
-#layout{display:flex;flex:1;overflow:hidden}
+#layout{display:flex;flex:1;overflow:hidden;transition:filter .15s ease}
+#layout._privacy-blur{filter:blur(22px) brightness(.7);pointer-events:none}
 
 /* SIDEBAR (Desktop) / BOTTOM NAV (Mobile) */
 #sidebar{width:232px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:10px 0}
@@ -71,8 +77,11 @@ a.sb-item{text-decoration:none}
 #content::-webkit-scrollbar{width:5px}
 #content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 #content::-webkit-scrollbar-track{background:transparent}
-.view{display:none}.view.active{display:block}
-@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.view{display:none}.view.active{display:block;animation:slideUp .22s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.content-spinner{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:80px 20px;color:var(--text2);font-size:13.5px;animation:slideUp .2s ease}
+.content-spinner .ring{width:34px;height:34px;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--blue);animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 /* ═══ NOTES ═══ */
 .note-doc{max-width:1050px;margin:0 auto}
@@ -94,7 +103,7 @@ a.sb-item{text-decoration:none}
 
 /* Body text */
 .n-p{font-size:15.5px;line-height:1.78;color:var(--text);margin:14px 0}
-.n-val{display:inline;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13.5px;font-weight:600}
+.n-val{display:inline;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13.5px;font-weight:600;white-space:nowrap}
 
 /* Callout boxes - important info, not alarming */
 .n-crit,.n-warn,.n-info,.n-ok{display:flex;gap:14px;align-items:flex-start;border-radius:var(--r8);padding:16px 18px;margin:20px 0;border:1px solid;border-left-width:4px}
@@ -158,7 +167,7 @@ a.sb-item{text-decoration:none}
 .n-steps li strong{color:var(--text);font-weight:600}
 .n-steps li .n-formula{margin-left:-38px}
 
-/* Numericals detail header — title + Prev/Next */
+/* Numericals detail header - title + Prev/Next */
 .num-detail-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
 .num-detail-nav{display:flex;gap:8px;flex-shrink:0}
 @media(max-width:768px){
@@ -458,7 +467,7 @@ a.sb-item{text-decoration:none}
   /* Topbar */
   #topbar { padding: 0 16px; height: 56px; }
   
-  /* Grids to 1 column — !important overrides inline style="grid-template-columns:..." on oral topic notes */
+  /* Grids to 1 column - !important overrides inline style="grid-template-columns:..." on oral topic notes */
   .welcome-grid, .n-grid, .n-grid-3, .qcat-grid, [style*="grid-template-columns"] {
     grid-template-columns: 1fr !important;
     gap: 10px;
@@ -487,18 +496,16 @@ a.sb-item{text-decoration:none}
   .quiz-opts { padding: 12px 16px 16px; }
   .quiz-actions { padding: 12px 16px; }
   
-  /* Safe table container & text wrapping */
+  /* Table scrolls horizontally on its own; page stays locked in portrait */
   .n-table {
     font-size: 13px;
     display: block;
-    width: 100% !important;
     max-width: 100%;
-    overflow-x: auto !important;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    white-space: normal;
-    word-break: break-word;
+    white-space: nowrap;
   }
-  .n-table th, .n-table td { padding: 10px 12px; word-break: break-word; }
+  .n-table th, .n-table td { padding: 10px 12px; }
   /* Overflow fixes for quiz/score screens */
   .score-screen, .duo-score-container { max-width: 100%; padding: 24px 16px; gap: 16px; border: none; border-radius: 0; box-shadow: none; }
   .duo-score-ill { font-size: 64px; }
@@ -507,11 +514,20 @@ a.sb-item{text-decoration:none}
   #quiz-active { max-width: 100%; }
   #quiz-home, #view-quiz-bank { max-width: 100%; }
   .n-formula {
+    font-size: 14px;
+    padding: 16px 14px;
+    line-height: 1.7;
     overflow-x: auto;
     max-width: 100%;
-    word-break: break-word;
-    overflow-wrap: anywhere;
+    word-break: normal;
+    overflow-wrap: break-word;
   }
+  /* The solid red-circle emoji renders heavy and misaligned at small sizes on phones */
+  .n-crit .icon { display: none; }
+  /* Numerical card title/badge row: stack instead of squeezing the title into a
+     sliver next to a long badge (e.g. a multi-month "By Year" pill) */
+  .nc-header { flex-direction: column; gap: 8px !important; }
+  .nc-badge { align-self: flex-start; white-space: normal !important; }
 
   /* ── Surveyor Q&A mobile ── */
   #view-sq-landing > div,
@@ -806,14 +822,13 @@ a.sb-item{text-decoration:none}
 .sq-badge-surveyor { background: var(--purple-dim); color: var(--purple); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
 .sq-badge-topic { background: var(--surface3); color: var(--text2); padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
 .sq-q { font-size: 16px; font-weight: 700; color: var(--text); line-height: 1.5; margin-bottom: 16px; }
-.sq-a { font-size: 14px; color: var(--text2); line-height: 1.6; background: var(--surface2); padding: 16px; border-radius: var(--r8); border-left: 4px solid var(--purple); }
-.sq-bullet { display: flex; gap: 8px; align-items: baseline; padding: 5px 0; border-bottom: 1px solid var(--border); }
-.sq-bullet:last-child { border-bottom: none; }
+.sq-a { font-size: 14px; color: var(--text); line-height: 1.6; background: var(--surface2); padding: 16px; border-radius: var(--r8); border-left: 4px solid var(--purple); }
+.sq-bullet { display: flex; gap: 8px; align-items: baseline; padding: 6px 0; }
 .sq-label { color: var(--purple); font-weight: 700; font-size: 13px; white-space: nowrap; flex-shrink: 0; }
-.sq-bullet-text { color: var(--text2); }
-.sq-numbered { display: flex; gap: 10px; align-items: baseline; padding: 5px 0; }
+.sq-bullet-text { color: var(--text); }
+.sq-numbered { display: flex; gap: 10px; align-items: baseline; padding: 6px 0; }
 .sq-num { color: var(--orange); font-weight: 700; font-size: 13px; flex-shrink: 0; min-width: 20px; }
-.sq-para { padding: 6px 0; color: var(--text2); }
+.sq-para { padding: 6px 0; color: var(--text); }
 
 /* ── Oral Scroll Hint ── */
 @keyframes osh-enter { from{opacity:0;transform:translateX(-50%) translateY(24px)} to{opacity:1;transform:translateX(-50%) translateY(0)} }
@@ -829,6 +844,10 @@ a.sb-item{text-decoration:none}
 .sq-surveyor-card:hover { border-color: var(--orange); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.1); }
 .sq-surveyor-name { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
 .sq-surveyor-stat { font-size: 13px; color: var(--text2); }
+.sq-topic-select { background: var(--surface); color: var(--text); border: 1px solid var(--border2); border-radius: var(--r8); padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.sq-topic-link { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.sq-topic-link:hover { color: var(--purple); }
+.sq-topic-select:focus { outline: 2px solid var(--purple); outline-offset: 1px; }
 
 /* ══════════════════════════════════════════
    APP GUIDE
@@ -918,7 +937,7 @@ a.sb-item{text-decoration:none}
     #guide-slide-card { padding: 28px 22px; }
     #guide-tooltip { width: min(280px, calc(100vw - 24px)); padding: 14px 16px 14px; }
     .guide-tt-body { font-size: 12.5px; margin-bottom: 12px; }
-    /* Hide logo subtitle on mobile — prevents topbar overflow.
+    /* Hide logo subtitle on mobile - prevents topbar overflow.
        Scoped to .logo-sub specifically: a plain ".logo span" selector here
        previously also matched .logo-elec ("Elec"), silently hiding it on
        every screen ≤768px since it's a span too. */
@@ -929,7 +948,7 @@ a.sb-item{text-decoration:none}
     .score-breakdown { grid-template-columns: 1fr 1fr; }
 }
 
-/* ── Floating video player — mobile layout ── */
+/* ── Floating video player - mobile layout ── */
 @media (max-width: 600px) {
     /* Stack player on top, playlist scrollable below */
     .vid-float-inner { flex-direction: column; }
@@ -1144,7 +1163,7 @@ a.sb-item{text-decoration:none}
     .note-diagram-wrap img { max-width: 100%; }
 }
 
-/* Data Saver placeholder — the actual diagram, heavily blurred (a ~200-byte
+/* Data Saver placeholder - the actual diagram, heavily blurred (a ~200-byte
    inline preview, not a network fetch), sitting under a dark scrim with a
    download button on top. Same pattern as WhatsApp/Telegram media messages:
    you see roughly what it is before choosing to spend the data on it. */
@@ -1158,7 +1177,7 @@ a.sb-item{text-decoration:none}
     cursor: pointer;
     background: var(--surface2);
 }
-/* Two classes so this beats .note-diagram-wrap img's width:auto/height:auto —
+/* Two classes so this beats .note-diagram-wrap img's width:auto/height:auto -
    .dgm-blur-bg is an <img> living inside that same wrapper, and without the
    extra specificity here the generic rule was winning and rendering it at
    its natural ~28px size instead of filling the placeholder box. */
@@ -1184,7 +1203,7 @@ a.sb-item{text-decoration:none}
     gap: 10px;
     /* Darker at the center so the icon/label stay legible over any diagram's
        colors, lighter at the edges so the blurred preview still reads
-       through — most of these diagrams are pale, technical-illustration
+       through - most of these diagrams are pale, technical-illustration
        backgrounds, not photos, so a flat dark scrim was crushing them. */
     background: radial-gradient(circle at center, rgba(0,0,0,.5) 0%, rgba(0,0,0,.5) 20%, rgba(0,0,0,.22) 70%);
     transition: background .15s;
@@ -1230,7 +1249,7 @@ a.sb-item{text-decoration:none}
 .theme-btn{width:38px;height:34px;border-radius:var(--r8);border:1px solid var(--border2);background:var(--surface2);font-size:15px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;align-items:center;justify-content:center;flex:1;color:var(--text2)}
 .theme-btn:hover{border-color:var(--border2);background:var(--surface3);color:var(--text)}
 .theme-btn.t-active{border-color:var(--blue-border);background:var(--blue-dim);color:var(--blue)}
-/* Gate overlay always stays dark — theme toggle doesn't reach inside */
+/* Gate overlay always stays dark - theme toggle doesn't reach inside */
 #gate-overlay{--bg:#07080e;--surface:#0D1E33;--surface2:#0D1E33;--surface3:#132030;--border:#1A3050;--border2:#1A3050;--text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;--blue:#f59e0b;--blue-dim:rgba(245,158,11,.12);--blue-border:rgba(245,158,11,.35)}
 /* Light theme global fixes */
 [data-theme="light"] body{background:var(--bg);color:var(--text)}
@@ -1258,7 +1277,7 @@ a.sb-item{text-decoration:none}
             padding-right: max(20px, env(safe-area-inset-right)); }
   #sidebar { padding-bottom: env(safe-area-inset-bottom); }
   /* Adds the inset on top of the real design padding rather than replacing
-     it — env(safe-area-inset-left/right) is 0px on virtually every device
+     it - env(safe-area-inset-left/right) is 0px on virtually every device
      (it only matters in the landscape-notch edge case), so max(0px, ...)
      was silently zeroing out #content's actual ~48px horizontal padding on
      every device, at every screen size, not just notched phones. */
@@ -1274,7 +1293,7 @@ a.sb-item{text-decoration:none}
   button, [role="button"] { touch-action: manipulation; }
 }
 
-/* Landscape phones are short — reclaim vertical space */
+/* Landscape phones are short - reclaim vertical space */
 @media (max-height: 480px) and (orientation: landscape) {
   #topbar { height: 48px; }
   #sidebar { top: 0; height: 100svh; width: 280px; }

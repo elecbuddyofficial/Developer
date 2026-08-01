@@ -49,7 +49,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-h1" id="s-principle">⚡ Working Principle &amp; Construction</div>
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t01-ac-generator-principle.webp" alt="AC Generator - Working Principle" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRrQAAABXRUJQVlA4IKgAAAAwBQCdASocABMAPu1sq08ppqOiMBgIATAdiWMAUwAD6fWoCnbDT1S2pwHG9m9wsQV/lgD+7joWBTTD0H6HwAuEZYd5/gl4leRrr1/KQ/g0i9DTpAzom5SSL4+zWiwy4C36hvulcxzSvJfSM9RNBW+PMNMqBRpsXOtU0g9yalZagYJrHiFWnFCi8f1H8SfgPp9u36z4gIalWhc+wcpsBG0SWfVuxo1AAAA=">
-    <div class="note-diagram-cap">Fig. AC Generator — N/S poles, rotating coil, slip ring &amp; AC output waveform</div>
+    <div class="note-diagram-cap">Fig. AC Generator - N/S poles, rotating coil, slip ring &amp; AC output waveform</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Faraday's Law of Electromagnetic Induction:</strong> EMF is induced in a conductor when there is a relative change in magnetic flux linkage. In a marine alternator, the rotating DC-excited rotor field cuts the stationary stator armature conductors - balanced 3-phase AC EMF is induced. Foundation question asked by every surveyor.</div></div>
   <div class="n-grid">
@@ -101,7 +101,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-h1" id="s-brushless">🔄 Brushless Alternator - Full Chain</div>
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t01-brushless-system.webp" alt="Brushless Alternator System" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAABQAwCdASocAA4APu1iqU2ppaOiMAgBMB2JZwAAXBug2s+K4AD+8c/8Gu8SoiLI22LPEOYxWQU2zTS7m0H+52SbUfdS2EQ34AAAAA==">
-    <div class="note-diagram-cap">Fig. Brushless Alternator — AVR, exciter stator (DC), exciter rotor (3PH AC), rotating rectifier, surge suppressor, main field (DC), stator output with CT feedback</div>
+    <div class="note-diagram-cap">Fig. Brushless Alternator - AVR, exciter stator (DC), exciter rotor (3PH AC), rotating rectifier, surge suppressor, main field (DC), stator output with CT feedback</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>The Three-Machine System on One Shaft.</strong> All rotating together, eliminating electrical transfer via physical contact. Essential for hazardous areas due to zero brush sparking.</div></div>
   <ol class="n-steps">
@@ -237,7 +237,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-h1" id="s-synchroscope">🕐 Synchroscope - Construction, Working &amp; Paralleling</div>
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t01-synchroscope-construction.webp" alt="Synchroscope Construction" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmAAAABXRUJQVlA4IFQAAADwAwCdASocABIAPu1mqk2ppaQiMAgBMB2JaQAAXFMs0snpH2DtHzgAAP7thQgh+VWzF1uMfQLUk2lhErHJiwo0KrcXlLm2dG/Xf1gx3SK+lYhAAAA=">
-    <div class="note-diagram-cap">Fig. Synchroscope — poles, armature, resistance, inductance coil; connected to incoming alternator &amp; main bus-bars via instrument transformer</div>
+    <div class="note-diagram-cap">Fig. Synchroscope - poles, armature, resistance, inductance coil; connected to incoming alternator &amp; main bus-bars via instrument transformer</div>
   </div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>Asked by EVERY Surveyor.</strong> Indicates frequency difference and phase angle difference between the incoming generator and the running busbar.</div></div>
   <p class="n-p">The synchroscope is a small single-phase induction-motor-type instrument designed for phase comparison.</p>
@@ -280,7 +280,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-h2">Paralleling Without Synchroscope</div>
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t01-dark-lamp-sync.webp" alt="Dark Lamp Synchronizing Circuit" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAAAQAwCdASocABEAPu1mqk+ppSOiMBgIATAdiWkAADqwVgAA/vBoJrwgafnF5JhrBx6ZG8YQp1PKoHIdscYyipq6gdtItyAzA4AAAA==">
-    <div class="note-diagram-cap">Fig. Dark Lamp Method — busbars (R₁Y₁B₁), synchronising switches, synchronising lamps, incoming machine</div>
+    <div class="note-diagram-cap">Fig. Dark Lamp Method - busbars (R₁Y₁B₁), synchronising switches, synchronising lamps, incoming machine</div>
   </div>
   <div class="n-grid" style="grid-template-columns:1fr 1fr">
     <div class="n-card"><div class="card-title">Dark Lamp Method</div><div class="card-desc">Three lamps connected across corresponding phases of incoming and busbar. When all three lamps go dark simultaneously, the generators are in phase. <em>Limitation:</em> Cannot detect wrong phase sequence (all dark even at 180° out of phase if sequence is reversed).</div></div>
@@ -333,6 +333,10 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   • <strong>Governor Droop (3-5%):</strong> Speed decreases slightly as active load (kW) increases. This ensures stable load sharing without hunting.<br>
   • <strong>AVR Droop (3-5%):</strong> Voltage drops slightly as reactive load (kVAR) increases. This stabilizes reactive currents and prevents current swings between machines.<br>
   <em>Note:</em> Isochronous mode (zero droop / constant speed) can only be used on a single, isolated generator. If run in parallel, isochronous generators will "fight" and immediately trip on overload or reverse power.</div></div>
+
+  <div class="note-diagram-wrap"><img src="../data/diagrams/w08-alternator-load-sharing-droop.webp" alt="Frequency versus load droop lines for two alternators running in parallel, showing no-load frequencies, full-load frequencies, and how shifting one governor droop line changes the load split at a common system frequency" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAACwAgCdASoYABAAPu1iqU2ppaOiMAgBMB2JaQAAeyAA/vB6Su7PpZwmf6ZscrMpMqZBrpyXXNIAAA==">
+    <div class="note-diagram-cap">Fig. Droop lines for two paralleled alternators - both fall from their no-load frequency as load increases; at the common system frequency f, the machine with the shallower droop (Alternator 1) is carrying more load (P₁) than the steeper-drooping Alternator 2 (P₂).</div>
+  </div>
 
   <div class="n-h2">Load Sharing Fault Diagnosis</div>
   <table class="n-table">
@@ -565,7 +569,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <div class="n-h1" id="s-dashpot">⏱️ Dashpot - How It Works</div>
   <div class="note-diagram-wrap">
     <img src="../data/diagrams/t01-dashpot.webp" alt="Dashpot Preferential Trip" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACwAwCdASocABIAPu1mq06ppaOiKA1RMB2JaQAAO7tqaeEDwGVWYAD+8GVx0+I6G5jAWVbAA0GIJ6AaxuuIw4Zm3aHC0hoswjPJNAzksirnibWJJAyjydD4AAA=">
-    <div class="note-diagram-cap">Fig. Dashpot preferential trip — 5s/10s non-essential trips, 15s main breaker trip, delayed &amp; instantaneous contacts, alarm circuit</div>
+    <div class="note-diagram-cap">Fig. Dashpot preferential trip - 5s/10s non-essential trips, 15s main breaker trip, delayed &amp; instantaneous contacts, alarm circuit</div>
   </div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Dashpot Assembly:</strong> A pneumatic or hydraulic time-delay device used in mechanical preferential trip relays to provide a configurable delay before shedding loads.<br>
   • <strong>Construction:</strong> Comprises a piston moving inside an oil or air cylinder. The rate of fluid displacement is controlled by a micro-orifice with an adjustable needle valve.<br>

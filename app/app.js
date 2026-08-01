@@ -106,12 +106,12 @@ window.VIDEO_DATA = {}; // Video Data Store
 // ── Data Saver ───────────────────────────────────────────────
 // window.NOTE_HTML always holds the pristine note HTML with real <img>
 // tags. This transform is applied only at the point of injecting it into
-// the DOM, so toggling the setting never requires re-fetching content —
+// the DOM, so toggling the setting never requires re-fetching content -
 // it just changes how the same cached HTML gets rendered.
 window._dataSaver = localStorage.getItem('eb_data_saver') === '1';
 
 // data-blur is a ~200-byte inline base64 WebP (28px wide) baked into every
-// note file at build time — a real, heavily-blurred preview of the actual
+// note file at build time - a real, heavily-blurred preview of the actual
 // diagram, shown under the overlay exactly like WhatsApp/Telegram media
 // placeholders. It costs one extra HTML attribute, never a network request.
 var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async" data-blur="([^"]*)">/g;
@@ -246,6 +246,8 @@ window.fetchTopicData = function(topicId, topicKey) {
 
     if (!window.NOTE_HTML[topicId]) {
         let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
+        let spinnerC = document.getElementById('notes-container');
+        if (spinnerC) spinnerC.innerHTML = '<div class="content-spinner"><div class="ring"></div><div>Loading topic…</div></div>';
         window._loadEncryptedScript(pathStr + topicId.toLowerCase() + '_notes.js').catch(function() {
             var c = document.getElementById('notes-container');
             if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes. Please check your connection.</div>';
@@ -728,7 +730,7 @@ function showView(n){
   if(window.innerWidth <= 768) closeMobileMenu();
   if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker' || n==='num-landing') {
      // Hide topic sidebar list when leaving notes (num-landing is a picker
-     // page like written-notes-picker, not a content page — no sidebar there)
+     // page like written-notes-picker, not a content page - no sidebar there)
      var tsl = document.getElementById('topic-side-list');
      if (tsl) tsl.style.display = 'none';
   }
@@ -739,7 +741,7 @@ function showView(n){
   if(n==='oral'){var so=document.getElementById('si-oral');if(so)so.classList.add('active');}
   if(n==='written-notes-picker' || n.startsWith('num-')){var sw=document.getElementById('si-written');if(sw)sw.classList.add('active');}
   // Inside one of the three Numericals sub-views, show a sidebar that
-  // switches between Frequency/Category/Year — not the Written topics list.
+  // switches between Frequency/Category/Year - not the Written topics list.
   if(n==='num-freq' || n==='num-cat' || n==='num-year') buildNumericalsSideList(n);
   if(n==='notes-picker')buildNotesTopicGrid();
   if(n==='written-notes-picker')buildWrittenTopicGrid();
@@ -2033,7 +2035,7 @@ function _guideVideosHTML() {
 function _guideSupportHTML() {
     return '<div style="text-align:center">'
         + '<div style="display:flex;justify-content:center;gap:12px;margin-bottom:26px;flex-wrap:wrap">'
-        + _gStat('23','Topics') + _gStat('5,643','Questions') + _gStat('281','Surveyor Answers')
+        + _gStat('23','Topics') + _gStat('5,643','Questions') + _gStat('1,196','Surveyor Answers')
         + '</div>'
         + '<h2 style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Keep it free for everyone.</h2>'
         + '<p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px">Most cadets studying for MMD can\'t afford paid subscriptions. This app exists to change that.</p>'
@@ -2249,6 +2251,8 @@ function handleHashRouting() {
       openSurveyorQA(function() { renderSqAll(); });
   } else if (hash === 'sq-grid') {
       openSurveyorQA(function() { renderSqGrid(); });
+  } else if (hash === 'sq-monthly') {
+      openSurveyorQA(function() { renderSqMonthly(); });
   } else if (hash.startsWith('sq-detail=')) {
       var surveyorName = decodeURIComponent(hash.split('=')[1]);
       openSurveyorQA(function() { openSqDetail(surveyorName); });
@@ -2283,9 +2287,38 @@ startBackgroundIndexing();
 // ═══════════════ SURVEYOR Q&A LOGIC ═══════════════
 
 let sqCurrentPage = 0;
-const sqPageSize = 50;
+const sqPageSize = 20;
+window._sqAllFilter = window._sqAllFilter || '';
+window._sqAllSurveyorFilter = window._sqAllSurveyorFilter || '';
+window._sqDetailFilter = window._sqDetailFilter || '';
 
-function openSurveyorQA(onReady) {
+function _waitForAccessGate() {
+    // installGate() (index.html) only creates window._accessPromise on the
+    // page's 'load' event, which fires AFTER 'DOMContentLoaded' - so on a
+    // fresh page load straight into a #sq-* URL, _accessPromise may not
+    // exist yet at the exact moment handleHashRouting runs. Poll for it
+    // instead of a one-shot check, same defensive pattern installGate()
+    // itself uses while waiting for window.fetchTopicData to exist.
+    return new Promise(function(resolve) {
+        (function poll() {
+            if (window._accessPromise) { window._accessPromise.then(resolve); }
+            else { setTimeout(poll, 50); }
+        })();
+    });
+}
+
+async function openSurveyorQA(onReady) {
+    // Sidebar clicks already await this via installGate()'s wrapper (index.html),
+    // but hash-based navigation (#sq-all, #sq-grid, deep links, refresh/back on
+    // a #sq-* URL) calls this directly - without this guard, it can race ahead
+    // of initContentKeys() and fail with "No content key available for scope: oral"
+    // even for a fully-entitled user, simply because the key fetch hadn't finished yet.
+    await _waitForAccessGate();
+    if (window._access && !window._access.oral) {
+        if (window.showGate) window.showGate('oral');
+        return;
+    }
+
     var cb = onReady || function() { showView('sq-landing'); };
     if (!window.SQ_DATA) {
         showView('sq-landing');
@@ -2298,7 +2331,8 @@ function openSurveyorQA(onReady) {
         window._loadEncryptedScript('../data/Orals/SurveyorQA/sq_data.js').then(function() {
             if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
             cb();
-        }).catch(function() {
+        }).catch(function(e) {
+            console.error('[SurveyorQA] load failed:', e);
             if (spinner.parentNode) spinner.parentNode.removeChild(spinner);
             appToast('Failed to load Surveyor Q&A. Check your connection.');
         });
@@ -2340,65 +2374,190 @@ function renderSqCard(q) {
         + '</div>';
 }
 
+function sqJumpToTopic(code) {
+    let t = TOPICS.find(function(x) { return x.id === code; });
+    if (t && window.fetchTopicData) window.fetchTopicData(t.id, t.key);
+}
+
+function _sqLinkifyTopics(text) {
+    // Turns bare topic codes like "T23" inside a style-notes sentence into
+    // clickable links that take the cadet straight into that topic's notes -
+    // e.g. "Frequently asks about T23, T01." becomes three real jump points.
+    let parts = String(text).split(/(T\d{2})/g);
+    return parts.map(function(part) {
+        if (!/^T\d{2}$/.test(part)) return esc(part);
+        let t = TOPICS.find(function(x) { return x.id === part; });
+        let label = t ? (part + ' - ' + t.name) : part;
+        return '<a href="#" class="sq-topic-link" onclick="sqJumpToTopic(\'' + part + '\'); return false;">' + esc(label) + '</a>';
+    }).join('');
+}
+
+function _sqTopicOptionsHTML(questions, selected) {
+    let counts = {};
+    questions.forEach(function(q) { counts[q.topic] = (counts[q.topic] || 0) + 1; });
+    let codes = Object.keys(counts).sort();
+    let html = '<option value="">All Topics (' + questions.length + ')</option>';
+    codes.forEach(function(code) {
+        let t = TOPICS.find(function(x) { return x.id === code; });
+        let label = t ? (code + ' - ' + t.name) : code;
+        html += '<option value="' + code + '"' + (code === selected ? ' selected' : '') + '>' + esc(label) + ' (' + counts[code] + ')</option>';
+    });
+    return html;
+}
+
+function _sqSurveyorOptionsHTML(questions, selected) {
+    let counts = {};
+    questions.forEach(function(q) { counts[q.surveyor] = (counts[q.surveyor] || 0) + 1; });
+    let names = Object.keys(counts).sort();
+    let html = '<option value="">All Surveyors (' + questions.length + ')</option>';
+    names.forEach(function(name) {
+        html += '<option value="' + esc(name) + '"' + (name === selected ? ' selected' : '') + '>' + esc(name) + ' (' + counts[name] + ')</option>';
+    });
+    return html;
+}
+
+function _sqAllKey() {
+    var parts = [];
+    if (window._sqAllFilter) parts.push('t:' + window._sqAllFilter);
+    if (window._sqAllSurveyorFilter) parts.push('s:' + window._sqAllSurveyorFilter);
+    return 'sq-all' + (parts.length ? ':' + parts.join(',') : '');
+}
+
+function _sqAllFiltered() {
+    let all = window.SQ_DATA.questions;
+    if (window._sqAllFilter) all = all.filter(function(q) { return q.topic === window._sqAllFilter; });
+    if (window._sqAllSurveyorFilter) all = all.filter(function(q) { return q.surveyor === window._sqAllSurveyorFilter; });
+    return all;
+}
+
 function renderSqAll() {
     showView('sq-all');
-    sqCurrentPage = 0;
-    document.getElementById('sq-all-container').innerHTML = '';
-    loadMoreSqAll();
+    if (!window.SQ_DATA) return;
+
+    document.getElementById('sq-all-topic-filter').innerHTML = _sqTopicOptionsHTML(window.SQ_DATA.questions, window._sqAllFilter);
+    document.getElementById('sq-all-surveyor-filter').innerHTML = _sqSurveyorOptionsHTML(window.SQ_DATA.questions, window._sqAllSurveyorFilter);
+    _sqAllRenderFromScratch();
+}
+
+function sqAllFilterChanged() {
+    window._sqAllFilter = document.getElementById('sq-all-topic-filter').value;
+    window._sqAllSurveyorFilter = document.getElementById('sq-all-surveyor-filter').value;
+    _sqAllRenderFromScratch();
+}
+
+function _sqAllRenderFromScratch() {
+    let items = _sqAllFiltered();
+    let key = _sqAllKey();
+    document.getElementById('sq-all-count').textContent = items.length + ' question' + (items.length === 1 ? '' : 's');
+
+    // Re-load as many pages as were loaded last time we were on this exact
+    // view+filter, so a saved scroll position further down actually has
+    // content to land on, rather than clamping to the bottom of a short list.
+    let savedPages = Math.max(1, parseInt(localStorage.getItem('eb_sq_pages_' + key), 10) || 1);
+    let end = Math.min(savedPages * sqPageSize, items.length);
+    let html = '';
+    for (let i = 0; i < end; i++) html += renderSqCard(items[i]);
+    document.getElementById('sq-all-container').innerHTML = html;
+    sqCurrentPage = Math.ceil(end / sqPageSize);
+    document.getElementById('sq-load-more').style.display = (end >= items.length) ? 'none' : 'inline-block';
+
+    window._activeTopicId = key;
+    _restoreScroll(key);
 }
 
 function loadMoreSqAll() {
     if (!window.SQ_DATA) return;
-    if (sqCurrentPage * sqPageSize >= window.SQ_DATA.questions.length) return;
-    
+    let items = _sqAllFiltered();
+    if (sqCurrentPage * sqPageSize >= items.length) return;
+
     let container = document.getElementById('sq-all-container');
-    let questions = window.SQ_DATA.questions;
     let start = sqCurrentPage * sqPageSize;
-    let end = start + sqPageSize;
+    let end = Math.min(start + sqPageSize, items.length);
     let html = '';
-    
-    for (let i = start; i < end && i < questions.length; i++) {
-        html += renderSqCard(questions[i]);
-    }
-    
+    for (let i = start; i < end; i++) html += renderSqCard(items[i]);
     container.insertAdjacentHTML('beforeend', html);
     sqCurrentPage++;
-    
-    if (end >= questions.length) {
-        document.getElementById('sq-load-more').style.display = 'none';
-    } else {
-        document.getElementById('sq-load-more').style.display = 'inline-block';
-    }
+    localStorage.setItem('eb_sq_pages_' + _sqAllKey(), sqCurrentPage);
+
+    document.getElementById('sq-load-more').style.display = (end >= items.length) ? 'none' : 'inline-block';
+}
+
+function _sqSurveyorCard(name, meta, icon) {
+    let qCount = window.SQ_DATA.questions.filter(q => q.surveyor === name).length;
+    let tops = meta.top_topics ? meta.top_topics.slice(0, 3).join(', ') : 'Mixed';
+    return '<div class="sq-surveyor-card" data-surveyor="' + esc(name) + '">'
+        + '<div class="sq-surveyor-name">' + icon + ' ' + esc(name) + '</div>'
+        + '<div class="sq-surveyor-stat"><strong>' + qCount + '</strong> questions</div>'
+        + '<div class="sq-surveyor-stat"><strong>Top Topics:</strong> ' + esc(tops) + '</div>'
+        + '</div>';
 }
 
 function renderSqGrid() {
     showView('sq-grid');
     if (!window.SQ_DATA) return;
-    
-    let grid = document.getElementById('sq-surveyor-grid');
+
     let surveyors = window.SQ_DATA.surveyors;
     let activeSurveyors = new Set(window.SQ_DATA.questions.map(q => q.surveyor));
-    
-    let html = '';
-    let sortedNames = Array.from(activeSurveyors).sort();
-    
-    for (let name of sortedNames) {
-        let meta = surveyors[name] || {};
-        let qCount = window.SQ_DATA.questions.filter(q => q.surveyor === name).length;
-        let tops = meta.top_topics ? meta.top_topics.slice(0, 3).join(', ') : 'Mixed';
-        
-        html += '<div class="sq-surveyor-card" data-surveyor="' + esc(name) + '">'
-            + '<div class="sq-surveyor-name">🧑‍✈️ ' + esc(name) + '</div>'
-            + '<div class="sq-surveyor-stat"><strong>' + qCount + '</strong> questions</div>'
-            + '<div class="sq-surveyor-stat"><strong>Top Topics:</strong> ' + esc(tops) + '</div>'
-            + '</div>';
-    }
-    
-    grid.innerHTML = html;
+    let realNames = Array.from(activeSurveyors).filter(n => (surveyors[n] || {}).role !== 'monthly-mock').sort();
+
+    let grid = document.getElementById('sq-surveyor-grid');
+    grid.innerHTML = realNames.map(function(name) {
+        return _sqSurveyorCard(name, surveyors[name] || {}, '🧑‍✈️');
+    }).join('');
     grid.onclick = function(e) {
         var card = e.target.closest('[data-surveyor]');
         if (card) openSqDetail(card.getAttribute('data-surveyor'));
     };
+}
+
+function renderSqMonthly() {
+    showView('sq-monthly');
+    if (!window.SQ_DATA) return;
+
+    let surveyors = window.SQ_DATA.surveyors;
+    let activeSurveyors = new Set(window.SQ_DATA.questions.map(q => q.surveyor));
+    let monthlyNames = Array.from(activeSurveyors).filter(n => (surveyors[n] || {}).role === 'monthly-mock');
+    monthlyNames.sort(function(a, b) {
+        return new Date('1 ' + a) - new Date('1 ' + b);
+    });
+
+    let grid = document.getElementById('sq-monthly-grid');
+    grid.innerHTML = monthlyNames.map(function(name) {
+        return _sqSurveyorCard(name, surveyors[name] || {}, '📅');
+    }).join('');
+    grid.onclick = function(e) {
+        var card = e.target.closest('[data-surveyor]');
+        if (card) openSqDetail(card.getAttribute('data-surveyor'));
+    };
+}
+
+function sqDetailBack() {
+    if (window._sqDetailReturn === 'sq-monthly') renderSqMonthly();
+    else renderSqGrid();
+}
+
+function _sqDetailAllQuestions() {
+    return window.SQ_DATA.questions.filter(function(q) { return q.surveyor === window._sqDetailName; });
+}
+
+function _sqDetailFiltered() {
+    let all = _sqDetailAllQuestions();
+    return window._sqDetailFilter ? all.filter(function(q) { return q.topic === window._sqDetailFilter; }) : all;
+}
+
+function _sqDetailRenderQuestions() {
+    let questions = _sqDetailFiltered();
+    document.getElementById('sq-detail-container').innerHTML = questions.map(renderSqCard).join('');
+    document.getElementById('sq-detail-count').textContent = questions.length + ' question' + (questions.length === 1 ? '' : 's');
+
+    let key = 'sq-detail-' + window._sqDetailName + (window._sqDetailFilter ? ':' + window._sqDetailFilter : '');
+    window._activeTopicId = key;
+    _restoreScroll(key);
+}
+
+function sqDetailFilterChanged() {
+    window._sqDetailFilter = document.getElementById('sq-detail-topic-filter').value;
+    _sqDetailRenderQuestions();
 }
 
 function openSqDetail(surveyorName) {
@@ -2408,25 +2567,18 @@ function openSqDetail(surveyorName) {
     document.getElementById('sq-detail-title').textContent = surveyorName;
 
     let meta = window.SQ_DATA.surveyors[surveyorName] || {};
+    let isMonthly = meta.role === 'monthly-mock';
+    window._sqDetailReturn = isMonthly ? 'sq-monthly' : 'sq-grid';
+    let backBtn = document.getElementById('sq-detail-back-btn');
+    if (backBtn) backBtn.textContent = isMonthly ? '← Monthly Sittings' : '← Surveyors';
     let infoDiv = document.getElementById('sq-detail-info');
-    infoDiv.textContent = '';
-    let strong = document.createElement('strong');
-    strong.textContent = 'Style Notes: ';
-    let span = document.createElement('span');
-    span.textContent = meta.style_notes || 'No specific style noted.';
-    infoDiv.appendChild(strong);
-    infoDiv.appendChild(span);
+    infoDiv.innerHTML = '<strong>Style Notes: </strong><span>' + _sqLinkifyTopics(meta.style_notes || 'No specific style noted.') + '</span>';
     infoDiv.className = 'n-info';
-    
-    let container = document.getElementById('sq-detail-container');
-    let questions = window.SQ_DATA.questions.filter(q => q.surveyor === surveyorName);
-    
-    let html = '';
-    for (let q of questions) {
-        html += renderSqCard(q);
-    }
-    
-    container.innerHTML = html;
+
+    window._sqDetailName = surveyorName;
+    window._sqDetailFilter = '';
+    document.getElementById('sq-detail-topic-filter').innerHTML = _sqTopicOptionsHTML(_sqDetailAllQuestions(), '');
+    _sqDetailRenderQuestions();
 }
 
 // ── DIAGRAM ZOOM TOGGLE ───────────────────────────────────────
@@ -2662,9 +2814,9 @@ var NUM_TAB_ORDER = { freq: [], cat: [], year: [] };
 function numCard(n, tab, badgeText, extraAttrs) {
   return `
     <div onclick="loadNumerical('${n.id}', '${tab}')" ${extraAttrs || ''} style="background: var(--surface); border: 1px solid var(--border2); border-radius: 8px; padding: 16px; cursor: pointer; transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='var(--border2)'">
-      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
-        <div style="font-size: 15px; font-weight: 600; color: var(--text);">${n.title}</div>
-        <div style="background: var(--surface3); color: var(--text); font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; font-weight: 700;">${badgeText}</div>
+      <div class="nc-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;">
+        <div style="font-size: 15px; font-weight: 600; color: var(--text); flex: 1; min-width: 0;">${n.title}</div>
+        <div class="nc-badge" style="background: var(--surface3); color: var(--text); font-size: 12px; padding: 4px 10px; border-radius: 12px; white-space: nowrap; font-weight: 700; flex-shrink: 0;">${badgeText}</div>
       </div>
       <div style="font-size: 13px; color: var(--text2); margin-top: 8px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis;">
         ${n.givenData.replace(/<[^>]*>?/gm, ' ')}
@@ -2711,10 +2863,10 @@ function renderNumericalList() {
   if (!container) return;
 
   var tiers = {
-    1: { title: '🔥 Tier 1 — Very High Frequency (10+ appearances)', items: [] },
-    2: { title: '⭐ Tier 2 — High Frequency (6–9 appearances)', items: [] },
-    3: { title: '👍 Tier 3 — Medium Frequency (3–5 appearances)', items: [] },
-    4: { title: '📄 Tier 4 — Low Frequency (1–2 appearances)', items: [] }
+    1: { title: '🔥 Tier 1 - Very High Frequency (10+ appearances)', items: [] },
+    2: { title: '⭐ Tier 2 - High Frequency (6–9 appearances)', items: [] },
+    3: { title: '👍 Tier 3 - Medium Frequency (3–5 appearances)', items: [] },
+    4: { title: '📄 Tier 4 - Low Frequency (1–2 appearances)', items: [] }
   };
 
   window.NUMERICALS.forEach(n => {
@@ -2751,7 +2903,7 @@ function numericalsByCategory() {
 }
 
 // Step 1: a card grid of topics (like the Numericals landing page), one per
-// category with a live question count — the front door into By Category.
+// category with a live question count - the front door into By Category.
 function renderNumericalCategoryTopics() {
   if (!window.NUMERICALS) return;
   var grid = document.getElementById('numerical-cat-topics-container');
@@ -2811,7 +2963,7 @@ function renderNumericalByYear() {
   var anchors = document.getElementById('numerical-year-anchors');
   if (!container) return;
 
-  // A question can appear in many years — build year -> [{n, months[]}] so
+  // A question can appear in many years - build year -> [{n, months[]}] so
   // it shows up under every year it was actually asked, each time badged
   // with just that year's month(s), not the full appearance history.
   var byYear = {};
@@ -2882,7 +3034,7 @@ function filterNumericalYear() {
     var visibleInSection = 0;
     section.querySelectorAll('[data-months]').forEach(function(card) {
       var months = card.getAttribute('data-months').split(',');
-      // OCT1/OCT2 etc are two sittings in the same month — match by prefix.
+      // OCT1/OCT2 etc are two sittings in the same month - match by prefix.
       var monthMatches = !monthFilter || months.some(function(m) { return m.indexOf(monthFilter) === 0; });
       var show = sectionMatches && monthMatches;
       card.style.display = show ? '' : 'none';
@@ -2960,9 +3112,9 @@ function loadNumerical(id, tab) {
   `;
   detailContent.innerHTML = html;
 
-  // View transition — instant, not smooth (the list/detail swap already
+  // View transition - instant, not smooth (the list/detail swap already
   // changes content height, so animating on top of that is jarring), and
-  // scrolled to the detail block itself rather than #content's top:0 — the
+  // scrolled to the detail block itself rather than #content's top:0 - the
   // nav row/title/tags/anchors above it are unchanged between list and
   // detail, so scrolling to top:0 just re-shows that same header instead of
   // the question the user actually clicked.
@@ -3003,7 +3155,7 @@ function waitForAccessPromise() {
   return new Promise(function(resolve) {
     (function check() {
       // installGate() itself only creates window._accessPromise once app.js
-      // has finished loading — there's a real window right after page load
+      // has finished loading - there's a real window right after page load
       // where it doesn't exist yet. Poll for it rather than skipping the
       // wait, or a fast navigation hits isLocked() against the still-default
       // (denied) window._access and wrongly gates a legitimate subscriber.
@@ -3016,14 +3168,14 @@ function waitForAccessPromise() {
 async function ensureNumericalsLoaded(renderFn, errorContainerId) {
   if (window.NUMERICALS) { renderFn(); return; }
   // Content keys arrive asynchronously after login (session check + a real
-  // get-content-key round trip) — on a fresh reload this can still be in
+  // get-content-key round trip) - on a fresh reload this can still be in
   // flight when the user lands on a Numericals tab. Wait for the same
   // access-check promise every other content loader (fetchTopicData) already
   // awaits, instead of racing it and failing permanently.
   await waitForAccessPromise();
   // Numericals is Written-scope content but, unlike every other Written
   // topic, wasn't wired through fetchTopicData's isLocked()/showGate() check
-  // — a non-subscriber would just see a generic "connection" error instead
+  // - a non-subscriber would just see a generic "connection" error instead
   // of the upgrade prompt. Match the existing gate behavior here too.
   if (window.isLocked && window.isLocked('W08')) {
     showView('num-landing');

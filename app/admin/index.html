@@ -328,7 +328,7 @@
         display: none;
       }
       #ad-side.mob-open { display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; right: 0; left: auto; width: 260px; height: 100vh; height: 100dvh; z-index: 300; box-shadow: 0 0 0 100vw rgba(0,0,0,.6); }
-      /* The ≤960px icon-only rules also match here — restore full labels
+      /* The ≤960px icon-only rules also match here - restore full labels
          inside the drawer, which has room for them. */
       #ad-side.mob-open .ad-logo-name,
       #ad-side.mob-open .ad-logo-sub,
@@ -833,7 +833,7 @@
   <div class="ad-foot">
     <div class="ad-user-chip">
       <div class="ad-avatar" id="ad-avatar">A</div>
-      <div class="ad-user-email" id="ad-user-email">—</div>
+      <div class="ad-user-email" id="ad-user-email">-</div>
     </div>
     <button class="ad-signout ad-back-to-app" onclick="window.location.href='../index.html'" title="Back to App">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
@@ -860,22 +860,22 @@
     <div class="dash-kpi-grid">
       <div class="dash-kpi dk-blue">
         <div class="dki-label">Total Users</div>
-        <div class="dki-val" id="dk-total">—</div>
+        <div class="dki-val" id="dk-total">-</div>
         <div class="dki-sub" id="dk-total-sub">All time signups</div>
       </div>
       <div class="dash-kpi dk-green">
         <div class="dki-label">Active Subscribers</div>
-        <div class="dki-val" id="dk-active">—</div>
+        <div class="dki-val" id="dk-active">-</div>
         <div class="dki-sub" id="dk-active-sub">Paid, not expired</div>
       </div>
       <div class="dash-kpi dk-amber">
         <div class="dki-label">Total Revenue</div>
-        <div class="dki-val" id="dk-revenue">—</div>
+        <div class="dki-val" id="dk-revenue">-</div>
         <div class="dki-sub" id="dk-revenue-sub">From paid orders</div>
       </div>
       <div class="dash-kpi dk-purple">
         <div class="dki-label">Conversion Rate</div>
-        <div class="dki-val" id="dk-conv">—</div>
+        <div class="dki-val" id="dk-conv">-</div>
         <div class="dki-sub" id="dk-conv-sub">Trial → Paid</div>
       </div>
     </div>
@@ -884,23 +884,23 @@
     <div class="dash-kpi-sm-row">
       <div class="dash-kpi-sm">
         <div class="dki-label">On Trial</div>
-        <div class="dki-val-sm" id="dk-trial">—</div>
+        <div class="dki-val-sm" id="dk-trial">-</div>
       </div>
       <div class="dash-kpi-sm">
         <div class="dki-label">Expired / Lapsed</div>
-        <div class="dki-val-sm red" id="dk-expired">—</div>
+        <div class="dki-val-sm red" id="dk-expired">-</div>
       </div>
       <div class="dash-kpi-sm">
         <div class="dki-label">New This Week</div>
-        <div class="dki-val-sm blue" id="dk-week">—</div>
+        <div class="dki-val-sm blue" id="dk-week">-</div>
       </div>
       <div class="dash-kpi-sm">
         <div class="dki-label">Paid Orders</div>
-        <div class="dki-val-sm" id="dk-orders">—</div>
+        <div class="dki-val-sm" id="dk-orders">-</div>
       </div>
       <div class="dash-kpi-sm">
         <div class="dki-label">Avg Order Value</div>
-        <div class="dki-val-sm" id="dk-avg-order">—</div>
+        <div class="dki-val-sm" id="dk-avg-order">-</div>
       </div>
     </div>
 
@@ -982,11 +982,11 @@
     </div>
     <div class="users-controls">
       <div class="users-pill-row">
-        <button class="upill active" data-filter="all"      onclick="setUserFilter('all')">All      <span class="upill-count" id="upc-all">—</span></button>
-        <button class="upill"        data-filter="active"   onclick="setUserFilter('active')">Active   <span class="upill-count" id="upc-active">—</span></button>
-        <button class="upill"        data-filter="trial"    onclick="setUserFilter('trial')">Trial    <span class="upill-count" id="upc-trial">—</span></button>
-        <button class="upill"        data-filter="expired"  onclick="setUserFilter('expired')">Expired  <span class="upill-count" id="upc-expired">—</span></button>
-        <button class="upill"        data-filter="lifetime" onclick="setUserFilter('lifetime')">Lifetime <span class="upill-count" id="upc-lifetime">—</span></button>
+        <button class="upill active" data-filter="all"      onclick="setUserFilter('all')">All      <span class="upill-count" id="upc-all">-</span></button>
+        <button class="upill"        data-filter="active"   onclick="setUserFilter('active')">Active   <span class="upill-count" id="upc-active">-</span></button>
+        <button class="upill"        data-filter="trial"    onclick="setUserFilter('trial')">Trial    <span class="upill-count" id="upc-trial">-</span></button>
+        <button class="upill"        data-filter="expired"  onclick="setUserFilter('expired')">Expired  <span class="upill-count" id="upc-expired">-</span></button>
+        <button class="upill"        data-filter="lifetime" onclick="setUserFilter('lifetime')">Lifetime <span class="upill-count" id="upc-lifetime">-</span></button>
       </div>
       <input class="ad-input" style="max-width:240px;flex-shrink:0" id="user-search" placeholder="Search email or name…" oninput="applyUserFilters()">
     </div>
@@ -1021,16 +1021,16 @@
       </div>
 
       <div id="grant-found">
-        <div class="grant-found-name" id="gf-name">—</div>
-        <div class="grant-found-meta" id="gf-meta">—</div>
+        <div class="grant-found-name" id="gf-name">-</div>
+        <div class="grant-found-meta" id="gf-meta">-</div>
         <div class="ad-row">
           <div class="ad-field">
             <label class="ad-label">New Plan</label>
             <select class="ad-select" id="grant-plan" onchange="grantPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="3mo">3 Months — Launch</option>
-              <option value="6mo">6 Months — Mariner</option>
-              <option value="12mo">12 Months — Master</option>
+              <option value="3mo">3 Months - Launch</option>
+              <option value="6mo">6 Months - Mariner</option>
+              <option value="12mo">12 Months - Master</option>
               <option value="lifetime">Lifetime</option>
               <optgroup label="Legacy (no longer sold)">
                 <option value="starter">Starter</option>
@@ -1042,9 +1042,9 @@
           <div class="ad-field" id="grant-scope-field">
             <label class="ad-label">Scope</label>
             <select class="ad-select" id="grant-scope">
-              <option value="written">Written Only — Passage</option>
-              <option value="oral">Oral Only — Voyage</option>
-              <option value="both" selected>Both — Expedition</option>
+              <option value="written">Written Only - Passage</option>
+              <option value="oral">Oral Only - Voyage</option>
+              <option value="both" selected>Both - Expedition</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1055,7 +1055,7 @@
         <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
           <button class="ad-btn btn-primary" onclick="grantAccess()">Update Access</button>
           <button class="ad-btn btn-danger"  onclick="revokeAccess()">Revoke to Trial</button>
-          <button class="ad-btn btn-ghost"   onclick="forceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired — for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
+          <button class="ad-btn btn-ghost"   onclick="forceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired - for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
         </div>
       </div>
     </div>
@@ -1165,19 +1165,19 @@
     <div id="pay-stats" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;">
       <div class="pay-stat-card" id="psc-total">
         <div class="psc-label">Total Revenue</div>
-        <div class="psc-value" id="psc-revenue">—</div>
+        <div class="psc-value" id="psc-revenue">-</div>
       </div>
       <div class="pay-stat-card" id="psc-count">
         <div class="psc-label">Paid Orders</div>
-        <div class="psc-value" id="psc-paid-count">—</div>
+        <div class="psc-value" id="psc-paid-count">-</div>
       </div>
       <div class="pay-stat-card">
         <div class="psc-label">Pending Orders</div>
-        <div class="psc-value" id="psc-pending-count">—</div>
+        <div class="psc-value" id="psc-pending-count">-</div>
       </div>
       <div class="pay-stat-card">
         <div class="psc-label">Refunded</div>
-        <div class="psc-value" id="psc-refunded" style="color:var(--red)">—</div>
+        <div class="psc-value" id="psc-refunded" style="color:var(--red)">-</div>
       </div>
     </div>
 
@@ -1201,9 +1201,9 @@
       </select>
       <select id="pay-filter-scope" onchange="loadPayments()" style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">
         <option value="">All scopes</option>
-        <option value="written">Written — Passage</option>
-        <option value="oral">Oral — Voyage</option>
-        <option value="both">Both — Expedition</option>
+        <option value="written">Written - Passage</option>
+        <option value="oral">Oral - Voyage</option>
+        <option value="both">Both - Expedition</option>
       </select>
       <input class="ad-input" id="pay-filter-from" type="date" onchange="loadPayments()" title="From date" style="max-width:150px">
       <input class="ad-input" id="pay-filter-to" type="date" onchange="loadPayments()" title="To date" style="max-width:150px">
@@ -1268,18 +1268,18 @@
         <div class="ad-field">
           <label class="ad-label">Grants Plan</label>
           <select class="ad-select" id="cp-plan" onchange="cpPlanChanged()">
-            <option value="3mo">3 Months — Launch</option>
-            <option value="6mo">6 Months — Mariner</option>
-            <option value="12mo">12 Months — Master</option>
+            <option value="3mo">3 Months - Launch</option>
+            <option value="6mo">6 Months - Mariner</option>
+            <option value="12mo">12 Months - Master</option>
             <option value="lifetime">Lifetime</option>
           </select>
         </div>
         <div class="ad-field" id="cp-scope-field">
           <label class="ad-label">Scope</label>
           <select class="ad-select" id="cp-scope">
-            <option value="written">Written Only — Passage</option>
-            <option value="oral">Oral Only — Voyage</option>
-            <option value="both" selected>Both — Expedition</option>
+            <option value="written">Written Only - Passage</option>
+            <option value="oral">Oral Only - Voyage</option>
+            <option value="both" selected>Both - Expedition</option>
           </select>
         </div>
       </div>
@@ -1360,11 +1360,11 @@
 <div class="prof-overlay" id="prof-overlay" onclick="if(event.target===this) closeUserProfile()">
   <div class="prof-card">
     <div class="prof-head">
-      <div class="prof-avatar" id="prof-avatar">—</div>
+      <div class="prof-avatar" id="prof-avatar">-</div>
       <div style="min-width:0">
-        <div class="prof-name" id="prof-name">—</div>
-        <div class="prof-email" id="prof-email">—</div>
-        <div class="prof-uid" id="prof-uid">—</div>
+        <div class="prof-name" id="prof-name">-</div>
+        <div class="prof-email" id="prof-email">-</div>
+        <div class="prof-uid" id="prof-uid">-</div>
       </div>
       <button class="prof-close" onclick="closeUserProfile()" aria-label="Close">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -1376,30 +1376,30 @@
       <div class="prof-stat-row">
         <div class="prof-stat">
           <div class="prof-stat-label">Plan</div>
-          <div class="prof-stat-val" id="prof-plan">—</div>
+          <div class="prof-stat-val" id="prof-plan">-</div>
         </div>
         <div class="prof-stat">
           <div class="prof-stat-label">Expires</div>
-          <div class="prof-stat-val" id="prof-expiry" style="font-size:12.5px">—</div>
+          <div class="prof-stat-val" id="prof-expiry" style="font-size:12.5px">-</div>
         </div>
         <div class="prof-stat">
           <div class="prof-stat-label">Joined</div>
-          <div class="prof-stat-val" id="prof-joined" style="font-size:12.5px">—</div>
+          <div class="prof-stat-val" id="prof-joined" style="font-size:12.5px">-</div>
         </div>
         <div class="prof-stat">
           <div class="prof-stat-label">Total Spent</div>
-          <div class="prof-stat-val" id="prof-spent">—</div>
+          <div class="prof-stat-val" id="prof-spent">-</div>
         </div>
         <div class="prof-stat">
           <div class="prof-stat-label">Orders</div>
-          <div class="prof-stat-val" id="prof-orders">—</div>
+          <div class="prof-stat-val" id="prof-orders">-</div>
         </div>
       </div>
 
       <!-- Quick actions -->
       <div class="prof-actions">
         <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="toggleProfEdit()">Edit Access</button>
-        <button class="ad-btn btn-ghost btn-sm" id="prof-trial-expiry-btn" onclick="profForceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired — for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
+        <button class="ad-btn btn-ghost btn-sm" id="prof-trial-expiry-btn" onclick="profForceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired - for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
         <button class="ad-btn btn-danger btn-sm" id="prof-delete-btn" onclick="profDeleteAccount()">Delete Account</button>
       </div>
 
@@ -1410,9 +1410,9 @@
             <label class="ad-label">New Plan</label>
             <select class="ad-select" id="prof-edit-plan" onchange="profEditPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="3mo">3 Months — Launch</option>
-              <option value="6mo">6 Months — Mariner</option>
-              <option value="12mo">12 Months — Master</option>
+              <option value="3mo">3 Months - Launch</option>
+              <option value="6mo">6 Months - Mariner</option>
+              <option value="12mo">12 Months - Master</option>
               <option value="lifetime">Lifetime</option>
               <optgroup label="Legacy (no longer sold)">
                 <option value="starter">Starter</option>
@@ -1424,9 +1424,9 @@
           <div class="ad-field" id="prof-edit-scope-field">
             <label class="ad-label">Scope</label>
             <select class="ad-select" id="prof-edit-scope">
-              <option value="written">Written Only — Passage</option>
-              <option value="oral">Oral Only — Voyage</option>
-              <option value="both" selected>Both — Expedition</option>
+              <option value="written">Written Only - Passage</option>
+              <option value="oral">Oral Only - Voyage</option>
+              <option value="both" selected>Both - Expedition</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1572,7 +1572,7 @@ function logAdminAction(action, target, details) {
     return;
   }
 
-  // Auth is confirmed past this point — a failure loading any of these
+  // Auth is confirmed past this point - a failure loading any of these
   // (e.g. pricing_plans unreachable) must not boot an already-verified
   // admin back to the login screen, so it's deliberately outside the
   // auth guard's try/catch above.
@@ -1626,7 +1626,7 @@ function toast(msg, type) {
 
 /* ── HELPERS ─────────────────────────────────────────────────────── */
 function fmtDate(iso) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
 
@@ -1661,7 +1661,7 @@ function planLabel(plan, scope) {
   return legacyNames[plan] || plan || 'Trial';
 }
 
-// Just the tier name (Launch/Mariner/Master) for duration-only contexts —
+// Just the tier name (Launch/Mariner/Master) for duration-only contexts -
 // shared across all three tracks in the seed data, so scope isn't needed.
 function tierLabel(duration) {
   var names = { '3mo': 'Launch', '6mo': 'Mariner', '12mo': 'Master' };
@@ -1684,13 +1684,13 @@ function isTrialExpired(trialStartedAt, now) {
 function expiryDisplay(iso, plan, trialStartedAt) {
   if (plan === 'lifetime') return '<span class="active-tag">Lifetime</span>';
   if (plan === 'trial' || !plan) {
-    if (!trialStartedAt) return '<span class="date-cell">—</span>';
+    if (!trialStartedAt) return '<span class="date-cell">-</span>';
     var trialEnd = new Date(new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
     return isTrialExpired(trialStartedAt)
       ? '<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>'
       : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>';
   }
-  if (!iso) return '<span class="date-cell">—</span>';
+  if (!iso) return '<span class="date-cell">-</span>';
   var d = new Date(iso);
   if (d < new Date()) return '<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>';
   return '<span class="active-tag">' + fmtDate(iso) + '</span>';
@@ -1763,7 +1763,7 @@ async function loadDashboard() {
   document.getElementById('dk-expired').textContent   = expired.length;
   document.getElementById('dk-week').textContent      = '+' + newWeek.length;
   document.getElementById('dk-orders').textContent    = payments.length;
-  document.getElementById('dk-avg-order').textContent = avgOrder ? '₹' + (avgOrder / 100).toLocaleString('en-IN') : '—';
+  document.getElementById('dk-avg-order').textContent = avgOrder ? '₹' + (avgOrder / 100).toLocaleString('en-IN') : '-';
 
   // Charts
   drawSparkline(all);
@@ -1775,8 +1775,8 @@ async function loadDashboard() {
   document.getElementById('dash-recent').innerHTML = all.length
     ? all.slice(0, 10).map(function(u) {
         return '<tr>'
-          + '<td class="email-cell">' + esc(u.email || '—') + '</td>'
-          + '<td>' + esc(u.full_name || '—') + '</td>'
+          + '<td class="email-cell">' + esc(u.email || '-') + '</td>'
+          + '<td>' + esc(u.full_name || '-') + '</td>'
           + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '</tr>';
@@ -2008,7 +2008,7 @@ function drawPlanDist(all, now) {
     var isExpired = ALL_PAID_PLANS.indexOf(p) !== -1
       && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
     if (isExpired) p = 'trial';
-    if (!(p in counts)) p = 'trial'; // unrecognised value — don't drop the user silently
+    if (!(p in counts)) p = 'trial'; // unrecognised value - don't drop the user silently
     counts[p] = (counts[p] || 0) + 1;
   });
   var total = all.length || 1;
@@ -2055,8 +2055,8 @@ function updatePillCounts(users) {
     if (isPaidExpired) return 'expired';
     if (ALL_PAID_PLANS.indexOf(p) !== -1) return 'active';
     // Trial (or unset, which defaults to trial): an aged-out trial is just
-    // as "expired" as a lapsed paid plan — get-content-key locks both out
-    // identically — so it belongs in the same bucket, not silently stuck
+    // as "expired" as a lapsed paid plan - get-content-key locks both out
+    // identically - so it belongs in the same bucket, not silently stuck
     // under "Trial" forever with no visual sign anything changed.
     if (isTrialExpired(u.trial_started_at, now)) return 'expired';
     return 'trial';
@@ -2105,8 +2105,8 @@ function renderUsers(users) {
     ? users.map(function(u) {
         var idAttr = attrJs(u.id);
         return '<tr>'
-          + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '—') + '</button></td>'
-          + '<td>' + esc(u.full_name || '—') + '</td>'
+          + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '-') + '</button></td>'
+          + '<td>' + esc(u.full_name || '-') + '</td>'
           + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
@@ -2158,16 +2158,16 @@ async function openUserProfile(userId) {
   document.body.style.overflow = 'hidden';
   document.getElementById('prof-edit-inline').style.display = 'none';
 
-  var name = u.full_name || u.email || '—';
+  var name = u.full_name || u.email || '-';
   document.getElementById('prof-avatar').textContent = name.charAt(0).toUpperCase();
   document.getElementById('prof-name').textContent = u.full_name || 'No name set';
-  document.getElementById('prof-email').textContent = u.email || '—';
+  document.getElementById('prof-email').textContent = u.email || '-';
   document.getElementById('prof-uid').textContent = u.id;
   document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan, u.plan_scope);
   document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at);
   document.getElementById('prof-joined').textContent = fmtDate(u.created_at);
-  document.getElementById('prof-spent').textContent = '—';
-  document.getElementById('prof-orders').textContent = '—';
+  document.getElementById('prof-spent').textContent = '-';
+  document.getElementById('prof-orders').textContent = '-';
 
   document.getElementById('prof-mail-subject').value = '';
   document.getElementById('prof-mail-body').value = '';
@@ -2333,12 +2333,12 @@ function _syncScopeField(planSelectId, fieldId, scopeSelectId) {
     field.style.display = '';
     sel.disabled = false;
   } else if (LEGACY_PAID_PLANS.indexOf(plan) !== -1) {
-    // Legacy plans never had partial scope — always full access.
+    // Legacy plans never had partial scope - always full access.
     field.style.display = '';
     sel.value = 'both';
     sel.disabled = true;
   } else {
-    // trial / lifetime — scope is meaningless.
+    // trial / lifetime - scope is meaningless.
     field.style.display = 'none';
   }
 }
@@ -2402,7 +2402,7 @@ async function profSaveAccess() {
 // Backdates trial_started_at to 4 days ago (past the 3-day trial window
 // get-content-key checks) so the user's trial reads as already expired,
 // without waiting 3 real days. Testing tool, not a way to grant/revoke a
-// specific paid plan — always lands them on plan='trial', expired.
+// specific paid plan - always lands them on plan='trial', expired.
 async function profForceTrialExpiry() {
   if (!_profUser) return;
   var msg = _profUser.subscription_plan === 'trial'
@@ -2587,7 +2587,7 @@ async function revokeAccess() {
 // Backdates trial_started_at to 4 days ago (past the 3-day trial window
 // get-content-key checks) so the user's trial reads as already expired,
 // without waiting 3 real days. Testing tool, not a way to grant/revoke a
-// specific paid plan — always lands them on plan='trial', expired.
+// specific paid plan - always lands them on plan='trial', expired.
 async function forceTrialExpiry() {
   if (!_grantUserId) return;
   var u = _allUsers.find(function(x) { return x.id === _grantUserId; });
@@ -2686,8 +2686,8 @@ async function loadAdmins() {
     ? data.map(function(a) {
         var isMe = a.id === _myId;
         return '<tr>'
-          + '<td class="email-cell">' + esc(a.email || '—') + (isMe ? ' <span style="font-size:10px;color:var(--text3)">(you)</span>' : '') + '</td>'
-          + '<td>' + esc(a.full_name || '—') + '</td>'
+          + '<td class="email-cell">' + esc(a.email || '-') + (isMe ? ' <span style="font-size:10px;color:var(--text3)">(you)</span>' : '') + '</td>'
+          + '<td>' + esc(a.full_name || '-') + '</td>'
           + '<td class="date-cell">' + fmtDate(a.created_at) + '</td>'
           + '<td>'
           + (isMe
@@ -2875,7 +2875,7 @@ function fmtINR(paise) {
 // These used to share a name, so this one silently overrode the other and
 // stamped a time onto every date in the Users and Dashboard tables.
 function fmtDateTime(iso) {
-  if (!iso) return '—';
+  if (!iso) return '-';
   return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
@@ -2956,10 +2956,10 @@ async function loadPayments(reset) {
       : 'pay-badge-created';
     var paymentId = p.razorpay_payment_id
       ? '<span style="font-size:11px;font-family:monospace;color:var(--text2);" title="' + esc(p.razorpay_payment_id) + '">' + esc(p.razorpay_payment_id.slice(0,18)) + '…</span>'
-      : '<span style="color:var(--muted)">—</span>';
+      : '<span style="color:var(--muted)">-</span>';
     var expires = p.subscription_expires_at
       ? '<span style="font-size:12px;">' + esc(new Date(p.subscription_expires_at).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})) + '</span>'
-      : '<span style="color:var(--muted)">—</span>';
+      : '<span style="color:var(--muted)">-</span>';
     var dateStr = fmtDateTime(p.status === 'paid' ? p.paid_at : p.created_at);
     var userCell = p._email
       ? '<button class="user-email-link" style="font-size:12px" onclick="openUserProfile(' + attrJs(p.user_id) + ')">' + esc(p._email) + '</button>'
@@ -3310,12 +3310,12 @@ async function setCouponActive(code, active) {
 }
 
 /* ── PLANS (pricing editor) ──────────────────────────────────────────
-   Duration x scope = 9 fixed rows (this is an editor, not a creator —
+   Duration x scope = 9 fixed rows (this is an editor, not a creator -
    pricing_v2_setup.sql seeds all 9). Edits here are what the upgrade modal
    and every plan-display surface in the app read live, no redeploy. */
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
-var TRACK_LABEL_ADMIN = { written: 'Passage — Written Only', oral: 'Voyage — Oral Only', both: 'Expedition — Both' };
+var TRACK_LABEL_ADMIN = { written: 'Passage - Written Only', oral: 'Voyage - Oral Only', both: 'Expedition - Both' };
 
 async function loadPlansTab() {
   var wrap = document.getElementById('plans-groups');
@@ -3468,10 +3468,10 @@ async function loadActivity() {
       ? (a.target_user_id
           ? '<button class="user-email-link" style="font-size:12.5px" onclick="openUserProfile(' + attrJs(a.target_user_id) + ')">' + esc(a.target_email) + '</button>'
           : esc(a.target_email))
-      : '<span style="color:var(--text3)">—</span>';
+      : '<span style="color:var(--text3)">-</span>';
     return '<tr>'
       + '<td class="date-cell">' + fmtDateTime(a.created_at) + '</td>'
-      + '<td class="email-cell">' + esc(a.admin_email || '—') + '</td>'
+      + '<td class="email-cell">' + esc(a.admin_email || '-') + '</td>'
       + '<td><span style="color:' + meta[1] + ';font-weight:700;font-size:12px">' + esc(meta[0]) + '</span></td>'
       + '<td>' + target + '</td>'
       + '<td style="font-size:12px;color:var(--text2)">' + esc(actionSummary(a)) + '</td>'

@@ -160,7 +160,7 @@
       .footer-note { font-size: 11px; }
     }
 
-    /* Landscape phones are vertically cramped — let the card scroll */
+    /* Landscape phones are vertically cramped - let the card scroll */
     @media (max-height: 520px) and (orientation: landscape) {
       body { align-items: flex-start; padding: 16px; }
       .card { padding: 20px 24px; }
@@ -299,7 +299,7 @@
     }
   });
 
-  // If already logged in, skip auth page — but NOT during password recovery
+  // If already logged in, skip auth page - but NOT during password recovery
   sb.auth.getSession().then(({ data: { session } }) => {
     if (session && !_recoveryMode) redirectAfterLogin();
   });
@@ -383,10 +383,10 @@
       showMsg(error.message, 'error');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
     } else if (data.session) {
-      // Email confirmation disabled — user is logged in immediately
+      // Email confirmation disabled - user is logged in immediately
       redirectAfterLogin();
     } else {
-      // Email confirmation enabled — ask them to verify
+      // Email confirmation enabled - ask them to verify
       showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
       document.getElementById('form-register').reset();

@@ -194,6 +194,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li><strong>CONTROL SYSTEM</strong> - integrated automation system controlling all generators, drives and propulsion motors</li>
     </ul>
     <div class="n-info"><div class="icon">✏️</div><div class="body"><strong>Sketch Description:</strong> Draw: Multiple diesel generator sets (3-4 shown) connected to main switchboard via bus bars. From main switchboard, propulsion transformers feed into frequency converters/drives. Drives feed propulsion motors. Motors connect to propeller shaft. Show service switchboard branching from main switchboard for ship's service loads.</div></div>
+
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-diesel-electric-propulsion.webp" alt="Diesel-electric propulsion single-line: diesel generator sets on main switchboard bus, feeding propulsion transformers and drives to propulsion motors, with service switchboard branching off" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAACwAwCdASoYABIAPu1wsFKppiSiqAgBMB2JaQAALnhdLWokHuaYQAD+8DYDggT1fcLJvV+oFRLNGNUNTaxKafoS89siaVerLKGl9+BegAA=">
+      <div class="note-diagram-cap">Fig. Diesel-electric single-line - each DG set feeds the main switchboard bus (with harmonic filters); rectifier/converter drive trains take power off the bus to the propulsion motor and shaft, while a service switchboard branches off the same bus for ship's auxiliary loads.</div>
+    </div>
   </div>
 
   <div class="n-h2">B) Advantages of Diesel Electric Propulsion (8 marks)</div>
@@ -451,6 +455,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   <div class="n-card" style="margin-top:16px;">
     <p class="n-p"><strong>B) Reverse Power Trip - Sketch and Principle (10 marks)</strong></p>
     <div class="n-info"><div class="icon">✏️</div><div class="body"><strong>Sketch Description:</strong> Draw: Alternator connected to busbar via circuit breaker. Current transformer (CT) in one phase measures current. Voltage transformer (VT) measures voltage. Both CT and VT outputs fed to REVERSE POWER RELAY (wattmetric relay). Relay output connected to trip coil of circuit breaker. Show direction of normal current flow and reverse current flow arrows.</div></div>
+
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-reverse-power-trip-circuit.webp" alt="Reverse power trip schematic: prime mover and generator, CT and PT sensing at the bus, directional relay comparing Va and Ia, tripping the breaker on loss of prime mover" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAABQAwCdASoYAAwAPu1iqU2ppaQiMAgBMB2JaWDrADc2+dngAAD+8JQsjWwDIWgVJjkHQjbRuIkwLHI1WEik9gr6zvhqLqCAAAA=">
+      <div class="note-diagram-cap">Fig. Reverse power trip - the directional relay compares bus voltage Va and generator current Ia; if a lost prime mover lets the alternator motor instead of generate, current direction reverses relative to voltage and the relay fires the trip.</div>
+    </div>
     
     <strong>Principle of Operation:</strong>
     <ul class="n-list">
@@ -703,6 +711,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
 
     <p class="n-p" style="margin-top:16px;"><strong>B) HV Distribution System Features (4 marks)</strong></p>
     <div class="n-info"><div class="icon">✏️</div><div class="body"><strong>Sketch Description:</strong> Draw: HV generators (3.3kV or 6.6kV) connected to HV main switchboard via HV circuit breakers (vacuum or SF6 type). From HV switchboard - HV feeders to propulsion transformers/converters and large HV motors. Also show HV/LV step-down transformers feeding 440V main switchboard for ship's service loads.</div></div>
+
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-hv-distribution-system.webp" alt="HV electrical single-line diagram: main generators on HV switchboard with harmonic filters, propulsion transformer/rectifier/motor drive trains, auxiliary and emergency generators, step-down transformers to LV switchboards" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAAAwAwCdASoYAA4APu1iqU2ppaOiMAgBMB2JaQAAetv2viAAAP7wfO38HJ7psiesXRg6uadtM0rw1QCNd5y4vBAAAAA=">
+      <div class="note-diagram-cap">Fig. HV single-line - main generators feed the 6.6 kV HV switchboard (with harmonic filters), splitting to propulsion drive trains (rectifier-motor) on either side; the auxiliary generator ties in as backup, and step-down transformers feed the 440 V ECR sub-board and the 440 V emergency switchboard, backed by the emergency generator.</div>
+    </div>
     
     <strong>Key Features:</strong>
     <ul class="n-list">
@@ -813,6 +825,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li><strong>Rung 4:</strong> KM contact (NO) → Timer coil (starts timing when main contactor closes)</li>
     </ul>
 
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-star-delta-ladder-logic.webp" alt="Star-delta motor starter ladder logic diagram with start/stop/overload rungs, main contactor Q1, timer T001, star contactor Q2 and delta contactor Q3" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRpwAAABXRUJQVlA4IJAAAABwBACdASoYAB8APu1oq08ppiOiMBgIATAdiWldgAAbocz8f+T3HvwqS42mcAD+8DN5bWPtfjGIAdo7D8K9iQRvadpx2VhQGpboy4xO5vzk9jy97dDbdpEp+HPqyqWh8aMQ9+OSXHcDIjt3S7+BvaYmG5NNG40vuaWtGjG2C37h6+7xHdsiJDiZKzCfLozwAAA=">
+      <div class="note-diagram-cap">Fig. Ladder logic - Rung 1 seals in the main contactor Q1; Rung 2 energises star contactor Q2 through the timer's NC contact; the timer then drops Q2 and, via its NO contact, energises delta contactor Q3 - Q2 and Q3 rungs carry each other's NC contact as the electrical interlock.</div>
+    </div>
+
     <p class="n-p" style="margin-top:16px;"><strong>D) Crawling and Cogging (6 marks)</strong></p>
     <div class="n-crit" style="margin-bottom:8px;"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Explain the phenomenon of crawling and cogging in three phase induction motors. 2025/JUN, 2025/OCT, 2019/JUL - 6 marks</div></div>
     
@@ -859,6 +875,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li><strong>Sketch description:</strong> Draw two curves on same graph (X axis = speed from 0 to Ns, Y axis = current and torque). CURRENT curve: starts very HIGH at standstill (5-7 x FLC), falls as speed increases, reaches normal running current near synchronous speed. TORQUE curve: starts moderate at standstill, dips slightly (saddle), peaks around 70-80% synchronous speed (breakdown torque), then falls to zero at synchronous speed.</li>
     </ul>
 
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-dol-starter-torque-current-curves.webp" alt="DOL starter power circuit with fuses, contactor and thermal overload, paired with torque-speed and current-speed characteristic curves showing acceleration torque above resistive torque and current falling from Id to In" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAACwAwCdASoYAB4APu1usFKppiSiqAgBMB2JaWWRABtpNReX7KKfIAD+8H/ho5nfpOrNV/CPMyIDvjLlkEkVli/bptTTAEfBZ8JBsBxbV3Q/WwiRK4wAAA==">
+      <div class="note-diagram-cap">Fig. DOL circuit (Q1 fuses, KM1 contactor, F2 thermal overload) alongside its characteristic curves - torque climbs to Tmax then collapses to zero at synchronous speed with the shaded gap between acceleration and resistive torque driving the run-up; current falls steeply from its locked-rotor peak (Id) down to the normal running value (In).</div>
+    </div>
+
     <strong>Disadvantages of DOL Starting:</strong>
     <ul class="n-list">
       <li><strong>HIGH STARTING CURRENT:</strong> 5-7 times full load current - causes VOLTAGE DIP on switchboard - affects other loads</li>
@@ -884,6 +904,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li>At FULL SPEED: thyristors fully conducting - full voltage applied - or bypass contactor closes, bypassing thyristors</li>
       <li>BYPASS CONTACTOR: closed when motor reaches full speed - thyristors then taken out of circuit to avoid thermal losses</li>
     </ul>
+
+    <div class="note-diagram-wrap"><img src="../data/diagrams/w01-soft-starter-thyristor-circuit.webp" alt="Soft starter circuit showing fuse/CB, contactor, thermal overload, back-to-back SCR pairs per phase with thyristor firing circuit and run bypass contactor feeding a three-phase induction motor" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlIAAABXRUJQVlA4IEYAAABQAwCdASoYAA8APu1iqU2ppaOiMAgBMB2JaV2AADc1i3IoAAD+8GkGUa+jHftba3XN90WEVrmgihVKA1WPs6DbAOYqgAAA">
+      <div class="note-diagram-cap">Fig. Soft starter - transformer/rectifier feeds a microcontroller that drives the thyristor firing circuit, which controls the back-to-back SCR pair in each phase; once up to speed the RUN bypass contactor closes across the SCRs to avoid continuous thermal loss in the thyristors.</div>
+    </div>
 
     <div class="n-grid" style="margin-top:12px">
       <div class="n-card" style="border-color:var(--green-border)">
