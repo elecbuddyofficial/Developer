@@ -1017,6 +1017,7 @@ function setTheme(t) {
     window._gateTriggerScope = triggerScope || null;
     var el = document.getElementById('gate-overlay');
     el.style.display = 'flex';
+    document.documentElement.classList.add('_modal-open');
     if (window.loadPricingPlans) {
       window.loadPricingPlans().then(function() { if (window.renderGateCards) window.renderGateCards(); });
     }
@@ -1025,6 +1026,7 @@ function setTheme(t) {
 
   window.closeGate = function() {
     document.getElementById('gate-overlay').style.display = 'none';
+    document.documentElement.classList.remove('_modal-open');
   };
 
   document.getElementById('gate-overlay').addEventListener('click', function(e) {
@@ -1358,6 +1360,22 @@ function setTheme(t) {
       if (document.visibilityState === 'visible') checkSession();
     });
 
+    // Move every full-screen overlay to be a direct child of <body>. Each one
+    // is `position:fixed` + `backdrop-filter`, nested a few divs deep inside
+    // #layout. backdrop-filter establishes a new containing block for fixed
+    // descendants (same rule as `filter`/`transform`), and on some WebKit
+    // versions that also disrupts paint order against `position:sticky`
+    // siblings (#topbar) despite a much higher z-index — the overlay renders
+    // behind the topbar instead of above it. Relocating to <body> removes
+    // every intermediate ancestor, so there is nothing left that could ever
+    // establish a containing block for it — a structural fix rather than a
+    // guess at compositing behaviour, and it makes the z-index comparison
+    // against #topbar a simple top-level one.
+    ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el && el.parentNode !== document.body) document.body.appendChild(el);
+    });
+
     // ── Content protection ───────────────────────────────────
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
 
@@ -1460,7 +1478,6 @@ function setTheme(t) {
 
     window.openSettings = function() {
       document.getElementById('profile-panel').classList.remove('open');
-      document.documentElement.classList.remove('_modal-open');
       setTimeout(() => {
         document.getElementById('profile-modal').style.display = 'none';
         document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
@@ -1469,6 +1486,7 @@ function setTheme(t) {
         resetBtn.dataset.armed = '';
         document.getElementById('settings-reset-status').style.display = 'none';
         document.getElementById('settings-modal').style.display = 'block';
+        document.documentElement.classList.add('_modal-open'); // still open, just switched modal
         setTimeout(() => document.getElementById('settings-panel').classList.add('open'), 10);
       }, 300);
     };
@@ -1476,6 +1494,7 @@ function setTheme(t) {
     window.closeSettings = function(e) {
       if (!e || e.target === document.getElementById('settings-modal') || e.target.closest('.close-btn')) {
         document.getElementById('settings-panel').classList.remove('open');
+        document.documentElement.classList.remove('_modal-open');
         setTimeout(() => document.getElementById('settings-modal').style.display = 'none', 300);
       }
     };
@@ -1859,6 +1878,7 @@ function openUpgradeModal(preferredPlan, preferredScope) {
   var modal = document.getElementById('upgrade-modal');
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
+  document.documentElement.classList.add('_modal-open');
 
   window._upPreferredPlan  = preferredPlan || (preferredScope ? '12mo' : null);
   window._upPreferredScope = preferredScope || null;
@@ -1891,6 +1911,7 @@ function openUpgradeModal(preferredPlan, preferredScope) {
 
 function closeUpgradeModal() {
   document.getElementById('upgrade-modal').style.display = 'none';
+  document.documentElement.classList.remove('_modal-open');
   document.body.style.overflow = '';
   clearUpStatus();
   setUpBtnsDisabled(false);

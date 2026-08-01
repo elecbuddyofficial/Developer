@@ -151,9 +151,18 @@
     .topic-card-grid { grid-template-columns:1fr }
   }
 
-  /* profile reuse */
-  #profile-panel { position:absolute;right:14px;top:54px;width:296px;background:#0D1E33;border:1px solid #1A3050;border-radius:10px;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.6) }
-  @media(max-width:360px){ #profile-panel { right:8px;left:8px;width:auto } }
+  /* profile reuse — matches the main app's slide-in panel */
+  #profile-panel {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 300px; background: #0D1E33;
+    border-left: 1px solid #1A3050;
+    padding: 22px; box-shadow: -4px 0 24px rgba(0,0,0,0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto; margin: 0;
+  }
+  #profile-panel.open { transform: translateX(0); }
+  @media(max-width:360px){ #profile-panel { width:100%; border-left:none } }
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
@@ -1236,6 +1245,18 @@ startBackgroundIndexing();
   setInterval(checkSession,10*60*1000);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkSession();});
 
+  // Move every full-screen overlay to be a direct child of <body> — see the
+  // matching comment in ../index.html for why (backdrop-filter establishes a
+  // containing block for position:fixed descendants, which on real WebKit —
+  // confirmed on iPhone Safari and Firefox-iOS, both WebKit under the hood —
+  // also breaks paint order against position:sticky #topbar despite a much
+  // higher z-index; Chrome's desktop mobile-emulation does not reproduce
+  // this because it never leaves the Blink engine).
+  ['profile-modal', 'nf-overlay'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && el.parentNode !== document.body) document.body.appendChild(el);
+  });
+
   document.addEventListener('contextmenu',function(e){e.preventDefault();});
   document.addEventListener('keydown',function(e){ var k=e.key.toLowerCase(); if(e.ctrlKey&&['u','s','p'].includes(k)){e.preventDefault();return;} if(e.ctrlKey&&e.shiftKey&&['i','j','c'].includes(k)){e.preventDefault();return;} if(e.key==='F12'){e.preventDefault();} });
 
@@ -1251,6 +1272,7 @@ startBackgroundIndexing();
 
   window.openProfile=async function(){
     document.getElementById('profile-modal').style.display='block';
+    setTimeout(function(){ document.getElementById('profile-panel').classList.add('open'); }, 10);
     var user=window._sbUser; if(!user)return;
     var name=user.user_metadata?.full_name||user.email.split('@')[0];
     document.getElementById('pm-avatar').textContent=name.charAt(0).toUpperCase();
@@ -1265,7 +1287,12 @@ startBackgroundIndexing();
       document.getElementById('pm-admin-btn').style.display=isAdmin?'block':'none';
     }
   };
-  window.closeProfile=function(e){ if(e.target===document.getElementById('profile-modal')) document.getElementById('profile-modal').style.display='none'; };
+  window.closeProfile=function(e){
+    if(e.target===document.getElementById('profile-modal')){
+      document.getElementById('profile-panel').classList.remove('open');
+      setTimeout(function(){ document.getElementById('profile-modal').style.display='none'; }, 300);
+    }
+  };
   window.signOut=async function(){ if(window._sbClient)await window._sbClient.auth.signOut(); window.location.replace('../auth.html'); };
 
   function renderPlan(profile){
