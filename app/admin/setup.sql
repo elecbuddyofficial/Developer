@@ -57,20 +57,31 @@ CREATE TABLE IF NOT EXISTS public.admin_users (
   user_id UUID PRIMARY KEY REFERENCES auth.users ON DELETE CASCADE
 );
 ALTER TABLE public.admin_users ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Authenticated users can read admin list"
-  ON public.admin_users FOR SELECT TO authenticated USING (TRUE);
-CREATE POLICY "Admin can insert admin users"
-  ON public.admin_users FOR INSERT WITH CHECK (public.is_admin());
-CREATE POLICY "Admin can delete admin users"
-  ON public.admin_users FOR DELETE USING (public.is_admin());
 
--- Helper function reads from admin_users (no recursion with profiles SELECT policy)
+-- Helper function reads from admin_users (no recursion with profiles SELECT policy).
+--
+-- Defined BEFORE the policies that call it. It used to sit after them, which
+-- meant this file could never run start to finish on a fresh database: a
+-- policy referencing a function Postgres has not seen yet fails outright
+-- (42883). Production only ever worked because it was built up incrementally,
+-- so the ordering bug stayed invisible until the first real rebuild.
+-- security_fix_setup.sql later REPLACES this to read profiles instead.
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
   SELECT EXISTS (
     SELECT 1 FROM public.admin_users WHERE user_id = auth.uid()
   );
 $$ LANGUAGE sql SECURITY DEFINER STABLE;
+
+DROP POLICY IF EXISTS "Authenticated users can read admin list" ON public.admin_users;
+CREATE POLICY "Authenticated users can read admin list"
+  ON public.admin_users FOR SELECT TO authenticated USING (TRUE);
+DROP POLICY IF EXISTS "Admin can insert admin users" ON public.admin_users;
+CREATE POLICY "Admin can insert admin users"
+  ON public.admin_users FOR INSERT WITH CHECK (public.is_admin());
+DROP POLICY IF EXISTS "Admin can delete admin users" ON public.admin_users;
+CREATE POLICY "Admin can delete admin users"
+  ON public.admin_users FOR DELETE USING (public.is_admin());
 
 -- 5. Trigger: prevents any non-admin from flipping their own is_admin flag
 CREATE OR REPLACE FUNCTION public.protect_is_admin()
@@ -89,11 +100,13 @@ CREATE TRIGGER guard_is_admin
   FOR EACH ROW EXECUTE FUNCTION public.protect_is_admin();
 
 -- 6. Allow admin to read ALL profiles (not just their own)
+DROP POLICY IF EXISTS "Admin can read all profiles" ON public.profiles;
 CREATE POLICY "Admin can read all profiles"
   ON public.profiles FOR SELECT
   USING (auth.uid() = id OR public.is_admin());
 
 -- 7. Allow admin to update ANY profile
+DROP POLICY IF EXISTS "Admin can update all profiles" ON public.profiles;
 CREATE POLICY "Admin can update all profiles"
   ON public.profiles FOR UPDATE
   USING (public.is_admin());
@@ -110,14 +123,17 @@ CREATE TABLE IF NOT EXISTS public.notifications (
 
 ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Authenticated users can read notifications" ON public.notifications;
 CREATE POLICY "Authenticated users can read notifications"
   ON public.notifications FOR SELECT
   TO authenticated USING (TRUE);
 
+DROP POLICY IF EXISTS "Admin can insert notifications" ON public.notifications;
 CREATE POLICY "Admin can insert notifications"
   ON public.notifications FOR INSERT
   WITH CHECK (public.is_admin());
 
+DROP POLICY IF EXISTS "Admin can delete notifications" ON public.notifications;
 CREATE POLICY "Admin can delete notifications"
   ON public.notifications FOR DELETE
   USING (public.is_admin());

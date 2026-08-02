@@ -26,16 +26,17 @@ window.EB_CONFIG = (function () {
     razorpayKeyId: 'rzp_live_TJ1Il25pLKcrEU',
   };
 
-  // Fill these in once the dev Supabase project exists. Use Razorpay TEST
-  // keys here (rzp_test_...) - that is the whole point of a dev environment:
-  // real checkout flows, test cards, no real money. While these stay null the
-  // app falls back to PROD so nothing breaks, but it warns loudly, because
-  // silently developing against the live database is exactly what this file
-  // was created to prevent.
+  // "Elec-Buddy Dev" - separate Supabase project, same schema, own data.
+  // Razorpay key is a TEST key, which is the point: dev runs real checkout
+  // flows with test cards and can never move actual money.
+  //
+  // Free-tier projects pause after ~7 days idle. If dev suddenly cannot reach
+  // Supabase, check whether the project needs waking in the dashboard before
+  // assuming the code broke.
   var DEV = {
-    supabaseRef:   null,
-    supabaseKey:   null,
-    razorpayKeyId: null,
+    supabaseRef:   'wyudmkvelyhdtqezqinn',
+    supabaseKey:   'sb_publishable_KAqIUJkBHp2UAZVJtsuWdA_Qc2xbm7Y',
+    razorpayKeyId: 'rzp_test_TKxa9MtZfsArE7',
   };
 
   // Hostnames that serve real users. Anything else - localhost, a Vercel

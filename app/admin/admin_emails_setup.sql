@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS public.admin_emails (
 ALTER TABLE public.admin_emails ENABLE ROW LEVEL SECURITY;
 
 -- Admins can read the full log
+DROP POLICY IF EXISTS "Admins can read admin_emails" ON public.admin_emails;
 CREATE POLICY "Admins can read admin_emails"
   ON public.admin_emails FOR SELECT
   USING (public.is_admin());

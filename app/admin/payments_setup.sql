@@ -18,11 +18,13 @@ CREATE TABLE IF NOT EXISTS public.payments (
 ALTER TABLE public.payments ENABLE ROW LEVEL SECURITY;
 
 -- Users can read their own payments
+DROP POLICY IF EXISTS "Users can read own payments" ON public.payments;
 CREATE POLICY "Users can read own payments"
   ON public.payments FOR SELECT
   USING (auth.uid() = user_id);
 
 -- Admins can read all payments
+DROP POLICY IF EXISTS "Admins can read all payments" ON public.payments;
 CREATE POLICY "Admins can read all payments"
   ON public.payments FOR SELECT
   USING (public.is_admin());
