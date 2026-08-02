@@ -1,6 +1,6 @@
 // ─── Elec-Buddy — Service Worker ──────────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v60';
+const VERSION = 'v61';
 const CACHE = 'elec-buddy-' + VERSION;
 
 // App shell — always cached at install time
@@ -11,6 +11,7 @@ const PRECACHE = [
   './sponsorship/index.html',
   './style.css',
   './app.js',
+  './config.js',   // env config - every page needs it before it can talk to Supabase
   './written.css',
 ];
 

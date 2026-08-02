@@ -11,6 +11,9 @@
   html { visibility: hidden; }
   @media print { body { display: none !important; } }
 </style>
+<!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="config.js"></script>
 <script>
   (function(){
     var t = localStorage.getItem('eb_theme') || 'dark';
@@ -27,10 +30,7 @@
   window._authReady = (async () => {
     try {
       if (typeof supabase === 'undefined') throw new Error('Supabase CDN unavailable');
-      const _sb = supabase.createClient(
-        'https://vcofgjuwprylojgyfbtr.supabase.co',
-        'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
-      );
+      const _sb = supabase.createClient(EB_CONFIG.supabaseUrl, EB_CONFIG.supabaseKey);
       window._sbClient = _sb;
       const { data: { session } } = await _sb.auth.getSession();
       if (!session) {
@@ -1199,7 +1199,7 @@ function setTheme(t) {
       var s = await window._sbClient.auth.getSession();
       var session = s.data && s.data.session;
       if (!session) return;
-      var resp = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/get-content-key', {
+      var resp = await fetch(EB_CONFIG.functionsUrl + '/get-content-key', {
         headers: { 'Authorization': 'Bearer ' + session.access_token }
       });
       if (!resp.ok) return;
@@ -1450,7 +1450,7 @@ function setTheme(t) {
       } catch(e) {
         // Network unreachable - decode local JWT to catch hard-expired sessions even offline
         try {
-          var raw = localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token');
+          var raw = localStorage.getItem(EB_CONFIG.authTokenKey);
           if (raw) {
             var tok = JSON.parse(raw);
             var parts = ((tok && tok.access_token) || '').split('.');
@@ -1889,8 +1889,8 @@ function ensureRazorpay() {
 // Warm it up when the upgrade modal opens, so the script is usually already
 // in place by the time a plan is chosen and the Pay tap still feels instant.
 function preloadRazorpay() { ensureRazorpay(); }
-var SUPABASE_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
-var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
+var SUPABASE_FN_URL = EB_CONFIG.functionsUrl;
+var RZP_KEY_ID = EB_CONFIG.razorpayKeyId;
 
 // ── Pricing data (admin-editable via the Plans tab, fetched live) ───────────
 var TRACK_ORDER = ['written', 'oral', 'both'];   // Passage, Voyage, Expedition

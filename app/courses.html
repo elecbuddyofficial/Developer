@@ -512,15 +512,15 @@
   .nf-chip-warning  { background: var(--orange-dim); color: var(--orange); }
   .nf-chip-deadline { background: var(--red-dim);    color: var(--red); }
 </style>
+<!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   (async () => {
     try {
       if (typeof supabase === 'undefined') throw new Error('Supabase CDN unavailable');
-      const _sb = supabase.createClient(
-        'https://vcofgjuwprylojgyfbtr.supabase.co',
-        'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
-      );
+      const _sb = supabase.createClient(EB_CONFIG.supabaseUrl, EB_CONFIG.supabaseKey);
       window._sbClient = _sb;
       const { data: { session } } = await _sb.auth.getSession();
       if (!session) {

@@ -190,6 +190,9 @@
   .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px}
   .nf-chip-info{background:var(--blue-dim);color:var(--blue)}.nf-chip-update{background:var(--green-dim);color:var(--green)}.nf-chip-warning{background:var(--orange-dim);color:var(--orange)}.nf-chip-deadline{background:var(--red-dim);color:var(--red)}
 </style>
+<!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="../config.js"></script>
 <script>
   (function(){
     var t = localStorage.getItem('eb_theme') || 'dark';
@@ -202,7 +205,7 @@
 (async () => {
   try {
     if (typeof supabase === 'undefined') throw new Error('CDN unavailable');
-    const _sb = supabase.createClient('https://vcofgjuwprylojgyfbtr.supabase.co','sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW');
+    const _sb = supabase.createClient(EB_CONFIG.supabaseUrl, EB_CONFIG.supabaseKey);
     window._sbClient = _sb;
     const { data:{ session } } = await _sb.auth.getSession();
     if (!session) { window.location.replace('../auth.html'); return; }
@@ -1240,7 +1243,7 @@ startBackgroundIndexing();
     if(!window._sbClient)return;
     try{
       var s=await window._sbClient.auth.getSession(); if(!s.data.session){kick();return;}
-    }catch(e){ try{var raw=localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token'); if(raw){var tok=JSON.parse(raw);var parts=((tok&&tok.access_token)||'').split('.');if(parts.length===3){var pay=JSON.parse(atob(parts[1]));if(pay.exp&&Math.floor(Date.now()/1000)>=pay.exp)kick();}}}catch(e2){} }
+    }catch(e){ try{var raw=localStorage.getItem(EB_CONFIG.authTokenKey); if(raw){var tok=JSON.parse(raw);var parts=((tok&&tok.access_token)||'').split('.');if(parts.length===3){var pay=JSON.parse(atob(parts[1]));if(pay.exp&&Math.floor(Date.now()/1000)>=pay.exp)kick();}}}catch(e2){} }
   }
   setInterval(checkSession,10*60*1000);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkSession();});

@@ -6,7 +6,10 @@
   <title>Elec-Buddy Admin Login</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
   <style>html{visibility:hidden}</style>
-  <script>
+  <!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="../config.js"></script>
+<script>
     (function(){
       document.documentElement.setAttribute('data-theme','dark');
     })();
@@ -153,8 +156,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
-var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+var SB_URL = EB_CONFIG.supabaseUrl;
+var SB_KEY = EB_CONFIG.supabaseKey;
 var _sb = supabase.createClient(SB_URL, SB_KEY);
 
 /* Check if already logged in as admin */

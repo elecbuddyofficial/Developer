@@ -5,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Elec-Buddy: Sign In</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -260,8 +263,8 @@
 </div>
 
 <script>
-  const SUPABASE_URL  = 'https://vcofgjuwprylojgyfbtr.supabase.co';
-  const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+  const SUPABASE_URL  = EB_CONFIG.supabaseUrl;
+  const SUPABASE_KEY  = EB_CONFIG.supabaseKey;
   const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 

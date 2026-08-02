@@ -6,7 +6,10 @@
   <title>Elec-Buddy Admin</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
   <style>html{visibility:hidden}</style>
-  <script>
+  <!-- Environment config. Must load before anything creates a Supabase
+     client or reads a stored session. -->
+<script src="../config.js"></script>
+<script>
     (function(){
       var t = localStorage.getItem('eb_theme') || 'dark';
       if (t === 'system') t = window.matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
@@ -1501,8 +1504,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ── CONFIG ─────────────────────────────────────────────────────── */
-var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
-var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+var SB_URL = EB_CONFIG.supabaseUrl;
+var SB_KEY = EB_CONFIG.supabaseKey;
 var _sb, _grantUserId, _grantUser, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
@@ -2149,12 +2152,12 @@ async function deleteUser(id, email) {
   var { data: { session } } = await _sb.auth.getSession();
   if (!session) { toast('Session expired', 'err'); return; }
 
-  var res = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/delete-user', {
+  var res = await fetch(EB_CONFIG.functionsUrl + '/delete-user', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer ' + session.access_token,
-      'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+      'apikey': EB_CONFIG.supabaseKey
     },
     body: JSON.stringify({ user_id: id })
   });
@@ -2305,12 +2308,12 @@ async function sendAdminEmail() {
     var { data: { session } } = await _sb.auth.getSession();
     if (!session) throw new Error('Session expired');
 
-    var res = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/send-admin-email', {
+    var res = await fetch(EB_CONFIG.functionsUrl + '/send-admin-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + session.access_token,
-        'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+        'apikey': EB_CONFIG.supabaseKey
       },
       body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message, from_admin_id: fromAdminId, email_format: emailFormat })
     });
@@ -2979,7 +2982,7 @@ var _payOffset = 0;
 var _payPageSize = 50;
 var _payLoading = false;
 
-var SUPABASE_FN_URL_ADMIN = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
+var SUPABASE_FN_URL_ADMIN = EB_CONFIG.functionsUrl;
 
 function fmtINR(paise) {
   return '₹' + (paise / 100).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
