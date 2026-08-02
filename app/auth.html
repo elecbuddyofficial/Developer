@@ -268,6 +268,16 @@
   const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+  // Wherever THIS page is actually being loaded from - localhost on some
+  // port, a LAN IP for phone testing, GitHub Pages, or the real domain once
+  // that's live. Confirmation/reset links must bounce back here, so this is
+  // derived from the live location instead of a hardcoded prod URL, which
+  // used to send every environment's confirmation email to production
+  // regardless of where the signup actually happened. The corresponding
+  // Supabase project's redirect allowlist still has to include this origin
+  // once, or it silently falls back to that project's SITE_URL instead.
+  var AUTH_REDIRECT_URL = window.location.origin + window.location.pathname;
+
   // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
   // The edge function itself is a one-shot compare-and-swap, so it's safe to
   // call from here even though the tab could close before this resolves.
@@ -399,7 +409,7 @@
       email, password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: 'https://elecbuddyofficial.github.io/Developer/app/auth.html'
+        emailRedirectTo: AUTH_REDIRECT_URL
       }
     });
     if (error) {
@@ -427,7 +437,7 @@
     const btn   = document.getElementById('reset-btn');
     btn.disabled = true; btn.textContent = 'Sending...';
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://elecbuddyofficial.github.io/Developer/app/auth.html'
+      redirectTo: AUTH_REDIRECT_URL
     });
     if (error) {
       showMsg(error.message, 'error');
