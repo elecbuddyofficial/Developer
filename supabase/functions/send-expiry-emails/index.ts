@@ -55,7 +55,7 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
             <div style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#C8A44A;line-height:1.2;">
               Elec-Buddy
             </div>
-            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6E8AA6;">
               ETO EXAM PREPARATION
             </div>
 
@@ -78,7 +78,7 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
               </tr>
             </table>
 
-            <p style="margin:28px 0 0 0;font-size:13px;line-height:1.6;color:#4A6880;">
+            <p style="margin:28px 0 0 0;font-size:13px;line-height:1.6;color:#6E8AA6;">
               Open the app, tap your profile, then Upgrade Plan to see your options.
             </p>
 
@@ -86,9 +86,9 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
         </tr>
         <tr>
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
-            <div style="font-size:12px;color:#2E5577;line-height:1.7;">
+            <div style="font-size:12px;color:#6E8AA6;line-height:1.7;">
               Elec-Buddy · ETO CoC and STCW Exam Preparation<br>
-              Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+              Questions? <a href="mailto:support@elec-buddy.com" style="color:#6E8AA6;text-decoration:none;">support@elec-buddy.com</a>
             </div>
           </td>
         </tr>

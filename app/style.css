@@ -3,13 +3,23 @@
   /* Midnight Navy - premium dark, easy on eyes for long study sessions */
   --bg:#0B1220;--surface:#141C2F;--surface2:#1C2740;--surface3:#252F45;
   --border:#2B395A;--border2:#3D4F6E;
-  --blue:#3b82f6;--blue-dim:rgba(59,130,246,.14);--blue-border:rgba(59,130,246,.40);
-  --purple:#a855f7;--purple-dim:rgba(168,85,247,.14);
+  /* Blue/red/purple are brightened from the stock 500-weight tints: on
+     --surface3 (#252F45), the lightest dark panel and so the worst case for
+     light text, the originals measured 3.63:1, 3.55:1 and 3.38:1 - under the
+     4.5:1 AA floor. Green, orange and cyan already cleared it and are
+     unchanged. Same hue and saturation, lightened only as far as needed. */
+  --blue:#5D98F8;--blue-dim:rgba(59,130,246,.14);--blue-border:rgba(59,130,246,.40);
+  --purple:#BC7CF9;--purple-dim:rgba(168,85,247,.14);
   --green:#22c55e;--green-dim:rgba(34,197,94,.14);--green-border:rgba(34,197,94,.40);
-  --red:#ef4444;--red-dim:rgba(239,68,68,.14);--red-border:rgba(239,68,68,.40);
+  --red:#F36E6E;--red-dim:rgba(239,68,68,.14);--red-border:rgba(239,68,68,.40);
   --orange:#f59e0b;--orange-dim:rgba(245,158,11,.14);--orange-border:rgba(245,158,11,.40);
   --cyan:#06b6d4;--cyan-dim:rgba(6,182,212,.14);
   --text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;
+  /* Foreground for text sitting ON a filled accent chip (step-number
+     circles, quiz option letters). Dark themes use bright accents, so the
+     glyph must be dark; light theme uses darker accents, so it stays white.
+     Hardcoded #fff was failing everywhere: 2.28:1 on green, 2.87 on blue. */
+  --on-accent:#0B1220;
   --r4:6px;--r6:8px;--r8:12px;--r12:16px;
   --read-width:860px;
 }
@@ -17,22 +27,37 @@
   --bg:#0B1220;--surface:#141C2F;--surface2:#1C2740;--surface3:#252F45;
   --border:#2B395A;--border2:#3D4F6E;
   --text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;
+  --on-accent:#0B1220;
 }
 [data-theme="amoled"]{
   --bg:#000000;--surface:#0E0E0E;--surface2:#171717;--surface3:#1F1F1F;
   --border:#1F1F1F;--border2:#2D2D2D;
   --text:#FFFFFF;--text2:#E2E8F0;--text3:#94A3B8;
+  --on-accent:#000000;
 }
 [data-theme="light"]{
+  /* Accent + muted tones are DARKER here than in the dark themes, not merely
+     recoloured. A hue that reads fine as light-on-dark fails badly as
+     dark-on-light: measured against #FFFFFF, the previous values gave
+     --text3 2.56:1, --orange 3.19:1, --green 3.30:1 and --cyan 3.68:1, all
+     under the 4.5:1 WCAG AA floor for body text. --text3 in particular was
+     copied verbatim from the dark palette (#94A3B8), so every caption,
+     figure label and "Jump to section" hint was close to unreadable on
+     white. Values below are the same hue and saturation, darkened only as
+     far as needed. They are solved against --surface3 (#F1F5F9), the
+     DARKEST light surface and therefore the worst case for dark text -
+     solving against #FFFFFF alone leaves everything sitting on a tinted
+     panel about 0.3 short. --purple is decorative only (no body text). */
   --bg:#F8FAFC;--surface:#FFFFFF;--surface2:#F8FAFC;--surface3:#F1F5F9;
   --border:#E2E8F0;--border2:#CBD5E1;
   --blue:#2563EB;--blue-dim:rgba(37,99,235,.10);--blue-border:rgba(37,99,235,.30);
   --purple:#7C3AED;--purple-dim:rgba(124,58,237,.10);
-  --green:#16A34A;--green-dim:rgba(22,163,74,.10);--green-border:rgba(22,163,74,.30);
-  --red:#DC2626;--red-dim:rgba(220,38,38,.10);--red-border:rgba(220,38,38,.30);
-  --orange:#D97706;--orange-dim:rgba(217,119,6,.10);--orange-border:rgba(217,119,6,.30);
-  --cyan:#0891B2;--cyan-dim:rgba(8,145,178,.10);
-  --text:#0F172A;--text2:#475569;--text3:#94A3B8;
+  --green:#117F3A;--green-dim:rgba(22,163,74,.10);--green-border:rgba(22,163,74,.30);
+  --red:#D52222;--red-dim:rgba(220,38,38,.10);--red-border:rgba(220,38,38,.30);
+  --orange:#A25905;--orange-dim:rgba(217,119,6,.10);--orange-border:rgba(217,119,6,.30);
+  --cyan:#06758F;--cyan-dim:rgba(8,145,178,.10);
+  --text:#0F172A;--text2:#475569;--text3:#5C708A;
+  --on-accent:#FFFFFF;
 }
 html{-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--text);height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased;font-size:16px;line-height:1.5}
@@ -163,7 +188,7 @@ a.sb-item{text-decoration:none}
 .n-steps{margin:12px 0;counter-reset:step;list-style:none;padding:0}
 .n-steps ol, .n-steps ul{list-style:none;padding:0;margin:0}
 .n-steps li{padding:7px 0 7px 38px;font-size:15px;line-height:1.7;color:var(--text);counter-increment:step;position:relative}
-.n-steps li::before{content:counter(step);background:var(--blue);color:#fff;font-size:11px;font-weight:800;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;position:absolute;left:0;top:9px}
+.n-steps li::before{content:counter(step);background:var(--blue);color:var(--on-accent);font-size:11px;font-weight:800;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;position:absolute;left:0;top:9px}
 .n-steps li strong{color:var(--text);font-weight:600}
 .n-steps li .n-formula{margin-left:-38px}
 
@@ -226,11 +251,11 @@ a.sb-item{text-decoration:none}
 .qopt .opt-letter{width:28px;height:28px;border-radius:50%;background:var(--surface3);border:1px solid var(--border2);font-size:12px;font-weight:800;color:var(--text2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .qopt .opt-text{font-size:14.5px;color:var(--text);line-height:1.6;flex:1;text-align:left;font-weight:500}
 .qopt.correct{background:rgba(34,197,94,.08)!important;border-color:rgba(34,197,94,.4)!important}
-.qopt.correct .opt-letter{background:var(--green);border-color:var(--green);color:#fff}
+.qopt.correct .opt-letter{background:var(--green);border-color:var(--green);color:var(--on-accent)}
 .qopt.correct .opt-text{color:#a7f3c0!important;font-weight:600}
 .qopt.wrong{background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.4)!important;animation:shake 0.4s cubic-bezier(0.36,0.07,0.19,0.97) both}
 @keyframes shake{10%,90%{transform:translate3d(-2px,0,0)}20%,80%{transform:translate3d(4px,0,0)}30%,50%,70%{transform:translate3d(-6px,0,0)}40%,60%{transform:translate3d(6px,0,0)}}
-.qopt.wrong .opt-letter{background:var(--red);border-color:var(--red);color:#fff}
+.qopt.wrong .opt-letter{background:var(--red);border-color:var(--red);color:var(--on-accent)}
 .qopt.wrong .opt-text{color:#fca5a5!important}
 .qopt:disabled{cursor:default}
 /* Explanation box - the key study element */

@@ -44,7 +44,7 @@ function layout(opts: { heading: string; bodyHtml: string; signerName: string | 
     ? `<p style="margin:26px 0 0 0;font-size:14px;line-height:1.6;color:#8FA3B8;">
          Regards,<br>
          ${escapeHtml(signerName)}<br>
-         <span style="font-size:12px;color:#4A6880;">Elec-Buddy Team</span>
+         <span style="font-size:12px;color:#6E8AA6;">Elec-Buddy Team</span>
        </p>`
     : '';
 
@@ -65,7 +65,7 @@ function layout(opts: { heading: string; bodyHtml: string; signerName: string | 
             <div style="font-family:Georgia,serif;font-size:28px;font-weight:bold;color:#C8A44A;line-height:1.2;">
               Elec-Buddy
             </div>
-            <div style="margin-top:7px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+            <div style="margin-top:7px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:#6E8AA6;">
               ETO EXAM PREPARATION
             </div>
           </td>
@@ -97,7 +97,7 @@ function layout(opts: { heading: string; bodyHtml: string; signerName: string | 
         </tr>
         <tr>
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
-            <div style="font-size:12px;color:#2E5577;line-height:1.7;">
+            <div style="font-size:12px;color:#6E8AA6;line-height:1.7;">
               Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
               You can reply directly to this email.
             </div>

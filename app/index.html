@@ -683,7 +683,7 @@
     <div id="gate-plan-cards" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;"></div>
 
     <button onclick="openUpgradeModal()" style="background:none;border:none;color:#6E8AA6;font-size:12px;cursor:pointer;text-decoration:underline;margin-bottom:8px;display:block;width:100%;">See all tracks &amp; durations</button>
-    <button onclick="closeGate()" style="background:none;border:none;color:#4A6880;font-size:13px;cursor:pointer;text-decoration:underline;">Continue with free preview</button>
+    <button onclick="closeGate()" style="background:none;border:none;color:#6E8AA6;font-size:13px;cursor:pointer;text-decoration:underline;">Continue with free preview</button>
   </div>
 </div>
 
@@ -763,18 +763,18 @@
           <div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></div>
           <span id="pm-admin-badge" style="display:none;font-size:9.5px;font-weight:700;background:rgba(200,164,74,.15);border:1px solid rgba(200,164,74,.4);color:#C8A44A;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.3px;">✓ admin</span>
         </div>
-        <div id="pm-email" style="font-size:11.5px;color:#4A6880;margin-top:3px;word-break:break-all;line-height:1.4;"></div>
+        <div id="pm-email" style="font-size:11.5px;color:#6E8AA6;margin-top:3px;word-break:break-all;line-height:1.4;"></div>
       </div>
     </div>
 
     <!-- Plan box -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px;">
-      <div style="font-size:10.5px;color:#4A6880;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;">Current Plan</div>
+      <div style="font-size:10.5px;color:#6E8AA6;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;">Current Plan</div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <div id="pm-plan-label" style="font-size:14px;font-weight:700;"></div>
         <div id="pm-plan-expiry" style="font-size:11.5px;color:#8FA3B8;text-align:right;"></div>
       </div>
-      <div id="pm-plan-sub" style="font-size:10.5px;color:#4A6880;margin-top:3px;"></div>
+      <div id="pm-plan-sub" style="font-size:10.5px;color:#6E8AA6;margin-top:3px;"></div>
     </div>
 
     <!-- Upgrade CTA (shown only for trial / expired) -->
@@ -834,14 +834,14 @@
         </button>
         <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Settings</div>
       </div>
-      <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#4A6880;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
+      <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
     </div>
 
     <!-- Data Saver -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <div style="min-width:0;">
         <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Data Saver</div>
-        <div style="font-size:10.5px;color:#4A6880;margin-top:2px;line-height:1.4;">Diagrams load only when tapped</div>
+        <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;line-height:1.4;">Diagrams load only when tapped</div>
       </div>
       <label class="ds-switch">
         <input type="checkbox" id="pm-data-saver-toggle" onchange="toggleDataSaver(this.checked)">
@@ -852,7 +852,7 @@
     <!-- Reset Statistics -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
       <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Reset Statistics</div>
-      <div style="font-size:10.5px;color:#4A6880;margin-top:2px;margin-bottom:11px;line-height:1.4;">Clears quiz scores and lesson reading progress on this account. This can't be undone.</div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Clears quiz scores and lesson reading progress on this account. This can't be undone.</div>
       <button id="settings-reset-btn" onclick="resetStatistics()" style="width:100%;background:rgba(224,90,106,0.1);border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s;">Reset Statistics</button>
       <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center;"></div>
     </div>
@@ -869,9 +869,9 @@
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
         <div>
           <div style="font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#C8A44A;letter-spacing:0.02em;">Elec-Buddy</div>
-          <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#2E5577;margin-top:3px;">Choose your plan</div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6E8AA6;margin-top:3px;">Choose your plan</div>
         </div>
-        <button onclick="closeUpgradeModal()" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:36px;height:36px;color:#4A6880;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">&times;</button>
+        <button onclick="closeUpgradeModal()" class="up-close-btn" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:36px;height:36px;color:#6E8AA6;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">&times;</button>
       </div>
 
       <!-- Trial notice -->
@@ -886,13 +886,13 @@
 
       <!-- Features -->
       <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
-        <div id="up-features-title" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#2E5577;margin-bottom:12px;">This track includes</div>
+        <div id="up-features-title" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6E8AA6;margin-bottom:12px;">This track includes</div>
         <div id="up-track-features" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
 
       <!-- Coupon -->
       <div style="text-align:center;margin-bottom:18px;">
-        <button id="up-coupon-toggle" onclick="toggleCouponBox()" style="background:none;border:none;color:#4A6880;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:6px;font-family:inherit;">Have a code?</button>
+        <button id="up-coupon-toggle" onclick="toggleCouponBox()" style="background:none;border:none;color:#6E8AA6;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:6px;font-family:inherit;">Have a code?</button>
         <div id="up-coupon-box" style="display:none;margin-top:10px;">
           <div style="display:flex;gap:8px;">
             <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
@@ -906,9 +906,9 @@
       <!-- Payment status -->
       <div id="up-status" style="display:none;text-align:center;padding:20px;border-radius:10px;font-size:14px;font-weight:600;"></div>
 
-      <div style="text-align:center;font-size:11.5px;color:#2E5577;line-height:1.6;">
+      <div style="text-align:center;font-size:11.5px;color:#6E8AA6;line-height:1.6;">
         Payments are processed securely by Razorpay.<br>
-        Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+        Questions? <a href="mailto:support@elec-buddy.com" style="color:#6E8AA6;text-decoration:none;">support@elec-buddy.com</a>
       </div>
 
     </div>
@@ -943,15 +943,15 @@
   }
   .up-ribbon-promo { background: #5DC87A; }
   .up-tier-name { font-size: 15px; font-weight: 700; color: #DDE5EF; }
-  .up-tier-duration { font-size: 12px; color: #4A6880; margin-top: 3px; }
+  .up-tier-duration { font-size: 12px; color: #6E8AA6; margin-top: 3px; }
   .up-price { font-size: 20px; font-weight: 700; color: #C8A44A; letter-spacing: -0.5px; }
-  .up-price-strike { font-size: 13px; color: #3A5570; text-decoration: line-through; }
+  .up-price-strike { font-size: 13px; color: #6E8AA6; text-decoration: line-through; }
   .up-card-desc { font-size: 11.5px; color: #5DC87A; margin-top: 6px; }
   /* What the plan contains, on every card so a card stands alone. */
   .up-card-gets { font-size: 11.5px; color: #8FA3B8; margin-top: 8px; line-height: 1.5; }
   /* What it does to THIS buyer's dates. Sits under the buy button, quieter
      than the price but always present, so stacking is never a surprise. */
-  .up-card-effect { font-size: 11px; color: #4A6880; margin-top: 8px; line-height: 1.5; }
+  .up-card-effect { font-size: 11px; color: #6E8AA6; margin-top: 8px; line-height: 1.5; }
   .up-buy-btn {
     margin-top: 14px; width: 100%; background: rgba(200,164,74,0.12);
     border: 1px solid rgba(200,164,74,0.35); border-radius: 8px; padding: 10px;
@@ -988,9 +988,33 @@
     #upgrade-modal > div { padding-top: 14px !important; padding-bottom: 28px !important; }
     #upgrade-modal > div > div { margin-top: 0 !important; }
   }
+
+  /* ── Touch targets ──────────────────────────────────────────────────────
+     Keyed to pointer:coarse, NOT to a width breakpoint. A phone held in
+     landscape is 640-950px wide - wider than any mobile breakpoint here -
+     but it is still a thumb, and the max-width:600px rule above silently
+     stopped applying there, dropping the pay buttons to ~37px. Measured
+     before this rule: track tabs 32px, close 36px, "Have a code?" 28px,
+     Apply 41px, all under the 44px minimum (WCAG 2.5.8 / Apple HIG).
+     Padding is used rather than fixed height so labels never clip. */
+  @media (pointer: coarse) {
+    .up-track-tab      { min-height: 44px; }
+    .up-buy-btn        { min-height: 46px; }
+    #up-coupon-toggle  { min-height: 44px; padding: 12px 16px !important; }
+    #up-coupon-btn     { min-height: 44px; }
+    #up-coupon-input   { min-height: 44px; }
+    /* Close buttons carry inline width/height, so they need the override. */
+    #upgrade-modal .up-close-btn,
+    #settings-modal .close-btn { width: 44px !important; height: 44px !important; }
+  }
 </style>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<!-- Razorpay's checkout.js is loaded ON DEMAND (see ensureRazorpay below), not
+     here. It is 57 KB and its CDN sends Cache-Control: max-age=120 - a two
+     minute cache - so as a static tag it re-downloaded on essentially every
+     page load, for every user, whether or not they ever opened the upgrade
+     screen. On ship satellite data that is pure waste: the overwhelming
+     majority of sessions never touch payment at all. -->
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
@@ -1835,6 +1859,36 @@ function setTheme(t) {
 
 <script>
 // ── Upgrade modal & Razorpay payment ────────────────────────────────────────
+
+// Loads Razorpay's checkout.js the first time it is actually needed, and only
+// once per page. It used to be a static <script> in <head>: 57 KB, on every
+// page load, for every user. Razorpay's CDN sends Cache-Control: max-age=120,
+// so the browser could not hold it for more than two minutes either - meaning
+// it genuinely re-downloaded again and again during a normal study session,
+// to support a screen most users never open. Deferring it removes that from
+// the common path entirely.
+//
+// Resolves to true once window.Razorpay exists. A failed load resolves false
+// rather than throwing, so the caller can show a real message instead of the
+// modal hanging on "Creating order...".
+var _rzpPromise = null;
+function ensureRazorpay() {
+  if (window.Razorpay) return Promise.resolve(true);
+  if (_rzpPromise) return _rzpPromise;
+  _rzpPromise = new Promise(function(resolve) {
+    var s = document.createElement('script');
+    s.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    s.async = true;
+    s.onload = function() { resolve(!!window.Razorpay); };
+    s.onerror = function() { _rzpPromise = null; resolve(false); }; // allow a retry
+    document.head.appendChild(s);
+  });
+  return _rzpPromise;
+}
+
+// Warm it up when the upgrade modal opens, so the script is usually already
+// in place by the time a plan is chosen and the Pay tap still feels instant.
+function preloadRazorpay() { ensureRazorpay(); }
 var SUPABASE_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
 var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
 
@@ -2059,10 +2113,10 @@ function renderGateCards() {
     var isBest = dur === bestDur;
     return '<div class="gate-plan"' + (isBest ? ' style="border-color:#C8A44A"' : '') + '>'
       + '<div><div style="font-size:13px;font-weight:700;color:#DDE5EF;">' + escUp(row.tier_name) + (isBest ? ' <span style="color:#C8A44A;font-size:9.5px;letter-spacing:.04em;">BEST VALUE</span>' : '') + '</div>'
-      +   '<div style="font-size:11.5px;color:#4A6880;margin-top:2px;">' + escUp(dur.replace('mo', ' months')) + ' access</div></div>'
+      +   '<div style="font-size:11.5px;color:#6E8AA6;margin-top:2px;">' + escUp(dur.replace('mo', ' months')) + ' access</div></div>'
       + '<div style="text-align:right;"><div style="font-size:16px;font-weight:700;color:#C8A44A;">' + fmtRupees(price.amount) + '</div>'
       +   '<button class="gate-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button></div>'
-      + '<div style="flex-basis:100%;font-size:10.5px;color:#4A6880;margin-top:6px;line-height:1.45;">' + escUp(purchaseEffectText(dur, scope)) + '</div>'
+      + '<div style="flex-basis:100%;font-size:10.5px;color:#6E8AA6;margin-top:6px;line-height:1.45;">' + escUp(purchaseEffectText(dur, scope)) + '</div>'
       + '</div>';
   }).join('');
 }
@@ -2085,6 +2139,8 @@ function openUpgradeModal(preferredPlan, preferredScope) {
   window._upPreferredPlan  = preferredPlan || (preferredScope ? '12mo' : null);
   window._upPreferredScope = preferredScope || null;
   if (preferredScope) _upActiveTrack = preferredScope;
+
+  preloadRazorpay();   // fetch the checkout script while they read the plans
 
   window.loadPricingPlans().then(function() {
     renderUpgradeTrackTabs();
@@ -2213,6 +2269,11 @@ async function startPayment(plan, scope) {
   var planLabelForDesc = planRow ? (planRow.track_name + ' ' + planRow.tier_name) : (plan + ' ' + scope);
 
   try {
+    // Razorpay's script is fetched on demand now (see ensureRazorpay). Start
+    // it and the order creation together - the order round-trip covers most of
+    // the script's load time, so this costs no perceptible delay.
+    var rzpReady = ensureRazorpay();
+
     // Get fresh JWT
     var sessionRes = await window._sbClient.auth.getSession();
     var token = sessionRes.data.session && sessionRes.data.session.access_token;
@@ -2290,6 +2351,12 @@ async function startPayment(plan, scope) {
       },
     };
 
+    // Must be in place before the checkout can open. Awaited here rather than
+    // earlier so the network fetch overlaps the order call above.
+    if (!(await rzpReady)) {
+      throw new Error('Could not reach the payment provider. Check your connection and try again.');
+    }
+
     var rzp = new Razorpay(options);
     rzp.on('payment.failed', function(resp) {
       setUpStatus('Payment failed: ' + (resp.error && resp.error.description || 'Unknown error'), false);
@@ -2321,7 +2388,7 @@ function confirmPurchase(duration, scope, onConfirm) {
       + '<td style="padding:7px 0;font-size:13px;color:#8FA3B8;">' + name + '</td>'
       + '<td style="padding:7px 0;font-size:13px;color:#DDE5EF;text-align:right;font-weight:600;">'
       +   (c.extended ? escUp(before) + arrow + escUp(after) : escUp(after))
-      +   '<div style="font-size:10.5px;font-weight:400;color:#4A6880;margin-top:2px;">'
+      +   '<div style="font-size:10.5px;font-weight:400;color:#6E8AA6;margin-top:2px;">'
       +     (c.extended ? '+' + _durationMonths(duration) + ' months' : 'new access')
       +   '</div>'
       + '</td></tr>';

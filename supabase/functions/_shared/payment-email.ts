@@ -91,7 +91,7 @@ export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
         <td style="padding:10px 0;border-top:1px solid #1A3050;font-size:13px;color:#8FA3B8;">${name} access</td>
         <td style="padding:10px 0;border-top:1px solid #1A3050;font-size:14px;font-weight:600;color:#DDE5EF;text-align:right;">
           ${value}<br>
-          <span style="font-size:11px;font-weight:400;color:#4A6880;">${note}</span>
+          <span style="font-size:11px;font-weight:400;color:#6E8AA6;">${note}</span>
         </td>
       </tr>`;
   }).join('');

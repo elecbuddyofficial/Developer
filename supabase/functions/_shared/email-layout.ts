@@ -45,14 +45,14 @@ export function emailLayout(opts: EmailLayoutOptions): string {
     : '';
 
   const footNoteHtml = footNote
-    ? `<p style="margin:28px 0 0 0;font-size:13px;line-height:1.6;color:#4A6880;">${footNote}</p>`
+    ? `<p style="margin:28px 0 0 0;font-size:13px;line-height:1.6;color:#6E8AA6;">${footNote}</p>`
     : '';
 
   const signatureHtml = signerName
     ? `<p style="margin:26px 0 0 0;font-size:14px;line-height:1.6;color:#8FA3B8;">
          Regards,<br>
          ${escapeHtml(signerName)}<br>
-         <span style="font-size:12px;color:#4A6880;">Elec-Buddy Team</span>
+         <span style="font-size:12px;color:#6E8AA6;">Elec-Buddy Team</span>
        </p>`
     : '';
 
@@ -75,7 +75,7 @@ ${preheaderHtml}
             <div style="font-family:Georgia,serif;font-size:34px;font-weight:bold;color:#C8A44A;line-height:1.2;">
               Elec-Buddy
             </div>
-            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#4A6880;">
+            <div style="margin-top:8px;font-family:Consolas,Monaco,'Courier New',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6E8AA6;">
               ETO EXAM PREPARATION
             </div>
 
@@ -95,9 +95,9 @@ ${preheaderHtml}
         </tr>
         <tr>
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
-            <div style="font-size:12px;color:#2E5577;line-height:1.7;">
+            <div style="font-size:12px;color:#6E8AA6;line-height:1.7;">
               Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
-              Questions? <a href="mailto:support@elec-buddy.com" style="color:#4A6880;text-decoration:none;">support@elec-buddy.com</a>
+              Questions? <a href="mailto:support@elec-buddy.com" style="color:#6E8AA6;text-decoration:none;">support@elec-buddy.com</a>
             </div>
           </td>
         </tr>
