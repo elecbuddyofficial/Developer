@@ -1,5 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { sendEmail } from '../_shared/email-layout.ts';
+import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Razorpay webhook: the authoritative record of what actually got paid.
@@ -76,6 +78,7 @@ serve(async (req) => {
   const SUPABASE_URL     = Deno.env.get('SUPABASE_URL')!;
   const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
   const WEBHOOK_SECRET   = Deno.env.get('RAZORPAY_WEBHOOK_SECRET');
+  const RESEND_API_KEY   = Deno.env.get('RESEND_API_KEY');
 
   if (!WEBHOOK_SECRET) {
     console.error('RAZORPAY_WEBHOOK_SECRET is not set');
@@ -175,12 +178,14 @@ serve(async (req) => {
       // so buying early during a trial does not burn the days already given.
       const now = new Date();
       let startDate = now;
+      let buyerEmail: string | null = null;
       if (payment.user_id) {
         const { data: profile } = await sb
           .from('profiles')
-          .select('trial_started_at')
+          .select('trial_started_at, email')
           .eq('id', payment.user_id)
           .maybeSingle();
+        buyerEmail = profile?.email ?? null;
         if (profile?.trial_started_at) {
           const trialEnd = new Date(
             new Date(profile.trial_started_at).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000,
@@ -216,6 +221,30 @@ serve(async (req) => {
           subscription_expires_at: expiresAt.toISOString(),
           plan_scope:               payment.scope || 'both',
         }).eq('id', payment.user_id);
+      }
+
+      // Payment confirmation email. Only one of this function and
+      // verify-razorpay-payment ever reaches this point for a given payment
+      // (see the compare-and-swap above), so this is exactly one email per
+      // purchase — covering the case where the buyer's tab closed before the
+      // client-side path could fire at all.
+      if (RESEND_API_KEY && buyerEmail) {
+        const emailInput = {
+          plan:        payment.plan,
+          scope:       payment.scope || 'both',
+          amountPaise: payment.amount,
+          expiresAt:   expiresAt.toISOString(),
+          orderId:     orderId,
+          paymentId:   paymentId,
+        };
+        const sent = await sendEmail({
+          resendKey: RESEND_API_KEY,
+          from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
+          to:        buyerEmail,
+          subject:   paymentConfirmedSubject(emailInput),
+          html:      paymentConfirmedHtml(emailInput),
+        });
+        if (!sent.ok) console.error('Payment confirmation email failed:', sent.error);
       }
 
       return finish({ applied: true, order_id: orderId, plan: payment.plan });

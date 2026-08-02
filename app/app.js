@@ -80,9 +80,16 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!contentEl) return;
     contentEl.addEventListener('scroll', function() {
         if (!window._activeTopicId) return;
+        // Capture the topic AND position at scroll time, not when the debounce
+        // fires 600ms later. Switching topics inside that window used to mean
+        // the timer read the NEW topic id and the already-reset scrollTop, so
+        // the topic you just left never got its position saved at all and
+        // "Continue where you left off" silently did nothing.
+        var tid = window._activeTopicId;
+        var pos = contentEl.scrollTop;
         clearTimeout(_scrollTimer);
         _scrollTimer = setTimeout(function() {
-            localStorage.setItem('eb_scroll_' + window._activeTopicId, contentEl.scrollTop);
+            try { localStorage.setItem('eb_scroll_' + tid, pos); } catch (e) {}
         }, 600);
     }, { passive: true });
 });
@@ -137,6 +144,12 @@ function _dgmLoad(ph) {
     img.alt = ph.getAttribute('data-alt') || '';
     img.loading = 'lazy';
     img.decoding = 'async';
+    // Carry the blur thumbnail back onto the real <img>. Without this, turning
+    // Data Saver off and on again (or tapping to load, then re-enabling it)
+    // rebuilt the placeholder with an empty blur src - a blank box instead of
+    // the blurred preview, since toggleDataSaver reads data-blur off the img.
+    var blur = ph.querySelector('.dgm-blur-bg');
+    if (blur && blur.getAttribute('src')) img.setAttribute('data-blur', blur.getAttribute('src'));
     ph.replaceWith(img);
 }
 
@@ -190,8 +203,14 @@ window.loadQuizzes = function(topicKey, data) {
 window.loadNotes = function(topicId, htmlContent) {
     window.NOTE_HTML[topicId] = htmlContent;
     buildSearchIndexForTopic(topicId, htmlContent);
-    // Skip display update if this was a background index load (not user-requested)
-    if (window._bgIndexing && topicId !== window._activeTopicId) return;
+    // Only ever paint the topic the user is actually on. This catches two
+    // cases: a background index load (never the active topic), and a slow
+    // user-initiated load that finishes AFTER the user gave up and opened a
+    // different topic - that one used to hijack the screen, leaving the
+    // sidebar and URL pointing at a topic that is no longer displayed.
+    // The cache write and search index above still happen either way, so the
+    // late arrival is not wasted - it just doesn't steal the view.
+    if (topicId !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = _applyDataSaver(htmlContent);
     injectVideoTab(topicId);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -217,8 +236,8 @@ window.loadNotes = function(topicId, htmlContent) {
 window.loadWrittenNotes = function(topicCode, html) {
     window.NOTE_HTML[topicCode] = html;
     buildSearchIndexForTopic(topicCode, html);
-    // Skip display update if this was a background index load (not user-requested)
-    if (window._bgIndexing && topicCode !== window._activeTopicId) return;
+    // Same stale-load guard as loadNotes above - see the comment there.
+    if (topicCode !== window._activeTopicId) return;
     document.getElementById('notes-container').innerHTML = _applyDataSaver(html);
     injectVideoTab(topicCode);
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -788,7 +807,7 @@ function buildCatGrid(){
       var saved = _qk0 ? localStorage.getItem(_qk0) : null;
       if (saved) {
           showCustomConfirm("Resume Quiz", "You have an unfinished quiz in 'All Categories'.", "Resume Quiz", "Start Fresh",
-              function(){ startQuiz(catId, dName, qs, JSON.parse(saved)); },
+              function(){ startQuiz(catId, dName, qs, _readJSON(saved, null) || undefined); },
               function(){ startQuiz(catId, dName, qs); });
       } else {
           startQuiz(catId, dName, qs);
@@ -796,7 +815,7 @@ function buildCatGrid(){
   };
   grid.appendChild(ab);
   
-  var savedP=JSON.parse(localStorage.getItem('eto_progress')||'{}');
+  var savedP=_readProgress();
   var catScores=(savedP[ACTIVE_TOPIC]&&savedP[ACTIVE_TOPIC].cats)||{};
   Object.keys(cats).forEach(function(cat){
     var n=cats[cat]||0;if(!n)return;
@@ -816,7 +835,7 @@ function buildCatGrid(){
         var saved = _qk1 ? localStorage.getItem(_qk1) : null;
         if (saved) {
             showCustomConfirm("Resume Quiz", "You have an unfinished quiz in '"+dName+"'.", "Resume Quiz", "Start Fresh",
-                function(){ startQuiz(cat, dName, f, JSON.parse(saved)); },
+                function(){ startQuiz(cat, dName, f, _readJSON(saved, null) || undefined); },
                 function(){ startQuiz(cat, dName, f); });
         } else {
             startQuiz(cat, dName, f);
@@ -832,9 +851,9 @@ function buildCatGrid(){
   rst.onclick=function(){
       showCustomConfirm("Reset Progress", "Are you sure you want to reset all progress and saved quizzes for this topic back to 0%?", "Yes, Reset", "Cancel",
           function(){
-              var p = JSON.parse(localStorage.getItem('eto_progress')||'{}');
+              var p = _readProgress();
               delete p[ACTIVE_TOPIC];
-              localStorage.setItem('eto_progress', JSON.stringify(p));
+              _writeProgress(p);
               for (var i = localStorage.length - 1; i >= 0; i--) {
                   var k = localStorage.key(i);
                   if (k && k.startsWith('eto_qz_state_' + ACTIVE_TOPIC + '_')) {
@@ -1055,8 +1074,33 @@ function exitQuiz(){
   }
 }
 // Progress logic
+
+// One corrupt localStorage value used to throw straight out of buildCatGrid /
+// getProgress and leave the quiz picker permanently broken for that user, with
+// no way back short of clearing site data. Parse defensively instead: a
+// unreadable value is treated as "no progress yet" and overwritten on the next
+// save, which is recoverable. Anything non-object (a stray string/number) is
+// rejected too, since callers immediately index into it.
+function _readJSON(raw, fallback) {
+  if (!raw) return fallback;
+  try {
+    var v = JSON.parse(raw);
+    if (!v || typeof v !== 'object') return fallback;
+    return v;
+  } catch (e) { return fallback; }
+}
+
+function _readProgress() {
+  try { return _readJSON(localStorage.getItem('eto_progress'), {}); }
+  catch (e) { return {}; }   // localStorage itself can throw (Safari private mode)
+}
+
+function _writeProgress(p) {
+  try { localStorage.setItem('eto_progress', JSON.stringify(p)); } catch (e) {}
+}
+
 function saveProgress(topic, cat, score, total) {
-  var p = JSON.parse(localStorage.getItem('eto_progress') || '{}');
+  var p = _readProgress();
   if(!p[topic]) p[topic] = {cats:{}, best:0};
   
   // Do not record "All Topics" standalone quizzes in the individual category progress
@@ -1101,7 +1145,7 @@ function saveProgress(topic, cat, score, total) {
   }
   
   p[topic].best = Math.round(sum / validCatCount);
-  localStorage.setItem('eto_progress', JSON.stringify(p));
+  _writeProgress(p);
 }
 
 function getActiveQuizCompletion(topic, cat) {
@@ -1119,7 +1163,7 @@ function getActiveQuizCompletion(topic, cat) {
 }
 
 function getProgress(topic) {
-  var p = JSON.parse(localStorage.getItem('eto_progress') || '{}');
+  var p = _readProgress();
   var pData = p[topic] || {cats:{}, best:0};
   
   var changed = false;
@@ -1184,7 +1228,7 @@ function getProgress(topic) {
   
   if (changed) {
       p[topic] = pData;
-      localStorage.setItem('eto_progress', JSON.stringify(p));
+      _writeProgress(p);
   }
   
   return trueTopicPct;
@@ -1208,13 +1252,19 @@ function showScore(){
   var hText = tier === 'perfect' ? 'Flawless!' : tier === 'good' ? 'Great Job!' : "Don't Give Up!";
   var sText = tier === 'perfect' ? 'You crushed every single question!' : tier === 'good' ? 'You are making steady progress.' : 'Mistakes are proof that you are trying.';
   
+  // Buttons carry an action name only - the quiz identity is read straight off
+  // QZ when the click happens, never round-tripped through an HTML attribute.
+  // It used to be interpolated via esc(), which escapes <, >, & and ' but NOT
+  // double quotes. Quiz Bank sets catName to an HTML label containing
+  // `class="svg-ic"`, so that quote terminated the onclick attribute early and
+  // left Try Again dead on every Quiz Bank result screen.
   var btnHtml = '';
   if (tier === 'bad') {
-    btnHtml = '<button class="duo-btn duo-btn-primary needs-practice" onclick="startQuiz(\''+esc(QZ.catId)+'\', \''+esc(QZ.catName)+'\', QZ.qs)">Try Again</button>' +
-              '<button class="duo-btn duo-btn-secondary" onclick="exitQuiz()">Categories</button>';
+    btnHtml = '<button class="duo-btn duo-btn-primary needs-practice" data-act="retry">Try Again</button>' +
+              '<button class="duo-btn duo-btn-secondary" data-act="exit">Categories</button>';
   } else {
-    btnHtml = '<button class="duo-btn duo-btn-primary" onclick="exitQuiz()">Continue</button>' +
-              '<button class="duo-btn duo-btn-secondary" onclick="startQuiz(\''+esc(QZ.catId)+'\', \''+esc(QZ.catName)+'\', QZ.qs)">Try Again</button>';
+    btnHtml = '<button class="duo-btn duo-btn-primary" data-act="exit">Continue</button>' +
+              '<button class="duo-btn duo-btn-secondary" data-act="retry">Try Again</button>';
   }
   
   var html = '<div class="duo-score-container">' +
@@ -1237,7 +1287,14 @@ function showScore(){
     '<div class="duo-score-actions">' + btnHtml + '</div>' +
   '</div>';
   
-  document.getElementById('quiz-active').innerHTML = html;
+  var host = document.getElementById('quiz-active');
+  host.innerHTML = html;
+  host.querySelectorAll('[data-act]').forEach(function(b) {
+    b.addEventListener('click', function() {
+      if (b.getAttribute('data-act') === 'retry') startQuiz(QZ.catId, QZ.catName, QZ.qs);
+      else exitQuiz();
+    });
+  });
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;')}
 

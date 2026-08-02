@@ -1,5 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { sendEmail } from '../_shared/email-layout.ts';
+import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -36,6 +38,7 @@ serve(async (req) => {
     const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
     const SERVICE_ROLE_KEY  = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const KEY_SECRET        = Deno.env.get('RAZORPAY_KEY_SECRET')!;
+    const RESEND_API_KEY    = Deno.env.get('RESEND_API_KEY');
 
     // Verify user JWT
     const authHeader = req.headers.get('Authorization');
@@ -150,6 +153,28 @@ serve(async (req) => {
       subscription_expires_at: expiresAt.toISOString(),
       plan_scope:               payment.scope || 'both',
     }).eq('id', user.id);
+
+    // Payment confirmation email. The purchase is already applied above by
+    // this point, so a send failure here must never change the response the
+    // paying user gets — sendEmail reports failure instead of throwing.
+    if (RESEND_API_KEY && user.email) {
+      const emailInput = {
+        plan:        payment.plan,
+        scope:       payment.scope || 'both',
+        amountPaise: payment.amount,
+        expiresAt:   expiresAt.toISOString(),
+        orderId:     order_id,
+        paymentId:   payment_id,
+      };
+      const sent = await sendEmail({
+        resendKey: RESEND_API_KEY,
+        from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
+        to:        user.email,
+        subject:   paymentConfirmedSubject(emailInput),
+        html:      paymentConfirmedHtml(emailInput),
+      });
+      if (!sent.ok) console.error('Payment confirmation email failed:', sent.error);
+    }
 
     return json({
       ok: true,

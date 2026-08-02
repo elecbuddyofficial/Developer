@@ -718,17 +718,30 @@
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
   .nb-dot.show{display:block}
   .nf-list{flex:1;overflow-y:auto;padding:12px 22px;display:flex;flex-direction:column;gap:8px; margin: 0 -22px -22px -22px;}
-  .nf-item{background:#11253E;border:1px solid var(--border2);border-radius:var(--r8);padding:14px;position:relative}
+  /* These class names must match what renderNotifications() actually emits.
+     They previously described an older markup shape (.nf-title/.nf-body/
+     .nf-meta/.nf-type-badge) that no longer exists anywhere, so every
+     notification rendered completely unstyled in this app while courses.html
+     and sponsorship/ looked correct. Card styling below is this app's own
+     look; the inner structure matches the shared renderer. */
+  .nf-item{display:flex;gap:11px;background:#11253E;border:1px solid var(--border2);border-radius:var(--r8);padding:14px;position:relative}
   .nf-item.unread{border-left:3px solid var(--blue);background:linear-gradient(90deg, rgba(37,99,235,.04) 0%, rgba(17,37,62,0) 100%), #11253E}
-  .nf-title{font-size:14px;font-weight:700;color:#DDE5EF;margin-bottom:6px;display:flex;align-items:center;gap:6px}
-  .nf-body{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:8px}
-  .nf-meta{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:8px}
+  .nf-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+  .nf-dot-info{background:var(--blue)}
+  .nf-dot-update{background:var(--green)}
+  .nf-dot-warning{background:var(--orange)}
+  .nf-dot-deadline{background:var(--red)}
+  .nf-content{flex:1;min-width:0}
+  .nf-item-title{font-size:13.5px;font-weight:700;color:#DDE5EF;line-height:1.35}
+  .nf-item-body{font-size:12.5px;color:var(--text2);margin-top:3px;line-height:1.55}
+  .nf-item-meta{font-size:11px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:6px}
+  .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px}
+  .nf-chip-info{background:var(--blue-dim);color:var(--blue)}
+  .nf-chip-update{background:var(--green-dim);color:var(--green)}
+  .nf-chip-warning{background:var(--orange-dim);color:var(--orange)}
+  .nf-chip-deadline{background:var(--red-dim);color:var(--red)}
   .nf-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);font-size:14px;gap:12px;padding:40px 0;}
   .nf-loading{padding:20px;text-align:center;color:var(--text2);font-size:13px}
-  .nf-type-badge{font-size:10px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:4px;letter-spacing:.04em}
-  .badge-system{background:rgba(37,99,235,.15);color:#5A92FA}
-  .badge-alert{background:rgba(239,68,68,.15);color:#FCA5A5}
-  .badge-promo{background:rgba(200,164,74,.15);color:#C8A44A}
 </style>
 
 <div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);transform:translateZ(0);isolation:isolate;">
@@ -1119,6 +1132,20 @@ function setTheme(t) {
     } catch(e) { return null; }
   }
 
+  // True when the cached key set is missing a scope this user is now entitled
+  // to. Buying/being granted a second scope (coupon, admin grant, upgrade)
+  // leaves the old cache technically unexpired, so without this check the app
+  // would unlock the new section in the UI but never hold the key to decrypt
+  // it - surfacing as a bogus "check your connection" error to someone whose
+  // payment went through perfectly.
+  function _keysAreStale(keys) {
+    var acc = window._access;
+    if (!acc || !keys) return false;          // access not resolved yet - nothing to compare against
+    if (acc.oral && !keys.oral) return true;
+    if (acc.written && !keys.written) return true;
+    return false;
+  }
+
   // Fetch decryption key(s) from Edge Function; fall back to IndexedDB when offline.
   // The response only ever contains the key(s) the caller is entitled to.
   async function initContentKeys() {
@@ -1127,7 +1154,10 @@ function setTheme(t) {
 
     // Prefer IndexedDB - works offline if keys were previously fetched
     var stored = await _loadKeys(userId);
-    if (stored) { window._contentKeys = stored.keys; return; }
+    if (stored && !_keysAreStale(stored.keys)) { window._contentKeys = stored.keys; return; }
+    // Stale cache: keep the old keys usable while we try to widen them, so a
+    // failed refetch degrades to "what you had before" rather than no access.
+    if (stored) window._contentKeys = stored.keys;
 
     try {
       var s = await window._sbClient.auth.getSession();
@@ -1269,8 +1299,11 @@ function setTheme(t) {
   function installGate() {
     if (!window.fetchTopicData) { setTimeout(installGate, 100); return; }
 
-    // Fire access check + key init together - content can only load once both complete
-    window._accessPromise = Promise.all([determineAccess(), initContentKeys()]);
+    // Sequential, not parallel: initContentKeys compares the cached key set
+    // against window._access to detect a scope upgrade, so determineAccess has
+    // to have populated that first or the staleness check has nothing to
+    // compare and silently keeps serving the old, too-narrow key set.
+    window._accessPromise = determineAccess().then(initContentKeys);
 
     var _orig = window.fetchTopicData;
     window.fetchTopicData = async function(topicId, topicKey) {

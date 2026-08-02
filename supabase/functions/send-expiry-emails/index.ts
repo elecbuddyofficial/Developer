@@ -183,10 +183,37 @@ serve(async (req) => {
 
   const results = { sent: 0, failed: 0, skipped: 0, errors: [] as string[] };
 
-  async function dispatch(email: string | null, subject: string, html: string) {
-    if (!email) { results.skipped++; return; }
+  // Claim-then-send. The UNIQUE (user_id, kind, sent_on) constraint on
+  // email_sends means a second run on the same day fails this insert and the
+  // recipient is skipped instead of mailed twice - the workflow can be
+  // triggered manually as well as on its daily schedule, so same-day re-runs
+  // are entirely normal. A failed send releases the claim so the next run can
+  // legitimately retry.
+  async function dispatch(
+    userId: string | null,
+    email: string | null,
+    kind: string,
+    subject: string,
+    html: string,
+  ) {
+    if (!email || !userId) { results.skipped++; return; }
+
+    const { error: claimErr } = await sb
+      .from('email_sends')
+      .insert({ user_id: userId, kind });
+    if (claimErr) { results.skipped++; return; }   // already sent today
+
     const ok = await sendEmail(email, subject, html, RESEND_API_KEY);
-    ok ? results.sent++ : results.failed++;
+    if (ok) {
+      results.sent++;
+    } else {
+      results.failed++;
+      await sb.from('email_sends')
+        .delete()
+        .eq('user_id', userId)
+        .eq('kind', kind)
+        .eq('sent_on', dateOnly(now));
+    }
   }
 
   // ── 1. Trial expiring tomorrow ───────────────────────────────────────────
@@ -195,13 +222,13 @@ serve(async (req) => {
   const trialWarnDay = daysAgo(TRIAL_DAYS - 1);
   const { data: trialWarning } = await sb
     .from('profiles')
-    .select('email')
+    .select('id, email')
     .eq('subscription_plan', 'trial')
     .gte('trial_started_at', trialWarnDay + 'T00:00:00Z')
     .lte('trial_started_at', trialWarnDay + 'T23:59:59Z');
 
   for (const u of trialWarning ?? []) {
-    await dispatch(u.email, 'Your Elec-Buddy trial ends tomorrow', trialExpiringHtml());
+    await dispatch(u.id, u.email, 'trial_expiring', 'Your Elec-Buddy trial ends tomorrow', trialExpiringHtml());
   }
 
   // ── 2. Trial expired yesterday ───────────────────────────────────────────
@@ -209,27 +236,29 @@ serve(async (req) => {
   const trialExpiredDay = daysAgo(TRIAL_DAYS + 1);
   const { data: trialExpired } = await sb
     .from('profiles')
-    .select('email')
+    .select('id, email')
     .eq('subscription_plan', 'trial')
     .gte('trial_started_at', trialExpiredDay + 'T00:00:00Z')
     .lte('trial_started_at', trialExpiredDay + 'T23:59:59Z');
 
   for (const u of trialExpired ?? []) {
-    await dispatch(u.email, 'Your Elec-Buddy trial has ended', trialExpiredHtml());
+    await dispatch(u.id, u.email, 'trial_expired', 'Your Elec-Buddy trial has ended', trialExpiredHtml());
   }
 
   // ── 3. Subscription expiring in 3 days ───────────────────────────────────
   const subWarnDay = daysAhead(3);
   const { data: subWarning } = await sb
     .from('profiles')
-    .select('email, subscription_plan')
+    .select('id, email, subscription_plan')
     .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
     .gte('subscription_expires_at', subWarnDay + 'T00:00:00Z')
     .lte('subscription_expires_at', subWarnDay + 'T23:59:59Z');
 
   for (const u of subWarning ?? []) {
     await dispatch(
+      u.id,
       u.email,
+      'sub_expiring',
       'Your Elec-Buddy subscription expires in 3 days',
       subExpiringHtml(u.subscription_plan),
     );
@@ -239,14 +268,16 @@ serve(async (req) => {
   const subExpiredDay = daysAgo(1);
   const { data: subExpired } = await sb
     .from('profiles')
-    .select('email, subscription_plan')
+    .select('id, email, subscription_plan')
     .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
     .gte('subscription_expires_at', subExpiredDay + 'T00:00:00Z')
     .lte('subscription_expires_at', subExpiredDay + 'T23:59:59Z');
 
   for (const u of subExpired ?? []) {
     await dispatch(
+      u.id,
       u.email,
+      'sub_expired',
       'Your Elec-Buddy subscription has ended',
       subExpiredHtml(u.subscription_plan),
     );

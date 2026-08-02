@@ -262,7 +262,19 @@
 <script>
   const SUPABASE_URL  = 'https://vcofgjuwprylojgyfbtr.supabase.co';
   const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+  const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
+  // The edge function itself is a one-shot compare-and-swap, so it's safe to
+  // call from here even though the tab could close before this resolves.
+  function sendWelcomeEmail(userId) {
+    fetch(SUPABASE_FN_URL + '/send-welcome-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId }),
+    }).catch(function() {});
+  }
 
   function redirectAfterLogin() {
     var saved = localStorage.getItem('eb_track');
@@ -289,12 +301,20 @@
   var _recoveryMode = window.location.hash.includes('type=recovery');
   if (_recoveryMode) showRecoveryForm();
 
+  // Supabase tags a signup confirmation-link redirect with type=signup in the
+  // hash, same way it tags recovery links with type=recovery above. This is
+  // what lets the SIGNED_IN handler below tell "they just confirmed their
+  // brand-new account" apart from "they just logged in normally" - the
+  // welcome email should only ever fire for the former.
+  var _confirmMode = window.location.hash.includes('type=signup');
+
   // Supabase fires PASSWORD_RECOVERY or SIGNED_IN when the hash token is processed
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'PASSWORD_RECOVERY') {
       _recoveryMode = true;
       showRecoveryForm();
     } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
+      if (_confirmMode && session.user) sendWelcomeEmail(session.user.id);
       redirectAfterLogin();
     }
   });
@@ -384,9 +404,13 @@
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
     } else if (data.session) {
       // Email confirmation disabled - user is logged in immediately
+      if (data.user) sendWelcomeEmail(data.user.id);
       redirectAfterLogin();
     } else {
-      // Email confirmation enabled - ask them to verify
+      // Email confirmation enabled - ask them to verify. Welcome email fires
+      // later, off the SIGNED_IN event when they actually click the
+      // confirmation link (see _confirmMode below) - not here, before
+      // they've proven they own the address.
       showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
       document.getElementById('form-register').reset();
