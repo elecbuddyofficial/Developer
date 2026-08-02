@@ -20,7 +20,11 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-  (async () => {
+  // Exposed as a promise so the content gate below can chain off it. The
+  // access check needs window._sbUser, which is only set after the await
+  // inside here - without something to wait on, anything running earlier
+  // would read "not signed in" and deny access to a perfectly valid session.
+  window._authReady = (async () => {
     try {
       if (typeof supabase === 'undefined') throw new Error('Supabase CDN unavailable');
       const _sb = supabase.createClient(
@@ -1299,11 +1303,18 @@ function setTheme(t) {
   function installGate() {
     if (!window.fetchTopicData) { setTimeout(installGate, 100); return; }
 
-    // Sequential, not parallel: initContentKeys compares the cached key set
-    // against window._access to detect a scope upgrade, so determineAccess has
-    // to have populated that first or the staleness check has nothing to
-    // compare and silently keeps serving the old, too-narrow key set.
-    window._accessPromise = determineAccess().then(initContentKeys);
+    // Chain: auth -> access -> keys. All three are strictly ordered.
+    //  - _authReady must settle first or determineAccess reads a null user and
+    //    denies access to a valid session.
+    //  - determineAccess must precede initContentKeys, because the key-cache
+    //    staleness check compares against window._access; without it the old,
+    //    too-narrow key set is silently kept after a scope upgrade.
+    // The wrapper below is installed synchronously regardless, so a deep link
+    // that fires before this chain settles still awaits it rather than
+    // slipping past the gate.
+    window._accessPromise = (window._authReady || Promise.resolve())
+      .then(determineAccess)
+      .then(initContentKeys);
 
     var _orig = window.fetchTopicData;
     window.fetchTopicData = async function(topicId, topicKey) {
@@ -1327,8 +1338,23 @@ function setTheme(t) {
     });
   }
 
-  if (document.readyState === 'complete') installGate();
-  else window.addEventListener('load', installGate);
+  // Install immediately, NOT on 'load'. app.js is a synchronous <script> above
+  // this block, so fetchTopicData already exists here, and every .sb-item is
+  // markup earlier in this same document - both preconditions are already met.
+  //
+  // Deferring to 'load' was a real hole: app.js registers handleHashRouting on
+  // DOMContentLoaded, which always fires BEFORE load, so refreshing or deep
+  // linking to #notes=T05 called the raw unwrapped fetchTopicData - no
+  // _accessPromise await, no isLocked() check. Content never actually leaked
+  // (the decryption key is fetched in here too, so it wasn't ready either),
+  // but a locked topic showed "Could not load notes. Please check your
+  // connection." instead of the upgrade gate, and a paying subscriber
+  // refreshing on a topic raced key init against the notes fetch and often
+  // got that same bogus error on content they own.
+  //
+  // installGate still self-polls for fetchTopicData, so this stays safe even
+  // if script order ever changes.
+  installGate();
 
   // Auto-reload when a new SW activates so users always get fresh HTML
   if ('serviceWorker' in navigator) {
