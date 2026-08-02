@@ -8,7 +8,7 @@ import { emailLayout, escapeHtml, APP_URL } from './email-layout.ts';
 export const TRIAL_DAYS = 3;
 
 export function welcomeEmailSubject(): string {
-  return 'Welcome to Elec-Buddy — your free trial has started';
+  return 'Welcome to Elec-Buddy: your free trial has started';
 }
 
 export interface WelcomeEmailInput {
@@ -20,7 +20,7 @@ export function welcomeEmailHtml(input: WelcomeEmailInput): string {
   const greeting = firstName ? `Welcome aboard, ${escapeHtml(firstName)}!` : 'Welcome aboard!';
 
   const body = `
-    <p style="margin:0 0 16px 0;">Your ${TRIAL_DAYS}-day free trial just started &mdash; full access to every Oral topic, every Written numerical, quizzes, and the Surveyor Q&amp;A bank. No card required.</p>
+    <p style="margin:0 0 16px 0;">Your ${TRIAL_DAYS}-day free trial just started, with full access to every Oral topic, every Written numerical, quizzes, and the Surveyor Q&amp;A bank. No card required.</p>
     <p style="margin:0 0 16px 0;">Work through a topic, quiz yourself, then check your numericals against worked solutions, the same way a real MMD oral panel will push you.</p>
     <p style="margin:0;">When your trial ends, everything you've already read and answered stays saved. Upgrade anytime to keep going without a gap.</p>
   `;

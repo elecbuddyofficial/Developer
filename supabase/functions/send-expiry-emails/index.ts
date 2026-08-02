@@ -128,32 +128,47 @@ function trialExpiredHtml(): string {
   );
 }
 
-const DURATION_LABELS: Record<string, string> = { '3mo': '3-Month', '6mo': '6-Month', '12mo': '12-Month' };
-function planDisplayName(plan: string): string {
-  return DURATION_LABELS[plan] || (plan.charAt(0).toUpperCase() + plan.slice(1));
+// Each section expires on its own schedule now, so these name the section
+// rather than the plan. Telling a cadet "your plan expires" when only half
+// their access is ending would be actively misleading - and the other half
+// staying live is exactly what the per-scope rewrite was for.
+const SCOPE_LABEL: Record<string, string> = { written: 'Written', oral: 'Oral' };
+const SCOPE_CONTENT: Record<string, string> = {
+  written: 'the Written exam section: theory notes and all 39 worked numericals',
+  oral:    'the Oral exam section: all 23 topics, quizzes, and the Surveyor Q&amp;A bank',
+};
+
+/** Names whichever access survives, so the email never implies total loss. */
+function stillHaveLine(otherScope: string, otherExpiry: string | null): string {
+  if (!otherExpiry || new Date(otherExpiry) <= new Date()) return '';
+  const other = SCOPE_LABEL[otherScope];
+  const until = new Date(otherExpiry).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  return `<p style="margin:16px 0 0 0;">Your ${other} access is unaffected and continues until ${until}.</p>`;
 }
 
-function subExpiringHtml(plan: string): string {
-  const planLabel = planDisplayName(plan);
+function scopeExpiringHtml(scope: string, otherScope: string, otherExpiry: string | null): string {
+  const label = SCOPE_LABEL[scope];
   return baseLayout(
-    `Your ${planLabel} plan expires in 3 days. Renew to stay on track.`,
-    `Your ${planLabel} plan expires in 3 days`,
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${planLabel} plan expires in 3 days. Renew before it lapses to keep uninterrupted access to all your study materials.</p>
-     <p style="margin:0;">If you have any questions about renewal, just reply to this email.</p>`,
+    `Your ${label} access expires in 3 days. Renew to stay on track.`,
+    `Your ${label} access expires in 3 days`,
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access expires in 3 days. That covers ${SCOPE_CONTENT[scope]}.</p>
+     <p style="margin:0;">Renew before it lapses to keep studying without a gap. Any time you buy is added on top of what you already have, so nothing is lost by renewing early.</p>
+     ${stillHaveLine(otherScope, otherExpiry)}`,
     APP_URL,
-    'Renew My Plan',
+    `Renew ${label} Access`,
   );
 }
 
-function subExpiredHtml(plan: string): string {
-  const planLabel = planDisplayName(plan);
+function scopeExpiredHtml(scope: string, otherScope: string, otherExpiry: string | null): string {
+  const label = SCOPE_LABEL[scope];
   return baseLayout(
-    `Your ${planLabel} plan has ended. Renew to continue studying.`,
-    `Your ${planLabel} plan has expired`,
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${planLabel} plan has expired. Your reading progress and quiz history are intact. Renew to get back to studying right away.</p>
-     <p style="margin:0;">Questions? Reply to this email and we will sort it out quickly.</p>`,
+    `Your ${label} access has ended. Renew to continue studying.`,
+    `Your ${label} access has expired`,
+    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access has expired, so ${SCOPE_CONTENT[scope]} is locked for now.</p>
+     <p style="margin:0;">Your reading progress and quiz history are all intact. Renew and you pick up exactly where you left off.</p>
+     ${stillHaveLine(otherScope, otherExpiry)}`,
     APP_URL,
-    'Renew My Plan',
+    `Renew ${label} Access`,
   );
 }
 
@@ -245,42 +260,48 @@ serve(async (req) => {
     await dispatch(u.id, u.email, 'trial_expired', 'Your Elec-Buddy trial has ended', trialExpiredHtml());
   }
 
-  // ── 3. Subscription expiring in 3 days ───────────────────────────────────
-  const subWarnDay = daysAhead(3);
-  const { data: subWarning } = await sb
-    .from('profiles')
-    .select('id, email, subscription_plan')
-    .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
-    .gte('subscription_expires_at', subWarnDay + 'T00:00:00Z')
-    .lte('subscription_expires_at', subWarnDay + 'T23:59:59Z');
+  // ── 3 & 4. Per-scope expiry ──────────────────────────────────────────────
+  // Written and Oral expire independently now, so each is queried on its own
+  // date column. A cadet losing Oral while Written runs for another 8 months
+  // gets an email about Oral only, and it says so. Lifetime holders are
+  // excluded: their dates are NULL, so the range filters never match them.
+  //
+  // Each (scope, stage) pair is its own email_sends kind, so the same-day
+  // dedupe guard covers them individually - losing Written and Oral on the
+  // same day correctly produces two distinct emails, not one suppressed.
+  const SCOPES: { scope: 'written' | 'oral'; other: 'written' | 'oral'; col: string; otherCol: string }[] = [
+    { scope: 'written', other: 'oral',    col: 'written_expires_at', otherCol: 'oral_expires_at' },
+    { scope: 'oral',    other: 'written', col: 'oral_expires_at',    otherCol: 'written_expires_at' },
+  ];
 
-  for (const u of subWarning ?? []) {
-    await dispatch(
-      u.id,
-      u.email,
-      'sub_expiring',
-      'Your Elec-Buddy subscription expires in 3 days',
-      subExpiringHtml(u.subscription_plan),
-    );
-  }
+  const STAGES = [
+    { day: daysAhead(3), stage: 'expiring', subject: (l: string) => `Your Elec-Buddy ${l} access expires in 3 days` },
+    { day: daysAgo(1),   stage: 'expired',  subject: (l: string) => `Your Elec-Buddy ${l} access has ended` },
+  ];
 
-  // ── 4. Subscription expired yesterday ────────────────────────────────────
-  const subExpiredDay = daysAgo(1);
-  const { data: subExpired } = await sb
-    .from('profiles')
-    .select('id, email, subscription_plan')
-    .in('subscription_plan', ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'])
-    .gte('subscription_expires_at', subExpiredDay + 'T00:00:00Z')
-    .lte('subscription_expires_at', subExpiredDay + 'T23:59:59Z');
+  for (const s of SCOPES) {
+    for (const st of STAGES) {
+      const { data: rows } = await sb
+        .from('profiles')
+        .select(`id, email, ${s.col}, ${s.otherCol}`)
+        .neq('subscription_plan', 'lifetime')
+        .gte(s.col, st.day + 'T00:00:00Z')
+        .lte(s.col, st.day + 'T23:59:59Z');
 
-  for (const u of subExpired ?? []) {
-    await dispatch(
-      u.id,
-      u.email,
-      'sub_expired',
-      'Your Elec-Buddy subscription has ended',
-      subExpiredHtml(u.subscription_plan),
-    );
+      for (const u of rows ?? []) {
+        const otherExpiry = (u as Record<string, string | null>)[s.otherCol] ?? null;
+        const html = st.stage === 'expiring'
+          ? scopeExpiringHtml(s.scope, s.other, otherExpiry)
+          : scopeExpiredHtml(s.scope, s.other, otherExpiry);
+        await dispatch(
+          u.id,
+          u.email,
+          `${s.scope}_${st.stage}`,
+          st.subject(SCOPE_LABEL[s.scope]),
+          html,
+        );
+      }
+    }
   }
 
   // Record the run so the admin panel can show whether this job is actually

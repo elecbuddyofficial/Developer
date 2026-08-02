@@ -6,8 +6,6 @@ const CORS = {
   'Access-Control-Allow-Headers': 'authorization, content-type',
 };
 
-const ALL_PAID_PLANS = ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'];
-
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -42,32 +40,26 @@ serve(async (req) => {
 
     const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
-    // ── Repeat-purchase guard ────────────────────────────────────────────
-    // verify-razorpay-payment overwrites subscription_plan/plan_scope on
-    // every successful payment rather than merging with existing access, so
-    // a second purchase that overlaps what the buyer already holds could
-    // silently shrink their access (e.g. buying Oral while Written is still
-    // active would leave them Oral-only). Block it here and point to support
-    // rather than guessing at merge/stacking semantics.
+    // ── Lifetime guard ───────────────────────────────────────────────────
+    // The old guard here also blocked any OVERLAPPING purchase, because
+    // payments used to overwrite a single plan_scope slot and a second
+    // purchase could silently shrink access. That is no longer true: every
+    // purchase now stacks per scope from that scope's own expiry (see
+    // _shared/entitlements.ts), so a repeat or complementary purchase can
+    // only ever add time. Blocking it would cost a code path and buy nothing.
+    //
+    // Lifetime is still blocked - they already hold everything, forever, so
+    // charging them again would take money for nothing.
     const { data: existingProfile } = await sb
       .from('profiles')
-      .select('subscription_plan, subscription_expires_at, plan_scope')
+      .select('subscription_plan')
       .eq('id', user.id)
       .maybeSingle();
 
-    const existingPlan = existingProfile?.subscription_plan;
-    const hasActivePaid = existingPlan === 'lifetime'
-      || (ALL_PAID_PLANS.includes(existingPlan) && existingProfile?.subscription_expires_at
-          && new Date(existingProfile.subscription_expires_at) > new Date());
-
-    if (hasActivePaid) {
-      const existingScope = existingPlan === 'lifetime' ? 'both' : (existingProfile?.plan_scope || 'both');
-      const overlaps = existingScope === 'both' || scope === 'both' || existingScope === scope;
-      if (overlaps) {
-        return json({
-          error: 'You already have active access that overlaps this plan. Contact support to change your plan.',
-        }, 409);
-      }
+    if (existingProfile?.subscription_plan === 'lifetime') {
+      return json({
+        error: 'You already have lifetime access to everything. Contact support if something looks wrong.',
+      }, 409);
     }
 
     // ── Live price lookup — never trust a client-sent amount ──────────────

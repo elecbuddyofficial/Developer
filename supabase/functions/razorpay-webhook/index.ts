@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
+import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Razorpay webhook: the authoritative record of what actually got paid.
@@ -21,29 +22,11 @@ import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/paymen
 // must happen before anything else touches the database.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const PLAN_MONTHS: Record<string, number> = {
-  starter: 2,
-  standard: 5,
-  pro: 12,
-  '3mo': 3,
-  '6mo': 6,
-  '12mo': 12,
-};
-
-// Must stay in sync with get-content-key, the authoritative access gate.
-const TRIAL_DAYS = 3;
-
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
     headers: { 'Content-Type': 'application/json' },
   });
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
-}
 
 function toHex(buf: ArrayBuffer): string {
   return Array.from(new Uint8Array(buf))
@@ -176,24 +159,29 @@ serve(async (req) => {
 
       // Subscription starts when the trial runs out, not the moment they pay,
       // so buying early during a trial does not burn the days already given.
+      // Per-scope stacking, identical to verify-razorpay-payment - both paths
+      // go through _shared/entitlements.ts so they cannot drift. This purchase
+      // extends only the scope(s) it covers, each from its own current expiry.
       const now = new Date();
-      let startDate = now;
+      const startDate = now;
       let buyerEmail: string | null = null;
+      let profile: Record<string, unknown> = {};
       if (payment.user_id) {
-        const { data: profile } = await sb
+        const { data } = await sb
           .from('profiles')
-          .select('trial_started_at, email')
+          .select('subscription_plan, trial_started_at, email, written_expires_at, oral_expires_at')
           .eq('id', payment.user_id)
           .maybeSingle();
-        buyerEmail = profile?.email ?? null;
-        if (profile?.trial_started_at) {
-          const trialEnd = new Date(
-            new Date(profile.trial_started_at).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000,
-          );
-          if (trialEnd > now) startDate = trialEnd;
-        }
+        profile = data ?? {};
+        buyerEmail = (data?.email as string) ?? null;
       }
-      const expiresAt = addMonths(startDate, months);
+      const effect = applyPurchase(profile, payment.scope, months, now);
+      // Legacy single-slot value: earliest of the covered scopes, so a client
+      // on cached JS under-grants rather than over-grants. See the same note
+      // in verify-razorpay-payment.
+      const expiresAt = new Date(
+        Math.min(...effect.changes.map(c => new Date(c.to).getTime())),
+      );
 
       // Compare-and-swap. If the client-side verify already flipped this row
       // to paid, this matches zero rows and we skip the profile write, so the
@@ -220,6 +208,8 @@ serve(async (req) => {
           subscription_plan:       payment.plan,
           subscription_expires_at: expiresAt.toISOString(),
           plan_scope:               payment.scope || 'both',
+          written_expires_at:      effect.written_expires_at,
+          oral_expires_at:         effect.oral_expires_at,
         }).eq('id', payment.user_id);
       }
 
@@ -233,7 +223,7 @@ serve(async (req) => {
           plan:        payment.plan,
           scope:       payment.scope || 'both',
           amountPaise: payment.amount,
-          expiresAt:   expiresAt.toISOString(),
+          changes:     effect.changes,
           orderId:     orderId,
           paymentId:   paymentId,
         };

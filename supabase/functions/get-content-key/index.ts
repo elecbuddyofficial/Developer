@@ -1,15 +1,11 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { deriveAccess, trialEnd } from '../_shared/entitlements.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
-
-// Duration values that grant access when unexpired. Legacy values (starter/
-// standard/pro) are pre-scope-split plans, backfilled to plan_scope='both'
-// in the DB migration, so they keep working exactly as before.
-const ALL_PAID_PLANS = ['starter', 'standard', 'pro', '3mo', '6mo', '12mo'];
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
@@ -28,39 +24,38 @@ serve(async (req) => {
     const { data: { user }, error: userErr } = await supabase.auth.getUser();
     if (userErr || !user) return new Response('Unauthorized', { status: 401, headers: CORS });
 
-    // Check subscription status
+    // Check subscription status. Access comes from the per-scope expiry
+    // columns now, so someone whose Written has lapsed while their Oral is
+    // still running resolves correctly instead of being judged by whichever
+    // plan they happened to buy last.
     const { data: profile } = await supabase
       .from('profiles')
-      .select('subscription_plan, subscription_expires_at, trial_started_at, plan_scope')
+      .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at')
       .eq('id', user.id)
       .single();
 
     if (!profile) return new Response('No profile', { status: 403, headers: CORS });
 
-    const plan = profile.subscription_plan;
-    let expiresAt: number | null = null;
-    let hasOral = false;
-    let hasWritten = false;
+    const now = new Date();
+    const { written: hasWritten, oral: hasOral } = deriveAccess(profile, now);
 
-    if (plan === 'lifetime') {
-      hasOral = hasWritten = true;
-      expiresAt = null; // never expires
-    } else if (plan === 'trial' && profile.trial_started_at) {
-      // Trial is never scope-restricted — full preview of both sections.
-      const trialEnd = new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000;
-      const active = Date.now() < trialEnd;
-      hasOral = hasWritten = active;
-      expiresAt = trialEnd;
-    } else if (ALL_PAID_PLANS.includes(plan) && profile.subscription_expires_at) {
-      const subEnd = new Date(profile.subscription_expires_at).getTime();
-      const active = Date.now() < subEnd;
-      // Legacy rows and any payment caught mid-deploy-skew have plan_scope
-      // NULL — those must resolve to 'both' (what they actually paid for
-      // under the old all-or-nothing model), never fail closed to neither.
-      const scope = profile.plan_scope || 'both';
-      hasOral = active && (scope === 'oral' || scope === 'both');
-      hasWritten = active && (scope === 'written' || scope === 'both');
-      expiresAt = subEnd;
+    // When the cached key set should be revisited. Not the LATEST expiry:
+    // if Written ends in March and Oral in December, the cache has to be
+    // refreshed in March so the Written key stops being handed out. So it is
+    // the earliest expiry among the scopes actually granted.
+    let expiresAt: number | null = null;
+    if (profile.subscription_plan === 'lifetime') {
+      expiresAt = null;                                   // never expires
+    } else {
+      const tEnd = trialEnd(profile);
+      if (tEnd && now < tEnd) {
+        expiresAt = tEnd.getTime();                       // trial grants both
+      } else {
+        const granted: number[] = [];
+        if (hasWritten && profile.written_expires_at) granted.push(new Date(profile.written_expires_at).getTime());
+        if (hasOral    && profile.oral_expires_at)    granted.push(new Date(profile.oral_expires_at).getTime());
+        expiresAt = granted.length ? Math.min(...granted) : now.getTime();
+      }
     }
 
     if (!hasOral && !hasWritten) {

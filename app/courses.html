@@ -819,7 +819,7 @@
 
     var { data: profile } = await window._sbClient
       .from('profiles')
-      .select('subscription_plan, subscription_expires_at, trial_started_at, plan_scope, is_admin')
+      .select('subscription_plan, subscription_expires_at, trial_started_at, plan_scope, written_expires_at, oral_expires_at, is_admin')
       .eq('id', u.id)
       .single();
 
@@ -839,17 +839,36 @@
         badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">Lifetime</span>';
         subEl.textContent = 'Never expires';
       } else if (ALL_PAID_PLANS.indexOf(plan) !== -1) {
-        var exp = profile.subscription_expires_at ? new Date(profile.subscription_expires_at) : null;
-        var expired = exp && exp < new Date();
+        // Per-scope expiry: each section runs on its own clock, so the scope
+        // shown is what is actually LIVE, not whichever plan was bought last.
+        // Mirrors renderPlan() in index.html and deriveAccess() in
+        // supabase/functions/_shared/entitlements.ts.
+        var nowMs = Date.now();
+        var wMs = profile.written_expires_at ? new Date(profile.written_expires_at).getTime() : 0;
+        var oMs = profile.oral_expires_at    ? new Date(profile.oral_expires_at).getTime()    : 0;
+        var hasW = wMs > nowMs, hasO = oMs > nowMs;
+
+        // Latest live date drives the "active until" line; the split case is
+        // spelled out separately below so a half-lapsed plan cannot read as
+        // fully active.
+        var exp = (hasW || hasO) ? new Date(Math.max(wMs, oMs))
+                : profile.subscription_expires_at ? new Date(profile.subscription_expires_at) : null;
+        var expired = !hasW && !hasO;
         var legacyNames = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
-        var scope = profile.plan_scope || 'both';
-        var planLabel = legacyNames[plan] || (plan + ' · ' + scope);
-        // Same track/tier lookup as the main app's profile display - same
-        // plan should read the same everywhere in the product.
+        // The badge names the most recent purchase/grant, read straight from
+        // plan_scope - NOT derived from which sections are currently live.
+        // Someone who bought Written 12mo then Oral 3mo separately has both
+        // sections live on different dates; deriving scope='both' from that
+        // would look up a combined-bundle tier (e.g. "Expedition Launch")
+        // that was never purchased. plan_scope already records exactly which
+        // scope the last transaction was for. Mirrors renderPlan() in
+        // index.html - see the comment there for the full reasoning.
+        var lastScope = profile.plan_scope || 'both';
+        var planLabel = legacyNames[plan] || (plan + ' · ' + lastScope);
         var planRowRes = await window._sbClient
           .from('pricing_plans')
           .select('track_name, tier_name')
-          .eq('duration', plan).eq('scope', scope).maybeSingle();
+          .eq('duration', plan).eq('scope', lastScope).maybeSingle();
         if (planRowRes && planRowRes.data) {
           planLabel = planRowRes.data.track_name + ' ' + planRowRes.data.tier_name;
         }
@@ -858,7 +877,15 @@
           subEl.textContent = 'Expired ' + (exp ? exp.toLocaleDateString() : '');
         } else {
           badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">' + escNf(planLabel) + '</span>';
-          subEl.textContent = exp ? 'Active until ' + exp.toLocaleDateString() : 'Active';
+          if (hasW && hasO && wMs !== oMs) {
+            subEl.textContent = 'Written to ' + new Date(wMs).toLocaleDateString()
+                              + ' · Oral to ' + new Date(oMs).toLocaleDateString();
+          } else if (!hasW || !hasO) {
+            subEl.textContent = (hasW ? 'Written' : 'Oral') + ' only · until '
+                              + (exp ? exp.toLocaleDateString() : '');
+          } else {
+            subEl.textContent = exp ? 'Active until ' + exp.toLocaleDateString() : 'Active';
+          }
         }
       } else {
         badgeEl.innerHTML = '<span class="pm-plan-badge pb-active">Active</span>';

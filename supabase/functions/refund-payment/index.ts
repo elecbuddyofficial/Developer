@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { recomputeFromPayments } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin-triggered refund. Issues the refund through Razorpay, records it on
@@ -111,41 +112,56 @@ serve(async (req) => {
     }).eq('id', payment.id);
 
     // ── Recompute the customer's access ──────────────────────────────────
-    // Their entitlement is whatever their longest-running remaining paid
-    // purchase grants. A manually granted lifetime plan is left alone: it was
-    // never tied to this payment, so a refund should not silently strip it.
+    // Rebuilt by REPLAYING every remaining paid purchase in the order it was
+    // paid, rather than picking the single longest-running one. With per-scope
+    // stacking you cannot subtract a refund arithmetically: each purchase's
+    // start date depended on what already existed at the time, so replay is
+    // the only method that agrees with applyPurchase. It also fixes the old
+    // logic's assumption that a customer only ever holds one scope - refunding
+    // an Oral purchase used to be able to wipe an unrelated Written one.
+    //
+    // A manually granted lifetime plan is left alone: it was never tied to
+    // this payment, so a refund should not silently strip it.
     let accessResult = 'skipped';
     if (shouldRevoke && payment.user_id) {
       const { data: profile } = await sb
         .from('profiles')
-        .select('subscription_plan')
+        .select('subscription_plan, trial_started_at')
         .eq('id', payment.user_id)
         .maybeSingle();
 
       if (profile?.subscription_plan === 'lifetime') {
         accessResult = 'kept_lifetime';
       } else {
+        // Everything still paid for. The row refunded above is already
+        // status='refunded', so it is excluded by this filter.
         const { data: remaining } = await sb
           .from('payments')
-          .select('plan, scope, subscription_expires_at')
+          .select('plan, scope, paid_at, status')
           .eq('user_id', payment.user_id)
-          .eq('status', 'paid')
-          .not('subscription_expires_at', 'is', null)
-          .order('subscription_expires_at', { ascending: false })
-          .limit(1);
+          .eq('status', 'paid');
 
-        if (remaining && remaining.length > 0) {
+        const effect = recomputeFromPayments(remaining ?? [], profile ?? {});
+        const live = [effect.written_expires_at, effect.oral_expires_at]
+          .filter(Boolean)
+          .map(iso => new Date(iso as string).getTime())
+          .filter(t => t > Date.now());
+
+        if (live.length > 0) {
           await sb.from('profiles').update({
-            subscription_plan:       remaining[0].plan,
-            subscription_expires_at: remaining[0].subscription_expires_at,
-            plan_scope:               remaining[0].scope || 'both',
+            written_expires_at:      effect.written_expires_at,
+            oral_expires_at:         effect.oral_expires_at,
+            // Legacy display columns kept roughly consistent.
+            subscription_expires_at: new Date(Math.min(...live)).toISOString(),
           }).eq('id', payment.user_id);
-          accessResult = `downgraded_to_${remaining[0].plan}`;
+          accessResult = 'recomputed_from_remaining_payments';
         } else {
           await sb.from('profiles').update({
             subscription_plan:       'trial',
             subscription_expires_at: null,
             plan_scope:               null,
+            written_expires_at:      null,
+            oral_expires_at:         null,
           }).eq('id', payment.user_id);
           accessResult = 'reverted_to_trial';
         }

@@ -690,6 +690,9 @@
 <style>
   .gate-plan {
     display: flex; align-items: center; justify-content: space-between;
+    /* wrap so the "what this does to your dates" line can sit on its own row
+       beneath the price/buy pair rather than squeezing them */
+    flex-wrap: wrap;
     background: rgba(13,30,51,0.7); border: 1px solid #1A3050; border-radius: 10px;
     padding: 14px 16px; transition: border-color .15s, background .15s;
   }
@@ -944,6 +947,11 @@
   .up-price { font-size: 20px; font-weight: 700; color: #C8A44A; letter-spacing: -0.5px; }
   .up-price-strike { font-size: 13px; color: #3A5570; text-decoration: line-through; }
   .up-card-desc { font-size: 11.5px; color: #5DC87A; margin-top: 6px; }
+  /* What the plan contains, on every card so a card stands alone. */
+  .up-card-gets { font-size: 11.5px; color: #8FA3B8; margin-top: 8px; line-height: 1.5; }
+  /* What it does to THIS buyer's dates. Sits under the buy button, quieter
+     than the price but always present, so stacking is never a surprise. */
+  .up-card-effect { font-size: 11px; color: #4A6880; margin-top: 8px; line-height: 1.5; }
   .up-buy-btn {
     margin-top: 14px; width: 100%; background: rgba(200,164,74,0.12);
     border: 1px solid rgba(200,164,74,0.35); border-radius: 8px; padding: 10px;
@@ -1222,33 +1230,44 @@ function setTheme(t) {
   // Derive per-scope access from a profiles row. Shared by determineAccess()
   // and checkSession() so the two don't drift the way subscription_plan and
   // plan_scope handling has drifted across other duplicate copies elsewhere.
+  // Mirrors deriveAccess() in supabase/functions/_shared/entitlements.ts.
+  // The server copy is authoritative (it decides which decryption keys are
+  // handed out); this one only drives the UI. Keep the two in step.
+  //
+  // Each section carries its own expiry, so someone whose Written has lapsed
+  // while their Oral is still running resolves correctly - it no longer
+  // depends on whichever plan they happened to buy last.
   window._deriveAccess = function _deriveAccess(profile) {
-    var plan = profile.subscription_plan;
+    var now = Date.now();
     var access = { oral: false, written: false };
     var expiresAt = null;
 
-    if (plan === 'lifetime') {
+    if (profile.subscription_plan === 'lifetime') {
       access.oral = access.written = true;
-      expiresAt = null;
-    } else if (plan === 'trial') {
-      // Trial is never scope-restricted - full preview of both sections.
-      var trialEnd = new Date(new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000);
-      var trialActive = Date.now() < trialEnd.getTime();
-      access.oral = access.written = trialActive;
-      expiresAt = trialEnd.getTime();
-    } else if (window.ALL_PAID_PLANS.indexOf(plan) !== -1) {
-      var subEnd = profile.subscription_expires_at ? new Date(profile.subscription_expires_at).getTime() : 0;
-      var paidActive = subEnd > 0 && Date.now() < subEnd;
-      // Legacy rows and any payment caught mid-deploy-skew have plan_scope
-      // null - those resolve to 'both' (what they actually paid for under
-      // the old all-or-nothing model), never fail closed to neither.
-      var scope = profile.plan_scope || 'both';
-      access.oral    = paidActive && (scope === 'oral' || scope === 'both');
-      access.written = paidActive && (scope === 'written' || scope === 'both');
-      expiresAt = subEnd || Date.now();
-    } else {
-      expiresAt = Date.now();
+      return { access: access, expiresAt: null };
     }
+
+    var trialEnd = profile.trial_started_at
+      ? new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000
+      : null;
+    if (trialEnd && now < trialEnd) {
+      // Trial is never scope-restricted - full preview of both sections.
+      access.oral = access.written = true;
+      return { access: access, expiresAt: trialEnd };
+    }
+
+    var w = profile.written_expires_at ? new Date(profile.written_expires_at).getTime() : 0;
+    var o = profile.oral_expires_at    ? new Date(profile.oral_expires_at).getTime()    : 0;
+    access.written = w > now;
+    access.oral    = o > now;
+
+    // Earliest LIVE expiry, so the cached content key is revisited when the
+    // first section lapses rather than when the last one does.
+    var live = [];
+    if (access.written) live.push(w);
+    if (access.oral)    live.push(o);
+    expiresAt = live.length ? Math.min.apply(null, live) : now;
+
     return { access: access, expiresAt: expiresAt };
   }
 
@@ -1261,6 +1280,12 @@ function setTheme(t) {
       var profile = res.data;
       if (!profile) return;
 
+      // Cache the whole row, not just the derived booleans. The upgrade-modal
+      // purchase preview needs the per-scope expiry dates to say what a plan
+      // will do, and it must not depend on the buyer having opened the profile
+      // panel first - otherwise an existing subscriber would be told a plan
+      // "unlocks" a section they already hold.
+      window._profileData = profile;
       var derived = window._deriveAccess(profile);
       window._access = derived.access;
       _saveAccessCache(window._access, derived.expiresAt);
@@ -1379,7 +1404,7 @@ function setTheme(t) {
 
         // Also re-check subscription plan so expiry takes effect mid-session
         const { data: profile } = await window._sbClient
-          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope')
+          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope,written_expires_at,oral_expires_at')
           .eq('id', session.user.id).single();
         if (!profile) return;
 
@@ -1515,7 +1540,7 @@ function setTheme(t) {
 
       if (!window._sbClient) return;
       const [{ data: profile }] = await Promise.all([
-        window._sbClient.from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,plan_scope,is_admin').eq('id', user.id).single(),
+        window._sbClient.from('profiles').select('subscription_plan,subscription_expires_at,trial_started_at,plan_scope,written_expires_at,oral_expires_at,is_admin').eq('id', user.id).single(),
         window.loadPricingPlans(),
       ]);
       if (profile) {
@@ -1653,29 +1678,61 @@ function setTheme(t) {
         }
 
       } else {
-        // New duration plans: show the branded track+tier name ("Voyage
-        // Mariner"), with a plain technical subtext underneath so the user
-        // can always tell literally what they have. Legacy plans (pre-scope
-        // split) show their old plain name and were always full access.
+        // Each section now runs on its own clock. Two things are shown that
+        // must NOT be conflated:
+        //   - the LABEL names the most recent purchase/grant, verbatim - that
+        //     is exactly what plan_scope + subscription_plan already record,
+        //     since every purchase overwrites them to its own values.
+        //   - the STATUS line reports what is actually live right now, per
+        //     section, independent of the label above.
+        //
+        // Deriving the label's scope from "which sections are currently live"
+        // (the previous approach) was wrong: someone who bought Written 12mo
+        // and later Oral 3mo separately has BOTH sections live on different
+        // dates, which made that logic synthesize scope='both' and look up a
+        // combined-bundle tier name (e.g. "Expedition Launch") that was never
+        // purchased - Written was never part of that 3-month package. Reading
+        // plan_scope directly names only the real, most recent transaction,
+        // while the status line below independently and correctly discloses
+        // both dates.
         const legacyNames = { starter: 'Starter', standard: 'Standard', pro: 'Pro' };
-        const scope = profile.plan_scope || 'both';
-        const planRow = (window._pricingPlansCache || []).find(function(p) { return p.duration === plan && p.scope === scope; });
-        const scopeLabel = scope === 'written' ? 'Written' : scope === 'oral' ? 'Oral' : 'Written + Oral';
+        const fmt = function(iso) {
+          return new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        };
+        const now = Date.now();
+        const w = profile.written_expires_at ? new Date(profile.written_expires_at).getTime() : 0;
+        const o = profile.oral_expires_at    ? new Date(profile.oral_expires_at).getTime()    : 0;
+        const hasW = w > now, hasO = o > now;
+
+        const lastScope = profile.plan_scope || 'both';
+        const planRow = (window._pricingPlansCache || []).find(function(p) { return p.duration === plan && p.scope === lastScope; });
+        const lastScopeLabel = lastScope === 'written' ? 'Written' : lastScope === 'oral' ? 'Oral' : 'Written + Oral';
+
         if (planRow) {
           labelEl.textContent = planRow.track_name + ' ' + planRow.tier_name;
-          if (subEl) subEl.textContent = scopeLabel + ' · ' + plan.replace('mo', ' months');
+          if (subEl) subEl.textContent = 'Most recent: ' + lastScopeLabel + ' · ' + plan.replace('mo', ' months');
         } else {
           labelEl.textContent = legacyNames[plan] || plan;
-          if (subEl) subEl.textContent = scopeLabel;
+          if (subEl) subEl.textContent = lastScopeLabel;
         }
         labelEl.style.color = '#C8A44A';
-        if (profile.subscription_expires_at) {
-          const dLeft = Math.ceil((new Date(profile.subscription_expires_at) - Date.now()) / 864e5);
-          if (dLeft > 0) {
-            expiryEl.textContent = dLeft + ' days remaining';
-          } else {
-            expiryEl.textContent = 'Expired';
-            labelEl.style.color = '#E07070';
+
+        if (!hasW && !hasO) {
+          expiryEl.textContent = 'Expired';
+          labelEl.style.color = '#E07070';
+          upgradeBtn.style.display = 'block';
+        } else if (hasW && hasO && w !== o) {
+          // Two live sections on different dates - proof they came from
+          // separate purchases. Name both explicitly rather than picking one.
+          expiryEl.textContent = 'Written to ' + fmt(w) + ' · Oral to ' + fmt(o);
+        } else {
+          const end = hasW ? w : o;
+          const dLeft = Math.ceil((end - now) / 864e5);
+          expiryEl.textContent = dLeft + ' days remaining';
+          // One section already gone while the other runs on - say which,
+          // rather than showing a cheerful countdown for partial access.
+          if (!hasW || !hasO) {
+            expiryEl.textContent = (hasW ? 'Written' : 'Oral') + ' only · ' + dLeft + ' days remaining';
             upgradeBtn.style.display = 'block';
           }
         }
@@ -1844,6 +1901,85 @@ function bestValueDuration(scope) {
   return best;
 }
 
+// ── Purchase preview ───────────────────────────────────────────────────────
+// Mirrors applyPurchase() in supabase/functions/_shared/entitlements.ts. The
+// server recomputes this independently and is the source of truth; this exists
+// so the buyer is told, in dates, exactly what their money does BEFORE they
+// spend it. Stacking is invisible otherwise: someone holding Written who buys
+// Expedition cannot otherwise tell whether they are gaining 3 months or losing
+// the 10 they already paid for.
+function _scopesCovered(scope) {
+  return scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
+}
+
+function _addMonths(date, months) {
+  var d = new Date(date);
+  d.setMonth(d.getMonth() + months);
+  return d;
+}
+
+function _durationMonths(dur) {
+  return { '3mo': 3, '6mo': 6, '12mo': 12, starter: 2, standard: 5, pro: 12 }[dur] || 0;
+}
+
+/** Returns [{ scope, from, to, extended }] for a hypothetical purchase. */
+function previewPurchase(duration, scope) {
+  var p = window._profileData || {};
+  var now = new Date();
+  var months = _durationMonths(duration);
+  var trialEnd = p.trial_started_at
+    ? new Date(new Date(p.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000)
+    : null;
+
+  return _scopesCovered(scope).map(function(s) {
+    var currentIso = s === 'written' ? p.written_expires_at : p.oral_expires_at;
+    var current = currentIso ? new Date(currentIso) : null;
+
+    // Latest of: now, trial end, this scope's own existing expiry.
+    var base = now;
+    if (trialEnd && trialEnd > base) base = trialEnd;
+    if (current && current > base) base = current;
+
+    return {
+      scope: s,
+      from: current,
+      to: _addMonths(base, months),
+      extended: !!current && current > now,
+    };
+  });
+}
+
+function _fmtShort(d) {
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+/** One plain sentence describing what this purchase does for this buyer. */
+function purchaseEffectText(duration, scope) {
+  var parts = previewPurchase(duration, scope).map(function(c) {
+    var name = c.scope === 'written' ? 'Written' : 'Oral';
+    return c.extended
+      ? 'extends ' + name + ' to ' + _fmtShort(c.to)
+      : 'unlocks ' + name + ' until ' + _fmtShort(c.to);
+  });
+  if (!parts.length) return '';
+  var sentence = parts.length === 1 ? parts[0] : parts.join(' and ');
+  return sentence.charAt(0).toUpperCase() + sentence.slice(1) + '.';
+}
+
+/** True when this purchase touches a section the buyer already holds. */
+function purchaseTouchesExisting(duration, scope) {
+  return previewPurchase(duration, scope).some(function(c) { return c.extended; });
+}
+
+// Short "what you get" line, per card. SCOPE_FEATURES is the long list shown
+// once above the cards; this is the condensed version so each card stands on
+// its own.
+var SCOPE_CARD_SUMMARY = {
+  written: 'All 7 written topics, solved papers and 39 worked numericals',
+  oral:    'All 23 oral topics, 5,600+ quiz questions and the Surveyor Q&A bank',
+  both:    'Everything: all 23 oral topics, 7 written topics, quizzes, numericals and Surveyor Q&A',
+};
+
 var _upActiveTrack = 'both';
 
 function renderUpgradeTrackTabs() {
@@ -1883,6 +2019,10 @@ function renderUpgradeCards() {
       ? '<span class="up-price-strike">' + fmtRupees(row.base_amount) + '</span> <span class="up-price">' + fmtRupees(price.amount) + '</span>'
       : '<span class="up-price">' + fmtRupees(price.amount) + '</span>';
     var descHtml = row.description ? '<div class="up-card-desc">' + escUp(row.description) + '</div>' : '';
+    // Every card says what you get and what it does to your dates, so a card
+    // is self-explanatory without reading the track blurb above it.
+    var getsHtml = '<div class="up-card-gets">' + escUp(SCOPE_CARD_SUMMARY[scope] || '') + '</div>';
+    var effectHtml = '<div class="up-card-effect">' + escUp(purchaseEffectText(dur, scope)) + '</div>';
     return '<div class="up-plan-card' + (isBest ? ' up-plan-card-best' : '') + '" id="up-card-' + dur + '-' + scope + '" data-duration="' + dur + '">'
       + ribbon
       + '<div style="display:flex;align-items:center;justify-content:space-between;">'
@@ -1890,7 +2030,9 @@ function renderUpgradeCards() {
       +   '<div style="text-align:right;">' + priceHtml + '</div>'
       + '</div>'
       + descHtml
+      + getsHtml
       + '<button class="up-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '">Pay ' + fmtRupees(price.amount) + ' with Razorpay</button>'
+      + effectHtml
       + '</div>';
   }).join('');
 
@@ -1920,6 +2062,7 @@ function renderGateCards() {
       +   '<div style="font-size:11.5px;color:#4A6880;margin-top:2px;">' + escUp(dur.replace('mo', ' months')) + ' access</div></div>'
       + '<div style="text-align:right;"><div style="font-size:16px;font-weight:700;color:#C8A44A;">' + fmtRupees(price.amount) + '</div>'
       +   '<button class="gate-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '" style="margin-top:4px;background:#C8A44A;color:#070D1A;border:none;border-radius:4px;padding:5px 14px;font-size:12px;font-weight:700;cursor:pointer;">Buy</button></div>'
+      + '<div style="flex-basis:100%;font-size:10.5px;color:#4A6880;margin-top:6px;line-height:1.45;">' + escUp(purchaseEffectText(dur, scope)) + '</div>'
       + '</div>';
   }).join('');
 }
@@ -2013,7 +2156,14 @@ async function redeemCoupon() {
     if (!res.ok) throw new Error(data.error || 'That code is not valid');
 
     var scope = data.scope || 'both';
-    window._access = { oral: scope === 'oral' || scope === 'both', written: scope === 'written' || scope === 'both' };
+    // Merge, never replace. A coupon adds access; assigning a fresh object
+    // would strip whatever the user already held, briefly locking a paid
+    // section they still own until the reload below repaired it.
+    var prev = window._access || { oral: false, written: false };
+    window._access = {
+      oral:    prev.oral    || scope === 'oral'    || scope === 'both',
+      written: prev.written || scope === 'written' || scope === 'both',
+    };
     var planRow = findPlanRow(data.plan, scope);
     var planLabel = planRow ? (planRow.track_name + ' ' + planRow.tier_name) : (data.plan.charAt(0).toUpperCase() + data.plan.slice(1));
     var msg = data.expires_at
@@ -2110,13 +2260,23 @@ async function startPayment(plan, scope) {
           var verifyData = await verifyRes.json();
           if (!verifyRes.ok) throw new Error(verifyData.error || 'Verification failed');
 
-          // Update local access state
+          // Update local access state. Merge, never replace: a purchase ADDS
+          // a section, and overwriting would strip whatever the buyer already
+          // held - the same mistake in the UI that the server used to make in
+          // the database.
           var vScope = verifyData.scope || 'both';
-          window._access = { oral: vScope === 'oral' || vScope === 'both', written: vScope === 'written' || vScope === 'both' };
+          var vPrev = window._access || { oral: false, written: false };
+          window._access = {
+            oral:    vPrev.oral    || vScope === 'oral'    || vScope === 'both',
+            written: vPrev.written || vScope === 'written' || vScope === 'both',
+          };
           var vRow = findPlanRow(verifyData.plan, vScope);
           var planLabel = vRow ? (vRow.track_name + ' ' + vRow.tier_name) : (verifyData.plan.charAt(0).toUpperCase() + verifyData.plan.slice(1));
-          var expiryDate = new Date(verifyData.expires_at).toLocaleDateString('en-IN', {day:'numeric',month:'short',year:'numeric'});
-          setUpStatus('Payment successful! ' + planLabel + ' plan active until ' + expiryDate + '.', true);
+          // Report the effect per section, computed the same way the card
+          // preview did, so the success message matches what they were shown
+          // before paying rather than a single blended date.
+          var effectMsg = purchaseEffectText(verifyData.plan, vScope);
+          setUpStatus('Payment successful! ' + planLabel + ' is active. ' + effectMsg, true);
 
           // Close modal after 2.5s and reload to reflect new plan
           setTimeout(function() {
@@ -2143,11 +2303,55 @@ async function startPayment(plan, scope) {
   }
 }
 
+// Confirmation shown ONLY when the purchase touches a section the buyer
+// already holds. A first-time buyer has nothing at stake and goes straight to
+// Razorpay; someone extending existing access gets the before/after in dates,
+// because that is the case where "what did my money just do" is genuinely
+// unclear. Built with the existing showCustomConfirm() styling vocabulary but
+// as its own element, since it needs a table rather than a message string.
+function confirmPurchase(duration, scope, onConfirm) {
+  if (!purchaseTouchesExisting(duration, scope)) { onConfirm(); return; }
+
+  var rows = previewPurchase(duration, scope).map(function(c) {
+    var name = c.scope === 'written' ? 'Written' : 'Oral';
+    var before = c.from ? _fmtShort(c.from) : 'none';
+    var arrow = c.extended ? ' &rarr; ' : '';
+    var after = c.extended ? _fmtShort(c.to) : _fmtShort(c.to);
+    return '<tr>'
+      + '<td style="padding:7px 0;font-size:13px;color:#8FA3B8;">' + name + '</td>'
+      + '<td style="padding:7px 0;font-size:13px;color:#DDE5EF;text-align:right;font-weight:600;">'
+      +   (c.extended ? escUp(before) + arrow + escUp(after) : escUp(after))
+      +   '<div style="font-size:10.5px;font-weight:400;color:#4A6880;margin-top:2px;">'
+      +     (c.extended ? '+' + _durationMonths(duration) + ' months' : 'new access')
+      +   '</div>'
+      + '</td></tr>';
+  }).join('');
+
+  var ov = document.createElement('div');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
+  ov.innerHTML =
+    '<div style="background:#0D1E33;border:1px solid #1A3050;border-radius:14px;padding:22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);">'
+    + '<div style="font-size:16px;font-weight:700;color:#DDE5EF;margin-bottom:4px;">Confirm your purchase</div>'
+    + '<div style="font-size:12.5px;color:#8FA3B8;margin-bottom:14px;line-height:1.5;">Here is exactly what changes:</div>'
+    + '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">' + rows + '</table>'
+    + '<div style="font-size:12px;color:#5DC87A;background:rgba(93,200,122,.09);border:1px solid rgba(93,200,122,.25);border-radius:8px;padding:9px 11px;line-height:1.5;margin-bottom:16px;">Nothing you already paid for is lost. New time is added on top of what you have.</div>'
+    + '<button id="_cp-go" style="width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Continue to payment</button>'
+    + '<button id="_cp-no" style="width:100%;background:none;color:#8FA3B8;border:none;padding:11px;font-size:13px;cursor:pointer;margin-top:4px;">Cancel</button>'
+    + '</div>';
+  document.body.appendChild(ov);
+
+  function close() { if (ov.parentNode) ov.parentNode.removeChild(ov); }
+  ov.querySelector('#_cp-go').onclick = function() { close(); onConfirm(); };
+  ov.querySelector('#_cp-no').onclick = close;
+  ov.addEventListener('click', function(e) { if (e.target === ov) close(); });
+}
+
 // Wire plan card buy buttons (upgrade modal tier cards + gate overlay cards)
 document.getElementById('upgrade-modal').addEventListener('click', function(e) {
   var btn = e.target.closest('.up-buy-btn');
   if (!btn || btn.disabled) return;
-  startPayment(btn.dataset.plan, btn.dataset.scope);
+  var plan = btn.dataset.plan, scope = btn.dataset.scope;
+  confirmPurchase(plan, scope, function() { startPayment(plan, scope); });
 });
 
 // Close on backdrop click

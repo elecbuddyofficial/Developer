@@ -1041,7 +1041,7 @@
           </div>
           <div class="ad-field" id="grant-scope-field">
             <label class="ad-label">Scope</label>
-            <select class="ad-select" id="grant-scope">
+            <select class="ad-select" id="grant-scope" onchange="_refreshGrantPreview()">
               <option value="written">Written Only - Passage</option>
               <option value="oral">Oral Only - Voyage</option>
               <option value="both" selected>Both - Expedition</option>
@@ -1049,9 +1049,12 @@
           </div>
           <div class="ad-field">
             <label class="ad-label">Access Until (required for paid plans)</label>
-            <input class="ad-input" id="grant-expiry" type="date">
+            <input class="ad-input" id="grant-expiry" type="date" onchange="_refreshGrantPreview()">
           </div>
         </div>
+        <!-- Spells out exactly which sections this grant touches and which it
+             leaves alone, before the admin commits it. -->
+        <div id="grant-preview" style="display:none;font-size:12px;line-height:1.5;color:var(--text2);background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r8);padding:9px 11px;margin-top:8px"></div>
         <div style="display:flex;gap:8px;margin-top:4px;flex-wrap:wrap">
           <button class="ad-btn btn-primary" onclick="grantAccess()">Update Access</button>
           <button class="ad-btn btn-danger"  onclick="revokeAccess()">Revoke to Trial</button>
@@ -1423,7 +1426,7 @@
           </div>
           <div class="ad-field" id="prof-edit-scope-field">
             <label class="ad-label">Scope</label>
-            <select class="ad-select" id="prof-edit-scope">
+            <select class="ad-select" id="prof-edit-scope" onchange="_refreshProfEditPreview()">
               <option value="written">Written Only - Passage</option>
               <option value="oral">Oral Only - Voyage</option>
               <option value="both" selected>Both - Expedition</option>
@@ -1431,9 +1434,11 @@
           </div>
           <div class="ad-field">
             <label class="ad-label">Access Until (required for paid plans)</label>
-            <input class="ad-input" id="prof-edit-expiry" type="date">
+            <input class="ad-input" id="prof-edit-expiry" type="date" onchange="_refreshProfEditPreview()">
           </div>
         </div>
+        <!-- Same preview as the Grant tab: which sections change, which stay. -->
+        <div id="prof-edit-preview" style="display:none;font-size:12px;line-height:1.5;color:var(--text2);background:var(--blue-dim);border:1px solid var(--blue-border);border-radius:var(--r8);padding:9px 11px;margin:8px 0"></div>
         <div style="display:flex;gap:8px">
           <button class="ad-btn btn-primary btn-sm" onclick="profSaveAccess()">Save</button>
           <button class="ad-btn btn-ghost btn-sm" onclick="toggleProfEdit(false)">Cancel</button>
@@ -1498,7 +1503,7 @@
 /* ── CONFIG ─────────────────────────────────────────────────────── */
 var SB_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co';
 var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
-var _sb, _grantUserId, _myId, _myEmail;
+var _sb, _grantUserId, _grantUser, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
 var TAB_NAMES = ['dashboard', 'users', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'activity', 'status'];
@@ -1681,7 +1686,11 @@ function isTrialExpired(trialStartedAt, now) {
   return new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000 <= now.getTime();
 }
 
-function expiryDisplay(iso, plan, trialStartedAt) {
+// `user` is optional and carries the per-scope dates. When present, Written
+// and Oral are reported separately - a customer holding Written to March and
+// Oral to December has no single expiry date, and showing one would misreport
+// half their access.
+function expiryDisplay(iso, plan, trialStartedAt, user) {
   if (plan === 'lifetime') return '<span class="active-tag">Lifetime</span>';
   if (plan === 'trial' || !plan) {
     if (!trialStartedAt) return '<span class="date-cell">-</span>';
@@ -1690,6 +1699,20 @@ function expiryDisplay(iso, plan, trialStartedAt) {
       ? '<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>'
       : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>';
   }
+
+  if (user && (user.written_expires_at || user.oral_expires_at)) {
+    var now = new Date();
+    var tag = function(label, val) {
+      if (!val) return '';
+      var live = new Date(val) > now;
+      return '<span class="' + (live ? 'active-tag' : 'expired-tag') + '" style="margin-right:4px;">'
+           + label + ' ' + fmtDate(val) + '</span>';
+    };
+    var w = tag('W', user.written_expires_at);
+    var o = tag('O', user.oral_expires_at);
+    if (w || o) return w + o;
+  }
+
   if (!iso) return '<span class="date-cell">-</span>';
   var d = new Date(iso);
   if (d < new Date()) return '<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>';
@@ -1700,7 +1723,7 @@ function expiryDisplay(iso, plan, trialStartedAt) {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, scope, created_at, paid_at, user_id, razorpay_payment_id')
@@ -1714,7 +1737,7 @@ async function loadDashboard() {
   if (profilesRes.error) {
     console.warn('dashboard profile query failed, retrying without topic_progress:', profilesRes.error.message);
     profilesRes = await _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at, email, full_name')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name')
       .order('created_at', { ascending: false });
   }
 
@@ -2033,7 +2056,7 @@ var _userFilter = 'all';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, trial_started_at, created_at')
+    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at')
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -2108,7 +2131,7 @@ function renderUsers(users) {
           + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '-') + '</button></td>'
           + '<td>' + esc(u.full_name || '-') + '</td>'
           + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
-          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at) + '</td>'
+          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at, u) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
           + '<td style="display:flex;gap:6px">'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
@@ -2164,7 +2187,7 @@ async function openUserProfile(userId) {
   document.getElementById('prof-email').textContent = u.email || '-';
   document.getElementById('prof-uid').textContent = u.id;
   document.getElementById('prof-plan').innerHTML = planBadge(u.subscription_plan, u.plan_scope);
-  document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at, u);
   document.getElementById('prof-joined').textContent = fmtDate(u.created_at);
   document.getElementById('prof-spent').textContent = '-';
   document.getElementById('prof-orders').textContent = '-';
@@ -2342,8 +2365,87 @@ function _syncScopeField(planSelectId, fieldId, scopeSelectId) {
     field.style.display = 'none';
   }
 }
-function grantPlanChanged() { _syncScopeField('grant-plan', 'grant-scope-field', 'grant-scope'); }
-function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-scope-field', 'prof-edit-scope'); }
+function grantPlanChanged() { _syncScopeField('grant-plan', 'grant-scope-field', 'grant-scope'); _refreshGrantPreview(); }
+function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-scope-field', 'prof-edit-scope'); _refreshProfEditPreview(); }
+
+// ── Per-scope access writes ────────────────────────────────────────────────
+// Each section carries its own expiry (see app/admin/per_scope_expiry_setup.sql).
+// An admin grant sets ONLY the sections it covers and leaves the others
+// untouched. That is deliberate: clearing an uncovered section would repeat
+// exactly the bug this whole change exists to fix - granting Oral to someone
+// holding paid Written would silently destroy the Written they bought. To
+// remove access outright, use Force Trial Expiry, which clears everything.
+function scopeAccessUpdate(plan, scope, expiry) {
+  var upd = { subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope };
+
+  if (plan === 'lifetime') {
+    // Not date-based; stale per-scope dates would later contradict it.
+    upd.written_expires_at = null;
+    upd.oral_expires_at = null;
+    return upd;
+  }
+  if (plan === 'trial') {
+    upd.written_expires_at = null;
+    upd.oral_expires_at = null;
+    return upd;
+  }
+  var covered = scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
+  if (covered.indexOf('written') !== -1) upd.written_expires_at = expiry;
+  if (covered.indexOf('oral')    !== -1) upd.oral_expires_at    = expiry;
+  return upd;
+}
+
+/** Plain-English description of what a grant will do, shown before saving. */
+function scopeAccessPreview(user, plan, scope, expiry) {
+  if (plan === 'lifetime') return 'Grants unlimited access to everything. Existing expiry dates are cleared.';
+  if (plan === 'trial')    return 'Puts them back on trial and clears all paid access dates.';
+  if (!expiry)             return '';
+
+  var when = fmtDate(expiry);
+  var covered = scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
+  var names = { written: 'Written', oral: 'Oral' };
+  var setPart = covered.map(function(s) { return names[s]; }).join(' and ') + ' set to ' + when + '.';
+
+  var untouched = ['written', 'oral'].filter(function(s) { return covered.indexOf(s) === -1; });
+  var keepPart = '';
+  untouched.forEach(function(s) {
+    var cur = user && user[s + '_expires_at'];
+    if (cur && new Date(cur) > new Date()) {
+      keepPart = ' ' + names[s] + ' is left unchanged, still running to ' + fmtDate(cur) + '.';
+    }
+  });
+  return setPart + keepPart;
+}
+
+function _renderPreviewInto(elId, text) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  el.textContent = text || '';
+  el.style.display = text ? 'block' : 'none';
+}
+
+function _refreshProfEditPreview() {
+  var planEl = document.getElementById('prof-edit-plan');
+  if (!planEl || !_profUser) return;
+  var plan = planEl.value;
+  var expVal = document.getElementById('prof-edit-expiry').value;
+  var scope = requiresScope(plan) ? document.getElementById('prof-edit-scope').value
+    : (LEGACY_PAID_PLANS.indexOf(plan) !== -1 ? 'both' : null);
+  _renderPreviewInto('prof-edit-preview',
+    scopeAccessPreview(_profUser, plan, scope, expVal ? new Date(expVal).toISOString() : null));
+}
+
+function _refreshGrantPreview() {
+  var planEl = document.getElementById('grant-plan');
+  if (!planEl) return;
+  var plan = planEl.value;
+  var expEl = document.getElementById('grant-expiry');
+  var expVal = expEl ? expEl.value : '';
+  var scope = requiresScope(plan) ? document.getElementById('grant-scope').value
+    : (LEGACY_PAID_PLANS.indexOf(plan) !== -1 ? 'both' : null);
+  _renderPreviewInto('grant-preview',
+    scopeAccessPreview(_grantUser, plan, scope, expVal ? new Date(expVal).toISOString() : null));
+}
 
 async function profSaveAccess() {
   if (!_profUser) return;
@@ -2365,8 +2467,9 @@ async function profSaveAccess() {
     return;
   }
 
+  var _upd = scopeAccessUpdate(plan, scope, expiry);
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope })
+    .update(_upd)
     .eq('id', _profUser.id);
 
   if (error) {
@@ -2383,15 +2486,14 @@ async function profSaveAccess() {
     source: 'profile_modal',
   });
 
-  // Sync local state everywhere it's cached
-  _profUser.subscription_plan = plan;
-  _profUser.plan_scope = scope;
-  _profUser.subscription_expires_at = expiry;
+  // Sync local state everywhere it's cached, including the per-scope dates so
+  // the table and profile modal don't show stale access until the next reload.
+  Object.keys(_upd).forEach(function(k) { _profUser[k] = _upd[k]; });
   var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
-  if (u) { u.subscription_plan = plan; u.plan_scope = scope; u.subscription_expires_at = expiry; }
+  if (u) Object.keys(_upd).forEach(function(k) { u[k] = _upd[k]; });
 
   document.getElementById('prof-plan').innerHTML = planBadge(plan, scope);
-  document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan, _profUser.trial_started_at);
+  document.getElementById('prof-expiry').innerHTML = expiryDisplay(expiry, plan, _profUser.trial_started_at, _profUser);
   toggleProfEdit(false);
   toast('Access updated');
   updatePillCounts(_allUsers);
@@ -2411,8 +2513,12 @@ async function profForceTrialExpiry() {
   if (!confirm(msg)) return;
 
   var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+  // Clears the per-scope dates too - this is the one action that genuinely
+  // means "remove all access", so leaving a live Written/Oral date behind
+  // would silently keep the paywall open.
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null, plan_scope: null })
+    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null,
+              plan_scope: null, written_expires_at: null, oral_expires_at: null })
     .eq('id', _profUser.id);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -2426,8 +2532,11 @@ async function profForceTrialExpiry() {
   _profUser.trial_started_at = backdated;
   _profUser.subscription_expires_at = null;
   _profUser.plan_scope = null;
+  _profUser.written_expires_at = null;
+  _profUser.oral_expires_at = null;
   var u = _allUsers.find(function(x) { return x.id === _profUser.id; });
-  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null; u.plan_scope = null; }
+  if (u) { u.subscription_plan = 'trial'; u.trial_started_at = backdated; u.subscription_expires_at = null;
+           u.plan_scope = null; u.written_expires_at = null; u.oral_expires_at = null; }
 
   document.getElementById('prof-plan').innerHTML = planBadge('trial');
   document.getElementById('prof-expiry').innerHTML = expiryDisplay(null, 'trial', backdated);
@@ -2513,16 +2622,18 @@ function grantKeyNav(e) {
 
 function selectGrantUser(user) {
   _grantUserId = user.id;
+  _grantUser = user;
   document.getElementById('grant-email').value = user.email || '';
   document.getElementById('grant-dropdown').classList.remove('open');
   _grantDdIndex = -1;
 
   document.getElementById('gf-name').textContent = (user.full_name || 'No name set') + ' · ' + user.email;
-  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan, user.plan_scope) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan, user.trial_started_at);
+  document.getElementById('gf-meta').innerHTML = 'Current plan: ' + planBadge(user.subscription_plan, user.plan_scope) + ' ' + expiryDisplay(user.subscription_expires_at, user.subscription_plan, user.trial_started_at, user);
   document.getElementById('grant-expiry').value = user.subscription_expires_at
     ? user.subscription_expires_at.substring(0, 10) : '';
   document.getElementById('grant-scope').value = user.plan_scope || 'both';
   grantPlanChanged();
+  _refreshGrantPreview();
   document.getElementById('grant-found').style.display = 'block';
 }
 
@@ -2548,8 +2659,9 @@ async function grantAccess() {
     return;
   }
 
+  var _upd = scopeAccessUpdate(plan, scope, expiry);
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope })
+    .update(_upd)
     .eq('id', _grantUserId);
 
   if (error) { toast('Update failed: ' + error.message, 'err'); return; }
@@ -2557,10 +2669,12 @@ async function grantAccess() {
   var u = _allUsers.find(function(x) { return x.id === _grantUserId; });
   logAdminAction('grant_access', u || { id: _grantUserId }, {
     plan: plan, scope: scope, expires_at: expiry,
+    written_expires_at: _upd.written_expires_at,
+    oral_expires_at: _upd.oral_expires_at,
     previous_plan: u ? u.subscription_plan : null,
     source: 'grant_tab',
   });
-  if (u) { u.subscription_plan = plan; u.plan_scope = scope; u.subscription_expires_at = expiry; selectGrantUser(u); }
+  if (u) { Object.keys(_upd).forEach(function(k) { u[k] = _upd[k]; }); selectGrantUser(u); }
   loadDashboard();
   loadUsers();
 }

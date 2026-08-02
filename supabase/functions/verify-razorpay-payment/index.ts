@@ -2,19 +2,11 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
+import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, content-type',
-};
-
-const PLAN_MONTHS: Record<string, number> = {
-  starter: 2,
-  standard: 5,
-  pro: 12,
-  '3mo': 3,
-  '6mo': 6,
-  '12mo': 12,
 };
 
 const json = (data: unknown, status = 200) =>
@@ -22,12 +14,6 @@ const json = (data: unknown, status = 200) =>
     status,
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
-}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
@@ -93,22 +79,25 @@ serve(async (req) => {
     const months = PLAN_MONTHS[payment.plan];
     if (!months) return json({ error: 'Unknown plan' }, 400);
 
-    // Subscription starts after trial if trial is still running, else now
+    // Per-scope stacking. This purchase extends only the scope(s) it covers,
+    // each from its own current expiry, so buying Oral can never shorten
+    // Written the buyer already paid for. See _shared/entitlements.ts.
     const { data: profile } = await sb
       .from('profiles')
-      .select('trial_started_at')
+      .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at')
       .eq('id', user.id)
       .single();
 
     const now = new Date();
-    let startDate = now;
-    if (profile?.trial_started_at) {
-      const trialEnd = new Date(
-        new Date(profile.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000,
-      );
-      if (trialEnd > now) startDate = trialEnd;
-    }
-    const expiresAt = addMonths(startDate, months);
+    const effect = applyPurchase(profile ?? {}, payment.scope, months, now);
+    const startDate = now;
+    // Legacy single-slot value, kept only for display and for a client still
+    // running cached JS mid-deploy. Deliberately the EARLIEST of the scopes
+    // this purchase covers: an old client reading it will then under-grant
+    // rather than over-grant once the first scope lapses.
+    const expiresAt = new Date(
+      Math.min(...effect.changes.map(c => new Date(c.to).getTime())),
+    );
 
     // Compare-and-swap rather than a read-then-write. The razorpay-webhook
     // function processes the same payment independently and the two can race;
@@ -152,6 +141,8 @@ serve(async (req) => {
       subscription_plan:       payment.plan,
       subscription_expires_at: expiresAt.toISOString(),
       plan_scope:               payment.scope || 'both',
+      written_expires_at:      effect.written_expires_at,
+      oral_expires_at:         effect.oral_expires_at,
     }).eq('id', user.id);
 
     // Payment confirmation email. The purchase is already applied above by
@@ -162,7 +153,7 @@ serve(async (req) => {
         plan:        payment.plan,
         scope:       payment.scope || 'both',
         amountPaise: payment.amount,
-        expiresAt:   expiresAt.toISOString(),
+        changes:     effect.changes,
         orderId:     order_id,
         paymentId:   payment_id,
       };

@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { applyPurchase } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Redeems a comp code for the calling user.
@@ -19,15 +20,6 @@ const json = (data: unknown, status = 200) =>
     status,
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
-
-// Must stay in sync with get-content-key, the authoritative access gate.
-const TRIAL_DAYS = 3;
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date);
-  d.setMonth(d.getMonth() + months);
-  return d;
-}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
@@ -107,33 +99,43 @@ serve(async (req) => {
       return json({ error: 'You have already used this code' }, 409);
     }
 
-    // Grant access. Same trial-aware start as a paid purchase, so redeeming
-    // early during a trial does not waste the days already given.
+    // Grant access. Same per-scope stacking as a paid purchase (see
+    // _shared/entitlements.ts): the coupon extends only the scope(s) it
+    // covers, each from its own expiry, and the trial-aware start means
+    // redeeming early during a trial does not waste the free days.
     let expiresAt: string | null = null;
-    if (coupon.plan !== 'lifetime') {
+    const grant: Record<string, unknown> = {
+      subscription_plan: coupon.plan,
+      plan_scope:        coupon.plan === 'lifetime' ? null : (coupon.scope || 'both'),
+    };
+
+    if (coupon.plan === 'lifetime') {
+      // Lifetime is not date-based; clearing the per-scope columns keeps them
+      // from later contradicting the lifetime flag.
+      grant.subscription_expires_at = null;
+      grant.written_expires_at = null;
+      grant.oral_expires_at = null;
+    } else {
       const months = coupon.months || 1;
       const { data: profile } = await sb
         .from('profiles')
-        .select('trial_started_at')
+        .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at')
         .eq('id', user.id)
         .maybeSingle();
 
-      const now = new Date();
-      let startDate = now;
-      if (profile?.trial_started_at) {
-        const trialEnd = new Date(
-          new Date(profile.trial_started_at).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000,
-        );
-        if (trialEnd > now) startDate = trialEnd;
-      }
-      expiresAt = addMonths(startDate, months).toISOString();
+      const effect = applyPurchase(profile ?? {}, coupon.scope, months, new Date());
+      // Legacy single-slot value: earliest covered scope, so a stale client
+      // under-grants rather than over-grants.
+      expiresAt = new Date(
+        Math.min(...effect.changes.map(c => new Date(c.to).getTime())),
+      ).toISOString();
+
+      grant.subscription_expires_at = expiresAt;
+      grant.written_expires_at = effect.written_expires_at;
+      grant.oral_expires_at = effect.oral_expires_at;
     }
 
-    await sb.from('profiles').update({
-      subscription_plan:       coupon.plan,
-      subscription_expires_at: expiresAt,
-      plan_scope:               coupon.plan === 'lifetime' ? null : (coupon.scope || 'both'),
-    }).eq('id', user.id);
+    await sb.from('profiles').update(grant).eq('id', user.id);
 
     await sb.from('admin_actions').insert({
       admin_id:       coupon.created_by,
