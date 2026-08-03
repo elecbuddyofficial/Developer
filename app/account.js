@@ -50,9 +50,63 @@
     created:  { label: 'Incomplete', color: '#6E8AA6' },
   };
 
+  // One definition of where to find us. Three profile panels, two legal pages
+  // and a handful of inline mailto: links already referenced the support
+  // address separately; a handle added by hand in each of those is a handle
+  // that will be wrong in one of them within a month.
+  var CONTACT = {
+    instagram: 'elec.buddy',
+    email: 'support@elec-buddy.com',
+  };
+
+  var IG_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>';
+  var MAIL_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>';
+
+  function contactHtml() {
+    // min-height 44px matches the touch-target floor used everywhere else in
+    // the app; the natural height of this row was 38px, which is under it.
+    var row = 'display:flex;align-items:center;justify-content:center;gap:7px;'
+            + 'padding:9px 10px;min-height:44px;box-sizing:border-box;'
+            + 'border:1px solid #1A3050;border-radius:6px;'
+            + 'font-size:12px;color:#8FA3B8;text-decoration:none;flex:1;min-width:0;';
+    return '<div style="margin-top:14px;padding-top:14px;border-top:1px solid #1A3050;">'
+      + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E8AA6;text-align:center;margin-bottom:9px;">Get in touch</div>'
+      // Wraps rather than squeezing, so both stay tappable on a narrow phone.
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
+      +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" style="' + row + '">'
+      +     IG_ICON + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@' + CONTACT.instagram + '</span></a>'
+      +   '<a href="mailto:' + CONTACT.email + '" style="' + row + '">'
+      +     MAIL_ICON + '<span>Contact us</span></a>'
+      + '</div>'
+      + '<div style="text-align:center;margin-top:8px;font-size:10.5px;color:#6E8AA6;word-break:break-all;">' + CONTACT.email + '</div>'
+      + '</div>';
+  }
+
+  // Any page that wants the block just puts an empty element with
+  // data-eb-contact in its markup; no per-page wiring to keep in step.
+  function mountContact() {
+    var slots = document.querySelectorAll('[data-eb-contact]');
+    for (var i = 0; i < slots.length; i++) {
+      if (!slots[i].getAttribute('data-eb-mounted')) {
+        slots[i].innerHTML = contactHtml();
+        slots[i].setAttribute('data-eb-mounted', '1');
+      }
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', mountContact);
+  } else {
+    mountContact();
+  }
+
   window.EBAccount = {
     esc: esc,
     rupees: rupees,
+    CONTACT: CONTACT,
+    contactHtml: contactHtml,
+    mountContact: mountContact,
 
     /**
      * Every payment this user has ever started, newest first, with the coupon
