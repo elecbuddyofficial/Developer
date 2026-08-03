@@ -2940,7 +2940,29 @@ document.getElementById('up-track-tabs').addEventListener('click', function(e) {
   renderUpgradeCards();
 });
 
+// Records a step on the way to paying, so a low conversion rate can be
+// explained rather than just observed. `payments` only exists once an order is
+// created, which makes everyone who looked at the price and closed the window
+// invisible.
+//
+// Fire and forget, and deliberately never awaited: this is measurement, and it
+// must not be able to slow down, block, or break a purchase. Every failure is
+// swallowed.
+function trackFunnel(event, plan, scope, detail) {
+  try {
+    if (!window._sbClient || !window._sbUser) return;
+    window._sbClient.from('funnel_events').insert({
+      user_id: window._sbUser.id,
+      event:   event,
+      plan:    plan || null,
+      scope:   scope || null,
+      detail:  detail ? String(detail).slice(0, 200) : null,
+    }).then(function(){}, function(){});
+  } catch (e) {}
+}
+
 function openUpgradeModal(preferredPlan, preferredScope) {
+  trackFunnel('upgrade_opened', preferredPlan, preferredScope);
   var modal = document.getElementById('upgrade-modal');
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -3171,6 +3193,7 @@ function setUpBtnsDisabled(disabled) {
 }
 
 async function startPayment(plan, scope) {
+  trackFunnel('plan_selected', plan, scope);
   if (!window._sbClient || !window._sbUser) {
     setUpStatus('You must be signed in to purchase.', false);
     return;
@@ -3293,12 +3316,20 @@ async function startPayment(plan, scope) {
 
     var rzp = new Razorpay(options);
     rzp.on('payment.failed', function(resp) {
+      // The single most useful line in here. A cluster of these with the same
+      // description is a broken checkout, not people changing their minds.
+      trackFunnel('payment_failed', plan, scope, resp && resp.error && resp.error.description);
       setUpStatus('Payment failed: ' + (resp.error && resp.error.description || 'Unknown error'), false);
       setUpBtnsDisabled(false);
     });
+    trackFunnel('checkout_opened', plan, scope);
     rzp.open();
 
   } catch(e) {
+    // Failed before checkout could even open: a rejected coupon, a sold-out
+    // code, no network, the payment provider unreachable. Distinct from
+    // payment_failed, and a very different problem to fix.
+    trackFunnel('checkout_blocked', plan, scope, e && e.message);
     setUpStatus(e.message || 'Something went wrong. Please try again.', false);
     setUpBtnsDisabled(false);
   }

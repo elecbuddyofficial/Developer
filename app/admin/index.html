@@ -884,6 +884,21 @@
       <p>Live overview of growth, revenue, and subscription health.</p>
     </div>
 
+    <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Upgrade funnel</div>
+      <div class="ad-card-sub">
+        How far people get on the way to paying, and where they stop. Counts
+        <strong>people</strong>, not clicks, so someone who opens the window four times is
+        one person still deciding. Each step includes everyone who got further, so the
+        numbers only ever go down. A big drop between two steps is where the problem is:
+        losing them at <em>Picked a plan</em> points at price or at the tiers being
+        confusing, losing them at <em>Reached the payment window</em> points at checkout
+        itself.
+      </div>
+      <div id="funnel-body"><div class="ad-loading">Loading...</div></div>
+      <div id="funnel-problems" style="margin-top:12px"></div>
+    </div>
+
     <!-- Primary KPIs -->
     <div class="dash-kpi-grid">
       <div class="dash-kpi dk-blue">
@@ -1905,7 +1920,77 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
 }
 
 /* ── DASHBOARD ───────────────────────────────────────────────────── */
+async function loadFunnel() {
+  var body = document.getElementById('funnel-body');
+  if (!body) return;
+
+  var res = await _sb.from('funnel_summary').select('*').order('step');
+  if (res.error) {
+    body.innerHTML = '<div class="ad-loading">Run funnel_setup.sql to enable the funnel.</div>';
+    return;
+  }
+  var rows = res.data || [];
+  if (!rows.length) { body.innerHTML = '<div class="ad-loading">No data yet.</div>'; return; }
+
+  var top = rows[0].people || 0;
+  body.innerHTML = rows.map(function(r, i) {
+    var n = r.people || 0;
+    // Width is relative to the top of the funnel so the shape is visible at a
+    // glance. Guarded because a zero top would divide by zero on a quiet day.
+    var pct = top > 0 ? Math.round((n / top) * 100) : 0;
+    var prev = i > 0 ? (rows[i - 1].people || 0) : null;
+    var lost = prev !== null ? prev - n : null;
+    var lostPct = (prev && prev > 0 && lost > 0) ? Math.round((lost / prev) * 100) : 0;
+    // A drop of more than half between two steps is worth looking at rather
+    // than a number to admire.
+    var bad = lostPct >= 50;
+    return '<div style="margin-bottom:12px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px">'
+      +   '<span style="font-size:13px;color:var(--text)">' + esc(r.label) + '</span>'
+      +   '<span style="font-size:15px;font-weight:700;font-variant-numeric:tabular-nums">' + n + '</span>'
+      + '</div>'
+      + '<div style="height:8px;background:var(--surface2);border-radius:99px;overflow:hidden">'
+      +   '<div style="height:100%;width:' + Math.max(pct, n > 0 ? 3 : 0) + '%;background:' + (bad ? 'var(--red)' : 'var(--blue)') + ';border-radius:99px"></div>'
+      + '</div>'
+      + (lost > 0
+          ? '<div style="font-size:11px;color:' + (bad ? 'var(--red)' : 'var(--text3)') + ';margin-top:3px">'
+            + lost + ' dropped off here (' + lostPct + '%)</div>'
+          : '')
+      + '</div>';
+  }).join('');
+
+  // Checkout errors, grouped. A repeated message here is a broken checkout,
+  // which reads very differently from people simply changing their minds.
+  var errs = await _sb.from('funnel_events')
+    .select('event, detail, created_at')
+    .in('event', ['payment_failed', 'checkout_blocked'])
+    .order('created_at', { ascending: false })
+    .limit(200);
+
+  var box = document.getElementById('funnel-problems');
+  var list = (errs.data || []);
+  if (!list.length) { box.innerHTML = ''; return; }
+
+  var counts = {};
+  list.forEach(function(e) {
+    var k = (e.event === 'payment_failed' ? 'Payment failed: ' : 'Blocked before checkout: ')
+          + (e.detail || 'no reason given');
+    counts[k] = (counts[k] || 0) + 1;
+  });
+  var top5 = Object.keys(counts).sort(function(a, b) { return counts[b] - counts[a]; }).slice(0, 5);
+
+  box.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:7px">'
+    + 'What stopped them</div>'
+    + top5.map(function(k) {
+        return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:6px 0;border-bottom:1px solid var(--border2)">'
+          + '<span style="color:var(--text2);min-width:0;word-break:break-word">' + esc(k) + '</span>'
+          + '<span style="font-weight:700;flex-shrink:0">' + counts[k] + '</span>'
+          + '</div>';
+      }).join('');
+}
+
 async function loadDashboard() {
+  loadFunnel();
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
       .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
