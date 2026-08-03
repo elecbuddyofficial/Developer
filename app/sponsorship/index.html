@@ -1334,7 +1334,11 @@ startBackgroundIndexing();
   // also breaks paint order against position:sticky #topbar despite a much
   // higher z-index; Chrome's desktop mobile-emulation does not reproduce
   // this because it never leaves the Blink engine).
-  ['profile-modal', 'settings-modal', 'nf-overlay'].forEach(function(id) {
+  // tx-modal was added with the payment history panel and inherits exactly
+  // the same trap. back-to-top is position:fixed inside #content, which on
+  // iOS positions it against the scroller rather than the viewport, so it
+  // drifts while scrolling instead of staying pinned.
+  ['profile-modal', 'settings-modal', 'nf-overlay', 'tx-modal', 'back-to-top'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el && el.parentNode !== document.body) document.body.appendChild(el);
   });

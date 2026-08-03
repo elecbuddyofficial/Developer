@@ -1536,8 +1536,15 @@ function setTheme(t) {
     // because the comparison was never happening at that level. Moving it to
     // <body> makes it a top-level sibling of the sidebar, where the z-index
     // finally means what it looks like it means.
+    //
+    // back-to-top and oral-scroll-hint are here for a different reason from
+    // the modals. They are position:fixed, but a fixed element inside an
+    // element carrying -webkit-overflow-scrolling:touch is treated by iOS as
+    // if it were positioned against the scroller rather than the viewport, so
+    // it drifts during momentum scrolling instead of staying pinned. Staying
+    // pinned is the entire purpose of both.
     ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal',
-     'guide-overlay', 'tx-modal'].forEach(function(id) {
+     'guide-overlay', 'tx-modal', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
     });
