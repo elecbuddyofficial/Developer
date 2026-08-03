@@ -422,7 +422,7 @@
       email, password,
       options: {
         data: { full_name: name },
-        emailRedirectTo: 'https://elecbuddyofficial.github.io/Developer/app/auth.html'
+        emailRedirectTo: authReturnUrl()
       }
     });
     if (error) {
@@ -443,6 +443,24 @@
     }
   }
 
+  // Where a confirmation or reset link should drop the reader.
+  //
+  // Derived from wherever they actually are, never hardcoded. This used to name
+  // the GitHub Pages URL outright, so once the site moved to elec-buddy.com a
+  // confirmation link landed people back on the old origin. Their new session
+  // was then created in THAT origin's storage and did not carry across, so they
+  // returned to elec-buddy.com still signed out and it looked broken.
+  //
+  // Every origin the app is served from has to be in Supabase's redirect
+  // allowlist, or Supabase rejects the redirect and the email link dies.
+  function authReturnUrl() {
+    var path = window.location.pathname;
+    // Served as a directory index rather than the explicit file: normalise, so
+    // the returned URL is always the page that can actually handle the token.
+    if (!/auth\.html$/.test(path)) path = path.replace(/[^/]*$/, '') + 'auth.html';
+    return window.location.origin + path;
+  }
+
   async function handleReset(e) {
     e.preventDefault();
     clearMsg();
@@ -450,7 +468,7 @@
     const btn   = document.getElementById('reset-btn');
     btn.disabled = true; btn.textContent = 'Sending...';
     const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://elecbuddyofficial.github.io/Developer/app/auth.html'
+      redirectTo: authReturnUrl()
     });
     if (error) {
       showMsg(error.message, 'error');
