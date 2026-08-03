@@ -223,7 +223,7 @@
       <tr><td>Account information</td><td>Full name, email address, and a securely hashed password (we never see or store your password in plain text).</td></tr>
       <tr><td>Payment information</td><td>Plan purchased, amount paid, and the order and payment identifiers returned by Razorpay. We do not collect or store your card number, UPI ID, or net banking credentials; these are handled directly by Razorpay.</td></tr>
       <tr><td>Study activity</td><td>Which topics you have read, your progress through them, and your quiz results, so you can pick up where you left off and track your revision.</td></tr>
-      <tr><td>Device information</td><td>A device identifier used to enforce the per-account device limit described in our Terms, so that one subscription cannot be shared across an unlimited number of devices.</td></tr>
+      <tr><td>Device information</td><td>A random identifier your browser generates and stores on your own device, together with a rough description such as "Chrome on Windows", used to enforce the per-account device limit described in our Terms. This is <strong>not</strong> a fingerprint: we do not measure your hardware, screen, fonts, or anything else about your machine, and the identifier cannot be used to recognise you on any other website or under any other account. Clearing your browser data replaces it, and the old one simply becomes a device you can remove in Settings.</td></tr>
       <tr><td>Technical data</td><td>Standard web request information such as browser type and IP address, collected automatically as part of normal server operation.</td></tr>
       <tr><td>Usage analytics</td><td>Aggregate, privacy-friendly page-view analytics that do not identify you individually or track you across other websites.</td></tr>
     </table>
@@ -275,7 +275,13 @@
 
   <section id="retention">
     <h2>7. Data Retention</h2>
-    <p>We retain your account and study data for as long as your account remains active, so that your progress and access history are preserved. If you request deletion of your account, we will delete your personal information, other than records we are required to keep for legitimate accounting, tax, or legal purposes, such as payment records.</p>
+    <p>We retain your account and study data for as long as your account remains active, so that your progress and access history are preserved.</p>
+    <p>When you delete your account, we permanently remove your profile, your name and email address, your study progress and quiz results, and every device registered to you. This happens after a 30 day grace period, during which you can still sign in and cancel.</p>
+    <p>Two things deliberately survive that deletion:</p>
+    <ul>
+      <li><strong>Your payment records</strong>, including the email address and name they were made under. We are required to retain financial records for accounting and tax purposes, and without them we could not process a later refund or respond to a bank dispute on your behalf. Razorpay separately retains its own record of any transaction, which is outside our control.</li>
+      <li><strong>A one way cryptographic hash of your email address</strong>, so that a deleted account cannot be used to claim a second free trial or re-use a single-use discount code. A hash cannot be reversed into your address, is not used to contact you, and is not used for any other purpose.</li>
+    </ul>
   </section>
 
   <section id="rights">
@@ -286,7 +292,7 @@
       <li>correct inaccurate account information, such as your name or email address;</li>
       <li>request deletion of your account and associated personal data.</li>
     </ul>
-    <div class="callout">Account deletion is currently handled by our support team rather than as a self-service option in the app. Email <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a> from your registered address and we will action your request.</div>
+    <div class="callout">You can delete your account yourself, at any time, from <strong>Profile &rarr; Settings &rarr; Delete account</strong> in the app. You will be told exactly what is removed and what is kept before you confirm, and you have <strong>30 days to change your mind</strong>: nothing is destroyed until then, your access continues as normal in the meantime, and we email you a confirmation with a link to cancel. To cancel, sign in and press <strong>Keep my account</strong>. If you would rather we did it for you, email <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a> from your registered address.</div>
   </section>
 
   <section id="children">

@@ -64,3 +64,6 @@ data/PLAINTEXT_BACKUP_do_not_delete/
 
 # Local key storage — never commit real secret values
 DecryptEncrypt/
+
+# Supabase CLI local state, not project config
+supabase/.temp/

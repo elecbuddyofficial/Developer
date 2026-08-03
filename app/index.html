@@ -879,12 +879,98 @@
       <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center;"></div>
     </div>
 
+    <!-- Signed-in devices -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-top:14px;">
+      <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Signed in devices</div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">
+        Your account works on up to <strong id="dev-limit-txt">3</strong> devices. Removing one frees a slot straight away.
+      </div>
+      <div id="dev-list"><div style="font-size:11.5px;color:#6E8AA6;">Loading&hellip;</div></div>
+    </div>
+
+    <!-- Delete account -->
+    <div style="background:rgba(224,90,106,0.05);border:1px solid rgba(224,90,106,0.25);border-radius:7px;padding:13px 15px;margin-top:14px;">
+      <div style="font-size:12.5px;font-weight:600;color:#E05A6A;margin-bottom:2px;">Delete account</div>
+
+      <div id="del-idle">
+        <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.45;">
+          Permanently removes your account. You get 30 days to change your mind.
+        </div>
+        <button onclick="startDeleteAccount()" style="width:100%;min-height:40px;background:none;border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:600;cursor:pointer;">Delete my account</button>
+      </div>
+
+      <div id="del-confirm" style="display:none;">
+        <div style="font-size:11.5px;color:#C0CCDC;line-height:1.6;margin-top:8px;">
+          <div style="font-weight:700;color:#E05A6A;margin-bottom:5px;">What you will lose</div>
+          <ul style="margin:0 0 12px 16px;padding:0;color:#8FA3B8;">
+            <li>Any remaining paid access, with no refund for time left over</li>
+            <li>All quiz scores and reading progress</li>
+            <li>Your name, email, and every device you have signed in on</li>
+          </ul>
+
+          <div style="font-weight:700;color:#DDE5EF;margin-bottom:5px;">What we keep, and why</div>
+          <ul style="margin:0 0 12px 16px;padding:0;color:#8FA3B8;">
+            <li>A record of payments you have made. We are required to keep financial records, and without them we could not handle a later refund or a bank dispute.</li>
+            <li>A one way scramble of your email address, so a deleted account cannot be used to claim a second free trial. It cannot be turned back into your address.</li>
+          </ul>
+
+          <div style="background:rgba(122,184,224,0.08);border:1px solid rgba(122,184,224,0.25);border-radius:6px;padding:9px 11px;margin-bottom:12px;color:#9FC5DF;">
+            <strong>You have 30 days to undo this.</strong> Nothing is removed until then, and you can keep using your account normally in the meantime. To cancel, sign in and press <strong>Keep my account</strong>, here or on the notice at the bottom of the screen. We will email you a reminder as well.
+          </div>
+
+          <label style="display:block;font-size:11px;color:#8FA3B8;margin-bottom:5px;">Type <strong id="del-email-hint" style="color:#DDE5EF;"></strong> to confirm</label>
+          <input id="del-email-input" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="your email" style="width:100%;background:#070D1A;border:1px solid #1A3050;border-radius:6px;color:#DDE5EF;font-size:13px;padding:10px 11px;font-family:inherit;margin-bottom:9px;">
+          <div id="del-msg" style="display:none;font-size:11.5px;margin-bottom:9px;"></div>
+          <div style="display:flex;gap:8px;">
+            <button onclick="cancelDeleteFlow()" style="flex:1;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Keep my account</button>
+            <button id="del-go-btn" onclick="confirmDeleteAccount()" style="flex:1;min-height:40px;background:rgba(224,90,106,0.15);border:1px solid rgba(224,90,106,0.45);border-radius:6px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;">Delete account</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="del-scheduled" style="display:none;">
+        <div style="font-size:11.5px;color:#C0CCDC;line-height:1.6;margin-top:8px;">
+          Your account is scheduled for deletion on <strong id="del-date" style="color:#E05A6A;"></strong>.
+          Until then nothing is removed and everything keeps working as normal.
+        </div>
+        <button onclick="cancelScheduledDeletion()" id="del-keep-btn" style="width:100%;min-height:42px;margin-top:11px;background:#C8A44A;border:none;border-radius:6px;font-size:13px;color:#070D1A;font-weight:700;cursor:pointer;">Keep my account</button>
+      </div>
+    </div>
+
     <!-- Legal -->
     <div style="display:flex;justify-content:center;gap:14px;margin-top:16px;">
       <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Terms</a>
       <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
     </div>
 
+  </div>
+</div>
+
+<!-- Shown on every load while a deletion is pending. Deliberately hard to
+     miss and impossible to dismiss: someone who did not ask for this needs to
+     find out before the 30 days run out. -->
+<div id="del-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10005;background:#5A1520;border-top:1px solid #A03042;padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));">
+  <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;text-align:center;">
+    <div style="font-size:12.5px;color:#FFD9DE;line-height:1.45;">
+      Your account is scheduled for deletion on <strong id="del-banner-date"></strong>.
+    </div>
+    <button onclick="cancelScheduledDeletion()" style="min-height:34px;background:#C8A44A;border:none;border-radius:6px;padding:7px 16px;font-size:12.5px;color:#070D1A;font-weight:700;cursor:pointer;font-family:inherit;flex-shrink:0;">Keep my account</button>
+  </div>
+</div>
+
+<!-- Too many devices. Blocking, because the alternative is silently signing
+     someone out of a device they are still using. -->
+<div id="dev-block" style="display:none;position:fixed;inset:0;z-index:10006;background:rgba(4,9,20,0.95);backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:440px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">
+      <div style="font-size:18px;font-weight:700;color:#DDE5EF;">Too many devices</div>
+      <div style="font-size:12.5px;color:#8FA3B8;margin-top:6px;line-height:1.55;">
+        Your account is already signed in on <strong id="dev-block-limit">3</strong> devices, which is the limit.
+        Remove one below to use this device. Whichever you remove is signed out the next time it opens the app.
+      </div>
+      <div id="dev-block-list" style="margin-top:16px;"></div>
+      <button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid #1A3050;border-radius:8px;font-size:13px;color:#8FA3B8;font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>
+    </div>
   </div>
 </div>
 
@@ -1590,7 +1676,7 @@ function setTheme(t) {
 
         // Also re-check subscription plan so expiry takes effect mid-session
         const { data: profile } = await window._sbClient
-          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope,written_expires_at,oral_expires_at')
+          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope,written_expires_at,oral_expires_at,deletion_requested_at')
           .eq('id', session.user.id).single();
         if (!profile) return;
 
@@ -1598,6 +1684,8 @@ function setTheme(t) {
         // costs no extra round trip. It is a no-op after the first time.
         if (typeof window.maybeShowWelcome === 'function') window.maybeShowWelcome(profile);
         if (typeof window.maybeShowUpdates === 'function') window.maybeShowUpdates();
+        if (typeof window.registerThisDevice === 'function') window.registerThisDevice();
+        if (typeof window.refreshDeletionState === 'function') window.refreshDeletionState(profile);
 
         var wasAccess = window._access || { oral: false, written: false };
         window._access = window._deriveAccess(profile).access;
@@ -1665,8 +1753,14 @@ function setTheme(t) {
     // if it were positioned against the scroller rather than the viewport, so
     // it drifts during momentum scrolling instead of staying pinned. Staying
     // pinned is the entire purpose of both.
+    // EVERY new fixed overlay must be added here. They are all authored inside
+    // <div#content>, which carries -webkit-overflow-scrolling:touch, and that
+    // creates a stacking context on iOS which traps position:fixed descendants
+    // underneath the sidebar. wel-modal and upd-modal were missing and would
+    // have failed on iPhone in exactly the way the walkthrough once did.
     ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal',
-     'guide-overlay', 'tx-modal', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
+     'guide-overlay', 'tx-modal', 'wel-modal', 'upd-modal',
+     'del-banner', 'dev-block', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
     });
@@ -1782,6 +1876,8 @@ function setTheme(t) {
         document.getElementById('settings-reset-status').style.display = 'none';
         document.getElementById('settings-modal').style.display = 'block';
         document.documentElement.classList.add('_modal-open'); // still open, just switched modal
+        if (typeof loadDevices === 'function') loadDevices();
+        if (typeof refreshDeletionState === 'function') refreshDeletionState();
         setTimeout(() => document.getElementById('settings-panel').classList.add('open'), 10);
       }, 300);
     };
@@ -1804,6 +1900,216 @@ function setTheme(t) {
 
     // Payment history. Same slide-across pattern as Settings: the profile
     // panel closes, this one opens in its place, and Back returns to it.
+
+    // ── Devices and account deletion ───────────────────────
+    // Terms section 9 has always promised a device limit. Nothing enforced it
+    // until now: the devices table existed and no code anywhere touched it.
+
+    var EB_DEV_KEY = 'eb_device_id';
+
+    // A random id this browser generates once, NOT a measurement of the
+    // machine. No canvas, no fonts, no hardware probing. That means clearing
+    // site data looks like a new device and costs a slot, which is the honest
+    // price of not fingerprinting anybody.
+    function ebDeviceId() {
+      try {
+        var id = localStorage.getItem(EB_DEV_KEY);
+        if (!id) {
+          id = (crypto.randomUUID ? crypto.randomUUID()
+                                  : String(Date.now()) + Math.random().toString(36).slice(2));
+          localStorage.setItem(EB_DEV_KEY, id);
+        }
+        return id;
+      } catch (e) {
+        // Private mode: no stable id available, so this browser simply is not
+        // counted. Better than refusing entry to someone who paid.
+        return null;
+      }
+    }
+
+    // Coarse on purpose. Enough for a reader to recognise which row is their
+    // own phone when choosing one to remove, and nothing more.
+    function ebDeviceLabel() {
+      var ua = navigator.userAgent || '';
+      var os = /iPhone|iPad|iPod/.test(ua) ? 'iPhone'
+             : /Android/.test(ua)          ? 'Android'
+             : /Macintosh/.test(ua)        ? 'Mac'
+             : /Windows/.test(ua)          ? 'Windows'
+             : /Linux/.test(ua)            ? 'Linux' : 'Device';
+      var br = /Edg\//.test(ua)     ? 'Edge'
+             : /OPR\//.test(ua)     ? 'Opera'
+             : /Chrome\//.test(ua)  ? 'Chrome'
+             : /Firefox\//.test(ua) ? 'Firefox'
+             : /Safari\//.test(ua)  ? 'Safari' : 'Browser';
+      return br + ' on ' + os;
+    }
+
+    window._ebDevicesRegistered = false;
+
+    window.registerThisDevice = async function() {
+      if (window._ebDevicesRegistered) return;
+      if (!window._sbClient || !window._sbUser) return;
+      var id = ebDeviceId();
+      if (!id) return;                       // private mode, see above
+      window._ebDevicesRegistered = true;
+
+      try {
+        var res = await window._sbClient.functions.invoke('register-device', {
+          body: { fingerprint: id, label: ebDeviceLabel() },
+        });
+        var d = res && res.data;
+        if (!d || d.allowed !== false) return;
+
+        document.getElementById('dev-block-limit').textContent = d.limit || 3;
+        document.getElementById('dev-block-list').innerHTML = devRowsHtml(d.devices || [], 'dev-block');
+        document.getElementById('dev-block').style.display = 'block';
+        document.documentElement.classList.add('_modal-open');
+      } catch (e) {
+        // Fail open. This exists to discourage sharing, not to be the reason
+        // a paying reader cannot open their notes.
+        console.warn('device check skipped:', e);
+      }
+    };
+
+    function devRowsHtml(rows, ctx) {
+      if (!rows.length) return '<div style="font-size:11.5px;color:#6E8AA6;">No devices registered yet.</div>';
+      var mine = null;
+      try { mine = localStorage.getItem(EB_DEV_KEY); } catch (e) {}
+      return rows.map(function(r) {
+        var when = r.last_seen ? new Date(r.last_seen).toLocaleDateString('en-GB',
+                     { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        var isThis = r.fingerprint && mine && r.fingerprint === mine;
+        return '<div style="display:flex;align-items:center;gap:10px;background:#070D1A;border:1px solid #1A3050;border-radius:6px;padding:9px 11px;margin-bottom:8px;">'
+          + '<div style="flex:1;min-width:0;">'
+          +   '<div style="font-size:12.5px;color:#DDE5EF;font-weight:600;">' + escNf(r.device_label || 'Unknown device')
+          +     (isThis ? ' <span style="font-size:10px;color:#C8A44A;font-weight:700;white-space:nowrap;">THIS DEVICE</span>' : '')
+          +   '</div>'
+          +   '<div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;">Last used ' + escNf(when) + '</div>'
+          + '</div>'
+          + '<button onclick="removeDevice(' + JSON.stringify(r.id).replace(/"/g, '&quot;') + ',\'' + ctx + '\')" '
+          +   'style="min-height:34px;background:none;border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:6px 12px;font-size:11.5px;color:#E05A6A;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0;">Remove</button>'
+          + '</div>';
+      }).join('');
+    }
+
+    window.removeDevice = async function(id, ctx) {
+      if (!window._sbClient) return;
+      // The owner may delete their own device rows; RLS enforces that it is
+      // only ever their own.
+      var { error } = await window._sbClient.from('devices').delete().eq('id', id);
+      if (error) { alert('Could not remove that device. Please try again.'); return; }
+      if (ctx === 'dev-block') {
+        location.reload();                   // re-register this device in the freed slot
+      } else {
+        loadDevices();
+      }
+    };
+
+    window.loadDevices = async function() {
+      var el = document.getElementById('dev-list');
+      if (!el || !window._sbClient) return;
+      var { data, error } = await window._sbClient
+        .from('devices').select('id, fingerprint, device_label, last_seen')
+        .order('last_seen', { ascending: false });
+      if (error) { el.innerHTML = '<div style="font-size:11.5px;color:#6E8AA6;">Could not load devices.</div>'; return; }
+      el.innerHTML = devRowsHtml(data || [], 'settings');
+    };
+
+    // ── Deletion ───────────────────────────────────────────
+    function delFmt(iso) {
+      return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    // Drives both the settings panel and the banner from one source, so they
+    // can never disagree about whether a deletion is pending.
+    window.refreshDeletionState = async function(profile) {
+      if (!window._sbClient || !window._sbUser) return;
+      var req = profile ? profile.deletion_requested_at : undefined;
+      if (req === undefined) {
+        var { data } = await window._sbClient.from('profiles')
+          .select('deletion_requested_at').eq('id', window._sbUser.id).single();
+        req = data ? data.deletion_requested_at : null;
+      }
+
+      var banner = document.getElementById('del-banner');
+      var idle = document.getElementById('del-idle');
+      var conf = document.getElementById('del-confirm');
+      var sched = document.getElementById('del-scheduled');
+
+      if (req) {
+        var due = new Date(new Date(req).getTime() + 30 * 86400000);
+        document.getElementById('del-date').textContent = delFmt(due);
+        document.getElementById('del-banner-date').textContent = delFmt(due);
+        if (idle) idle.style.display = 'none';
+        if (conf) conf.style.display = 'none';
+        if (sched) sched.style.display = 'block';
+        if (banner) banner.style.display = 'block';
+      } else {
+        if (idle) idle.style.display = 'block';
+        if (conf) conf.style.display = 'none';
+        if (sched) sched.style.display = 'none';
+        if (banner) banner.style.display = 'none';
+      }
+    };
+
+    window.startDeleteAccount = function() {
+      document.getElementById('del-idle').style.display = 'none';
+      document.getElementById('del-confirm').style.display = 'block';
+      document.getElementById('del-msg').style.display = 'none';
+      document.getElementById('del-email-input').value = '';
+      var em = (window._sbUser && window._sbUser.email) || '';
+      document.getElementById('del-email-hint').textContent = em;
+      document.getElementById('del-email-input').placeholder = em;
+    };
+
+    window.cancelDeleteFlow = function() {
+      document.getElementById('del-confirm').style.display = 'none';
+      document.getElementById('del-idle').style.display = 'block';
+    };
+
+    function delMsg(text, ok) {
+      var el = document.getElementById('del-msg');
+      el.style.display = 'block';
+      el.textContent = text;
+      el.style.color = ok ? '#5DC87A' : '#E05A6A';
+    }
+
+    window.confirmDeleteAccount = async function() {
+      var typed = (document.getElementById('del-email-input').value || '').trim();
+      if (!typed) { delMsg('Type your email to confirm.', false); return; }
+      var btn = document.getElementById('del-go-btn');
+      btn.disabled = true; btn.textContent = 'Working...';
+      try {
+        var res = await window._sbClient.functions.invoke('delete-account', {
+          body: { action: 'request', confirm_email: typed },
+        });
+        // The address is re-checked server-side too, so a mistyped one cannot
+        // delete anything even if this button is called directly.
+        var d = res && res.data;
+        if (!d || !d.ok) {
+          delMsg((d && d.error) || 'That did not match your account email.', false);
+          btn.disabled = false; btn.textContent = 'Delete account';
+          return;
+        }
+        await refreshDeletionState();
+      } catch (e) {
+        delMsg('Something went wrong. Please try again.', false);
+      }
+      btn.disabled = false; btn.textContent = 'Delete account';
+    };
+
+    window.cancelScheduledDeletion = async function() {
+      var btns = [document.getElementById('del-keep-btn')].filter(Boolean);
+      btns.forEach(function(b) { b.disabled = true; b.textContent = 'Working...'; });
+      try {
+        await window._sbClient.functions.invoke('delete-account', { body: { action: 'cancel' } });
+        await refreshDeletionState({ deletion_requested_at: null });
+      } catch (e) {
+        alert('Could not cancel. Please try again.');
+      }
+      btns.forEach(function(b) { b.disabled = false; b.textContent = 'Keep my account'; });
+    };
+
     // ── What's new, shown once ─────────────────────────────
     // Anything an admin publishes is put in front of the reader the next time
     // they open the app, rather than waiting behind a dot in the profile menu
