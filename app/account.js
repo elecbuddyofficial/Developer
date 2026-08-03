@@ -70,17 +70,24 @@
     var row = 'display:flex;align-items:center;justify-content:center;gap:7px;'
             + 'padding:9px 10px;min-height:44px;box-sizing:border-box;'
             + 'border:1px solid #1A3050;border-radius:6px;'
-            + 'font-size:12px;color:#8FA3B8;text-decoration:none;flex:1;min-width:0;';
+            + 'font-size:12px;color:#8FA3B8;text-decoration:none;min-width:0;';
+    // Each control shows what it actually is, the handle and the address,
+    // rather than a generic label with the address repeated underneath it.
+    // The address is worth showing rather than hiding behind "Contact us":
+    // on a desktop with no mail client configured a mailto: link does nothing
+    // at all, and then the only useful thing is being able to read and copy it.
+    //
+    // flex-basis is what decides the arrangement: the address needs roughly
+    // 200px to sit on one line, so on a narrow phone it takes a row of its own
+    // instead of being squeezed to an ellipsis.
     return '<div style="margin-top:14px;padding-top:14px;border-top:1px solid #1A3050;">'
       + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E8AA6;text-align:center;margin-bottom:9px;">Get in touch</div>'
-      // Wraps rather than squeezing, so both stay tappable on a narrow phone.
       + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" style="' + row + '">'
+      +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" style="' + row + 'flex:1 1 130px;">'
       +     IG_ICON + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@' + CONTACT.instagram + '</span></a>'
-      +   '<a href="mailto:' + CONTACT.email + '" style="' + row + '">'
-      +     MAIL_ICON + '<span>Contact us</span></a>'
+      +   '<a href="mailto:' + CONTACT.email + '" style="' + row + 'flex:1 1 200px;">'
+      +     MAIL_ICON + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + CONTACT.email + '</span></a>'
       + '</div>'
-      + '<div style="text-align:center;margin-top:8px;font-size:10.5px;color:#6E8AA6;word-break:break-all;">' + CONTACT.email + '</div>'
       + '</div>';
   }
 
