@@ -829,6 +829,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 7h20M2 17h20"/></svg>
       <span>Plans</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('videos');closeMobNav()" data-tab="videos" title="Videos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
+      <span>Videos</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('activity');closeMobNav()" data-tab="activity" title="Activity Log">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
       <span>Activity Log</span>
@@ -1410,6 +1414,41 @@
     </div>
 
     <div id="plans-groups"><div class="ad-loading">Loading…</div></div>
+  </div>
+
+  <!-- VIDEOS ─────────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-videos">
+    <div class="ad-ph">
+      <h1>Videos</h1>
+      <p>YouTube links shown inside the oral notes. Paste a link against a section and it appears there immediately, with no deploy.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">How this works</div>
+      <div class="ad-card-sub" style="margin-bottom:0">
+        Every section of every topic already has a row waiting for it, in the order it appears in the notes. Most are empty because the video has not been made yet: that is expected, and an empty row simply shows nothing to the cadet. Paste an ordinary YouTube link, either the short <code>youtu.be/…</code> form or the full <code>youtube.com/watch?v=…</code> form. Clearing the box takes the video down again. You can add as many videos to a section as you like.
+      </div>
+    </div>
+
+    <div class="ad-row" style="align-items:flex-end">
+      <div class="ad-field" style="max-width:260px">
+        <label class="ad-label">Topic</label>
+        <select class="ad-select" id="vid-topic" onchange="loadVideosTab()"></select>
+      </div>
+      <div class="ad-field" style="max-width:210px">
+        <label class="ad-label">Show</label>
+        <select class="ad-select" id="vid-filter" onchange="renderVideosTab()">
+          <option value="all">All sections</option>
+          <option value="empty">Still missing a video</option>
+          <option value="filled">Has a video</option>
+        </select>
+      </div>
+      <div class="ad-field" style="margin-bottom:14px">
+        <span id="vid-summary" style="font-size:12.5px;color:var(--text2)"></span>
+      </div>
+    </div>
+
+    <div id="vid-list"><div class="ad-loading">Loading…</div></div>
   </div>
 
   <!-- ACTIVITY LOG ───────────────────────────────────────────── -->
@@ -3981,6 +4020,120 @@ async function savePlanRow(duration, scope) {
   renderPlansTab();
 }
 
+/* ── VIDEOS ───────────────────────────────────────────────────────────
+   Rows are seeded from the note structure, so an admin never types a section
+   id by hand. A section may hold any number of videos: T01's s-brushless
+   already has two, which is why sort_order rather than section is the row's
+   identity. */
+var _vidRows = [];
+
+function ytId(url) {
+  if (!url) return null;
+  var m = String(url).match(/(?:youtu\.be\/|v=|\/embed\/|\/shorts\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+async function initVideosTab() {
+  var sel = document.getElementById('vid-topic');
+  var opts = '';
+  for (var i = 1; i <= 23; i++) {
+    var id = 'T' + String(i).padStart(2, '0');
+    opts += '<option value="' + id + '">' + id + (id === 'T01' ? ' (free preview)' : '') + '</option>';
+  }
+  sel.innerHTML = opts;
+  loadVideosTab();
+}
+
+async function loadVideosTab() {
+  var topic = document.getElementById('vid-topic').value;
+  document.getElementById('vid-list').innerHTML = '<div class="ad-loading">Loading…</div>';
+  var { data, error } = await _sb.from('topic_videos')
+    .select('id,topic_id,section,header,url,sort_order')
+    .eq('topic_id', topic).order('sort_order');
+  if (error) {
+    document.getElementById('vid-list').innerHTML =
+      '<div class="ad-loading">Run topic_videos_setup.sql to enable Videos.</div>';
+    return;
+  }
+  _vidRows = data || [];
+  renderVideosTab();
+}
+
+function renderVideosTab() {
+  var filter = document.getElementById('vid-filter').value;
+  var filled = _vidRows.filter(function(r) { return r.url && r.url.trim(); }).length;
+  document.getElementById('vid-summary').textContent =
+    filled + ' of ' + _vidRows.length + ' sections have a video';
+
+  var rows = _vidRows.filter(function(r) {
+    var has = !!(r.url && r.url.trim());
+    return filter === 'all' || (filter === 'filled' ? has : !has);
+  });
+
+  if (!rows.length) {
+    document.getElementById('vid-list').innerHTML = '<div class="ad-loading">Nothing matches that filter.</div>';
+    return;
+  }
+
+  document.getElementById('vid-list').innerHTML = rows.map(function(r) {
+    var vid = ytId(r.url);
+    var thumb = vid
+      ? '<img src="https://img.youtube.com/vi/' + vid + '/default.jpg" alt="" style="width:64px;height:48px;object-fit:cover;border-radius:5px;flex-shrink:0">'
+      : '<div style="width:64px;height:48px;border:1px dashed var(--border2);border-radius:5px;flex-shrink:0"></div>';
+    // A link that is not recognisably YouTube is worth flagging before it is
+    // saved, since the player embeds by id and would simply show nothing.
+    var warn = (r.url && r.url.trim() && !vid)
+      ? '<div class="ad-hint" style="color:var(--orange)">That does not look like a YouTube link, so nothing will play.</div>' : '';
+    return '<div class="ad-card" style="margin-bottom:10px">'
+      + '<div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">'
+      +   thumb
+      +   '<div style="flex:1 1 260px;min-width:0">'
+      +     '<div style="font-size:13.5px;font-weight:600;color:var(--text)">' + esc(r.header) + '</div>'
+      +     '<div style="font-size:11px;color:var(--text3);margin:2px 0 8px;font-family:ui-monospace,monospace">' + esc(r.section) + '</div>'
+      +     '<input class="ad-input" id="vid-url-' + r.id + '" value="' + esc(r.url || '') + '" placeholder="Paste a YouTube link, or leave blank">'
+      +     warn
+      +   '</div>'
+      +   '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">'
+      +     '<button class="ad-btn btn-primary btn-sm" onclick="saveVideo(' + attrJs(r.id) + ')">Save</button>'
+      +     '<button class="ad-btn btn-ghost btn-sm" onclick="addVideoToSection(' + attrJs(r.section) + ',' + attrJs(r.header) + ')">Add another here</button>'
+      +   '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+async function saveVideo(id) {
+  var url = (document.getElementById('vid-url-' + id).value || '').trim();
+  var { error } = await _sb.from('topic_videos')
+    .update({ url: url, updated_at: new Date().toISOString(), updated_by: _myId })
+    .eq('id', id);
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  toast(url ? 'Video saved' : 'Video removed');
+  logAdminAction('edit_video', null, { id: id, url: url });
+  loadVideosTab();
+}
+
+// A second, third, any number of videos for the same section. sort_order is
+// placed just after the row it was added from, so it lands next to its sibling
+// in the notes rather than at the end of the topic.
+async function addVideoToSection(section, header) {
+  var topic = document.getElementById('vid-topic').value;
+  var siblings = _vidRows.filter(function(r) { return r.section === section; });
+  var after = Math.max.apply(null, siblings.map(function(r) { return r.sort_order; }));
+  var used = _vidRows.map(function(r) { return r.sort_order; });
+  var next = after + 1;
+  while (used.indexOf(next) !== -1) next++;   // never collide with (topic, sort_order)
+
+  var { error } = await _sb.from('topic_videos').insert({
+    topic_id: topic, section: section, header: header, url: '', sort_order: next,
+    updated_by: _myId,
+  });
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  toast('Row added, paste the link and save');
+  logAdminAction('add_video', null, { topic: topic, section: section });
+  loadVideosTab();
+}
+
 /* ── ACTIVITY LOG ─────────────────────────────────────────────────── */
 var ACTION_LABELS = {
   grant_access:       ['Access granted',      'var(--green)'],
@@ -4064,6 +4217,10 @@ window.showTab = function(name) {
   if (name === 'plans' && !_tabLoaded.plans) {
     _tabLoaded.plans = true;
     loadPlansTab();
+  }
+  if (name === 'videos' && !_tabLoaded.videos) {
+    _tabLoaded.videos = true;
+    initVideosTab();
   }
   if (name === 'activity') loadActivity();
 };

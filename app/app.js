@@ -228,6 +228,41 @@ window.toggleDataSaver = function(on) {
     }
 };
 
+// Videos come from the topic_videos table so a new YouTube link goes live
+// without a deploy. Row-level security applies the same access rule as the
+// oral notes, so an unentitled reader simply receives no rows rather than a
+// list of links.
+//
+// The encrypted files are still shipped and are used if the query fails, which
+// keeps the app working offline and through a Supabase outage. They hold the
+// structure rather than the links, so the fallback shows the right sections
+// with nothing to play, which is what an unfilled section looks like anyway.
+function _loadTopicVideos(topicId) {
+    var fallback = function() {
+        window._loadEncryptedScript('../data/Orals/videos/' + topicId.toLowerCase() + '_videos.js').catch(function(){});
+    };
+    if (!window._sbClient) return fallback();
+
+    window._sbClient
+        .from('topic_videos')
+        .select('section,header,url,sort_order')
+        .eq('topic_id', topicId)
+        .order('sort_order')
+        .then(function(res) {
+            if (res.error || !res.data) return fallback();
+            // No rows can mean either "not entitled" or "table not migrated
+            // yet". Falling back is right for both: the encrypted file is
+            // itself paywalled, so this cannot leak anything.
+            if (!res.data.length) return fallback();
+            window.VIDEO_DATA[topicId] = res.data.map(function(r) {
+                return { section: r.section, header: r.header, url: r.url || '' };
+            });
+            if (window._activeTopicId === topicId && typeof injectVideoTab === 'function') {
+                injectVideoTab(topicId);
+            }
+        }, fallback);
+}
+
 window.loadVideos = function(topicId, data) {
     window.VIDEO_DATA[topicId] = data;
 };
@@ -344,7 +379,7 @@ window.fetchTopicData = function(topicId, topicKey) {
     }
 
     if (!topicId.startsWith('W') && !window.VIDEO_DATA[topicId]) {
-        window._loadEncryptedScript('../data/Orals/videos/' + topicId.toLowerCase() + '_videos.js').catch(function(){});
+        _loadTopicVideos(topicId);
     }
     
     // URL Routing
