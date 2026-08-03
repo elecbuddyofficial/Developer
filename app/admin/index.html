@@ -402,7 +402,14 @@
     }
 
     /* Mobile Table-to-Card Overhaul */
-    .ad-table-wrap, #pay-table-wrap { -webkit-overflow-scrolling: touch; overflow-x: hidden; padding-bottom: 8px; border: none !important; }
+    /* overflow-x must be auto, not hidden. This rule sits outside any media
+       query, so `hidden` applied at every width and silently clipped whatever
+       did not fit: on the 12-column Plans table that put Description, Active
+       and the Save button permanently out of reach, with no way to scroll to
+       them. Auto does not reintroduce page-level sideways scroll, because the
+       scrolling is contained to the wrapper, and below 600px the stacked card
+       layout means there is nothing to scroll anyway. */
+    .ad-table-wrap, #pay-table-wrap { -webkit-overflow-scrolling: touch; overflow-x: auto; padding-bottom: 8px; border: none !important; }
     @media (max-width: 600px) {
       .ad-table thead, #pay-table-wrap table thead { display: none; }
       .ad-table, .ad-table tbody, .ad-table tr, .ad-table td,
@@ -1010,6 +1017,7 @@
         <button class="upill"        data-filter="lifetime" onclick="setUserFilter('lifetime')">Lifetime <span class="upill-count" id="upc-lifetime">-</span></button>
       </div>
       <input class="ad-input" style="max-width:240px;flex-shrink:0" id="user-search" placeholder="Search email or name…" oninput="applyUserFilters()">
+      <button class="ad-btn btn-ghost btn-sm" onclick="exportUsersCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
     </div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -1386,7 +1394,10 @@
       <div id="cp-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
     </div>
 
-    <div class="ad-section-head">Existing Coupons</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div class="ad-section-head" style="margin-bottom:0">Existing Coupons</div>
+      <button class="ad-btn btn-ghost btn-sm" onclick="exportCouponsCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
+    </div>
     <div class="ad-card-sub" style="margin-top:-6px">
       <strong>Used</strong> counts people who have actually spent the code plus anyone
       part-way through paying with it right now. <strong>held</strong> is a checkout in
@@ -1430,6 +1441,48 @@
       </div>
     </div>
 
+    <div class="ad-card">
+      <div class="ad-card-head">Add a video</div>
+      <div class="ad-card-sub">Pick where it belongs, give it the title cadets will see, and paste the link.</div>
+      <div class="ad-row">
+        <div class="ad-field">
+          <label class="ad-label">Topic</label>
+          <select class="ad-select" id="nv-topic" onchange="nvTopicChanged()"></select>
+        </div>
+        <div class="ad-field">
+          <label class="ad-label">Section</label>
+          <select class="ad-select" id="nv-section"></select>
+          <div class="ad-hint">Where in the notes it appears. Sections come from the topic itself, so a video can never end up attached to nothing.</div>
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field">
+          <label class="ad-label">Title shown to cadets</label>
+          <input class="ad-input" id="nv-title" placeholder="e.g. Brushless Excitation System">
+          <div class="ad-hint">Just the title. The language is a separate field below, so do not put it here.</div>
+        </div>
+        <div class="ad-field" style="max-width:200px">
+          <label class="ad-label">Language</label>
+          <select class="ad-select" id="nv-lang">
+            <option value="English" selected>English</option>
+            <option value="Malayalam">Malayalam</option>
+            <option value="Hindi">Hindi</option>
+            <option value="Tamil">Tamil</option>
+            <option value="Telugu">Telugu</option>
+          </select>
+          <div class="ad-hint">Cadets filter the list by this.</div>
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">YouTube link</label>
+        <input class="ad-input" id="nv-url" placeholder="https://youtu.be/... or https://www.youtube.com/watch?v=..." oninput="nvPreview()">
+        <div class="ad-hint" id="nv-hint"></div>
+      </div>
+      <button class="ad-btn btn-primary" onclick="addVideo()">Add Video</button>
+      <div id="nv-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
+    </div>
+
+    <div class="ad-section-head">Existing Videos</div>
     <div class="ad-row" style="align-items:flex-end">
       <div class="ad-field" style="max-width:260px">
         <label class="ad-label">Topic</label>
@@ -1468,6 +1521,7 @@
         <option value="create_coupon">Coupon created</option>
       </select>
       <button class="ad-btn btn-ghost btn-sm" onclick="loadActivity()">Refresh</button>
+      <button class="ad-btn btn-ghost btn-sm" onclick="exportActivityCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
     </div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -2231,24 +2285,28 @@ function setUserFilter(filter) {
   applyUserFilters();
 }
 
+// Shared by the on-screen list and the CSV export, so an export can never
+// disagree with the pills and search box the admin is looking at.
+function userMatchesFilter(u, q, now) {
+  if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
+  var p = u.subscription_plan || 'trial';
+  var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
+    && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+  var isActive = !isPaidExpired && ALL_PAID_PLANS.indexOf(p) !== -1;
+  var trialExpired = (p === 'trial' || !u.subscription_plan) && isTrialExpired(u.trial_started_at, now);
+  var isExpired = isPaidExpired || trialExpired;
+  if (_userFilter === 'all')      return true;
+  if (_userFilter === 'active')   return isActive;
+  if (_userFilter === 'trial')    return p === 'trial' && !trialExpired;
+  if (_userFilter === 'expired')  return isExpired;
+  if (_userFilter === 'lifetime') return p === 'lifetime';
+  return true;
+}
+
 function applyUserFilters() {
   var q   = (document.getElementById('user-search').value || '').toLowerCase();
   var now = new Date();
-  var filtered = _allUsers.filter(function(u) {
-    if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
-    var p = u.subscription_plan || 'trial';
-    var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
-      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
-    var isActive = !isPaidExpired && ALL_PAID_PLANS.indexOf(p) !== -1;
-    var trialExpired = (p === 'trial' || !u.subscription_plan) && isTrialExpired(u.trial_started_at, now);
-    var isExpired = isPaidExpired || trialExpired;
-    if (_userFilter === 'all')      return true;
-    if (_userFilter === 'active')   return isActive;
-    if (_userFilter === 'trial')    return p === 'trial' && !trialExpired;
-    if (_userFilter === 'expired')  return isExpired;
-    if (_userFilter === 'lifetime') return p === 'lifetime';
-    return true;
-  });
+  var filtered = _allUsers.filter(function(u) { return userMatchesFilter(u, q, now); });
   renderUsers(filtered);
   var cnt = document.getElementById('users-count');
   if (cnt) cnt.textContent = filtered.length + ' user' + (filtered.length !== 1 ? 's' : '');
@@ -3387,53 +3445,167 @@ function csvCell(v) {
   return '"' + s.replace(/"/g, '""') + '"';
 }
 
-async function exportPaymentsCsv() {
-  toast('Building export...');
-  var f = payFilters();
+/* ── CSV EXPORTS ──────────────────────────────────────────────────────
+   Every list in this panel can be pulled out as a CSV for an audit.
 
-  // Export the whole filtered set, not just the page on screen.
-  var query = _sb.from('payments')
-    .select('created_at,paid_at,refunded_at,plan,scope,amount,refund_amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,subscription_starts_at,subscription_expires_at,user_id')
-    .order('created_at', { ascending: false })
-    .limit(5000);
+   What is on screen is paged or capped for speed. An export is neither:
+   it walks the whole result set. A truncated audit file is worse than no
+   audit file, because it looks complete.
+*/
 
-  var { data, error } = await applyPayFilters(query, f);
-  if (error) { toast('Export failed: ' + error.message, 'err'); return; }
-  if (!data || !data.length) { toast('Nothing to export', 'err'); return; }
+// PostgREST caps a single response at 1000 rows, so anything that could
+// legitimately exceed that has to be walked a page at a time. Without this
+// an export just stops at row 1000 and says nothing about it.
+async function fetchAllRows(build, label) {
+  var out = [], page = 0;
+  var SIZE = 1000;
+  for (;;) {
+    var res = await build().range(page * SIZE, page * SIZE + SIZE - 1);
+    if (res.error) throw new Error(res.error.message);
+    var batch = res.data || [];
+    out = out.concat(batch);
+    if (batch.length < SIZE) break;
+    page++;
+    if (page > 500) break;   // 500k rows: a runaway backstop, not a real ceiling
+    toast('Fetching ' + label + '... ' + out.length + ' rows');
+  }
+  return out;
+}
 
-  var emailMap = await resolvePayEmails(data);
-
-  var headers = [
-    'Date','Paid At','Refunded At','Email','User ID','Plan','Scope','Amount (INR)',
-    'Refund (INR)','Currency','Status','Order ID','Payment ID','Refund ID',
-    'Access Starts','Access Expires'
-  ];
+function csvDownload(name, headers, rows) {
   var lines = [headers.map(csvCell).join(',')];
-
-  data.forEach(function(p) {
-    lines.push([
-      p.created_at, p.paid_at, p.refunded_at,
-      emailMap[p.user_id] || '', p.user_id, p.plan, p.scope,
-      (p.amount / 100).toFixed(2),
-      p.refund_amount ? (p.refund_amount / 100).toFixed(2) : '',
-      p.currency || 'INR', p.status,
-      p.razorpay_order_id, p.razorpay_payment_id, p.razorpay_refund_id,
-      p.subscription_starts_at, p.subscription_expires_at
-    ].map(csvCell).join(','));
-  });
-
+  rows.forEach(function(r) { lines.push(r.map(csvCell).join(',')); });
   // BOM so Excel opens UTF-8 correctly instead of mangling the rupee sign.
-  var blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+  var blob = new Blob(['\ufeff' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
   var url  = URL.createObjectURL(blob);
   var a    = document.createElement('a');
-  var stamp = new Date().toISOString().slice(0, 10);
   a.href = url;
-  a.download = 'elecbuddy-payments-' + stamp + '.csv';
+  a.download = 'elecbuddy-' + name + '-' + new Date().toISOString().slice(0, 10) + '.csv';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+function rupees(paise) {
+  return (paise === null || paise === undefined) ? '' : (paise / 100).toFixed(2);
+}
+
+async function exportPaymentsCsv() {
+  toast('Building export...');
+  var f = payFilters();
+  var data;
+  try {
+    data = await fetchAllRows(function() {
+      return applyPayFilters(_sb.from('payments')
+        .select('created_at,paid_at,refunded_at,plan,scope,amount,original_amount,discount_amount,coupon_code,refund_amount,currency,status,razorpay_order_id,razorpay_payment_id,razorpay_refund_id,subscription_starts_at,subscription_expires_at,user_id')
+        .order('created_at', { ascending: false }), f);
+    }, 'payments');
+  } catch (e) { toast('Export failed: ' + e.message, 'err'); return; }
+  if (!data.length) { toast('Nothing to export', 'err'); return; }
+
+  var emailMap = await resolvePayEmails(data);
+
+  csvDownload('payments', [
+    'Date','Paid At','Refunded At','Email','User ID','Plan','Scope',
+    'Sticker (INR)','Discount (INR)','Charged (INR)','Refund (INR)','Net (INR)','Coupon',
+    'Currency','Status','Order ID','Payment ID','Refund ID','Access Starts','Access Expires'
+  ], data.map(function(p) {
+    // Payments taken before discount codes existed have no sticker recorded,
+    // and for those the sticker simply is what was charged.
+    var sticker = (p.original_amount === null || p.original_amount === undefined)
+      ? p.amount : p.original_amount;
+    // Left blank unless money actually moved. A failed row carries the amount
+    // that was attempted, and totalling those as revenue would be wrong.
+    var settled = (p.status === 'paid' || p.status === 'refunded');
+    var net = settled ? (p.amount - (p.refund_amount || 0)) : null;
+    return [
+      p.created_at, p.paid_at, p.refunded_at,
+      emailMap[p.user_id] || '', p.user_id, p.plan, p.scope,
+      rupees(sticker), rupees(p.discount_amount || 0), rupees(p.amount),
+      p.refund_amount ? rupees(p.refund_amount) : '', rupees(net),
+      p.coupon_code || '', p.currency || 'INR', p.status,
+      p.razorpay_order_id, p.razorpay_payment_id, p.razorpay_refund_id,
+      p.subscription_starts_at, p.subscription_expires_at
+    ];
+  }));
   toast('Exported ' + data.length + ' payments');
+}
+
+// Honours the pills and the search box, so the file matches what is on
+// screen. Re-fetched rather than exported from _allUsers, because that is
+// capped at one page and would quietly short the file once you pass 1000
+// accounts.
+async function exportUsersCsv() {
+  toast('Building export...');
+  var data;
+  try {
+    data = await fetchAllRows(function() {
+      return _sb.from('profiles')
+        .select('id,email,full_name,subscription_plan,plan_scope,subscription_expires_at,written_expires_at,oral_expires_at,trial_started_at,created_at')
+        .order('created_at', { ascending: false });
+    }, 'users');
+  } catch (e) { toast('Export failed: ' + e.message, 'err'); return; }
+
+  var q = (document.getElementById('user-search').value || '').toLowerCase();
+  var now = new Date();
+  var rows = data.filter(function(u) { return userMatchesFilter(u, q, now); });
+  if (!rows.length) { toast('Nothing to export', 'err'); return; }
+
+  csvDownload('users', [
+    'Email','Name','User ID','Plan','Scope','Joined','Trial Started',
+    'Plan Expires','Written Until','Oral Until'
+  ], rows.map(function(u) {
+    return [u.email, u.full_name, u.id, u.subscription_plan || 'trial', u.plan_scope,
+      u.created_at, u.trial_started_at, u.subscription_expires_at,
+      u.written_expires_at, u.oral_expires_at];
+  }));
+  toast('Exported ' + rows.length + ' users');
+}
+
+// Columns are taken from the view rather than listed here, so this keeps
+// working if coupon_usage gains a column later.
+async function exportCouponsCsv() {
+  toast('Building export...');
+  var data;
+  try {
+    data = await fetchAllRows(function() {
+      return _sb.from('coupon_usage').select('*').order('created_at', { ascending: false });
+    }, 'coupons');
+  } catch (e) { toast('Export failed: ' + e.message, 'err'); return; }
+  if (!data.length) { toast('Nothing to export', 'err'); return; }
+
+  var keys = Object.keys(data[0]);
+  csvDownload('coupons', keys, data.map(function(c) {
+    return keys.map(function(k) { return c[k]; });
+  }));
+  toast('Exported ' + data.length + ' coupons');
+}
+
+// The whole log, not the 200 rows the tab shows. details is JSON, flattened
+// to a string so a spreadsheet can hold it in one cell.
+async function exportActivityCsv() {
+  toast('Building export...');
+  var filter = document.getElementById('act-filter').value;
+  var data;
+  try {
+    data = await fetchAllRows(function() {
+      var q = _sb.from('admin_actions')
+        .select('created_at,admin_email,action,target_email,target_user_id,details')
+        .order('created_at', { ascending: false });
+      return filter ? q.eq('action', filter) : q;
+    }, 'activity');
+  } catch (e) { toast('Export failed: ' + e.message, 'err'); return; }
+  if (!data.length) { toast('Nothing to export', 'err'); return; }
+
+  csvDownload('activity-log', [
+    'When','Admin','Action','Target Email','Target User ID','Details'
+  ], data.map(function(a) {
+    var d = '';
+    try { d = a.details ? JSON.stringify(a.details) : ''; } catch (e) { d = ''; }
+    return [a.created_at, a.admin_email, a.action, a.target_email, a.target_user_id, d];
+  }));
+  toast('Exported ' + data.length + ' log entries');
 }
 
 async function loadMorePayments() {
@@ -4026,6 +4198,7 @@ async function savePlanRow(duration, scope) {
    already has two, which is why sort_order rather than section is the row's
    identity. */
 var _vidRows = [];
+var VID_LANGS = ['English', 'Malayalam', 'Hindi', 'Tamil', 'Telugu'];
 
 function ytId(url) {
   if (!url) return null;
@@ -4033,29 +4206,111 @@ function ytId(url) {
   return m ? m[1] : null;
 }
 
+// Rows seeded from the old files carry the language as a suffix on the title,
+// because parsing that suffix is how the app used to work out what language a
+// video was in. Until a row is saved through this screen it has no language
+// column, so read the suffix rather than mislabelling every old row English.
+function rowLang(r) {
+  if (r.language) return r.language;
+  var m = String(r.header || '').match(/[-\u2013]\s*([A-Za-z]+)\s*$/);
+  return (m && VID_LANGS.indexOf(m[1]) !== -1) ? m[1] : 'English';
+}
+
 async function initVideosTab() {
-  var sel = document.getElementById('vid-topic');
   var opts = '';
   for (var i = 1; i <= 23; i++) {
     var id = 'T' + String(i).padStart(2, '0');
     opts += '<option value="' + id + '">' + id + (id === 'T01' ? ' (free preview)' : '') + '</option>';
   }
-  sel.innerHTML = opts;
+  document.getElementById('vid-topic').innerHTML = opts;
+  document.getElementById('nv-topic').innerHTML = opts;
+  nvTopicChanged();
   loadVideosTab();
+}
+
+// Sections are read from the topic rather than typed, so a video cannot be
+// filed against an anchor that does not exist in the notes.
+async function nvTopicChanged() {
+  var topic = document.getElementById('nv-topic').value;
+  var sel = document.getElementById('nv-section');
+  sel.innerHTML = '<option>Loading...</option>';
+  var res = await _sb.from('topic_videos').select('section,header,sort_order')
+    .eq('topic_id', topic).order('sort_order');
+  var seen = {}, opts = '';
+  (res.data || []).forEach(function(r) {
+    if (seen[r.section]) return;
+    seen[r.section] = 1;
+    opts += '<option value="' + esc(r.section) + '">' + esc(r.section) + ' - ' + esc(r.header) + '</option>';
+  });
+  sel.innerHTML = opts || '<option value="">No sections found</option>';
+}
+
+function nvPreview() {
+  var url = document.getElementById('nv-url').value.trim();
+  var el = document.getElementById('nv-hint');
+  if (!url) { el.textContent = ''; el.style.color = ''; return; }
+  var id = ytId(url);
+  el.textContent = id ? ('Recognised, video id ' + id)
+                      : 'That does not look like a YouTube link, so nothing would play.';
+  el.style.color = id ? 'var(--green)' : 'var(--orange)';
+}
+
+function nvMsg(text, ok) {
+  var el = document.getElementById('nv-msg');
+  if (!text) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.textContent = text;
+  el.style.background = ok ? 'var(--green-dim)' : 'var(--red-dim)';
+  el.style.color = ok ? 'var(--green)' : 'var(--red)';
+  el.style.border = '1.5px solid ' + (ok ? 'var(--green-border)' : 'var(--red-border)');
+}
+
+async function addVideo() {
+  var topic = document.getElementById('nv-topic').value;
+  var section = document.getElementById('nv-section').value;
+  var title = document.getElementById('nv-title').value.trim();
+  var url = document.getElementById('nv-url').value.trim();
+  if (!section) { nvMsg('Pick a section.', false); return; }
+  if (!title) { nvMsg('Give it a title, this is what cadets see.', false); return; }
+  if (url && !ytId(url)) { nvMsg('That does not look like a YouTube link.', false); return; }
+
+  // Land it directly after the last video already in that section, so it sits
+  // beside its siblings in the notes rather than at the end of the topic.
+  var res = await _sb.from('topic_videos').select('sort_order,section')
+    .eq('topic_id', topic).order('sort_order');
+  var rows = res.data || [];
+  var used = rows.map(function(r) { return r.sort_order; });
+  var sib = rows.filter(function(r) { return r.section === section; });
+  var next = (sib.length ? Math.max.apply(null, sib.map(function(r) { return r.sort_order; }))
+                         : Math.max.apply(null, used.concat([-1]))) + 1;
+  while (used.indexOf(next) !== -1) next++;   // (topic_id, sort_order) is unique
+
+  var ins = await _sb.from('topic_videos').insert({
+    topic_id: topic, section: section, header: title, url: url,
+    language: document.getElementById('nv-lang').value,
+    sort_order: next, updated_by: _myId,
+  });
+  if (ins.error) { nvMsg('Failed: ' + ins.error.message, false); return; }
+  nvMsg('Added to ' + topic + '.', true);
+  logAdminAction('add_video', null, { topic: topic, section: section, title: title, url: url });
+  document.getElementById('nv-title').value = '';
+  document.getElementById('nv-url').value = '';
+  nvPreview();
+  if (document.getElementById('vid-topic').value === topic) loadVideosTab();
 }
 
 async function loadVideosTab() {
   var topic = document.getElementById('vid-topic').value;
-  document.getElementById('vid-list').innerHTML = '<div class="ad-loading">Loading…</div>';
-  var { data, error } = await _sb.from('topic_videos')
-    .select('id,topic_id,section,header,url,sort_order')
+  document.getElementById('vid-list').innerHTML = '<div class="ad-loading">Loading...</div>';
+  var res = await _sb.from('topic_videos')
+    .select('id,topic_id,section,header,url,language,sort_order')
     .eq('topic_id', topic).order('sort_order');
-  if (error) {
+  if (res.error) {
     document.getElementById('vid-list').innerHTML =
       '<div class="ad-loading">Run topic_videos_setup.sql to enable Videos.</div>';
     return;
   }
-  _vidRows = data || [];
+  _vidRows = res.data || [];
   renderVideosTab();
 }
 
@@ -4063,13 +4318,12 @@ function renderVideosTab() {
   var filter = document.getElementById('vid-filter').value;
   var filled = _vidRows.filter(function(r) { return r.url && r.url.trim(); }).length;
   document.getElementById('vid-summary').textContent =
-    filled + ' of ' + _vidRows.length + ' sections have a video';
+    filled + ' of ' + _vidRows.length + ' rows have a video';
 
   var rows = _vidRows.filter(function(r) {
     var has = !!(r.url && r.url.trim());
     return filter === 'all' || (filter === 'filled' ? has : !has);
   });
-
   if (!rows.length) {
     document.getElementById('vid-list').innerHTML = '<div class="ad-loading">Nothing matches that filter.</div>';
     return;
@@ -4080,22 +4334,28 @@ function renderVideosTab() {
     var thumb = vid
       ? '<img src="https://img.youtube.com/vi/' + vid + '/default.jpg" alt="" style="width:64px;height:48px;object-fit:cover;border-radius:5px;flex-shrink:0">'
       : '<div style="width:64px;height:48px;border:1px dashed var(--border2);border-radius:5px;flex-shrink:0"></div>';
-    // A link that is not recognisably YouTube is worth flagging before it is
-    // saved, since the player embeds by id and would simply show nothing.
+    // Flagged before saving, because the player embeds by video id and an
+    // unrecognised link would silently play nothing.
     var warn = (r.url && r.url.trim() && !vid)
-      ? '<div class="ad-hint" style="color:var(--orange)">That does not look like a YouTube link, so nothing will play.</div>' : '';
+      ? '<div class="ad-hint" style="color:var(--orange)">Not a recognised YouTube link, so nothing will play.</div>' : '';
+    var langOpts = VID_LANGS.map(function(L) {
+      return '<option value="' + L + '"' + (rowLang(r) === L ? ' selected' : '') + '>' + L + '</option>';
+    }).join('');
     return '<div class="ad-card" style="margin-bottom:10px">'
       + '<div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">'
       +   thumb
       +   '<div style="flex:1 1 260px;min-width:0">'
-      +     '<div style="font-size:13.5px;font-weight:600;color:var(--text)">' + esc(r.header) + '</div>'
-      +     '<div style="font-size:11px;color:var(--text3);margin:2px 0 8px;font-family:ui-monospace,monospace">' + esc(r.section) + '</div>'
+      +     '<input class="ad-input" id="vid-title-' + r.id + '" value="' + esc(r.header) + '" style="font-weight:600;margin-bottom:6px" placeholder="Title shown to cadets">'
+      +     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:6px">'
+      +       '<select class="ad-select" id="vid-lang-' + r.id + '" style="max-width:150px">' + langOpts + '</select>'
+      +       '<span style="font-size:11px;color:var(--text3);font-family:ui-monospace,monospace;align-self:center">' + esc(r.section) + '</span>'
+      +     '</div>'
       +     '<input class="ad-input" id="vid-url-' + r.id + '" value="' + esc(r.url || '') + '" placeholder="Paste a YouTube link, or leave blank">'
       +     warn
       +   '</div>'
       +   '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start">'
       +     '<button class="ad-btn btn-primary btn-sm" onclick="saveVideo(' + attrJs(r.id) + ')">Save</button>'
-      +     '<button class="ad-btn btn-ghost btn-sm" onclick="addVideoToSection(' + attrJs(r.section) + ',' + attrJs(r.header) + ')">Add another here</button>'
+      +     '<button class="ad-btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteVideo(' + attrJs(r.id) + ')">Delete</button>'
       +   '</div>'
       + '</div>'
       + '</div>';
@@ -4104,33 +4364,28 @@ function renderVideosTab() {
 
 async function saveVideo(id) {
   var url = (document.getElementById('vid-url-' + id).value || '').trim();
-  var { error } = await _sb.from('topic_videos')
-    .update({ url: url, updated_at: new Date().toISOString(), updated_by: _myId })
-    .eq('id', id);
-  if (error) { toast('Failed: ' + error.message, 'err'); return; }
-  toast(url ? 'Video saved' : 'Video removed');
-  logAdminAction('edit_video', null, { id: id, url: url });
+  var title = (document.getElementById('vid-title-' + id).value || '').trim();
+  if (!title) { toast('A title is required', 'err'); return; }
+  var res = await _sb.from('topic_videos').update({
+    url: url, header: title,
+    language: document.getElementById('vid-lang-' + id).value,
+    updated_at: new Date().toISOString(), updated_by: _myId,
+  }).eq('id', id);
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  toast(url ? 'Saved' : 'Saved, link cleared');
+  logAdminAction('edit_video', null, { id: id, title: title, url: url });
   loadVideosTab();
 }
 
-// A second, third, any number of videos for the same section. sort_order is
-// placed just after the row it was added from, so it lands next to its sibling
-// in the notes rather than at the end of the topic.
-async function addVideoToSection(section, header) {
-  var topic = document.getElementById('vid-topic').value;
-  var siblings = _vidRows.filter(function(r) { return r.section === section; });
-  var after = Math.max.apply(null, siblings.map(function(r) { return r.sort_order; }));
-  var used = _vidRows.map(function(r) { return r.sort_order; });
-  var next = after + 1;
-  while (used.indexOf(next) !== -1) next++;   // never collide with (topic, sort_order)
-
-  var { error } = await _sb.from('topic_videos').insert({
-    topic_id: topic, section: section, header: header, url: '', sort_order: next,
-    updated_by: _myId,
-  });
-  if (error) { toast('Failed: ' + error.message, 'err'); return; }
-  toast('Row added, paste the link and save');
-  logAdminAction('add_video', null, { topic: topic, section: section });
+// Removes the row entirely. Clearing the link instead leaves the section
+// listed with nothing to play, which is right while a video is still being
+// made; deleting is for a row that should not be there at all.
+async function deleteVideo(id) {
+  if (!confirm('Delete this row? Clearing the link instead keeps the section listed for later.')) return;
+  var res = await _sb.from('topic_videos').delete().eq('id', id);
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  toast('Row deleted');
+  logAdminAction('delete_video', null, { id: id });
   loadVideosTab();
 }
 

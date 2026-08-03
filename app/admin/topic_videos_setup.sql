@@ -29,6 +29,13 @@ CREATE TABLE IF NOT EXISTS public.topic_videos (
   UNIQUE (topic_id, sort_order)
 );
 
+-- Language is its own column rather than a suffix on the title. The app used
+-- to work out the language by parsing " - Malayalam" off the end of the
+-- header, which meant whoever added a video had to know that convention and a
+-- typo silently produced an untagged video. Seeded rows keep their suffix, so
+-- the client falls back to parsing when this column is null.
+ALTER TABLE public.topic_videos ADD COLUMN IF NOT EXISTS language TEXT;
+
 CREATE INDEX IF NOT EXISTS topic_videos_topic_idx ON public.topic_videos (topic_id, sort_order);
 
 -- ── Who may read a topic's videos ─────────────────────────────────────────

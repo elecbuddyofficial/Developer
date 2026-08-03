@@ -245,7 +245,7 @@ function _loadTopicVideos(topicId) {
 
     window._sbClient
         .from('topic_videos')
-        .select('section,header,url,sort_order')
+        .select('section,header,url,language,sort_order')
         .eq('topic_id', topicId)
         .order('sort_order')
         .then(function(res) {
@@ -255,7 +255,7 @@ function _loadTopicVideos(topicId) {
             // itself paywalled, so this cannot leak anything.
             if (!res.data.length) return fallback();
             window.VIDEO_DATA[topicId] = res.data.map(function(r) {
-                return { section: r.section, header: r.header, url: r.url || '' };
+                return { section: r.section, header: r.header, url: r.url || '', language: r.language || '' };
             });
             if (window._activeTopicId === topicId && typeof injectVideoTab === 'function') {
                 injectVideoTab(topicId);
@@ -3065,14 +3065,21 @@ var _vidVids = [];
 var _vidLangs = ['All'];
 var _vidActiveLang = 'All';
 
-function getVideoLang(header) {
-    let m = header.match(/\s*[-–]\s*([A-Za-z]+)\s*$/);
+// Videos added through the admin console carry their language in its own
+// column. Rows seeded from the old hardcoded files encode it as a suffix on the
+// title instead, which is how this was always read. Prefer the column, fall
+// back to the suffix, so both shapes coexist without a data migration.
+function getVideoLang(v) {
+    if (v && v.language && KNOWN_LANGS.indexOf(v.language) !== -1) return v.language;
+    let m = String((v && v.header) || '').match(/\s*[-–]\s*([A-Za-z]+)\s*$/);
     if (m && KNOWN_LANGS.indexOf(m[1]) !== -1) return m[1];
     return 'English';
 }
 
-function stripLangSuffix(header) {
-    return header.replace(/\s*[-–]\s*([A-Za-z]+)\s*$/, function(_, lang) {
+// Stripped whichever way the language arrived, so an old row that later gets
+// its column filled in does not end up reading "... - Malayalam [Malayalam]".
+function stripLangSuffix(v) {
+    return String((v && v.header) || '').replace(/\s*[-–]\s*([A-Za-z]+)\s*$/, function(_, lang) {
         return KNOWN_LANGS.indexOf(lang) !== -1 ? '' : (_ );
     }).trim();
 }
@@ -3093,7 +3100,7 @@ function renderVideos(topicId) {
     _vidVids = vids;
     _vidLangs = ['All'];
     vids.forEach(function(v) {
-        var l = getVideoLang(v.header);
+        var l = getVideoLang(v);
         if (_vidLangs.indexOf(l) === -1) _vidLangs.push(l);
     });
 
@@ -3106,7 +3113,7 @@ function vidRenderList(activeLang) {
 
     var filtered = activeLang === 'All'
         ? _vidVids
-        : _vidVids.filter(function(v) { return getVideoLang(v.header) === activeLang; });
+        : _vidVids.filter(function(v) { return getVideoLang(v) === activeLang; });
 
     var chipsHtml = _vidLangs.length > 1
         ? '<div class="vid-lang-chips">' + _vidLangs.map(function(l) {
@@ -3120,8 +3127,8 @@ function vidRenderList(activeLang) {
         ? '<div style="color:var(--text3);font-size:13px;padding:20px 0;text-align:center;">No ' + activeLang + ' videos for this topic.</div>'
         : '<div class="vid-list">' + filtered.map(function(v) {
             var realIdx = _vidVids.indexOf(v);
-            var lang = getVideoLang(v.header);
-            var title = stripLangSuffix(v.header);
+            var lang = getVideoLang(v);
+            var title = stripLangSuffix(v);
             var badge = lang !== 'English' ? '<span class="vid-lang-badge">' + lang.slice(0, 2).toUpperCase() + '</span>' : '';
             return '<button class="vid-list-item" onclick="vidOpenFloat(\'' + _vidTopicId + '\',' + realIdx + ')">' +
                 '<span class="vid-list-icon">▶</span>' +
@@ -3134,7 +3141,7 @@ function vidRenderList(activeLang) {
 
 function vidOpenFloat(topicId, startIdx) {
     let allVids = (window.VIDEO_DATA[topicId] || []).filter(function(v) { return v.url && v.url.trim(); });
-    let vids = (_vidActiveLang === 'All') ? allVids : allVids.filter(function(v) { return getVideoLang(v.header) === _vidActiveLang; });
+    let vids = (_vidActiveLang === 'All') ? allVids : allVids.filter(function(v) { return getVideoLang(v) === _vidActiveLang; });
     if (!vids.length) return;
     let floatIdx = vids.indexOf(allVids[startIdx]);
     if (floatIdx === -1) floatIdx = 0;

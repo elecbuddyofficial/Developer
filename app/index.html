@@ -888,7 +888,23 @@
   </div>
 </div>
 
-<!-- ── First-run welcome ───────────────────────────────────── -->
+<!-- ── What's new ──────────────────────────────────────────── -->
+<div id="upd-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:480px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">
+      <div style="font-size:18px;font-weight:700;color:#DDE5EF;">What&rsquo;s new</div>
+      <div style="font-size:12.5px;color:#8FA3B8;margin-top:5px;line-height:1.55;">Since you were last here. You will only see these once.</div>
+      <!-- Deliberately not a scrolling pane with the button pinned below it.
+           The whole card scrolls, so the button sits after the notices and has
+           to be scrolled to, rather than the last notice being clipped by a
+           box the reader has no reason to notice. -->
+      <div id="upd-list" style="margin-top:18px;"></div>
+      <button onclick="dismissUpdates()" style="width:100%;min-height:46px;margin-top:18px;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── First-run welcome ───────────────────────────── -->
 <div id="wel-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
     <div style="width:100%;max-width:460px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:26px 24px;text-align:center;">
@@ -1581,6 +1597,7 @@ function setTheme(t) {
         // Piggybacks on a profile read that already happens, so the welcome
         // costs no extra round trip. It is a no-op after the first time.
         if (typeof window.maybeShowWelcome === 'function') window.maybeShowWelcome(profile);
+        if (typeof window.maybeShowUpdates === 'function') window.maybeShowUpdates();
 
         var wasAccess = window._access || { oral: false, written: false };
         window._access = window._deriveAccess(profile).access;
@@ -1787,7 +1804,82 @@ function setTheme(t) {
 
     // Payment history. Same slide-across pattern as Settings: the profile
     // panel closes, this one opens in its place, and Back returns to it.
-    // ── First-run welcome ──────────────────────────────────
+    // ── What's new, shown once ─────────────────────────────
+    // Anything an admin publishes is put in front of the reader the next time
+    // they open the app, rather than waiting behind a dot in the profile menu
+    // that most people never press.
+    //
+    // Tracked separately from eb_notif_seen, which the bell already uses. If
+    // they shared a key, opening the notifications panel would silently mark
+    // updates as read without the reader having seen this banner, and the
+    // banner would never appear again.
+    //
+    // Keyed per user id, so a second account on the same device gets its own
+    // history rather than inheriting the first one's.
+    function _updKey() {
+      return 'eb_updates_seen_' + (window._sbUser ? window._sbUser.id : 'anon');
+    }
+
+    // It hangs off checkSession(), which also runs every ten minutes and on
+    // every tab focus. Without this it would interrupt someone mid-quiz the
+    // moment an admin published something. On opening the app, and nowhere else.
+    var _updRan = false;
+
+    window.maybeShowUpdates = async function() {
+      if (_updRan) return;
+      _updRan = true;
+      if (!window._sbClient || !window._sbUser) return;
+      // Never stack on top of the first-run welcome. A brand new account has
+      // no "since you were last here" anyway, so mark everything read and
+      // leave them alone.
+      if (document.getElementById('wel-modal').style.display === 'block') return;
+
+      var since;
+      try { since = localStorage.getItem(_updKey()); } catch (e) { return; }
+
+      var res = await window._sbClient.from('notifications')
+        .select('id,title,body,type,created_at,target_plan')
+        .order('created_at', { ascending: false }).limit(20);
+      // Same audience filter the bell uses, so a notice aimed at another plan
+      // is never forced in front of the wrong reader.
+      var all = (res.data || []).filter(nfVisible);
+      if (!all.length) return;
+
+      // First run of this build on an existing account: mark everything read
+      // rather than dumping months of history on them at once.
+      if (!since) {
+        try { localStorage.setItem(_updKey(), new Date().toISOString()); } catch (e) {}
+        return;
+      }
+
+      var fresh = all.filter(function(n) { return new Date(n.created_at) > new Date(since); });
+      if (!fresh.length) return;
+
+      document.getElementById('upd-list').innerHTML = fresh.map(function(n) {
+        var t = n.type || 'info';
+        return '<div style="background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:13px 15px;margin-bottom:10px;">'
+          + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+          +   '<span class="nf-chip nf-chip-' + t + '">' + t + '</span>'
+          +   '<span style="font-size:11px;color:#6E8AA6;">' + nfTimeAgo(n.created_at) + '</span>'
+          + '</div>'
+          + '<div style="font-size:14px;font-weight:600;color:#DDE5EF;margin-bottom:4px;">' + escNf(n.title) + '</div>'
+          + '<div style="font-size:13px;color:#8FA3B8;line-height:1.6;white-space:pre-wrap;">' + escNf(n.body) + '</div>'
+          + '</div>';
+      }).join('');
+
+      document.getElementById('upd-modal').style.display = 'block';
+      document.documentElement.classList.add('_modal-open');
+    };
+
+    window.dismissUpdates = function() {
+      // Stamped only on dismissal, never on display, so closing the tab
+      // mid-read leaves them to be shown again rather than lost.
+      try { localStorage.setItem(_updKey(), new Date().toISOString()); } catch (e) {}
+      document.getElementById('upd-modal').style.display = 'none';
+      document.documentElement.classList.remove('_modal-open');
+    };
+
+    // ── First-run welcome ────────────────────────────────────────
     // Shown once, on the first visit after signing up.
     //
     // Keyed per user id rather than a single flag, so a shared or reused
