@@ -1524,7 +1524,20 @@ function setTheme(t) {
     // establish a containing block for it — a structural fix rather than a
     // guess at compositing behaviour, and it makes the z-index comparison
     // against #topbar a simple top-level one.
-    ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal'].forEach(function(id) {
+    //
+    // guide-overlay is here for a second reason worth spelling out, because it
+    // only reproduced on a real iPhone. #content carries
+    // -webkit-overflow-scrolling:touch, which on iOS establishes a stacking
+    // context. The guide overlay sat inside it, so its z-index of 9000 was only
+    // ever compared against its siblings INSIDE #content, never against
+    // #sidebar (z-index 2000), which is a direct child of #layout. The sidebar
+    // therefore painted straight over the walkthrough, hiding the tooltip
+    // behind it. No amount of raising the overlay's z-index could fix that,
+    // because the comparison was never happening at that level. Moving it to
+    // <body> makes it a top-level sibling of the sidebar, where the z-index
+    // finally means what it looks like it means.
+    ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal',
+     'guide-overlay', 'tx-modal'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
     });

@@ -2300,7 +2300,16 @@ function _guideTooltip(targetRect, pad, step, idx) {
         else                       { top = sT + sH/2 - th/2;   left = sL - tw - mg; }
         left = Math.max(mg, Math.min(left, vw - tw - mg));
         top  = Math.max(mg, Math.min(top,  vh - th - mg));
-        if (top >= mg && top+th <= vh-mg && left >= mg && left+tw <= vw-mg) { placed = true; break; }
+        var onScreen = top >= mg && top+th <= vh-mg && left >= mg && left+tw <= vw-mg;
+        // Fitting on screen is not enough on its own. Clamping a placement back
+        // into the viewport can slide it straight over the thing it is pointing
+        // at: on a 390px phone the open sidebar is 280px wide, so "right of the
+        // navigation" has nowhere to go and gets clamped back across the
+        // navigation itself. Reject any placement that covers the spotlight and
+        // let the next candidate try.
+        var clearOfTarget = (left + tw <= sL) || (left >= sL + sW)
+                         || (top + th <= sT)  || (top >= sT + sH);
+        if (onScreen && clearOfTarget) { placed = true; break; }
     }
     if (!placed) {
         left = Math.max(mg, Math.min((vw-tw)/2, vw-tw-mg));
