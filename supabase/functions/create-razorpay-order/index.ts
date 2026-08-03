@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { priceWithCoupon, priceWithoutCoupon, couponAppliesTo } from '../_shared/coupons.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -36,7 +37,15 @@ serve(async (req) => {
     const body  = await req.json();
     const plan  = body?.plan as string;
     const scope = body?.scope as string;
+    const rawCode = body?.code as string | undefined;
     if (!plan || !scope) return json({ error: 'plan and scope are required' }, 400);
+
+    const code = typeof rawCode === 'string' && rawCode.trim()
+      ? rawCode.trim().toUpperCase()
+      : null;
+    if (code && !/^[A-Z0-9_-]{3,32}$/.test(code)) {
+      return json({ error: 'That code is not valid for this plan' }, 400);
+    }
 
     const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
@@ -73,12 +82,74 @@ serve(async (req) => {
     if (!planRow || !planRow.active) return json({ error: 'Invalid plan/scope' }, 400);
 
     const now = new Date();
-    const discountActive = planRow.discount_percent > 0
-      && (!planRow.discount_starts_at || new Date(planRow.discount_starts_at) <= now)
-      && (!planRow.discount_ends_at   || new Date(planRow.discount_ends_at)   >= now);
-    const amount = discountActive
-      ? Math.round(planRow.base_amount * (1 - planRow.discount_percent / 100))
-      : planRow.base_amount;
+    // Price with no code. Same rule the quote endpoint used, from _shared so
+    // the two cannot drift into showing one number and charging another.
+    const listAmount = priceWithoutCoupon(planRow, now);
+
+    // ── Apply a discount code, if one was supplied ────────────────────────
+    // The quote from validate-coupon is NOT trusted and is not even sent: the
+    // coupon is looked up again here, and the slot is claimed under a row lock
+    // inside coupon_reserve. Anything that changed since the quote (code spent,
+    // expired, disabled) is caught here, which is the only place that matters
+    // because this is the only place that charges.
+    let amount = listAmount;
+    let couponCode: string | null = null;
+    let discountAmount = 0;
+
+    if (code) {
+      const { data: coupon } = await sb
+        .from('coupons').select('*').eq('code', code).maybeSingle();
+
+      const vague = json({ error: 'That code is not valid for this plan' }, 400);
+      if (!coupon) return vague;
+
+      // A grant hands over access with no payment, so it must never reach
+      // Razorpay. The client is told to use redeem-coupon instead.
+      if (!coupon.kind || coupon.kind === 'grant') {
+        return json({ error: 'use_redeem_coupon', code }, 409);
+      }
+
+      const applies = couponAppliesTo(coupon, plan, scope, listAmount, now);
+      if (!applies.ok) {
+        return json({
+          error: applies.reason === 'below_minimum'
+            ? 'This code needs an order of at least ₹' + Math.ceil((coupon.min_amount ?? 0) / 100)
+            : 'That code is not valid for this plan',
+        }, 400);
+      }
+
+      const priced = priceWithCoupon(planRow, coupon, now);
+      if (priced.isFullGrant) return json({ error: 'use_redeem_coupon', code }, 409);
+
+      // Claim the slot. Raises if the code is spent, already used by this
+      // buyer, or otherwise ineligible; the row lock inside makes a limited
+      // code impossible to oversell no matter how many buyers arrive at once.
+      const { error: reserveErr } = await sb.rpc('coupon_reserve', {
+        p_code: code, p_user: user.id, p_duration: plan, p_scope: scope,
+        p_amount: listAmount, p_ttl_minutes: 30,
+      });
+      if (reserveErr) {
+        const m = String(reserveErr.message || '');
+        return json({
+          error: m.includes('already_used') ? 'You have already used this code'
+               : m.includes('below_minimum') ? 'This code needs a larger order'
+               : 'That code is not valid for this plan',
+        }, 400);
+      }
+
+      couponCode = code;
+      amount = priced.final;
+      discountAmount = listAmount - priced.final;
+    }
+
+    // Hand the slot back if we cannot get as far as a payment row. This is
+    // best-effort only: the reserved_until TTL is the actual guarantee, since
+    // a crashed isolate never runs its own cleanup.
+    const releaseReservation = async () => {
+      if (couponCode) {
+        await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+      }
+    };
 
     // Create Razorpay order
     const credentials = btoa(`${RZP_KEY_ID}:${RZP_KEY_SECRET}`);
@@ -99,23 +170,43 @@ serve(async (req) => {
     if (!rzpRes.ok) {
       const err = await rzpRes.text();
       console.error('Razorpay error:', err);
+      await releaseReservation();
       return json({ error: 'Could not create order' }, 502);
     }
 
     const order = await rzpRes.json();
 
-    // Log pending payment
-    await sb.from('payments').insert({
+    // Log pending payment. razorpay_order_id is UNIQUE NOT NULL, so this row
+    // cannot exist any earlier than here - which is why the settle trigger
+    // finds the redemption by (coupon_code, user_id) rather than payment_id.
+    const { error: payErr } = await sb.from('payments').insert({
       user_id:           user.id,
       razorpay_order_id: order.id,
       plan,
       scope,
-      amount,
+      amount,                          // what will actually be charged
+      original_amount:   listAmount,   // what it would have been without a code
+      discount_amount:   discountAmount,
+      coupon_code:       couponCode,
       currency:          'INR',
       status:            'created',
     });
+    if (payErr) {
+      // No local row means nothing can ever settle this order, so do not send
+      // the buyer to a checkout we cannot honour.
+      console.error('payments insert failed:', payErr);
+      await releaseReservation();
+      return json({ error: 'Could not create order' }, 500);
+    }
 
-    return json({ order_id: order.id, amount, currency: 'INR' });
+    return json({
+      order_id: order.id,
+      amount,
+      currency: 'INR',
+      original_amount: listAmount,
+      discount_amount: discountAmount,
+      coupon_code: couponCode,
+    });
 
   } catch (e) {
     console.error(e);

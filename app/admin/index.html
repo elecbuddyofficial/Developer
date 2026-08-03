@@ -166,6 +166,23 @@
     .ad-card-head { font-size:14px; font-weight:700; color:var(--text); margin-bottom:4px; }
     .ad-card-sub  { font-size:12.5px; color:var(--text2); margin-bottom:18px; line-height:1.5; }
 
+    /* Small note under a single field, for the ones where getting it wrong
+       costs money rather than just looking untidy. */
+    .ad-hint { font-size:11px; color:var(--text3); line-height:1.45; margin-top:5px; }
+    /* Panel that explains what the currently selected coupon type actually
+       does, in plain words with a worked example. */
+    .ad-explain {
+      font-size:12.5px; line-height:1.6; color:var(--text2);
+      background:var(--surface2); border:1px solid var(--border2);
+      border-left:3px solid var(--blue);
+      border-radius:var(--r8); padding:12px 14px; margin-bottom:18px;
+    }
+    .ad-explain strong { color:var(--text); }
+    .ad-explain code {
+      font-family:ui-monospace,monospace; font-size:11.5px;
+      background:var(--surface3); padding:1px 5px; border-radius:4px;
+    }
+
     .ad-field { margin-bottom:14px; }
     .ad-label {
       display:block; font-size:10.5px; font-weight:700;
@@ -1262,12 +1279,32 @@
 
     <div class="ad-card">
       <div class="ad-card-head">New Coupon</div>
-      <div class="ad-card-sub">Codes are case-insensitive and stored uppercase.</div>
+      <div class="ad-card-sub">Codes are case-insensitive and stored uppercase. A buyer types one into "Have a code?" in the upgrade window.</div>
+
+      <!-- Rewritten by cpKindChanged() to describe whichever type is selected. -->
+      <div class="ad-explain" id="cp-explain"></div>
       <div class="ad-row">
         <div class="ad-field">
           <label class="ad-label">Code</label>
           <input class="ad-input" id="cp-code" placeholder="e.g. FAMILY2026" autocomplete="off">
         </div>
+        <div class="ad-field">
+          <label class="ad-label">Type</label>
+          <select class="ad-select" id="cp-kind" onchange="cpKindChanged()">
+            <option value="grant" selected>Grant free access</option>
+            <option value="percent">Percent off</option>
+            <option value="fixed">Fixed amount off</option>
+          </select>
+        </div>
+        <div class="ad-field" id="cp-value-field" style="display:none">
+          <label class="ad-label" id="cp-value-label">Percent Off</label>
+          <input class="ad-input" id="cp-value" type="number" min="1" oninput="cpPreview()">
+          <div class="ad-hint" id="cp-value-hint"></div>
+        </div>
+      </div>
+
+      <!-- GRANT-only: what the code hands out -->
+      <div class="ad-row" id="cp-grant-row">
         <div class="ad-field">
           <label class="ad-label">Grants Plan</label>
           <select class="ad-select" id="cp-plan" onchange="cpPlanChanged()">
@@ -1285,21 +1322,58 @@
             <option value="both" selected>Both - Expedition</option>
           </select>
         </div>
-      </div>
-      <div class="ad-row">
         <div class="ad-field">
           <label class="ad-label">Months of Access</label>
           <input class="ad-input" id="cp-months" type="number" min="1" max="120" placeholder="Defaults to the plan length">
         </div>
+      </div>
+
+      <!-- DISCOUNT-only: which purchases the code is allowed on -->
+      <div class="ad-row" id="cp-target-row" style="display:none">
+        <div class="ad-field">
+          <label class="ad-label">Applies to Duration</label>
+          <select class="ad-select" id="cp-applies-duration" onchange="cpPreview()">
+            <option value="">Any duration</option>
+            <option value="3mo">3 Months only</option>
+            <option value="6mo">6 Months only</option>
+            <option value="12mo">12 Months only</option>
+          </select>
+          <div class="ad-hint">Leave on "Any" unless the offer is meant for one tier. Stops a code aimed at the 12-month plan being spent on the cheapest one.</div>
+        </div>
+        <div class="ad-field">
+          <label class="ad-label">Applies to Scope</label>
+          <select class="ad-select" id="cp-applies-scope" onchange="cpPreview()">
+            <option value="">Any scope</option>
+            <option value="written">Written Only - Passage</option>
+            <option value="oral">Oral Only - Voyage</option>
+            <option value="both">Both - Expedition</option>
+          </select>
+          <div class="ad-hint">Which section the offer covers. "Any" lets the buyer choose.</div>
+        </div>
+        <div class="ad-field">
+          <label class="ad-label">Minimum Order (&#8377;, optional)</label>
+          <input class="ad-input" id="cp-min-amount" type="number" min="0" placeholder="No minimum" oninput="cpPreview()">
+          <div class="ad-hint">Blocks the code on anything cheaper. Mainly useful with a fixed &#8377; discount, so &#8377;200 off cannot be spent on a &#8377;299 plan.</div>
+        </div>
+      </div>
+
+      <div class="ad-row">
         <div class="ad-field">
           <label class="ad-label">Max Redemptions</label>
           <input class="ad-input" id="cp-max" type="number" min="1" value="1">
+          <div class="ad-hint">How many people in total can use it. <strong>1</strong> for a single person, <strong>50</strong> for a "first 50" campaign. One use per account either way, so nobody can spend it twice.</div>
         </div>
         <div class="ad-field">
           <label class="ad-label">Expires (optional)</label>
           <input class="ad-input" id="cp-expires" type="date">
+          <div class="ad-hint">Last day the code works. Leave blank and it runs until you disable it.</div>
         </div>
+        <div class="ad-field"></div>
       </div>
+
+      <!-- What this code will actually charge, on every live plan. The single
+           best guard against a 90 that was meant to be a 9. -->
+      <div id="cp-preview" style="display:none;margin-top:4px;margin-bottom:14px;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r8);background:var(--surface2)"></div>
       <div class="ad-field">
         <label class="ad-label">Note (internal)</label>
         <input class="ad-input" id="cp-note" placeholder="Who is this for?">
@@ -1309,12 +1383,21 @@
     </div>
 
     <div class="ad-section-head">Existing Coupons</div>
+    <div class="ad-card-sub" style="margin-top:-6px">
+      <strong>Used</strong> counts people who have actually spent the code plus anyone
+      part-way through paying with it right now. <strong>held</strong> is a checkout in
+      progress: it frees itself within 30 minutes if they never pay.
+      <strong>refunded</strong> means the slot went back to the pool, though that buyer
+      cannot use the code again. <strong>over-redeemed</strong> means a payment landed
+      after the limit was reached; the money was taken so it was honoured, and it is
+      shown here rather than hidden.
+    </div>
     <div class="ad-table-wrap">
       <table class="ad-table">
         <thead><tr>
-          <th>Code</th><th>Plan</th><th>Used</th><th>Expires</th><th>Note</th><th></th>
+          <th>Code</th><th>Type</th><th>Effect</th><th>Used</th><th>Expires</th><th>Note</th><th></th>
         </tr></thead>
-        <tbody id="cp-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        <tbody id="cp-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -3334,6 +3417,131 @@ function cpPlanChanged() {
   }
 }
 
+// Plain-English description of each type, with a worked example. The three
+// behave so differently (one skips payment entirely) that picking the wrong
+// one is the easiest expensive mistake to make on this screen.
+var CP_EXPLAIN = {
+  grant: '<strong>Grant free access.</strong> The person types the code and gets the plan immediately. '
+       + '<strong>No payment is taken and no money reaches your Razorpay account.</strong> '
+       + 'Use it for review copies, complimentary access, and making good on a complaint.'
+       + '<div style="margin-top:7px">Example: <code>ADITH12</code> granting 12 Months / Both means that person gets a full year of everything, free.</div>',
+  percent: '<strong>Percent off.</strong> The person still pays, just less. Razorpay runs as normal and the reduced amount lands in your account.'
+       + '<div style="margin-top:7px">Example: <code>LAUNCH25</code> at 25% turns a &#8377;1,299 plan into <strong>&#8377;974</strong>. You receive &#8377;974.</div>'
+       + '<div style="margin-top:7px">A percentage scales by itself, so one code stays sensible on both a cheap and an expensive plan. This is usually the one you want.</div>',
+  fixed: '<strong>Fixed amount off.</strong> Takes a flat rupee amount off, whatever the plan costs.'
+       + '<div style="margin-top:7px">Example: <code>SAVE200</code> turns &#8377;1,299 into <strong>&#8377;1,099</strong> but also turns &#8377;699 into &#8377;499, which is a far deeper cut in percentage terms. Set a Minimum Order if that matters.</div>',
+};
+
+// A grant decides what you GET; a discount decides what you PAY. The two need
+// completely different fields, so the form swaps rather than showing both.
+function cpKindChanged() {
+  var kind = document.getElementById('cp-kind').value;
+  var isGrant = kind === 'grant';
+  document.getElementById('cp-grant-row').style.display  = isGrant ? '' : 'none';
+  document.getElementById('cp-target-row').style.display = isGrant ? 'none' : '';
+  document.getElementById('cp-value-field').style.display = isGrant ? 'none' : '';
+  document.getElementById('cp-explain').innerHTML = CP_EXPLAIN[kind] || '';
+  document.getElementById('cp-value-label').textContent =
+    kind === 'percent' ? 'Percent Off (1-100)' : 'Amount Off (₹)';
+  var v = document.getElementById('cp-value');
+  v.max = kind === 'percent' ? 100 : '';
+  v.placeholder = kind === 'percent' ? 'e.g. 25' : 'e.g. 200';
+  var hint = document.getElementById('cp-value-hint');
+  if (hint) {
+    hint.innerHTML = kind === 'percent'
+      ? 'Type <strong>25</strong> to mean 25% off. Not 0.25, and not 75.'
+      : 'In rupees. Type <strong>200</strong> to take &#8377;200 off.';
+  }
+  cpPreview();
+}
+
+// Mirrors the server rule in _shared/coupons.ts: best-of, never compounded,
+// then clamped to Razorpay's floor. Display only - create-razorpay-order
+// recomputes from the database and is the only thing that can charge.
+var RZP_FLOOR_PAISE = 100;
+function cpPriceWith(row, kind, value) {
+  var sticker = row.base_amount;
+  var now = new Date();
+  var saleOn = row.discount_percent > 0
+    && (!row.discount_starts_at || new Date(row.discount_starts_at) <= now)
+    && (!row.discount_ends_at   || new Date(row.discount_ends_at)   >= now);
+  var salePrice = saleOn ? Math.round(sticker * (1 - row.discount_percent / 100)) : sticker;
+  var couponPrice = kind === 'percent'
+    ? Math.round(sticker * (1 - value / 100))
+    : sticker - value;
+  var best = Math.min(salePrice, couponPrice);
+  return {
+    sticker: sticker, salePrice: salePrice, saleOn: saleOn,
+    final: Math.max(RZP_FLOOR_PAISE, best),
+    isFullGrant: best < RZP_FLOOR_PAISE,
+  };
+}
+
+// The preview prices against live plan rows, which are otherwise only fetched
+// when the Plans tab is opened. Pull them once so the preview works even if
+// the admin came straight to Coupons.
+async function cpEnsurePlans() {
+  if (window._plansRows && window._plansRows.length) return;
+  var { data } = await _sb.from('pricing_plans').select('*').order('scope').order('duration');
+  window._plansRows = data || [];
+  cpPreview();
+}
+
+function cpPreview() {
+  var box  = document.getElementById('cp-preview');
+  var kind = document.getElementById('cp-kind').value;
+  if (kind === 'grant') { box.style.display = 'none'; return; }
+
+  var value = parseInt(document.getElementById('cp-value').value, 10);
+  var rows = window._plansRows || [];
+  if (!value || value < 1 || !rows.length) { box.style.display = 'none'; return; }
+
+  var wantDur   = document.getElementById('cp-applies-duration').value;
+  var wantScope = document.getElementById('cp-applies-scope').value;
+  var minRupees = parseInt(document.getElementById('cp-min-amount').value, 10) || 0;
+
+  var lines = rows.filter(function(r) { return r.active; }).map(function(r) {
+    var eligible = (!wantDur || wantDur === r.duration)
+                && (!wantScope || wantScope === r.scope);
+    var label = r.track_name + ' ' + r.tier_name;
+    if (!eligible) {
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;color:var(--text3)">'
+        + '<span>' + esc(label) + '</span><span>not eligible</span></div>';
+    }
+    var p = cpPriceWith(r, kind, kind === 'percent' ? value : value * 100);
+    var was = p.saleOn ? p.salePrice : p.sticker;
+    if (minRupees && was < minRupees * 100) {
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;color:var(--text3)">'
+        + '<span>' + esc(label) + '</span><span>below minimum</span></div>';
+    }
+    // Best-of means a weak code can lose to an active sale, in which case it
+    // changes nothing. Say so plainly rather than printing "-0%", which reads
+    // like a bug.
+    if (p.final >= was) {
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0">'
+        + '<span style="color:var(--text2)">' + esc(label) + '</span>'
+        + '<span style="font-size:12px;color:var(--orange)">no effect, sale is already better</span></div>';
+    }
+    var off = Math.round(100 * (1 - p.final / was));
+    return '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0">'
+      + '<span style="color:var(--text2)">' + esc(label) + '</span>'
+      + '<span style="font-variant-numeric:tabular-nums">'
+      +   '<s style="color:var(--text3)">&#8377;' + (was / 100).toFixed(0) + '</s> '
+      +   '<strong style="color:' + (p.isFullGrant ? 'var(--orange)' : 'var(--green)') + '">&#8377;'
+      +   (p.final / 100).toFixed(0) + '</strong>'
+      +   (p.isFullGrant ? ' <span style="font-size:11px;color:var(--orange)">free</span>'
+                         : ' <span style="font-size:11px;color:var(--text3)">-' + off + '%</span>')
+      + '</span></div>';
+  }).join('');
+
+  var warn = (kind === 'percent' && value > 50)
+    ? '<div style="margin-top:8px;font-size:12px;color:var(--orange)">This takes more than half off. Check the figure before saving.</div>'
+    : '';
+  box.style.display = 'block';
+  box.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:8px">What buyers will be charged</div>'
+    + lines + warn;
+}
+
 function cpMsg(text, ok) {
   var el = document.getElementById('cp-msg');
   el.style.display = 'block';
@@ -3345,9 +3553,7 @@ function cpMsg(text, ok) {
 
 async function createCoupon() {
   var code = (document.getElementById('cp-code').value || '').trim().toUpperCase();
-  var plan = document.getElementById('cp-plan').value;
-  var scope = plan === 'lifetime' ? null : document.getElementById('cp-scope').value;
-  var monthsRaw = document.getElementById('cp-months').value;
+  var kind = document.getElementById('cp-kind').value;
   var max  = parseInt(document.getElementById('cp-max').value, 10) || 1;
   var exp  = document.getElementById('cp-expires').value;
   var note = (document.getElementById('cp-note').value || '').trim();
@@ -3358,17 +3564,37 @@ async function createCoupon() {
     return;
   }
 
-  var months = plan === 'lifetime'
-    ? null
-    : (monthsRaw ? parseInt(monthsRaw, 10) : PLAN_DEFAULT_MONTHS[plan]);
-
-  var { error } = await _sb.from('coupons').insert({
-    code: code, plan: plan, scope: scope, months: months,
-    max_redemptions: max,
+  var row = {
+    code: code, kind: kind, max_redemptions: max,
     expires_at: exp ? new Date(exp).toISOString() : null,
     note: note || null,
     created_by: _myId,
-  });
+  };
+
+  if (kind === 'grant') {
+    var plan = document.getElementById('cp-plan').value;
+    var monthsRaw = document.getElementById('cp-months').value;
+    row.plan   = plan;
+    row.scope  = plan === 'lifetime' ? null : document.getElementById('cp-scope').value;
+    row.months = plan === 'lifetime' ? null
+               : (monthsRaw ? parseInt(monthsRaw, 10) : PLAN_DEFAULT_MONTHS[plan]);
+  } else {
+    var value = parseInt(document.getElementById('cp-value').value, 10);
+    if (!value || value < 1) { cpMsg('Enter the discount amount.', false); return; }
+    if (kind === 'percent' && value > 100) { cpMsg('A percentage cannot be over 100.', false); return; }
+    // Anything this deep is far more likely to be a typo than a decision, so
+    // make the admin say it out loud before it becomes a live code.
+    if (kind === 'percent' && value > 50 &&
+        !confirm('This code takes ' + value + '% off. Create it?')) return;
+
+    var minR = parseInt(document.getElementById('cp-min-amount').value, 10);
+    row.discount_value   = kind === 'percent' ? value : value * 100; // rupees -> paise
+    row.applies_duration = document.getElementById('cp-applies-duration').value || null;
+    row.applies_scope    = document.getElementById('cp-applies-scope').value || null;
+    row.min_amount       = minR ? minR * 100 : null;
+  }
+
+  var { error } = await _sb.from('coupons').insert(row);
 
   if (error) {
     cpMsg(error.code === '23505' ? 'That code already exists.' : 'Failed: ' + error.message, false);
@@ -3376,36 +3602,67 @@ async function createCoupon() {
   }
 
   cpMsg(code + ' created.', true);
-  logAdminAction('create_coupon', null, { code: code, plan: plan, scope: scope, months: months, max: max });
+  logAdminAction('create_coupon', null, row);
   document.getElementById('cp-code').value = '';
   document.getElementById('cp-note').value = '';
+  document.getElementById('cp-value').value = '';
+  cpPreview();
   loadCoupons();
 }
 
 async function loadCoupons() {
-  var { data, error } = await _sb.from('coupons')
-    .select('code,plan,scope,months,max_redemptions,times_redeemed,expires_at,note,active,created_at')
+  cpEnsurePlans();
+  // coupon_usage resolves committed vs reserved vs refunded, which a bare
+  // times_redeemed cannot: a reservation is a live hold, not a redemption.
+  var { data, error } = await _sb.from('coupon_usage')
+    .select('*')
     .order('created_at', { ascending: false });
 
   var tbody = document.getElementById('cp-tbody');
   if (error) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">Run payments_v2_setup.sql to enable coupons.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">Run coupon_discounts_setup.sql to enable coupons.</td></tr>';
     return;
   }
   if (!data || !data.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">No coupons yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">No coupons yet.</td></tr>';
     return;
   }
 
   tbody.innerHTML = data.map(function(c) {
-    var used = c.times_redeemed + ' / ' + c.max_redemptions;
-    var spent = c.times_redeemed >= c.max_redemptions;
+    var limit   = c.max_redemptions || 1;
+    var spent   = c.live_used >= limit;
     var expired = c.expires_at && new Date(c.expires_at) < new Date();
-    var dead = !c.active || spent || expired;
-    return '<tr' + (dead ? ' style="opacity:.55"' : '') + '>'
+    var dead    = !c.active || spent || expired;
+
+    // What the code does, which is a different question for each kind.
+    var what;
+    if (c.kind === 'percent')    what = '<strong>' + c.discount_value + '% off</strong>';
+    else if (c.kind === 'fixed') what = '<strong>&#8377;' + (c.discount_value / 100).toFixed(0) + ' off</strong>';
+    else what = planBadge(c.plan, c.scope) + (c.months ? ' <span style="font-size:11px;color:var(--text3)">' + c.months + 'mo</span>' : '');
+
+    // Who it is allowed on. Only meaningful for discounts.
+    var target = '';
+    if (c.kind !== 'grant') {
+      var bits = [];
+      if (c.applies_duration) bits.push(c.applies_duration);
+      if (c.applies_scope)    bits.push(c.applies_scope);
+      if (c.min_amount)       bits.push('min &#8377;' + (c.min_amount / 100).toFixed(0));
+      target = '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (bits.length ? bits.join(' &middot; ') : 'any plan') + '</div>';
+    }
+
+    var used = '<span style="font-variant-numeric:tabular-nums">' + c.live_used + ' / ' + limit + '</span>';
+    if (c.reserved > 0) used += ' <span style="font-size:10px;color:var(--blue)">' + c.reserved + ' held</span>';
+    if (c.refunded > 0) used += ' <span style="font-size:10px;color:var(--text3)">' + c.refunded + ' refunded</span>';
+    if (spent && !c.over_redeemed) used += ' <span style="font-size:10px;color:var(--orange)">spent</span>';
+    // Money already taken is always honoured, even past the limit, so this can
+    // legitimately happen. It must be visible rather than silent.
+    if (c.over_redeemed) used += ' <span style="font-size:10px;color:var(--red);font-weight:700">over-redeemed</span>';
+
+    return '<tr' + (dead && !c.over_redeemed ? ' style="opacity:.55"' : '') + '>'
       + '<td style="font-family:monospace;font-weight:700">' + esc(c.code) + '</td>'
-      + '<td>' + planBadge(c.plan, c.scope) + (c.months ? ' <span style="font-size:11px;color:var(--text3)">' + c.months + 'mo</span>' : '') + '</td>'
-      + '<td style="font-variant-numeric:tabular-nums">' + used + (spent ? ' <span style="font-size:10px;color:var(--orange)">spent</span>' : '') + '</td>'
+      + '<td style="font-size:12px;text-transform:capitalize;color:var(--text2)">' + esc(c.kind) + '</td>'
+      + '<td>' + what + target + '</td>'
+      + '<td>' + used + '</td>'
       + '<td class="date-cell">' + (c.expires_at ? fmtDate(c.expires_at) + (expired ? ' <span style="color:var(--red);font-size:10px">expired</span>' : '') : 'Never') + '</td>'
       + '<td style="font-size:12px;color:var(--text2)">' + esc(c.note || '') + '</td>'
       + '<td>' + (c.active
@@ -3605,6 +3862,7 @@ window.showTab = function(name) {
   if (name === 'coupons' && !_tabLoaded.coupons) {
     _tabLoaded.coupons = true;
     cpPlanChanged();
+    cpKindChanged();   // paints the explainer for the default type
     loadCoupons();
   }
   if (name === 'plans' && !_tabLoaded.plans) {

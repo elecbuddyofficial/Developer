@@ -902,7 +902,7 @@
           <div style="display:flex;gap:8px;">
             <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
                    style="flex:1;background:#0A1828;border:1px solid #1A3050;border-radius:8px;color:#DDE5EF;font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
-            <button id="up-coupon-btn" onclick="redeemCoupon()"
+            <button id="up-coupon-btn" onclick="applyCoupon()"
                     style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
           </div>
         </div>
@@ -1943,6 +1943,38 @@ function effectivePrice(row) {
   return { active: active, amount: active ? Math.round(row.base_amount * (1 - row.discount_percent / 100)) : row.base_amount };
 }
 
+// Mirrors _shared/coupons.ts: best of the sale and the code, never both, then
+// clamped to Razorpay's ₹1 floor. This is DISPLAY ONLY. Every card is priced
+// again server-side by create-razorpay-order before a rupee is taken, so a
+// stale or tampered value here can misinform the buyer but can never
+// undercharge them.
+var RZP_FLOOR_PAISE = 100;
+function couponPrice(row, duration, scope) {
+  var base = effectivePrice(row);
+  var out = { amount: base.amount, saleActive: base.active, couponApplied: false, notEligible: false };
+  var c = window._upCoupon;
+  if (!c || c.value == null) return out;
+
+  var t = c.terms || {};
+  // The code may be aimed at one tier. Say so on the cards it does not cover
+  // rather than quietly showing them at full price next to a discounted one.
+  if ((t.applies_duration && t.applies_duration !== duration)
+   || (t.applies_scope && t.applies_scope !== scope)
+   || (t.min_amount && base.amount < t.min_amount)) {
+    out.notEligible = true;
+    return out;
+  }
+
+  var couponAmount = c.kind === 'percent'
+    ? Math.round(row.base_amount * (1 - c.value / 100))
+    : row.base_amount - c.value;
+
+  var best = Math.min(base.amount, couponAmount);
+  out.amount = Math.max(RZP_FLOOR_PAISE, best);
+  out.couponApplied = best < base.amount;
+  return out;
+}
+
 function fmtRupees(paise) { return '₹' + Math.round(paise / 100).toLocaleString('en-IN'); }
 function escUp(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
@@ -2070,13 +2102,29 @@ function renderUpgradeCards() {
     var row = findPlanRow(dur, scope);
     if (!row) return '';
     var price = effectivePrice(row);
+    var cp = couponPrice(row, dur, scope);
     var isBest = dur === bestDur;
     var ribbon = row.label
       ? '<div class="up-ribbon up-ribbon-promo">' + escUp(row.label) + '</div>'
       : (isBest ? '<div class="up-ribbon">Best Value</div>' : '');
-    var priceHtml = price.active
-      ? '<span class="up-price-strike">' + fmtRupees(row.base_amount) + '</span> <span class="up-price">' + fmtRupees(price.amount) + '</span>'
-      : '<span class="up-price">' + fmtRupees(price.amount) + '</span>';
+    // Three states: a code is cutting this price, the plan's own sale is, or
+    // neither. When a code applies, strike the price they would otherwise pay
+    // rather than the sticker, so the saving shown is the saving they get.
+    var priceHtml;
+    if (cp.couponApplied) {
+      priceHtml = '<span class="up-price-strike">' + fmtRupees(cp.saleActive ? price.amount : row.base_amount) + '</span> '
+                + '<span class="up-price">' + fmtRupees(cp.amount) + '</span>';
+    } else if (price.active) {
+      priceHtml = '<span class="up-price-strike">' + fmtRupees(row.base_amount) + '</span> <span class="up-price">' + fmtRupees(price.amount) + '</span>';
+    } else {
+      priceHtml = '<span class="up-price">' + fmtRupees(price.amount) + '</span>';
+    }
+    var codeNote = '';
+    if (window._upCoupon && cp.notEligible) {
+      codeNote = '<div class="up-card-effect" style="color:#C08A3E">' + escUp(window._upCoupon.code + ' does not apply to this plan.') + '</div>';
+    } else if (cp.couponApplied) {
+      codeNote = '<div class="up-card-effect" style="color:#7FD18B">' + escUp(window._upCoupon.code + ' applied.') + '</div>';
+    }
     var descHtml = row.description ? '<div class="up-card-desc">' + escUp(row.description) + '</div>' : '';
     // Every card says what you get and what it does to your dates, so a card
     // is self-explanatory without reading the track blurb above it.
@@ -2090,7 +2138,8 @@ function renderUpgradeCards() {
       + '</div>'
       + descHtml
       + getsHtml
-      + '<button class="up-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '">Pay ' + fmtRupees(price.amount) + ' with Razorpay</button>'
+      + '<button class="up-buy-btn" data-plan="' + dur + '" data-scope="' + scope + '">Pay ' + fmtRupees(cp.amount) + ' with Razorpay</button>'
+      + codeNote
       + effectHtml
       + '</div>';
   }).join('');
@@ -2189,7 +2238,15 @@ function toggleCouponBox() {
   document.getElementById('up-coupon-input').focus();
 }
 
-async function redeemCoupon() {
+// A code can mean two completely different things now, and only the server
+// can tell them apart: a grant hands over access with no payment, a discount
+// just lowers the price of a purchase that still happens. Ask first, then
+// route. window._upCoupon holds an applied discount for the rest of the
+// session; it is only ever a hint for display, since create-razorpay-order
+// re-validates and re-prices from the database before charging anything.
+window._upCoupon = null;
+
+async function applyCoupon() {
   var input = document.getElementById('up-coupon-input');
   var btn   = document.getElementById('up-coupon-btn');
   var code  = (input.value || '').trim().toUpperCase();
@@ -2206,6 +2263,89 @@ async function redeemCoupon() {
   try {
     var sessionRes = await window._sbClient.auth.getSession();
     var token = sessionRes.data.session && sessionRes.data.session.access_token;
+    if (!token) throw new Error('Not signed in');
+
+    // Quote against whichever track is on screen. The quote is per plan, so
+    // switching track re-quotes rather than assuming the answer carries over.
+    var quoteRes = await fetch(SUPABASE_FN_URL + '/validate-coupon', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, plan: _upQuoteDuration(), scope: _upActiveTrack }),
+    });
+    var quote = await quoteRes.json();
+    if (!quoteRes.ok) throw new Error(quote.error || 'That code is not valid');
+
+    if (quote.kind === 'grant') {
+      // Free access: no payment, so hand straight to the existing path.
+      await redeemCoupon(code, token);
+      return;
+    }
+
+    if (quote.no_effect) {
+      window._upCoupon = null;
+      setUpStatus('That code does not beat the discount already applied to this plan.', false);
+      btn.disabled = false;
+      return;
+    }
+
+    window._upCoupon = {
+      code: quote.code, kind: quote.kind,
+      value: quote.terms && quote.terms.value,
+      terms: quote.terms || {},
+    };
+    clearUpStatus();
+    document.getElementById('up-coupon-box').style.display = 'none';
+    var toggle = document.getElementById('up-coupon-toggle');
+    toggle.style.display = '';
+    toggle.textContent = quote.code + ' applied. Remove';
+    toggle.onclick = clearCoupon;
+    renderUpgradeCards();
+    setUpStatus(quote.code + ' applied. New prices are shown below.', true);
+  } catch (e) {
+    window._upCoupon = null;
+    setUpStatus(e.message || 'That code is not valid', false);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function clearCoupon() {
+  window._upCoupon = null;
+  var toggle = document.getElementById('up-coupon-toggle');
+  toggle.textContent = 'Have a code?';
+  toggle.onclick = toggleCouponBox;
+  document.getElementById('up-coupon-input').value = '';
+  clearUpStatus();
+  renderUpgradeCards();
+}
+
+// Which plan to quote against. The upgrade modal shows three durations at
+// once, so quote the one the buyer is most likely to take and let the card
+// render tell the truth for the rest.
+function _upQuoteDuration() {
+  return window._upPreferredPlan || bestValueDuration(_upActiveTrack) || '12mo';
+}
+
+async function redeemCoupon(codeArg, tokenArg) {
+  var input = document.getElementById('up-coupon-input');
+  var btn   = document.getElementById('up-coupon-btn');
+  var code  = codeArg || (input.value || '').trim().toUpperCase();
+  if (!code) { input.focus(); return; }
+
+  if (!window._sbClient || !window._sbUser) {
+    setUpStatus('You must be signed in to use a code.', false);
+    return;
+  }
+
+  btn.disabled = true;
+  setUpStatus('Checking code...', true);
+
+  try {
+    var token = tokenArg;
+    if (!token) {
+      var sessionRes = await window._sbClient.auth.getSession();
+      token = sessionRes.data.session && sessionRes.data.session.access_token;
+    }
     if (!token) throw new Error('Not signed in');
 
     var res = await fetch(SUPABASE_FN_URL + '/redeem-coupon', {
@@ -2286,13 +2426,33 @@ async function startPayment(plan, scope) {
 
     // Create Razorpay order via Edge Function - the amount charged is looked
     // up server-side from pricing_plans, never trusted from the client.
+    // The code is a hint, not a price. The server looks the coupon up again,
+    // re-checks it against THIS plan, claims the redemption slot under a lock
+    // and recomputes the amount, so anything that changed since the quote is
+    // caught before the buyer is charged.
+    var orderBody = { plan: plan, scope: scope };
+    if (window._upCoupon && window._upCoupon.code) orderBody.code = window._upCoupon.code;
+
     var orderRes = await fetch(SUPABASE_FN_URL + '/create-razorpay-order', {
       method: 'POST',
       headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: plan, scope: scope }),
+      body: JSON.stringify(orderBody),
     });
     var orderData = await orderRes.json();
+    // A code that turns out to be a full giveaway never reaches Razorpay, so
+    // hand it to the redemption path instead of failing in front of the buyer.
+    if (orderRes.status === 409 && orderData.error === 'use_redeem_coupon') {
+      setUpBtnsDisabled(false);
+      await redeemCoupon(orderData.code, token);
+      return;
+    }
     if (!orderRes.ok) throw new Error(orderData.error || 'Could not create order');
+
+    // The amount charged is whatever the server decided, never the figure the
+    // card was showing.
+    if (orderData.discount_amount > 0) {
+      setUpStatus('Code applied, ' + fmtRupees(orderData.discount_amount) + ' off.', true);
+    }
 
     clearUpStatus();
 
