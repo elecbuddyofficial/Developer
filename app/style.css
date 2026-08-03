@@ -913,7 +913,9 @@ a.sb-item{text-decoration:none}
 }
 
 #guide-tooltip {
-    position: fixed; z-index: 9002; display: none;
+    /* Above the sidebar's temporary 9003 during sidebar steps, or the tooltip
+       would slide back underneath the thing it is anchored to. */
+    position: fixed; z-index: 9010; display: none;
     background: var(--surface);
     border: 1px solid var(--border2);
     border-radius: 16px;

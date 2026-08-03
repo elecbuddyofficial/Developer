@@ -2060,6 +2060,15 @@ var GUIDE_STEPS = [
         body: 'Type any keyword and jump straight to the right topic across all notes. Try "alternator", "earth fault", or "MARPOL". Works across oral and written sections.',
         prefer: 'bottom'
     },
+    {
+        type: 'spotlight',
+        view: 'welcome',
+        target: '#profile-btn',
+        pad: 8,
+        title: 'Your account',
+        body: 'Everything about your account lives behind this button: which plan you are on and when it runs out, your full payment history with any discount applied, settings including Data Saver, and the terms. You can also reopen this walkthrough from here.',
+        prefer: 'bottom'
+    },
     { type: 'slide', id: 'videos' },
     { type: 'slide', id: 'support' }
 ];
@@ -2090,6 +2099,12 @@ function guideDismiss(save) {
     if (save) localStorage.setItem('guide_seen', '1');
     _guideActive = false;
     _guideCancelPending();
+    // Undo the sidebar lift. Left at 9003 it would outrank the content
+    // gate overlay (9500 is higher, but the paywall's own scrim sits
+    // below that) and generally leave the sidebar floating over things
+    // it should sit under for the rest of the session.
+    var _sbReset = document.getElementById('sidebar');
+    if (_sbReset) { _sbReset.style.zIndex = ''; _sbReset.style.willChange = ''; }
     var ov = document.getElementById('guide-overlay');
     ov.style.transition = 'opacity 0.3s ease';
     ov.style.opacity = '0';
@@ -2152,17 +2167,19 @@ function _guideVideosHTML() {
         + '</div>';
 }
 
+// Closing slide. This used to be a donation appeal built around "keep it free
+// for everyone" plus a Razorpay donations link. The app now sells plans, so
+// that slide told a paying cadet the opposite of what they had just been
+// charged for, and the donations page is no longer in use.
 function _guideSupportHTML() {
     return '<div style="text-align:center">'
         + '<div style="display:flex;justify-content:center;gap:12px;margin-bottom:26px;flex-wrap:wrap">'
         + _gStat('23','Topics') + _gStat('5,643','Questions') + _gStat('1,196','Surveyor Answers')
         + '</div>'
-        + '<h2 style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">Keep it free for everyone.</h2>'
-        + '<p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px">Most cadets studying for MMD can\'t afford paid subscriptions. This app exists to change that.</p>'
-        + '<p style="font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:8px">Every note and question here was tracked down from MMD forums, study materials, and real exam reports. Months of work - and it\'s still growing.</p>'
-        + '<p style="font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:28px">If you\'re in a position to help, your support means everything and keeps it free for the ones who aren\'t.</p>'
-        + '<a href="https://pages.razorpay.com/elecbuddy" target="_blank" rel="noopener noreferrer" class="guide-btn-support" onclick="setTimeout(function(){guideDismiss(true)},400)">Support this project</a>'
-        + '<div style="margin-top:14px"><button class="guide-btn-text" onclick="guideDismiss(true)">Start studying</button></div>'
+        + '<h2 style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:10px">That is the whole tour.</h2>'
+        + '<p style="font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:8px">Every note and question here was tracked down from MMD forums, study materials and real exam reports, then checked against the syllabus.</p>'
+        + '<p style="font-size:13px;color:var(--text3);line-height:1.55;margin-bottom:28px">You can reopen this walkthrough any time from the profile menu, under App Guide.</p>'
+        + '<button class="guide-btn-primary" onclick="guideDismiss(true)">Start studying</button>'
         + '</div>';
 }
 
@@ -2185,9 +2202,19 @@ function _guideSpotlight(step, idx) {
             sb.style.transition = 'none';
             sb.style.transform = 'none';
         }, 320);
+        // Lift the sidebar above the spotlight's scrim.
+        //
+        // The dimming is a 9999px spread box-shadow on #guide-spotlight
+        // (z-index 9001). Once the overlay was moved to <body> it finally
+        // painted above the sidebar, which fixed the hidden tooltip but
+        // meant the sidebar was dimmed along with everything else, so the
+        // navigation these steps are describing could not be read at all.
+        // On a step about the sidebar the sidebar IS the subject, so it
+        // sits above the scrim and the tooltip sits above both.
+        sb.style.zIndex = '9003';
     } else if (!step.openSidebar) {
         var sb2 = document.getElementById('sidebar');
-        if (sb2) { sb2.style.transform = ''; sb2.style.transition = ''; }
+        if (sb2) { sb2.style.transform = ''; sb2.style.transition = ''; sb2.style.zIndex = ''; }
         closeMobileMenu();
     }
 
