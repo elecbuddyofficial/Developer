@@ -176,6 +176,16 @@
     overflow-y: auto; margin: 0;
   }
   #settings-panel.open { transform: translateX(0); }
+  /* Payment history: same slide-in, wider because a receipt row carries
+     more than a settings toggle. */
+  #tx-panel {
+    position:fixed; right:0; top:0; bottom:0; width:360px; background:#0D1E33;
+    border-left:1px solid #1A3050; padding:22px; box-shadow:-4px 0 24px rgba(0,0,0,.5);
+    transform:translateX(100%); transition:transform .3s cubic-bezier(.16,1,.3,1);
+    overflow-y:auto; margin:0;
+  }
+  #tx-panel.open { transform: translateX(0); }
+  @media(max-width:420px){ #tx-panel { width:100%; border-left:none } }
   @media(max-width:360px){ #settings-panel { width:100%; border-left:none } }
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
@@ -212,6 +222,7 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../account.js?v=1"></script>
 <script>
 (async () => {
   try {
@@ -550,6 +561,14 @@
       </div>
     </div>
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">Upgrade to Full Access</button>
+    <button onclick="openTransactions()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Payment History
+    </button>
+    <button onclick="window.open('../terms.html','_blank','noopener')" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
+      Terms and Conditions
+    </button>
     <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Settings
@@ -557,6 +576,22 @@
     <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
     <button onclick="window.location.href='../courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+  </div>
+</div>
+
+<!-- ── Payment History ─────────────────────────────────────── -->
+<div id="tx-modal" onclick="closeTransactions(event)" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px)">
+  <div id="tx-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <div style="font-size:15px;font-weight:700;color:#DDE5EF">Payment History</div>
+      </div>
+      <button onclick="closeTransactions({target:this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&times;</button>
+    </div>
+    <div id="tx-list"></div>
   </div>
 </div>
 
@@ -1364,6 +1399,36 @@ startBackgroundIndexing();
     document.getElementById('settings-panel').classList.remove('open');
     setTimeout(function(){
       document.getElementById('settings-modal').style.display='none';
+      window.openProfile();
+    }, 300);
+  };
+
+  // Payment history. Rendering lives in account.js so all three surfaces show
+  // the identical receipt rather than three drifting versions of one.
+  window.openTransactions=function(){
+    document.getElementById('profile-panel').classList.remove('open');
+    setTimeout(function(){
+      document.getElementById('profile-modal').style.display='none';
+      document.getElementById('tx-modal').style.display='block';
+      setTimeout(function(){ document.getElementById('tx-panel').classList.add('open'); }, 10);
+      if (window.EBAccount && window._sbClient && window._sbUser) {
+        window.EBAccount.renderTransactions(
+          document.getElementById('tx-list'), window._sbClient, window._sbUser.id);
+      }
+    }, 300);
+  };
+
+  window.closeTransactions=function(e){
+    if (!e || e.target===document.getElementById('tx-modal') || e.target.closest('.close-btn')) {
+      document.getElementById('tx-panel').classList.remove('open');
+      setTimeout(function(){ document.getElementById('tx-modal').style.display='none'; }, 300);
+    }
+  };
+
+  window.backToProfileFromTx=function(){
+    document.getElementById('tx-panel').classList.remove('open');
+    setTimeout(function(){
+      document.getElementById('tx-modal').style.display='none';
       window.openProfile();
     }, 300);
   };

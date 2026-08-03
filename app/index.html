@@ -702,7 +702,7 @@
 
 <!-- ── Profile Panel ──────────────────────────────────────── -->
 <style>
-  #profile-panel, #settings-panel {
+  #profile-panel, #settings-panel, #tx-panel {
     position: fixed; right: 0; top: 0; bottom: 0;
     width: 300px; background: #0D1E33;
     border-left: 1px solid #1A3050;
@@ -711,8 +711,14 @@
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     overflow-y: auto; margin: 0;
   }
-  #profile-panel.open, #settings-panel.open {
+  /* Receipts carry more per row than a settings toggle, so this one is wider
+     wherever there is room for it. */
+  #tx-panel { width: 360px; }
+  #profile-panel.open, #settings-panel.open, #tx-panel.open {
     transform: translateX(0);
+  }
+  @media (max-width: 420px) {
+    #tx-panel { width: 100%; border-left: none; }
   }
   @media (max-width: 360px) {
     #profile-panel, #settings-panel { width: 100%; border-left: none; }
@@ -792,6 +798,18 @@
       App Guide
     </button>
 
+    <!-- Payment History -->
+    <button onclick="openTransactions()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Payment History
+    </button>
+
+    <!-- Terms and Conditions -->
+    <button onclick="window.open('./terms.html','_blank','noopener')" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
+      Terms and Conditions
+    </button>
+
     <!-- Settings -->
     <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -862,6 +880,22 @@
       <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
     </div>
 
+  </div>
+</div>
+
+<!-- ── Payment History ─────────────────────────────────────── -->
+<div id="tx-modal" onclick="closeTransactions(event)" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px);">
+  <div id="tx-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <div style="font-size:15px;font-weight:700;color:#DDE5EF;">Payment History</div>
+      </div>
+      <button onclick="closeTransactions({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
+    </div>
+    <div id="tx-list"></div>
   </div>
 </div>
 
@@ -1025,6 +1059,7 @@
      page load, for every user, whether or not they ever opened the upgrade
      screen. On ship satellite data that is pure waste: the overwhelming
      majority of sessions never touch payment at all. -->
+<script src="account.js?v=1"></script>
 <script src="app.js?v=2"></script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script>
@@ -1621,6 +1656,40 @@ function setTheme(t) {
       document.getElementById('settings-panel').classList.remove('open');
       setTimeout(() => {
         document.getElementById('settings-modal').style.display = 'none';
+        window.openProfile();
+      }, 300);
+    };
+
+    // Payment history. Same slide-across pattern as Settings: the profile
+    // panel closes, this one opens in its place, and Back returns to it.
+    window.openTransactions = function() {
+      document.getElementById('profile-panel').classList.remove('open');
+      setTimeout(() => {
+        document.getElementById('profile-modal').style.display = 'none';
+        document.getElementById('tx-modal').style.display = 'block';
+        document.documentElement.classList.add('_modal-open');
+        setTimeout(() => document.getElementById('tx-panel').classList.add('open'), 10);
+        // Fetched on open rather than at page load: most sessions never look
+        // at receipts, and this is a network round trip.
+        if (window.EBAccount && window._sbClient && window._sbUser) {
+          window.EBAccount.renderTransactions(
+            document.getElementById('tx-list'), window._sbClient, window._sbUser.id);
+        }
+      }, 300);
+    };
+
+    window.closeTransactions = function(e) {
+      if (!e || e.target === document.getElementById('tx-modal') || e.target.closest('.close-btn')) {
+        document.getElementById('tx-panel').classList.remove('open');
+        document.documentElement.classList.remove('_modal-open');
+        setTimeout(() => document.getElementById('tx-modal').style.display = 'none', 300);
+      }
+    };
+
+    window.backToProfileFromTx = function() {
+      document.getElementById('tx-panel').classList.remove('open');
+      setTimeout(() => {
+        document.getElementById('tx-modal').style.display = 'none';
         window.openProfile();
       }, 300);
     };

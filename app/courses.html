@@ -432,6 +432,32 @@
     font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s;
   }
   .pm-admin-btn:hover { background: rgba(200,164,74,.22); }
+  /* Neutral menu action, matching pm-signout's shape so the footer reads as
+     one stack rather than three unrelated controls. */
+  .pm-menu-btn {
+    width: 100%; padding: 10px; border-radius: 6px;
+    background: none; border: 1px solid var(--border2); color: var(--text2);
+    font: inherit; font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: border-color .15s, color .15s;
+  }
+  .pm-menu-btn:hover { border-color: var(--blue); color: var(--blue); }
+  /* Payment history slides in over the profile panel. max-width keeps it on
+     screen at every phone width; the receipts inside wrap rather than scroll. */
+  .tx-panel {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 380px; max-width: 100vw;
+    background: var(--surface); border-left: 1px solid var(--border2);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform: translateX(100%); transition: transform .25s cubic-bezier(.4,0,.2,1);
+    z-index: 602;
+  }
+  .pm-overlay.tx-open .tx-panel { transform: translateX(0); }
+  .tx-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 18px; border-bottom: 1px solid var(--border);
+  }
+  .tx-body { flex: 1; overflow-y: auto; padding: 16px 18px; }
   .pm-signout {
     width: 100%; padding: 10px;
     background: none; border: 1px solid var(--border2);
@@ -463,7 +489,6 @@
     position: fixed; inset: 0;
     background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
     z-index: 600; opacity: 0; pointer-events: none; transition: opacity .22s;
-  }
   }
   .nf-overlay.open { opacity: 1; pointer-events: all; }
   .nf-head {
@@ -513,6 +538,7 @@
   .nf-chip-deadline { background: var(--red-dim);    color: var(--red); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="account.js?v=1"></script>
 <script>
   (async () => {
     try {
@@ -663,13 +689,32 @@
       </div>
     </div>
     <div class="pm-footer">
+      <button class="pm-menu-btn" onclick="openTransactions()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        Payment History
+      </button>
+      <button class="pm-menu-btn" onclick="window.open('./terms.html','_blank','noopener')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
+        Terms and Conditions
+      </button>
       <button class="pm-admin-btn" id="pm-admin-btn" onclick="window.location.href='./admin/index.html'">⚡ Admin Panel</button>
       <button class="pm-signout" onclick="signOut()">Sign Out</button>
       <div style="display:flex;justify-content:center;gap:14px;margin-top:4px;">
-        <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:var(--text3);text-decoration:underline;">Terms</a>
         <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:var(--text3);text-decoration:underline;">Privacy Policy</a>
       </div>
     </div>
+  </div>
+
+  <!-- Payment history, inside the same overlay so one backdrop serves both -->
+  <div class="tx-panel" id="tx-panel" onclick="event.stopPropagation()">
+    <div class="tx-head">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button class="pm-close" onclick="closeTransactions()" title="Back" aria-label="Back to profile menu">&#8592;</button>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">Payment History</div>
+      </div>
+      <button class="pm-close" onclick="closeProfile()" title="Close" aria-label="Close">&times;</button>
+    </div>
+    <div class="tx-body" id="tx-list"></div>
   </div>
 </div>
 
@@ -902,8 +947,22 @@
     }
   }
 
+  // Payment history. Rendering comes from account.js so this surface shows the
+  // identical receipt to the app and the sponsorship section.
+  function openTransactions() {
+    document.getElementById('pm-overlay').classList.add('tx-open');
+    if (window.EBAccount && window._sbClient && window._sbUser) {
+      window.EBAccount.renderTransactions(
+        document.getElementById('tx-list'), window._sbClient, window._sbUser.id);
+    }
+  }
+  function closeTransactions() {
+    document.getElementById('pm-overlay').classList.remove('tx-open');
+  }
+
   function closeProfile() {
     document.getElementById('pm-overlay').classList.remove('open');
+    document.getElementById('pm-overlay').classList.remove('tx-open');
   }
 
   function closePmIfBg(e) {
