@@ -117,7 +117,7 @@
   </div>
   <div id="topic-side-list"></div>
   <div class="sb-spacer"></div>
-  <a class="sb-item" href="mailto:support@elec-buddy.com?subject=App%20Feedback%20%2F%20Request%20%2F%20Bug%20Report" style="color:var(--blue);font-weight:700;background:rgba(59, 130, 246, 0.05);border:1px solid rgba(59, 130, 246, 0.2);margin-top:8px;">
+  <a class="sb-item" href="#" onclick="event.preventDefault();openFeedback()" style="color:var(--blue);font-weight:700;background:rgba(59, 130, 246, 0.05);border:1px solid rgba(59, 130, 246, 0.2);margin-top:8px;">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg></span><span class="label">Request Content / Report Bug</span>
   </a>
   <div class="sb-divider"></div>
@@ -881,6 +881,54 @@
       <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
     </div>
 
+  </div>
+</div>
+
+<!-- ── Feedback / bug report ───────────────────────────────── -->
+<div id="fb-modal" onclick="closeFeedback(event)" style="display:none;position:fixed;inset:0;z-index:10003;background:rgba(4,9,20,0.92);backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
+    <div id="fb-card" style="width:100%;max-width:520px;background:#0D1E33;border:1px solid #1A3050;border-radius:14px;padding:22px;">
+
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;">
+        <div style="font-size:17px;font-weight:700;color:#DDE5EF;">Report a bug or request content</div>
+        <button onclick="closeFeedback({target:this})" class="fb-close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;flex-shrink:0;">&times;</button>
+      </div>
+      <div style="font-size:12.5px;color:#8FA3B8;line-height:1.6;margin-bottom:16px;">
+        This goes straight to our support inbox with your account details attached, so you do not need to explain who you are. We reply to the email address on your account.
+      </div>
+      <div style="font-size:12px;color:#C8A44A;background:rgba(200,164,74,0.07);border:1px solid rgba(200,164,74,0.22);border-radius:8px;padding:10px 12px;line-height:1.55;margin-bottom:16px;">
+        Reports we act on earn a discount code. If we fix something you found, or use notes you send in, we review it and send you one as thanks.
+      </div>
+
+      <label class="fb-lbl">What is this about?</label>
+      <select id="fb-kind" class="fb-in" onchange="fbKindChanged()">
+        <option value="bug">Something is broken</option>
+        <option value="correction">Content looks wrong</option>
+        <option value="content">Request new content</option>
+        <option value="other">Something else</option>
+      </select>
+      <div class="fb-hint" id="fb-kind-hint"></div>
+
+      <label class="fb-lbl" style="margin-top:14px;">Subject <span style="color:#6E8AA6;font-weight:400;">(optional)</span></label>
+      <input id="fb-subject" class="fb-in" maxlength="200" placeholder="A short summary">
+
+      <label class="fb-lbl" style="margin-top:14px;">Details</label>
+      <textarea id="fb-message" class="fb-in" maxlength="8000" style="min-height:130px;resize:vertical;" placeholder="Describe it here"></textarea>
+      <div class="fb-hint" id="fb-msg-hint"></div>
+
+      <label class="fb-lbl" style="margin-top:14px;">Attachments <span style="color:#6E8AA6;font-weight:400;">(optional)</span></label>
+      <input id="fb-files" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt" onchange="fbFilesChanged()"
+             style="width:100%;min-height:44px;font-size:12px;color:#8FA3B8;padding:11px 10px;background:#0A1828;border:1px dashed #1A3050;border-radius:8px;box-sizing:border-box;">
+      <div class="fb-hint">Screenshots help most for a bug. For content you can attach a PDF, Word document or notes. Up to 5 files, 5&nbsp;MB each.</div>
+      <div id="fb-file-list" style="margin-top:8px;"></div>
+
+      <div id="fb-status" style="display:none;margin-top:14px;font-size:13px;padding:11px 13px;border-radius:8px;line-height:1.5;"></div>
+
+      <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
+        <button id="fb-send" onclick="sendFeedback()" style="flex:1 1 160px;min-height:44px;background:#C8A44A;color:#070D1A;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Send</button>
+        <button onclick="closeFeedback({target:this})" class="fb-close" style="flex:0 1 110px;min-height:44px;background:none;border:1px solid #1A3050;border-radius:8px;color:#8FA3B8;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1683,6 +1731,127 @@ function setTheme(t) {
 
     // Payment history. Same slide-across pattern as Settings: the profile
     // panel closes, this one opens in its place, and Back returns to it.
+    // ── Feedback / bug report ──────────────────────────────
+    // Files are attached to the email rather than uploaded anywhere, so this
+    // costs no Supabase storage. The caps below mirror the ones the edge
+    // function enforces; checking here too means the reporter is told before
+    // a slow upload rather than after it.
+    var FB_MAX_FILES = 5;
+    var FB_MAX_FILE = 5 * 1024 * 1024;
+    var FB_MAX_TOTAL = 12 * 1024 * 1024;
+    var FB_HINTS = {
+      bug: 'Tell us what you did, what you expected, and what happened instead. A screenshot of the screen it happened on is worth more than any description.',
+      correction: 'Say which topic and section, and what the correct answer should be. If you have the source, attach it.',
+      content: 'Tell us the topic or question you want covered. If you have notes, a PDF or a Word file, attach them and we will work from those.',
+      other: 'Anything else you want to tell us.'
+    };
+
+    window.fbKindChanged = function() {
+      var k = document.getElementById('fb-kind').value;
+      document.getElementById('fb-kind-hint').textContent = FB_HINTS[k] || '';
+    };
+
+    function fbBytes(n) {
+      return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB';
+    }
+
+    window.fbFilesChanged = function() {
+      var files = document.getElementById('fb-files').files;
+      var list = document.getElementById('fb-file-list');
+      var html = '', total = 0, bad = false;
+      for (var i = 0; i < files.length; i++) {
+        var f = files[i], over = f.size > FB_MAX_FILE;
+        total += f.size;
+        if (over) bad = true;
+        html += '<div class="fb-file-row' + (over ? ' bad' : '') + '">'
+              + '<span class="nm">' + escUp(f.name) + '</span>'
+              + '<span class="sz">' + fbBytes(f.size) + (over ? ' - too large' : '') + '</span></div>';
+      }
+      if (files.length > FB_MAX_FILES) { bad = true; html += '<div class="fb-file-row bad"><span class="nm">Up to ' + FB_MAX_FILES + ' files, please</span></div>'; }
+      if (total > FB_MAX_TOTAL) { bad = true; html += '<div class="fb-file-row bad"><span class="nm">Total is ' + fbBytes(total) + ', the limit is 12 MB</span></div>'; }
+      list.innerHTML = html;
+      document.getElementById('fb-send').disabled = bad;
+      document.getElementById('fb-send').style.opacity = bad ? '0.5' : '';
+    };
+
+    window.openFeedback = function() {
+      closeMobileMenu();
+      document.getElementById('fb-modal').style.display = 'block';
+      document.documentElement.classList.add('_modal-open');
+      fbKindChanged();
+      fbSetStatus('', null);
+    };
+
+    window.closeFeedback = function(e) {
+      if (!e || e.target === document.getElementById('fb-modal') || (e.target.closest && e.target.closest('.fb-close'))) {
+        document.getElementById('fb-modal').style.display = 'none';
+        document.documentElement.classList.remove('_modal-open');
+      }
+    };
+
+    function fbSetStatus(text, ok) {
+      var el = document.getElementById('fb-status');
+      if (!text) { el.style.display = 'none'; return; }
+      el.style.display = 'block';
+      el.textContent = text;
+      el.style.background = ok ? 'rgba(127,209,139,0.10)' : ok === false ? 'rgba(224,90,106,0.10)' : 'rgba(110,138,166,0.10)';
+      el.style.color = ok ? '#7FD18B' : ok === false ? '#E06C6C' : '#8FA3B8';
+      el.style.border = '1px solid ' + (ok ? 'rgba(127,209,139,0.3)' : ok === false ? 'rgba(224,90,106,0.3)' : 'rgba(110,138,166,0.25)');
+    }
+
+    function fbReadFile(file) {
+      return new Promise(function(resolve, reject) {
+        var r = new FileReader();
+        // Strip the "data:...;base64," prefix; the API wants the payload only.
+        r.onload = function() { resolve({ name: file.name, type: file.type, content: String(r.result).split(',')[1] || '' }); };
+        r.onerror = function() { reject(new Error('Could not read ' + file.name)); };
+        r.readAsDataURL(file);
+      });
+    }
+
+    window.sendFeedback = async function() {
+      var btn = document.getElementById('fb-send');
+      var message = document.getElementById('fb-message').value.trim();
+      if (!message) { fbSetStatus('Please describe it first.', false); return; }
+      if (!window._sbClient || !window._sbUser) { fbSetStatus('You need to be signed in to send this.', false); return; }
+
+      btn.disabled = true;
+      fbSetStatus('Sending...', null);
+      try {
+        var sess = await window._sbClient.auth.getSession();
+        var token = sess.data.session && sess.data.session.access_token;
+        if (!token) throw new Error('Your session expired. Sign in again.');
+
+        var input = document.getElementById('fb-files');
+        var files = [];
+        for (var i = 0; i < input.files.length; i++) files.push(await fbReadFile(input.files[i]));
+
+        var res = await fetch(SUPABASE_FN_URL + '/send-feedback', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kind: document.getElementById('fb-kind').value,
+            subject: document.getElementById('fb-subject').value.trim(),
+            message: message,
+            files: files
+          })
+        });
+        var data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Could not send');
+
+        fbSetStatus('Sent. We read every one of these, and if we act on yours we will send you a discount code.', true);
+        document.getElementById('fb-message').value = '';
+        document.getElementById('fb-subject').value = '';
+        input.value = '';
+        document.getElementById('fb-file-list').innerHTML = '';
+      } catch (err) {
+        fbSetStatus(err.message || 'Could not send. Please try again.', false);
+      } finally {
+        btn.disabled = false;
+        btn.style.opacity = '';
+      }
+    };
+
     window.openTransactions = function() {
       document.getElementById('profile-panel').classList.remove('open');
       setTimeout(() => {
