@@ -1544,30 +1544,39 @@
           <label class="ad-label">Send As</label>
           <select class="ad-select" id="prof-mail-sender"></select>
         </div>
-        <div class="ad-field" style="margin-bottom:10px">
-          <label class="ad-label">Format</label>
-          <div style="display:flex;align-items:center;gap:10px">
-            <span id="prof-format-label-plain" class="prof-switch-label">Plain</span>
-            <label class="prof-switch">
-              <input type="checkbox" id="prof-mail-format-toggle" checked onchange="onProfFormatToggle()">
-              <span class="prof-switch-track"></span>
-            </label>
-            <span id="prof-format-label-template" class="prof-switch-label on">Template</span>
-          </div>
+        <div class="ad-field" style="margin-bottom:6px">
+          <label class="ad-label">Purpose</label>
+          <select class="ad-select" id="prof-mail-intent" onchange="onProfIntentChanged()">
+            <option value="notice" selected>Notice - no button</option>
+            <option value="announcement">Announcement - with button to the app</option>
+            <option value="plain">Plain text - no branding</option>
+          </select>
+          <div class="ad-hint" id="prof-intent-hint"></div>
         </div>
         <div class="ad-field" style="margin-bottom:10px">
           <input class="ad-input" id="prof-mail-subject" placeholder="Subject">
         </div>
+        <div class="ad-field" id="prof-heading-field" style="margin-bottom:10px">
+          <input class="ad-input" id="prof-mail-heading" placeholder="Heading inside the email (optional)">
+          <div class="ad-hint">Leave blank unless you want a title above the message. The subject already shows at the top of every mail app, so repeating it there just says the same thing twice.</div>
+        </div>
         <div class="ad-field" style="margin-bottom:0">
           <textarea class="ad-input ad-textarea" id="prof-mail-body" placeholder="Write your message…" style="min-height:100px"></textarea>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;margin-top:10px">
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
           <button class="ad-btn btn-primary btn-sm" id="prof-send-btn" onclick="sendAdminEmail()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             Send Email
           </button>
+          <button class="ad-btn btn-ghost btn-sm" id="prof-preview-btn" onclick="previewAdminEmail()">Preview</button>
         </div>
         <div id="prof-send-status"></div>
+        <!-- Renders the real thing, built by the same code that sends it, so
+             what is checked here is what the recipient gets. -->
+        <div id="prof-mail-preview" style="display:none;margin-top:12px">
+          <div class="ad-hint" style="margin-bottom:6px">Exactly what will be sent:</div>
+          <iframe id="prof-mail-preview-frame" title="Email preview" style="width:100%;height:420px;border:1px solid var(--border2);border-radius:var(--r8);background:#070D1A"></iframe>
+        </div>
       </div>
 
       <!-- Email history -->
@@ -2276,11 +2285,16 @@ async function openUserProfile(userId) {
   document.getElementById('prof-orders').textContent = '-';
 
   document.getElementById('prof-mail-subject').value = '';
+  document.getElementById('prof-mail-heading').value = '';
   document.getElementById('prof-mail-body').value = '';
   document.getElementById('prof-send-status').className = '';
   document.getElementById('prof-send-status').textContent = '';
-  document.getElementById('prof-mail-format-toggle').checked = true;
-  onProfFormatToggle();
+  document.getElementById('prof-mail-preview').style.display = 'none';
+  // Back to Notice for every new recipient. Announcement carries a call to
+  // action, so it should be chosen deliberately rather than inherited from
+  // whoever was opened last.
+  document.getElementById('prof-mail-intent').value = 'notice';
+  onProfIntentChanged();
   populateProfMailSender();
 
   document.getElementById('prof-payments').innerHTML = '<div class="prof-empty">Loading…</div>';
@@ -2359,18 +2373,88 @@ function populateProfMailSender() {
   if (admins.some(function(a) { return a.id === _myId; })) sel.value = _myId;
 }
 
-function onProfFormatToggle() {
-  var checked = document.getElementById('prof-mail-format-toggle').checked;
-  document.getElementById('prof-format-label-plain').classList.toggle('on', !checked);
-  document.getElementById('prof-format-label-template').classList.toggle('on', checked);
+// What each purpose actually produces. Worth spelling out: the difference that
+// matters is the button, and sending "your account is being removed" with a
+// "Open Elec-Buddy" button under it reads as a mistake or a trick.
+var PROF_INTENT_HINT = {
+  notice: 'Branded like the app, with no button. Use for account changes, corrections and apologies, anything where you are informing rather than inviting them back.',
+  announcement: 'Branded, with an "Open Elec-Buddy" button at the bottom. Use only when you actually want them to open the app.',
+  plain: 'Plain text with no branding at all. Looks like an ordinary personal email.',
+};
+
+function onProfIntentChanged() {
+  var v = document.getElementById('prof-mail-intent').value;
+  document.getElementById('prof-intent-hint').textContent = PROF_INTENT_HINT[v] || '';
+  // A heading is chrome; plain text has none.
+  document.getElementById('prof-heading-field').style.display = v === 'plain' ? 'none' : '';
+  document.getElementById('prof-mail-preview').style.display = 'none';
+}
+
+function _profMailPayload(previewOnly) {
+  return {
+    user_id: _profUser.id,
+    subject: document.getElementById('prof-mail-subject').value.trim(),
+    heading: (document.getElementById('prof-mail-heading').value || '').trim(),
+    message: document.getElementById('prof-mail-body').value.trim(),
+    from_admin_id: document.getElementById('prof-mail-sender').value,
+    intent: document.getElementById('prof-mail-intent').value,
+    preview_only: !!previewOnly,
+  };
+}
+
+async function _profMailPost(payload) {
+  var { data: { session } } = await _sb.auth.getSession();
+  if (!session) throw new Error('Session expired');
+  var res = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/send-admin-email', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + session.access_token,
+      'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
+    },
+    body: JSON.stringify(payload),
+  });
+  var data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+// Renders without sending. The server builds it with the same code path the
+// real send uses, so this is the email, not an approximation of it.
+async function previewAdminEmail() {
+  if (!_profUser) return;
+  var statusEl = document.getElementById('prof-send-status');
+  var payload = _profMailPayload(true);
+  if (!payload.subject || !payload.message) {
+    statusEl.className = 'err';
+    statusEl.textContent = 'Subject and message are both required.';
+    return;
+  }
+  var btn = document.getElementById('prof-preview-btn');
+  btn.disabled = true;
+  statusEl.className = '';
+  statusEl.textContent = 'Rendering…';
+  try {
+    var data = await _profMailPost(payload);
+    var frame = document.getElementById('prof-mail-preview-frame');
+    frame.srcdoc = data.html
+      || '<body style="margin:0;padding:16px;background:#070D1A;color:#DDE5EF;font:14px/1.7 ui-monospace,monospace;white-space:pre-wrap">'
+         + esc(data.text || '') + '</body>';
+    document.getElementById('prof-mail-preview').style.display = 'block';
+    statusEl.textContent = 'Preview only. Nothing has been sent.';
+  } catch (e) {
+    statusEl.className = 'err';
+    statusEl.textContent = e.message;
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 async function sendAdminEmail() {
   if (!_profUser) return;
-  var fromAdminId = document.getElementById('prof-mail-sender').value;
-  var emailFormat = document.getElementById('prof-mail-format-toggle').checked ? 'template' : 'plain';
-  var subject = document.getElementById('prof-mail-subject').value.trim();
-  var message = document.getElementById('prof-mail-body').value.trim();
+  var payload = _profMailPayload(false);
+  var subject = payload.subject;
+  var message = payload.message;
   var statusEl = document.getElementById('prof-send-status');
   var btn = document.getElementById('prof-send-btn');
 
@@ -2395,7 +2479,7 @@ async function sendAdminEmail() {
         'Authorization': 'Bearer ' + session.access_token,
         'apikey': 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
       },
-      body: JSON.stringify({ user_id: _profUser.id, subject: subject, message: message, from_admin_id: fromAdminId, email_format: emailFormat })
+      body: JSON.stringify(payload)
     });
     var data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Failed to send');

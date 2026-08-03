@@ -37,8 +37,48 @@ function plainTextBody(message: string, signerName: string | null): string {
   return text;
 }
 
-function layout(opts: { heading: string; bodyHtml: string; signerName: string | null }): string {
-  const { heading, bodyHtml, signerName } = opts;
+// Chrome, heading and call-to-action are three separate decisions, and an
+// admin message frequently needs the first without the third.
+//
+// This used to force all three together: every templated message got a big
+// "Open Elec-Buddy" button whether or not the point of the mail was to bring
+// someone back. Telling a person their account is being removed and then
+// inviting them to log in reads as either a mistake or a trick, and the only
+// alternative was 'plain', which strips the branding that makes the message
+// look genuinely from you. Neither was right for an account notice.
+function layout(opts: {
+  heading: string | null;
+  bodyHtml: string;
+  signerName: string | null;
+  cta: boolean;
+}): string {
+  const { heading, bodyHtml, signerName, cta } = opts;
+
+  // Most mail clients already show the subject directly above the body, so
+  // repeating it as an H1 just says the same thing twice. Only rendered when
+  // the admin deliberately sets one.
+  const headingHtml = heading
+    ? `<h1 style="margin:0 0 18px 0;font-size:20px;font-weight:700;line-height:1.35;color:#DDE5EF;text-align:left;">
+         ${escapeHtml(heading)}
+       </h1>`
+    : '';
+
+  const ctaHtml = cta
+    ? `<tr>
+          <td style="padding:10px 32px 34px;">
+            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:8px auto 0;">
+              <tr>
+                <td align="center" bgcolor="#C8A44A" style="border-radius:10px;">
+                  <a href="${APP_URL}"
+                     style="display:inline-block;padding:13px 30px;background-color:#C8A44A;color:#070D1A;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;">
+                    Open Elec-Buddy
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>`
+    : '';
 
   const signature = signerName
     ? `<p style="margin:26px 0 0 0;font-size:14px;line-height:1.6;color:#8FA3B8;">
@@ -71,30 +111,15 @@ function layout(opts: { heading: string; bodyHtml: string; signerName: string | 
           </td>
         </tr>
         <tr>
-          <td style="padding:30px 32px 6px;">
-            <h1 style="margin:0 0 18px 0;font-size:20px;font-weight:700;line-height:1.35;color:#DDE5EF;text-align:left;">
-              ${heading}
-            </h1>
+          <td style="padding:30px 32px ${cta ? '6px' : '28px'};">
+            ${headingHtml}
             <div style="font-size:15px;line-height:1.75;color:#DDE5EF;text-align:left;">
               ${bodyHtml}
             </div>
             ${signature}
           </td>
         </tr>
-        <tr>
-          <td style="padding:10px 32px 34px;">
-            <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" style="margin:8px auto 0;">
-              <tr>
-                <td align="center" bgcolor="#C8A44A" style="border-radius:10px;">
-                  <a href="${APP_URL}"
-                     style="display:inline-block;padding:13px 30px;background-color:#C8A44A;color:#070D1A;text-decoration:none;font-size:14px;font-weight:700;border-radius:10px;">
-                    Open Elec-Buddy
-                  </a>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
+        ${ctaHtml}
         <tr>
           <td style="padding:20px 32px;border-top:1px solid #1A3050;text-align:center;">
             <div style="font-size:12px;color:#6E8AA6;line-height:1.7;">
@@ -142,14 +167,32 @@ serve(async (req) => {
     if (!callerProfile?.is_admin) return json({ error: 'Forbidden: admin access required' }, 403);
 
     const body = await req.json().catch(() => ({}));
-    const { user_id, subject, message, from_admin_id, email_format } = body;
-    const useTemplate = email_format !== 'plain';
+    const { user_id, subject, message, from_admin_id, email_format, intent, heading, preview_only } = body;
+
+    // An admin picks a PURPOSE, not a rendering mode. The three differ only in
+    // whether they carry branding and whether they invite an action:
+    //
+    //   notice       branded, no button  - account changes, corrections, apologies
+    //   announcement branded, button     - new content, come back and look
+    //   plain        no branding at all  - bare text
+    //
+    // 'notice' is the default because most admin-to-user mail is informational.
+    // email_format is still honoured so an older client mid-deploy keeps working:
+    // its 'plain' means plain, and its 'template' maps to announcement, which is
+    // what that toggle used to produce.
+    const mode = intent
+      || (email_format === 'plain' ? 'plain' : email_format === 'template' ? 'announcement' : 'notice');
+    const useTemplate = mode !== 'plain';
+    const withCta = mode === 'announcement';
 
     if (!user_id || typeof user_id !== 'string') return json({ error: 'user_id required' }, 400);
     if (!subject || typeof subject !== 'string' || !subject.trim()) return json({ error: 'subject required' }, 400);
     if (!message || typeof message !== 'string' || !message.trim()) return json({ error: 'message required' }, 400);
     if (subject.length > 200) return json({ error: 'subject too long' }, 400);
     if (message.length > 8000) return json({ error: 'message too long' }, 400);
+    if (heading && (typeof heading !== 'string' || heading.length > 200)) {
+      return json({ error: 'heading too long' }, 400);
+    }
 
     // Look up target user's email
     const { data: target } = await admin
@@ -202,9 +245,28 @@ serve(async (req) => {
     }
 
     const signerName = signerProfile.full_name || null;
+    // heading is opt-in and separate from the subject. Passing the subject in
+    // here is what printed it twice: once in the mail client's subject line and
+    // again as an H1 immediately below it.
     const emailBody = useTemplate
-      ? { html: layout({ heading: subject, bodyHtml: formatMessage(message), signerName }) }
+      ? { html: layout({
+          heading: (typeof heading === 'string' && heading.trim()) ? heading.trim() : null,
+          bodyHtml: formatMessage(message),
+          signerName,
+          cta: withCta,
+        }) }
       : { text: plainTextBody(message, signerName) };
+
+    // Render and return without sending, so the admin can see the exact email
+    // first. Nothing is logged and nobody is contacted on a preview.
+    if (preview_only) {
+      return json({
+        ok: true, preview: true, mode,
+        from: fromHeader, to: target.email, subject,
+        html: emailBody.html || null,
+        text: emailBody.text || null,
+      });
+    }
 
     const resendRes = await fetch('https://api.resend.com/emails', {
       method: 'POST',
