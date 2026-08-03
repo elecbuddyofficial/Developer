@@ -1474,7 +1474,7 @@ startBackgroundIndexing();
   }
   // Sponsorship itself is free — this button sends the user to the main app
   // to manage their Oral/Written plan, since there's nothing to gate here.
-  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ window.location.href='../index.html'; });
+  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ window.location.href='../index.html?stay=1'; });
   window.addEventListener('load',function(){ var user=window._sbUser; if(user){var n=user.user_metadata?.full_name||user.email; document.getElementById('profile-btn').textContent=n.charAt(0).toUpperCase();} });
 })();
 

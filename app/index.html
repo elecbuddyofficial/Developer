@@ -37,6 +37,10 @@
         window.location.replace('./auth.html');
       } else {
         window._sbUser = session.user;
+        // Marks that this person actually reached the app, which is what lets
+        // elec-buddy.com skip its marketing page for them next time. Set here
+        // rather than on the landing page, so it can never mean 'saw the pitch'.
+        try { localStorage.setItem('eb_entered_app', '1'); } catch (e) {}
         window._topicProgress = JSON.parse(localStorage.getItem('eb_tp_cache') || '{}');
         _sb.from('profiles').select('topic_progress').eq('id', session.user.id).single().then(function(res) {
           if (res.data && res.data.topic_progress) {
@@ -121,7 +125,7 @@
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/></svg></span><span class="label">Request Content / Report Bug</span>
   </a>
   <div class="sb-divider"></div>
-  <a class="sb-item" href="../index.html" title="About this app">
+  <a class="sb-item" href="../index.html?stay=1" title="About this app">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></g></svg></span><span class="label">About</span>
   </a>
   <div class="sb-divider"></div>
@@ -884,6 +888,54 @@
   </div>
 </div>
 
+<!-- ── First-run welcome ───────────────────────────────────── -->
+<div id="wel-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:460px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:26px 24px;text-align:center;">
+
+      <div style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#C8A44A;line-height:1.2;">Welcome to Elec-Buddy</div>
+      <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6E8AA6;margin-top:6px;">ETO Exam Preparation</div>
+
+      <p style="font-size:14px;color:#DDE5EF;line-height:1.7;margin:20px 0 0;">
+        Everything here is built for one thing: getting you through your MMD orals and written papers.
+      </p>
+
+      <div style="display:flex;gap:10px;margin:20px 0 0;flex-wrap:wrap;">
+        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+          <div style="font-size:19px;font-weight:800;color:#C8A44A;">23</div>
+          <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Oral topics with full notes and diagrams</div>
+        </div>
+        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+          <div style="font-size:19px;font-weight:800;color:#C8A44A;">5,643</div>
+          <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Practice questions with explanations</div>
+        </div>
+        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+          <div style="font-size:19px;font-weight:800;color:#C8A44A;">1,196</div>
+          <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Real surveyor questions and answers</div>
+        </div>
+      </div>
+
+      <p style="font-size:13px;color:#8FA3B8;line-height:1.65;margin:18px 0 0;">
+        The written section adds theory notes and 39 numericals worked out line by line. Everything is searchable, and the app remembers where you stopped.
+      </p>
+
+      <div style="margin:20px 0 0;padding:14px;background:rgba(200,164,74,0.06);border:1px solid rgba(200,164,74,0.2);border-radius:10px;">
+        <div style="font-size:12.5px;color:#DDE5EF;line-height:1.6;">Follow us for new topics, exam updates and study tips.</div>
+        <a href="https://instagram.com/elec.buddy" target="_blank" rel="noopener noreferrer"
+           style="display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;min-height:44px;padding:0 20px;background:rgba(200,164,74,0.14);border:1px solid rgba(200,164,74,0.4);border-radius:8px;color:#C8A44A;font-size:13px;font-weight:700;text-decoration:none;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+          Follow @elec.buddy
+        </a>
+      </div>
+
+      <p style="font-size:13.5px;color:#DDE5EF;margin:20px 0 0;font-weight:600;">Happy studying.</p>
+
+      <button onclick="dismissWelcome()" style="width:100%;min-height:46px;margin-top:18px;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Start studying</button>
+      <button onclick="dismissWelcome(true)" style="width:100%;min-height:44px;margin-top:8px;background:none;border:1px solid #1A3050;border-radius:9px;color:#8FA3B8;font-size:12.5px;cursor:pointer;font-family:inherit;">Show me around first</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── Feedback / bug report ───────────────────────────────── -->
 <div id="fb-modal" onclick="closeFeedback(event)" style="display:none;position:fixed;inset:0;z-index:10003;background:rgba(4,9,20,0.92);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
@@ -1526,6 +1578,10 @@ function setTheme(t) {
           .eq('id', session.user.id).single();
         if (!profile) return;
 
+        // Piggybacks on a profile read that already happens, so the welcome
+        // costs no extra round trip. It is a no-op after the first time.
+        if (typeof window.maybeShowWelcome === 'function') window.maybeShowWelcome(profile);
+
         var wasAccess = window._access || { oral: false, written: false };
         window._access = window._deriveAccess(profile).access;
 
@@ -1731,6 +1787,44 @@ function setTheme(t) {
 
     // Payment history. Same slide-across pattern as Settings: the profile
     // panel closes, this one opens in its place, and Back returns to it.
+    // ── First-run welcome ──────────────────────────────────
+    // Shown once, on the first visit after signing up.
+    //
+    // Keyed per user id rather than a single flag, so a shared or reused
+    // device does not swallow the welcome for the second person to sign in.
+    // Deliberately localStorage rather than a profiles column: it saves a
+    // migration, and the worst case if someone signs in on a second device is
+    // that they see a friendly welcome twice, which is not worth a schema
+    // change to prevent.
+    //
+    // Gated on the account being genuinely new. Without that check, every
+    // existing user would be greeted as a newcomer the first time they load
+    // the build that introduced this.
+    function _welKey() {
+      return 'eb_welcomed_' + (window._sbUser ? window._sbUser.id : 'anon');
+    }
+
+    window.maybeShowWelcome = function(profile) {
+      if (!window._sbUser) return;
+      try { if (localStorage.getItem(_welKey())) return; } catch (e) { return; }
+
+      var started = profile && profile.trial_started_at;
+      // Anyone whose trial began more than a day ago is not a new signup, so
+      // mark them as welcomed and stay out of their way.
+      var isNew = started && (Date.now() - new Date(started).getTime()) < 24 * 60 * 60 * 1000;
+      if (!isNew) { try { localStorage.setItem(_welKey(), 'skip'); } catch (e) {} return; }
+
+      document.getElementById('wel-modal').style.display = 'block';
+      document.documentElement.classList.add('_modal-open');
+    };
+
+    window.dismissWelcome = function(startTour) {
+      try { localStorage.setItem(_welKey(), new Date().toISOString()); } catch (e) {}
+      document.getElementById('wel-modal').style.display = 'none';
+      document.documentElement.classList.remove('_modal-open');
+      if (startTour === true && typeof startGuide === 'function') startGuide();
+    };
+
     // ── Feedback / bug report ──────────────────────────────
     // Files are attached to the email rather than uploaded anywhere, so this
     // costs no Supabase storage. The caps below mirror the ones the edge

@@ -571,5 +571,43 @@ function switchTab(btn, which) {
 })();
 </script>
 <script data-goatcounter="https://elecbuddy.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+<script>
+// ── Returning visitors skip the marketing page ──────────────────────────────
+// Someone who has already been inside the app does not need the pitch again,
+// and elec-buddy.com is where every bookmark, share and search result lands.
+//
+// The flag is set by the app itself (eb_entered_app), not here, so it only
+// ever means "this person actually got into the app", never "this person saw
+// the landing page once".
+//
+// Three ways out of the redirect, because a marketing page you cannot reach
+// is its own problem: any ?stay=1 link, a same-tab Back from the app, and the
+// "View the full site" link the redirect leaves behind.
+(function () {
+  var KEY = 'eb_entered_app';
+  var params = new URLSearchParams(location.search);
+
+  // An explicit request to see the page always wins, and is remembered, so a
+  // returning user who wants the site can keep it.
+  if (params.has('stay')) {
+    try { sessionStorage.setItem('eb_stay_on_site', '1'); } catch (e) {}
+    return;
+  }
+  try { if (sessionStorage.getItem('eb_stay_on_site')) return; } catch (e) {}
+
+  var entered;
+  try { entered = localStorage.getItem(KEY); } catch (e) { return; }  // private mode
+  if (!entered) return;
+
+  // Coming back from the app in the same tab, i.e. they pressed Back. Bouncing
+  // them forward again would trap them in a loop they cannot escape.
+  if (performance && performance.getEntriesByType) {
+    var nav = performance.getEntriesByType('navigation')[0];
+    if (nav && nav.type === 'back_forward') return;
+  }
+
+  location.replace('app/auth.html');
+})();
+</script>
 </body>
 </html>
