@@ -2300,7 +2300,20 @@ async function applyCoupon() {
     toggle.textContent = quote.code + ' applied. Remove';
     toggle.onclick = clearCoupon;
     renderUpgradeCards();
-    setUpStatus(quote.code + ' applied. New prices are shown below.', true);
+
+    // The code may be live but aimed at plans other than the one we happened
+    // to quote. Applying it and letting the cards show which ones it covers is
+    // far more useful than refusing it, which reads as "your code is broken".
+    if (quote.applies_here === false) {
+      var t = quote.terms || {};
+      var only = t.applies_duration ? t.applies_duration.replace('mo', '-month') : null;
+      setUpStatus(quote.code + ' applied. ' + (quote.min_amount_message
+        ? 'It ' + quote.min_amount_message + '.'
+        : only ? 'It covers the ' + only + ' plans, marked below.'
+               : 'See which plans it covers below.'), true);
+    } else {
+      setUpStatus(quote.code + ' applied. New prices are shown below.', true);
+    }
   } catch (e) {
     window._upCoupon = null;
     setUpStatus(e.message || 'That code is not valid', false);

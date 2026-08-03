@@ -81,17 +81,25 @@ serve(async (req) => {
 
     const now = new Date();
     const priceBefore = priceWithCoupon(planRow, null, now).final;
+
+    // Targeting is NOT a hard rejection here, deliberately.
+    //
+    // The upgrade modal shows three durations at once and can only ask about
+    // one of them, so it asks about the one it guesses the buyer wants. A code
+    // aimed at the 3-month plan was therefore being rejected outright whenever
+    // that guess landed on 12-month, which is what the buyer sees as "my valid
+    // code does not work". The code is live and usable; it just does not cover
+    // the plan we happened to ask about.
+    //
+    // So only the code's own liveness is fatal here. Whether it covers a given
+    // plan is per-card information, which the client already renders, and
+    // create-razorpay-order still refuses outright at purchase time because by
+    // then exactly one plan is being bought.
+    const hardDead = !coupon.active
+      || (coupon.expires_at && new Date(coupon.expires_at) < now);
+    if (hardDead) { await note(false); return json({ error: VAGUE }, 400); }
+
     const applies = couponAppliesTo(coupon, duration, scope, priceBefore, now);
-    if (!applies.ok) {
-      await note(false);
-      return json({
-        error: applies.reason === 'below_minimum'
-          // Worth being specific about: the buyer can act on this one by
-          // picking a larger plan, and it gives nothing away about the code.
-          ? 'This code needs an order of at least ₹' + Math.ceil((coupon.min_amount ?? 0) / 100)
-          : VAGUE,
-      }, 400);
-    }
 
     // Cheap pre-check on the limit so an obviously spent code fails here
     // rather than at checkout. This is NOT the authority - coupon_reserve
@@ -128,20 +136,26 @@ serve(async (req) => {
     // A 100%-off discount is a giveaway wearing a discount's clothes. Route it
     // down the same grant path rather than creating a ₹0 order Razorpay would
     // reject anyway.
-    if (p.isFullGrant) return json({ ok: true, kind: 'grant', code, was_discount: true });
+    if (p.isFullGrant && applies.ok) return json({ ok: true, kind: 'grant', code, was_discount: true });
 
     return json({
       ok: true,
       kind: coupon.kind,
       code,
+      // False means the code is live but does not cover the plan we asked
+      // about. The client still applies it and marks the eligible cards.
+      applies_here: applies.ok,
+      min_amount_message: (!applies.ok && applies.reason === 'below_minimum' && coupon.min_amount)
+        ? 'needs an order of at least ₹' + Math.ceil(coupon.min_amount / 100)
+        : null,
       sticker: p.sticker,
       was: p.salePrice,          // what they would pay without the code
-      now: p.final,              // what they will pay with it
-      discount: p.salePrice - p.final,
+      now: applies.ok ? p.final : p.salePrice,
+      discount: applies.ok ? p.salePrice - p.final : 0,
       sale_active: p.saleActive,
       // Best-of means a weak code can lose to a live sale and change nothing.
-      // The client says so plainly rather than showing an identical price twice.
-      no_effect: p.couponHadNoEffect,
+      // Only meaningful when the code actually covers this plan.
+      no_effect: applies.ok && p.couponHadNoEffect,
       // The upgrade modal shows three durations at once but this quote priced
       // only one, so hand back the code's own terms and let the client apply
       // the identical rule to the other cards. Not a leak: the buyer already
