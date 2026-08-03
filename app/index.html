@@ -886,18 +886,14 @@
       <div id="up-track-tabs" style="display:flex;gap:8px;margin-bottom:16px;"></div>
       <div id="up-track-subhead" style="font-size:12px;color:#5A7B98;margin-bottom:16px;margin-top:-6px;"></div>
 
-      <!-- Tier cards (Launch / Mariner / Master), rendered from pricing_plans -->
-      <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
-
-      <!-- Features -->
-      <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
-        <div id="up-features-title" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6E8AA6;margin-bottom:12px;">This track includes</div>
-        <div id="up-track-features" style="display:flex;flex-direction:column;gap:8px;"></div>
-      </div>
-
-      <!-- Coupon -->
-      <div style="text-align:center;margin-bottom:18px;">
-        <button id="up-coupon-toggle" onclick="toggleCouponBox()" style="background:none;border:none;color:#6E8AA6;font-size:12.5px;cursor:pointer;text-decoration:underline;padding:6px;font-family:inherit;">Have a code?</button>
+      <!-- Coupon. Sits ABOVE the cards on purpose: below the features box it
+           was under the fold, so buyers holding a code never saw it and the
+           prices they were reading were not the prices they could get. -->
+      <div style="margin-bottom:12px;">
+        <div style="display:flex;justify-content:flex-end;">
+          <button id="up-coupon-toggle" onclick="toggleCouponBox()"
+                  style="background:rgba(200,164,74,0.08);border:1px solid rgba(200,164,74,0.28);border-radius:999px;color:#C8A44A;font-size:12px;font-weight:600;cursor:pointer;padding:7px 14px;font-family:inherit;">Have a code?</button>
+        </div>
         <div id="up-coupon-box" style="display:none;margin-top:10px;">
           <div style="display:flex;gap:8px;">
             <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
@@ -906,6 +902,15 @@
                     style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
           </div>
         </div>
+      </div>
+
+      <!-- Tier cards (Launch / Mariner / Master), rendered from pricing_plans -->
+      <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+
+      <!-- Features -->
+      <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
+        <div id="up-features-title" style="font-size:10.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#6E8AA6;margin-bottom:12px;">This track includes</div>
+        <div id="up-track-features" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
 
       <!-- Payment status -->
