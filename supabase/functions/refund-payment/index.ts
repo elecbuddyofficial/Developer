@@ -126,7 +126,10 @@ serve(async (req) => {
     if (shouldRevoke && payment.user_id) {
       const { data: profile } = await sb
         .from('profiles')
-        .select('subscription_plan, trial_started_at')
+        // granted_* is what makes this replay safe: it is access that came from
+        // a comp coupon or an admin grant, which leaves no payments row, so
+        // rebuilding from payments alone used to destroy it.
+        .select('subscription_plan, trial_started_at, granted_written_expires_at, granted_oral_expires_at')
         .eq('id', payment.user_id)
         .maybeSingle();
 

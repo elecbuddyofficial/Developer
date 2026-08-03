@@ -2639,6 +2639,17 @@ function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-sc
 // exactly the bug this whole change exists to fix - granting Oral to someone
 // holding paid Written would silently destroy the Written they bought. To
 // remove access outright, use Force Trial Expiry, which clears everything.
+// Also writes the grant-only ledger (granted_*), and that is not optional.
+//
+// Access granted here leaves no `payments` row. Refunding a payment rebuilds
+// access by replaying that table, so before this ledger existed, refunding any
+// unrelated purchase silently destroyed everything granted from this screen. A
+// reviewer comped a free year who later bought one month and asked for that
+// month back lost the year with it.
+//
+// This grant sets an absolute date rather than adding months, so the ledger
+// simply mirrors it. Scopes this grant does not cover are left out of the
+// object entirely, so an existing grant on the other scope is not disturbed.
 function scopeAccessUpdate(plan, scope, expiry) {
   var upd = { subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope };
 
@@ -2646,16 +2657,26 @@ function scopeAccessUpdate(plan, scope, expiry) {
     // Not date-based; stale per-scope dates would later contradict it.
     upd.written_expires_at = null;
     upd.oral_expires_at = null;
+    upd.granted_written_expires_at = null;
+    upd.granted_oral_expires_at = null;
     return upd;
   }
   if (plan === 'trial') {
     upd.written_expires_at = null;
     upd.oral_expires_at = null;
+    upd.granted_written_expires_at = null;
+    upd.granted_oral_expires_at = null;
     return upd;
   }
   var covered = scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
-  if (covered.indexOf('written') !== -1) upd.written_expires_at = expiry;
-  if (covered.indexOf('oral')    !== -1) upd.oral_expires_at    = expiry;
+  if (covered.indexOf('written') !== -1) {
+    upd.written_expires_at = expiry;
+    upd.granted_written_expires_at = expiry;
+  }
+  if (covered.indexOf('oral') !== -1) {
+    upd.oral_expires_at = expiry;
+    upd.granted_oral_expires_at = expiry;
+  }
   return upd;
 }
 
@@ -2947,8 +2968,22 @@ async function revokeAccess() {
   if (!_grantUserId) return;
   if (!confirm('Revoke access? User will be dropped back to trial.')) return;
 
+  // Clears the per-scope columns as well, which it previously did not.
+  // deriveAccess reads written_expires_at / oral_expires_at and ignores
+  // subscription_plan entirely for paid access, so setting the plan back to
+  // 'trial' on its own revoked nothing: the user kept everything. The grant
+  // ledger is cleared alongside, or a later refund would replay the revoked
+  // grant straight back in.
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', subscription_expires_at: null, plan_scope: null })
+    .update({
+      subscription_plan: 'trial',
+      subscription_expires_at: null,
+      plan_scope: null,
+      written_expires_at: null,
+      oral_expires_at: null,
+      granted_written_expires_at: null,
+      granted_oral_expires_at: null,
+    })
     .eq('id', _grantUserId);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }

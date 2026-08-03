@@ -49,6 +49,14 @@ export interface EntitlementProfile {
   // never read for access decisions once the migration has run.
   plan_scope?: string | null;
   subscription_expires_at?: string | null;
+  // Access that did NOT come from a payment: a comp coupon or an admin grant.
+  // Maintained as its own little ledger, stacked the same way, so that a
+  // refund can rebuild from payments WITHOUT destroying it. See
+  // recomputeFromPayments for why reconstructing this after the fact is not
+  // possible: months are added from a moving anchor, so subtracting two
+  // replays does not recover the grant, it lands weeks out.
+  granted_written_expires_at?: string | null;
+  granted_oral_expires_at?: string | null;
 }
 
 export interface Access {
@@ -199,13 +207,23 @@ export function recomputeFromPayments(
     .slice()
     .sort((a, b) => new Date(a.paid_at ?? 0).getTime() - new Date(b.paid_at ?? 0).getTime());
 
-  // Start from a clean slate, keeping only trial info - anything else would
-  // re-credit the very purchase being refunded.
+  // Start from whatever was GRANTED rather than from nothing.
+  //
+  // Starting from null was a real bug. Comp coupons (redeem-coupon) and the
+  // admin panel's Grant Access both write expiry straight to profiles and
+  // leave no payments row, so a replay could not see them. Refunding any
+  // payment on such an account therefore wiped the granted time as well: a
+  // reviewer given a free year, who bought one month and asked for that month
+  // back, lost the year too.
+  //
+  // Seeding here is exact, because the grant ledger is stacked by the same
+  // applyPurchase, so replaying payments on top of it reproduces the real
+  // sequence rather than approximating it.
   let running: EntitlementProfile = {
     subscription_plan: profile.subscription_plan,
     trial_started_at:  profile.trial_started_at,
-    written_expires_at: null,
-    oral_expires_at:    null,
+    written_expires_at: profile.granted_written_expires_at ?? null,
+    oral_expires_at:    profile.granted_oral_expires_at ?? null,
   };
 
   for (const p of ordered) {
@@ -226,5 +244,33 @@ export function recomputeFromPayments(
     written_expires_at: running.written_expires_at ?? null,
     oral_expires_at:    running.oral_expires_at ?? null,
     changes: [],
+  };
+}
+
+
+/**
+ * Apply a grant (comp coupon or admin Grant Access) to the grant-only ledger.
+ *
+ * Kept separate from the real expiry columns on purpose. The real columns are
+ * grants and payments combined; these are grants alone, and they are what a
+ * refund rebuilds on top of. Stacking uses the same applyPurchase, so the two
+ * ledgers can never drift in how they count a month.
+ */
+export function applyGrant(
+  profile: EntitlementProfile,
+  scope: string | null | undefined,
+  months: number,
+  now: Date = new Date(),
+): { granted_written_expires_at: string | null; granted_oral_expires_at: string | null } {
+  const eff = applyPurchase({
+    subscription_plan:  profile.subscription_plan,
+    trial_started_at:   profile.trial_started_at,
+    written_expires_at: profile.granted_written_expires_at ?? null,
+    oral_expires_at:    profile.granted_oral_expires_at ?? null,
+  }, scope, months, now);
+
+  return {
+    granted_written_expires_at: eff.written_expires_at,
+    granted_oral_expires_at:    eff.oral_expires_at,
   };
 }

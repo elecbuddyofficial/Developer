@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { applyPurchase } from '../_shared/entitlements.ts';
+import { applyPurchase, applyGrant } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Redeems a comp code for the calling user.
@@ -115,11 +115,13 @@ serve(async (req) => {
       grant.subscription_expires_at = null;
       grant.written_expires_at = null;
       grant.oral_expires_at = null;
+      grant.granted_written_expires_at = null;
+      grant.granted_oral_expires_at = null;
     } else {
       const months = coupon.months || 1;
       const { data: profile } = await sb
         .from('profiles')
-        .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at')
+        .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at, granted_written_expires_at, granted_oral_expires_at')
         .eq('id', user.id)
         .maybeSingle();
 
@@ -133,6 +135,13 @@ serve(async (req) => {
       grant.subscription_expires_at = expiresAt;
       grant.written_expires_at = effect.written_expires_at;
       grant.oral_expires_at = effect.oral_expires_at;
+
+      // Also recorded on the grant-only ledger. This is what a later refund
+      // rebuilds from: without it, refunding an unrelated purchase would wipe
+      // the comped time, because a replay of `payments` cannot see a coupon.
+      const granted = applyGrant(profile ?? {}, coupon.scope, months, new Date());
+      grant.granted_written_expires_at = granted.granted_written_expires_at;
+      grant.granted_oral_expires_at    = granted.granted_oral_expires_at;
     }
 
     await sb.from('profiles').update(grant).eq('id', user.id);
