@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elec-Buddy: Privacy Policy</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #070D1A;
+    color: #DDE5EF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .top-bar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(7,13,26,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #1A3050;
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .brand-name {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    color: #C8A44A;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+  .back-link {
+    font-size: 13px;
+    color: #7AB8E0;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .doc-header { margin-bottom: 28px; }
+  .doc-header h1 {
+    font-size: 1.6rem;
+    color: #F8FAFC;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .doc-header .meta {
+    font-size: 12.5px;
+    color: #6E8AA6;
+  }
+
+  .toc {
+    background: #0D1E33;
+    border: 1px solid #1A3050;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 32px;
+  }
+  .toc-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6E8AA6;
+    margin-bottom: 10px;
+  }
+  .toc ol {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+  }
+  .toc a {
+    font-size: 13px;
+    color: #8FA3B8;
+    text-decoration: none;
+  }
+  .toc a:hover { color: #C8A44A; text-decoration: underline; }
+
+  section { margin-bottom: 30px; scroll-margin-top: 70px; }
+  section h2 {
+    font-size: 1.05rem;
+    color: #DDE5EF;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1A3050;
+  }
+  section h3 {
+    font-size: 0.92rem;
+    color: #C8A44A;
+    margin: 16px 0 8px;
+  }
+  section p { font-size: 14px; color: #C0CCDC; margin-bottom: 12px; }
+  section ul, section ol.plain {
+    font-size: 14px; color: #C0CCDC;
+    margin: 0 0 12px 22px;
+  }
+  section li { margin-bottom: 6px; }
+  section strong { color: #DDE5EF; font-weight: 600; }
+  a.inline-link { color: #7AB8E0; }
+
+  table.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 16px;
+    font-size: 13px;
+  }
+  table.data-table th {
+    text-align: left;
+    color: #8FA3B8;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 8px 10px;
+    border-bottom: 1px solid #1A3050;
+  }
+  table.data-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #10192B;
+    color: #C0CCDC;
+    vertical-align: top;
+  }
+
+  .callout {
+    background: rgba(200,164,74,0.07);
+    border: 1px solid rgba(200,164,74,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #C0A868;
+    margin-bottom: 12px;
+  }
+
+  footer {
+    border-top: 1px solid #1A3050;
+    padding-top: 24px;
+    margin-top: 40px;
+    font-size: 12.5px;
+    color: #6E8AA6;
+    text-align: center;
+  }
+  footer a { color: #7AB8E0; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 16px 64px; }
+    .toc ol { grid-template-columns: 1fr; }
+    .doc-header h1 { font-size: 1.35rem; }
+    table.data-table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; white-space: nowrap; }
+  }
+
+  /* Same scroll-hint pattern as the main app's .n-table (see app/style.css
+     and app.js's _addTableScrollHints) - this page is standalone and does
+     not load app.js, so the same behaviour is reimplemented in the inline
+     script below rather than shared. */
+  .table-wrap { position: relative; }
+  .table-hint {
+    display: none; position: absolute; top: 50%; right: 8px; transform: translateY(-50%);
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #C8A44A; color: #070D1A;
+    align-items: center; justify-content: center; font-size: 13px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.35);
+    pointer-events: none; transition: opacity .35s ease;
+    animation: tableHintPulse 1.6s ease-in-out infinite;
+  }
+  .table-wrap.has-scroll-hint .table-hint { display: flex; }
+  .table-wrap.hint-dismissed .table-hint { opacity: 0; }
+  @keyframes tableHintPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .table-hint { animation: none; } }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a class="brand-name" href="./courses.html">Elec-Buddy</a>
+  <a class="back-link" href="javascript:history.back()">&larr; Back</a>
+</div>
+
+<div class="wrap">
+  <div class="doc-header">
+    <h1>Privacy Policy</h1>
+    <div class="meta">Last updated: 3 August 2026 &middot; Applies to all Elec-Buddy accounts</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#intro">1. Introduction</a></li>
+      <li><a href="#collect">2. Information We Collect</a></li>
+      <li><a href="#use">3. How We Use Your Information</a></li>
+      <li><a href="#thirdparty">4. Third-Party Service Providers</a></li>
+      <li><a href="#security">5. Data Storage and Security</a></li>
+      <li><a href="#cookies">6. Cookies and Local Storage</a></li>
+      <li><a href="#retention">7. Data Retention</a></li>
+      <li><a href="#rights">8. Your Rights</a></li>
+      <li><a href="#children">9. Children's Privacy</a></li>
+      <li><a href="#location">10. Where Your Data Is Stored</a></li>
+      <li><a href="#changes">11. Changes to This Policy</a></li>
+      <li><a href="#contact">12. Contact Us</a></li>
+    </ol>
+  </div>
+
+  <section id="intro">
+    <h2>1. Introduction</h2>
+    <p>This Privacy Policy explains what information Elec-Buddy collects when you use our exam preparation platform for marine Electro-Technical Officers, how we use it, and the choices available to you. It should be read alongside our <a class="inline-link" href="./terms.html">Terms and Conditions</a>.</p>
+    <p>By using the Service, you agree to the collection and use of information as described here.</p>
+  </section>
+
+  <section id="collect">
+    <h2>2. Information We Collect</h2>
+    <table class="data-table">
+      <tr><th>Category</th><th>What we collect</th></tr>
+      <tr><td>Account information</td><td>Full name, email address, and a securely hashed password (we never see or store your password in plain text).</td></tr>
+      <tr><td>Payment information</td><td>Plan purchased, amount paid, and the order and payment identifiers returned by Razorpay. We do not collect or store your card number, UPI ID, or net banking credentials; these are handled directly by Razorpay.</td></tr>
+      <tr><td>Study activity</td><td>Which topics you have read, your progress through them, and your quiz results, so you can pick up where you left off and track your revision.</td></tr>
+      <tr><td>Device information</td><td>A device identifier used to enforce the per-account device limit described in our Terms, so that one subscription cannot be shared across an unlimited number of devices.</td></tr>
+      <tr><td>Technical data</td><td>Standard web request information such as browser type and IP address, collected automatically as part of normal server operation.</td></tr>
+      <tr><td>Usage analytics</td><td>Aggregate, privacy-friendly page-view analytics that do not identify you individually or track you across other websites.</td></tr>
+    </table>
+  </section>
+
+  <section id="use">
+    <h2>3. How We Use Your Information</h2>
+    <ul>
+      <li>to create and maintain your account, and to verify your identity when you sign in;</li>
+      <li>to grant and enforce access to the content your subscription covers;</li>
+      <li>to process payments and send you a receipt and confirmation of your access dates;</li>
+      <li>to send trial and subscription expiry reminders, and other service-related emails such as a welcome message when you sign up;</li>
+      <li>to save your reading progress and quiz scores across sessions and devices;</li>
+      <li>to enforce the device limit and detect account sharing that would breach our Terms;</li>
+      <li>to respond to support requests you send us;</li>
+      <li>to understand, in aggregate, how the Service is used, so we can improve it.</li>
+    </ul>
+    <p>We do not sell your personal information to anyone, and we do not use your study data or account details for third-party advertising.</p>
+  </section>
+
+  <section id="thirdparty">
+    <h2>4. Third-Party Service Providers</h2>
+    <p>We rely on the following providers to operate the Service. Each processes a limited set of your information solely to perform its function for us:</p>
+    <table class="data-table">
+      <tr><th>Provider</th><th>Purpose</th></tr>
+      <tr><td>Supabase</td><td>Database, authentication, and secure storage of your account and study data.</td></tr>
+      <tr><td>Razorpay</td><td>Payment processing. Handles your card, UPI, or net banking details directly; we never receive them.</td></tr>
+      <tr><td>Resend</td><td>Delivery of transactional emails, such as payment receipts, welcome messages, and expiry reminders.</td></tr>
+      <tr><td>GoatCounter</td><td>Privacy-focused, cookie-free page-view analytics.</td></tr>
+    </table>
+    <p>We do not permit these providers to use your information for any purpose other than providing their service to us.</p>
+  </section>
+
+  <section id="security">
+    <h2>5. Data Storage and Security</h2>
+    <ul>
+      <li>Passwords are never stored in plain text; authentication is handled by Supabase using industry-standard hashing.</li>
+      <li>Database access is restricted with row-level security, so your data is only readable by you and by authorised administrative functions, never by other subscribers.</li>
+      <li>Paid study content is encrypted at rest using AES-256-GCM, so that access requires an active, verified subscription.</li>
+      <li>All data in transit between your device and our servers is encrypted using HTTPS.</li>
+    </ul>
+    <p>No method of storage or transmission is completely secure, and we cannot guarantee absolute security, but we take reasonable, industry-standard measures to protect your information.</p>
+  </section>
+
+  <section id="cookies">
+    <h2>6. Cookies and Local Storage</h2>
+    <p>Elec-Buddy uses your browser's local storage, not third-party advertising cookies, to keep the app working smoothly. This includes your signed-in session, theme preference, Data Saver setting, and your last reading position, so the app remembers your preferences and progress between visits. This data stays on your own device and is not shared with advertisers.</p>
+  </section>
+
+  <section id="retention">
+    <h2>7. Data Retention</h2>
+    <p>We retain your account and study data for as long as your account remains active, so that your progress and access history are preserved. If you request deletion of your account, we will delete your personal information, other than records we are required to keep for legitimate accounting, tax, or legal purposes, such as payment records.</p>
+  </section>
+
+  <section id="rights">
+    <h2>8. Your Rights</h2>
+    <p>You may contact us at any time to:</p>
+    <ul>
+      <li>request a copy of the personal information we hold about you;</li>
+      <li>correct inaccurate account information, such as your name or email address;</li>
+      <li>request deletion of your account and associated personal data.</li>
+    </ul>
+    <div class="callout">Account deletion is currently handled by our support team rather than as a self-service option in the app. Email <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a> from your registered address and we will action your request.</div>
+  </section>
+
+  <section id="children">
+    <h2>9. Children's Privacy</h2>
+    <p>Elec-Buddy is intended for maritime professionals and cadets preparing for ETO certification, and is not directed at children. We do not knowingly collect personal information from anyone under the age of 18.</p>
+  </section>
+
+  <section id="location">
+    <h2>10. Where Your Data Is Stored</h2>
+    <p>Your account and study data are stored on servers located in India (Mumbai region), in accordance with applicable data protection laws.</p>
+  </section>
+
+  <section id="changes">
+    <h2>11. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time to reflect changes to the Service or applicable law. The "Last updated" date at the top of this page will always reflect the most recent version. Continued use of the Service after an update constitutes acceptance of the revised policy.</p>
+  </section>
+
+  <section id="contact">
+    <h2>12. Contact Us</h2>
+    <p>If you have any questions about this Privacy Policy or how your information is handled, please contact us at <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>.</p>
+  </section>
+
+  <footer>
+    Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
+    <a href="./terms.html">Terms and Conditions</a> &middot; <a href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>
+  </footer>
+</div>
+
+<script>
+// Same measured-overflow scroll hint as the main app's .n-table (see the
+// comment on .table-wrap above). Wraps each table that actually overflows
+// and fades the hint out on first scroll or touch.
+(function() {
+  function checkOne(table, wrap) {
+    var overflowing = table.scrollWidth > table.clientWidth + 2;
+    wrap.classList.toggle('has-scroll-hint', overflowing && !wrap.classList.contains('hint-dismissed'));
+  }
+  document.querySelectorAll('table.data-table').forEach(function(table) {
+    var wrap = document.createElement('div');
+    wrap.className = 'table-wrap';
+    table.parentNode.insertBefore(wrap, table);
+    wrap.appendChild(table);
+
+    var hint = document.createElement('span');
+    hint.className = 'table-hint';
+    hint.setAttribute('aria-hidden', 'true');
+    hint.textContent = '⇄';
+    wrap.appendChild(hint);
+
+    checkOne(table, wrap);
+    var dismiss = function() { wrap.classList.add('hint-dismissed'); wrap.classList.remove('has-scroll-hint'); };
+    table.addEventListener('scroll', dismiss, { passive: true, once: true });
+    table.addEventListener('touchstart', dismiss, { passive: true, once: true });
+    window.addEventListener('resize', function() { checkOne(table, wrap); });
+  });
+})();
+</script>
+</body>
+</html>

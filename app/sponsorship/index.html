@@ -163,6 +163,20 @@
   }
   #profile-panel.open { transform: translateX(0); }
   @media(max-width:360px){ #profile-panel { width:100%; border-left:none } }
+
+  /* Settings panel - identical slide-in pattern to profile-panel, since it
+     is reached from there and must feel like the same surface continuing. */
+  #settings-panel {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 300px; background: #0D1E33;
+    border-left: 1px solid #1A3050;
+    padding: 22px; box-shadow: -4px 0 24px rgba(0,0,0,0.5);
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto; margin: 0;
+  }
+  #settings-panel.open { transform: translateX(0); }
+  @media(max-width:360px){ #settings-panel { width:100%; border-left:none } }
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
@@ -536,9 +550,42 @@
       </div>
     </div>
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px">Upgrade to Full Access</button>
+    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </button>
     <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
     <button onclick="window.location.href='../courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+  </div>
+</div>
+
+<!-- ── Settings Modal ─────────────────────────────────────── -->
+<div id="settings-modal" onclick="closeSettings(event)" style="display:none;position:fixed;inset:0;z-index:10001;background:rgba(0,0,0,0.55);backdrop-filter:blur(3px)">
+  <div id="settings-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="backToProfile()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+        </button>
+        <div style="font-size:15px;font-weight:700;color:#DDE5EF">Settings</div>
+      </div>
+      <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&times;</button>
+    </div>
+
+    <!-- Reset Statistics -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px">
+      <div style="font-size:12.5px;font-weight:600;color:#DDE5EF">Reset Statistics</div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4">Clears quiz scores and lesson reading progress on this account. This can't be undone.</div>
+      <button id="settings-reset-btn" onclick="resetStatistics()" style="width:100%;background:rgba(224,90,106,0.1);border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s">Reset Statistics</button>
+      <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center"></div>
+    </div>
+
+    <!-- Legal -->
+    <div style="display:flex;justify-content:center;gap:14px;margin-top:16px">
+      <a href="../terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline">Terms</a>
+      <a href="../privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline">Privacy Policy</a>
+    </div>
   </div>
 </div>
 
@@ -1252,7 +1299,7 @@ startBackgroundIndexing();
   // also breaks paint order against position:sticky #topbar despite a much
   // higher z-index; Chrome's desktop mobile-emulation does not reproduce
   // this because it never leaves the Blink engine).
-  ['profile-modal', 'nf-overlay'].forEach(function(id) {
+  ['profile-modal', 'settings-modal', 'nf-overlay'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el && el.parentNode !== document.body) document.body.appendChild(el);
   });
@@ -1294,6 +1341,59 @@ startBackgroundIndexing();
     }
   };
   window.signOut=async function(){ if(window._sbClient)await window._sbClient.auth.signOut(); window.location.replace('../auth.html'); };
+
+  window.openSettings=function(){
+    document.getElementById('profile-panel').classList.remove('open');
+    setTimeout(function(){
+      document.getElementById('profile-modal').style.display='none';
+      var resetBtn=document.getElementById('settings-reset-btn');
+      resetBtn.textContent='Reset Statistics';
+      resetBtn.dataset.armed='';
+      document.getElementById('settings-reset-status').style.display='none';
+      document.getElementById('settings-modal').style.display='block';
+      setTimeout(function(){ document.getElementById('settings-panel').classList.add('open'); }, 10);
+    }, 300);
+  };
+  window.closeSettings=function(e){
+    if(!e || e.target===document.getElementById('settings-modal') || e.target.closest('.close-btn')){
+      document.getElementById('settings-panel').classList.remove('open');
+      setTimeout(function(){ document.getElementById('settings-modal').style.display='none'; }, 300);
+    }
+  };
+  window.backToProfile=function(){
+    document.getElementById('settings-panel').classList.remove('open');
+    setTimeout(function(){
+      document.getElementById('settings-modal').style.display='none';
+      window.openProfile();
+    }, 300);
+  };
+
+  var _sponResetArmTimer;
+  window.resetStatistics=function(){
+    var btn=document.getElementById('settings-reset-btn');
+    var statusEl=document.getElementById('settings-reset-status');
+    if(!btn.dataset.armed){
+      btn.dataset.armed='1';
+      btn.textContent='Tap again to confirm';
+      clearTimeout(_sponResetArmTimer);
+      _sponResetArmTimer=setTimeout(function(){ btn.dataset.armed=''; btn.textContent='Reset Statistics'; }, 4000);
+      return;
+    }
+    clearTimeout(_sponResetArmTimer);
+    btn.disabled=true;
+    btn.textContent='Resetting…';
+    statusEl.style.display='none';
+
+    // spon_progress is Sponsorship's own quiz/reading progress store - kept
+    // separate from the main app's eto_progress since these are two
+    // independent content sections. Local only, never synced to Supabase.
+    localStorage.removeItem('spon_progress');
+
+    statusEl.style.display='block';
+    statusEl.style.color='#3DBA72';
+    statusEl.textContent='Statistics reset.';
+    setTimeout(function(){ window.location.reload(); }, 1200);
+  };
 
   function renderPlan(profile){
     var lbl=document.getElementById('pm-plan-label'), exp=document.getElementById('pm-plan-expiry'), upg=document.getElementById('pm-upgrade-btn');

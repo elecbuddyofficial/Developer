@@ -112,6 +112,28 @@
     }
     .link-btn:hover { text-decoration: underline; }
 
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      cursor: pointer;
+      margin-top: -2px;
+    }
+    .consent-row input[type="checkbox"] {
+      width: 15px; height: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: #C8A44A;
+      cursor: pointer;
+    }
+    .consent-row span {
+      font-size: 12.5px;
+      color: #8FA3B8;
+      line-height: 1.5;
+    }
+    .consent-row a { color: #7AB8E0; }
+    .consent-row a:hover { text-decoration: underline; }
+
     .msg {
       font-size: 13px;
       padding: 10px 12px;
@@ -227,6 +249,10 @@
       <label>Confirm password</label>
       <input type="password" id="reg-confirm" placeholder="Repeat password" required autocomplete="new-password">
     </div>
+    <label class="consent-row">
+      <input type="checkbox" id="reg-consent" required>
+      <span>I agree to the <a href="./terms.html" target="_blank" rel="noopener">Terms and Conditions</a> and <a href="./privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+    </label>
     <button class="btn" type="submit" id="reg-btn">Create Account &amp; Start Free Trial</button>
   </form>
 

@@ -39,6 +39,48 @@ function _setupProgressObserver(topicId) {
     headings.forEach(function(h) { window._progObserver.observe(h); });
 }
 
+// Tables that overflow horizontally on mobile (see .n-table's max-width:768px
+// rule in style.css) read as clean and complete, not cut off - nothing about
+// them signals there is more to the right. Wraps every table that actually
+// overflows (measured after render, not guessed from viewport width, so it
+// stays correct across orientation changes and tablet-sized screens) with a
+// small pulsing hint that fades out the first time that specific table is
+// scrolled or touched.
+function _addTableScrollHints(container) {
+    if (!container) return;
+    var tables = container.querySelectorAll('.n-table');
+    if (!tables.length) return;
+
+    function checkOne(table, wrap) {
+        var overflowing = table.scrollWidth > table.clientWidth + 2;
+        wrap.classList.toggle('has-scroll-hint', overflowing && !wrap.classList.contains('hint-dismissed'));
+    }
+
+    tables.forEach(function(table) {
+        if (table.dataset.scrollHinted) return;
+        table.dataset.scrollHinted = '1';
+
+        var wrap = document.createElement('div');
+        wrap.className = 'n-table-wrap';
+        table.parentNode.insertBefore(wrap, table);
+        wrap.appendChild(table);
+
+        var hint = document.createElement('span');
+        hint.className = 'n-table-hint';
+        hint.setAttribute('aria-hidden', 'true');
+        hint.textContent = '⇄'; // ⇄
+        wrap.appendChild(hint);
+
+        checkOne(table, wrap);
+
+        var dismiss = function() { wrap.classList.add('hint-dismissed'); wrap.classList.remove('has-scroll-hint'); };
+        table.addEventListener('scroll', dismiss, { passive: true, once: true });
+        table.addEventListener('touchstart', dismiss, { passive: true, once: true });
+
+        window.addEventListener('resize', function() { checkOne(table, wrap); });
+    });
+}
+
 function _dismissContinueDlg() {
     var dlg = document.getElementById('_continue-dlg');
     if (!dlg) return;
@@ -231,6 +273,7 @@ window.loadNotes = function(topicId, htmlContent) {
         _restoreScroll(topicId);
     }
     _setupProgressObserver(topicId);
+    _addTableScrollHints(document.getElementById('notes-container'));
 };
 
 window.loadWrittenNotes = function(topicCode, html) {
@@ -258,6 +301,7 @@ window.loadWrittenNotes = function(topicCode, html) {
         _restoreScroll(topicCode);
     }
     _setupProgressObserver(topicCode);
+    _addTableScrollHints(document.getElementById('notes-container'));
 };
 
 window.fetchTopicData = function(topicId, topicKey) {
@@ -292,6 +336,7 @@ window.fetchTopicData = function(topicId, topicKey) {
             _restoreScroll(topicId);
         }
         _setupProgressObserver(topicId);
+    _addTableScrollHints(document.getElementById('notes-container'));
     }
 
     if (!window.QD[topicKey] && !topicId.startsWith('W')) {
@@ -2654,6 +2699,180 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// ── HANDWRITTEN SHEET ZOOM VIEWER ─────────────────────────────
+// The diagram zoom above is a fit-to-screen toggle, which is fine for a
+// single circuit diagram but useless for these sheets: they are dense A4
+// landscape worked solutions, so "fit to 95vw" on a phone renders the
+// working too small to read. This is a real zoom/pan viewer instead -
+// pinch on touch, wheel on desktop, drag to pan, double-tap to toggle.
+var _hwV = null;
+
+function _hwViewerEl() {
+    if (_hwV) return _hwV;
+    var o = document.createElement('div');
+    o.className = 'hw-viewer';
+    o.setAttribute('hidden', '');
+    o.innerHTML =
+        '<div class="hw-stage"><img class="hw-stage-img" alt=""></div>'
+      + '<div class="hw-bar">'
+      +   '<button type="button" class="hw-btn" data-act="out" aria-label="Zoom out">&minus;</button>'
+      +   '<span class="hw-zoom" aria-live="polite">100%</span>'
+      +   '<button type="button" class="hw-btn" data-act="in" aria-label="Zoom in">+</button>'
+      +   '<button type="button" class="hw-btn hw-btn-wide" data-act="reset">Reset</button>'
+      + '</div>'
+      + '<button type="button" class="hw-close" aria-label="Close">&times;</button>';
+    document.body.appendChild(o);
+    _hwV = o;
+
+    var stage = o.querySelector('.hw-stage');
+    var img = o.querySelector('.hw-stage-img');
+    var zlabel = o.querySelector('.hw-zoom');
+    var s = 1, tx = 0, ty = 0;
+    var MIN = 1, MAX = 6;
+    var pointers = new Map();
+    var pinchDist = 0, pinchMid = null;
+    var panning = false, panX = 0, panY = 0;
+    var lastTap = 0;
+    var moved = false;
+
+    function limits() {
+        // Bounds are computed from the rendered (fitted) size at s=1, so the
+        // sheet can never be dragged fully off screen.
+        var vw = stage.clientWidth, vh = stage.clientHeight;
+        var w = img.clientWidth * s, h = img.clientHeight * s;
+        return { x: Math.max(0, (w - vw) / 2), y: Math.max(0, (h - vh) / 2) };
+    }
+    function apply() {
+        var L = limits();
+        tx = Math.max(-L.x, Math.min(L.x, tx));
+        ty = Math.max(-L.y, Math.min(L.y, ty));
+        img.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+        zlabel.textContent = Math.round(s * 100) + '%';
+        stage.classList.toggle('is-zoomed', s > 1.01);
+    }
+    // Zoom about a focal point measured from the stage centre, so the thing
+    // under the fingers/cursor stays put instead of the image sliding away.
+    function zoomTo(ns, fx, fy) {
+        ns = Math.max(MIN, Math.min(MAX, ns));
+        if (ns === s) return;
+        if (fx === undefined) { fx = 0; fy = 0; }
+        tx = fx - (fx - tx) * (ns / s);
+        ty = fy - (fy - ty) * (ns / s);
+        s = ns;
+        if (s <= 1.001) { tx = 0; ty = 0; }
+        apply();
+    }
+    function focal(cx, cy) {
+        var r = stage.getBoundingClientRect();
+        return { x: cx - (r.left + r.width / 2), y: cy - (r.top + r.height / 2) };
+    }
+    function reset() { s = 1; tx = 0; ty = 0; apply(); }
+
+    o.addEventListener('click', function(e) {
+        var b = e.target.closest('[data-act]');
+        if (b) {
+            var a = b.getAttribute('data-act');
+            if (a === 'in') zoomTo(s * 1.5);
+            else if (a === 'out') zoomTo(s / 1.5);
+            else reset();
+            return;
+        }
+        if (e.target.closest('.hw-close')) { closeHandwritten(); return; }
+        // A drag is not a click. Swallow the click that trails every pan.
+        if (moved) { moved = false; return; }
+        // Close only on a genuine tap on the backdrop. This has to be decided
+        // from coordinates, not e.target: setPointerCapture retargets the
+        // synthesized click to the stage, so target-based checks treat a tap
+        // on the sheet itself as a backdrop tap and close the viewer.
+        var r = img.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) closeHandwritten();
+    });
+
+    stage.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        var f = focal(e.clientX, e.clientY);
+        zoomTo(s * Math.exp(-e.deltaY * 0.0016), f.x, f.y);
+    }, { passive: false });
+
+    stage.addEventListener('pointerdown', function(e) {
+        stage.setPointerCapture(e.pointerId);
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pointers.size === 2) {
+            var p = [...pointers.values()];
+            pinchDist = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+            pinchMid = focal((p[0].x + p[1].x) / 2, (p[0].y + p[1].y) / 2);
+            panning = false;
+            moved = true;
+        } else if (pointers.size === 1) {
+            moved = false;
+            panning = s > 1.01;
+            panX = e.clientX; panY = e.clientY;
+            var now = Date.now();
+            if (now - lastTap < 300) { zoomTo(s > 1.01 ? 1 : 2.5, 0, 0); lastTap = 0; }
+            else lastTap = now;
+        }
+    });
+    stage.addEventListener('pointermove', function(e) {
+        if (!pointers.has(e.pointerId)) return;
+        pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+        if (pointers.size === 2 && pinchDist) {
+            var p = [...pointers.values()];
+            var d = Math.hypot(p[0].x - p[1].x, p[0].y - p[1].y);
+            if (d > 0) { zoomTo(s * (d / pinchDist), pinchMid.x, pinchMid.y); pinchDist = d; }
+        } else if (panning) {
+            var dx = e.clientX - panX, dy = e.clientY - panY;
+            if (Math.abs(dx) > 2 || Math.abs(dy) > 2) moved = true;
+            tx += dx; ty += dy;
+            panX = e.clientX; panY = e.clientY;
+            apply();
+        }
+    });
+    function endPointer(e) {
+        pointers.delete(e.pointerId);
+        if (pointers.size < 2) pinchDist = 0;
+        if (pointers.size === 0) panning = false;
+    }
+    stage.addEventListener('pointerup', endPointer);
+    stage.addEventListener('pointercancel', endPointer);
+
+    o._reset = reset;
+    o._img = img;
+    return o;
+}
+
+window.openHandwritten = function(src, alt) {
+    var o = _hwViewerEl();
+    o._img.src = src;
+    o._img.alt = alt || '';
+    o.removeAttribute('hidden');
+    document.body.classList.add('hw-open');
+    o._reset();
+};
+
+window.closeHandwritten = function() {
+    if (!_hwV) return;
+    _hwV.setAttribute('hidden', '');
+    document.body.classList.remove('hw-open');
+    // Drop the decoded bitmap so a full-size sheet is not held in memory
+    // for the rest of the session after a single look.
+    _hwV._img.removeAttribute('src');
+};
+
+function _hwOpenFrom(img) {
+    if (img && img.getAttribute('src')) openHandwritten(img.getAttribute('src'), img.getAttribute('alt'));
+}
+document.addEventListener('click', function(e) {
+    _hwOpenFrom(e.target.closest('.hw-img'));
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && _hwV && !_hwV.hasAttribute('hidden')) { closeHandwritten(); return; }
+    // The thumbnail is an <img>, so it gets no activation behaviour for free.
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('hw-img')) {
+        e.preventDefault();
+        _hwOpenFrom(e.target);
+    }
+});
+
 // ── VIDEOS TAB LOGIC ──────────────────────────────────────────
 
 function injectVideoTab(topicId) {
@@ -3122,6 +3341,7 @@ function loadNumerical(id, tab) {
   var idx = order.indexOf(id);
   var prevId = idx > 0 ? order[idx - 1] : null;
   var nextId = (idx !== -1 && idx < order.length - 1) ? order[idx + 1] : null;
+  var hasHand = NUM_HANDWRITTEN.indexOf(id) !== -1;
 
   var html = `
     <div class="note-doc" style="margin-top: 0; padding: 20px; border-radius: 12px; border: 1px solid var(--border2); background: var(--surface);">
@@ -3140,11 +3360,12 @@ function loadNumerical(id, tab) {
       </div>
       ${numYearsBadges(data.years, tab)}
 
-      <!-- THE 3-WAY TOGGLE -->
+      <!-- TOGGLE - the third segment only exists when a sheet is actually
+           available for this numerical, so there is no dead tab to tap. -->
       <div style="display:inline-flex; background:var(--surface2); border-radius:8px; border:1px solid var(--border2); overflow:hidden; margin: 20px 0;">
         <button class="qb-seg-btn active" onclick="numToggle(this, 'num', '${tab}')" style="border-right:1px solid var(--border2);">Numerical Solution</button>
-        <button class="qb-seg-btn" onclick="numToggle(this, 'concept', '${tab}')" style="border-right:1px solid var(--border2);">Concept Explanation</button>
-        <button class="qb-seg-btn" onclick="numToggle(this, 'hand', '${tab}')">Handwritten Solution</button>
+        <button class="qb-seg-btn" onclick="numToggle(this, 'concept', '${tab}')"${hasHand ? ' style="border-right:1px solid var(--border2);"' : ''}>Concept Explanation</button>
+        ${hasHand ? `<button class="qb-seg-btn" onclick="numToggle(this, 'hand', '${tab}')">Handwritten Solution</button>` : ''}
       </div>
 
       <!-- CONTENT AREAS -->
@@ -3162,9 +3383,9 @@ function loadNumerical(id, tab) {
         ${data.conceptHtml}
       </div>
 
-      <div id="dyn-hand-${tab}" style="display:none; text-align:center; padding: 20px; background:var(--surface2); border-radius:8px; border:1px solid var(--border2); color:var(--text2);">
-        <em>[ Image of handwritten solution goes here ]</em>
-      </div>
+      ${hasHand ? `<div id="dyn-hand-${tab}" style="display:none; padding: 12px; background:var(--surface2); border-radius:8px; border:1px solid var(--border2);">
+        ${_hwHtml(id)}
+      </div>` : ''}
     </div>
   `;
   detailContent.innerHTML = html;
@@ -3177,6 +3398,15 @@ function loadNumerical(id, tab) {
   // the question the user actually clicked.
   listContainer.style.display = 'none';
   detailView.style.display = 'block';
+
+  // Numericals can carry wide data tables too (n17's magnetisation table is
+  // 8 columns), and those scroll on mobile exactly like the ones in notes,
+  // so they need the same "there is more to the right" affordance. This has
+  // to run *after* the detail view is displayed: the hint decides whether to
+  // show by measuring scrollWidth against clientWidth, and both read 0 while
+  // the container is still display:none, so measuring early never shows it.
+  _addTableScrollHints(detailContent);
+
   detailView.scrollIntoView({block: 'start', behavior: 'instant'});
 }
 
@@ -3206,6 +3436,65 @@ function numToggle(btn, target, tab) {
   });
   var targetEl = document.getElementById('dyn-' + target + '-' + tab);
   if (targetEl) targetEl.style.display = 'block';
+
+  // The sheet is a ~190KB image, so its src is held back in data-src until
+  // this tab is actually opened. display:none alone is not a reliable
+  // guarantee against the fetch, and these are large enough to be worth
+  // being explicit about.
+  if (target === 'hand' && targetEl) _hwReveal(targetEl);
+}
+
+// ── HANDWRITTEN SOLUTION SHEETS ──────────────────────────────
+// Numericals that have a scanned worked solution under data/handwritten/.
+// Kept here rather than as a field inside numericals.js so that adding a
+// new sheet is just "drop the .webp in and add its id" - no decrypt and
+// re-encrypt round trip on the content file.
+var NUM_HANDWRITTEN = ['n01','n02','n03','n04','n05','n06','n08','n10','n12','n14','n15','n16','n17','n38'];
+
+// Where a sheet legitimately lands on a different number from the typed
+// solution, say so on the sheet rather than quietly letting the two
+// contradict each other. A cadet seeing two answers with no explanation
+// assumes one of them is a mistake.
+var NUM_HW_NOTE = {
+  n17: 'This sheet reads the second field current straight off the table as 0.75&nbsp;A and so arrives at 346.66&nbsp;&Omega;. The typed solution interpolates between the 0.50&nbsp;A and 0.75&nbsp;A rows to get 0.739&nbsp;A, giving 355&nbsp;&Omega;. Both methods are accepted in the exam; the interpolated figure is the more consistent one, since the same interpolation is already used to obtain &Phi;<sub>1</sub>. Note also that the table printed on this sheet is cropped at 1.25&nbsp;A, which is why &Phi;<sub>1</sub>&nbsp;=&nbsp;11.3&nbsp;mWb appears unexplained on it. The full table runs to 2.0&nbsp;A.'
+};
+
+function _hwHtml(id) {
+  if (NUM_HANDWRITTEN.indexOf(id) === -1) return '';
+  var src = '../data/handwritten/' + id + '.webp';
+  var note = NUM_HW_NOTE[id]
+    ? '<div class="n-info hw-note"><div class="icon">💡</div><div class="body">' + NUM_HW_NOTE[id] + '</div></div>'
+    : '';
+  return '<figure class="hw-figure">'
+    + '<img class="hw-img" data-src="' + src + '" alt="Handwritten worked solution for numerical ' + id.slice(1) + '"'
+    + ' decoding="async" role="button" tabindex="0" aria-label="Open the handwritten solution full screen to zoom">'
+    + '<figcaption class="hw-cap">Tap the sheet to open it full screen, where you can pinch or scroll to zoom.</figcaption>'
+    + note
+    + '</figure>';
+}
+
+// Swap data-src to src the first time the tab is opened. With Data Saver on,
+// hold it behind an explicit tap instead, matching how diagrams behave.
+function _hwReveal(container) {
+  var img = container.querySelector('.hw-img[data-src]');
+  if (!img) return;
+  if (window._dataSaver && !container.querySelector('.hw-ds-btn')) {
+    var btn = document.createElement('button');
+    btn.className = 'hw-ds-btn';
+    btn.type = 'button';
+    btn.textContent = 'Tap to load handwritten sheet (~190 KB)';
+    btn.addEventListener('click', function() {
+      btn.remove();
+      img.src = img.getAttribute('data-src');
+      img.removeAttribute('data-src');
+    });
+    img.parentNode.insertBefore(btn, img);
+    return;
+  }
+  if (!window._dataSaver) {
+    img.src = img.getAttribute('data-src');
+    img.removeAttribute('data-src');
+  }
 }
 
 function waitForAccessPromise() {

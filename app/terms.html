@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Elec-Buddy: Terms and Conditions</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #070D1A;
+    color: #DDE5EF;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.6;
+  }
+
+  .top-bar {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(7,13,26,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #1A3050;
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+  }
+  .brand-name {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    color: #C8A44A;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+  }
+  .back-link {
+    font-size: 13px;
+    color: #7AB8E0;
+    text-decoration: none;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+
+  .doc-header { margin-bottom: 28px; }
+  .doc-header h1 {
+    font-size: 1.6rem;
+    color: #F8FAFC;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+  .doc-header .meta {
+    font-size: 12.5px;
+    color: #6E8AA6;
+  }
+
+  .toc {
+    background: #0D1E33;
+    border: 1px solid #1A3050;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 32px;
+  }
+  .toc-title {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6E8AA6;
+    margin-bottom: 10px;
+  }
+  .toc ol {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 16px;
+  }
+  .toc a {
+    font-size: 13px;
+    color: #8FA3B8;
+    text-decoration: none;
+  }
+  .toc a:hover { color: #C8A44A; text-decoration: underline; }
+
+  section { margin-bottom: 30px; scroll-margin-top: 70px; }
+  section h2 {
+    font-size: 1.05rem;
+    color: #DDE5EF;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #1A3050;
+  }
+  section h3 {
+    font-size: 0.92rem;
+    color: #C8A44A;
+    margin: 16px 0 8px;
+  }
+  section p { font-size: 14px; color: #C0CCDC; margin-bottom: 12px; }
+  section ul, section ol.plain {
+    font-size: 14px; color: #C0CCDC;
+    margin: 0 0 12px 22px;
+  }
+  section li { margin-bottom: 6px; }
+  section strong { color: #DDE5EF; font-weight: 600; }
+  a.inline-link { color: #7AB8E0; }
+
+  .callout {
+    background: rgba(200,164,74,0.07);
+    border: 1px solid rgba(200,164,74,0.25);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #C0A868;
+    margin-bottom: 12px;
+  }
+  .callout-red {
+    background: rgba(224,90,106,0.08);
+    border-color: rgba(224,90,106,0.3);
+    color: #E5919B;
+  }
+
+  footer {
+    border-top: 1px solid #1A3050;
+    padding-top: 24px;
+    margin-top: 40px;
+    font-size: 12.5px;
+    color: #6E8AA6;
+    text-align: center;
+  }
+  footer a { color: #7AB8E0; }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 24px 16px 64px; }
+    .toc ol { grid-template-columns: 1fr; }
+    .doc-header h1 { font-size: 1.35rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <a class="brand-name" href="./courses.html">Elec-Buddy</a>
+  <a class="back-link" href="javascript:history.back()">&larr; Back</a>
+</div>
+
+<div class="wrap">
+  <div class="doc-header">
+    <h1>Terms and Conditions</h1>
+    <div class="meta">Last updated: 3 August 2026 &middot; Effective for all Elec-Buddy accounts</div>
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">On this page</div>
+    <ol>
+      <li><a href="#acceptance">1. Acceptance of Terms</a></li>
+      <li><a href="#service">2. The Service</a></li>
+      <li><a href="#accounts">3. Accounts and Eligibility</a></li>
+      <li><a href="#plans">4. Subscription Plans and Trial</a></li>
+      <li><a href="#payments">5. Payments and Billing</a></li>
+      <li><a href="#refunds">6. Refund Policy</a></li>
+      <li><a href="#ip">7. Intellectual Property and Copyright</a></li>
+      <li><a href="#conduct">8. Acceptable Use</a></li>
+      <li><a href="#devices">9. Device Limits and Account Security</a></li>
+      <li><a href="#accuracy">10. Content Accuracy and Exam Disclaimer</a></li>
+      <li><a href="#third-party">11. Third-Party Services</a></li>
+      <li><a href="#termination">12. Termination</a></li>
+      <li><a href="#liability">13. Disclaimers and Limitation of Liability</a></li>
+      <li><a href="#indemnity">14. Indemnification</a></li>
+      <li><a href="#law">15. Governing Law</a></li>
+      <li><a href="#changes">16. Changes to These Terms</a></li>
+      <li><a href="#contact">17. Contact Us</a></li>
+    </ol>
+  </div>
+
+  <section id="acceptance">
+    <h2>1. Acceptance of Terms</h2>
+    <p>These Terms and Conditions ("Terms") govern your access to and use of Elec-Buddy, an exam preparation platform for marine Electro-Technical Officers (ETOs) studying for MMD and STCW oral and written examinations, available through our website and web application (together, the "Service").</p>
+    <p>By creating an account, starting a free trial, or otherwise using the Service, you agree to be bound by these Terms and by our <a class="inline-link" href="./privacy.html">Privacy Policy</a>. If you do not agree, please do not use the Service.</p>
+    <p>Throughout these Terms, "Elec-Buddy", "we", "us", and "our" refer to the operator of the Service. "You" and "your" refer to the individual using the Service.</p>
+  </section>
+
+  <section id="service">
+    <h2>2. The Service</h2>
+    <p>Elec-Buddy provides study notes, quiz questions, numerical problem walkthroughs, diagrams, and a bank of real surveyor questions and answers, organised around the oral and written syllabus for ETO certification. Content is delivered through a web application and is accessible to a signed-in subscriber on up to two registered devices at a time.</p>
+    <p>We may add, remove, or modify content, features, or the layout of the Service at any time to improve accuracy, coverage, or usability. We will make reasonable efforts to keep active subscribers informed of material changes to what their plan covers.</p>
+  </section>
+
+  <section id="accounts">
+    <h2>3. Accounts and Eligibility</h2>
+    <p>You must provide a valid email address and accurate account details to register. You are responsible for maintaining the confidentiality of your password and for all activity that occurs under your account.</p>
+    <p>One account is intended for use by one individual. Sharing your login credentials with another person, or allowing another person to access the Service using your account, is a breach of these Terms and may result in suspension or termination without refund.</p>
+    <p>You must notify us promptly at <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a> if you become aware of any unauthorised use of your account.</p>
+  </section>
+
+  <section id="plans">
+    <h2>4. Subscription Plans and Trial</h2>
+    <p>New accounts receive a free 3-day trial with full access to both the Oral and Written sections, no payment required. After the trial ends, continued access requires an active paid subscription.</p>
+    <p>Paid plans are sold by content scope (Written only, Oral only, or both) and by duration (3, 6, or 12 months). Current pricing, scope, and duration for each plan are displayed within the app before you pay and are not part of these Terms, since they change from time to time.</p>
+    <p>Access to a given section (Written or Oral) runs until that section's own expiry date. If you hold active access to a section and purchase further time for that same section, the new period is added on top of your existing access rather than replacing it, so you never lose time you have already paid for.</p>
+    <p>Elec-Buddy is a fixed-term subscription, not an auto-renewing one. Access simply ends on the expiry date shown in your account unless you choose to purchase further access.</p>
+  </section>
+
+  <section id="payments">
+    <h2>5. Payments and Billing</h2>
+    <p>All payments are processed in Indian Rupees (INR) through Razorpay, a third-party payment gateway. We do not collect or store your card, UPI, or net banking details; these are handled directly by Razorpay under its own security standards.</p>
+    <p>Prices displayed in the app are inclusive of any applicable taxes unless stated otherwise. A payment confirmation, including the plan purchased and the resulting access dates, is emailed to you once your payment is verified.</p>
+  </section>
+
+  <section id="refunds">
+    <h2>6. Refund Policy</h2>
+    <div class="callout">Every new account already includes a free 3-day trial with full access to both sections, specifically so you can evaluate the Service before paying anything.</div>
+    <p><strong>Payments are non-refundable.</strong> Because the trial exists precisely to let you confirm the Service is right for you before you pay, and because access to digital study content is granted immediately and in full upon payment, we do not offer refunds once a purchase is completed.</p>
+    <p>This does not affect any right you may have under applicable law to a refund for a duplicate charge or a genuine billing error. If you believe you were charged incorrectly, contact <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a> and we will look into it. Beyond correcting genuine errors, refunds may still be granted at our sole discretion in exceptional circumstances, but this is not a right you can rely on when purchasing.</p>
+  </section>
+
+  <section id="ip">
+    <h2>7. Intellectual Property and Copyright</h2>
+
+    <h3>7.1 Ownership</h3>
+    <p>All content made available through the Service, including but not limited to study notes, quiz questions and answers, numerical problem solutions, diagrams and illustrations, the Surveyor Q&amp;A bank, and any accompanying video material, is the original work of Elec-Buddy or is used under licence, and is protected by copyright and other intellectual property laws. This content is referred to below as "Elec-Buddy Content".</p>
+    <p>The name "Elec-Buddy", the Elec-Buddy logo, and associated branding are trademarks of Elec-Buddy. Whether or not formally registered, we claim and intend to enforce ownership of this name and branding, and no licence to use them is granted except as expressly stated in these Terms.</p>
+
+    <h3>7.2 Licence Granted to You</h3>
+    <p>Subject to your compliance with these Terms and for as long as you hold an active trial or paid subscription, we grant you a limited, personal, non-exclusive, non-transferable, revocable licence to access and view Elec-Buddy Content within the app, solely for your own exam preparation. No other rights are granted.</p>
+
+    <h3>7.3 What You May Not Do</h3>
+    <p>Except as strictly necessary for your own personal, non-commercial study within the app, you must not:</p>
+    <ul>
+      <li>copy, reproduce, download, print, or extract Elec-Buddy Content beyond the app's normal operation;</li>
+      <li>screenshot, screen-record, or otherwise capture Elec-Buddy Content for the purpose of sharing, redistributing, or reselling it;</li>
+      <li>upload, post, or otherwise make Elec-Buddy Content available on any other website, app, messaging group, file-sharing service, or platform;</li>
+      <li>sell, rent, sublicense, or otherwise commercially exploit Elec-Buddy Content or access to it;</li>
+      <li>use Elec-Buddy Content, in whole or in part, to train, fine-tune, or evaluate any machine learning or artificial intelligence model;</li>
+      <li>scrape, crawl, or use automated tools to extract Elec-Buddy Content or account data;</li>
+      <li>circumvent, disable, or attempt to interfere with any content protection, encryption, watermarking, or access control measure used by the Service;</li>
+      <li>use the Elec-Buddy name, logo, or branding in a way that suggests endorsement, affiliation, or partnership without our prior written consent.</li>
+    </ul>
+
+    <h3>7.4 Content Protection Measures</h3>
+    <p>To protect Elec-Buddy Content on behalf of every paying subscriber, the Service applies technical measures including but not limited to per-user watermarking, encryption of content at rest, and deterrents against copying and screen capture. These measures are disclosed here so that any attempt to circumvent them is understood, without ambiguity, to be a deliberate breach of these Terms.</p>
+
+    <h3>7.5 Consequences of Infringement</h3>
+    <p>A breach of this section is treated as a serious violation of these Terms. We reserve the right to suspend or terminate, without refund, the account of anyone who copies, redistributes, or otherwise misuses Elec-Buddy Content or branding, and to pursue any other remedy available to us under applicable law, including claims for damages.</p>
+
+    <h3>7.6 Reporting Unauthorised Use</h3>
+    <p>If you come across Elec-Buddy Content being shared, sold, or redistributed anywhere outside the Service without our authorisation, please report it to <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>.</p>
+  </section>
+
+  <section id="conduct">
+    <h2>8. Acceptable Use</h2>
+    <p>In addition to the intellectual property restrictions above, you agree not to:</p>
+    <ul>
+      <li>create multiple accounts to obtain more than one free trial;</li>
+      <li>attempt to bypass, disable, or interfere with any paywall, access control, or security feature of the Service;</li>
+      <li>reverse engineer, decompile, or attempt to extract the source code of the Service, except to the extent such restriction is prohibited by applicable law;</li>
+      <li>use the Service in any way that is unlawful, fraudulent, or intended to harm Elec-Buddy or other users;</li>
+      <li>exploit any bug or vulnerability in the Service rather than reporting it to us.</li>
+    </ul>
+  </section>
+
+  <section id="devices">
+    <h2>9. Device Limits and Account Security</h2>
+    <p>Each account may be signed in on a limited number of registered devices at a time. This limit exists to keep individual subscriptions from being shared between multiple people, and is part of what keeps the Service affordable. We may adjust the device limit from time to time.</p>
+  </section>
+
+  <section id="accuracy">
+    <h2>10. Content Accuracy and Exam Disclaimer</h2>
+    <p>Elec-Buddy Content is prepared and reviewed carefully, drawing on real MMD surveyor questions, official regulations, and standard engineering references, and is regularly updated. However, examination formats, surveyor expectations, and regulations can change, and no study material can guarantee a particular outcome.</p>
+    <p>The Service is a study and revision aid. It is not a substitute for your own seagoing experience, formal training, or professional judgement, and Elec-Buddy does not guarantee that using the Service will result in you passing any examination or assessment.</p>
+  </section>
+
+  <section id="third-party">
+    <h2>11. Third-Party Services</h2>
+    <p>The Service relies on third-party providers to operate, including Supabase for our database and authentication, Razorpay for payment processing, and Resend for transactional email. Your use of the Service is also subject to the applicable terms of these providers where you interact with them directly, such as when entering payment details with Razorpay.</p>
+  </section>
+
+  <section id="termination">
+    <h2>12. Termination</h2>
+    <p>You may stop using the Service at any time. To request deletion of your account and associated data, contact <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>.</p>
+    <p>We may suspend or terminate your account, with or without notice, if we reasonably believe you have breached these Terms, particularly the intellectual property and acceptable use sections above. Termination for breach does not entitle you to a refund of any amount already paid.</p>
+  </section>
+
+  <section id="liability">
+    <h2>13. Disclaimers and Limitation of Liability</h2>
+    <p>The Service is provided "as is" and "as available", without warranties of any kind, whether express or implied, to the fullest extent permitted by applicable law. We do not warrant that the Service will be uninterrupted, error-free, or available at all times.</p>
+    <p>To the fullest extent permitted by applicable law, Elec-Buddy shall not be liable for any indirect, incidental, special, or consequential damages arising out of or relating to your use of the Service. Our total liability to you for any claim arising out of these Terms shall not exceed the amount you paid to Elec-Buddy in the six months preceding the claim.</p>
+    <p>Nothing in these Terms excludes or limits any liability that cannot lawfully be excluded or limited under applicable law.</p>
+  </section>
+
+  <section id="indemnity">
+    <h2>14. Indemnification</h2>
+    <p>You agree to indemnify and hold Elec-Buddy harmless from any claim, loss, or damage, including reasonable legal fees, arising out of your breach of these Terms or your misuse of Elec-Buddy Content.</p>
+  </section>
+
+  <section id="law">
+    <h2>15. Governing Law</h2>
+    <p>These Terms are governed by the laws of India. Any dispute arising out of or relating to these Terms or the Service shall be subject to the exclusive jurisdiction of the competent courts in India.</p>
+  </section>
+
+  <section id="changes">
+    <h2>16. Changes to These Terms</h2>
+    <p>We may update these Terms from time to time to reflect changes to the Service, our pricing structure, or applicable law. The "Last updated" date at the top of this page will always reflect the most recent version. Continued use of the Service after an update constitutes acceptance of the revised Terms.</p>
+  </section>
+
+  <section id="contact">
+    <h2>17. Contact Us</h2>
+    <p>If you have any questions about these Terms, please contact us at <a class="inline-link" href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>.</p>
+  </section>
+
+  <footer>
+    Elec-Buddy &middot; ETO CoC and STCW Exam Preparation<br>
+    <a href="./privacy.html">Privacy Policy</a> &middot; <a href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>
+  </footer>
+</div>
+
+</body>
+</html>
