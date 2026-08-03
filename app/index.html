@@ -884,23 +884,23 @@
 
       <!-- Track tabs (Passage / Voyage / Expedition) -->
       <div id="up-track-tabs" style="display:flex;gap:8px;margin-bottom:16px;"></div>
-      <div id="up-track-subhead" style="font-size:12px;color:#5A7B98;margin-bottom:16px;margin-top:-6px;"></div>
+      <!-- The coupon toggle rides on the subhead's own line rather than taking
+           a row of its own. It still sits above the cards, where a buyer
+           holding a code will actually see it before reading prices that are
+           not the prices available to them, but it costs no extra height and
+           leaves the tabs-to-cards rhythm exactly as it was. -->
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;margin-top:-6px;">
+        <div id="up-track-subhead" style="font-size:12px;color:#5A7B98;"></div>
+        <button id="up-coupon-toggle" onclick="toggleCouponBox()"
+                style="flex-shrink:0;background:none;border:none;color:#C8A44A;font-size:12px;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:2px 0;font-family:inherit;">Have a code?</button>
+      </div>
 
-      <!-- Coupon. Sits ABOVE the cards on purpose: below the features box it
-           was under the fold, so buyers holding a code never saw it and the
-           prices they were reading were not the prices they could get. -->
-      <div style="margin-bottom:12px;">
-        <div style="display:flex;justify-content:flex-end;">
-          <button id="up-coupon-toggle" onclick="toggleCouponBox()"
-                  style="background:rgba(200,164,74,0.08);border:1px solid rgba(200,164,74,0.28);border-radius:999px;color:#C8A44A;font-size:12px;font-weight:600;cursor:pointer;padding:7px 14px;font-family:inherit;">Have a code?</button>
-        </div>
-        <div id="up-coupon-box" style="display:none;margin-top:10px;">
-          <div style="display:flex;gap:8px;">
-            <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
-                   style="flex:1;background:#0A1828;border:1px solid #1A3050;border-radius:8px;color:#DDE5EF;font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
-            <button id="up-coupon-btn" onclick="applyCoupon()"
-                    style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
-          </div>
+      <div id="up-coupon-box" style="display:none;margin-bottom:16px;">
+        <div style="display:flex;gap:8px;">
+          <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
+                 style="flex:1;background:#0A1828;border:1px solid #1A3050;border-radius:8px;color:#DDE5EF;font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
+          <button id="up-coupon-btn" onclick="applyCoupon()"
+                  style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
         </div>
       </div>
 
