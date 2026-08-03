@@ -80,7 +80,11 @@
     // flex-basis is what decides the arrangement: the address needs roughly
     // 200px to sit on one line, so on a narrow phone it takes a row of its own
     // instead of being squeezed to an ellipsis.
-    return '<div style="margin-top:14px;padding-top:14px;border-top:1px solid #1A3050;">'
+    // Symmetric margin top and bottom. Without the bottom one the block sat
+    // flush against whatever button followed it, which reads as two boxes
+    // touching rather than as a separate group. The panels that place this
+    // between other controls do not add spacing of their own.
+    return '<div style="margin:14px 0;padding-top:14px;border-top:1px solid #1A3050;">'
       + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E8AA6;text-align:center;margin-bottom:9px;">Get in touch</div>'
       + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
       +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" style="' + row + 'flex:1 1 130px;">'
