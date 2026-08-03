@@ -1377,6 +1377,11 @@ a.sb-item{text-decoration:none}
    solutions, so the inline thumbnail is only ever an invitation to open
    the viewer, never something you are expected to read in place. */
 .hw-figure { margin: 0; text-align: center; }
+/* Until a src exists the <img> would paint as a broken-image box with its
+   alt text written out in full. Hide it and its caption; the Data Saver
+   button (or the tab-open reveal) is the only thing that should show. */
+.hw-figure.hw-pending .hw-img,
+.hw-figure.hw-pending .hw-cap { display: none; }
 .hw-img {
     max-width: 100%;
     height: auto;

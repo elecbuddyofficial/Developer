@@ -3465,7 +3465,11 @@ function _hwHtml(id) {
   var note = NUM_HW_NOTE[id]
     ? '<div class="n-info hw-note"><div class="icon">💡</div><div class="body">' + NUM_HW_NOTE[id] + '</div></div>'
     : '';
-  return '<figure class="hw-figure">'
+  // hw-pending hides the <img> and its caption until a src exists. Without
+  // it an src-less <img> paints as a broken-image box with its alt text
+  // spelled out across the page, which is what the reader sees for the whole
+  // time the sheet is held back under Data Saver.
+  return '<figure class="hw-figure hw-pending">'
     + '<img class="hw-img" data-src="' + src + '" alt="Handwritten worked solution for numerical ' + id.slice(1) + '"'
     + ' decoding="async" role="button" tabindex="0" aria-label="Open the handwritten solution full screen to zoom">'
     + '<figcaption class="hw-cap">Tap the sheet to open it full screen, where you can pinch or scroll to zoom.</figcaption>'
@@ -3475,6 +3479,13 @@ function _hwHtml(id) {
 
 // Swap data-src to src the first time the tab is opened. With Data Saver on,
 // hold it behind an explicit tap instead, matching how diagrams behave.
+function _hwShow(img) {
+  img.src = img.getAttribute('data-src');
+  img.removeAttribute('data-src');
+  var fig = img.closest('.hw-figure');
+  if (fig) fig.classList.remove('hw-pending');
+}
+
 function _hwReveal(container) {
   var img = container.querySelector('.hw-img[data-src]');
   if (!img) return;
@@ -3485,16 +3496,12 @@ function _hwReveal(container) {
     btn.textContent = 'Tap to load handwritten sheet (~190 KB)';
     btn.addEventListener('click', function() {
       btn.remove();
-      img.src = img.getAttribute('data-src');
-      img.removeAttribute('data-src');
+      _hwShow(img);
     });
     img.parentNode.insertBefore(btn, img);
     return;
   }
-  if (!window._dataSaver) {
-    img.src = img.getAttribute('data-src');
-    img.removeAttribute('data-src');
-  }
+  if (!window._dataSaver) _hwShow(img);
 }
 
 function waitForAccessPromise() {
