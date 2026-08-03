@@ -12,7 +12,16 @@ export function escapeHtml(s: string): string {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-export const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
+// Where the button in every automated email sends the reader. THE one
+// definition: send-admin-email and send-expiry-emails import this rather than
+// keeping their own copies, which is how all three ended up still naming the
+// old GitHub Pages host after the site had already moved to elec-buddy.com.
+//
+// It must match the origin people actually sign in on. A different origin has
+// its own session storage, so a customer clicking "Start Studying" in their
+// receipt would arrive signed out and have to log in again straight after
+// paying.
+export const APP_URL = 'https://elec-buddy.com/app/';
 
 export interface EmailLayoutOptions {
   preheader?: string;   // hidden preview text shown in inbox lists, before the email is opened

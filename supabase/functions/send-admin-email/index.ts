@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { APP_URL } from '../_shared/email-layout.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -12,7 +13,6 @@ const json = (data: unknown, status = 200) =>
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
 
-const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
 
 function escapeHtml(s: string): string {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

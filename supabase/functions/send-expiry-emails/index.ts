@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { APP_URL } from '../_shared/email-layout.ts';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -100,7 +101,6 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
 </html>`;
 }
 
-const APP_URL = 'https://elecbuddyofficial.github.io/Developer/app/';
 
 // Length of the free trial in days. This must stay in sync with
 // get-content-key, which is the authoritative server-side access gate.
