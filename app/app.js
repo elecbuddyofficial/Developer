@@ -1973,6 +1973,15 @@ document.addEventListener('click', function(e) {
 var _guideStep = 0;
 var _guideActive = false;
 var _guideTimer = null;
+// Holds a requestAnimationFrame id now rather than a setTimeout id, because
+// step readiness is polled per frame. Cancelling has to match, or a rapid
+// Next leaves the previous step's poll running and two steps fight over the
+// spotlight.
+var _guideFallback = null;
+function _guideCancelPending() {
+    if (_guideTimer != null) { cancelAnimationFrame(_guideTimer); _guideTimer = null; }
+    if (_guideFallback != null) { clearTimeout(_guideFallback); _guideFallback = null; }
+}
 var _guideResizeTimer = null;
 
 var GUIDE_STEPS = [
@@ -2029,7 +2038,16 @@ var GUIDE_STEPS = [
         target: '#view-written .welcome-card:first-child',
         pad: 8,
         title: 'Written Section',
-        body: 'Structured notes and worked examples for ISM, SOLAS, MARPOL, MLC and more. Built to give you clear answers for the written paper without digging through textbooks.',
+        body: 'Structured theory notes for ISM, SOLAS, MARPOL, MLC and more. Built to give you clear answers for the written paper without digging through textbooks.',
+        prefer: 'bottom'
+    },
+    {
+        type: 'spotlight',
+        view: 'written',
+        target: '#view-written .welcome-card:nth-child(2)',
+        pad: 8,
+        title: 'Worked Numericals',
+        body: '39 exam numericals worked out line by line, each with the concept behind it explained rather than just the formula. Many also carry a handwritten solution sheet you can open full screen and zoom into, exactly as you would work it on paper.',
         prefer: 'bottom'
     },
     {
@@ -2071,7 +2089,7 @@ function guideNext() {
 function guideDismiss(save) {
     if (save) localStorage.setItem('guide_seen', '1');
     _guideActive = false;
-    clearTimeout(_guideTimer);
+    _guideCancelPending();
     var ov = document.getElementById('guide-overlay');
     ov.style.transition = 'opacity 0.3s ease';
     ov.style.opacity = '0';
@@ -2173,9 +2191,19 @@ function _guideSpotlight(step, idx) {
         closeMobileMenu();
     }
 
-    clearTimeout(_guideTimer);
-    _guideTimer = setTimeout(function() {
-        var el = document.querySelector(step.target);
+    _guideCancelPending();
+
+    // Wait for the target to actually be there and laid out, rather than
+    // guessing how long that takes.
+    //
+    // This used to be a blind setTimeout of up to 450ms before every step, so
+    // tapping Next did nothing at all for half a second and the tour felt like
+    // it was dragging itself between places. The delay had to assume the worst
+    // case (a view switch plus the mobile sidebar animating open), which meant
+    // every fast step paid for the slowest one. Now a step that is ready
+    // immediately moves immediately, and a slow one still waits as long as it
+    // genuinely needs.
+    _guideWaitFor(step.target, step.openSidebar ? 700 : 500, function(el) {
         if (!el) { guideNext(); return; }
 
         el.scrollIntoView({ block: 'nearest', behavior: 'instant' });
@@ -2186,16 +2214,14 @@ function _guideSpotlight(step, idx) {
         var firstTime = sp.style.display === 'none';
 
         sp.style.display = 'block';
-        if (firstTime) {
-            sp.style.transition = 'none';
-            sp.style.opacity = '0';
-            requestAnimationFrame(function() {
-                sp.style.transition = 'opacity 0.3s ease';
-                sp.style.opacity = '1';
-            });
-        } else {
-            sp.style.transition = 'top 0.38s cubic-bezier(0.25,1,0.5,1), left 0.38s cubic-bezier(0.25,1,0.5,1), width 0.38s cubic-bezier(0.25,1,0.5,1), height 0.38s cubic-bezier(0.25,1,0.5,1), border-radius 0.38s ease';
-        }
+        // The spotlight is a small box carrying a 9999px spread box-shadow to
+        // dim the rest of the screen. Animating its top/left/width/height means
+        // re-rasterising that entire full-screen shadow on every frame, which
+        // is where the actual jank came from. Moving it in one step and
+        // crossfading instead keeps the transition on opacity only, which is
+        // cheap, and reads as quicker even though it is shorter.
+        sp.style.transition = 'none';
+        sp.style.opacity = firstTime ? '0' : '0.35';
         sp.style.top    = (rect.top  - pad) + 'px';
         sp.style.left   = (rect.left - pad) + 'px';
         sp.style.width  = (rect.width  + pad * 2) + 'px';
@@ -2203,8 +2229,41 @@ function _guideSpotlight(step, idx) {
         var br = parseInt(window.getComputedStyle(el).borderRadius) || 12;
         sp.style.borderRadius = Math.min(br + pad, 24) + 'px';
 
+        requestAnimationFrame(function() {
+            sp.style.transition = 'opacity 0.18s ease';
+            sp.style.opacity = '1';
+        });
+
         _guideTooltip(rect, pad, step, idx);
-    }, step.openSidebar ? 450 : step.view ? 260 : 60);
+    });
+}
+
+// Resolves as soon as the selector matches something with a real size, or
+// gives up after timeoutMs. Polls on animation frames so it costs nothing
+// while idle and never overshoots by more than a frame once the view lands.
+function _guideWaitFor(selector, timeoutMs, done) {
+    var started = performance.now();
+    var finished = false;
+    function finish(el) {
+        if (finished) return;
+        finished = true;
+        _guideCancelPending();
+        done(el);
+    }
+    // The give-up cap cannot live only inside the poll. requestAnimationFrame
+    // stops firing whenever the page is not rendering (backgrounded tab, or a
+    // headless browser with no compositor), and a cap that is only checked on
+    // each frame then never runs at all, leaving the step hung indefinitely.
+    // This timer bounds the wait no matter what the frame loop is doing.
+    _guideFallback = setTimeout(function() { finish(null); }, timeoutMs);
+    (function poll() {
+        if (finished) return;
+        var el = document.querySelector(selector);
+        // A zero-size element is present but not laid out yet, which would give
+        // the spotlight a rect of nothing to sit on.
+        if (el && el.getBoundingClientRect().width > 0) return finish(el);
+        _guideTimer = requestAnimationFrame(poll);
+    })();
 }
 
 function _guideTooltip(targetRect, pad, step, idx) {

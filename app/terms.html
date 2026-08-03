@@ -146,7 +146,7 @@
 
 <div class="top-bar">
   <a class="brand-name" href="./courses.html">Elec-Buddy</a>
-  <a class="back-link" href="javascript:history.back()">&larr; Back</a>
+  <a class="back-link" href="#">&larr; Back</a>
 </div>
 
 <div class="wrap">
@@ -319,5 +319,36 @@
   </footer>
 </div>
 
+
+<script>
+// These pages are always opened in a NEW TAB (every link to them uses
+// target="_blank" or window.open), and a fresh tab has no history entry
+// behind it. "javascript:history.back()" therefore did nothing at all: the
+// button looked live and simply never responded.
+//
+// So decide what the control should be, based on whether there is anywhere
+// to go back to, and label it honestly rather than promising "Back" and
+// closing, or promising "Back" and doing nothing.
+(function () {
+  var link = document.querySelector('.back-link');
+  if (!link) return;
+
+  var canGoBack = window.history.length > 1;
+  if (!canGoBack) link.innerHTML = 'Close &times;';
+
+  link.setAttribute('href', '#');
+  link.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (window.history.length > 1) { window.history.back(); return; }
+    window.close();
+    // close() is only permitted for windows opened by script, so a tab opened
+    // from a plain target="_blank" link will still be here. Send it to the app
+    // rather than stranding the reader on a page with a dead control.
+    setTimeout(function () {
+      if (!window.closed) window.location.href = './index.html';
+    }, 150);
+  });
+})();
+</script>
 </body>
 </html>
