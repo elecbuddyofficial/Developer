@@ -312,6 +312,88 @@ $$ LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public;
 
 REVOKE ALL ON FUNCTION public.coupon_attempt_allowed(UUID, INTEGER) FROM PUBLIC, anon, authenticated;
 
+-- ── 8c. Editing and deleting a coupon safely ──────────────────────────────
+-- Deleting a coupon that has been used is destructive in a way that is not
+-- obvious from the admin panel: coupon_redemptions.code CASCADES, so the
+-- redemption history disappears, and payments.coupon_code is SET NULL, so a
+-- real payment silently forgets why it was discounted. A ₹374 charge against
+-- a ₹499 plan with nothing recording the reason is an accounting problem, not
+-- a tidy-up.
+--
+-- Changing a coupon's TERMS after someone has used it is a milder version of
+-- the same thing. It claws nothing back (each payment stores its own
+-- discount_amount), but the code then says one thing while a real buyer got
+-- another, which is a support problem. Stripe treats coupons as immutable
+-- once used for exactly this reason.
+--
+-- So: limit, expiry, note and active stay editable forever. Terms freeze on
+-- first use. Deletion is allowed only while the code has no history at all.
+-- Enforced here rather than in the admin panel, because the panel is not the
+-- only way to reach these tables.
+
+CREATE OR REPLACE FUNCTION public.coupon_freeze_terms_once_used()
+RETURNS TRIGGER AS $$
+DECLARE
+  used INTEGER;
+BEGIN
+  IF (NEW.kind, NEW.discount_value, NEW.plan, NEW.scope, NEW.months,
+      NEW.applies_duration, NEW.applies_scope, NEW.min_amount)
+     IS NOT DISTINCT FROM
+     (OLD.kind, OLD.discount_value, OLD.plan, OLD.scope, OLD.months,
+      OLD.applies_duration, OLD.applies_scope, OLD.min_amount) THEN
+    RETURN NEW;   -- only limit / expiry / note / active changed
+  END IF;
+
+  SELECT COUNT(*) INTO used
+    FROM public.coupon_redemptions r
+   WHERE r.code = OLD.code AND r.status IN ('committed','refunded');
+
+  IF used > 0 THEN
+    RAISE EXCEPTION 'coupon_terms_locked' USING ERRCODE = 'P0001';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+DROP TRIGGER IF EXISTS freeze_coupon_terms ON public.coupons;
+CREATE TRIGGER freeze_coupon_terms
+  BEFORE UPDATE ON public.coupons
+  FOR EACH ROW EXECUTE FUNCTION public.coupon_freeze_terms_once_used();
+
+-- Deletes only an untouched code. Anything with a redemption row or a payment
+-- pointing at it is refused, so the audit trail cannot be removed by accident.
+CREATE OR REPLACE FUNCTION public.coupon_delete_if_unused(p_code TEXT)
+RETURNS VOID AS $$
+DECLARE
+  n INTEGER;
+BEGIN
+  SELECT COUNT(*) INTO n FROM public.coupon_redemptions WHERE code = p_code;
+  IF n > 0 THEN RAISE EXCEPTION 'coupon_has_history' USING ERRCODE = 'P0001'; END IF;
+
+  SELECT COUNT(*) INTO n FROM public.payments WHERE coupon_code = p_code;
+  IF n > 0 THEN RAISE EXCEPTION 'coupon_has_history' USING ERRCODE = 'P0001'; END IF;
+
+  DELETE FROM public.coupons WHERE code = p_code;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+-- Admins call this from the panel, so unlike the reservation functions it is
+-- reachable by a signed-in session. The is_admin() check inside the RLS policy
+-- on coupons no longer applies to a SECURITY DEFINER function, so gate it here.
+CREATE OR REPLACE FUNCTION public.admin_delete_coupon(p_code TEXT)
+RETURNS VOID AS $$
+BEGIN
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'not_admin' USING ERRCODE = 'P0001';
+  END IF;
+  PERFORM public.coupon_delete_if_unused(p_code);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+REVOKE ALL ON FUNCTION public.coupon_delete_if_unused(TEXT) FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON FUNCTION public.coupon_freeze_terms_once_used() FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.admin_delete_coupon(TEXT) TO authenticated;
+
 -- ── 9. Admin reporting view ───────────────────────────────────────────────
 -- One row per code with the numbers the admin list needs, including the
 -- over-redeemed flag from the honour-the-payment rule above.

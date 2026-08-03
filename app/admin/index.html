@@ -3628,6 +3628,11 @@ async function loadCoupons() {
     return;
   }
 
+  // code -> kind, so the edit handler knows whether its value field is a
+  // percentage or an amount in paise without re-reading the row.
+  window._couponCache = {};
+  data.forEach(function(c) { window._couponCache[c.code] = c.kind; });
+
   tbody.innerHTML = data.map(function(c) {
     var limit   = c.max_redemptions || 1;
     var spent   = c.live_used >= limit;
@@ -3665,12 +3670,119 @@ async function loadCoupons() {
       + '<td>' + used + '</td>'
       + '<td class="date-cell">' + (c.expires_at ? fmtDate(c.expires_at) + (expired ? ' <span style="color:var(--red);font-size:10px">expired</span>' : '') : 'Never') + '</td>'
       + '<td style="font-size:12px;color:var(--text2)">' + esc(c.note || '') + '</td>'
-      + '<td>' + (c.active
-          ? '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',false)">Disable</button>'
-          : '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',true)">Enable</button>')
+      + '<td style="white-space:nowrap">'
+      +   '<button class="ad-btn btn-ghost btn-sm" onclick="cpToggleEdit(' + attrJs(c.code) + ')">Edit</button> '
+      +   (c.active
+            ? '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',false)">Disable</button>'
+            : '<button class="ad-btn btn-ghost btn-sm" onclick="setCouponActive(' + attrJs(c.code) + ',true)">Enable</button>')
       + '</td>'
-      + '</tr>';
+      + '</tr>'
+      + cpEditRowHtml(c);
   }).join('');
+}
+
+// Terms freeze once a code has been used, and a used code can never be
+// deleted, because deleting one CASCADES its redemption history away and
+// blanks coupon_code on real payments - a discounted charge with no record of
+// why. The database enforces both; this only reflects them so the admin is
+// not offered a button that will fail.
+function cpEditRowHtml(c) {
+  var used = (c.committed || 0) + (c.refunded || 0);
+  var frozen = used > 0;
+  var hasHistory = used > 0 || (c.reserved || 0) > 0;
+  var id = c.code.replace(/[^A-Za-z0-9_-]/g, '');
+  var valueField = c.kind === 'grant' ? '' :
+      '<div class="ad-field" style="max-width:150px">'
+    +   '<label class="ad-label">' + (c.kind === 'percent' ? 'Percent Off' : 'Amount Off (₹)') + '</label>'
+    +   '<input class="ad-input" id="ce-value-' + id + '" type="number" min="1"'
+    +     ' value="' + (c.kind === 'fixed' ? (c.discount_value / 100) : c.discount_value) + '"'
+    +     (frozen ? ' disabled' : '') + '>'
+    + '</div>';
+
+  return '<tr id="ce-row-' + id + '" style="display:none"><td colspan="7" style="background:var(--surface2)">'
+    + '<div style="display:flex;gap:14px;align-items:flex-end;flex-wrap:wrap;padding:6px 2px">'
+    +   '<div class="ad-field" style="max-width:150px">'
+    +     '<label class="ad-label">Max Redemptions</label>'
+    +     '<input class="ad-input" id="ce-max-' + id + '" type="number" min="1" value="' + (c.max_redemptions || 1) + '">'
+    +   '</div>'
+    +   '<div class="ad-field" style="max-width:190px">'
+    +     '<label class="ad-label">Expires</label>'
+    +     '<input class="ad-input" id="ce-exp-' + id + '" type="date" value="' + (c.expires_at ? new Date(c.expires_at).toISOString().slice(0, 10) : '') + '">'
+    +   '</div>'
+    +   valueField
+    +   '<div class="ad-field" style="flex:1;min-width:200px">'
+    +     '<label class="ad-label">Note</label>'
+    +     '<input class="ad-input" id="ce-note-' + id + '" value="' + esc(c.note || '') + '">'
+    +   '</div>'
+    +   '<div class="ad-field" style="margin-bottom:14px">'
+    +     '<button class="ad-btn btn-primary btn-sm" onclick="cpSaveEdit(' + attrJs(c.code) + ')">Save</button> '
+    +     (hasHistory
+             ? '<button class="ad-btn btn-ghost btn-sm" disabled title="This code has been used. Deleting it would erase the record of why real payments were discounted.">Delete</button>'
+             : '<button class="ad-btn btn-ghost btn-sm" style="color:var(--red)" onclick="cpDelete(' + attrJs(c.code) + ')">Delete</button>')
+    +   '</div>'
+    + '</div>'
+    + (frozen
+        ? '<div class="ad-hint" style="margin:0 0 8px">This code has been used, so its discount and targeting are locked. Limit, expiry and note can still change. To offer different terms, disable this one and create a new code.</div>'
+        : '<div class="ad-hint" style="margin:0 0 8px">Nobody has used this code yet, so everything is still editable.</div>')
+    + '</td></tr>';
+}
+
+function cpToggleEdit(code) {
+  var row = document.getElementById('ce-row-' + code.replace(/[^A-Za-z0-9_-]/g, ''));
+  if (row) row.style.display = row.style.display === 'none' ? '' : 'none';
+}
+
+async function cpSaveEdit(code) {
+  var id = code.replace(/[^A-Za-z0-9_-]/g, '');
+  var maxEl = document.getElementById('ce-max-' + id);
+  var expEl = document.getElementById('ce-exp-' + id);
+  var valEl = document.getElementById('ce-value-' + id);
+
+  var max = parseInt(maxEl.value, 10);
+  if (!(max >= 1)) { toast('Max redemptions must be at least 1', 'err'); return; }
+
+  var payload = {
+    max_redemptions: max,
+    expires_at: expEl.value ? new Date(expEl.value).toISOString() : null,
+    note: (document.getElementById('ce-note-' + id).value || '').trim() || null,
+  };
+  // Only send the value when it is actually editable, so an unchanged frozen
+  // code never trips the database guard just by being saved.
+  if (valEl && !valEl.disabled) {
+    var v = parseInt(valEl.value, 10);
+    if (!(v >= 1)) { toast('Enter a valid discount', 'err'); return; }
+    var kindNow = (window._couponCache || {})[code];
+    payload.discount_value = kindNow === 'fixed' ? v * 100 : v;
+    if (kindNow === 'percent' && v > 100) { toast('A percentage cannot be over 100', 'err'); return; }
+  }
+
+  var { error } = await _sb.from('coupons').update(payload).eq('code', code);
+  if (error) {
+    toast(String(error.message).indexOf('coupon_terms_locked') !== -1
+      ? 'This code has been used, so its terms can no longer change.'
+      : 'Failed: ' + error.message, 'err');
+    return;
+  }
+  toast(code + ' updated');
+  logAdminAction('edit_coupon', null, Object.assign({ code: code }, payload));
+  loadCoupons();
+}
+
+async function cpDelete(code) {
+  if (!confirm('Delete ' + code + '? This only works while nobody has used it.')) return;
+  var { error } = await _sb.rpc('admin_delete_coupon', { p_code: code });
+  if (error) {
+    var m = String(error.message);
+    toast(m.indexOf('coupon_has_history') !== -1
+      ? 'This code has been used, so it cannot be deleted. Disable it instead.'
+      : m.indexOf('admin_delete_coupon') !== -1
+        ? 'Re-run coupon_discounts_setup.sql to enable deleting.'
+        : 'Failed: ' + m, 'err');
+    return;
+  }
+  toast(code + ' deleted');
+  logAdminAction('delete_coupon', null, { code: code });
+  loadCoupons();
 }
 
 async function setCouponActive(code, active) {
