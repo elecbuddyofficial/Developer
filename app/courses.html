@@ -979,7 +979,10 @@
     document.getElementById('pd-main-view').style.display = 'none';
     document.getElementById('pd-notif-view').style.display = 'flex';
     loadNotifs();
-    localStorage.setItem('eb_notif_seen', new Date().toISOString());
+    // Opening the menu is the ONLY thing that clears the count. Seeing a
+    // toast is not reading a notice, so the toast deliberately leaves it.
+    if (window.EBNotify) EBNotify.markRead();
+    else localStorage.setItem('eb_notif_seen', new Date().toISOString());
     document.getElementById('nb-dot').classList.remove('show');
     if (document.getElementById('profile-nb-dot')) document.getElementById('profile-nb-dot').classList.remove('show');
   }
@@ -1048,6 +1051,9 @@
 
   async function checkNotifsUnread() {
     if (!window._sbClient) return;
+    // EBNotify owns the badge now: a count rather than a dot, and filtered by
+    // audience, which this page's own version never did.
+    if (window.EBNotify) { EBNotify.refreshBadge(window._sbClient); return; }
     var { data } = await window._sbClient
       .from('notifications')
       .select('created_at')

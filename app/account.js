@@ -211,3 +211,229 @@
     },
   };
 })();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EBNotify: notifications, on every page.
+
+   This lives here rather than in a page because it has to be everywhere. The
+   toast was originally built only in index.html, and after signing in a reader
+   lands on courses.html, so in practice it never fired once. Anything a reader
+   should see wherever they happen to be belongs in this file, which every page
+   already loads.
+
+   What it provides:
+     - a toast when a notice is published while they are using the app
+     - an unread COUNT badge, not just a dot
+     - the realtime subscription, with the JWT the socket actually needs
+
+   What it deliberately does NOT do: mark anything as read. Seeing a toast is
+   not reading a notice. The count stays until they open the notifications
+   menu, which is the only thing that clears it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  'use strict';
+
+  var SEEN_KEY = 'eb_notif_seen';
+  var toastTimer = null;
+  var started = false;
+
+  // Styles are injected rather than copied into three stylesheets, so a page
+  // can never end up with the markup and not the CSS.
+  function injectStyles() {
+    if (document.getElementById('eb-notify-css')) return;
+    var s = document.createElement('style');
+    s.id = 'eb-notify-css';
+    s.textContent = [
+      '#nf-toast{position:fixed;z-index:10007;left:50%;top:14px;transform:translate(-50%,-140%);',
+      'display:flex;align-items:stretch;width:calc(100% - 28px);max-width:400px;',
+      'background:rgba(13,30,51,0.97);border:1px solid #24466E;border-radius:12px;overflow:hidden;',
+      'box-shadow:0 10px 30px rgba(0,0,0,0.45);opacity:0;pointer-events:none;',
+      'transition:transform .34s cubic-bezier(.2,.9,.3,1.2),opacity .28s ease}',
+      '#nf-toast.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}',
+      '#nf-toast-open{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;',
+      'border:none;cursor:pointer;text-align:left;padding:11px 4px 11px 13px;font-family:inherit;color:inherit}',
+      '.nf-toast-chip{flex-shrink:0;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;',
+      'padding:3px 7px;border-radius:100px;background:rgba(93,200,122,.16);color:#5DC87A}',
+      '.nf-toast-chip.t-info{background:rgba(122,184,224,.16);color:#7AB8E0}',
+      '.nf-toast-chip.t-warning{background:rgba(245,158,11,.16);color:#F59E0B}',
+      '.nf-toast-chip.t-deadline{background:rgba(224,90,106,.16);color:#E05A6A}',
+      '.nf-toast-text{min-width:0;display:flex;flex-direction:column;gap:1px}',
+      '.nf-toast-title{font-size:13px;font-weight:650;color:#DDE5EF;line-height:1.3;overflow:hidden;',
+      'text-overflow:ellipsis;white-space:nowrap}',
+      '.nf-toast-sub{font-size:11px;color:#6E8AA6}',
+      '.nf-toast-arrow{flex-shrink:0;color:#4E6B88;margin-left:auto}',
+      '#nf-toast-x{flex-shrink:0;background:none;border:none;border-left:1px solid #1A3050;color:#5A7B98;',
+      'font-size:19px;line-height:1;cursor:pointer;padding:0 13px;font-family:inherit}',
+      '#nf-toast-x:hover{color:#DDE5EF}',
+      // The dot becomes a count. Still circular at one digit so it reads as a
+      // badge rather than stray text, and widens past nine.
+      '.nb-dot.nb-count{width:auto!important;min-width:17px;height:17px!important;border-radius:9px;',
+      'padding:0 4px;display:none;align-items:center;justify-content:center;font-size:10px;',
+      'font-weight:800;color:#fff;line-height:1;font-family:inherit}',
+      '.nb-dot.nb-count.show{display:inline-flex!important}',
+      '@media (max-width:600px){#nf-toast{top:10px;width:calc(100% - 20px);border-radius:11px}',
+      '#nf-toast-open{padding:12px 4px 12px 12px;min-height:52px}#nf-toast-x{padding:0 15px}}',
+      '@media (prefers-reduced-motion:reduce){#nf-toast{transition:opacity .2s ease;transform:translate(-50%,0)}}',
+    ].join('');
+    document.head.appendChild(s);
+  }
+
+  // Appended to <body> on purpose. Every page nests its content in a scrolling
+  // container, and on iOS -webkit-overflow-scrolling:touch traps a
+  // position:fixed descendant underneath the sidebar.
+  function injectToast() {
+    if (document.getElementById('nf-toast')) return;
+    if (!document.body) return;
+    var t = document.createElement('div');
+    t.id = 'nf-toast';
+    t.setAttribute('role', 'status');
+    t.setAttribute('aria-live', 'polite');
+    t.innerHTML =
+      '<button type="button" id="nf-toast-open" aria-label="Open notifications">'
+      + '<span class="nf-toast-chip" id="nf-toast-chip"></span>'
+      + '<span class="nf-toast-text"><span class="nf-toast-title" id="nf-toast-title"></span>'
+      + '<span class="nf-toast-sub">Tap to read</span></span>'
+      + '<svg class="nf-toast-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" '
+      + 'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'
+      + '<path d="m9 18 6-6-6-6"/></svg></button>'
+      + '<button type="button" id="nf-toast-x" aria-label="Dismiss">&times;</button>';
+    document.body.appendChild(t);
+
+    t.querySelector('#nf-toast-open').addEventListener('click', function () {
+      EBNotify.hideToast();
+      // Pages differ in how the panel is reached, so use whichever exists.
+      if (typeof window.openProfile === 'function') {
+        window.openProfile();
+        setTimeout(function () {
+          if (typeof window.openNotifs === 'function') window.openNotifs();
+        }, 80);
+      } else if (typeof window.openNotifs === 'function') {
+        window.openNotifs();
+      }
+    });
+    t.querySelector('#nf-toast-x').addEventListener('click', function () { EBNotify.hideToast(); });
+  }
+
+  // A notice with no target is for everyone. A targeted one is shown only when
+  // the page can say who this reader is; guessing would put a paid-only notice
+  // in front of somebody on trial.
+  function visible(n) {
+    if (!n) return false;
+    if (typeof window.nfVisible === 'function') {
+      try { return window.nfVisible(n); } catch (e) { return !n.target_plan; }
+    }
+    return !n.target_plan;
+  }
+
+  var EBNotify = {
+    hideToast: function () {
+      var t = document.getElementById('nf-toast');
+      if (t) t.classList.remove('show');
+      if (toastTimer) { clearTimeout(toastTimer); toastTimer = null; }
+    },
+
+    showToast: function (n) {
+      injectStyles(); injectToast();
+      var t = document.getElementById('nf-toast');
+      if (!t) return;
+      // Never on top of something that already has their attention.
+      var blocking = ['upd-modal', 'wel-modal', 'gate-overlay', 'dev-block'];
+      for (var i = 0; i < blocking.length; i++) {
+        var el = document.getElementById(blocking[i]);
+        if (el && (el.style.display === 'block' || el.classList.contains('open'))) return;
+      }
+      var type = n.type || 'info';
+      var chip = document.getElementById('nf-toast-chip');
+      chip.textContent = type;
+      chip.className = 'nf-toast-chip t-' + type;
+      document.getElementById('nf-toast-title').textContent = n.title || 'New notification';
+      t.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(EBNotify.hideToast, 7000);
+    },
+
+    /** How many are unread. A number on every badge, not a dot. */
+    refreshBadge: async function (sb) {
+      sb = sb || window._sbClient;
+      if (!sb) return;
+      try {
+        var res = await sb.from('notifications')
+          .select('created_at,target_plan,type')
+          .order('created_at', { ascending: false }).limit(50);
+        var rows = (res.data || []).filter(visible);
+        var seen = null;
+        try { seen = localStorage.getItem(SEEN_KEY); } catch (e) {}
+        var unread = seen
+          ? rows.filter(function (n) { return new Date(n.created_at) > new Date(seen); }).length
+          : rows.length;
+        EBNotify.setBadge(unread);
+      } catch (e) {}
+    },
+
+    setBadge: function (count) {
+      injectStyles();
+      var dots = document.querySelectorAll('.nb-dot');
+      for (var i = 0; i < dots.length; i++) {
+        var d = dots[i];
+        d.classList.add('nb-count');
+        if (count > 0) {
+          d.textContent = count > 9 ? '9+' : String(count);
+          d.classList.add('show');
+        } else {
+          d.textContent = '';
+          d.classList.remove('show');
+        }
+      }
+    },
+
+    /** Called once the notifications menu has actually been opened. */
+    markRead: function () {
+      try { localStorage.setItem(SEEN_KEY, new Date().toISOString()); } catch (e) {}
+      EBNotify.setBadge(0);
+    },
+
+    start: async function () {
+      if (started) return;
+      var sb = window._sbClient, user = window._sbUser;
+      if (!sb || !user) return;
+      started = true;
+
+      injectStyles(); injectToast();
+      EBNotify.refreshBadge(sb);
+
+      try {
+        // The socket must be handed the user's JWT. Without it it connects as
+        // `anon`; the SELECT policy on notifications is TO authenticated, so
+        // the server delivers nothing while still reporting SUBSCRIBED.
+        var sess = await sb.auth.getSession();
+        var tok = sess && sess.data && sess.data.session && sess.data.session.access_token;
+        if (tok && sb.realtime && sb.realtime.setAuth) sb.realtime.setAuth(tok);
+
+        window._nfChannel = sb.channel('eb-notify-' + Math.random().toString(36).slice(2, 8))
+          .on('postgres_changes',
+              { event: 'INSERT', schema: 'public', table: 'notifications' },
+              function (payload) {
+                var n = payload && payload.new;
+                if (!n || !visible(n)) return;
+                EBNotify.refreshBadge(sb);
+                EBNotify.showToast(n);
+              })
+          .subscribe();
+      } catch (e) {
+        // Realtime is a nicety. The badge and the menu still work without it.
+        console.warn('notification stream unavailable:', e);
+      }
+    },
+  };
+
+  window.EBNotify = EBNotify;
+
+  // Self-starting with a bounded wait, so a page only has to load this file.
+  // Auth is established asynchronously and each page does it differently, so
+  // polling briefly is more reliable than picking one page's hook.
+  var tries = 0;
+  var iv = setInterval(function () {
+    if (window._sbClient && window._sbUser) { clearInterval(iv); EBNotify.start(); }
+    else if (++tries > 60) { clearInterval(iv); }      // ~30s, then give up
+  }, 500);
+})();
