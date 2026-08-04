@@ -731,6 +731,55 @@
 <style>
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
+  /* Toast for a notice that arrives mid-session.
+     Anchored top-centre on desktop and pinned to the top edge on a phone,
+     because that is where a notification is expected to come from on both.
+     It never covers the topbar controls: it sits below them. */
+  #nf-toast{
+    position:fixed; z-index:10007; left:50%; top:14px;
+    transform:translate(-50%,-140%);
+    display:flex; align-items:stretch; gap:0;
+    width:calc(100% - 28px); max-width:400px;
+    background:rgba(13,30,51,0.97); border:1px solid #24466E;
+    border-radius:12px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);
+    opacity:0; pointer-events:none;
+    transition:transform .34s cubic-bezier(.2,.9,.3,1.2), opacity .28s ease;
+  }
+  #nf-toast.show{ transform:translate(-50%,0); opacity:1; pointer-events:auto; }
+  #nf-toast-open{
+    flex:1; min-width:0; display:flex; align-items:center; gap:10px;
+    background:none; border:none; cursor:pointer; text-align:left;
+    padding:11px 4px 11px 13px; font-family:inherit; color:inherit;
+  }
+  .nf-toast-chip{
+    flex-shrink:0; font-size:9px; font-weight:800; letter-spacing:.5px;
+    text-transform:uppercase; padding:3px 7px; border-radius:100px;
+    background:var(--green-dim,rgba(93,200,122,.16)); color:#5DC87A;
+  }
+  .nf-toast-text{ min-width:0; display:flex; flex-direction:column; gap:1px; }
+  .nf-toast-title{
+    font-size:13px; font-weight:650; color:#DDE5EF; line-height:1.3;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .nf-toast-sub{ font-size:11px; color:#6E8AA6; }
+  .nf-toast-arrow{ flex-shrink:0; color:#4E6B88; margin-left:auto; }
+  #nf-toast-x{
+    flex-shrink:0; background:none; border:none; border-left:1px solid #1A3050;
+    color:#5A7B98; font-size:19px; line-height:1; cursor:pointer;
+    padding:0 13px; font-family:inherit;
+  }
+  #nf-toast-x:hover{ color:#DDE5EF; }
+  /* Phones: full width under the top edge, and a real touch target. */
+  @media (max-width:600px){
+    #nf-toast{ top:10px; width:calc(100% - 20px); border-radius:11px; }
+    #nf-toast-open{ padding:12px 4px 12px 12px; min-height:52px; }
+    #nf-toast-x{ padding:0 15px; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    #nf-toast{ transition:opacity .2s ease; transform:translate(-50%,0); }
+  }
+
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
   .nb-dot.show{display:block}
   .nf-list{flex:1;overflow-y:auto;padding:12px 22px;display:flex;flex-direction:column;gap:8px; margin: 0 -22px -22px -22px;}
@@ -972,6 +1021,21 @@
       <button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid #1A3050;border-radius:8px;font-size:13px;color:#8FA3B8;font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>
     </div>
   </div>
+</div>
+
+<!-- A notice arriving while someone is already in the app. Small, brief, and
+     ignorable on purpose: the bell and the What's new banner are the paths
+     that insist, this one only offers. -->
+<div id="nf-toast" role="status" aria-live="polite">
+  <button type="button" id="nf-toast-open" aria-label="Open notifications">
+    <span class="nf-toast-chip" id="nf-toast-chip">update</span>
+    <span class="nf-toast-text">
+      <span class="nf-toast-title" id="nf-toast-title"></span>
+      <span class="nf-toast-sub" id="nf-toast-sub"></span>
+    </span>
+    <svg class="nf-toast-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+  </button>
+  <button type="button" id="nf-toast-x" aria-label="Dismiss">&times;</button>
 </div>
 
 <!-- ── What's new ──────────────────────────────────────────── -->
@@ -1690,6 +1754,7 @@ function setTheme(t) {
         if (typeof window.maybeShowWelcome === 'function') window.maybeShowWelcome(profile);
         if (typeof window.maybeShowUpdates === 'function') window.maybeShowUpdates();
         if (typeof window.registerThisDevice === 'function') window.registerThisDevice();
+        if (typeof window.subscribeNotifs === 'function') window.subscribeNotifs();
         if (typeof window.refreshDeletionState === 'function') window.refreshDeletionState(profile);
 
         var wasAccess = window._access || { oral: false, written: false };
@@ -1765,7 +1830,7 @@ function setTheme(t) {
     // have failed on iPhone in exactly the way the walkthrough once did.
     ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal',
      'guide-overlay', 'tx-modal', 'wel-modal', 'upd-modal',
-     'del-banner', 'dev-block', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
+     'del-banner', 'dev-block', 'nf-toast', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
     });
@@ -2546,6 +2611,78 @@ function setTheme(t) {
     });
   })();
 
+  /* ── Live notice toast ── */
+  // Shown when a notice is published while someone is already using the app.
+  // Deliberately the gentlest of the three paths: the What's new banner blocks
+  // on open and the bell keeps a dot until read, so this one is allowed to be
+  // missed. It offers, it does not insist.
+  var _nfToastTimer = null;
+
+  function hideNfToast() {
+    var t = document.getElementById('nf-toast');
+    if (t) t.classList.remove('show');
+    if (_nfToastTimer) { clearTimeout(_nfToastTimer); _nfToastTimer = null; }
+  }
+
+  function showNfToast(n) {
+    var t = document.getElementById('nf-toast');
+    if (!t) return;
+    // Never on top of something that already demands attention.
+    if (document.getElementById('upd-modal').style.display === 'block') return;
+    if (document.getElementById('wel-modal').style.display === 'block') return;
+
+    var type = n.type || 'info';
+    var chip = document.getElementById('nf-toast-chip');
+    chip.textContent = type;
+    chip.className = 'nf-toast-chip nf-chip-' + type;
+    document.getElementById('nf-toast-title').textContent = n.title || 'New notification';
+    document.getElementById('nf-toast-sub').textContent = 'Tap to read';
+
+    t.classList.add('show');
+    if (_nfToastTimer) clearTimeout(_nfToastTimer);
+    // Long enough to read a title, short enough not to sit over the notes.
+    _nfToastTimer = setTimeout(hideNfToast, 7000);
+  }
+
+  // Realtime rather than polling, so it arrives when it is published rather
+  // than up to ten minutes later. RLS applies to the stream exactly as it does
+  // to a query, and nfVisible then applies the same audience filter the panel
+  // and the banner use, so a notice aimed at one plan never surfaces here for
+  // another.
+  async function subscribeNotifs() {
+    if (!window._sbClient || !window._sbUser) return;
+    if (window._nfChannel) return;
+    try {
+      // The realtime socket must be handed the user's JWT explicitly.
+      // Without it, it authenticates as `anon`, and since the SELECT policy on
+      // notifications is TO authenticated, the server delivers nothing at all
+      // while the subscription still cheerfully reports SUBSCRIBED. That is a
+      // silent failure, and it is exactly what happened the first time this
+      // was tested end to end.
+      var sess = await window._sbClient.auth.getSession();
+      var tok = sess && sess.data && sess.data.session && sess.data.session.access_token;
+      if (tok) window._sbClient.realtime.setAuth(tok);
+
+      window._nfChannel = window._sbClient
+        .channel('eb-notifications')
+        .on('postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'notifications' },
+            function(payload) {
+              var n = payload && payload.new;
+              if (!n || !nfVisible(n)) return;
+              document.getElementById('nb-dot').classList.add('show');
+              var pd = document.getElementById('profile-nb-dot');
+              if (pd) pd.classList.add('show');
+              showNfToast(n);
+            })
+        .subscribe();
+    } catch (e) {
+      // Realtime is a nicety. If it cannot connect, the bell and the What's
+      // new banner still deliver the notice on the next open.
+      console.warn('notification stream unavailable:', e);
+    }
+  }
+
   /* ── Notifications ── */
   function openNotifs() {
     document.getElementById('pm-main-view').style.display = 'none';
@@ -2555,6 +2692,20 @@ function setTheme(t) {
     document.getElementById('nb-dot').classList.remove('show');
     if (document.getElementById('profile-nb-dot')) document.getElementById('profile-nb-dot').classList.remove('show');
   }
+  (function wireNfToast() {
+    var open = document.getElementById('nf-toast-open');
+    var x    = document.getElementById('nf-toast-x');
+    if (open) open.addEventListener('click', function() {
+      hideNfToast();
+      // Straight into the notice, rather than leaving them to find the bell.
+      // openProfile, not openProfileModal: the latter does not exist, and the
+      // typeof guard would have silently swallowed that forever.
+      if (typeof openProfile === 'function') openProfile();
+      setTimeout(function() { if (typeof openNotifs === 'function') openNotifs(); }, 60);
+    });
+    if (x) x.addEventListener('click', hideNfToast);
+  })();
+
   function closeNotifs() {
     document.getElementById('pm-notif-view').style.display = 'none';
     document.getElementById('pm-main-view').style.display = 'block';
