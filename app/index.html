@@ -816,6 +816,14 @@
 
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+
+    <!-- Reference footer. Reaching support should not require knowing that it
+         lives behind Settings, so it sits on the menu people already open. -->
+    <div data-eb-contact style="margin-top:16px"></div>
+    <div style="display:flex;justify-content:center;gap:14px;margin-top:14px;">
+      <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Terms</a>
+      <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
+    </div>
     </div>
 
     <div id="pm-notif-view" style="display:none; flex-direction:column; height:100%;">
@@ -944,8 +952,6 @@
       </div>
     </div>
 
-    <div data-eb-contact style="margin-top:14px"></div>
-
     </div><!-- /set-main-view -->
 
     <!-- Sub-views. Same pattern as Notifications inside the profile panel:
@@ -976,11 +982,6 @@
       </div>
     </div>
 
-    <!-- Legal -->
-    <div id="set-legal" style="display:flex;justify-content:center;gap:14px;margin-top:16px;">
-      <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Terms</a>
-      <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
-    </div>
 
   </div>
 </div>
@@ -2070,10 +2071,6 @@ function setTheme(t) {
         var el = document.getElementById('set-' + v + '-view');
         if (el) el.style.display = (v === name) ? 'block' : 'none';
       });
-      // Legal belongs to the main list, not to a sub-view.
-      var legal = document.getElementById('set-legal');
-      if (legal) legal.style.display = (name === 'main') ? 'flex' : 'none';
-
       var panel = document.getElementById('settings-panel');
       if (panel) panel.scrollTop = 0;
 
