@@ -23,9 +23,21 @@
 --    1. Free trial farming. Delete, sign up again with the same address, get
 --       another 3 day trial. Repeatable forever, and a one click way never to
 --       pay.
---    2. Single-use coupon reuse. coupon_redemptions.user_id is SET NULL on
---       delete, and the "you already used this code" check keys on user_id,
---       so deleting frees the code again.
+--    2. Single-use coupon reuse. The per-user check ("you already used this
+--       code") keys on user_id, which deletion nulls, so that half of the
+--       guard IS defeated by deleting.
+--
+--       It does not actually open the loophole, but NOT because of the
+--       tombstone, and the distinction matters. coupon_redemptions.user_id is
+--       ON DELETE SET NULL, so the redemption ROW survives the purge, and
+--       coupon_live_count counts committed rows regardless of who they belong
+--       to. The slot therefore stays consumed forever, and max_redemptions
+--       defaults to 1 via COALESCE, so every coupon has a slot to consume.
+--
+--       READ THIS BEFORE TIDYING ANYTHING. That protection rests entirely on
+--       those orphaned redemption rows continuing to exist. Changing the
+--       foreign key to CASCADE, or "cleaning up" rows whose user_id is null,
+--       frees the slot and silently opens the hole.
 --
 --  A SHA-256 of the address answers "has this person been here before?"
 --  without storing the address, so it is not a way of quietly keeping the
