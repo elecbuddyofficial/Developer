@@ -706,6 +706,20 @@
 
 <!-- ── Profile Panel ──────────────────────────────────────── -->
 <style>
+  /* Settings tabs. Three sections rather than one long scroll: the panel is
+     300px wide, so an undivided list of toggles, a device list and a delete
+     flow ran to several screens and buried whichever one you came for. */
+  .set-tabs{display:flex;gap:4px;background:#0A1828;border:1px solid #1A3050;
+    border-radius:8px;padding:3px;margin-bottom:16px}
+  .set-tab{flex:1;background:none;border:none;border-radius:6px;padding:8px 4px;
+    font-family:inherit;font-size:11.5px;font-weight:700;letter-spacing:.02em;
+    color:#6E8AA6;cursor:pointer;transition:background .15s,color .15s;min-height:36px}
+  .set-tab:hover{color:#8FA3B8}
+  .set-tab.active{background:#1A3050;color:#DDE5EF}
+  .set-pane{display:none}
+  .set-pane.active{display:block}
+  @media (pointer:coarse){ .set-tab{min-height:44px} }
+
   #profile-panel, #settings-panel, #tx-panel {
     position: fixed; right: 0; top: 0; bottom: 0;
     width: 300px; background: #0D1E33;
@@ -798,22 +812,9 @@
     </button>
 
     <!-- App Guide -->
-    <button onclick="document.getElementById('profile-modal').style.display='none'; startGuide();" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
-      <span style="font-weight:bold;font-size:14px;border:1px solid currentColor;border-radius:50%;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;">?</span>
-      App Guide
-    </button>
 
     <!-- Payment History -->
-    <button onclick="openTransactions()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-      Payment History
-    </button>
 
-    <!-- Terms and Conditions -->
-    <button onclick="window.open('./terms.html','_blank','noopener')" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h8"/></svg>
-      Terms and Conditions
-    </button>
 
     <!-- Settings -->
     <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
@@ -827,7 +828,6 @@
     <!-- Courses -->
     <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
 
-    <div data-eb-contact></div>
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
     </div>
@@ -860,6 +860,15 @@
       <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
     </div>
 
+    <div class="set-tabs" role="tablist">
+      <button type="button" class="set-tab active" data-pane="general" onclick="setSettingsTab('general')">General</button>
+      <button type="button" class="set-tab" data-pane="devices" onclick="setSettingsTab('devices')">Devices</button>
+      <button type="button" class="set-tab" data-pane="account" onclick="setSettingsTab('account')">Account</button>
+    </div>
+
+    <!-- ── General ─────────────────────────────────────────── -->
+    <div class="set-pane active" id="set-pane-general">
+
     <!-- Data Saver -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <div style="min-width:0;">
@@ -880,13 +889,39 @@
       <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center;"></div>
     </div>
 
-    <!-- Signed-in devices -->
+    <!-- Take a tour. Moved out of the profile menu: it is a one-off, and it
+         was sitting between two things people open constantly. -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-top:14px;">
+      <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Take the tour</div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">A quick walkthrough of where everything is.</div>
+      <button onclick="closeSettings({target:{closest:function(){return true}}}); document.getElementById('profile-modal').style.display='none'; setTimeout(startGuide, 340);" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Start the tour</button>
+    </div>
+
+    </div><!-- /general -->
+
+    <!-- ── Devices ─────────────────────────────────────────── -->
+    <div class="set-pane" id="set-pane-devices">
+
+    <!-- Signed-in devices -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
       <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Signed in devices</div>
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">
         Your account works on up to <strong id="dev-limit-txt">3</strong> devices. Removing one frees a slot straight away.
       </div>
       <div id="dev-list"><div style="font-size:11.5px;color:#6E8AA6;">Loading&hellip;</div></div>
+    </div>
+
+    </div><!-- /devices -->
+
+    <!-- ── Account ─────────────────────────────────────────── -->
+    <div class="set-pane" id="set-pane-account">
+
+    <!-- Payments. Moved out of the profile menu: looked at occasionally, not
+         daily, and it opens its own panel anyway. -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px;">
+      <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Payments</div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Every purchase on this account, with receipts.</div>
+      <button onclick="openTransactions()" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">View payments</button>
     </div>
 
     <!-- Delete account -->
@@ -937,6 +972,10 @@
         <button onclick="cancelScheduledDeletion()" id="del-keep-btn" style="width:100%;min-height:42px;margin-top:11px;background:#C8A44A;border:none;border-radius:6px;font-size:13px;color:#070D1A;font-weight:700;cursor:pointer;">Keep my account</button>
       </div>
     </div>
+
+    <div data-eb-contact style="margin-top:14px"></div>
+
+    </div><!-- /account -->
 
     <!-- Legal -->
     <div style="display:flex;justify-content:center;gap:14px;margin-top:16px;">
@@ -1871,6 +1910,23 @@ function setTheme(t) {
       }
     };
 
+    // Devices are fetched when their tab is opened rather than on every
+    // settings open, so the common case (flipping Data Saver) costs no query.
+    window.setSettingsTab = function(name) {
+      ['general','devices','account'].forEach(function(k) {
+        var pane = document.getElementById('set-pane-' + k);
+        if (pane) pane.classList.toggle('active', k === name);
+      });
+      document.querySelectorAll('.set-tab').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.pane === name);
+      });
+      // Panes differ a lot in height; leaving the scroll where it was drops
+      // you into the middle of a shorter one.
+      var panel = document.getElementById('settings-panel');
+      if (panel) panel.scrollTop = 0;
+      if (name === 'devices' && typeof loadDevices === 'function') loadDevices();
+    };
+
     window.openSettings = function() {
       document.getElementById('profile-panel').classList.remove('open');
       setTimeout(() => {
@@ -1882,7 +1938,9 @@ function setTheme(t) {
         document.getElementById('settings-reset-status').style.display = 'none';
         document.getElementById('settings-modal').style.display = 'block';
         document.documentElement.classList.add('_modal-open'); // still open, just switched modal
-        if (typeof loadDevices === 'function') loadDevices();
+        // Always land on General. Reopening on whichever tab you left is
+        // disorienting when the panel is this small.
+        if (typeof setSettingsTab === 'function') setSettingsTab('general');
         if (typeof refreshDeletionState === 'function') refreshDeletionState();
         setTimeout(() => document.getElementById('settings-panel').classList.add('open'), 10);
       }, 300);

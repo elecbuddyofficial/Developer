@@ -1605,7 +1605,18 @@
       <div class="prof-actions">
         <button class="ad-btn btn-ghost btn-sm" id="prof-edit-btn" onclick="toggleProfEdit()">Edit Access</button>
         <button class="ad-btn btn-ghost btn-sm" id="prof-trial-expiry-btn" onclick="profForceTrialExpiry()" title="Backdates trial_started_at so their 3-day trial reads as already expired - for testing the expired/paywall experience without waiting.">Force Trial Expiry</button>
+        <button class="ad-btn btn-ghost btn-sm" id="prof-devices-btn" onclick="toggleProfDevices()" title="Which devices this account is signed in on, and how many of its slots are used.">Devices</button>
         <button class="ad-btn btn-danger btn-sm" id="prof-delete-btn" onclick="profDeleteAccount()">Delete Account</button>
+      </div>
+
+      <!-- Devices. Collapsed by default: it needs its own query, and most
+           visits to a profile are not about devices. -->
+      <div id="prof-devices-inline" style="display:none;margin-top:12px">
+        <div class="ad-card-sub" style="margin-bottom:8px">
+          Read only. Removing a device is the reader's own action from their Settings, so support
+          can see what is registered and talk them through it rather than doing it for them.
+        </div>
+        <div id="prof-devices-body"><div class="ad-loading">Loading...</div></div>
       </div>
 
       <!-- Inline access editor -->
@@ -2457,6 +2468,49 @@ async function deleteUser(id, email) {
 /* ── USER PROFILE MODAL ─────────────────────────────────────────── */
 var _profUser = null;
 
+// Devices for the account being viewed. Relies on the "admins read all
+// devices" RLS policy, which is exactly what that policy is for; the reader's
+// own Settings panel filters to their own id explicitly and does not depend
+// on which policies happen to apply to whoever is looking.
+async function toggleProfDevices() {
+  var box = document.getElementById('prof-devices-inline');
+  if (!box) return;
+  var opening = box.style.display === 'none';
+  box.style.display = opening ? 'block' : 'none';
+  if (!opening || !_profUser) return;
+
+  var body = document.getElementById('prof-devices-body');
+  body.innerHTML = '<div class="ad-loading">Loading...</div>';
+
+  var res = await _sb.from('devices')
+    .select('id, device_label, last_seen, created_at')
+    .eq('user_id', _profUser.id)
+    .order('last_seen', { ascending: false });
+
+  if (res.error) { body.innerHTML = '<div class="ad-loading">Could not load devices.</div>'; return; }
+  var rows = res.data || [];
+  var LIMIT = 3;
+
+  if (!rows.length) {
+    body.innerHTML = '<div class="ad-loading">No devices registered. They have not opened the app since the limit went live.</div>';
+    return;
+  }
+
+  body.innerHTML =
+    '<div style="font-size:12px;color:var(--text3);margin-bottom:8px">'
+    + rows.length + ' of ' + LIMIT + ' slots used'
+    + (rows.length >= LIMIT ? ' <span style="color:var(--orange);font-weight:700">at the limit</span>' : '')
+    + '</div>'
+    + rows.map(function (d) {
+        return '<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;'
+          + 'padding:8px 0;border-bottom:1px solid var(--border2);font-size:12.5px">'
+          + '<span style="color:var(--text)">' + esc(d.device_label || 'Unknown device') + '</span>'
+          + '<span style="color:var(--text3);font-size:11.5px;white-space:nowrap">'
+          +   'last used ' + fmtDate(d.last_seen) + '</span>'
+          + '</div>';
+      }).join('');
+}
+
 async function openUserProfile(userId) {
   var u = _allUsers.find(function(x) { return x.id === userId; });
   if (!u) { toast('User not found', 'err'); return; }
@@ -2465,6 +2519,7 @@ async function openUserProfile(userId) {
   document.getElementById('prof-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
   document.getElementById('prof-edit-inline').style.display = 'none';
+  document.getElementById('prof-devices-inline').style.display = 'none';
 
   var name = u.full_name || u.email || '-';
   document.getElementById('prof-avatar').textContent = name.charAt(0).toUpperCase();
