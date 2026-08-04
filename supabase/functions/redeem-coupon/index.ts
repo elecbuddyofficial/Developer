@@ -61,6 +61,21 @@ serve(async (req) => {
     // would let someone probe for valid codes.
     const invalid = json({ error: 'That code is not valid or has already been used' }, 400);
     if (!coupon || !coupon.active) return invalid;
+
+    // ONLY grant coupons are redeemable here. This endpoint hands out access
+    // for free, and a discount coupon carries no plan and no months, so
+    // without this check `coupon.months || 1` silently turns a "₹100 off"
+    // code into a free month of full access. That is reachable by anyone
+    // holding a discount code, because this is a JWT endpoint they can call
+    // directly rather than through the checkout screen.
+    //
+    // Discount codes belong to create-razorpay-order, which reads `kind` and
+    // charges the remainder. It already refuses grant coupons with a 409, so
+    // the two endpoints now cover exactly one kind each with no overlap.
+    if (coupon.kind && coupon.kind !== 'grant') return invalid;
+    // A grant with no plan cannot say what it grants, so it is not honoured
+    // rather than defaulting to something.
+    if (!coupon.plan) return invalid;
     if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) return invalid;
     if (coupon.times_redeemed >= coupon.max_redemptions) return invalid;
 
