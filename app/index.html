@@ -1890,10 +1890,19 @@ function setTheme(t) {
       setTimeout(() => {
         document.getElementById('profile-modal').style.display = 'none';
         document.getElementById('pm-data-saver-toggle').checked = !!window._dataSaver;
-        var resetBtn = document.getElementById('settings-reset-btn');
-        resetBtn.textContent = 'Reset Statistics';
-        resetBtn.dataset.armed = '';
-        document.getElementById('settings-reset-status').style.display = 'none';
+        // Disarm both reset buttons, so a half-confirmed tap from last time
+        // does not fire on the first tap this time.
+        [['reset-chapters-btn', 'Reset chapter progress'],
+         ['reset-quiz-btn', 'Reset quiz progress']].forEach(function(pair) {
+          var b = document.getElementById(pair[0]);
+          if (!b) return;
+          clearTimeout(b._armTimer);
+          b.dataset.armed = '';
+          b.disabled = false;
+          b.textContent = pair[1];
+        });
+        var _rs = document.getElementById('settings-reset-status');
+        if (_rs) _rs.style.display = 'none';
         document.getElementById('settings-modal').style.display = 'block';
         document.documentElement.classList.add('_modal-open'); // still open, just switched modal
         // Devices are behind their own button now, so nothing to preload.
