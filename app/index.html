@@ -1119,7 +1119,7 @@
       <!-- Trial notice -->
       <div id="up-trial-notice" style="display:none;background:rgba(200,164,74,0.08);border:1px solid rgba(200,164,74,0.25);border-radius:10px;padding:11px 14px;margin-bottom:20px;font-size:12.5px;color:#A88B3A;line-height:1.6;"></div>
 
-      <!-- Track tabs (Passage / Voyage / Expedition) -->
+      <!-- Track tabs. Lead with what you get, brand name underneath. -->
       <div id="up-track-tabs" style="display:flex;gap:8px;margin-bottom:16px;"></div>
       <!-- The coupon toggle rides on the subhead's own line rather than taking
            a row of its own. It still sits above the cards, where a buyer
@@ -1168,6 +1168,11 @@
     padding: 9px 6px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em;
     color: #6E8AA6; cursor: pointer; transition: border-color .15s, background .15s, color .15s;
     font-family: inherit;
+  }
+  .up-track-tab .utt-brand {
+    display: block; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.04em; opacity: 0.7; margin-top: 2px;
+    text-transform: uppercase;
   }
   .up-track-tab:hover { background: rgba(20,42,68,0.8); }
   .up-track-tab.active { background: #C8A44A; border-color: #C8A44A; color: #070D1A; }
@@ -2657,6 +2662,28 @@ var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
 var TRACK_ORDER = ['written', 'oral', 'both'];   // Passage, Voyage, Expedition
 var TIER_ORDER  = ['3mo', '6mo', '12mo'];        // Launch, Mariner, Master
 var TRACK_FALLBACK_NAME = { written: 'Passage', oral: 'Voyage', both: 'Expedition' };
+
+// What the tab LEADS with. Deliberately not the track name.
+//
+// The tabs used to read PASSAGE / VOYAGE / EXPEDITION, and the only thing that
+// explained them was a subhead under whichever tab was already selected. Three
+// problems with that, in order of cost:
+//
+//   1. They read as a good/better/best ladder, because that is what
+//      passage -> voyage -> expedition sounds like. They are not a ladder,
+//      they are three different products. Someone who needs Oral reads Voyage
+//      as the middle upgrade rather than "the Oral one", and someone
+//      economising picks the cheapest and gets Written when they came for
+//      Oral. That is not confusion, it is buying the wrong thing, and it comes
+//      back as a refund.
+//   2. Both axes were nautical progressions, so nothing in "Passage Launch"
+//      signalled that one word means what you get and the other how long.
+//   3. You could not compare the three without clicking each one.
+//
+// So the function leads and the track name rides underneath as branding. The
+// tier names are untouched: "Launch" sits directly above "3 Months", where the
+// ladder metaphor is actually true.
+var SCOPE_TAB_LABEL = { written: 'Written', oral: 'Oral', both: 'Both' };
 var SCOPE_SUBHEAD = {
   written: 'Written exam prep',
   oral:    'Oral exam prep, quizzes & Surveyor Q&A',
@@ -2834,8 +2861,12 @@ function renderUpgradeTrackTabs() {
   if (!wrap) return;
   wrap.innerHTML = TRACK_ORDER.map(function(scope) {
     var row = findPlanRow('3mo', scope);
-    var name = row ? row.track_name : TRACK_FALLBACK_NAME[scope];
-    return '<button type="button" class="up-track-tab' + (scope === _upActiveTrack ? ' active' : '') + '" data-scope="' + scope + '">' + escUp(name).toUpperCase() + '</button>';
+    var brand = row ? row.track_name : TRACK_FALLBACK_NAME[scope];
+    var what  = SCOPE_TAB_LABEL[scope] || scope;
+    return '<button type="button" class="up-track-tab' + (scope === _upActiveTrack ? ' active' : '') + '" data-scope="' + scope + '">'
+      + escUp(what).toUpperCase()
+      + '<span class="utt-brand">' + escUp(brand) + '</span>'
+      + '</button>';
   }).join('');
 }
 
