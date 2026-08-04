@@ -2174,7 +2174,7 @@ function setTheme(t) {
           +   '<span style="font-size:11px;color:#6E8AA6;">' + nfTimeAgo(n.created_at) + '</span>'
           + '</div>'
           + '<div style="font-size:14px;font-weight:600;color:#DDE5EF;margin-bottom:4px;">' + escNf(n.title) + '</div>'
-          + '<div style="font-size:13px;color:#8FA3B8;line-height:1.6;white-space:pre-wrap;">' + escNf(n.body) + '</div>'
+          + '<div style="font-size:13px;color:#8FA3B8;line-height:1.6;white-space:pre-wrap;">' + linkifyNf(n.body) + '</div>'
           + '</div>';
       }).join('');
 
@@ -2567,6 +2567,34 @@ function setTheme(t) {
     return new Date(iso).toLocaleDateString();
   }
   function escNf(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  // Turns a bare URL in a notice into something tappable.
+  //
+  // Order matters and is the whole safety argument: the text is ESCAPED FIRST,
+  // then links are found in the already-escaped string. So a notice body can
+  // never inject markup, because by the time this runs there is no live markup
+  // left to inject: any < or " an admin typed is already &lt; or &quot;.
+  //
+  // The pattern only matches http and https, so javascript: and data: URLs
+  // cannot be produced even deliberately. Escaping turns & into &amp; inside
+  // query strings, which is correct in an href and decodes back on click.
+  function linkifyNf(text) {
+    // Quotes are excluded from the match, and that exclusion is load bearing.
+    // escNf escapes & < > but NOT ", so a body containing
+    //   https://a.com"onmouseover="alert(1)
+    // would otherwise put a live event handler inside the href. No real URL
+    // contains a bare quote, so cutting the match short at one costs nothing
+    // and leaves the quote outside the tag as ordinary text.
+    return escNf(text).replace(/https?:\/\/[^\s<"']+/g, function(url) {
+      // Trailing punctuation is nearly always the sentence, not the address.
+      var tail = '';
+      var m = url.match(/[.,;:!?)\]]+$/);
+      if (m) { tail = m[0]; url = url.slice(0, -tail.length); }
+      return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"'
+           + ' style="color:#7AB8E0;text-decoration:underline;text-underline-offset:2px;word-break:break-all">'
+           + url + '</a>' + tail;
+    });
+  }
   // Which targeted notifications this viewer should see. Admin can aim a
   // notification at trial, paid, or expired users; anything untargeted goes
   // to everyone.
@@ -2597,7 +2625,7 @@ function setTheme(t) {
     var seen = localStorage.getItem('eb_notif_seen');
     list.innerHTML = data.map(function(n) {
       var u = !seen || new Date(n.created_at) > new Date(seen), t = n.type || 'info';
-      return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + escNf(n.body) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
+      return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + linkifyNf(n.body) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
     }).join('');
   }
   async function checkNotifsUnread() {
