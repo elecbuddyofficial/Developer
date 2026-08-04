@@ -57,12 +57,16 @@
   var CONTACT = {
     instagram: 'elec.buddy',
     email: 'support@elec-buddy.com',
+    whatsapp: 'https://whatsapp.com/channel/0029Vb8IHLiHbFUyd1ICGl2t',
   };
 
-  var IG_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  var IG_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
     + '<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>';
-  var MAIL_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+  var MAIL_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
     + '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>';
+  var WA_ICON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<path d="M21 11.6a8.4 8.4 0 0 1-12.5 7.3L3.5 20.5l1.7-4.8A8.4 8.4 0 1 1 21 11.6Z"/>'
+    + '<path d="M9.2 9.1c.2 1.3.8 2.5 1.8 3.4a6.2 6.2 0 0 0 3.3 1.7"/></svg>';
 
   function contactHtml() {
     // min-height 44px matches the touch-target floor used everywhere else in
@@ -84,14 +88,25 @@
     // flush against whatever button followed it, which reads as two boxes
     // touching rather than as a separate group. The panels that place this
     // between other controls do not add spacing of their own.
+    // Three icon buttons rather than labelled rows: the labels repeated what
+    // the icons already say and took three stacked rows to do it.
+    //
+    // The address stays visible underneath as a caption, which is the one thing
+    // an icon cannot carry. On a desktop with no mail client a mailto: link
+    // does nothing at all, and then being able to read and copy the address is
+    // the only useful outcome. It is selectable text for exactly that reason.
+    var btn = 'display:flex;align-items:center;justify-content:center;'
+            + 'flex:1;min-height:44px;box-sizing:border-box;'
+            + 'border:1px solid #1A3050;border-radius:8px;'
+            + 'color:#8FA3B8;text-decoration:none;transition:border-color .15s,color .15s;';
     return '<div style="margin:14px 0;padding-top:14px;border-top:1px solid #1A3050;">'
       + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E8AA6;text-align:center;margin-bottom:9px;">Get in touch</div>'
-      + '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" style="' + row + 'flex:1 1 130px;">'
-      +     IG_ICON + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">@' + CONTACT.instagram + '</span></a>'
-      +   '<a href="mailto:' + CONTACT.email + '" style="' + row + 'flex:1 1 200px;">'
-      +     MAIL_ICON + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + CONTACT.email + '</span></a>'
+      + '<div style="display:flex;gap:8px;">'
+      +   '<a href="mailto:' + CONTACT.email + '" title="Email support" aria-label="Email support" style="' + btn + '">' + MAIL_ICON + '</a>'
+      +   '<a href="' + CONTACT.whatsapp + '" target="_blank" rel="noopener noreferrer" title="Updates on WhatsApp" aria-label="Updates on WhatsApp" style="' + btn + '">' + WA_ICON + '</a>'
+      +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" title="@' + CONTACT.instagram + ' on Instagram" aria-label="Instagram" style="' + btn + '">' + IG_ICON + '</a>'
       + '</div>'
+      + '<div style="text-align:center;margin-top:8px;font-size:11px;color:#6E8AA6;user-select:text;">' + CONTACT.email + '</div>'
       + '</div>';
   }
 

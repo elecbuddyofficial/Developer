@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { APP_URL } from '../_shared/email-layout.ts';
+import { APP_URL, escapeHtml } from '../_shared/email-layout.ts';
+import { EmailTemplate, loadTemplate, renderBody, couponBlock } from '../_shared/templates.ts';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -106,7 +107,32 @@ function baseLayout(preheader: string, heading: string, body: string, ctaUrl: st
 // get-content-key, which is the authoritative server-side access gate.
 const TRIAL_DAYS = 3;
 
-function trialExpiringHtml(): string {
+/**
+ * Builds the email from an admin's template. The layout, button and footer are
+ * kept, so an admin edits the message rather than the email itself.
+ * `vars` carries whatever placeholders make sense for that particular mail.
+ */
+function fromTemplate(tpl: EmailTemplate, fallbackHeading: string, fallbackCta: string, vars: Record<string, string>): string {
+  return baseLayout(
+    tpl.subject || fallbackHeading,
+    tpl.heading ? tpl.heading.split('{{name}}').join(vars.name ?? 'there') : fallbackHeading,
+    renderBody(tpl.body, vars) + (tpl.coupon ? couponBlock(tpl.coupon) : ''),
+    APP_URL,
+    tpl.ctaLabel || fallbackCta,
+  );
+}
+
+const firstNameOf = (n: string | null | undefined) =>
+  escapeHtml((n || '').trim().split(/\s+/)[0] || 'there');
+
+function trialExpiringHtml(tpl?: EmailTemplate | null, name?: string | null): string {
+  if (tpl) {
+    return fromTemplate(tpl, 'Your free trial ends tomorrow', 'Upgrade My Plan', {
+      name: firstNameOf(name),
+      first_name: firstNameOf(name),
+      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
+    });
+  }
   return baseLayout(
     'Your free trial ends tomorrow. Upgrade to keep full access.',
     'Your free trial ends tomorrow',
@@ -117,7 +143,14 @@ function trialExpiringHtml(): string {
   );
 }
 
-function trialExpiredHtml(): string {
+function trialExpiredHtml(tpl?: EmailTemplate | null, name?: string | null): string {
+  if (tpl) {
+    return fromTemplate(tpl, 'Your free trial has ended', 'Upgrade My Plan', {
+      name: firstNameOf(name),
+      first_name: firstNameOf(name),
+      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
+    });
+  }
   return baseLayout(
     'Your Elec-Buddy trial has ended. Upgrade to continue.',
     'Your free trial has ended',
@@ -146,8 +179,16 @@ function stillHaveLine(otherScope: string, otherExpiry: string | null): string {
   return `<p style="margin:16px 0 0 0;">Your ${other} access is unaffected and continues until ${until}.</p>`;
 }
 
-function scopeExpiringHtml(scope: string, otherScope: string, otherExpiry: string | null): string {
+function scopeExpiringHtml(scope: string, otherScope: string, otherExpiry: string | null, tpl?: EmailTemplate | null, name?: string | null): string {
   const label = SCOPE_LABEL[scope];
+  if (tpl) {
+    return fromTemplate(tpl, `Your ${label} access expires in 3 days`, `Renew ${label} Access`, {
+      name: firstNameOf(name),
+      first_name: firstNameOf(name),
+      scope: label,
+      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
+    });
+  }
   return baseLayout(
     `Your ${label} access expires in 3 days. Renew to stay on track.`,
     `Your ${label} access expires in 3 days`,
@@ -159,8 +200,16 @@ function scopeExpiringHtml(scope: string, otherScope: string, otherExpiry: strin
   );
 }
 
-function scopeExpiredHtml(scope: string, otherScope: string, otherExpiry: string | null): string {
+function scopeExpiredHtml(scope: string, otherScope: string, otherExpiry: string | null, tpl?: EmailTemplate | null, name?: string | null): string {
   const label = SCOPE_LABEL[scope];
+  if (tpl) {
+    return fromTemplate(tpl, `Your ${label} access has expired`, `Renew ${label} Access`, {
+      name: firstNameOf(name),
+      first_name: firstNameOf(name),
+      scope: label,
+      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
+    });
+  }
   return baseLayout(
     `Your ${label} access has ended. Renew to continue studying.`,
     `Your ${label} access has expired`,
@@ -195,6 +244,15 @@ serve(async (req) => {
   const dateOnly = (d: Date) => d.toISOString().split('T')[0];
   const daysAgo  = (n: number) => { const d = new Date(now); d.setDate(d.getDate() - n); return dateOnly(d); };
   const daysAhead = (n: number) => { const d = new Date(now); d.setDate(d.getDate() + n); return dateOnly(d); };
+
+  // Admin overrides, loaded once for the whole run. Each is null unless an
+  // admin wrote and activated it, in which case the built-in wording applies.
+  const [tplTrialExpiring, tplTrialExpired, tplAccessExpiring, tplAccessExpired] = await Promise.all([
+    loadTemplate(sb, 'trial_expiring'),
+    loadTemplate(sb, 'trial_expired'),
+    loadTemplate(sb, 'access_expiring'),
+    loadTemplate(sb, 'access_expired'),
+  ]);
 
   const results = { sent: 0, failed: 0, skipped: 0, errors: [] as string[] };
 
@@ -237,13 +295,15 @@ serve(async (req) => {
   const trialWarnDay = daysAgo(TRIAL_DAYS - 1);
   const { data: trialWarning } = await sb
     .from('profiles')
-    .select('id, email')
+    .select('id, email, full_name')
     .eq('subscription_plan', 'trial')
     .gte('trial_started_at', trialWarnDay + 'T00:00:00Z')
     .lte('trial_started_at', trialWarnDay + 'T23:59:59Z');
 
   for (const u of trialWarning ?? []) {
-    await dispatch(u.id, u.email, 'trial_expiring', 'Your Elec-Buddy trial ends tomorrow', trialExpiringHtml());
+    await dispatch(u.id, u.email, 'trial_expiring',
+      tplTrialExpiring?.subject || 'Your Elec-Buddy trial ends tomorrow',
+      trialExpiringHtml(tplTrialExpiring, u.full_name));
   }
 
   // ── 2. Trial expired yesterday ───────────────────────────────────────────
@@ -251,13 +311,15 @@ serve(async (req) => {
   const trialExpiredDay = daysAgo(TRIAL_DAYS + 1);
   const { data: trialExpired } = await sb
     .from('profiles')
-    .select('id, email')
+    .select('id, email, full_name')
     .eq('subscription_plan', 'trial')
     .gte('trial_started_at', trialExpiredDay + 'T00:00:00Z')
     .lte('trial_started_at', trialExpiredDay + 'T23:59:59Z');
 
   for (const u of trialExpired ?? []) {
-    await dispatch(u.id, u.email, 'trial_expired', 'Your Elec-Buddy trial has ended', trialExpiredHtml());
+    await dispatch(u.id, u.email, 'trial_expired',
+      tplTrialExpired?.subject || 'Your Elec-Buddy trial has ended',
+      trialExpiredHtml(tplTrialExpired, u.full_name));
   }
 
   // ── 3 & 4. Per-scope expiry ──────────────────────────────────────────────
@@ -283,23 +345,25 @@ serve(async (req) => {
     for (const st of STAGES) {
       const { data: rows } = await sb
         .from('profiles')
-        .select(`id, email, ${s.col}, ${s.otherCol}`)
+        .select(`id, email, full_name, ${s.col}, ${s.otherCol}`)
         .neq('subscription_plan', 'lifetime')
         .gte(s.col, st.day + 'T00:00:00Z')
         .lte(s.col, st.day + 'T23:59:59Z');
 
       for (const u of rows ?? []) {
         const otherExpiry = (u as Record<string, string | null>)[s.otherCol] ?? null;
+        const name = (u as Record<string, string | null>).full_name ?? null;
+        const tpl = st.stage === 'expiring' ? tplAccessExpiring : tplAccessExpired;
         const html = st.stage === 'expiring'
-          ? scopeExpiringHtml(s.scope, s.other, otherExpiry)
-          : scopeExpiredHtml(s.scope, s.other, otherExpiry);
-        await dispatch(
-          u.id,
-          u.email,
-          `${s.scope}_${st.stage}`,
-          st.subject(SCOPE_LABEL[s.scope]),
-          html,
-        );
+          ? scopeExpiringHtml(s.scope, s.other, otherExpiry, tpl, name)
+          : scopeExpiredHtml(s.scope, s.other, otherExpiry, tpl, name);
+        // A template subject is shared by Written and Oral, so {{scope}} is
+        // substituted here too. Without it one piece of wording could not name
+        // which access is ending, which is the whole point of these emails.
+        const subject = tpl?.subject
+          ? tpl.subject.split('{{scope}}').join(SCOPE_LABEL[s.scope])
+          : st.subject(SCOPE_LABEL[s.scope]);
+        await dispatch(u.id, u.email, `${s.scope}_${st.stage}`, subject, html);
       }
     }
   }

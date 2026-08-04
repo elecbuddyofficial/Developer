@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { welcomeEmailHtml, welcomeEmailSubject } from '../_shared/welcome-email.ts';
+import { loadTemplate } from '../_shared/templates.ts';
 
 // ─────────────────────────────────────────────────────────────────────────
 // Called from the client right after auth.signUp() resolves (both the
@@ -58,12 +59,16 @@ serve(async (req) => {
       return json({ ok: true, skipped: true });
     }
 
+    // Null unless an admin has written and activated one, in which case it
+    // replaces the wording and can carry a coupon. It never blocks the send.
+    const tpl = await loadTemplate(sb, 'welcome');
+
     const sent = await sendEmail({
       resendKey: RESEND_API_KEY,
       from:      'Elec-Buddy <noreply@elec-buddy.com>',
       to:        claimed.email,
-      subject:   welcomeEmailSubject(),
-      html:      welcomeEmailHtml({ name: claimed.full_name }),
+      subject:   welcomeEmailSubject(tpl),
+      html:      welcomeEmailHtml({ name: claimed.full_name, template: tpl }),
     });
 
     // The stamp above is what makes this one-shot, but it is claimed BEFORE

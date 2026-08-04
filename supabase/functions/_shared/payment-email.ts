@@ -5,6 +5,7 @@
 // wins the race is what keeps this to one email per payment, never zero,
 // never two.
 
+import { EmailTemplate, renderBody } from './templates.ts';
 import { emailLayout, escapeHtml, APP_URL } from './email-layout.ts';
 
 const DURATION_LABELS: Record<string, string> = {
@@ -58,11 +59,17 @@ export interface PaymentConfirmedInput {
   paymentId: string | null;
 }
 
-export function paymentConfirmedSubject(input: PaymentConfirmedInput): string {
-  return `Payment confirmed: ${planLabel(input.plan, input.scope)} plan is now active`;
+export function paymentConfirmedSubject(input: PaymentConfirmedInput, tpl?: EmailTemplate | null): string {
+  const label = planLabel(input.plan, input.scope);
+  if (tpl?.subject) {
+    return tpl.subject
+      .split('{{plan}}').join(label)
+      .split('{{amount}}').join(fmtINR(input.amountPaise));
+  }
+  return `Payment confirmed: ${label} plan is now active`;
 }
 
-export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
+export function paymentConfirmedHtml(input: PaymentConfirmedInput, tpl?: EmailTemplate | null): string {
   const scope = input.scope || 'both';
   const label = planLabel(input.plan, input.scope);
   const accessDesc = SCOPE_ACCESS_DESCRIPTION[scope] || SCOPE_ACCESS_DESCRIPTION.both;
@@ -101,8 +108,16 @@ export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
     ? ''
     : '<p style="margin:16px 0 0 0;font-size:13px;color:#8FA3B8;">Any access you already had is unchanged, and keeps running to its own end date.</p>';
 
+  const intro = tpl
+    ? renderBody(tpl.body, {
+        name: '', first_name: '',
+        plan: escapeHtml(label),
+        amount: fmtINR(input.amountPaise),
+      })
+    : '<p style="margin:0 0 20px 0;">Thanks for subscribing to Elec-Buddy! Your payment has gone through and your access is live right now, no need to do anything else.</p>';
+
   const body = `
-    <p style="margin:0 0 20px 0;">Thanks for subscribing to Elec-Buddy! Your payment has gone through and your access is live right now, no need to do anything else.</p>
+    ${intro}
 
     <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px 0;">
       <tr>
@@ -127,10 +142,10 @@ export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
     preheader: earliest
       ? `Your ${label} plan is active. Access until ${fmtDate(earliest)}.`
       : `Your ${label} plan is active.`,
-    heading: 'Payment Confirmed',
+    heading: tpl?.heading || 'Payment Confirmed',
     bodyHtml: body,
     ctaUrl: APP_URL,
-    ctaLabel: 'Start Studying',
+    ctaLabel: tpl?.ctaLabel || 'Start Studying',
     footNote: 'Keep this email as your receipt. Questions about your purchase? Just reply, this inbox is monitored.',
   });
 }

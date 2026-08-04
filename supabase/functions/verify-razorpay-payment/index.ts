@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
+import { loadTemplate } from '../_shared/templates.ts';
 import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
 
 const CORS = {
@@ -149,6 +150,9 @@ serve(async (req) => {
     // this point, so a send failure here must never change the response the
     // paying user gets — sendEmail reports failure instead of throwing.
     if (RESEND_API_KEY && user.email) {
+      // Null unless an admin activated a receipt template. It can reword the
+      // message but never the plan, amount or order id below.
+      const tplPaid = await loadTemplate(sb, 'payment_confirmed');
       const emailInput = {
         plan:        payment.plan,
         scope:       payment.scope || 'both',
@@ -161,8 +165,8 @@ serve(async (req) => {
         resendKey: RESEND_API_KEY,
         from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
         to:        user.email,
-        subject:   paymentConfirmedSubject(emailInput),
-        html:      paymentConfirmedHtml(emailInput),
+        subject:   paymentConfirmedSubject(emailInput, tplPaid),
+        html:      paymentConfirmedHtml(emailInput, tplPaid),
       });
       if (!sent.ok) console.error('Payment confirmation email failed:', sent.error);
     }

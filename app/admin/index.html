@@ -87,6 +87,16 @@
       transition:background .15s;
     }
     .ad-signout:hover { background:var(--red-dim); }
+    /* Used wherever a control changes something customers see without further
+       review. Loud on purpose: the Mail tab is the only place in this console
+       where a typo reaches every user's inbox. */
+    .ad-alarm { display:flex; gap:11px; align-items:flex-start; background:var(--orange-dim);
+      border:1px solid var(--orange-border); border-left:3px solid var(--orange);
+      border-radius:10px; padding:13px 15px; margin:0 0 16px; }
+    .ad-alarm-ico { flex-shrink:0; font-size:16px; line-height:1.35; }
+    .ad-alarm-txt { font-size:12.8px; line-height:1.6; color:var(--text2); }
+    .ad-alarm-txt strong { color:var(--text); }
+    .ad-alarm.is-red { background:var(--red-dim); border-color:var(--red-border); border-left-color:var(--red); }
     .ad-signout svg { width:14px; height:14px; flex-shrink:0; }
     .ad-back-to-app { color:var(--text2); margin-bottom:2px; }
     .ad-back-to-app:hover { background:var(--surface2); color:var(--text); }
@@ -840,6 +850,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
       <span>Videos</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('mail');closeMobNav()" data-tab="mail" title="Mail">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+      <span>Mail</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('activity');closeMobNav()" data-tab="activity" title="Activity Log">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
       <span>Activity Log</span>
@@ -1531,6 +1545,149 @@
   </div>
 
   <!-- ACTIVITY LOG ───────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-mail">
+    <div class="ad-ph">
+      <h1>Mail</h1>
+      <p>Edit the wording of automatic emails, and send one message to a group of users.</p>
+    </div>
+
+    <!-- ── Templates ─────────────────────────────────────── -->
+    <div class="ad-card" style="margin-bottom:18px">
+      <div class="ad-card-head">Automatic email wording</div>
+
+      <div class="ad-alarm">
+        <div class="ad-alarm-ico">&#9888;&#65039;</div>
+        <div class="ad-alarm-txt">
+          <strong>These are the real emails customers receive automatically.</strong>
+          Saving here changes what every new signup, trial warning and receipt says from
+          that moment on. Nobody reviews it and nothing is sent for approval. Keep edits
+          small and deliberate: attaching a coupon or changing an offer is what this is
+          for. Rewriting an email from scratch is not.
+          <br><br>
+          Nothing is sent when you save. The new wording is used the next time that email
+          would have gone out anyway.
+        </div>
+      </div>
+
+      <div class="ad-card-sub">
+        Change what an automatic email says without a deploy. <strong>Leaving the body empty
+        keeps the built in wording</strong>, which is the safest setting: it means the text
+        stays current if the original is ever improved. A template only takes effect once you
+        tick Active. If a template is broken or empty, the email still sends using the
+        built in version, because wording stored in a database must never stop a receipt
+        or a password reset going out.
+      </div>
+
+      <div class="ad-row">
+        <div class="ad-field">
+          <label class="ad-label">Which email</label>
+          <select class="ad-select" id="tpl-key" onchange="loadTemplate()"></select>
+        </div>
+        <div class="ad-field" style="max-width:220px">
+          <label class="ad-label">Attach a coupon</label>
+          <select class="ad-select" id="tpl-coupon"></select>
+          <div class="ad-hint">Checked before sending. An expired or spent code is left out rather than mailed.</div>
+        </div>
+      </div>
+
+      <div class="ad-field">
+        <label class="ad-label">Subject</label>
+        <input class="ad-input" id="tpl-subject" placeholder="Leave empty to keep the built in subject">
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Heading</label>
+        <input class="ad-input" id="tpl-heading" placeholder="Large text at the top of the email">
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Body</label>
+        <textarea class="ad-input ad-textarea" id="tpl-body" rows="7" placeholder="Leave empty to keep the built in wording" oninput="tplPreview()"></textarea>
+        <div class="ad-hint" id="tpl-placeholders"></div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Button text</label>
+        <input class="ad-input" id="tpl-cta" placeholder="e.g. Start studying" style="max-width:260px">
+      </div>
+
+      <label style="display:flex;align-items:center;gap:9px;font-size:13px;margin:6px 0 12px;cursor:pointer">
+        <input type="checkbox" id="tpl-active"> <span>Use this instead of the built in wording</span>
+      </label>
+
+      <div id="tpl-preview-box" style="display:none;margin-bottom:12px"></div>
+      <button class="ad-btn btn-primary" onclick="saveTemplate()">Save template</button>
+      <div id="tpl-msg" style="display:none;margin-top:10px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
+    </div>
+
+    <!-- ── Group send ────────────────────────────────────── -->
+    <div class="ad-card">
+      <div class="ad-card-head">Send to a group</div>
+
+      <div class="ad-alarm is-red">
+        <div class="ad-alarm-ico">&#128233;</div>
+        <div class="ad-alarm-txt">
+          <strong>This sends immediately and cannot be recalled.</strong>
+          It is a one-off message to real customers, not a change to an automatic email.
+          Read the preview, check the recipient count, and remember that people who have
+          unsubscribed or asked for their account to be deleted are already excluded.
+        </div>
+      </div>
+      <div class="ad-card-sub">
+        One message to everyone in a group. This is <strong>marketing rather than
+        transactional</strong>, so it skips anyone who has opted out and carries an
+        unsubscribe link. That link is not a formality: promotional mail without an easy way
+        out gets reported as spam, and the domain carrying those complaints is the same one
+        that carries your password resets and receipts. Damaging it breaks sign in for
+        everybody.
+      </div>
+
+      <div class="ad-row">
+        <div class="ad-field" style="max-width:260px">
+          <label class="ad-label">Who receives it</label>
+          <select class="ad-select" id="bulk-segment" onchange="bulkCount()">
+            <option value="trial_active">Trial, still active</option>
+            <option value="trial_expired">Trial expired, never paid</option>
+            <option value="never_paid">Never paid anything</option>
+            <option value="paid_active">Currently paying</option>
+            <option value="paid_expired">Paid access lapsed</option>
+            <option value="all">Everyone</option>
+          </select>
+        </div>
+        <div class="ad-field" style="max-width:220px">
+          <label class="ad-label">Attach a coupon</label>
+          <select class="ad-select" id="bulk-coupon"></select>
+        </div>
+      </div>
+
+      <div id="bulk-count" class="ad-hint" style="margin:-4px 0 12px"></div>
+
+      <div class="ad-field">
+        <label class="ad-label">Subject</label>
+        <input class="ad-input" id="bulk-subject" placeholder="Shown in their inbox">
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Heading</label>
+        <input class="ad-input" id="bulk-heading" placeholder="Large text at the top">
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Message</label>
+        <textarea class="ad-input ad-textarea" id="bulk-body" rows="6" placeholder="Write it as you would to one person." oninput="bulkPreview()"></textarea>
+        <div class="ad-hint">Placeholders: <code>{{name}}</code> their first name, <code>{{coupon}}</code> the code above.</div>
+      </div>
+
+      <div id="bulk-preview-box" style="display:none;margin-bottom:12px"></div>
+
+      <label style="display:flex;align-items:flex-start;gap:9px;font-size:13px;margin:6px 0 12px;cursor:pointer">
+        <input type="checkbox" id="bulk-confirm" onchange="bulkArm()" style="margin-top:3px">
+        <span id="bulk-confirm-label">I have previewed this and want to send it.</span>
+      </label>
+
+      <button class="ad-btn btn-primary" id="bulk-send-btn" onclick="sendBulk()" disabled>Send</button>
+      <div id="bulk-msg" style="display:none;margin-top:10px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
+
+      <div class="ad-section-head" style="margin-top:22px">Recent group sends</div>
+      <div id="bulk-history"><div class="ad-loading">Loading...</div></div>
+    </div>
+  </div>
+
   <div class="ad-tab" id="tab-activity">
     <div class="ad-ph">
       <h1>Activity Log</h1>
@@ -1830,6 +1987,7 @@ document.addEventListener('keydown', function(e) {
 
 /* ── TABS ────────────────────────────────────────────────────────── */
 function showTab(name) {
+  if (name === 'mail' && typeof initMailTab === 'function') initMailTab();
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
@@ -4762,6 +4920,253 @@ function actionSummary(a) {
   if (a.action === 'send_email') return d.subject ? String(d.subject) : '';
   if (a.action === 'force_trial_expiry') return d.previous_plan ? 'was ' + d.previous_plan : '';
   return '';
+}
+
+
+/* ── MAIL ─────────────────────────────────────────────────────────────
+   Two jobs that look similar and are not. Editing a template changes what an
+   AUTOMATIC email says, and takes effect the next time one is triggered.
+   Sending to a group is a one-off broadcast that goes out the moment it is
+   confirmed and cannot be recalled, which is why it carries a preview, a live
+   recipient count and a separate confirmation. */
+
+var PLACEHOLDERS = {
+  welcome:           ['{{name}}', '{{coupon}}', '{{trial_days}}'],
+  trial_expiring:    ['{{name}}', '{{coupon}}'],
+  trial_expired:     ['{{name}}', '{{coupon}}'],
+  payment_confirmed: ['{{plan}}', '{{amount}}'],
+  // One template covers Written and Oral, so without {{scope}} the wording
+  // cannot say which access is ending, which is the point of the email.
+  access_expiring:   ['{{name}}', '{{scope}}', '{{coupon}}'],
+  access_expired:    ['{{name}}', '{{scope}}', '{{coupon}}'],
+};
+
+// Said per template where the general warning is not specific enough.
+var TPL_NOTE = {
+  welcome:           'Goes to every new account the moment it signs up. The most useful place for a coupon.',
+  trial_expiring:    'Goes out the day before a trial ends.',
+  trial_expired:     'Goes out the day after a trial ends.',
+  payment_confirmed: 'This is a receipt. The plan, amount, dates and order ID are always included and cannot be edited here: you are only changing the sentence above them.',
+  access_expiring:   'Sent 3 days before Written or Oral access lapses. Use {{scope}} so it names the right one.',
+  access_expired:    'Sent the day after Written or Oral access lapses. Use {{scope}} so it names the right one.',
+};
+
+var _templates = [];
+
+async function initMailTab() {
+  var res = await _sb.from('email_templates').select('*').order('key');
+  if (res.error) {
+    document.getElementById('tpl-key').innerHTML = '<option>Run email_templates_setup.sql</option>';
+    return;
+  }
+  _templates = res.data || [];
+  document.getElementById('tpl-key').innerHTML = _templates.map(function (t) {
+    return '<option value="' + esc(t.key) + '">' + esc(t.label) + (t.active ? ' (in use)' : '') + '</option>';
+  }).join('');
+
+  // Only codes that can still be redeemed. Offering a spent or expired one is
+  // offering to mail somebody a dead link.
+  var cp = await _sb.from('coupons').select('code, active, expires_at').eq('active', true).order('code');
+  var live = (cp.data || []).filter(function (c) { return !c.expires_at || new Date(c.expires_at) > new Date(); });
+  var opts = '<option value="">No coupon</option>'
+    + live.map(function (c) { return '<option value="' + esc(c.code) + '">' + esc(c.code) + '</option>'; }).join('');
+  document.getElementById('tpl-coupon').innerHTML = opts;
+  document.getElementById('bulk-coupon').innerHTML = opts;
+
+  loadTemplate();
+  bulkCount();
+  loadBulkHistory();
+}
+
+function loadTemplate() {
+  var key = document.getElementById('tpl-key').value;
+  var t = _templates.filter(function (x) { return x.key === key; })[0] || {};
+  document.getElementById('tpl-subject').value = t.subject || '';
+  document.getElementById('tpl-heading').value = t.heading || '';
+  document.getElementById('tpl-body').value    = t.body_html || '';
+  document.getElementById('tpl-cta').value     = t.cta_label || '';
+  document.getElementById('tpl-coupon').value  = t.coupon_code || '';
+  document.getElementById('tpl-active').checked = !!t.active;
+  document.getElementById('tpl-placeholders').innerHTML =
+    'Placeholders: ' + (PLACEHOLDERS[key] || ['{{name}}']).map(function (x) {
+      return '<code>' + esc(x) + '</code>';
+    }).join(' ')
+    + (TPL_NOTE[key] ? '<div style="margin-top:6px;color:var(--orange)">' + esc(TPL_NOTE[key]) + '</div>' : '');
+  document.getElementById('tpl-msg').style.display = 'none';
+  tplPreview();
+}
+
+// Shows the wording with the placeholders filled in, because a template full
+// of {{name}} tells you nothing about how the sentence actually reads.
+function renderPreview(body, coupon) {
+  return esc(body)
+    .split('{{name}}').join('<strong>Arun</strong>')
+    .split('{{first_name}}').join('<strong>Arun</strong>')
+    .split('{{trial_days}}').join('3')
+    .split('{{plan}}').join('Expedition Master')
+    .split('{{amount}}').join('&#8377;2,699')
+    .split('{{coupon}}').join(coupon
+      ? '<strong style="color:var(--green)">' + esc(coupon) + '</strong>'
+      : '<span style="color:var(--orange)">[no coupon selected]</span>')
+    .split('\n').join('<br>');
+}
+
+function previewBox(id, heading, body, coupon) {
+  var el = document.getElementById(id);
+  if (!body || !body.trim()) { el.style.display = 'none'; return; }
+  el.style.display = 'block';
+  el.innerHTML = '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:7px">How it will read</div>'
+    + '<div style="background:#0D1E33;border:1px solid #1A3050;border-radius:10px;padding:18px">'
+    +   (heading ? '<div style="font-size:16px;font-weight:700;color:#DDE5EF;margin-bottom:10px">' + esc(heading) + '</div>' : '')
+    +   '<div style="font-size:13.5px;line-height:1.65;color:#C0CCDC">' + renderPreview(body, coupon) + '</div>'
+    + '</div>';
+}
+
+function tplPreview() {
+  previewBox('tpl-preview-box',
+    document.getElementById('tpl-heading').value,
+    document.getElementById('tpl-body').value,
+    document.getElementById('tpl-coupon').value);
+}
+
+function bulkPreview() {
+  previewBox('bulk-preview-box',
+    document.getElementById('bulk-heading').value,
+    document.getElementById('bulk-body').value,
+    document.getElementById('bulk-coupon').value);
+}
+
+function tplMsg(text, ok) {
+  var el = document.getElementById('tpl-msg');
+  el.style.display = 'block';
+  el.textContent = text;
+  el.style.background = ok ? 'var(--green-dim)' : 'var(--red-dim)';
+  el.style.color = ok ? 'var(--green)' : 'var(--red)';
+}
+
+async function saveTemplate() {
+  var key = document.getElementById('tpl-key').value;
+  var payload = {
+    subject:     document.getElementById('tpl-subject').value.trim() || null,
+    heading:     document.getElementById('tpl-heading').value.trim() || null,
+    body_html:   document.getElementById('tpl-body').value.trim() || null,
+    cta_label:   document.getElementById('tpl-cta').value.trim() || null,
+    coupon_code: document.getElementById('tpl-coupon').value || null,
+    active:      document.getElementById('tpl-active').checked,
+    updated_at:  new Date().toISOString(),
+    updated_by:  _myId,
+  };
+  // Ticking Active with nothing written would replace real wording with an
+  // empty email, so it is refused rather than saved.
+  if (payload.active && !payload.body_html) {
+    tplMsg('Write a body before turning this on, or untick it to keep the built in wording.', false);
+    return;
+  }
+  var wasActive = (_templates.filter(function (x) { return x.key === key; })[0] || {}).active;
+  if (payload.active && !wasActive) {
+    var label = (_templates.filter(function (x) { return x.key === key; })[0] || {}).label || key;
+    if (!confirm([
+      'Turn on your own wording for: ' + label + '?',
+      '',
+      'From now on every customer who triggers this email receives what you just wrote, instead of the built in text. Nothing is sent right now.',
+      '',
+      'Untick Active at any time to go back to the built in wording.',
+    ].join('\n'))) return;
+  }
+
+  var { error } = await _sb.from('email_templates').update(payload).eq('key', key);
+  if (error) { tplMsg('Failed: ' + error.message, false); return; }
+  logAdminAction('edit_email_template', null, { key: key, active: payload.active, coupon: payload.coupon_code });
+  tplMsg(payload.active ? 'Saved and in use.' : 'Saved. Not in use, the built in wording still applies.', true);
+  await initMailTab();
+  document.getElementById('tpl-key').value = key;
+  loadTemplate();
+}
+
+/* ── Group send ───────────────────────────────────────────────────── */
+
+var _bulkRecipients = 0;
+
+// Counted through the same function the send uses, so the number confirmed is
+// the number that receives it.
+async function bulkCount() {
+  var seg = document.getElementById('bulk-segment').value;
+  var el = document.getElementById('bulk-count');
+  el.textContent = 'Counting...';
+  var { data, error } = await _sb.rpc('email_segment', { p_segment: seg });
+  if (error) { el.textContent = 'Could not count recipients.'; _bulkRecipients = 0; bulkArm(); return; }
+  _bulkRecipients = (data || []).length;
+  el.innerHTML = '<strong style="color:var(--text)">' + _bulkRecipients + '</strong> '
+    + (_bulkRecipients === 1 ? 'person' : 'people') + ' will receive this. '
+    + 'Anyone who has opted out, or asked for their account to be deleted, is already excluded.';
+  document.getElementById('bulk-confirm-label').textContent =
+    'I have previewed this and want to send it to ' + _bulkRecipients + ' '
+    + (_bulkRecipients === 1 ? 'person' : 'people') + '.';
+  document.getElementById('bulk-confirm').checked = false;
+  bulkArm();
+}
+
+function bulkArm() {
+  var ok = document.getElementById('bulk-confirm').checked
+        && _bulkRecipients > 0
+        && document.getElementById('bulk-subject').value.trim()
+        && document.getElementById('bulk-body').value.trim();
+  document.getElementById('bulk-send-btn').disabled = !ok;
+}
+
+function bulkMsg(text, ok) {
+  var el = document.getElementById('bulk-msg');
+  el.style.display = 'block';
+  el.textContent = text;
+  el.style.background = ok ? 'var(--green-dim)' : 'var(--red-dim)';
+  el.style.color = ok ? 'var(--green)' : 'var(--red)';
+}
+
+async function sendBulk() {
+  var seg = document.getElementById('bulk-segment').value;
+  var subject = document.getElementById('bulk-subject').value.trim();
+  if (!confirm('Send "' + subject + '" to ' + _bulkRecipients + ' people?\n\nThis goes out immediately and cannot be recalled.')) return;
+
+  var btn = document.getElementById('bulk-send-btn');
+  btn.disabled = true; btn.textContent = 'Sending...';
+  try {
+    var res = await _sb.functions.invoke('send-bulk-email', {
+      body: {
+        segment: seg, subject: subject,
+        heading: document.getElementById('bulk-heading').value.trim(),
+        body: document.getElementById('bulk-body').value.trim(),
+        coupon_code: document.getElementById('bulk-coupon').value || null,
+      },
+    });
+    var d = res && res.data;
+    if (!d || d.error) { bulkMsg((d && d.error) || 'Send failed.', false); }
+    else {
+      bulkMsg('Sent to ' + d.delivered + ' of ' + d.recipients + (d.failed ? ', ' + d.failed + ' failed.' : '.'), true);
+      document.getElementById('bulk-confirm').checked = false;
+      loadBulkHistory();
+    }
+  } catch (e) {
+    bulkMsg('Send failed: ' + e.message, false);
+  }
+  btn.textContent = 'Send'; bulkArm();
+}
+
+async function loadBulkHistory() {
+  var el = document.getElementById('bulk-history');
+  var res = await _sb.from('email_campaigns').select('*').order('started_at', { ascending: false }).limit(20);
+  if (res.error) { el.innerHTML = '<div class="ad-loading">Run email_templates_setup.sql to enable this.</div>'; return; }
+  var rows = res.data || [];
+  if (!rows.length) { el.innerHTML = '<div class="ad-loading">Nothing sent yet.</div>'; return; }
+  el.innerHTML = rows.map(function (c) {
+    return '<div style="display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid var(--border2);font-size:12.5px">'
+      + '<div style="min-width:0"><div style="color:var(--text);font-weight:600">' + esc(c.subject) + '</div>'
+      +   '<div style="color:var(--text3);font-size:11.5px">' + esc(c.segment) + ' &middot; ' + fmtDateTime(c.started_at)
+      +   (c.sent_by_email ? ' &middot; ' + esc(c.sent_by_email) : '') + '</div></div>'
+      + '<div style="text-align:right;flex-shrink:0;white-space:nowrap">'
+      +   '<div style="font-weight:700">' + c.delivered + ' / ' + c.recipients + '</div>'
+      +   (c.failed ? '<div style="color:var(--red);font-size:11px">' + c.failed + ' failed</div>' : '')
+      + '</div></div>';
+  }).join('');
 }
 
 async function loadActivity() {
