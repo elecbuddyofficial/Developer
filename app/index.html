@@ -2002,7 +2002,8 @@ function setTheme(t) {
       if (!window._sbClient) return;
       // The owner may delete their own device rows; RLS enforces that it is
       // only ever their own.
-      var { error } = await window._sbClient.from('devices').delete().eq('id', id);
+      var { error } = await window._sbClient.from('devices').delete()
+        .eq('id', id).eq('user_id', window._sbUser.id);
       if (error) { alert('Could not remove that device. Please try again.'); return; }
       if (ctx === 'dev-block') {
         location.reload();                   // re-register this device in the freed slot
@@ -2016,6 +2017,11 @@ function setTheme(t) {
       if (!el || !window._sbClient) return;
       var { data, error } = await window._sbClient
         .from('devices').select('id, fingerprint, device_label, last_seen')
+        // Scoped explicitly, never left to RLS. An admin is covered by BOTH
+        // "read own devices" and "admins read all devices", and Postgres ORs
+        // policies together, so without this filter an admin's own Settings
+        // panel lists every device belonging to every user on the site.
+        .eq('user_id', window._sbUser.id)
         .order('last_seen', { ascending: false });
       if (error) { el.innerHTML = '<div style="font-size:11.5px;color:#6E8AA6;">Could not load devices.</div>'; return; }
       el.innerHTML = devRowsHtml(data || [], 'settings');
