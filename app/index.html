@@ -706,6 +706,13 @@
 
 <!-- ── Profile Panel ──────────────────────────────────────── -->
 <style>
+  /* The footer sinks to the bottom of the panel rather than trailing the last
+     button, so short menus do not leave it stranded in the middle with dead
+     space beneath. margin-top:auto inside a full-height flex column, so on a
+     short screen it simply follows the content and scrolls as normal. */
+  #pm-main-view { display: flex; flex-direction: column; min-height: 100%; }
+  #pm-footer { margin-top: auto; padding-top: 24px; }
+
   #profile-panel, #settings-panel, #tx-panel {
     position: fixed; right: 0; top: 0; bottom: 0;
     width: 300px; background: #0D1E33;
@@ -817,12 +824,16 @@
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
 
-    <!-- Reference footer. Reaching support should not require knowing that it
-         lives behind Settings, so it sits on the menu people already open. -->
-    <div data-eb-contact style="margin-top:16px"></div>
-    <div style="display:flex;justify-content:center;gap:14px;margin-top:14px;">
-      <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Terms</a>
-      <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
+    <!-- Reference footer, pinned to the bottom of the panel. Reaching support
+         should not require knowing it lives behind Settings, so it sits on the
+         menu people already open, but it is reference rather than an action so
+         it belongs away from the buttons instead of crowding them. -->
+    <div id="pm-footer">
+      <div data-eb-contact></div>
+      <div style="display:flex;justify-content:center;gap:14px;margin-top:14px;">
+        <a href="./terms.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Terms</a>
+        <a href="./privacy.html" target="_blank" rel="noopener" style="font-size:11px;color:#6E8AA6;text-decoration:underline;">Privacy Policy</a>
+      </div>
     </div>
     </div>
 
