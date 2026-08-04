@@ -1,21 +1,47 @@
-MIT License
+Copyright (c) 2026 Blesson Joji. All rights reserved.
 
-Copyright (c) 2026 Blesson Joji (ETO Study App)
+Elec-Buddy, including this repository's source code, study notes, quiz
+questions, Surveyor Q&A, diagrams, and all other content (together, the
+"Work"), is proprietary and is not open source.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+WHAT YOU MAY DO
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You may view and read this repository. You may use the Elec-Buddy service
+itself under the Terms and Conditions published at
+https://elec-buddy.com/app/terms.html, which is the agreement that governs
+your use of the product.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+WHAT YOU MAY NOT DO
+
+Without prior written permission you may not copy, reproduce, republish,
+redistribute, sell, sublicense, host, mirror, or create derivative works from
+any part of the Work, whether or not you charge for it. This applies to the
+freely readable preview material in the same way it applies to everything
+else: that material is free to read inside the app, which is not the same as
+being free to take.
+
+WHY THE REPOSITORY IS PUBLIC
+
+Being readable is not a grant of licence. The repository is public because the
+paid study content stored here is encrypted at rest and useless without keys
+the server issues only to entitled subscribers, so publishing it exposes
+nothing a visitor to the site could not already see.
+
+NOTE ON THE PREVIOUS LICENCE
+
+Earlier revisions of this repository carried an MIT licence, which is
+incompatible with a paid product and contradicted the Terms and Conditions
+that have always governed the service. That licence is withdrawn for all
+current and future revisions. Rights already granted under it, in respect of
+the specific revisions to which it applied, cannot be revoked, and nothing
+here attempts to do so.
+
+NO WARRANTY
+
+The Work is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose, and noninfringement. In no event shall the
+copyright holder be liable for any claim, damages, or other liability arising
+from or in connection with the Work or its use.
+
+Permission requests and licensing enquiries: support@elec-buddy.com
