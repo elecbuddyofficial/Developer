@@ -1439,6 +1439,17 @@
       <p>Duration &times; scope pricing shown in the upgrade modal. Edits here go live immediately, no deploy needed.</p>
     </div>
 
+    <div class="ad-card" style="margin-bottom:18px">
+      <div class="ad-card-head">Run a sale</div>
+      <div class="ad-card-sub">
+        Sets the same discount across a whole track at once, instead of editing three rows
+        by hand. It only touches the discount and its dates: base prices, names and the
+        active switch are left exactly as they are. Every plan keeps its own controls
+        below, so you can still override any single one afterwards.
+      </div>
+      <div id="bulk-controls"></div>
+    </div>
+
     <div id="plans-groups"><div class="ad-loading">Loading…</div></div>
   </div>
 
@@ -4211,6 +4222,166 @@ async function setCouponActive(code, active) {
    Duration x scope = 9 fixed rows (this is an editor, not a creator -
    pricing_v2_setup.sql seeds all 9). Edits here are what the upgrade modal
    and every plan-display surface in the app read live, no redeploy. */
+
+/* ── BULK PRICING ─────────────────────────────────────────────────────
+   Running a sale meant editing nine rows by hand, which is slow and, more to
+   the point, easy to get half-done: three plans on sale and six not is a
+   pricing bug your customers see before you do.
+
+   These controls write ONLY discount_percent and the two discount dates.
+   Base price, track and tier names, label, description and the active switch
+   are never touched, so a bulk action can never quietly undo a price edit.  */
+
+var BULK_TARGETS = [
+  { key: 'written', label: 'Passage (Written only)' },
+  { key: 'oral',    label: 'Voyage (Oral only)' },
+  { key: 'both',    label: 'Expedition (Both)' },
+  { key: 'all',     label: 'Every plan' },
+];
+
+function bulkRowsFor(target) {
+  var rows = window._plansRows || [];
+  return target === 'all' ? rows.slice() : rows.filter(function (r) { return r.scope === target; });
+}
+
+function renderBulkControls() {
+  var el = document.getElementById('bulk-controls');
+  if (!el) return;
+
+  el.innerHTML = BULK_TARGETS.map(function (t) {
+    var rows = bulkRowsFor(t.key);
+    var onSale = rows.filter(function (r) { return (r.discount_percent || 0) > 0; }).length;
+    var isAll = t.key === 'all';
+    return '<div style="border:1px solid ' + (isAll ? 'var(--border2)' : 'var(--border)') + ';border-radius:var(--r8);padding:12px 14px;margin-bottom:10px;'
+      + (isAll ? 'background:var(--surface2)' : '') + '">'
+      + '<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:9px">'
+      +   '<strong style="font-size:13px">' + esc(t.label) + '</strong>'
+      +   '<span style="font-size:11.5px;color:var(--text3)">' + rows.length + ' plan' + (rows.length === 1 ? '' : 's')
+      +     (onSale ? ', ' + onSale + ' currently discounted' : '') + '</span>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">'
+      +   '<div><label class="ad-label" style="font-size:10.5px">Discount %</label>'
+      +     '<input class="ad-input" type="number" min="0" max="100" step="1" style="width:96px" id="bk-pct-' + t.key + '" placeholder="0" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
+      +   '<div><label class="ad-label" style="font-size:10.5px">From (optional)</label>'
+      +     '<input class="ad-input" type="date" style="width:158px" id="bk-from-' + t.key + '" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
+      +   '<div><label class="ad-label" style="font-size:10.5px">Until (optional)</label>'
+      +     '<input class="ad-input" type="date" style="width:158px" id="bk-to-' + t.key + '" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
+      +   '<button class="ad-btn btn-primary btn-sm" onclick="applyBulkDiscount(' + attrJs(t.key) + ')">Apply</button>'
+      +   '<button class="ad-btn btn-ghost btn-sm" onclick="clearBulkDiscount(' + attrJs(t.key) + ')" style="color:var(--orange)">End sale</button>'
+      + '</div>'
+      + '<div id="bk-prev-' + t.key + '" class="ad-hint" style="margin-top:8px"></div>'
+      + '</div>';
+  }).join('');
+
+  BULK_TARGETS.forEach(function (t) { bulkPreview(t.key); });
+}
+
+/* Shows the plans as the BUYER will see them, not as a row of numbers.
+   A percentage does not tell you whether the result reads well: 40% off 1299
+   is 779, which looks deliberate, while 35% is 844, which looks like a
+   mistake. Seeing the actual cards is also the guard against a mistyped 90
+   that was meant to be 9, and across nine plans that mistake costs far more
+   than it does on one row. */
+function bulkPreview(target) {
+  var box = document.getElementById('bk-prev-' + target);
+  if (!box) return;
+  var pctEl = document.getElementById('bk-pct-' + target);
+  var pct = parseInt(pctEl && pctEl.value, 10);
+  if (!(pct > 0)) { box.innerHTML = ''; return; }
+  if (pct > 100) {
+    box.innerHTML = '<span style="color:var(--red)">A discount cannot be more than 100%.</span>';
+    return;
+  }
+
+  var rows = bulkRowsFor(target);
+  var warn = pct >= 50
+    ? '<div style="color:var(--orange);font-size:11.5px;margin-bottom:7px">'
+      + 'That is ' + pct + '% off. Check the prices below are what you meant.</div>'
+    : '';
+
+  box.innerHTML = warn
+    + '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:7px">'
+    +   'How buyers will see it</div>'
+    + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+    + rows.map(function (r) {
+        var now = Math.round(r.base_amount * (1 - pct / 100));
+        return '<div style="background:#0D1E33;border:1px solid #1A3050;border-radius:8px;padding:9px 11px;min-width:132px">'
+          + '<div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#6E8AA6">' + esc(r.track_name || r.scope) + '</div>'
+          + '<div style="font-size:12.5px;font-weight:700;color:#DDE5EF;margin-top:1px">' + esc(r.tier_name || '') + '</div>'
+          + '<div style="font-size:10.5px;color:#6E8AA6">' + esc(r.duration.replace('mo', ' months')) + '</div>'
+          + '<div style="margin-top:5px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">'
+          +   '<span style="font-size:15px;font-weight:700;color:#C8A44A">' + fmtINR(now) + '</span>'
+          +   '<span style="font-size:11px;color:#6E8AA6;text-decoration:line-through">' + fmtINR(r.base_amount) + '</span>'
+          + '</div>'
+          + '<div style="font-size:10px;color:#5DC87A;margin-top:2px">Save ' + fmtINR(r.base_amount - now) + '</div>'
+          + '</div>';
+      }).join('')
+    + '</div>';
+}
+
+function bulkDates(target) {
+  var f = (document.getElementById('bk-from-' + target) || {}).value;
+  var t = (document.getElementById('bk-to-' + target) || {}).value;
+  return {
+    discount_starts_at: f ? new Date(f).toISOString() : null,
+    discount_ends_at:   t ? new Date(t).toISOString() : null,
+  };
+}
+
+async function writeBulk(target, payload, verb) {
+  var rows = bulkRowsFor(target);
+  if (!rows.length) { toast('No plans to update', 'err'); return; }
+
+  // One statement per scope rather than per row. 'all' has no scope filter at
+  // all, so a partially applied sale is not possible.
+  var q = _sb.from('pricing_plans').update(payload);
+  if (target !== 'all') q = q.eq('scope', target);
+  var { error } = await q.gte('base_amount', 0);   // no-op predicate: makes the update explicit
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+
+  logAdminAction('update_plan', null, Object.assign({ bulk: target, rows: rows.length, action: verb }, payload));
+  toast(verb + ' on ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's'));
+
+  await loadPlansTab();
+}
+
+async function applyBulkDiscount(target) {
+  var pct = parseInt((document.getElementById('bk-pct-' + target) || {}).value, 10);
+  if (!(pct > 0)) { toast('Enter a discount above 0', 'err'); return; }
+  if (pct > 100) { toast('A discount cannot be more than 100%', 'err'); return; }
+
+  var rows = bulkRowsFor(target);
+  var dates = bulkDates(target);
+  if (dates.discount_starts_at && dates.discount_ends_at
+      && new Date(dates.discount_ends_at) < new Date(dates.discount_starts_at)) {
+    toast('The end date is before the start date', 'err'); return;
+  }
+
+  // Deliberately spells out the money rather than the percentage. Half off
+  // across every plan is a decision worth reading twice.
+  var lines = rows.map(function (r) {
+    return '  ' + tierLabel(r.duration) + ' ' + r.scope + ':  '
+         + fmtINR(r.base_amount) + '  ->  ' + fmtINR(Math.round(r.base_amount * (1 - pct / 100)));
+  }).join('\n');
+  var when = dates.discount_starts_at || dates.discount_ends_at
+    ? '\n\nRunning ' + (dates.discount_starts_at ? 'from ' + dates.discount_starts_at.slice(0, 10) : 'from now')
+      + (dates.discount_ends_at ? ' until ' + dates.discount_ends_at.slice(0, 10) : ' with no end date')
+    : '\n\nStarts immediately, with no end date.';
+  if (!confirm(pct + '% off ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's') + ':\n\n' + lines + when)) return;
+
+  await writeBulk(target, Object.assign({ discount_percent: pct }, dates), pct + '% applied');
+}
+
+async function clearBulkDiscount(target) {
+  var rows = bulkRowsFor(target);
+  var live = rows.filter(function (r) { return (r.discount_percent || 0) > 0; });
+  if (!live.length) { toast('Nothing is discounted there', 'err'); return; }
+  if (!confirm('End the sale on ' + live.length + ' plan' + (live.length === 1 ? '' : 's')
+      + '? They go back to full price immediately. Base prices are not changed.')) return;
+
+  await writeBulk(target, { discount_percent: 0, discount_starts_at: null, discount_ends_at: null }, 'Sale ended');
+}
+
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
 var TRACK_LABEL_ADMIN = { written: 'Passage - Written Only', oral: 'Voyage - Oral Only', both: 'Expedition - Both' };
@@ -4235,6 +4406,7 @@ function planEffectiveAmount(row) {
 }
 
 function renderPlansTab() {
+  renderBulkControls();
   var wrap = document.getElementById('plans-groups');
   if (!window._plansRows || !window._plansRows.length) {
     wrap.innerHTML = '<div class="ad-loading">No pricing rows found. Run pricing_v2_setup.sql to seed them.</div>';
