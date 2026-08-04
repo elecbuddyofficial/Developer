@@ -1570,12 +1570,14 @@
       </div>
 
       <div class="ad-card-sub">
-        Change what an automatic email says without a deploy. <strong>Leaving the body empty
-        keeps the built in wording</strong>, which is the safest setting: it means the text
-        stays current if the original is ever improved. A template only takes effect once you
-        tick Active. If a template is broken or empty, the email still sends using the
-        built in version, because wording stored in a database must never stop a receipt
-        or a password reset going out.
+        <strong>Every field below is optional and overrides on its own.</strong> Fill in
+        only what you want to change and tick Active: anything you leave blank keeps the
+        built in version. So attaching a coupon and writing nothing else sends the normal
+        email with the code added at the end, which is usually what you want. Leaving a
+        field empty is also the safest choice, because that text stays current if the
+        original is ever improved. If a template is broken, the email still sends using
+        the built in version: wording stored in a database must never stop a receipt or a
+        trial warning going out.
       </div>
 
       <div class="ad-row">
@@ -1609,7 +1611,7 @@
       </div>
 
       <label style="display:flex;align-items:center;gap:9px;font-size:13px;margin:6px 0 12px;cursor:pointer">
-        <input type="checkbox" id="tpl-active"> <span>Use this instead of the built in wording</span>
+        <input type="checkbox" id="tpl-active"> <span>Active: apply my changes to this email</span>
       </label>
 
       <div id="tpl-preview-box" style="display:none;margin-bottom:12px"></div>
@@ -4934,7 +4936,6 @@ var PLACEHOLDERS = {
   welcome:           ['{{name}}', '{{coupon}}', '{{trial_days}}'],
   trial_expiring:    ['{{name}}', '{{coupon}}'],
   trial_expired:     ['{{name}}', '{{coupon}}'],
-  payment_confirmed: ['{{plan}}', '{{amount}}'],
   // One template covers Written and Oral, so without {{scope}} the wording
   // cannot say which access is ending, which is the point of the email.
   access_expiring:   ['{{name}}', '{{scope}}', '{{coupon}}'],
@@ -4946,7 +4947,6 @@ var TPL_NOTE = {
   welcome:           'Goes to every new account the moment it signs up. The most useful place for a coupon.',
   trial_expiring:    'Goes out the day before a trial ends.',
   trial_expired:     'Goes out the day after a trial ends.',
-  payment_confirmed: 'This is a receipt. The plan, amount, dates and order ID are always included and cannot be edited here: you are only changing the sentence above them.',
   access_expiring:   'Sent 3 days before Written or Oral access lapses. Use {{scope}} so it names the right one.',
   access_expired:    'Sent the day after Written or Oral access lapses. Use {{scope}} so it names the right one.',
 };
@@ -5056,10 +5056,14 @@ async function saveTemplate() {
     updated_at:  new Date().toISOString(),
     updated_by:  _myId,
   };
-  // Ticking Active with nothing written would replace real wording with an
-  // empty email, so it is refused rather than saved.
-  if (payload.active && !payload.body_html) {
-    tplMsg('Write a body before turning this on, or untick it to keep the built in wording.', false);
+  // Active with EVERY field blank is the only meaningless combination, since
+  // each field overrides independently. Requiring a body here was wrong: it
+  // made "attach a coupon, change nothing else" impossible to save, which is
+  // the main thing this table exists for.
+  var changesSomething = payload.body_html || payload.coupon_code || payload.subject
+    || payload.heading || payload.cta_label;
+  if (payload.active && !changesSomething) {
+    tplMsg('Fill in at least one field, or attach a coupon, before turning this on.', false);
     return;
   }
   var wasActive = (_templates.filter(function (x) { return x.key === key; })[0] || {}).active;

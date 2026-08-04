@@ -35,6 +35,12 @@ DROP POLICY IF EXISTS "Admins manage email templates" ON public.email_templates;
 CREATE POLICY "Admins manage email templates" ON public.email_templates
   FOR ALL USING (public.is_admin()) WITH CHECK (public.is_admin());
 
+-- The payment receipt is deliberately NOT in this list. It states the plan, the
+-- amount and the order id, which are the record of a transaction rather than
+-- copy to be edited, and the functions that send it do not read templates. A
+-- row here would be a control that changes nothing, which is worse than no
+-- control at all.
+--
 -- Seeded inactive, so nothing changes until an admin edits one and turns it on.
 -- The body is left empty on purpose: an empty body means "use the built in
 -- wording", which is a safer default than a copy of it that silently goes stale
@@ -43,7 +49,6 @@ INSERT INTO public.email_templates (key, label, active) VALUES
   ('welcome',          'Welcome, sent when a new account verifies',   false),
   ('trial_expiring',   'Trial ends tomorrow',                          false),
   ('trial_expired',    'Trial has ended',                              false),
-  ('payment_confirmed','Payment receipt',                              false),
   ('access_expiring',  'Paid access ends in 3 days',                   false),
   ('access_expired',   'Paid access has ended',                        false)
 ON CONFLICT (key) DO NOTHING;

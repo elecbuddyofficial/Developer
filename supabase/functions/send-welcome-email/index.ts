@@ -67,7 +67,7 @@ serve(async (req) => {
       resendKey: RESEND_API_KEY,
       from:      'Elec-Buddy <noreply@elec-buddy.com>',
       to:        claimed.email,
-      subject:   welcomeEmailSubject(tpl),
+      subject:   welcomeEmailSubject(tpl, claimed.full_name),
       html:      welcomeEmailHtml({ name: claimed.full_name, template: tpl }),
     });
 

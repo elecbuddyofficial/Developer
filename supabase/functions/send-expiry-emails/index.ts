@@ -1,7 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { APP_URL, escapeHtml } from '../_shared/email-layout.ts';
-import { EmailTemplate, loadTemplate, renderBody, couponBlock } from '../_shared/templates.ts';
+import { EmailTemplate, loadTemplate, renderBody, couponBlock, fillSubject, fillHeading } from '../_shared/templates.ts';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -112,53 +112,68 @@ const TRIAL_DAYS = 3;
  * kept, so an admin edits the message rather than the email itself.
  * `vars` carries whatever placeholders make sense for that particular mail.
  */
-function fromTemplate(tpl: EmailTemplate, fallbackHeading: string, fallbackCta: string, vars: Record<string, string>): string {
+interface Fallbacks {
+  preheader: string;
+  heading: string;
+  body: string;
+  cta: string;
+}
+
+function fromTemplate(tpl: EmailTemplate, fb: Fallbacks, vars: Record<string, string>): string {
   return baseLayout(
-    tpl.subject || fallbackHeading,
-    tpl.heading ? tpl.heading.split('{{name}}').join(vars.name ?? 'there') : fallbackHeading,
-    renderBody(tpl.body, vars) + (tpl.coupon ? couponBlock(tpl.coupon) : ''),
+    tpl.subject ? fillSubject(tpl.subject, vars) : fb.preheader,
+    tpl.heading ? fillHeading(tpl.heading, vars) : fb.heading,
+    // The body is HTML, so the code is set in gold there. The subject and the
+    // heading above take the same value as plain text: an inbox list cannot
+    // render a <strong>, and escaping one into a subject is how you mail
+    // somebody a line full of &lt;strong&gt;.
+    (tpl.body
+      ? renderBody(tpl.body, {
+          ...vars,
+          coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
+        })
+      : fb.body) + (tpl.coupon ? couponBlock(tpl.coupon) : ''),
     APP_URL,
-    tpl.ctaLabel || fallbackCta,
+    tpl.ctaLabel || fb.cta,
   );
+}
+
+/** The variables every expiry template can use. Built once so the subject, the
+ *  heading and the body can never be filled from different sets. */
+function tplVars(tpl: EmailTemplate, name: string | null | undefined, scope?: string): Record<string, string> {
+  return {
+    name: firstNameOf(name),
+    first_name: firstNameOf(name),
+    ...(scope ? { scope } : {}),
+    coupon: tpl.coupon ?? '',
+  };
 }
 
 const firstNameOf = (n: string | null | undefined) =>
   escapeHtml((n || '').trim().split(/\s+/)[0] || 'there');
 
 function trialExpiringHtml(tpl?: EmailTemplate | null, name?: string | null): string {
-  if (tpl) {
-    return fromTemplate(tpl, 'Your free trial ends tomorrow', 'Upgrade My Plan', {
-      name: firstNameOf(name),
-      first_name: firstNameOf(name),
-      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
-    });
-  }
-  return baseLayout(
-    'Your free trial ends tomorrow. Upgrade to keep full access.',
-    'Your free trial ends tomorrow',
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial ends tomorrow. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
+  const fb: Fallbacks = {
+    preheader: 'Your free trial ends tomorrow. Upgrade to keep full access.',
+    heading: 'Your free trial ends tomorrow',
+    body: `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial ends tomorrow. After that, access to study notes, quizzes, and Surveyor Q&amp;A will be restricted.</p>
      <p style="margin:0;">Upgrade now to keep studying without interruption.</p>`,
-    APP_URL,
-    'Upgrade My Plan',
-  );
+    cta: 'Upgrade My Plan',
+  };
+  if (tpl) return fromTemplate(tpl, fb, tplVars(tpl, name));
+  return baseLayout(fb.preheader, fb.heading, fb.body, APP_URL, fb.cta);
 }
 
 function trialExpiredHtml(tpl?: EmailTemplate | null, name?: string | null): string {
-  if (tpl) {
-    return fromTemplate(tpl, 'Your free trial has ended', 'Upgrade My Plan', {
-      name: firstNameOf(name),
-      first_name: firstNameOf(name),
-      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
-    });
-  }
-  return baseLayout(
-    'Your Elec-Buddy trial has ended. Upgrade to continue.',
-    'Your free trial has ended',
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial has ended. Your reading progress and quiz scores are all saved, and you can pick up right where you left off as soon as you upgrade.</p>
+  const fb: Fallbacks = {
+    preheader: 'Your Elec-Buddy trial has ended. Upgrade to continue.',
+    heading: 'Your free trial has ended',
+    body: `<p style="margin:0 0 16px 0;">Your Elec-Buddy free trial has ended. Your reading progress and quiz scores are all saved, and you can pick up right where you left off as soon as you upgrade.</p>
      <p style="margin:0;">Nothing is lost. Upgrade and continue studying today.</p>`,
-    APP_URL,
-    'Upgrade My Plan',
-  );
+    cta: 'Upgrade My Plan',
+  };
+  if (tpl) return fromTemplate(tpl, fb, tplVars(tpl, name));
+  return baseLayout(fb.preheader, fb.heading, fb.body, APP_URL, fb.cta);
 }
 
 // Each section expires on its own schedule now, so these name the section
@@ -181,44 +196,30 @@ function stillHaveLine(otherScope: string, otherExpiry: string | null): string {
 
 function scopeExpiringHtml(scope: string, otherScope: string, otherExpiry: string | null, tpl?: EmailTemplate | null, name?: string | null): string {
   const label = SCOPE_LABEL[scope];
-  if (tpl) {
-    return fromTemplate(tpl, `Your ${label} access expires in 3 days`, `Renew ${label} Access`, {
-      name: firstNameOf(name),
-      first_name: firstNameOf(name),
-      scope: label,
-      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
-    });
-  }
-  return baseLayout(
-    `Your ${label} access expires in 3 days. Renew to stay on track.`,
-    `Your ${label} access expires in 3 days`,
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access expires in 3 days. That covers ${SCOPE_CONTENT[scope]}.</p>
+  const fb: Fallbacks = {
+    preheader: `Your ${label} access expires in 3 days. Renew to stay on track.`,
+    heading: `Your ${label} access expires in 3 days`,
+    body: `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access expires in 3 days. That covers ${SCOPE_CONTENT[scope]}.</p>
      <p style="margin:0;">Renew before it lapses to keep studying without a gap. Any time you buy is added on top of what you already have, so nothing is lost by renewing early.</p>
      ${stillHaveLine(otherScope, otherExpiry)}`,
-    APP_URL,
-    `Renew ${label} Access`,
-  );
+    cta: `Renew ${label} Access`,
+  };
+  if (tpl) return fromTemplate(tpl, fb, tplVars(tpl, name, label));
+  return baseLayout(fb.preheader, fb.heading, fb.body, APP_URL, fb.cta);
 }
 
 function scopeExpiredHtml(scope: string, otherScope: string, otherExpiry: string | null, tpl?: EmailTemplate | null, name?: string | null): string {
   const label = SCOPE_LABEL[scope];
-  if (tpl) {
-    return fromTemplate(tpl, `Your ${label} access has expired`, `Renew ${label} Access`, {
-      name: firstNameOf(name),
-      first_name: firstNameOf(name),
-      scope: label,
-      coupon: tpl.coupon ? `<strong style="color:#C8A44A">${escapeHtml(tpl.coupon)}</strong>` : '',
-    });
-  }
-  return baseLayout(
-    `Your ${label} access has ended. Renew to continue studying.`,
-    `Your ${label} access has expired`,
-    `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access has expired, so ${SCOPE_CONTENT[scope]} is locked for now.</p>
+  const fb: Fallbacks = {
+    preheader: `Your ${label} access has ended. Renew to continue studying.`,
+    heading: `Your ${label} access has expired`,
+    body: `<p style="margin:0 0 16px 0;">Your Elec-Buddy ${label} access has expired, so ${SCOPE_CONTENT[scope]} is locked for now.</p>
      <p style="margin:0;">Your reading progress and quiz history are all intact. Renew and you pick up exactly where you left off.</p>
      ${stillHaveLine(otherScope, otherExpiry)}`,
-    APP_URL,
-    `Renew ${label} Access`,
-  );
+    cta: `Renew ${label} Access`,
+  };
+  if (tpl) return fromTemplate(tpl, fb, tplVars(tpl, name, label));
+  return baseLayout(fb.preheader, fb.heading, fb.body, APP_URL, fb.cta);
 }
 
 // ── Main handler ───────────────────────────────────────────────────────────
@@ -302,7 +303,9 @@ serve(async (req) => {
 
   for (const u of trialWarning ?? []) {
     await dispatch(u.id, u.email, 'trial_expiring',
-      tplTrialExpiring?.subject || 'Your Elec-Buddy trial ends tomorrow',
+      tplTrialExpiring?.subject
+        ? fillSubject(tplTrialExpiring.subject, tplVars(tplTrialExpiring, u.full_name))
+        : 'Your Elec-Buddy trial ends tomorrow',
       trialExpiringHtml(tplTrialExpiring, u.full_name));
   }
 
@@ -318,7 +321,9 @@ serve(async (req) => {
 
   for (const u of trialExpired ?? []) {
     await dispatch(u.id, u.email, 'trial_expired',
-      tplTrialExpired?.subject || 'Your Elec-Buddy trial has ended',
+      tplTrialExpired?.subject
+        ? fillSubject(tplTrialExpired.subject, tplVars(tplTrialExpired, u.full_name))
+        : 'Your Elec-Buddy trial has ended',
       trialExpiredHtml(tplTrialExpired, u.full_name));
   }
 
@@ -361,7 +366,7 @@ serve(async (req) => {
         // substituted here too. Without it one piece of wording could not name
         // which access is ending, which is the whole point of these emails.
         const subject = tpl?.subject
-          ? tpl.subject.split('{{scope}}').join(SCOPE_LABEL[s.scope])
+          ? fillSubject(tpl.subject, tplVars(tpl, name, SCOPE_LABEL[s.scope]))
           : st.subject(SCOPE_LABEL[s.scope]);
         await dispatch(u.id, u.email, `${s.scope}_${st.stage}`, subject, html);
       }

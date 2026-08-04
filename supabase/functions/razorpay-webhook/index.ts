@@ -2,7 +2,6 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
-import { loadTemplate } from '../_shared/templates.ts';
 import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -220,9 +219,6 @@ serve(async (req) => {
       // purchase — covering the case where the buyer's tab closed before the
       // client-side path could fire at all.
       if (RESEND_API_KEY && buyerEmail) {
-        // Null unless an admin activated a receipt template. It can reword the
-        // message but never the plan, amount or order id below.
-        const tplPaid = await loadTemplate(sb, 'payment_confirmed');
         const emailInput = {
           plan:        payment.plan,
           scope:       payment.scope || 'both',
@@ -235,8 +231,8 @@ serve(async (req) => {
           resendKey: RESEND_API_KEY,
           from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
           to:        buyerEmail,
-          subject:   paymentConfirmedSubject(emailInput, tplPaid),
-          html:      paymentConfirmedHtml(emailInput, tplPaid),
+          subject:   paymentConfirmedSubject(emailInput),
+          html:      paymentConfirmedHtml(emailInput),
         });
         if (!sent.ok) console.error('Payment confirmation email failed:', sent.error);
       }
