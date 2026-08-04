@@ -1815,7 +1815,15 @@ function setTheme(t) {
     // underneath the sidebar. wel-modal and upd-modal were missing and would
     // have failed on iPhone in exactly the way the walkthrough once did.
     ['gate-overlay', 'profile-modal', 'settings-modal', 'upgrade-modal',
-     'guide-overlay', 'tx-modal', 'wel-modal', 'upd-modal',
+     // guide-tooltip is listed SEPARATELY from guide-overlay on purpose.
+     // #guide-overlay is position:fixed with z-index 9000, so it creates a
+     // stacking context, and the tooltip's own z-index of 9010 only ranks it
+     // against its siblings INSIDE that context. On a sidebar step the sidebar
+     // is deliberately lifted to 9003 so it can be read above the dimming, and
+     // 9003 at root level outranks the whole 9000 subtree, tooltip included.
+     // Moving the tooltip to <body> puts its 9010 in the same contest as the
+     // sidebar's 9003, which is the only way it can actually win.
+     'guide-overlay', 'guide-tooltip', 'tx-modal', 'wel-modal', 'upd-modal',
      'del-banner', 'dev-block', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
