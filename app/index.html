@@ -858,12 +858,21 @@
       </label>
     </div>
 
-    <!-- Reset Statistics -->
+    <!-- Reset Statistics. Two separate actions rather than one: wiping quiz
+         scores and wiping which chapters you have read are different regrets,
+         and someone clearing a stale quiz score should not lose their place in
+         23 topics as well. -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
       <div style="font-size:12.5px;font-weight:600;color:#DDE5EF;">Reset Statistics</div>
-      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Clears quiz scores and lesson reading progress on this account. This can't be undone.</div>
-      <button id="settings-reset-btn" onclick="resetStatistics()" style="width:100%;background:rgba(224,90,106,0.1);border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s;">Reset Statistics</button>
-      <div id="settings-reset-status" style="display:none;margin-top:9px;font-size:11.5px;text-align:center;"></div>
+      <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Two separate resets. Neither can be undone.</div>
+
+      <div style="font-size:10.5px;color:#6E8AA6;margin-bottom:6px;line-height:1.4;">Which topics and sections you have marked as read.</div>
+      <button id="reset-chapters-btn" onclick="resetChapterProgress()" style="width:100%;min-height:40px;background:rgba(224,90,106,0.08);border:1px solid rgba(224,90,106,0.3);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s;margin-bottom:13px;">Reset chapter progress</button>
+
+      <div style="font-size:10.5px;color:#6E8AA6;margin-bottom:6px;line-height:1.4;">Best scores, and any quiz you left half finished.</div>
+      <button id="reset-quiz-btn" onclick="resetQuizProgress()" style="width:100%;min-height:40px;background:rgba(224,90,106,0.08);border:1px solid rgba(224,90,106,0.3);border-radius:6px;padding:9px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;transition:background .15s;">Reset quiz progress</button>
+
+      <div id="settings-reset-status" style="display:none;margin-top:11px;font-size:11.5px;text-align:center;"></div>
     </div>
 
     <!-- Take a tour. Moved out of the profile menu: it is a one-off, and it
@@ -880,7 +889,8 @@
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">
         Your account works on up to <strong id="dev-limit-txt">3</strong> devices. Removing one frees a slot straight away.
       </div>
-      <div id="dev-list"><div style="font-size:11.5px;color:#6E8AA6;">Loading&hellip;</div></div>
+      <button id="dev-toggle-btn" onclick="toggleDeviceList()" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Manage devices</button>
+      <div id="dev-list" style="display:none;margin-top:10px;"></div>
     </div>
 
     <!-- Payments. Moved out of the profile menu: looked at occasionally, not
@@ -1886,7 +1896,11 @@ function setTheme(t) {
         document.getElementById('settings-reset-status').style.display = 'none';
         document.getElementById('settings-modal').style.display = 'block';
         document.documentElement.classList.add('_modal-open'); // still open, just switched modal
-        if (typeof loadDevices === 'function') loadDevices();
+        // Devices are behind their own button now, so nothing to preload.
+        var _dl = document.getElementById('dev-list');
+        if (_dl) { _dl.style.display = 'none'; _dl.innerHTML = ''; }
+        var _db = document.getElementById('dev-toggle-btn');
+        if (_db) _db.textContent = 'Manage devices';
         if (typeof refreshDeletionState === 'function') refreshDeletionState();
         setTimeout(() => document.getElementById('settings-panel').classList.add('open'), 10);
       }, 300);
@@ -2012,6 +2026,21 @@ function setTheme(t) {
       if (ctx === 'dev-block') {
         location.reload();                   // re-register this device in the freed slot
       } else {
+        loadDevices();                       // list is already open, just refresh it
+      }
+    };
+
+    // Collapsed until asked for. The list needs its own query and most visits
+    // to Settings are not about devices, so opening the panel should not pay
+    // for it.
+    window.toggleDeviceList = function() {
+      var list = document.getElementById('dev-list');
+      var btn  = document.getElementById('dev-toggle-btn');
+      var opening = list.style.display === 'none';
+      list.style.display = opening ? 'block' : 'none';
+      btn.textContent = opening ? 'Hide devices' : 'Manage devices';
+      if (opening) {
+        list.innerHTML = '<div style="font-size:11.5px;color:#6E8AA6;">Loading&hellip;</div>';
         loadDevices();
       }
     };
@@ -2396,50 +2425,67 @@ function setTheme(t) {
     // resets. Avoids a native confirm() dialog while still requiring an
     // unambiguous second action before wiping progress data for good.
     var _resetArmTimer = null;
-    window.resetStatistics = async function() {
-      var btn = document.getElementById('settings-reset-btn');
-      var statusEl = document.getElementById('settings-reset-status');
-
+    // Arm on the first tap, act on the second, disarm after four seconds.
+    // A browser confirm() is easy to dismiss by reflex on a phone, and this
+    // keeps the warning on the control being pressed.
+    function armReset(btn, label, run) {
       if (!btn.dataset.armed) {
         btn.dataset.armed = '1';
         btn.textContent = 'Tap again to confirm';
-        clearTimeout(_resetArmTimer);
-        _resetArmTimer = setTimeout(function() {
+        clearTimeout(btn._armTimer);
+        btn._armTimer = setTimeout(function() {
           btn.dataset.armed = '';
-          btn.textContent = 'Reset Statistics';
+          btn.textContent = label;
         }, 4000);
         return;
       }
-
-      clearTimeout(_resetArmTimer);
+      clearTimeout(btn._armTimer);
+      btn.dataset.armed = '';
       btn.disabled = true;
       btn.textContent = 'Resetting…';
-      statusEl.style.display = 'none';
+      run();
+    }
 
-      // Lesson reading progress: local cache + everything it's keyed off of.
-      window._topicProgress = {};
-      localStorage.removeItem('eb_tp_cache');
-
-      // Quiz category best-scores - local only, never synced to Supabase.
-      localStorage.removeItem('eto_progress');
-
-      // In-progress "resume where you left off" quiz state for every
-      // topic/category, so nothing stale resumes after a reset.
-      Object.keys(localStorage)
-        .filter(function(k) { return k.indexOf('eto_qz_state_') === 0; })
-        .forEach(function(k) { localStorage.removeItem(k); });
-
-      if (window._sbClient && window._sbUser) {
-        await window._sbClient.from('profiles')
-          .update({ topic_progress: {} })
-          .eq('id', window._sbUser.id);
-      }
-
-      statusEl.style.display = 'block';
-      statusEl.style.color = '#3DBA72';
-      statusEl.textContent = 'Statistics reset.';
-
+    function resetDone(msg) {
+      var el = document.getElementById('settings-reset-status');
+      el.style.display = 'block';
+      el.style.color = '#3DBA72';
+      el.textContent = msg;
+      // Progress is held in memory and rendered in several places, so a reload
+      // is the honest way to be sure nothing stale survives on screen.
       setTimeout(function() { window.location.reload(); }, 1200);
+    }
+
+    // Which topics and sections have been read. This one is synced, so it has
+    // to be cleared on the server as well as locally.
+    window.resetChapterProgress = function() {
+      var btn = document.getElementById('reset-chapters-btn');
+      armReset(btn, 'Reset chapter progress', async function() {
+        window._topicProgress = {};
+        try { localStorage.removeItem('eb_tp_cache'); } catch (e) {}
+        if (window._sbClient && window._sbUser) {
+          await window._sbClient.from('profiles')
+            .update({ topic_progress: {} })
+            .eq('id', window._sbUser.id);
+        }
+        resetDone('Chapter progress reset.');
+      });
+    };
+
+    // Quiz scores and any half finished attempt. Entirely local: quiz results
+    // have never been synced to Supabase, so there is nothing server side to
+    // clear here.
+    window.resetQuizProgress = function() {
+      var btn = document.getElementById('reset-quiz-btn');
+      armReset(btn, 'Reset quiz progress', function() {
+        try {
+          localStorage.removeItem('eto_progress');
+          Object.keys(localStorage)
+            .filter(function(k) { return k.indexOf('eto_qz_state_') === 0; })
+            .forEach(function(k) { localStorage.removeItem(k); });
+        } catch (e) {}
+        resetDone('Quiz progress reset.');
+      });
     };
 
     window.signOut = async function() {
