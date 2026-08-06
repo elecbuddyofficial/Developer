@@ -152,6 +152,11 @@
     .ad-table .empty { text-align:center; color:var(--text3); padding:32px; }
     .ad-table .email-cell { font-size:12.5px; color:var(--text2); }
     .ad-table .date-cell  { font-size:12px; color:var(--text3); white-space:nowrap; }
+    /* Buttons live in a wrapper, never on the td itself. `display:flex` on a
+       td takes it out of table layout, so it stops matching the row height and
+       ignores vertical-align, leaving the buttons stranded at the top with
+       their border drawn above the row separator. */
+    .row-actions { display:flex; gap:6px; align-items:center; }
 
     /* ── PLAN BADGES ── */
     .pbadge {
@@ -167,6 +172,21 @@
 
     .expired-tag { color:var(--red); font-size:12px; }
     .active-tag  { color:var(--green); font-size:12px; }
+    /* Live countdown under an expiry date. Tabular figures so the digits do
+       not jitter sideways as the seconds tick. */
+    .cd-timer { display:block; margin-top:2px; font-size:11px; color:var(--text3);
+      font-variant-numeric:tabular-nums; letter-spacing:.02em; white-space:nowrap; }
+    .cd-timer.is-soon { color:var(--orange); font-weight:600; }
+    .cd-timer.is-over { color:var(--red); }
+    /* Everything expiryDisplay returns is wrapped in this. On mobile the cell
+       is display:flex with space-between, so a bare date span and a bare timer
+       span would become two flex items and get pushed to opposite ends of the
+       row. One wrapper keeps them a single item that stacks internally.
+       inline-block rather than block because this also renders inline inside
+       the grant form's summary line. */
+    .exp-cell { display:inline-block; vertical-align:top; text-align:left; white-space:nowrap; }
+    /* One scope per line, so Written and Oral each get their own countdown. */
+    .exp-line + .exp-line { margin-top:6px; }
 
     /* ── FORM CARD ── */
     .ad-card {
@@ -408,7 +428,7 @@
       .ad-nav-btn { min-height: 46px; }
       .notif-del { min-width: 40px; min-height: 40px; }
       /* Action buttons in table rows stack rather than squeeze */
-      .ad-table td > div[style*="display:flex"] { flex-wrap: wrap; }
+      .ad-table td > div[style*="display:flex"], .row-actions { flex-wrap: wrap; }
     }
 
     /* Mobile Table-to-Card Overhaul */
@@ -460,6 +480,7 @@
       #tab-dashboard .ad-table:last-of-type td:nth-child(2)::before { content: "Plan"; }
       #tab-dashboard .ad-table:last-of-type td:nth-child(3)::before { content: "Amount"; }
       /* Users Tab */
+      .exp-cell { text-align: right; }
       #users-tbody td:nth-child(1)::before { content: "Email"; }
       #users-tbody td:nth-child(2)::before { content: "Name"; }
       #users-tbody td:nth-child(3)::before { content: "Plan"; }
@@ -2068,37 +2089,104 @@ function isTrialExpired(trialStartedAt, now) {
   return new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000 <= now.getTime();
 }
 
+/* ── Live countdown ────────────────────────────────────────────────────
+   Rendered empty and filled by one shared ticker rather than by whatever
+   drew the row. The users table, the profile panel and the grant form all
+   call expiryDisplay(), so a per-caller timer would mean three of them to
+   keep in step, and stale ones left running after a re-render. */
+function countdown(iso) {
+  if (!iso) return '';
+  return '<span class="cd-timer" data-until="' + esc(new Date(iso).toISOString()) + '"></span>';
+}
+
+function paintCountdown(el, now) {
+  var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+  var t = new Date(el.getAttribute('data-until')).getTime();
+  if (isNaN(t)) { el.textContent = ''; return; }
+
+  var diff = t - now;
+  var over = diff < 0;
+  var secs = Math.floor(Math.abs(diff) / 1000);
+  var d = Math.floor(secs / 86400); secs -= d * 86400;
+  var h = Math.floor(secs / 3600);  secs -= h * 3600;
+  var m = Math.floor(secs / 60);    secs -= m * 60;
+
+  var txt = (d ? d + 'd ' : '') + pad(h) + 'h ' + pad(m) + 'm ' + pad(secs) + 's';
+  el.textContent = over ? txt + ' ago' : txt + ' left';
+  el.classList.toggle('is-over', over);
+  // Under a day and still running: the window where an admin might actually
+  // act on it, so it is worth making it stand out.
+  el.classList.toggle('is-soon', !over && diff < 86400000);
+}
+
+function tickCountdowns() {
+  // Nothing to do while the tab is in the background, and skipping it stops
+  // an admin console left open all day from waking once a second forever.
+  if (document.hidden) return;
+  var els = document.querySelectorAll('.cd-timer[data-until]');
+  var now = Date.now();
+  for (var i = 0; i < els.length; i++) paintCountdown(els[i], now);
+}
+
+setInterval(tickCountdowns, 1000);
+
+// Rows are redrawn constantly here (filters, search, the profile panel), and a
+// freshly drawn timer would otherwise sit blank until the next tick. Rather
+// than teach every caller to refresh, new nodes are caught as they appear.
+//
+// This observer MUST only touch timers that are still empty. Writing
+// textContent is itself a childList mutation, so a version that repainted
+// everything would retrigger itself forever and peg the CPU. Filling only the
+// blanks terminates: once painted they are no longer empty, so the mutation
+// this causes finds nothing left to do.
+if (window.MutationObserver) {
+  new MutationObserver(function () {
+    if (document.hidden) return;
+    var els = document.querySelectorAll('.cd-timer[data-until]');
+    var now = Date.now();
+    for (var i = 0; i < els.length; i++) {
+      if (!els[i].textContent) paintCountdown(els[i], now);
+    }
+  }).observe(document.documentElement, { childList: true, subtree: true });
+}
+
 // `user` is optional and carries the per-scope dates. When present, Written
 // and Oral are reported separately - a customer holding Written to March and
 // Oral to December has no single expiry date, and showing one would misreport
 // half their access.
+function expCell(inner) { return '<div class="exp-cell">' + inner + '</div>'; }
+
 function expiryDisplay(iso, plan, trialStartedAt, user) {
-  if (plan === 'lifetime') return '<span class="active-tag">Lifetime</span>';
+  if (plan === 'lifetime') return expCell('<span class="active-tag">Lifetime</span>');
   if (plan === 'trial' || !plan) {
-    if (!trialStartedAt) return '<span class="date-cell">-</span>';
+    if (!trialStartedAt) return expCell('<span class="date-cell">-</span>');
     var trialEnd = new Date(new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
-    return isTrialExpired(trialStartedAt)
+    return expCell((isTrialExpired(trialStartedAt)
       ? '<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>'
-      : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>';
+      : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>')
+      + countdown(trialEnd));
   }
 
   if (user && (user.written_expires_at || user.oral_expires_at)) {
     var now = new Date();
-    var tag = function(label, val) {
+    // Each scope gets its own line and its own countdown. Written running to
+    // December while Oral lapsed in September is a real state, and one shared
+    // timer could only ever describe half of it.
+    var line = function(label, val) {
       if (!val) return '';
       var live = new Date(val) > now;
-      return '<span class="' + (live ? 'active-tag' : 'expired-tag') + '" style="margin-right:4px;">'
-           + label + ' ' + fmtDate(val) + '</span>';
+      return '<div class="exp-line"><span class="' + (live ? 'active-tag' : 'expired-tag') + '">'
+           + label + ' ' + fmtDate(val) + '</span>' + countdown(val) + '</div>';
     };
-    var w = tag('W', user.written_expires_at);
-    var o = tag('O', user.oral_expires_at);
-    if (w || o) return w + o;
+    var w = line('Written', user.written_expires_at);
+    var o = line('Oral', user.oral_expires_at);
+    if (w || o) return expCell(w + o);
   }
 
-  if (!iso) return '<span class="date-cell">-</span>';
+  if (!iso) return expCell('<span class="date-cell">-</span>');
   var d = new Date(iso);
-  if (d < new Date()) return '<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>';
-  return '<span class="active-tag">' + fmtDate(iso) + '</span>';
+  if (d < new Date()) return expCell('<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>' + countdown(iso));
+  return expCell('<span class="active-tag">' + fmtDate(iso) + '</span>' + countdown(iso));
 }
 
 /* ── DASHBOARD ───────────────────────────────────────────────────── */
@@ -2589,11 +2677,11 @@ function renderUsers(users) {
           + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
           + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at, u) + '</td>'
           + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
-          + '<td style="display:flex;gap:6px">'
+          + '<td><div class="row-actions">'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
           + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + attrJs(u.email || '') + ')">Edit</button>'
           + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + idAttr + ',' + attrJs(u.email || '') + ')">Delete</button>'
-          + '</td>'
+          + '</div></td>'
           + '</tr>';
       }).join('')
     : '<tr><td colspan="6" class="empty">No users</td></tr>';
