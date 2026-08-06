@@ -293,13 +293,47 @@
 
   // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
   // The edge function itself is a one-shot compare-and-swap, so it's safe to
-  // call from here even though the tab could close before this resolves.
+  // call from here even though the tab could close before this resolves, and
+  // safe to call more than once for the same user.
+  //
+  // `keepalive` is what makes this actually work. Every caller below redirects
+  // with location.replace on the very next line, which tears the page down and
+  // CANCELS an ordinary in-flight fetch before it leaves the browser. That is
+  // a race the request usually loses: on production only 2 of 12 signups ever
+  // reached this endpoint. keepalive lets the request outlive the navigation,
+  // which is precisely what it exists for.
   function sendWelcomeEmail(userId) {
+    if (!userId || _welcomeSentFor === userId) return;
+    _welcomeSentFor = userId;
     fetch(SUPABASE_FN_URL + '/send-welcome-email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id: userId }),
+      keepalive: true,
     }).catch(function() {});
+  }
+  // Both the SIGNED_IN handler and the getSession fallback can fire for the
+  // same confirmation, and either may win. Calling twice is harmless server
+  // side, but there is no reason to send two requests.
+  var _welcomeSentFor = null;
+
+  // Whether this sign-in belongs to a brand-new account.
+  //
+  // This used to be decided by looking for `type=signup` in the URL hash, and
+  // that was wrong. Confirmation tokens are single use, and mail providers
+  // routinely PREFETCH links to scan them, which spends the token before the
+  // human ever clicks. The account is confirmed, but the person lands on
+  // `#error=access_denied&error_code=otp_expired` instead of `type=signup`,
+  // sees "link expired", signs in normally, and is never welcomed. Real case
+  // on production: confirmed 35 seconds after signup, no welcome email.
+  //
+  // Account age is the honest test, and the server checks it again anyway:
+  // send-welcome-email only claims a send when the trial started in the last
+  // 10 minutes and no welcome has been stamped. So an existing user signing in
+  // can never be welcomed twice, whatever this returns.
+  function isBrandNew(user) {
+    if (!user || !user.created_at) return false;
+    return (Date.now() - new Date(user.created_at).getTime()) < 10 * 60 * 1000;
   }
 
   function redirectAfterLogin() {
@@ -316,8 +350,13 @@
     if (hash.includes('error=')) {
       var params = new URLSearchParams(hash.slice(1));
       var code = params.get('error_code') || '';
+      // "Expired" here usually does NOT mean the account is unconfirmed. These
+      // tokens are single use and mail providers prefetch links to scan them,
+      // which spends the token before the person clicks it. Their account is
+      // already confirmed and signing in just works. Telling them to sign up
+      // again sends them to a dead end, because the address is now registered.
       _initError = code === 'otp_expired'
-        ? 'This confirmation link has expired. Please sign up again or request a new link.'
+        ? 'That confirmation link has already been used. This is usually harmless: your email provider often opens the link to scan it. Try signing in below, your account is most likely ready. If sign in says your email is not confirmed, sign up again to get a fresh link.'
         : (params.get('error_description') || 'Something went wrong. Please try again.').replace(/\+/g, ' ');
       history.replaceState(null, '', window.location.pathname);
     }
@@ -327,27 +366,26 @@
   var _recoveryMode = window.location.hash.includes('type=recovery');
   if (_recoveryMode) showRecoveryForm();
 
-  // Supabase tags a signup confirmation-link redirect with type=signup in the
-  // hash, same way it tags recovery links with type=recovery above. This is
-  // what lets the SIGNED_IN handler below tell "they just confirmed their
-  // brand-new account" apart from "they just logged in normally" - the
-  // welcome email should only ever fire for the former.
-  var _confirmMode = window.location.hash.includes('type=signup');
-
   // Supabase fires PASSWORD_RECOVERY or SIGNED_IN when the hash token is processed
   sb.auth.onAuthStateChange((event, session) => {
     if (event === 'PASSWORD_RECOVERY') {
       _recoveryMode = true;
       showRecoveryForm();
     } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
-      if (_confirmMode && session.user) sendWelcomeEmail(session.user.id);
+      if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
       redirectAfterLogin();
     }
   });
 
-  // If already logged in, skip auth page - but NOT during password recovery
+  // If already logged in, skip auth page - but NOT during password recovery.
+  // This can resolve BEFORE onAuthStateChange fires SIGNED_IN, so it has to
+  // send the welcome email too. Otherwise whichever path wins the race decides
+  // whether a new account is ever welcomed.
   sb.auth.getSession().then(({ data: { session } }) => {
-    if (session && !_recoveryMode) redirectAfterLogin();
+    if (session && !_recoveryMode) {
+      if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
+      redirectAfterLogin();
+    }
   });
 
   function showRecoveryForm() {
@@ -433,10 +471,9 @@
       if (data.user) sendWelcomeEmail(data.user.id);
       redirectAfterLogin();
     } else {
-      // Email confirmation enabled - ask them to verify. Welcome email fires
-      // later, off the SIGNED_IN event when they actually click the
-      // confirmation link (see _confirmMode below) - not here, before
-      // they've proven they own the address.
+      // Email confirmation enabled - ask them to verify. The welcome email
+      // fires later, off the SIGNED_IN event once they actually hold a
+      // session, not here, before they've proven they own the address.
       showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
       document.getElementById('form-register').reset();

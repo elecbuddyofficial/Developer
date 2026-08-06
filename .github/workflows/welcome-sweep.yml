@@ -1,0 +1,45 @@
+name: Sweep Welcome Emails
+
+# Catches welcome emails the signup page failed to send. The browser is the
+# fast path; this is the safety net, so an empty run is the normal, healthy
+# outcome.
+#
+# Runs every 15 minutes rather than daily, because a welcome email that lands
+# a day after signup has missed the moment it was written for. GitHub's
+# scheduler is best-effort and can be late under load, so treat this as
+# "within about half an hour", not a guarantee.
+#
+# Uses the same CRON_SECRET and SUPABASE_FUNCTIONS_URL secrets already
+# configured for the expiry emails.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:        # manual trigger for testing
+
+# A slow run must never overlap the next tick and double-claim. The function
+# is idempotent anyway (claiming is a compare-and-swap), so this is belt and
+# braces rather than the actual guarantee.
+concurrency:
+  group: welcome-sweep
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger sweep-welcome-emails Edge Function
+        run: |
+          HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_FUNCTIONS_URL }}/sweep-welcome-emails")
+
+          echo "HTTP status: $HTTP_STATUS"
+          cat /tmp/response.json
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Edge Function returned non-200 status"
+            exit 1
+          fi
