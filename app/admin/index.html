@@ -157,6 +157,16 @@
        ignores vertical-align, leaving the buttons stranded at the top with
        their border drawn above the row separator. */
     .row-actions { display:flex; gap:6px; align-items:center; }
+    /* Rows rather than a table: this is a scannable list, and it has to read
+       the same on a phone without the table-to-card rewrite. */
+    .fbu-row { display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:10px 2px; border-bottom:1px solid var(--border2); cursor:pointer; }
+    .fbu-row:last-child { border-bottom:none; }
+    .fbu-row:hover { background:var(--surface2); }
+    .fbu-main { min-width:0; }
+    .fbu-email { font-size:13px; color:var(--text); word-break:break-word; }
+    .fbu-meta { font-size:11.5px; color:var(--text3); margin-top:2px; }
+    .fbu-side { text-align:right; flex-shrink:0; font-size:12.5px; white-space:nowrap; }
 
     /* ── PLAN BADGES ── */
     .pbadge {
@@ -932,6 +942,37 @@
       </div>
       <div id="funnel-body"><div class="ad-loading">Loading...</div></div>
       <div id="funnel-problems" style="margin-top:12px"></div>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Who is where</div>
+      <div class="ad-card-sub">
+        The same funnel, by person. With a few dozen users the individual answer is
+        worth more than the percentage: someone who opened the price four times and
+        never picked a plan is a person to email, not a number to average away.
+        <strong>Times</strong> counts how often they came back to look, which is the
+        clearest signal of interest. Click anyone to open their profile.
+      </div>
+      <div class="ad-row" style="align-items:flex-end">
+        <div class="ad-field" style="max-width:340px">
+          <label class="ad-label">Show</label>
+          <select class="ad-select" id="fbu-filter" onchange="renderFunnelUsers()">
+            <option value="stuck">Opened prices but never paid</option>
+            <option value="3">Left at the payment window</option>
+            <option value="2">Picked a plan, never reached payment</option>
+            <option value="1">Opened prices, never picked a plan</option>
+            <option value="0">Never opened the upgrade window</option>
+            <option value="failed">Payment failed or was blocked</option>
+            <option value="4">Paid</option>
+            <option value="all">Everyone</option>
+          </select>
+        </div>
+        <div class="ad-field" style="max-width:220px">
+          <label class="ad-label">&nbsp;</label>
+          <div id="fbu-count" style="font-size:12.5px;color:var(--text3);padding-bottom:10px"></div>
+        </div>
+      </div>
+      <div id="fbu-list"><div class="ad-loading">Loading...</div></div>
     </div>
 
     <!-- Primary KPIs -->
@@ -2161,10 +2202,9 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
   if (plan === 'trial' || !plan) {
     if (!trialStartedAt) return expCell('<span class="date-cell">-</span>');
     var trialEnd = new Date(new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
-    return expCell((isTrialExpired(trialStartedAt)
-      ? '<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>'
-      : '<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>')
-      + countdown(trialEnd));
+    return isTrialExpired(trialStartedAt)
+      ? expCell('<span class="expired-tag">Trial expired ' + fmtDate(trialEnd) + '</span>')
+      : expCell('<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>' + countdown(trialEnd));
   }
 
   if (user && (user.written_expires_at || user.oral_expires_at)) {
@@ -2176,7 +2216,7 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
       if (!val) return '';
       var live = new Date(val) > now;
       return '<div class="exp-line"><span class="' + (live ? 'active-tag' : 'expired-tag') + '">'
-           + label + ' ' + fmtDate(val) + '</span>' + countdown(val) + '</div>';
+           + label + ' ' + fmtDate(val) + '</span>' + (live ? countdown(val) : '') + '</div>';
     };
     var w = line('Written', user.written_expires_at);
     var o = line('Oral', user.oral_expires_at);
@@ -2185,8 +2225,72 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
 
   if (!iso) return expCell('<span class="date-cell">-</span>');
   var d = new Date(iso);
-  if (d < new Date()) return expCell('<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>' + countdown(iso));
+  if (d < new Date()) return expCell('<span class="expired-tag">Expired ' + fmtDate(iso) + '</span>');
   return expCell('<span class="active-tag">' + fmtDate(iso) + '</span>' + countdown(iso));
+}
+
+/* ── Funnel, per person ──────────────────────────────────────────── */
+var _fbu = [];
+
+async function loadFunnelUsers() {
+  var list = document.getElementById('fbu-list');
+  if (!list) return;
+  var res = await _sb.from('funnel_by_user')
+    .select('*')
+    .order('times_opened', { ascending: false })
+    .order('last_seen', { ascending: false, nullsFirst: false });
+  if (res.error) {
+    list.innerHTML = '<div class="ad-loading">Run funnel_by_user_setup.sql to enable this.</div>';
+    return;
+  }
+  _fbu = res.data || [];
+  renderFunnelUsers();
+}
+
+function renderFunnelUsers() {
+  var list = document.getElementById('fbu-list');
+  var f = document.getElementById('fbu-filter').value;
+
+  var rows = _fbu.filter(function (u) {
+    if (f === 'all') return true;
+    // The actionable group: they looked at the price and did not buy. Step 0
+    // is excluded because "never looked" is a different problem needing a
+    // different fix, and it would otherwise swamp everyone who did look.
+    if (f === 'stuck')  return !u.paid && u.furthest_step >= 1;
+    if (f === 'failed') return u.payment_failed || u.checkout_blocked;
+    return String(u.furthest_step) === f;
+  });
+
+  document.getElementById('fbu-count').textContent =
+    rows.length + (rows.length === 1 ? ' person' : ' people');
+
+  if (!rows.length) { list.innerHTML = '<div class="ad-loading">Nobody in this group.</div>'; return; }
+
+  var STEP_COLOR = ['var(--text3)', 'var(--orange)', 'var(--orange)', 'var(--red)', 'var(--green)'];
+
+  list.innerHTML = rows.map(function (u) {
+    // Someone who tried to pay and hit an error is the most urgent row here:
+    // they decided to buy and the app failed them.
+    var flag = u.payment_failed
+      ? '<span class="expired-tag" style="margin-left:6px">payment failed</span>'
+      : (u.checkout_blocked ? '<span class="expired-tag" style="margin-left:6px">blocked</span>' : '');
+    var looks = u.times_opened > 1
+      ? '<span style="color:var(--orange);font-weight:600">' + u.times_opened + ' times</span>'
+      : (u.times_opened === 1 ? '1 time' : '&mdash;');
+    var plan = u.last_plan
+      ? '<span style="color:var(--text3)"> &middot; last looked at ' + esc(u.last_plan) + (u.last_scope ? ' ' + esc(u.last_scope) : '') + '</span>'
+      : '';
+    return '<div class="fbu-row" onclick="openUserProfile(' + attrJs(u.user_id) + ')">'
+      + '<div class="fbu-main">'
+      +   '<div class="fbu-email">' + esc(u.email || '-') + flag + '</div>'
+      +   '<div class="fbu-meta">' + esc(u.dropped_at) + plan + '</div>'
+      + '</div>'
+      + '<div class="fbu-side">'
+      +   '<div style="color:' + STEP_COLOR[u.furthest_step] + ';font-weight:700">' + looks + '</div>'
+      +   '<div style="font-size:11px;color:var(--text3)">' + (u.last_seen ? fmtDateTime(u.last_seen) : 'no activity') + '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('');
 }
 
 /* ── DASHBOARD ───────────────────────────────────────────────────── */
@@ -2261,6 +2365,7 @@ async function loadFunnel() {
 
 async function loadDashboard() {
   loadFunnel();
+  loadFunnelUsers();
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
       .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')

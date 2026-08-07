@@ -4,17 +4,27 @@ name: Sweep Welcome Emails
 # fast path; this is the safety net, so an empty run is the normal, healthy
 # outcome.
 #
-# Runs every 15 minutes rather than daily, because a welcome email that lands
-# a day after signup has missed the moment it was written for. GitHub's
-# scheduler is best-effort and can be late under load, so treat this as
-# "within about half an hour", not a guarantee.
+# Hourly, not every 15 minutes. The first version asked for */15 and GitHub
+# delivered ONE run in six hours: scheduled workflows are explicitly
+# best-effort and the shorter the interval the more often they are dropped
+# entirely. A backstop that runs once in six hours is not a backstop, and an
+# hourly schedule that actually fires beats a quarter-hourly one that does not.
+#
+# Hourly is enough because this is only a net. The signup page sends the email
+# within seconds and is the path that should always win; if it ever misses,
+# an hour is an acceptable wait for a welcome that would otherwise never
+# arrive. If this ever starts catching people regularly, the client is broken
+# again and that is the thing to fix, not this interval.
+#
+# For a hard guarantee, pg_cron and pg_net are available on Supabase and would
+# run this from inside the database with no dependency on GitHub at all.
 #
 # Uses the same CRON_SECRET and SUPABASE_FUNCTIONS_URL secrets already
 # configured for the expiry emails.
 
 on:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '17 * * * *'   # hourly, off the hour to avoid the busiest minute
   workflow_dispatch:        # manual trigger for testing
 
 # A slow run must never overlap the next tick and double-claim. The function
