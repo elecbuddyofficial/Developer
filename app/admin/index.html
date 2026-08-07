@@ -167,6 +167,13 @@
     .fbu-email { font-size:13px; color:var(--text); word-break:break-word; }
     .fbu-meta { font-size:11.5px; color:var(--text3); margin-top:2px; }
     .fbu-side { text-align:right; flex-shrink:0; font-size:12.5px; white-space:nowrap; }
+    .act-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px; margin-bottom:6px; }
+    .act-tile { background:var(--surface2); border:1px solid var(--border2); border-radius:10px;
+      padding:11px 8px; text-align:center; cursor:pointer; font:inherit; }
+    .act-tile:hover { border-color:var(--border); }
+    .act-tile.is-on { border-color:var(--blue); background:var(--surface); }
+    .act-n { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; }
+    .act-l { font-size:10.5px; color:var(--text3); margin-top:3px; }
 
     /* ── PLAN BADGES ── */
     .pbadge {
@@ -945,6 +952,18 @@
     </div>
 
     <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Who is using the app</div>
+      <div class="ad-card-sub">
+        Last activity per account, so "signed up and never came back" stops looking
+        identical to "studying every evening". Only a rolling timestamp is kept, never a
+        history of what anyone read. Admin accounts are excluded, otherwise time spent in
+        this console would inflate the very numbers it is here to report. Tap a tile to
+        filter, and anyone to open their profile.
+      </div>
+      <div id="act-body"><div class="ad-loading">Loading...</div></div>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Who is where</div>
       <div class="ad-card-sub">
         The same funnel, by person. With a few dozen users the individual answer is
@@ -1717,7 +1736,7 @@
         </div>
         <div class="ad-field" style="max-width:220px">
           <label class="ad-label">Attach a coupon</label>
-          <select class="ad-select" id="bulk-coupon"></select>
+          <select class="ad-select" id="bulk-coupon" onchange="mailBulkPreview()"></select>
         </div>
       </div>
 
@@ -1725,15 +1744,15 @@
 
       <div class="ad-field">
         <label class="ad-label">Subject</label>
-        <input class="ad-input" id="bulk-subject" placeholder="Shown in their inbox">
+        <input class="ad-input" id="bulk-subject" placeholder="Shown in their inbox" oninput="bulkArm()">
       </div>
       <div class="ad-field">
         <label class="ad-label">Heading</label>
-        <input class="ad-input" id="bulk-heading" placeholder="Large text at the top">
+        <input class="ad-input" id="bulk-heading" placeholder="Large text at the top" oninput="mailBulkPreview()">
       </div>
       <div class="ad-field">
         <label class="ad-label">Message</label>
-        <textarea class="ad-input ad-textarea" id="bulk-body" rows="6" placeholder="Write it as you would to one person." oninput="bulkPreview()"></textarea>
+        <textarea class="ad-input ad-textarea" id="bulk-body" rows="6" placeholder="Write it as you would to one person." oninput="mailBulkPreview(); bulkArm();"></textarea>
         <div class="ad-hint">Placeholders: <code>{{name}}</code> their first name, <code>{{coupon}}</code> the code above.</div>
       </div>
 
@@ -2014,6 +2033,7 @@ function logAdminAction(action, target, details) {
     _myEmail = email;
     document.getElementById('ad-avatar').textContent = email[0] ? email[0].toUpperCase() : 'A';
     document.getElementById('ad-user-email').textContent = email;
+    startAdminHeartbeat();
   } catch (e) {
     console.error(e);
     window.location.replace('../auth.html');
@@ -2229,6 +2249,79 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
   return expCell('<span class="active-tag">' + fmtDate(iso) + '</span>' + countdown(iso));
 }
 
+/* ── Activity heartbeat ──────────────────────────────────────────────
+   The console stamps last_active_at too, so an admin reading the dashboard
+   counts as using the app rather than looking permanently inactive.
+
+   Admins are excluded from the customer "online now" figure below. Leaving
+   them in would mean this console inflates the very number it exists to
+   report, and an hour spent in here would read as an hour of study. */
+function startAdminHeartbeat() {
+  var beat = function () {
+    if (document.hidden) return;
+    _sb.rpc('touch_activity').then(function () {}, function () {});
+  };
+  beat();
+  setInterval(beat, 3 * 60 * 1000);
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) beat(); });
+}
+
+/* ── Who is using the app ────────────────────────────────────────── */
+var _activity = [];
+
+async function loadUserActivity() {
+  var box = document.getElementById('act-body');
+  if (!box) return;
+  var res = await _sb.from('user_activity').select('*').order('last_active_at', { ascending: false, nullsFirst: false });
+  if (res.error) {
+    box.innerHTML = '<div class="ad-loading">Run activity_tracker_setup.sql to enable this.</div>';
+    return;
+  }
+  _activity = res.data || [];
+  renderActivity();
+}
+
+function renderActivity() {
+  var box = document.getElementById('act-body');
+  // Customers only. See startAdminHeartbeat: counting the team would make
+  // this number describe us rather than them.
+  var rows = _activity.filter(function (u) { return !u.is_admin; });
+
+  var BUCKETS = [
+    ['online',    'Online now',        'var(--green)'],
+    ['recent',    'In the last hour',  'var(--green)'],
+    ['today',     'Today',             'var(--blue)'],
+    ['this_week', 'This week',         'var(--text2)'],
+    ['lapsed',    'Not for a week',    'var(--orange)'],
+    ['never',     'Never opened it',   'var(--red)'],
+  ];
+  var counts = {};
+  rows.forEach(function (u) { counts[u.activity] = (counts[u.activity] || 0) + 1; });
+
+  var tiles = BUCKETS.map(function (b) {
+    var n = counts[b[0]] || 0;
+    return '<button class="act-tile' + (_actFilter === b[0] ? ' is-on' : '') + '" onclick="setActFilter(' + attrJs(b[0]) + ')">'
+      + '<div class="act-n" style="color:' + b[2] + '">' + n + '</div>'
+      + '<div class="act-l">' + b[1] + '</div></button>';
+  }).join('');
+
+  var shown = _actFilter ? rows.filter(function (u) { return u.activity === _actFilter; }) : rows.slice(0, 25);
+  var list = shown.map(function (u) {
+    return '<div class="fbu-row" onclick="openUserProfile(' + attrJs(u.user_id) + ')">'
+      + '<div class="fbu-main"><div class="fbu-email">' + esc(u.email || '-') + '</div>'
+      +   '<div class="fbu-meta">' + esc(planLabel(u.subscription_plan)) + '</div></div>'
+      + '<div class="fbu-side">' + (u.last_active_at ? fmtDateTime(u.last_active_at) : '<span style="color:var(--red)">never opened</span>') + '</div>'
+      + '</div>';
+  }).join('');
+
+  box.innerHTML = '<div class="act-grid">' + tiles + '</div>'
+    + (_actFilter ? '<div style="font-size:12px;color:var(--text3);margin:10px 0 4px">Showing ' + shown.length + '. <button class="ad-btn btn-ghost btn-sm" onclick="setActFilter(null)">Show all</button></div>' : '')
+    + (list || '<div class="ad-loading">Nobody in this group.</div>');
+}
+
+var _actFilter = null;
+function setActFilter(v) { _actFilter = (_actFilter === v) ? null : v; renderActivity(); }
+
 /* ── Funnel, per person ──────────────────────────────────────────── */
 var _fbu = [];
 
@@ -2366,6 +2459,7 @@ async function loadFunnel() {
 async function loadDashboard() {
   loadFunnel();
   loadFunnelUsers();
+  loadUserActivity();
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
       .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
@@ -5222,7 +5316,10 @@ function tplPreview() {
     document.getElementById('tpl-coupon').value);
 }
 
-function bulkPreview() {
+// Named for the mail tab specifically. It was called bulkPreview() and
+// silently overwrote the bulk PRICING preview of the same name in the plans
+// tab, because the later definition wins. Two unrelated features, one name.
+function mailBulkPreview() {
   previewBox('bulk-preview-box',
     document.getElementById('bulk-heading').value,
     document.getElementById('bulk-body').value,

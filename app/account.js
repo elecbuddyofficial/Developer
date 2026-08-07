@@ -448,7 +448,53 @@
   // polling briefly is more reliable than picking one page's hook.
   var tries = 0;
   var iv = setInterval(function () {
-    if (window._sbClient && window._sbUser) { clearInterval(iv); EBNotify.start(); }
+    if (window._sbClient && window._sbUser) { clearInterval(iv); EBNotify.start(); EBActivity.start(); }
     else if (++tries > 60) { clearInterval(iv); }      // ~30s, then give up
   }, 500);
+
+  /* ── Activity heartbeat ───────────────────────────────────────────────
+     Stamps last_active_at so the admin console can tell "signed up and never
+     came back" from "studying every evening". Those look identical in the
+     users list today and need opposite responses.
+
+     Through an RPC rather than an UPDATE: the allowlist guard on profiles
+     reverts anything a user writes beyond their name, progress and mail
+     preference, so a direct write here would be silently discarded. The
+     function takes no arguments, so it cannot be aimed at another account or
+     used to backdate anything.
+
+     Cheap by construction. One write every few minutes per open tab, only
+     while the tab is actually in front of somebody: a phone left on a desk
+     with the app open is not "using the app", and counting it would make the
+     numbers say something untrue. */
+  var EBActivity = {
+    EVERY_MS: 3 * 60 * 1000,
+    _last: 0,
+    _timer: null,
+
+    beat: function (force) {
+      if (!window._sbClient || !window._sbUser) return;
+      if (document.hidden) return;
+      var now = Date.now();
+      // Coming back to the tab fires this as well as the timer, so a floor
+      // stops a burst of focus changes turning into a burst of writes.
+      if (!force && now - this._last < this.EVERY_MS - 5000) return;
+      this._last = now;
+      window._sbClient.rpc('touch_activity').then(function () {}, function () {
+        // Losing a heartbeat is not worth a console error on a study page.
+      });
+    },
+
+    start: function () {
+      var self = this;
+      self.beat(true);
+      if (self._timer) clearInterval(self._timer);
+      self._timer = setInterval(function () { self.beat(false); }, self.EVERY_MS);
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) self.beat(false);
+      });
+    },
+  };
+
+  window.EBActivity = EBActivity;
 })();
