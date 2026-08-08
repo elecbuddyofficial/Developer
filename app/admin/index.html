@@ -860,6 +860,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>Users</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('funnel');closeMobNav()" data-tab="funnel" title="Upgrade Funnel">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>
+      <span>Funnel</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('online');closeMobNav()" data-tab="online" title="Online Status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8"/><path d="M18.4 18.4a9 9 0 0 0 0-12.8"/><path d="M2.8 2.8a13 13 0 0 0 0 18.4"/><path d="M21.2 21.2a13 13 0 0 0 0-18.4"/></svg>
       <span>Online Status</span>
@@ -938,52 +942,6 @@
     <div class="ad-ph">
       <h1>Analytics</h1>
       <p>Live overview of growth, revenue, and subscription health.</p>
-    </div>
-
-    <div class="ad-card" style="margin-bottom:16px">
-      <div class="ad-card-head">Upgrade funnel</div>
-      <div class="ad-card-sub">
-        How far people get on the way to paying, and where they stop. Counts
-        <strong>people</strong>, not clicks, so someone who opens the window four times is
-        one person still deciding. Each step includes everyone who got further, so the
-        numbers only ever go down. A big drop between two steps is where the problem is:
-        losing them at <em>Picked a plan</em> points at price or at the tiers being
-        confusing, losing them at <em>Reached the payment window</em> points at checkout
-        itself.
-      </div>
-      <div id="funnel-body"><div class="ad-loading">Loading...</div></div>
-      <div id="funnel-problems" style="margin-top:12px"></div>
-    </div>
-
-    <div class="ad-card" style="margin-bottom:16px">
-      <div class="ad-card-head">Who is where</div>
-      <div class="ad-card-sub">
-        The same funnel, by person. With a few dozen users the individual answer is
-        worth more than the percentage: someone who opened the price four times and
-        never picked a plan is a person to email, not a number to average away.
-        <strong>Times</strong> counts how often they came back to look, which is the
-        clearest signal of interest. Click anyone to open their profile.
-      </div>
-      <div class="ad-row" style="align-items:flex-end">
-        <div class="ad-field" style="max-width:340px">
-          <label class="ad-label">Show</label>
-          <select class="ad-select" id="fbu-filter" onchange="renderFunnelUsers()">
-            <option value="stuck">Opened prices but never paid</option>
-            <option value="3">Left at the payment window</option>
-            <option value="2">Picked a plan, never reached payment</option>
-            <option value="1">Opened prices, never picked a plan</option>
-            <option value="0">Never opened the upgrade window</option>
-            <option value="failed">Payment failed or was blocked</option>
-            <option value="4">Paid</option>
-            <option value="all">Everyone</option>
-          </select>
-        </div>
-        <div class="ad-field" style="max-width:220px">
-          <label class="ad-label">&nbsp;</label>
-          <div id="fbu-count" style="font-size:12.5px;color:var(--text3);padding-bottom:10px"></div>
-        </div>
-      </div>
-      <div id="fbu-list"><div class="ad-loading">Loading...</div></div>
     </div>
 
     <!-- Primary KPIs -->
@@ -1133,6 +1091,59 @@
   </div>
 
   <!-- GRANT ACCESS ───────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-funnel">
+    <div class="ad-ph">
+      <h1>Upgrade Funnel</h1>
+      <p>Where people stop on the way to paying, and who stopped there.</p>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Upgrade funnel</div>
+      <div class="ad-card-sub">
+        How far people get on the way to paying, and where they stop. Counts
+        <strong>people</strong>, not clicks, so someone who opens the window four times is
+        one person still deciding. Each step includes everyone who got further, so the
+        numbers only ever go down. A big drop between two steps is where the problem is:
+        losing them at <em>Picked a plan</em> points at price or at the tiers being
+        confusing, losing them at <em>Reached the payment window</em> points at checkout
+        itself.
+      </div>
+      <div id="funnel-body"><div class="ad-loading">Loading...</div></div>
+      <div id="funnel-problems" style="margin-top:12px"></div>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Who is where</div>
+      <div class="ad-card-sub">
+        The same funnel, by person. With a few dozen users the individual answer is
+        worth more than the percentage: someone who opened the price four times and
+        never picked a plan is a person to email, not a number to average away.
+        <strong>Times</strong> counts how often they came back to look, which is the
+        clearest signal of interest. Click anyone to open their profile.
+      </div>
+      <div class="ad-row" style="align-items:flex-end">
+        <div class="ad-field" style="max-width:340px">
+          <label class="ad-label">Show</label>
+          <select class="ad-select" id="fbu-filter" onchange="renderFunnelUsers()">
+            <option value="stuck">Opened prices but never paid</option>
+            <option value="3">Left at the payment window</option>
+            <option value="2">Picked a plan, never reached payment</option>
+            <option value="1">Opened prices, never picked a plan</option>
+            <option value="0">Never opened the upgrade window</option>
+            <option value="failed">Payment failed or was blocked</option>
+            <option value="4">Paid</option>
+            <option value="all">Everyone</option>
+          </select>
+        </div>
+        <div class="ad-field" style="max-width:220px">
+          <label class="ad-label">&nbsp;</label>
+          <div id="fbu-count" style="font-size:12.5px;color:var(--text3);padding-bottom:10px"></div>
+        </div>
+      </div>
+      <div id="fbu-list"><div class="ad-loading">Loading...</div></div>
+    </div>
+  </div>
+
   <div class="ad-tab" id="tab-online">
     <div class="ad-ph">
       <h1>Online Status</h1>
@@ -1980,7 +1991,7 @@ var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _grantUser, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
-var TAB_NAMES = ['dashboard', 'users', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'status'];
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -2087,6 +2098,10 @@ function showTab(name) {
   // Refetched on every visit: "online now" is a live figure, and showing one
   // cached from an hour ago would be worse than showing nothing.
   if (name === 'online' && typeof loadUserActivity === 'function') loadUserActivity();
+  if (name === 'funnel') {
+    if (typeof loadFunnel === 'function') loadFunnel();
+    if (typeof loadFunnelUsers === 'function') loadFunnelUsers();
+  }
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
@@ -2472,8 +2487,6 @@ async function loadFunnel() {
 }
 
 async function loadDashboard() {
-  loadFunnel();
-  loadFunnelUsers();
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
       .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
