@@ -1011,20 +1011,6 @@
 
 <!-- Too many devices. Blocking, because the alternative is silently signing
      someone out of a device they are still using. -->
-<div id="dev-block" style="display:none;position:fixed;inset:0;z-index:10006;background:rgba(4,9,20,0.95);backdrop-filter:blur(6px);overflow-y:auto;">
-  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div style="width:100%;max-width:440px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">
-      <div style="font-size:18px;font-weight:700;color:#DDE5EF;">Too many devices</div>
-      <div style="font-size:12.5px;color:#8FA3B8;margin-top:6px;line-height:1.55;">
-        Your account is already signed in on <strong id="dev-block-limit">3</strong> devices, which is the limit.
-        Remove one below to use this device. Whichever you remove is signed out the next time it opens the app.
-      </div>
-      <div id="dev-block-list" style="margin-top:16px;"></div>
-      <button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid #1A3050;border-radius:8px;font-size:13px;color:#8FA3B8;font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>
-    </div>
-  </div>
-</div>
-
 <!-- ── What's new ──────────────────────────────────────────── -->
 <div id="upd-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
@@ -1740,7 +1726,7 @@ function setTheme(t) {
         // costs no extra round trip. It is a no-op after the first time.
         if (typeof window.maybeShowWelcome === 'function') window.maybeShowWelcome(profile);
         if (typeof window.maybeShowUpdates === 'function') window.maybeShowUpdates();
-        if (typeof window.registerThisDevice === 'function') window.registerThisDevice();
+        if (window.EBDevices) window.EBDevices.register();
         if (typeof window.refreshDeletionState === 'function') window.refreshDeletionState(profile);
 
         var wasAccess = window._access || { oral: false, written: false };
@@ -1824,7 +1810,7 @@ function setTheme(t) {
      // Moving the tooltip to <body> puts its 9010 in the same contest as the
      // sidebar's 9003, which is the only way it can actually win.
      'guide-overlay', 'guide-tooltip', 'tx-modal', 'wel-modal', 'upd-modal',
-     'del-banner', 'dev-block', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
+     'del-banner', 'back-to-top', 'oral-scroll-hint'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el && el.parentNode !== document.body) document.body.appendChild(el);
     });
@@ -1980,107 +1966,6 @@ function setTheme(t) {
     // Terms section 9 has always promised a device limit. Nothing enforced it
     // until now: the devices table existed and no code anywhere touched it.
 
-    var EB_DEV_KEY = 'eb_device_id';
-
-    // A random id this browser generates once, NOT a measurement of the
-    // machine. No canvas, no fonts, no hardware probing. That means clearing
-    // site data looks like a new device and costs a slot, which is the honest
-    // price of not fingerprinting anybody.
-    function ebDeviceId() {
-      try {
-        var id = localStorage.getItem(EB_DEV_KEY);
-        if (!id) {
-          id = (crypto.randomUUID ? crypto.randomUUID()
-                                  : String(Date.now()) + Math.random().toString(36).slice(2));
-          localStorage.setItem(EB_DEV_KEY, id);
-        }
-        return id;
-      } catch (e) {
-        // Private mode: no stable id available, so this browser simply is not
-        // counted. Better than refusing entry to someone who paid.
-        return null;
-      }
-    }
-
-    // Coarse on purpose. Enough for a reader to recognise which row is their
-    // own phone when choosing one to remove, and nothing more.
-    function ebDeviceLabel() {
-      var ua = navigator.userAgent || '';
-      var os = /iPhone|iPad|iPod/.test(ua) ? 'iPhone'
-             : /Android/.test(ua)          ? 'Android'
-             : /Macintosh/.test(ua)        ? 'Mac'
-             : /Windows/.test(ua)          ? 'Windows'
-             : /Linux/.test(ua)            ? 'Linux' : 'Device';
-      var br = /Edg\//.test(ua)     ? 'Edge'
-             : /OPR\//.test(ua)     ? 'Opera'
-             : /Chrome\//.test(ua)  ? 'Chrome'
-             : /Firefox\//.test(ua) ? 'Firefox'
-             : /Safari\//.test(ua)  ? 'Safari' : 'Browser';
-      return br + ' on ' + os;
-    }
-
-    window._ebDevicesRegistered = false;
-
-    window.registerThisDevice = async function() {
-      if (window._ebDevicesRegistered) return;
-      if (!window._sbClient || !window._sbUser) return;
-      var id = ebDeviceId();
-      if (!id) return;                       // private mode, see above
-      window._ebDevicesRegistered = true;
-
-      try {
-        var res = await window._sbClient.functions.invoke('register-device', {
-          body: { fingerprint: id, label: ebDeviceLabel() },
-        });
-        var d = res && res.data;
-        if (!d || d.allowed !== false) return;
-
-        document.getElementById('dev-block-limit').textContent = d.limit || 3;
-        document.getElementById('dev-block-list').innerHTML = devRowsHtml(d.devices || [], 'dev-block');
-        document.getElementById('dev-block').style.display = 'block';
-        document.documentElement.classList.add('_modal-open');
-      } catch (e) {
-        // Fail open. This exists to discourage sharing, not to be the reason
-        // a paying reader cannot open their notes.
-        console.warn('device check skipped:', e);
-      }
-    };
-
-    function devRowsHtml(rows, ctx) {
-      if (!rows.length) return '<div style="font-size:11.5px;color:#6E8AA6;">No devices registered yet.</div>';
-      var mine = null;
-      try { mine = localStorage.getItem(EB_DEV_KEY); } catch (e) {}
-      return rows.map(function(r) {
-        var when = r.last_seen ? new Date(r.last_seen).toLocaleDateString('en-GB',
-                     { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-        var isThis = r.fingerprint && mine && r.fingerprint === mine;
-        return '<div style="display:flex;align-items:center;gap:10px;background:#070D1A;border:1px solid #1A3050;border-radius:6px;padding:9px 11px;margin-bottom:8px;">'
-          + '<div style="flex:1;min-width:0;">'
-          +   '<div style="font-size:12.5px;color:#DDE5EF;font-weight:600;">' + escNf(r.device_label || 'Unknown device')
-          +     (isThis ? ' <span style="font-size:10px;color:#C8A44A;font-weight:700;white-space:nowrap;">THIS DEVICE</span>' : '')
-          +   '</div>'
-          +   '<div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;">Last used ' + escNf(when) + '</div>'
-          + '</div>'
-          + '<button onclick="removeDevice(' + JSON.stringify(r.id).replace(/"/g, '&quot;') + ',\'' + ctx + '\')" '
-          +   'style="min-height:34px;background:none;border:1px solid rgba(224,90,106,0.35);border-radius:6px;padding:6px 12px;font-size:11.5px;color:#E05A6A;font-weight:600;cursor:pointer;font-family:inherit;flex-shrink:0;">Remove</button>'
-          + '</div>';
-      }).join('');
-    }
-
-    window.removeDevice = async function(id, ctx) {
-      if (!window._sbClient) return;
-      // The owner may delete their own device rows; RLS enforces that it is
-      // only ever their own.
-      var { error } = await window._sbClient.from('devices').delete()
-        .eq('id', id).eq('user_id', window._sbUser.id);
-      if (error) { alert('Could not remove that device. Please try again.'); return; }
-      if (ctx === 'dev-block') {
-        location.reload();                   // re-register this device in the freed slot
-      } else {
-        loadDevices();                       // list is already open, just refresh it
-      }
-    };
-
     // Swaps which view the settings panel is showing, the same way the
     // profile panel swaps in Notifications. The panel never grows: a long
     // device list or a destructive reset gets the whole panel rather than
@@ -2108,7 +1993,7 @@ function setTheme(t) {
         .eq('user_id', window._sbUser.id)
         .order('last_seen', { ascending: false });
       if (error) { el.innerHTML = '<div style="font-size:11.5px;color:#6E8AA6;">Could not load devices.</div>'; return; }
-      el.innerHTML = devRowsHtml(data || [], 'settings');
+      el.innerHTML = window.EBDevices.rowsHtml(data || [], 'settings');
     };
 
     // ── Deletion ───────────────────────────────────────────

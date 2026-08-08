@@ -442,13 +442,164 @@
   };
 
   window.EBNotify = EBNotify;
+  /* ── Device limit ─────────────────────────────────────────────────────
+     Lives here because account.js is the only file loaded by all three
+     surfaces: index.html, courses.html and sponsorship/index.html. It used
+     to live inside index.html, which meant the limit was enforced on
+     exactly one page while sign-in sends most people to courses.html. The
+     visible symptom was a reader being told "too many devices" and then
+     carrying on regardless; the real cost was that 39 of 79 accounts had
+     never registered a device at all, so there was no data to judge whether
+     sharing was happening.
+
+     This is a deterrent, not an access gate. get-content-key decides what a
+     reader may actually open, and it deliberately knows nothing about
+     devices: a bug here should cost a nag screen, never somebody's notes. */
+  var EBDevices = {
+    KEY: 'eb_device_id',
+    _done: false,
+
+    /* A random id this browser generates once, NOT a measurement of the
+       machine. No canvas, no fonts, no hardware probing. Clearing site data
+       therefore looks like a new device and costs a slot, which is the
+       honest price of not fingerprinting anybody. */
+    deviceId: function () {
+      try {
+        var id = localStorage.getItem(this.KEY);
+        if (!id) {
+          id = (window.crypto && crypto.randomUUID)
+            ? crypto.randomUUID()
+            : String(Date.now()) + Math.random().toString(36).slice(2);
+          localStorage.setItem(this.KEY, id);
+        }
+        return id;
+      } catch (e) {
+        // Private mode: no stable id, so this browser is simply not counted.
+        // Better than refusing entry to somebody who paid.
+        return null;
+      }
+    },
+
+    /* Coarse on purpose. Enough for a reader to recognise which row is their
+       own phone when choosing one to remove, and nothing more. */
+    label: function () {
+      var ua = navigator.userAgent || '';
+      var os = /iPhone|iPad|iPod/.test(ua) ? 'iPhone'
+             : /Android/.test(ua)          ? 'Android'
+             : /Macintosh/.test(ua)        ? 'Mac'
+             : /Windows/.test(ua)          ? 'Windows'
+             : /Linux/.test(ua)            ? 'Linux' : 'Device';
+      var br = /Edg\//.test(ua)     ? 'Edge'
+             : /OPR\//.test(ua)     ? 'Opera'
+             : /Chrome\//.test(ua)  ? 'Chrome'
+             : /Firefox\//.test(ua) ? 'Firefox'
+             : /Safari\//.test(ua)  ? 'Safari' : 'Browser';
+      return br + ' on ' + os;
+    },
+
+    /* Self-contained rather than depending on the page-level escape helper,
+       which happens to exist on all three surfaces today but is defined
+       separately in each of them. */
+    esc: function (v) {
+      return String(v == null ? '' : v)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    },
+
+    rowsHtml: function (rows, ctx) {
+      if (!rows || !rows.length) {
+        return '<div style="font-size:11.5px;color:#6E8AA6;">No devices registered yet.</div>';
+      }
+      var mine = null, self = this;
+      try { mine = localStorage.getItem(this.KEY); } catch (e) {}
+      return rows.map(function (r) {
+        var when = r.last_seen
+          ? new Date(r.last_seen).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+          : '';
+        var isThis = r.fingerprint && mine && r.fingerprint === mine;
+        return '<div style="display:flex;align-items:center;gap:10px;background:#070D1A;border:1px solid #1A3050;border-radius:6px;padding:9px 11px;margin-bottom:8px;">'
+          + '<div style="flex:1;min-width:0;">'
+          +   '<div style="font-size:12.5px;color:#DDE5EF;font-weight:600;">' + self.esc(r.device_label || 'Unknown device')
+          +     (isThis ? ' <span style="font-size:10px;color:#C8A44A;font-weight:700;white-space:nowrap;">THIS DEVICE</span>' : '')
+          +   '</div>'
+          +   (when ? '<div style="font-size:11px;color:#6E8AA6;margin-top:2px;">Last used ' + self.esc(when) + '</div>' : '')
+          + '</div>'
+          + '<button onclick="EBDevices.remove(' + JSON.stringify(String(r.id)).replace(/"/g, '&quot;') + ',&quot;' + ctx + '&quot;)" '
+          +   'style="flex-shrink:0;min-height:34px;padding:6px 12px;background:none;border:1px solid #E05A6A;border-radius:6px;font-size:12px;color:#E05A6A;font-weight:600;cursor:pointer;font-family:inherit;">Remove</button>'
+          + '</div>';
+      }).join('');
+    },
+
+    remove: async function (id, ctx) {
+      if (!window._sbClient || !window._sbUser) return;
+      // RLS allows a reader to delete only their own device rows.
+      var res = await window._sbClient.from('devices').delete()
+        .eq('id', id).eq('user_id', window._sbUser.id);
+      if (res.error) { alert('Could not remove that device. Please try again.'); return; }
+      if (ctx === 'dev-block') location.reload();       // re-register into the freed slot
+      else if (typeof window.loadDevices === 'function') window.loadDevices();
+    },
+
+    /* Built here rather than in page markup, and appended to <body>, so all
+       three pages get the same thing and it cannot end up trapped inside a
+       scrolling container the way a fixed element does on iOS. */
+    _overlay: function () {
+      var el = document.getElementById('dev-block');
+      if (el) return el;
+      el = document.createElement('div');
+      el.id = 'dev-block';
+      el.style.cssText = 'display:none;position:fixed;inset:0;z-index:10006;background:rgba(4,9,20,0.95);backdrop-filter:blur(6px);overflow-y:auto;';
+      el.innerHTML =
+        '<div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">'
+        + '<div style="width:100%;max-width:440px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">'
+        +   '<div style="font-size:18px;font-weight:700;color:#DDE5EF;">Too many devices</div>'
+        +   '<div style="font-size:12.5px;color:#8FA3B8;margin-top:6px;line-height:1.55;">'
+        +     'Your account is already signed in on <strong id="dev-block-limit">3</strong> devices, which is the limit. '
+        +     'Remove one below to use this device. Whichever you remove is signed out the next time it opens the app.'
+        +   '</div>'
+        +   '<div id="dev-block-list" style="margin-top:16px;"></div>'
+        +   '<button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid #1A3050;border-radius:8px;font-size:13px;color:#8FA3B8;font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>'
+        + '</div></div>';
+      document.body.appendChild(el);
+      return el;
+    },
+
+    register: async function () {
+      if (this._done) return;
+      if (!window._sbClient || !window._sbUser) return;
+      var id = this.deviceId();
+      if (!id) return;                       // private mode, see deviceId()
+      this._done = true;
+
+      try {
+        var res = await window._sbClient.functions.invoke('register-device', {
+          body: { fingerprint: id, label: this.label() },
+        });
+        var d = res && res.data;
+        if (!d || d.allowed !== false) return;
+
+        var el = this._overlay();
+        el.querySelector('#dev-block-limit').textContent = d.limit || 3;
+        el.querySelector('#dev-block-list').innerHTML = this.rowsHtml(d.devices || [], 'dev-block');
+        el.style.display = 'block';
+        document.documentElement.classList.add('_modal-open');
+      } catch (e) {
+        // Fail open. This exists to discourage sharing, not to be the reason
+        // a paying reader cannot open their notes.
+        console.warn('device check skipped:', e);
+      }
+    },
+  };
+
+  window.EBDevices = EBDevices;
+
 
   // Self-starting with a bounded wait, so a page only has to load this file.
   // Auth is established asynchronously and each page does it differently, so
   // polling briefly is more reliable than picking one page's hook.
   var tries = 0;
   var iv = setInterval(function () {
-    if (window._sbClient && window._sbUser) { clearInterval(iv); EBNotify.start(); EBActivity.start(); }
+    if (window._sbClient && window._sbUser) { clearInterval(iv); EBNotify.start(); EBActivity.start(); EBDevices.register(); }
     else if (++tries > 60) { clearInterval(iv); }      // ~30s, then give up
   }, 500);
 
