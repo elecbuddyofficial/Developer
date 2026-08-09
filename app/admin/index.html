@@ -772,7 +772,12 @@
       font-size: 12.5px;
     }
     .prof-pay-row:last-child, .prof-mail-item:last-child { border-bottom: none; }
-    .prof-list-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); max-height: 180px; overflow-y: auto; }
+    /* 180px was sized for a short payment list. Study Progress can now run to
+       23 topics, which turned it into a three-row window with its own
+       scrollbar inside a panel that also scrolls. Roomier, and the two long
+       sections get more still. */
+    .prof-list-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); max-height: 260px; overflow-y: auto; }
+    #prof-progress, #prof-activity { max-height: 380px; }
     .prof-empty { padding: 16px; text-align: center; color: var(--text3); font-size: 12.5px; }
 
     .prof-mail-item { flex-direction: column; align-items: stretch; gap: 3px; }
@@ -806,6 +811,10 @@
       .prof-overlay { padding: 0; align-items: stretch; }
       .prof-card { max-width: 100%; min-height: 100vh; min-height: 100dvh; border-radius: 0; border: none; }
       .prof-body { max-height: none; }
+      /* No inner scrollers on touch. A box that scrolls inside a page that
+         also scrolls is the thing that makes this panel feel broken on a
+         phone, and it hides content behind a gesture nobody tries. */
+      .prof-list-wrap, #prof-progress, #prof-activity { max-height: none; overflow-y: visible; }
       .prof-stat-row { grid-template-columns: 1fr 1fr; }
     }
     
