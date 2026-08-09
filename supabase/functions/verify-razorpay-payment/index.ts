@@ -15,6 +15,15 @@ const json = (data: unknown, status = 200) =>
     headers: { ...CORS, 'Content-Type': 'application/json' },
   });
 
+/** Constant-time compare, so a wrong signature cannot be narrowed down by
+ *  timing how long the check took. Mirrors safeEqual in razorpay-webhook. */
+function safeEqual(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
@@ -59,7 +68,7 @@ serve(async (req) => {
       .map(b => b.toString(16).padStart(2, '0'))
       .join('');
 
-    if (expectedSig !== signature) {
+    if (!safeEqual(expectedSig, signature)) {
       console.error('Signature mismatch');
       return json({ error: 'Invalid signature' }, 400);
     }
