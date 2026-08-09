@@ -167,6 +167,8 @@
     .fbu-email { font-size:13px; color:var(--text); word-break:break-word; }
     .fbu-meta { font-size:11.5px; color:var(--text3); margin-top:2px; }
     .fbu-side { text-align:right; flex-shrink:0; font-size:12.5px; white-space:nowrap; }
+    .prof-topic-row { padding:7px 0; border-bottom:1px solid var(--border2); }
+    .prof-topic-row:last-child { border-bottom:none; }
     .act-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(105px,1fr)); gap:8px; margin-bottom:6px; }
     .act-tile { background:var(--surface2); border:1px solid var(--border2); border-radius:10px;
       padding:11px 8px; text-align:center; cursor:pointer; font:inherit; }
@@ -524,12 +526,17 @@
       #wh-tbody td:nth-child(3)::before { content: "Status"; }
       #wh-tbody td:nth-child(4)::before { content: "Detail"; }
       /* Coupons Tab */
+      /* Must track the header row above. The discount-coupon work inserted
+         Type and Effect as columns 2 and 3, which shifted every label after
+         it: on a phone "Type" was captioned Plan, "Effect" was captioned
+         Used, and the actions column had no caption at all. */
       #cp-tbody td:nth-child(1)::before { content: "Code"; }
-      #cp-tbody td:nth-child(2)::before { content: "Plan"; }
-      #cp-tbody td:nth-child(3)::before { content: "Used"; }
-      #cp-tbody td:nth-child(4)::before { content: "Expires"; }
-      #cp-tbody td:nth-child(5)::before { content: "Note"; }
-      #cp-tbody td:nth-child(6)::before { content: "Actions"; }
+      #cp-tbody td:nth-child(2)::before { content: "Type"; }
+      #cp-tbody td:nth-child(3)::before { content: "Effect"; }
+      #cp-tbody td:nth-child(4)::before { content: "Used"; }
+      #cp-tbody td:nth-child(5)::before { content: "Expires"; }
+      #cp-tbody td:nth-child(6)::before { content: "Note"; }
+      #cp-tbody td:nth-child(7)::before { content: "Actions"; }
       /* Activity Tab */
       #act-tbody td:nth-child(1)::before { content: "When"; }
       #act-tbody td:nth-child(2)::before { content: "Admin"; }
@@ -3130,17 +3137,22 @@ async function renderProfProgress(u) {
         var pct = Math.round((tp[k] || 0) * 100);
         var t = times[k];
         var col = pct >= 80 ? 'var(--green)' : pct >= 30 ? 'var(--blue)' : 'var(--text3)';
-        return '<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--border2)">'
-          + '<span style="font-size:11px;font-weight:700;color:var(--text3);width:32px;flex-shrink:0">' + esc(k) + '</span>'
-          + '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
-          +   esc(TOPIC_NAMES[k] || k) + '</span>'
-          + '<span style="width:74px;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;flex-shrink:0">'
-          +   '<span style="display:block;height:100%;width:' + Math.max(pct, 2) + '%;background:' + col + '"></span></span>'
-          + '<span style="width:34px;text-align:right;font-size:11.5px;font-variant-numeric:tabular-nums;color:' + col + ';font-weight:700;flex-shrink:0">' + pct + '%</span>'
+        // Topic and its timestamp are ONE block with ONE border beneath them.
+        // Split across two siblings the separator fell between a topic and its
+        // own time, so the time read as belonging to the next row down.
+        return '<div class="prof-topic-row">'
+          + '<div style="display:flex;align-items:center;gap:9px">'
+          +   '<span style="font-size:11px;font-weight:700;color:var(--text3);width:32px;flex-shrink:0">' + esc(k) + '</span>'
+          +   '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
+          +     esc(TOPIC_NAMES[k] || k) + '</span>'
+          +   '<span style="width:64px;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;flex-shrink:0">'
+          +     '<span style="display:block;height:100%;width:' + Math.max(pct, 2) + '%;background:' + col + '"></span></span>'
+          +   '<span style="width:36px;text-align:right;font-size:11.5px;font-variant-numeric:tabular-nums;color:' + col + ';font-weight:700;flex-shrink:0">' + pct + '%</span>'
           + '</div>'
-          + '<div style="font-size:10.5px;color:var(--text3);padding:0 0 6px 41px;margin-top:-4px;">'
+          + '<div style="font-size:10.5px;color:var(--text3);padding-left:41px;margin-top:3px">'
           +   (t ? fmtAgo(t.last_opened_at) + (t.opens > 1 ? ' &middot; opened ' + t.opens + ' times' : '')
                  : 'read before timings were recorded')
+          + '</div>'
           + '</div>';
       }).join('')
     + (extras.length ? renderProfExtras(extras) : '');
