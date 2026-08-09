@@ -1922,6 +1922,21 @@
         <div id="prof-edit-status" style="display:none;font-size:12px;padding:8px 11px;border-radius:var(--r8);margin-top:8px"></div>
       </div>
 
+      <!-- What they actually did -->
+      <div>
+        <div class="prof-section-title">Study Progress</div>
+        <div class="prof-list-wrap" id="prof-progress">
+          <div class="prof-empty">Loading&hellip;</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="prof-section-title">Activity Timeline</div>
+        <div class="prof-list-wrap" id="prof-activity">
+          <div class="prof-empty">Loading&hellip;</div>
+        </div>
+      </div>
+
       <!-- Payment history -->
       <div>
         <div class="prof-section-title">Payment History</div>
@@ -2822,7 +2837,7 @@ var _userFilter = 'all';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at')
+    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, last_active_at')
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -3022,14 +3037,147 @@ async function openUserProfile(userId) {
   document.getElementById('prof-payments').innerHTML = '<div class="prof-empty">Loading…</div>';
   document.getElementById('prof-mail-history').innerHTML = '<div class="prof-empty">Loading…</div>';
 
+  document.getElementById('prof-progress').innerHTML = '<div class="prof-empty">Loading&hellip;</div>';
+  document.getElementById('prof-activity').innerHTML = '<div class="prof-empty">Loading&hellip;</div>';
+
   loadProfPayments(u.id);
   loadProfMailHistory(u.id);
+  renderProfProgress(u);
+  loadProfActivity(u);
 }
 
 function closeUserProfile() {
   document.getElementById('prof-overlay').classList.remove('open');
   document.body.style.overflow = '';
   _profUser = null;
+}
+
+
+/* ── What a single reader actually did ────────────────────────────────
+   Built entirely from data already collected: topic_progress, which the
+   app writes as it is read, plus funnel_events and payments. No new
+   tracking was added for this, and nothing records WHICH page somebody
+   is on at a given moment, only how far through a topic they have got.
+
+   The question it exists to answer is why somebody with an expired trial
+   keeps coming back, or opened checkout and did not pay. Those two are
+   the most valuable people to understand and were previously invisible. */
+
+var TOPIC_NAMES = {
+  T01:'Alternator', T02:'High Voltage', T03:'Motors', T04:'Switchboard',
+  T05:'Transformers', T06:'Sensors', T07:'Control / PLC', T08:'Electronics',
+  T09:'Ship Machinery', T10:'ICCP', T11:'Power Factor', T12:'Cables',
+  T13:'Bridge Equipment I', T14:'Bridge Equipment II', T15:'Fire Fighting',
+  T16:'SOLAS', T17:'MARPOL', T18:'Electrical Survey', T19:'Tanker',
+  T20:'Construction', T21:'LSA', T22:'Practical Skills', T23:'Batteries',
+  W01:'Electrical Topics', W02:'Section II Theory', W03:'ISM Code',
+  W04:'SOLAS Full Notes', W05:'MLC 2006', W06:'MARPOL Full Notes',
+  W07:'Fire Safety & Fighting', W08:'Numerical Theory',
+};
+
+function renderProfProgress(u) {
+  var el = document.getElementById('prof-progress');
+  var tp = u.topic_progress || {};
+  var rows = Object.keys(tp)
+    .filter(function (k) { return typeof tp[k] === 'number' && tp[k] > 0; })
+    .sort(function (a, b) { return tp[b] - tp[a]; });
+
+  if (!rows.length) {
+    // Distinguishes "opened the app and read nothing" from "never came back",
+    // which need completely different follow-ups.
+    el.innerHTML = '<div class="prof-empty">Nothing read yet'
+      + (u.last_active_at ? ', though the app has been opened' : ' and the app has never been opened')
+      + '.</div>';
+    return;
+  }
+
+  var oral = rows.filter(function (k) { return k.charAt(0) === 'T'; }).length;
+  var written = rows.filter(function (k) { return k.charAt(0) === 'W'; }).length;
+
+  el.innerHTML =
+    '<div style="font-size:11.5px;color:var(--text3);padding:2px 0 8px">'
+    + '<strong style="color:var(--text)">' + rows.length + '</strong> topic' + (rows.length === 1 ? '' : 's')
+    + ' opened &middot; ' + oral + ' Oral, ' + written + ' Written</div>'
+    + rows.map(function (k) {
+        var pct = Math.round(tp[k] * 100);
+        var col = pct >= 80 ? 'var(--green)' : pct >= 30 ? 'var(--blue)' : 'var(--text3)';
+        return '<div style="display:flex;align-items:center;gap:9px;padding:6px 0;border-bottom:1px solid var(--border2)">'
+          + '<span style="font-size:11px;font-weight:700;color:var(--text3);width:32px;flex-shrink:0">' + esc(k) + '</span>'
+          + '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
+          +   esc(TOPIC_NAMES[k] || k) + '</span>'
+          + '<span style="width:74px;height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;flex-shrink:0">'
+          +   '<span style="display:block;height:100%;width:' + Math.max(pct, 2) + '%;background:' + col + '"></span></span>'
+          + '<span style="width:34px;text-align:right;font-size:11.5px;font-variant-numeric:tabular-nums;color:' + col + ';font-weight:700;flex-shrink:0">' + pct + '%</span>'
+          + '</div>';
+      }).join('');
+}
+
+async function loadProfActivity(u) {
+  var el = document.getElementById('prof-activity');
+
+  var [ev, pay] = await Promise.all([
+    _sb.from('funnel_events').select('event, plan, scope, detail, created_at')
+       .eq('user_id', u.id).order('created_at', { ascending: false }).limit(60),
+    _sb.from('payments').select('plan, scope, amount, status, created_at, paid_at')
+       .eq('user_id', u.id).order('created_at', { ascending: false }).limit(40),
+  ]);
+
+  if (ev.error && pay.error) { el.innerHTML = '<div class="prof-empty">Could not load activity.</div>'; return; }
+
+  var LABEL = {
+    upgrade_opened:   ['Opened the price list',       'var(--blue)'],
+    plan_selected:    ['Picked a plan',               'var(--orange)'],
+    checkout_opened:  ['Reached the payment window',  'var(--orange)'],
+    payment_failed:   ['Payment FAILED',              'var(--red)'],
+    checkout_blocked: ['Blocked before checkout',     'var(--red)'],
+  };
+
+  var items = [];
+
+  (ev.data || []).forEach(function (e) {
+    var l = LABEL[e.event] || [e.event, 'var(--text3)'];
+    var extra = [e.plan, e.scope].filter(Boolean).join(' ');
+    items.push({
+      at: e.created_at, colour: l[1], text: l[0],
+      sub: (extra ? extra : '') + (e.detail ? (extra ? ' &middot; ' : '') + e.detail : ''),
+    });
+  });
+
+  (pay.data || []).forEach(function (p) {
+    var money = '&#8377;' + (p.amount / 100).toLocaleString('en-IN');
+    if (p.status === 'paid') {
+      items.push({ at: p.paid_at || p.created_at, colour: 'var(--green)',
+                   text: 'PAID ' + money, sub: planLabel(p.plan, p.scope) });
+    } else {
+      items.push({ at: p.created_at,
+                   colour: p.status === 'failed' ? 'var(--red)' : 'var(--orange)',
+                   // An order that was created and never paid is the single
+                   // most actionable row in here: they decided to buy and
+                   // then stopped.
+                   text: p.status === 'failed' ? 'Payment failed ' + money
+                                               : 'Order created ' + money + ', not paid',
+                   sub: planLabel(p.plan, p.scope) });
+    }
+  });
+
+  if (u.trial_started_at) items.push({ at: u.trial_started_at, colour: 'var(--text3)', text: 'Trial started', sub: '' });
+  if (u.created_at)       items.push({ at: u.created_at,       colour: 'var(--text3)', text: 'Signed up',     sub: '' });
+
+  items = items.filter(function (i) { return i.at; })
+               .sort(function (a, b) { return new Date(b.at) - new Date(a.at); });
+
+  if (!items.length) { el.innerHTML = '<div class="prof-empty">No recorded activity.</div>'; return; }
+
+  el.innerHTML = items.map(function (i) {
+    return '<div style="display:flex;gap:9px;padding:7px 0;border-bottom:1px solid var(--border2)">'
+      + '<span style="width:6px;height:6px;border-radius:99px;background:' + i.colour + ';margin-top:6px;flex-shrink:0"></span>'
+      + '<div style="flex:1;min-width:0">'
+      +   '<div style="font-size:12.5px;color:' + i.colour + ';font-weight:600">' + i.text + '</div>'
+      +   (i.sub ? '<div style="font-size:11px;color:var(--text3);margin-top:1px">' + esc(i.sub) + '</div>' : '')
+      + '</div>'
+      + '<span style="font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0">' + fmtDateTime(i.at) + '</span>'
+      + '</div>';
+  }).join('');
 }
 
 async function loadProfPayments(userId) {
