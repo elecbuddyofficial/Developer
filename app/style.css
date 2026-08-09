@@ -128,7 +128,7 @@ a.sb-item{text-decoration:none}
 
 /* Body text */
 .n-p{font-size:15.5px;line-height:1.78;color:var(--text);margin:14px 0}
-.n-val{display:inline;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13.5px;font-weight:600;white-space:nowrap}
+.n-val{display:inline;padding:2px 8px;border-radius:4px;background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange);font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:13.5px;font-weight:600;white-space:nowrap;max-width:100%;overflow-wrap:anywhere}
 
 /* Callout boxes - important info, not alarming */
 .n-crit,.n-warn,.n-info,.n-ok{display:flex;gap:14px;align-items:flex-start;border-radius:var(--r8);padding:16px 18px;margin:20px 0;border:1px solid;border-left-width:4px}
@@ -185,7 +185,7 @@ a.sb-item{text-decoration:none}
    and adds this badge, which fades out the first time that table is
    scrolled or touched. Reuses --on-accent, added earlier for exactly this
    "glyph on a filled accent circle" case. */
-.n-table-wrap{position:relative}
+.n-table-wrap{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch}
 .n-table-hint{
   display:none;position:absolute;top:50%;right:8px;transform:translateY(-50%);
   width:26px;height:26px;border-radius:50%;
@@ -527,6 +527,13 @@ a.sb-item{text-decoration:none}
     word-break: break-word;
     overflow-wrap: anywhere;
   }
+  /* A value longer than the screen must wrap rather than run off the edge.
+     .note-doc clips horizontally on mobile, so anything that overflows is not
+     merely awkward, it is unreachable. Short values are unaffected: they fit
+     on one line regardless. */
+  .n-val { white-space: normal; }
+  /* Same reasoning for anything else that can be wider than a phone. */
+  .n-formula, pre, code { max-width: 100%; overflow-x: auto; overflow-wrap: anywhere; }
   
   /* Adjust typography & padding for mobile */
   .welcome h1 { font-size: 28px; }
