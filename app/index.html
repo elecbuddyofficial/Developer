@@ -685,12 +685,29 @@
     <!-- Tier cards, rendered from pricing_plans for whichever scope locked this content -->
     <div id="gate-plan-cards" style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;text-align:left;"></div>
 
-    <button onclick="openUpgradeModal()" style="background:none;border:none;color:#6E8AA6;font-size:12px;cursor:pointer;text-decoration:underline;margin-bottom:8px;display:block;width:100%;">See all tracks &amp; durations</button>
+    <!-- Filled by renderGateCards. The cards above only ever show ONE track,
+         the one that locked this content, so without this a reader has no way
+         of knowing the other two exist or what they cost. It used to be a grey
+         underlined link styled exactly like "Continue with free preview"
+         directly beneath it, which read as a way out rather than an offer. -->
+    <div id="gate-more" style="margin-bottom:12px;"></div>
     <button onclick="closeGate()" style="background:none;border:none;color:#6E8AA6;font-size:13px;cursor:pointer;text-decoration:underline;">Continue with free preview</button>
   </div>
 </div>
 
 <style>
+  .gate-more-btn {
+    display: flex; align-items: center; gap: 12px; width: 100%;
+    background: rgba(200,164,74,0.07);
+    border: 1px solid rgba(200,164,74,0.35);
+    border-radius: 10px; padding: 12px 14px; cursor: pointer;
+    font-family: inherit; transition: background .15s, border-color .15s;
+  }
+  .gate-more-btn:hover {
+    background: rgba(200,164,74,0.13);
+    border-color: rgba(200,164,74,0.6);
+  }
+
   .gate-plan {
     display: flex; align-items: center; justify-content: space-between;
     /* wrap so the "what this does to your dates" line can sit on its own row
@@ -2986,6 +3003,56 @@ function renderGateCards() {
       + '<div style="flex-basis:100%;font-size:10.5px;color:#6E8AA6;margin-top:6px;line-height:1.45;">' + escUp(purchaseEffectText(dur, scope)) + '</div>'
       + '</div>';
   }).join('');
+
+  renderGateMore(scope);
+}
+
+/* The other two tracks, priced. A reader who hit the Oral paywall may only
+   want Written, or may be better served by the combined track, and the gate
+   above cannot tell them because it renders a single scope by design. Prices
+   come from the same pricing_plans rows the cards use, so a sale or a price
+   change is reflected here without touching this code. */
+function renderGateMore(scope) {
+  var box = document.getElementById('gate-more');
+  if (!box) return;
+
+  var others = ['written', 'oral', 'both'].filter(function (sc) { return sc !== scope; });
+
+  var items = others.map(function (sc) {
+    var cheapest = null;
+    TIER_ORDER.forEach(function (dur) {
+      var row = findPlanRow(dur, sc);
+      if (!row) return;
+      var amt = effectivePrice(row).amount;
+      if (cheapest === null || amt < cheapest.amount) cheapest = { amount: amt, row: row };
+    });
+    if (!cheapest) return null;
+    return {
+      name: cheapest.row.track_name || TRACK_FALLBACK_NAME[sc],
+      what: sc === 'both' ? 'Oral + Written' : (sc === 'oral' ? 'Oral only' : 'Written only'),
+      from: cheapest.amount,
+    };
+  }).filter(Boolean);
+
+  // If pricing has not loaded yet, fall back to the plain link rather than
+  // showing an empty box or a price that is not real.
+  if (!items.length) {
+    box.innerHTML = '<button onclick="openUpgradeModal()" style="background:none;border:none;color:#6E8AA6;font-size:12px;cursor:pointer;text-decoration:underline;display:block;width:100%;">See all tracks &amp; durations</button>';
+    return;
+  }
+
+  box.innerHTML =
+    '<button onclick="openUpgradeModal()" class="gate-more-btn">'
+    + '<div style="flex:1;min-width:0;text-align:left;">'
+    +   '<div style="font-size:12.5px;font-weight:700;color:#DDE5EF;">This is one of three tracks</div>'
+    +   items.map(function (i) {
+          return '<div style="font-size:11.5px;color:#8FA3B8;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'
+            + '<span style="color:#C8A44A;font-weight:700;">' + escUp(i.name) + '</span> &middot; '
+            + escUp(i.what) + ' from <span style="color:#DDE5EF;font-weight:700;">' + fmtRupees(i.from) + '</span></div>';
+        }).join('')
+    + '</div>'
+    + '<span style="font-size:18px;color:#C8A44A;flex-shrink:0;line-height:1;">&rsaquo;</span>'
+    + '</button>';
 }
 window.renderGateCards = renderGateCards;
 
