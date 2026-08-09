@@ -339,8 +339,40 @@ window.loadWrittenNotes = function(topicCode, html) {
     _addTableScrollHints(document.getElementById('notes-container'));
 };
 
+/* Records that a topic was opened, and when. profiles.topic_progress holds
+   how far somebody got but carries no times at all, so "what did they do with
+   their trial" could not be answered from it.
+
+   Kept deliberately cheap, because this is a study app before it is an
+   analytics one:
+     - ONE request per topic opened, never per scroll or per section.
+     - The same topic is not re-counted within 5 minutes, so flipping between
+       notes and quiz does not inflate the count or the traffic. A genuine
+       return an hour later is what "opens" is meant to mean.
+     - Fire and forget, never awaited, errors swallowed. It cannot delay the
+       notes rendering or break a reader's session if it fails.
+     - Progress is NOT sent here. That would mean a second write on every
+       scroll increment; the admin panel reads progress from the column that
+       already exists and only takes the timing from this. */
+window._topicSeen = window._topicSeen || {};
+function _touchTopic(topicId, kind) {
+    try {
+        if (!window._sbClient || !window._sbUser || !topicId) return;
+        kind = kind || 'notes';
+        // Keyed by kind as well, so reading T01 does not suppress the record
+        // of taking the T01 quiz a moment later.
+        var key = kind + ':' + topicId;
+        var now = Date.now();
+        if (window._topicSeen[key] && now - window._topicSeen[key] < 5 * 60 * 1000) return;
+        window._topicSeen[key] = now;
+        window._sbClient.rpc('touch_topic', { p_topic: topicId, p_kind: kind })
+            .then(function(){}, function(){});
+    } catch (e) { /* never let measurement break studying */ }
+}
+
 window.fetchTopicData = function(topicId, topicKey) {
     window._activeTopicId = topicId;
+    _touchTopic(topicId);
 
     if (!window.NOTE_HTML[topicId]) {
         let pathStr = topicId.startsWith('W') ? '../data/Written/notes/' : '../data/Orals/notes/';
@@ -1052,6 +1084,9 @@ function clearActiveQuiz(catId) {
 
 var QZ={qs:[],i:0,correct:0,catId:'',catName:'',answered:false,history:[]};
 function startQuiz(catId,catName,qs,savedState){
+  // Which topics somebody quizzes on says as much as what they read, and it
+  // is the surface trial users reach for most.
+  _touchTopic(window._activeTopicId || catId, 'quiz');
   if (savedState) {
       QZ = savedState;
       if(!QZ.catId) QZ.catId = catId;
@@ -1730,6 +1765,7 @@ function qbUpdatePreview() {
 }
 
 function qbStart() {
+  _touchTopic('ALL', 'qbank');
   var pool = qbGetPool();
   if (!pool.length) { appToast('No questions match your filters. Try selecting more topics or categories.'); return; }
   qbCloseDropdown();
@@ -2540,6 +2576,7 @@ function _waitForAccessGate() {
 }
 
 async function openSurveyorQA(onReady) {
+    _touchTopic('ALL', 'surveyor');
     // Sidebar clicks already await this via installGate()'s wrapper (index.html),
     // but hash-based navigation (#sq-all, #sq-grid, deep links, refresh/back on
     // a #sq-* URL) calls this directly - without this guard, it can race ahead
