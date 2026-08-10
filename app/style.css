@@ -1200,19 +1200,30 @@ a.sb-item{text-decoration:none}
 .note-diagram-wrap img:hover {
     box-shadow: 0 4px 24px rgba(59,130,246,.25);
 }
-.note-diagram-wrap img.zoomed {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: auto;
-    max-width: 95vw;
-    max-height: 92vh;
-    object-fit: contain;
-    z-index: 9999;
-    border-radius: 8px;
-    cursor: zoom-out;
-    box-shadow: 0 0 0 100vmax rgba(0,0,0,.88);
+/* The zoomed view is its own element appended to <body> (see _dgmOpen in
+   app.js), not a class on the image where it sits. Faking the backdrop with a
+   100vmax box-shadow on a position:fixed image failed because the image lives
+   inside #content, which scrolls, and .note-doc, which clips horizontally on
+   mobile: the shadow was cut off by an ancestor and the fixed element was
+   positioned against it rather than the viewport, so the page and sidebar
+   showed through. A real overlay on <body> escapes both. */
+.dgm-lightbox {
+  position: fixed; inset: 0; z-index: 10001;   /* above #content (9999) and the hw viewer (10000) */
+  background: rgba(0,0,0,.93);
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px; cursor: zoom-out;
+  overscroll-behavior: contain;
+}
+.dgm-lightbox[hidden] { display: none; }
+.dgm-lightbox-img {
+  max-width: 96vw; max-height: 94vh;
+  width: auto; height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  /* Diagrams are line art on white; without this a dark theme shows them on
+     a dark ground with the strokes barely visible. */
+  background: #fff;
+  box-shadow: 0 18px 60px rgba(0,0,0,.6);
 }
 .note-diagram-cap {
     font-size: 12px;

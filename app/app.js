@@ -2850,20 +2850,62 @@ function openSqDetail(surveyorName) {
     _sqDetailRenderQuestions();
 }
 
-// ── DIAGRAM ZOOM TOGGLE ───────────────────────────────────────
+// ── DIAGRAM ZOOM ──────────────────────────────────────────────
+// A real overlay appended to <body>, not a class on the image in place.
+//
+// The previous version set position:fixed on the image itself and faked the
+// backdrop with `box-shadow: 0 0 0 100vmax`. Both halves of that fail here.
+// The image lives inside #content, which scrolls, and inside .note-doc, which
+// sets overflow-x:hidden on mobile, so the shadow is clipped by an ancestor
+// and a fixed child is positioned against it rather than the viewport. The
+// result was the page and the sidebar showing through a backdrop that only
+// partly covered, differently depending on scroll position.
+//
+// Appending to <body> escapes every clipping and scrolling ancestor, which is
+// the same reason the handwritten sheet viewer below builds its own element.
+var _dgmLb = null;
+
+function _dgmLightbox() {
+    if (_dgmLb) return _dgmLb;
+    var o = document.createElement('div');
+    o.className = 'dgm-lightbox';
+    o.hidden = true;
+    o.innerHTML = '<img class="dgm-lightbox-img" alt="">';
+    o.addEventListener('click', _dgmClose);
+    document.body.appendChild(o);
+    _dgmLb = o;
+    return o;
+}
+
+function _dgmOpen(src, alt) {
+    var o = _dgmLightbox();
+    var img = o.querySelector('.dgm-lightbox-img');
+    img.src = src;
+    img.alt = alt || '';
+    o.hidden = false;
+    document.documentElement.classList.add('_modal-open');
+}
+
+function _dgmClose() {
+    if (!_dgmLb || _dgmLb.hidden) return;
+    _dgmLb.hidden = true;
+    // Released so a large diagram is not held in memory behind the reader.
+    _dgmLb.querySelector('.dgm-lightbox-img').removeAttribute('src');
+    document.documentElement.classList.remove('_modal-open');
+}
+
 document.addEventListener('click', function(e) {
-    if (e.target.matches('.note-diagram-wrap img')) {
-        e.target.classList.toggle('zoomed');
-    } else {
-        var z = document.querySelector('.note-diagram-wrap img.zoomed');
-        if (z) z.classList.remove('zoomed');
+    var img = e.target.closest('.note-diagram-wrap img');
+    // .dgm-blur-bg is the Data Saver placeholder's 28px preview. Tapping that
+    // must load the real diagram, which its own handler above does, not open a
+    // lightbox of a blurred thumbnail.
+    if (img && !img.classList.contains('dgm-blur-bg') && !img.closest('.dgm-lightbox')) {
+        _dgmOpen(img.currentSrc || img.src, img.alt);
     }
 });
+
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        var z = document.querySelector('.note-diagram-wrap img.zoomed');
-        if (z) z.classList.remove('zoomed');
-    }
+    if (e.key === 'Escape') _dgmClose();
 });
 
 // ── HANDWRITTEN SHEET ZOOM VIEWER ─────────────────────────────

@@ -641,6 +641,10 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <li><strong>REQUIRED BY SOLAS AND CLASS</strong> - mandatory for all merchant ships - part of electrical installation requirements.</li>
       <li><strong>PREVENTS CASCADE FAILURE</strong> - without preference tripping, generator trip causes blackout, emergency generator overloads, emergency generator trips - catastrophic.</li>
     </ul>
+  
+    <div class="note-diagram-wrap"><img src="../data/diagrams/t01-dashpot.webp" alt="Dashpot preferential trip arrangement - three stages of tripping with delayed non-essential load shedding and instantaneous short circuit contacts" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRmYAAABXRUJQVlA4IFoAAACwAwCdASocABIAPu1mq06ppaOiKA1RMB2JaQAAO7tqaeEDwGVWYAD+8GVx0+I6G5jAWVbAA0GIJ6AaxuuIw4Zm3aHC0hoswjPJNAzksirnibWJJAyjydD4AAA=">
+      <div class="note-diagram-cap">Fig. Dashpot Preferential Trip - this is the sketch part (a) asks for. Each trip relay carries a dashpot that sets its own time delay, so the stages act in order: non-essential loads shed first, semi-essential next, and only if the overload persists does the main breaker trip. The instantaneous short circuit contact bypasses the dashpot altogether, which is why a fault clears in milliseconds while a mere overload is given time to correct itself. The times marked (5 s / 10 s / 15 s) are one typical setting: the dashpot needle valve adjusts them, so other installations use longer delays.</div>
+    </div>
   </div>
 
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>MEMORY AID: Preferential Tripping</strong><br>
