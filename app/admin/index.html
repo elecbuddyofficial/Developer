@@ -182,6 +182,37 @@
     .act-n { font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; line-height:1.1; }
     .act-l { font-size:10.5px; color:var(--text3); margin-top:3px; }
 
+    /* ── SIGNUP DOMAINS ── */
+    .dom-panel { margin-top:22px; border:1px solid var(--border2); border-radius:12px;
+      background:var(--surface2); overflow:hidden; }
+    .dom-summary { display:flex; align-items:center; gap:9px; cursor:pointer;
+      padding:13px 16px; font-size:13px; font-weight:600; color:var(--text2);
+      list-style:none; user-select:none; }
+    .dom-summary::-webkit-details-marker { display:none; }
+    .dom-summary::before { content:'▸'; color:var(--text3); font-size:11px;
+      transition:transform .15s ease; }
+    .dom-panel[open] .dom-summary::before { transform:rotate(90deg); }
+    .dom-summary:hover { color:var(--text); }
+    .dom-badge { background:var(--amber,#c2891a); color:#fff; border-radius:20px;
+      padding:1px 8px; font-size:10.5px; font-weight:700; letter-spacing:.3px; }
+    .dom-note { margin:0 16px 12px; font-size:11.5px; line-height:1.65; color:var(--text3); }
+    .dom-add { display:flex; gap:8px; padding:0 16px 12px; flex-wrap:wrap; }
+    .dom-add .ad-input { max-width:260px; flex:1 1 180px; }
+    .dom-panel .ad-table-wrap { padding:0 16px 16px; }
+    .dom-tag { font-size:9.5px; font-weight:700; text-transform:uppercase;
+      letter-spacing:.4px; padding:1.5px 6px; border-radius:5px; margin-left:5px;
+      vertical-align:middle; }
+    .dom-tag-blocked { background:rgba(200,60,60,.16); color:#d05a5a; }
+    .dom-tag-new { background:rgba(194,137,26,.18); color:#c2891a; }
+    .dom-tag-ok { background:rgba(60,160,110,.16); color:#3ca06e; }
+    tr.dom-new td:first-child { box-shadow:inset 2px 0 0 var(--amber,#c2891a); }
+    /* Count of accounts waiting, on the nav item itself, so the queue is
+       visible from any tab rather than only once you go looking. */
+    .ad-nav-badge { margin-left:auto; background:#c2891a; color:#fff; border-radius:20px;
+      min-width:18px; padding:1px 6px; font-size:10px; font-weight:700;
+      text-align:center; font-variant-numeric:tabular-nums; }
+    .ad-nav-badge[hidden] { display:none; }
+
     /* ── PLAN BADGES ── */
     .pbadge {
       display:inline-flex; align-items:center;
@@ -493,6 +524,16 @@
       
       /* Reset table min-width */
       .ad-table, #pay-table-wrap table { min-width: 0 !important; }
+
+      /* Signup domains: captions come from the cell's own data-label rather
+         than nth-child rules, so inserting a column cannot silently shift every
+         label out of step, which is what happened to the coupons table. */
+      #dom-panel .ad-table td::before,
+      #apr-tbody td::before { content: attr(data-label); }
+      #dom-panel .ad-table-wrap { padding: 0 12px 12px; }
+      .dom-note { margin-left: 12px; margin-right: 12px; }
+      .dom-add { padding-left: 12px; padding-right: 12px; }
+      .dom-add .ad-input { max-width: none; }
 
       /* Dash Users */
       #tab-dashboard .ad-table:first-of-type td:nth-child(1)::before { content: "Email"; }
@@ -886,6 +927,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       <span>Users</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('approvals');closeMobNav()" data-tab="approvals" title="Signup Approvals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+      <span>Approvals</span><span class="ad-nav-badge" id="apr-nav-badge" hidden></span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('funnel');closeMobNav()" data-tab="funnel" title="Upgrade Funnel">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>
       <span>Funnel</span>
@@ -1114,6 +1159,57 @@
       </table>
     </div>
     <div id="users-count" style="font-size:11.5px;color:var(--text3);margin-top:10px;text-align:right;"></div>
+
+  </div>
+
+  <!-- SIGNUP APPROVALS ────────────────────────────────────────── -->
+  <div class="ad-tab" id="tab-approvals">
+    <div class="ad-ph">
+      <h1>Signup Approvals</h1>
+      <p>Accounts on unrecognised mail providers, held until you look at them.</p>
+    </div>
+
+    <p class="dom-note" style="margin-left:0;margin-right:0;">
+      Mainstream providers (Gmail, Yahoo, Outlook, Hotmail, iCloud, Proton,
+      Rediffmail, Zoho) sign up normally and never appear here. Anything else
+      lands in this queue: a real cadet on a college or shipping company address,
+      or a throwaway address farming another free trial. Their trial clock does
+      not run while they wait, so there is no rush and no cost to them.
+    </p>
+
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Email</th><th>Name</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
+        </tr></thead>
+        <tbody id="apr-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- Approved providers. Secondary to the queue, so it is collapsed. -->
+    <details class="dom-panel" id="dom-panel">
+      <summary class="dom-summary" onclick="loadSignupDomains()">
+        <span>Approved providers &amp; signup domains</span>
+        <span class="dom-badge" id="dom-badge" hidden></span>
+      </summary>
+      <p class="dom-note">
+        Every domain that has ever signed up here. Approving one lets future
+        signups from it through without review; removing one sends them back to
+        the queue. Neither ever touches accounts that already exist.
+      </p>
+      <div class="dom-add">
+        <input class="ad-input" id="dom-input" placeholder="domain to approve, e.g. tulas.edu.in">
+        <button class="ad-btn btn-sm" onclick="allowDomain()">Approve domain</button>
+      </div>
+      <div class="ad-table-wrap">
+        <table class="ad-table">
+          <thead><tr>
+            <th>Domain</th><th>Accounts</th><th>Paid</th><th>First seen</th><th>Last seen</th><th></th>
+          </tr></thead>
+          <tbody id="dom-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </details>
   </div>
 
   <!-- GRANT ACCESS ───────────────────────────────────────────── -->
@@ -2114,6 +2210,9 @@ function logAdminAction(action, target, details) {
     loadUsers();
     loadNotifications();
     loadAdmins();
+    // Loaded on init, not just when the tab is opened, so the nav badge can
+    // tell you someone is waiting without you going looking for them.
+    loadApprovals();
     buildStatusBoard();
   } catch (e) {
     console.error('Admin dashboard init error:', e);
@@ -2143,6 +2242,9 @@ function showTab(name) {
     if (typeof loadFunnel === 'function') loadFunnel();
     if (typeof loadFunnelUsers === 'function') loadFunnelUsers();
   }
+  // Refetched every visit: someone may have signed up since the page loaded,
+  // and a stale empty queue is exactly the thing that leaves a cadet waiting.
+  if (name === 'approvals' && typeof loadApprovals === 'function') loadApprovals();
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
@@ -4814,6 +4916,142 @@ async function createCoupon() {
   document.getElementById('cp-value').value = '';
   cpPreview();
   loadCoupons();
+}
+
+// ── Signup approvals ──────────────────────────────────────────────────────
+// Classification happens in handle_new_user; approving calls eb_review_signup,
+// which re-checks is_admin() itself rather than trusting this page.
+// See app/admin/signup_guard_setup.sql.
+async function loadApprovals() {
+  var tbody = document.getElementById('apr-tbody');
+  var { data, error } = await _sb.from('pending_signups')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">Run signup_guard_setup.sql to enable signup approvals.</td></tr>';
+    return;
+  }
+
+  var waiting = (data || []).filter(function(r) { return r.signup_status === 'pending'; });
+  var badge = document.getElementById('apr-nav-badge');
+  if (badge) { badge.hidden = !waiting.length; badge.textContent = waiting.length || ''; }
+
+  if (!data || !data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">Nothing waiting. Every signup so far used a recognised provider.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = data.map(function(r) {
+    var pending = r.signup_status === 'pending';
+    // How many accounts share the domain. One is a throwaway's signature;
+    // several suggests a real institution, so it is worth showing before the
+    // decision rather than after.
+    var shared = r.domain_accounts > 1
+      ? '<span class="dom-tag dom-tag-new">' + r.domain_accounts + ' accounts</span>' : '';
+    return '<tr>'
+      + '<td data-label="Email">' + esc(r.email) + '</td>'
+      + '<td data-label="Name">' + esc(r.full_name || '-') + '</td>'
+      + '<td data-label="Domain"><code>' + esc(r.domain) + '</code> ' + shared + '</td>'
+      + '<td data-label="Signed up">' + new Date(r.created_at).toLocaleDateString() + '</td>'
+      + '<td data-label="Status">' + (pending
+          ? '<span class="dom-tag dom-tag-new">pending</span>'
+          : '<span class="dom-tag dom-tag-blocked">rejected</span>') + '</td>'
+      + '<td data-label="">' + (pending
+          ? '<div class="row-actions">'
+            + '<button class="ad-btn btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>'
+            + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,true)" title="Approve and stop queueing future signups from this domain">Approve + domain</button>'
+            + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',false,false)">Reject</button>'
+            + '</div>'
+          : '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>')
+      + '</td></tr>';
+  }).join('');
+}
+
+async function reviewSignup(id, approve, allowDomainToo) {
+  if (!approve && !confirm('Reject this signup? They will be told the account was not approved.')) return;
+  var { error } = await _sb.rpc('eb_review_signup', {
+    p_user: id, p_approve: approve, p_allow_domain: !!allowDomainToo
+  });
+  if (error) { toast(error.message, 'error'); return; }
+  toast(approve
+    ? (allowDomainToo ? 'Approved, and future signups from that domain will skip review.' : 'Approved. Their trial starts now.')
+    : 'Rejected.', 'success');
+  loadApprovals();
+  if (document.getElementById('dom-panel').open) loadSignupDomains();
+}
+
+// ── Signup domains ────────────────────────────────────────────────────────
+async function loadSignupDomains() {
+  var tbody = document.getElementById('dom-tbody');
+  var { data, error } = await _sb.from('signup_domains')
+    .select('*')
+    .order('last_seen', { ascending: false });
+
+  if (error) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">Run signup_guard_setup.sql to enable the signup guard.</td></tr>';
+    return;
+  }
+  if (!data || !data.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">No signups yet.</td></tr>';
+    return;
+  }
+
+  // Worth a look: not approved, nobody ever paid from it, first seen in the
+  // last 14 days. That is the shape of a throwaway domain. A domain with a
+  // paying account behind it is a real provider no matter how odd it looks.
+  var cutoff = Date.now() - 14 * 864e5;
+  var fresh = data.filter(function(d) {
+    return !d.allowed && !d.paid_accounts && new Date(d.first_seen).getTime() > cutoff;
+  });
+
+  var badge = document.getElementById('dom-badge');
+  badge.hidden = !fresh.length;
+  badge.textContent = fresh.length ? fresh.length + ' new' : '';
+
+  tbody.innerHTML = data.map(function(d) {
+    var isNew = fresh.indexOf(d) !== -1;
+    return '<tr' + (isNew ? ' class="dom-new"' : '') + '>'
+      + '<td data-label="Domain"><code>' + esc(d.domain) + '</code>'
+        + (d.allowed ? ' <span class="dom-tag dom-tag-ok">approved</span>'
+                     : ' <span class="dom-tag dom-tag-blocked">needs review</span>')
+        + (isNew ? ' <span class="dom-tag dom-tag-new">new</span>' : '') + '</td>'
+      + '<td data-label="Accounts">' + d.accounts + '</td>'
+      + '<td data-label="Paid">' + (d.paid_accounts || 0) + '</td>'
+      + '<td data-label="First seen">' + new Date(d.first_seen).toLocaleDateString() + '</td>'
+      + '<td data-label="Last seen">' + new Date(d.last_seen).toLocaleDateString() + '</td>'
+      + '<td data-label="">' + (d.allowed
+          ? '<button class="ad-btn btn-ghost btn-sm" onclick="revokeDomain(\'' + esc(d.domain) + '\')">Remove</button>'
+          : '<button class="ad-btn btn-ghost btn-sm" onclick="allowDomain(\'' + esc(d.domain) + '\')">Approve</button>')
+      + '</td></tr>';
+  }).join('');
+}
+
+async function allowDomain(domain) {
+  var input = document.getElementById('dom-input');
+  var d = (domain || input.value || '').trim().toLowerCase().replace(/^.*@/, '');
+  if (!d || d.indexOf('.') === -1) { toast('Enter a domain, for example tulas.edu.in', 'error'); return; }
+  var { error } = await _sb.from('allowed_email_domains')
+    .insert({ domain: d, label: d, is_public: false, note: 'approved from the admin console' });
+  if (error) { toast(error.message, 'error'); return; }
+  toast(d + ' approved. Future signups from it skip review.', 'success');
+  if (!domain) input.value = '';
+  loadSignupDomains();
+}
+
+async function revokeDomain(d) {
+  // Removing a domain real cadets use sends every future signup from it to the
+  // queue, which is recoverable but looks like a broken signup to them. Say
+  // what is behind it before writing.
+  var { data: rows } = await _sb.from('signup_domains').select('*').eq('domain', d);
+  var row = rows && rows[0];
+  if (row && row.paid_accounts > 0 &&
+      !confirm(d + ' has ' + row.paid_accounts + ' paying account(s). Future signups from it will need manual approval. Continue?')) return;
+
+  var { error } = await _sb.from('allowed_email_domains').delete().eq('domain', d);
+  if (error) { toast(error.message, 'error'); return; }
+  toast(d + ' removed. Existing accounts are unaffected.', 'success');
+  loadSignupDomains();
 }
 
 async function loadCoupons() {

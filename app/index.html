@@ -1727,6 +1727,39 @@ function setTheme(t) {
     // ── Session watcher ──────────────────────────────────────
     function kick() { window.location.replace('./auth.html'); }
 
+    // A signup on an unrecognised provider is held for an admin to look at.
+    // Built here rather than as markup in the page so it cannot be dismissed by
+    // anything already on screen, and appended to <body> so no scrolling or
+    // clipping ancestor can trap it.
+    function _showSignupHold(status) {
+      if (document.getElementById('_signup-hold')) return;
+      var rejected = status === 'rejected';
+      var o = document.createElement('div');
+      o.id = '_signup-hold';
+      o.style.cssText = 'position:fixed;inset:0;z-index:100000;background:#070D1A;' +
+        'display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;';
+      o.innerHTML =
+        '<div style="max-width:440px;text-align:center;color:#E8EDF7;font-size:14px;line-height:1.7;">' +
+          '<div style="font-size:38px;margin-bottom:14px;">' + (rejected ? '&#9940;' : '&#9203;') + '</div>' +
+          '<h2 style="font-size:19px;margin:0 0 12px;color:#C8A44A;">' +
+            (rejected ? 'Account not approved' : 'Waiting for approval') + '</h2>' +
+          '<p style="margin:0 0 14px;">' + (rejected
+            ? 'We could not approve this account. If you believe that is a mistake, reply to your signup email and we will take another look.'
+            : 'You signed up with a company or college address, so we check it by hand before opening access. This is usually quick, and your free trial does not start counting until we approve you.') +
+          '</p>' +
+          '<p style="margin:0 0 20px;color:#8FA0BD;font-size:12.5px;">' +
+            'Need it sooner? Reply to your signup email, or write to support@elec-buddy.com.</p>' +
+          '<button id="_hold-out" style="background:transparent;border:1px solid #2A3550;color:#8FA0BD;' +
+            'padding:9px 20px;border-radius:8px;font-size:13px;cursor:pointer;font:inherit;">Sign out</button>' +
+        '</div>';
+      document.body.appendChild(o);
+      document.documentElement.classList.add('_modal-open');
+      document.getElementById('_hold-out').onclick = function() {
+        if (window._sbClient) window._sbClient.auth.signOut().then(kick, kick);
+        else kick();
+      };
+    }
+
     async function checkSession() {
       if (!window._sbClient) return;
       try {
@@ -1735,9 +1768,18 @@ function setTheme(t) {
 
         // Also re-check subscription plan so expiry takes effect mid-session
         const { data: profile } = await window._sbClient
-          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope,written_expires_at,oral_expires_at,deletion_requested_at')
+          .from('profiles').select('subscription_plan,trial_started_at,subscription_expires_at,plan_scope,written_expires_at,oral_expires_at,deletion_requested_at,signup_status')
           .eq('id', session.user.id).single();
         if (!profile) return;
+
+        // Held for review, or turned down. Shown before anything else, because
+        // the alternative is the upgrade modal telling them to buy, which is
+        // the wrong story entirely: their trial has not started and there is
+        // nothing they can do from here except wait.
+        if (profile.signup_status && profile.signup_status !== 'approved') {
+          _showSignupHold(profile.signup_status);
+          return;
+        }
 
         // Piggybacks on a profile read that already happens, so the welcome
         // costs no extra round trip. It is a no-op after the first time.

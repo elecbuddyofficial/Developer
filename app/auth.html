@@ -456,6 +456,18 @@
     if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
     const btn = document.getElementById('reg-btn');
     btn.disabled = true; btn.textContent = 'Creating account...';
+
+    // Whether this provider is pre-approved. Not a gate: an unrecognised
+    // domain still creates an account, it just lands in the review queue
+    // (app/admin/signup_guard_setup.sql). Knowing it up front only changes
+    // which confirmation sentence we show afterwards, so a network blip here
+    // must never stop a signup.
+    var willNeedReview = false;
+    try {
+      const { data: ok, error: chkErr } = await sb.rpc('eb_signup_domain_allowed', { p_email: email });
+      if (!chkErr && ok === false) willNeedReview = true;
+    } catch (_) { /* assume normal signup */ }
+
     const { data, error } = await sb.auth.signUp({
       email, password,
       options: {
@@ -464,12 +476,19 @@
       }
     });
     if (error) {
-      showMsg(error.message, 'error');
+      showMsg(signupErrorMessage(error), 'error');
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
     } else if (data.session) {
       // Email confirmation disabled - user is logged in immediately
       if (data.user) sendWelcomeEmail(data.user.id);
       redirectAfterLogin();
+    } else if (willNeedReview) {
+      // Account exists and is real; it is simply held until an admin looks at
+      // it. Say so plainly, because "check your email then sign in" would be a
+      // lie that ends at a wall they cannot explain.
+      showMsg('Account created. Because you used a company or college address, we check it by hand before opening access. Confirm your email now, and we will approve you shortly.', 'success');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+      document.getElementById('form-register').reset();
     } else {
       // Email confirmation enabled - ask them to verify. The welcome email
       // fires later, off the SIGNED_IN event once they actually hold a
@@ -478,6 +497,23 @@
       btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
       document.getElementById('form-register').reset();
     }
+  }
+
+  // The duplicate-inbox refusal is raised inside a database trigger, so
+  // Supabase returns it as a 500 carrying our raw message. Nobody should be
+  // shown "eb_duplicate_inbox: blesson@gmail.com", so translate what we raise
+  // ourselves and pass anything else through untouched.
+  function signupErrorMessage(error) {
+    var raw = (error && error.message) || 'Something went wrong. Please try again.';
+    if (/eb_duplicate_inbox/i.test(raw)) {
+      return 'An account already exists for this email address. Sign in instead, or use Forgot password if you cannot get in.';
+    }
+    // Any other trigger failure surfaces as this generic Supabase string, which
+    // tells the reader nothing and looks like our bug rather than their input.
+    if (/database error saving new user/i.test(raw)) {
+      return 'We could not create that account. Please check the email address and try again, or contact support if it keeps happening.';
+    }
+    return raw;
   }
 
   // Where a confirmation or reset link should drop the reader.
