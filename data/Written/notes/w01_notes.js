@@ -352,6 +352,12 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   <div class="n-crit" style="margin-top:16px;"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Explain with neat diagram operation of a brushless alternator. What would likely happen if one rotating diode fails and becomes: a) An open circuit, b) A short circuit. - 16 marks<br>
   <em>Asked in: 2018/FEB-2025/AUG - very frequently asked - 16 marks</em></div></div>
 
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t01-brushless-system.webp" alt="Brushless alternator - AVR, exciter stator, exciter rotor, rotating diodes, main field and stator output" loading="lazy" decoding="async">
+    <div class="note-diagram-cap">Fig. Brushless Alternator - AVR feeds the exciter STATOR (DC); the exciter ROTOR generates 3-phase AC; the rotating rectifier converts it to DC for the main field; the main rotor induces the stator output. Trace this chain when answering the rotating-diode failure part.</div>
+  </div>
+
+
   <div class="n-card">
     <p class="n-p"><strong>C) Brushless Alternator - Operation and Rotating Diode Failure (16 marks)</strong></p>
     
@@ -1174,6 +1180,12 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   <div class="n-h1" id="t4-rect">〽️ 15. RECTIFIERS - HALF WAVE, FULL WAVE, BRIDGE, PEAK</div>
   <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2024/OCT/Q1, 2025/FEB/Q3, 2025/JUL/Q3 - 16 marks</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Differentiate between half and full wave rectification. State where half wave rectification may be used and purpose for which it is not well adapted. Sketch a bridge connection by which full wave rectification may be obtained. - 16 marks</div></div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t08-rectifier-circuits.webp" alt="Half-wave, full-wave centre-tap and bridge rectifier circuits with their output waveforms" loading="lazy" decoding="async">
+    <div class="note-diagram-cap">Fig. Rectifier Circuits - half-wave (1 diode), full-wave centre-tap, and the bridge connection (4 diodes, D1/D3 conducting on one half cycle and D2/D4 on the other), with output waveforms and ripple compared. The bridge is the one the question asks you to sketch.</div>
+  </div>
+
 
   <div class="n-card">
     <p class="n-p"><strong>A) Half Wave Rectifier (4 marks)</strong></p>
