@@ -793,7 +793,7 @@
 
   /* ── Notification detail modal ──────────────────────────────────────────
      Sits above #profile-modal (10000), which is what the list is inside. */
-  .nfd-back{position:fixed;inset:0;z-index:10002;background:rgba(3,8,18,.72);
+  .nfd-back{position:fixed;inset:0;z-index:10050;background:rgba(3,8,18,.72);
     display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
   .nfd-back[hidden]{display:none}
   .nfd{background:#0E1E33;border:1px solid var(--border2);border-radius:14px;
@@ -2794,7 +2794,15 @@ function setTheme(t) {
     }
     document.getElementById('nfd-extra').innerHTML = extra;
 
-    document.getElementById('nfd-back').hidden = false;
+    // Reparent to <body> before showing. The markup lives inside #profile-modal,
+    // which sets transform, backdrop-filter AND isolation:isolate, each of which
+    // creates a stacking context. Inside one, this dialog's z-index can only
+    // compete with its own siblings, so on mobile it surfaced UNDER the open
+    // sidebar no matter how high the number went. Moving it out is the fix; a
+    // bigger z-index is not, and that is the same trap the diagram lightbox hit.
+    var _nfd = document.getElementById('nfd-back');
+    if (_nfd.parentNode !== document.body) document.body.appendChild(_nfd);
+    _nfd.hidden = false;
     document.documentElement.classList.add('_modal-open');
 
     // Recorded on open, never on merely appearing in the list: a badge glimpsed
