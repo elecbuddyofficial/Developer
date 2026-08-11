@@ -94,7 +94,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        ========================================== -->
   <div class="n-h1" id="t4-semi">💻 1. SEMICONDUCTOR DEVICES</div>
   <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Regulation/Standard:</strong> Electronics fundamentals - all 16 marks questions in Section I<br>
-  <strong>Asked in:</strong> 2019/JUL/Q2, 2019/OCT1/Q3, 2022/APR/Q3, 2022/JUN/Q3, 2023/OCT/Q1, 2024/JUN/Q1, 2025/JUN/Q1, 2025/OCT/Q3, 2025/DEC/Q3</div></div>
+  <strong>Asked in:</strong> 2019/JUL/Q2, 2019/OCT1/Q3, 2022/APR/Q3, 2022/JUN/Q3, 2023/OCT/Q1, 2024/JUN/Q1, 2025/JUN/Q1, 2025/OCT/Q3, 2025/DEC/Q3, 2026/JAN/Q1 </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> What are semiconductor devices? Advantages over thermionic devices? Describe working principle and application of: (a) Zener Diode (b) Transistor (c) Photocell (d) Thyristor - 16 marks</div></div>
 
   <div class="n-card">
@@ -424,7 +424,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        5. REVERSE POWER PROTECTION
        ========================================== -->
   <div class="n-h1" id="t4-revpower">🔄 5. REVERSE POWER PROTECTION FOR ALTERNATORS</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/JAN/Q2, 2022/FEB/Q3, 2022/NOV/Q1, 2024/MAR/Q1, 2024/JUL/Q2</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/JAN/Q2, 2022/FEB/Q3, 2022/NOV/Q1, 2024/MAR/Q1, 2024/JUL/Q2, 2026/MAR/Q1 </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> a) Explain why it is necessary to have reverse power protection for alternators intended for parallel operation (6). b)(i) Sketch a reverse power trip (5). b)(ii) Briefly explain the principle and how tripping is activated (5). - 16 marks</div></div>
 
   <div class="n-card">
@@ -654,7 +654,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        8. NEUTRAL SYSTEMS
        ========================================== -->
   <div class="n-h1" id="t4-neutral">⚡ 8. INSULATED AND EARTHED NEUTRAL SYSTEMS</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/DEC, 2020/DEC, 2021/JUL1, 2022/JUL, 2024/DEC - 8+4+4 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/DEC, 2020/DEC, 2021/JUL1, 2022/JUL, 2024/DEC, 2026/MAR/Q2, 2026/APR/Q2 - 8+4+4 marks </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> With respect to Insulated and Earthed Neutral Systems used on board: a) Discuss advantages and disadvantages of both systems (8). b) What is earth fault and how do you identify earth fault in 440V system onboard (4). c) Discuss consequences of earth fault in an earthed distribution system (4). - 16 marks</div></div>
 
   <div class="n-card">
@@ -700,7 +700,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        9. HIGH VOLTAGE SYSTEMS
        ========================================== -->
   <div class="n-h1" id="t4-hv">⚠️ 9. HIGH VOLTAGE SYSTEMS - CLASSIFICATION, DISTRIBUTION, TESTING &amp; PI TEST</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/SEP/Q1, 2023/JAN/Q1, 2024/AUG/Q1, 2024/NOV/Q1 - 16 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/SEP/Q1, 2023/JAN/Q1, 2024/AUG/Q1, 2024/NOV/Q1, 2026/FEB/Q1, 2026/APR/Q2 - 16 marks </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Discuss criteria of classification of marine high voltage for AC and DC systems. Sketch a ships high voltage distribution system and explain its features. Discuss various methods of testing insulation of HV system. Mention significance of PI test, why 3 terminals insulation testers are used in HV insulation measurements. - 16 marks</div></div>
 
   <div class="n-card">
@@ -771,7 +771,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        10. INDUCTION MOTORS
        ========================================== -->
   <div class="n-h1" id="t4-indmotor">⚙️ 10. INDUCTION MOTORS - PRINCIPLE, SLIP, STAR-DELTA, CRAWLING &amp; COGGING</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/FEB-2025/OCT - very frequently asked across multiple papers</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/FEB-2025/OCT - very frequently asked across multiple papers, 2026/FEB/Q5, 2026/JUN/Q1, 2026/JUN/Q3, 2026/JUN/Q5 </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Principle of Operation of Induction Motor (4 marks)</strong></p>
@@ -864,7 +864,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        11. MOTOR STARTERS
        ========================================== -->
   <div class="n-h1" id="t4-starters">🔄 11. MOTOR STARTERS - DOL, STAR-DELTA, SOFT STARTER</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DOL: 2023/FEB, 2025/FEB, 2025/JUL | Soft start: 2023/JUL, 2024/APR, 2025/APR - 8+8 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DOL: 2023/FEB, 2025/FEB, 2025/JUL | Soft start: 2023/JUL, 2024/APR, 2025/APR, 2026/JAN/Q3, 2026/MAR/Q3, 2026/JUL/Q2 - 8+8 marks </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Direct Online (DOL) Contactor Starter (8 marks)</strong></p>
@@ -949,7 +949,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        12. SYNCHRONOUS MOTORS
        ========================================== -->
   <div class="n-h1" id="t4-syncmotor">⚡ 12. SYNCHRONOUS MOTORS - OPERATION, APPLICATION, CAPACITOR FUNCTION</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2019/AUG, 2019/OCT2, 2019/DEC, 2024/SEP, 2025/JAN - 16 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2019/AUG, 2019/OCT2, 2019/DEC, 2024/SEP, 2025/JAN, 2026/JAN/Q2, 2026/APR/Q4, 2026/JUN/Q6 - 16 marks </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> State the application of synchronous motors. Discuss how a synchronous motor can function as a synchronous capacitor. Compare synchronous motors with induction motor drives. - 16 marks</div></div>
 
   <div class="n-card">
@@ -1012,7 +1012,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        13. DC MOTORS
        ========================================== -->
   <div class="n-h1" id="t4-dcmotor">🔋 13. DC MOTORS - CHARACTERISTICS, BACK EMF, DC GENERATOR MOTORISATION</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DC motor characteristics: 2024/OCT/Q2 | DC generator motorisation: 2023/JAN, 2024/MAR, 2024/NOV - 16 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DC motor characteristics: 2024/OCT/Q2 | DC generator motorisation: 2023/JAN, 2024/MAR, 2024/NOV, 2026/JAN/Q5, 2026/MAR/Q5, 2026/APR/Q6, 2026/JUL/Q4 - 16 marks </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Characteristics of DC Motor (4 marks)</strong></p>
@@ -1090,7 +1090,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        14. TRANSFORMERS
        ========================================== -->
   <div class="n-h1" id="t4-trafo">🔌 14. TRANSFORMERS - LOSSES, EFFICIENCY, LIQUID-COOLED HAZARDS, 3-PHASE</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> Liquid-cooled hazards: 2023/FEB, 2023/APR, 2023/JUL, 2023/SEP, 2023/NOV, 2024/JUL, 2024/OCT, 2025/FEB, 2025/SEP, 2025/NOV - VERY FREQUENTLY ASKED</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> Liquid-cooled hazards: 2023/FEB, 2023/APR, 2023/JUL, 2023/SEP, 2023/NOV, 2024/JUL, 2024/OCT, 2025/FEB, 2025/SEP, 2025/NOV - VERY FREQUENTLY ASKED, 2026/FEB/Q3, 2026/FEB/Q4 </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Potential Hazards of Liquid-Cooled Transformers (6 marks)</strong></p>
@@ -1181,7 +1181,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        15. RECTIFIERS
        ========================================== -->
   <div class="n-h1" id="t4-rect">〽️ 15. RECTIFIERS - HALF WAVE, FULL WAVE, BRIDGE, PEAK</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2024/OCT/Q1, 2025/FEB/Q3, 2025/JUL/Q3 - 16 marks</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2024/OCT/Q1, 2025/FEB/Q3, 2025/JUL/Q3, 2026/JUL/Q3 - 16 marks </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Differentiate between half and full wave rectification. State where half wave rectification may be used and purpose for which it is not well adapted. Sketch a bridge connection by which full wave rectification may be obtained. - 16 marks</div></div>
 
   <div class="n-card">
