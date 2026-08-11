@@ -1765,9 +1765,16 @@ function qbUpdatePreview() {
 }
 
 function qbStart() {
-  _touchTopic('ALL', 'qbank');
   var pool = qbGetPool();
-  if (!pool.length) { appToast('No questions match your filters. Try selecting more topics or categories.'); return; }
+  // An empty pool is what a locked user gets, because the encrypted question
+  // files never decrypted for them. Recording the open before this check
+  // credited them with a question bank session that never started.
+  if (!pool.length) {
+    _touchTopic('ALL', 'qbank_blocked');
+    appToast('No questions match your filters. Try selecting more topics or categories.');
+    return;
+  }
+  _touchTopic('ALL', 'qbank');
   qbCloseDropdown();
   // Shuffle the full pool first, then take N
   var shuffled = pool.slice();
@@ -2576,7 +2583,10 @@ function _waitForAccessGate() {
 }
 
 async function openSurveyorQA(onReady) {
-    _touchTopic('ALL', 'surveyor');
+    // Recorded AFTER the gate, not before. It used to fire on the first line,
+    // which logged a plain "surveyor" open for someone the paywall then turned
+    // away, and the admin panel read that as an expired user having read paid
+    // content. The attempt is still worth recording, just honestly.
     // Sidebar clicks already await this via installGate()'s wrapper (index.html),
     // but hash-based navigation (#sq-all, #sq-grid, deep links, refresh/back on
     // a #sq-* URL) calls this directly - without this guard, it can race ahead
@@ -2584,9 +2594,11 @@ async function openSurveyorQA(onReady) {
     // even for a fully-entitled user, simply because the key fetch hadn't finished yet.
     await _waitForAccessGate();
     if (window._access && !window._access.oral) {
+        _touchTopic('ALL', 'surveyor_blocked');
         if (window.showGate) window.showGate('oral');
         return;
     }
+    _touchTopic('ALL', 'surveyor');
 
     var cb = onReady || function() { showView('sq-landing'); };
     if (!window.SQ_DATA) {

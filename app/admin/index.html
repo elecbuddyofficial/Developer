@@ -3279,10 +3279,16 @@ async function renderProfProgress(u) {
     + (extras.length ? renderProfExtras(extras) : '');
 }
 
+// The *_blocked kinds mean the paywall turned them away at that surface. They
+// are shown in red and worded as an attempt, because reading a plain "Surveyor
+// Q&A bank" line against an expired account implied the paywall had failed
+// when it had actually worked.
 var KIND_LABEL = {
-  quiz:     ['Quiz',              'var(--orange)'],
-  surveyor: ['Surveyor Q&A bank', 'var(--purple, #A855F7)'],
-  qbank:    ['Question bank',     'var(--blue)'],
+  quiz:             ['Quiz',                            'var(--orange)'],
+  surveyor:         ['Surveyor Q&A bank',               'var(--purple, #A855F7)'],
+  qbank:            ['Question bank',                   'var(--blue)'],
+  surveyor_blocked: ['Surveyor Q&A bank &middot; blocked, wanted access', 'var(--red)'],
+  qbank_blocked:    ['Question bank &middot; blocked, wanted access',     'var(--red)'],
 };
 
 function renderProfExtras(rows) {
