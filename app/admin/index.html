@@ -205,6 +205,61 @@
     .dom-tag-blocked { background:rgba(200,60,60,.16); color:#d05a5a; }
     .dom-tag-new { background:rgba(194,137,26,.18); color:#c2891a; }
     .dom-tag-ok { background:rgba(60,160,110,.16); color:#3ca06e; }
+
+    /* ── Notification preview ──────────────────────────────────────────────
+       Mirrors what the app renders, so a coupon that reads wrong is caught
+       before it is broadcast rather than after. */
+    .nfp { background:var(--surface2); border:1px solid var(--border2); border-radius:12px; padding:14px; }
+    .nfp-card { max-width:420px; }
+    .nfp-chip { display:inline-block; font-size:9.5px; font-weight:700; letter-spacing:.4px;
+      text-transform:uppercase; padding:2px 6px; border-radius:100px; margin-bottom:8px;
+      background:rgba(59,130,246,.16); color:#3b82f6; }
+    .nfp-update { background:rgba(34,197,94,.16); color:#22c55e; }
+    .nfp-deadline { background:rgba(239,68,68,.16); color:#ef4444; }
+    .nfp-warning { background:rgba(245,158,11,.16); color:#f59e0b; }
+    .nfp-title { font-size:15px; font-weight:800; color:var(--text); line-height:1.3; }
+    .nfp-body { font-size:13px; color:var(--text2); margin-top:6px; line-height:1.7;
+      white-space:pre-wrap; overflow-wrap:anywhere; }
+    .nfp-coupon { margin-top:12px; border:1px dashed #C8A44A; border-radius:12px; padding:13px;
+      background:linear-gradient(135deg,rgba(200,164,74,.14),rgba(200,164,74,.04)); }
+    .nfp-coupon-label { font-size:10px; font-weight:700; letter-spacing:.09em;
+      text-transform:uppercase; color:#C8A44A; margin-bottom:8px; }
+    .nfp-code-row { display:flex; gap:8px; align-items:stretch; }
+    .nfp-code { flex:1; min-width:0; font-family:ui-monospace,Menlo,monospace; font-size:18px;
+      font-weight:700; letter-spacing:.09em; color:#C8A44A; background:rgba(0,0,0,.20);
+      border:1px solid rgba(200,164,74,.34); border-radius:9px; padding:10px 12px;
+      text-align:center; overflow-x:auto; white-space:nowrap; }
+    .nfp-copy { flex-shrink:0; background:#C8A44A; color:#0A1526; border-radius:9px;
+      padding:10px 15px; font-size:13px; font-weight:700; display:flex; align-items:center; }
+    .nfp-detail { font-size:12px; color:var(--text2); margin-top:9px; line-height:1.6; }
+    .nfp-exp { font-size:11px; color:var(--text3); margin-top:5px; }
+    .nfp-cta { margin-top:12px; background:var(--blue); color:#fff; border-radius:10px;
+      padding:11px 16px; font-size:13.5px; font-weight:700; text-align:center; }
+    /* Read receipts on the sent list */
+    .nf-reads { display:flex; align-items:center; gap:7px; }
+    .nf-readbar { width:52px; height:5px; border-radius:99px; background:var(--border2); overflow:hidden; flex-shrink:0; }
+    .nf-readbar i { display:block; height:100%; background:var(--green,#22c55e); }
+    .nf-readnum { font-size:11.5px; color:var(--text2); font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .nf-readers-btn { background:none; border:none; color:var(--blue); font-size:11.5px;
+      cursor:pointer; padding:0; text-decoration:underline; font-family:inherit; }
+    /* Readers dialog */
+    .nfr-back { position:fixed; inset:0; z-index:10050; background:rgba(3,8,18,.66);
+      display:flex; align-items:center; justify-content:center; padding:18px; }
+    .nfr-back[hidden] { display:none; }
+    .nfr { background:var(--surface); border:1px solid var(--border2); border-radius:14px;
+      width:min(680px,100%); max-height:85vh; display:flex; flex-direction:column;
+      box-shadow:0 24px 70px rgba(0,0,0,.5); overflow:hidden; }
+    .nfr-head { display:flex; align-items:flex-start; gap:10px; padding:16px 18px 12px;
+      border-bottom:1px solid var(--border2); }
+    .nfr-title { font-size:15px; font-weight:700; color:var(--text); line-height:1.3;
+      overflow-wrap:anywhere; }
+    .nfr-count { font-size:11.5px; color:var(--text3); margin-top:3px; }
+    .nfr-x { background:none; border:none; color:var(--text3); cursor:pointer; padding:2px;
+      border-radius:6px; flex-shrink:0; line-height:0; }
+    .nfr-x:hover { color:var(--text); background:var(--surface2); }
+    /* The table scrolls inside the dialog, so the dialog itself never grows
+       past the viewport on a long reader list. */
+    .nfr-wrap { flex:1; overflow-y:auto; padding:0 18px 18px; margin:0; }
     tr.dom-new td:first-child { box-shadow:inset 2px 0 0 var(--amber,#c2891a); }
     /* Count of accounts waiting, on the nav item itself, so the queue is
        visible from any tab rather than only once you go looking. */
@@ -529,7 +584,22 @@
          than nth-child rules, so inserting a column cannot silently shift every
          label out of step, which is what happened to the coupons table. */
       #dom-panel .ad-table td::before,
-      #apr-tbody td::before { content: attr(data-label); }
+      #apr-tbody td::before,
+      #nfr-tbody td::before { content: attr(data-label); }
+
+      /* Notification composer and preview on a phone */
+      .nfp-card { max-width: none; }
+      .nfp-code { font-size: 15px; letter-spacing: .05em; }
+      .nfp-copy { padding: 10px 12px; font-size: 12px; }
+      /* The read bar and its label must not force the row wider than the
+         screen; the number matters more than the bar, so the bar goes. */
+      .nf-readbar { display: none; }
+      .nf-reads { flex-wrap: wrap; gap: 6px 10px; }
+      /* Full-height sheet rather than a floating box, which is unusable at
+         360px once a reader list is in it. */
+      .nfr-back { padding: 0; align-items: stretch; }
+      .nfr { width: 100%; max-height: 100%; border-radius: 0; border: none; }
+      .nfr-wrap { padding: 0 14px 14px; }
       #dom-panel .ad-table-wrap { padding: 0 12px 12px; }
       .dom-note { margin-left: 12px; margin-right: 12px; }
       .dom-add { padding-left: 12px; padding-right: 12px; }
@@ -1162,6 +1232,27 @@
 
   </div>
 
+  <!-- Who read a notification -->
+  <div class="nfr-back" id="nfr-back" hidden onclick="if(event.target===this)closeNotifReaders()">
+    <div class="nfr">
+      <div class="nfr-head">
+        <div style="flex:1;min-width:0">
+          <div class="nfr-title" id="nfr-title"></div>
+          <div class="nfr-count" id="nfr-count"></div>
+        </div>
+        <button class="nfd-x nfr-x" onclick="closeNotifReaders()" aria-label="Close">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="ad-table-wrap nfr-wrap">
+        <table class="ad-table">
+          <thead><tr><th>Email</th><th>Name</th><th>Plan</th><th>Read</th></tr></thead>
+          <tbody id="nfr-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
   <!-- SIGNUP APPROVALS ────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-approvals">
     <div class="ad-ph">
@@ -1382,10 +1473,62 @@
           </select>
         </div>
       </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Template</label>
+          <select class="ad-select" id="notif-template" onchange="notifTemplateChanged()">
+            <option value="plain">Plain message</option>
+            <option value="coupon">Coupon code</option>
+            <option value="cta">Button / link</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Coupon fields. The code goes in its own box with a copy button in the
+           app, rather than being typed into a sentence and retyped by hand at
+           checkout, which is where codes get mistyped. -->
+      <div id="notif-coupon-fields" style="display:none">
+        <div class="ad-row">
+          <div class="ad-field" style="flex:1">
+            <label class="ad-label">Coupon code</label>
+            <input class="ad-input" id="notif-code" placeholder="SUPER100" oninput="notifPreview()" style="text-transform:uppercase">
+          </div>
+          <div class="ad-field" style="flex:2">
+            <label class="ad-label">What it gives <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+            <input class="ad-input" id="notif-code-detail" placeholder="Flat 100 off any subscription" oninput="notifPreview()">
+          </div>
+          <div class="ad-field" style="flex:1">
+            <label class="ad-label">Valid until <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+            <input class="ad-input" id="notif-code-exp" type="date" oninput="notifPreview()">
+          </div>
+        </div>
+      </div>
+
+      <div id="notif-cta-fields" style="display:none">
+        <div class="ad-row">
+          <div class="ad-field" style="flex:1">
+            <label class="ad-label">Button label</label>
+            <input class="ad-input" id="notif-cta-label" placeholder="Join the channel" oninput="notifPreview()">
+          </div>
+          <div class="ad-field" style="flex:2">
+            <label class="ad-label">Link</label>
+            <input class="ad-input" id="notif-cta-url" placeholder="https://..." oninput="notifPreview()">
+          </div>
+        </div>
+      </div>
+
       <div class="ad-field">
         <label class="ad-label">Message</label>
-        <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..."></textarea>
+        <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..." oninput="notifPreview()"></textarea>
       </div>
+
+      <!-- Shows what the reader will actually see. A coupon that reads wrong is
+           cheap to fix here and expensive to fix once it is sent. -->
+      <div class="ad-field">
+        <label class="ad-label">Preview</label>
+        <div id="notif-preview" class="nfp"></div>
+      </div>
+
       <button class="ad-btn btn-primary" onclick="sendNotification()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
         Send to All Users
@@ -3997,6 +4140,14 @@ async function forceTrialExpiry() {
 
 /* ── NOTIFICATIONS ───────────────────────────────────────────────── */
 async function loadNotifications() {
+  // notification_stats carries the read count and the size of the audience the
+  // notice was actually aimed at, so a trial-only notice is not scored against
+  // people who were never shown it. Falls back to the plain table if the setup
+  // SQL has not been run yet.
+  var res = await _sb.from('notification_stats').select('*').order('created_at', { ascending: false });
+  var stats = {};
+  if (!res.error && res.data) res.data.forEach(function(s) { stats[s.id] = s; });
+
   var { data } = await _sb.from('notifications').select('*').order('created_at', { ascending: false });
   var container = document.getElementById('notif-list');
   if (!data || !data.length) {
@@ -4004,6 +4155,20 @@ async function loadNotifications() {
     return;
   }
   container.innerHTML = data.map(function(n) {
+    var st = stats[n.id];
+    var reads = '';
+    if (st) {
+      var pct = st.audience > 0 ? Math.round(st.reads * 100 / st.audience) : 0;
+      reads = '<div class="notif-meta nf-reads">'
+        + '<span class="nf-readbar"><i style="width:' + Math.min(100, pct) + '%"></i></span>'
+        + '<span class="nf-readnum">' + st.reads + ' of ' + st.audience + ' read'
+        + (st.audience ? ' (' + pct + '%)' : '') + '</span>'
+        + (st.reads > 0 ? '<button class="nf-readers-btn" onclick="showNotifReaders(' + attrJs(n.id) + ',' + attrJs(n.title) + ')">who</button>' : '')
+        + '</div>';
+    }
+    var tmpl = (n.template && n.template !== 'plain')
+      ? ' · ' + esc(n.template).toUpperCase() + (n.meta && n.meta.code ? ' ' + esc(n.meta.code) : '')
+      : '';
     return '<div class="notif-item">'
       + '<div class="notif-dot nd-' + (n.type || 'info') + '"></div>'
       + '<div class="notif-body">'
@@ -4011,7 +4176,8 @@ async function loadNotifications() {
       + '<div class="notif-text">' + esc(n.body) + '</div>'
       + '<div class="notif-meta">' + (n.type || 'info').toUpperCase()
         + (n.target_plan ? ' · ' + esc(n.target_plan).toUpperCase() + ' ONLY' : ' · EVERYONE')
-        + ' · ' + fmtDate(n.created_at) + '</div>'
+        + tmpl + ' · ' + fmtDate(n.created_at) + '</div>'
+      + reads
       + '</div>'
       + '<button class="notif-del" onclick="deleteNotification(' + attrJs(n.id) + ')" title="Delete">'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>'
@@ -4020,21 +4186,114 @@ async function loadNotifications() {
   }).join('');
 }
 
+// Who opened a given notice. Deliberately a plain list rather than a chart:
+// with fewer than a hundred users the names are the useful thing.
+async function showNotifReaders(id, title) {
+  var { data, error } = await _sb.from('notification_readers')
+    .select('email, full_name, subscription_plan, read_at')
+    .eq('notification_id', id)
+    .order('read_at', { ascending: false });
+  if (error) { toast('Could not load readers', 'err'); return; }
+  var rows = (data || []).map(function (r) {
+    return '<tr><td data-label="Email">' + esc(r.email) + '</td>'
+      + '<td data-label="Name">' + esc(r.full_name || '-') + '</td>'
+      + '<td data-label="Plan">' + esc(r.subscription_plan || '-') + '</td>'
+      + '<td data-label="Read">' + fmtAgo(r.read_at) + '</td></tr>';
+  }).join('');
+  document.getElementById('nfr-title').textContent = title || 'Readers';
+  document.getElementById('nfr-count').textContent =
+    (data || []).length + ' ' + ((data || []).length === 1 ? 'person' : 'people') + ' opened this';
+  document.getElementById('nfr-tbody').innerHTML =
+    rows || '<tr><td colspan="4" class="empty">Nobody has opened it yet.</td></tr>';
+  document.getElementById('nfr-back').hidden = false;
+}
+function closeNotifReaders() { document.getElementById('nfr-back').hidden = true; }
+
+// ── Notification templates ────────────────────────────────────────────────
+function notifTemplateChanged() {
+  var t = document.getElementById('notif-template').value;
+  document.getElementById('notif-coupon-fields').style.display = (t === 'coupon') ? '' : 'none';
+  document.getElementById('notif-cta-fields').style.display    = (t === 'cta')    ? '' : 'none';
+  notifPreview();
+}
+
+// The meta object exactly as the app will read it back.
+function notifMeta() {
+  var t = document.getElementById('notif-template').value;
+  if (t === 'coupon') {
+    var m = { code: (document.getElementById('notif-code').value || '').trim().toUpperCase() };
+    var d = document.getElementById('notif-code-detail').value.trim();
+    var e = document.getElementById('notif-code-exp').value;
+    if (d) m.detail = d;
+    if (e) m.expires = new Date(e + 'T00:00:00').toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+    return m;
+  }
+  if (t === 'cta') {
+    return { label: document.getElementById('notif-cta-label').value.trim(),
+             url:   document.getElementById('notif-cta-url').value.trim() };
+  }
+  return {};
+}
+
+function notifPreview() {
+  var el = document.getElementById('notif-preview');
+  if (!el) return;
+  var t     = document.getElementById('notif-template').value;
+  var type  = document.getElementById('notif-type').value;
+  var title = document.getElementById('notif-title').value.trim();
+  var body  = document.getElementById('notif-body').value.trim();
+  var m     = notifMeta();
+
+  var extra = '';
+  if (t === 'coupon' && m.code) {
+    extra = '<div class="nfp-coupon"><div class="nfp-coupon-label">Your coupon code</div>'
+      + '<div class="nfp-code-row"><div class="nfp-code">' + esc(m.code) + '</div>'
+      + '<span class="nfp-copy">Copy</span></div>'
+      + (m.detail  ? '<div class="nfp-detail">' + esc(m.detail) + '</div>' : '')
+      + (m.expires ? '<div class="nfp-exp">Valid until ' + esc(m.expires) + '</div>' : '')
+      + '</div>';
+  } else if (t === 'cta' && (m.label || m.url)) {
+    extra = '<div class="nfp-cta">' + esc(m.label || 'Open') + '</div>';
+  }
+
+  el.innerHTML = '<div class="nfp-card">'
+    + '<div class="nfp-chip nfp-' + esc(type) + '">' + esc(type) + '</div>'
+    + '<div class="nfp-title">' + (esc(title) || '<span style="color:var(--text3)">Title…</span>') + '</div>'
+    + '<div class="nfp-body">' + (esc(body) || '<span style="color:var(--text3)">Message…</span>') + '</div>'
+    + extra + '</div>';
+}
+
 async function sendNotification() {
   var title = document.getElementById('notif-title').value.trim();
   var body  = document.getElementById('notif-body').value.trim();
   var type  = document.getElementById('notif-type').value;
   if (!title || !body) { toast('Title and message required', 'err'); return; }
 
+  var template = document.getElementById('notif-template').value;
+  var meta     = notifMeta();
+
+  // Caught here rather than shipping a coupon notice with an empty code box,
+  // or a button that goes nowhere.
+  if (template === 'coupon' && !meta.code) { toast('Enter the coupon code', 'err'); return; }
+  if (template === 'cta') {
+    if (!meta.url) { toast('Enter the link', 'err'); return; }
+    if (!/^https?:\/\//i.test(meta.url)) { toast('Link must start with http:// or https://', 'err'); return; }
+    if (!meta.label) meta.label = 'Open';
+  }
+
   var target = document.getElementById('notif-target').value || null;
 
   var { error } = await _sb.from('notifications')
-    .insert({ title: title, body: body, type: type, target_plan: target });
+    .insert({ title: title, body: body, type: type, target_plan: target,
+              template: template, meta: meta });
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
 
   toast(target ? 'Sent to ' + target + ' users' : 'Notification sent');
-  document.getElementById('notif-title').value = '';
-  document.getElementById('notif-body').value  = '';
+  ['notif-title','notif-body','notif-code','notif-code-detail','notif-code-exp',
+   'notif-cta-label','notif-cta-url'].forEach(function(id) {
+    var f = document.getElementById(id); if (f) f.value = '';
+  });
+  notifPreview();
   loadNotifications();
 }
 
