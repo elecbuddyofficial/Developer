@@ -894,7 +894,40 @@ function showView(n){
       } catch(e) {}
   }
 }
-function jumpTo(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth'})}
+// Landed slightly short of the target, then correctly on a second click. Two
+// causes, both fixed here:
+//   1. scrollIntoView ignores the sticky #topbar, so the heading arrived under
+//      it rather than below it.
+//   2. lazy images above the target were still loading. They finish AFTER the
+//      scroll, push the content down, and carry the heading out of place. By
+//      the second click they are loaded, which is why it worked the second
+//      time and made this look intermittent.
+// So: scroll with the topbar allowed for, then re-measure once and correct if
+// the target actually moved.
+function jumpTo(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var box = document.getElementById('content') || document.scrollingElement;
+    var bar = document.getElementById('topbar');
+    var pad = (bar ? bar.offsetHeight : 0) + 12;
+
+    function go(smooth) {
+        var top = el.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop - pad;
+        box.scrollTo({ top: Math.max(0, top), behavior: smooth ? 'smooth' : 'auto' });
+    }
+    go(true);
+
+    // Two corrective passes after the smooth scroll has settled, in case
+    // something above finished decoding and shifted the layout underneath it.
+    // Cheap: each is a measurement, and it only re-scrolls if the target has
+    // actually drifted more than a few pixels.
+    [420, 900].forEach(function (ms) {
+        setTimeout(function () {
+            var off = el.getBoundingClientRect().top - (bar ? bar.getBoundingClientRect().bottom : 0);
+            if (Math.abs(off - 12) > 8) go(false);
+        }, ms);
+    });
+}
 function buildCatGrid(){
   var tObj = TOPICS.find(function(t) { return t.id === ACTIVE_TOPIC; });
   if(!tObj) return;
