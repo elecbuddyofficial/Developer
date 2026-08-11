@@ -1225,11 +1225,135 @@ a.sb-item{text-decoration:none}
   background: #fff;
   box-shadow: 0 18px 60px rgba(0,0,0,.6);
 }
+/* Reference plates are whole pages, so fitting one to the screen makes its
+   body text unreadable. These open fitted, then tap the page to go to 1:1 and
+   pan; tapping the surround still closes. */
+.dgm-lightbox.is-plate { align-items: flex-start; justify-content: center; overflow: auto; padding: 0; }
+.dgm-lightbox.is-plate .dgm-lightbox-img { cursor: zoom-in; margin: 16px auto; }
+.dgm-lightbox.is-plate.is-zoomed { justify-content: flex-start; }
+.dgm-lightbox.is-plate.is-zoomed .dgm-lightbox-img {
+  max-width: none; max-height: none;
+  width: auto; height: auto;
+  cursor: zoom-out;
+  margin: 0;
+  border-radius: 0;
+}
 .note-diagram-cap {
     font-size: 12px;
     color: var(--text3, #888);
     margin-top: 6px;
     font-style: italic;
+}
+
+/* ── Symbol grid ──────────────────────────────────────────────────────────
+   For sets of small pictograms (IMO fire control plan symbols and the like),
+   where the whole point is scanning a legend rather than studying one figure.
+   Each tile is ~2 KB, so these deliberately do NOT carry data-blur: replacing
+   them with 64 "tap to download" placeholders would cost far more than just
+   sending them. The artwork is black and colour on white, so every tile keeps
+   a white plate behind it and stays legible in dark mode. */
+.sym-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+    gap: 10px;
+    margin: 14px 0 6px;
+}
+.sym {
+    margin: 0;
+    background: var(--surface2, #f7f8fa);
+    border: 1px solid var(--border2, #e3e6ec);
+    border-radius: 10px;
+    padding: 8px 8px 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: border-color .15s, box-shadow .15s;
+}
+.sym:hover { border-color: var(--blue, #3b82f6); box-shadow: 0 3px 14px rgba(59,130,246,.16); }
+.sym img {
+    width: 100%;
+    height: 62px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 7px;
+    padding: 5px;
+    cursor: zoom-in;
+    display: block;
+}
+.sym figcaption {
+    margin-top: 7px;
+    font-size: 10.5px;
+    line-height: 1.35;
+    color: var(--text3, #8a93a6);
+}
+.sym figcaption b {
+    display: block;
+    font-size: 11px;
+    color: var(--text2, #c8cedb);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 1px;
+}
+
+/* ── Plate strip ──────────────────────────────────────────────────────────
+   For full-page reference sheets (GA drawings, manual pages). A whole A4 page
+   inline renders its text at about 6pt on a phone, so these are shown as
+   thumbnails cropped to the top of the page and opened full screen instead. */
+/* Flex rather than fixed-width grid columns, so each tile's width follows its
+   drawing: a landscape general-arrangement stays landscape and a portrait page
+   stays portrait, all sharing one row height. A fixed column width forced every
+   plate into the same portrait box and cropped the wide drawings. */
+.plate-strip {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    padding: 4px 2px 12px;
+    margin: 12px 0 4px;
+    scroll-snap-type: x proximity;
+}
+.plate {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+    max-width: 340px;
+    background: var(--surface2, #f7f8fa);
+    border: 1px solid var(--border2, #e3e6ec);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color .15s, box-shadow .15s;
+}
+.plate:hover { border-color: var(--blue, #3b82f6); box-shadow: 0 3px 14px rgba(59,130,246,.16); }
+.plate img {
+    height: 150px;
+    width: auto;
+    max-width: 340px;
+    min-width: 96px;
+    object-fit: contain;
+    background: #fff;
+    cursor: zoom-in;
+    display: block;
+}
+.plate-cap {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text3, #8a93a6);
+    padding: 7px 9px 8px;
+    /* The caption must not stretch a narrow portrait tile wider than its
+       drawing, so it is allowed to wrap inside whatever width the image sets. */
+    max-width: 300px;
+}
+.plate-cap b { display: block; color: var(--text2, #c8cedb); font-size: 11.5px; margin-bottom: 1px; }
+.plate-strip-note { font-size: 11.5px; color: var(--text3, #8a93a6); font-style: italic; margin: 0 0 2px; }
+
+@media (max-width: 600px) {
+    .sym-grid { grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+    .sym img { height: 52px; }
+    .plate img { height: 124px; max-width: 260px; }
+    .plate, .plate-cap { max-width: 260px; }
 }
 @media(max-width:600px){
     .note-diagram-wrap img { max-width: 100%; }

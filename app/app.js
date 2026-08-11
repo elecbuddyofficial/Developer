@@ -2877,11 +2877,18 @@ function _dgmLightbox() {
     return o;
 }
 
-function _dgmOpen(src, alt) {
+function _dgmOpen(src, alt, isPlate) {
     var o = _dgmLightbox();
     var img = o.querySelector('.dgm-lightbox-img');
     img.src = src;
     img.alt = alt || '';
+    // A full page fitted to the screen puts its body text at roughly 6pt on a
+    // phone, so reference plates open zoomable rather than fit-to-screen. A
+    // single diagram still fits, which is what you want for a diagram.
+    o.classList.toggle('is-plate', !!isPlate);
+    o.classList.remove('is-zoomed');
+    o.scrollTop = 0;
+    o.scrollLeft = 0;
     o.hidden = false;
     document.documentElement.classList.add('_modal-open');
 }
@@ -2891,16 +2898,30 @@ function _dgmClose() {
     _dgmLb.hidden = true;
     // Released so a large diagram is not held in memory behind the reader.
     _dgmLb.querySelector('.dgm-lightbox-img').removeAttribute('src');
+    _dgmLb.classList.remove('is-plate', 'is-zoomed');
     document.documentElement.classList.remove('_modal-open');
 }
 
 document.addEventListener('click', function(e) {
-    var img = e.target.closest('.note-diagram-wrap img');
+    // Inside the lightbox: tapping a plate toggles 1:1 zoom so the page can be
+    // read and panned; tapping the backdrop still closes. Handled before the
+    // opening logic so an open lightbox never re-opens itself.
+    var open = e.target.closest('.dgm-lightbox');
+    if (open) {
+        if (open.classList.contains('is-plate') && e.target.classList.contains('dgm-lightbox-img')) {
+            open.classList.toggle('is-zoomed');
+            return;
+        }
+        _dgmClose();
+        return;
+    }
+
+    var img = e.target.closest('.note-diagram-wrap img, .sym img, .plate img');
     // .dgm-blur-bg is the Data Saver placeholder's 28px preview. Tapping that
     // must load the real diagram, which its own handler above does, not open a
     // lightbox of a blurred thumbnail.
-    if (img && !img.classList.contains('dgm-blur-bg') && !img.closest('.dgm-lightbox')) {
-        _dgmOpen(img.currentSrc || img.src, img.alt);
+    if (img && !img.classList.contains('dgm-blur-bg')) {
+        _dgmOpen(img.currentSrc || img.src, img.alt, !!img.closest('.plate'));
     }
 });
 
