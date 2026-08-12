@@ -33,6 +33,16 @@ window.loadNotes("F14", `<div class="view" id="view-notes-f14">
   <div class="n-h1" id="s-analogue">Analogue vs Digital Instruments</div>
   <p class="n-p"><strong>Analogue instruments</strong> deflect a pointer against a scale by some physical effect of the current or voltage being measured (a force on a coil, a force between two pieces of iron). Accuracy is typically 1 to 2.5 percent of full scale. Their strength on board is that a swinging needle gives an instant sense of a trend, load rising, a value hunting, in a way a jumping digital number does not.</p>
   <p class="n-p"><strong>Digital instruments</strong> sample the signal, convert it with an analogue-to-digital converter, and display a numeric value. They are generally far more accurate (0.1 percent or better is common), have no moving parts to wear, and often add functions (data logging, auto-ranging, true RMS conversion). The trade is that a fast-changing quantity can flicker too quickly to read digitally.</p>
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>Analogue</th><th>Digital</th></tr>
+    <tr><td>How it reads</td><td>Pointer deflected by a physical effect of the quantity</td><td>Signal sampled and converted by an ADC</td></tr>
+    <tr><td>Typical accuracy</td><td><span class="n-val">1 to 2.5%</span> of full scale</td><td><span class="n-val">0.1%</span> or better</td></tr>
+    <tr><td>Moving parts</td><td>Yes, they wear</td><td>None</td></tr>
+    <tr><td>Best at</td><td>Showing a trend at a glance</td><td>Accuracy, logging, auto-ranging, true RMS</td></tr>
+    <tr><td>Weak at</td><td>Precision reading</td><td>Fast-changing values, the display flickers</td></tr>
+    <tr><td>Found on board</td><td>Main switchboard ammeters and voltmeters</td><td>Portable test instruments</td></tr>
+  </table>
+
   <p class="n-p">A ship's main switchboard still commonly carries analogue ammeters and voltmeters for the "glance and see the trend" reason, while portable test instruments are almost universally digital now for the accuracy.</p>
 
   <div class="n-h1" id="s-pmmc">Permanent Magnet Moving Coil (PMMC) Instrument</div>
@@ -56,6 +66,16 @@ window.loadNotes("F14", `<div class="view" id="view-notes-f14">
 
   <div class="n-crit"><span class="icon">💡</span><div class="body"><strong>Why moving iron reads true RMS and works on AC or DC.</strong> The force pulling the iron into the field does not depend on the direction of the current, only on the field strength, and field strength is proportional to current. So the force, and therefore the deflecting torque, is proportional to <span class="hl">I²</span>, not to I. Whichever way the current flows, the iron is always pulled in the same direction, so there is no cancellation on AC the way there is with PMMC. Because the coil and iron cannot follow the instantaneous swings of a 50 Hz waveform, what the pointer settles at is the time-average of I², and the square root of the average of I² is, by definition, the <strong>RMS value</strong>. A moving iron instrument therefore reads true RMS directly on any waveform, and reads correctly on AC or DC (on DC, I² is just a constant, so the reading is simply the DC value). Key distinction: PMMC is DC-only and reads average; moving iron works on AC and DC alike and reads true RMS.</div></div>
 
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>PMMC</th><th>Moving iron</th></tr>
+    <tr><td>Deflecting torque</td><td>Proportional to I</td><td>Proportional to I&sup2;</td></tr>
+    <tr><td>Reads</td><td>Average value</td><td><span class="n-val">True RMS</span>, on any waveform</td></tr>
+    <tr><td>Works on</td><td>DC only</td><td>AC and DC alike</td></tr>
+    <tr><td>Scale</td><td>Linear, evenly spaced</td><td>Square law, cramped at the low end</td></tr>
+    <tr><td>Accuracy</td><td>Higher</td><td>Coarser, hysteresis and eddy losses in the iron</td></tr>
+    <tr><td>Typical use</td><td>DC measurement, and the movement inside a multimeter</td><td>Switchboard AC ammeters and voltmeters</td></tr>
+  </table>
+
   <p class="n-p">The trade for that versatility is a non-linear (square law) scale, cramped at the low end, and coarser accuracy than PMMC due to hysteresis and eddy current losses in the iron. Moving iron instruments are the standard analogue AC ammeters and voltmeters fitted to marine switchboards.</p>
 
   <div class="n-h1" id="s-ammeter">Ammeter: Series Connection and the Shunt</div>
@@ -73,10 +93,10 @@ window.loadNotes("F14", `<div class="view" id="view-notes-f14">
   <div class="n-formula">R<sub>sh</sub> = (I<sub>m</sub> × R<sub>m</sub>) / I<sub>sh</sub></div>
 
   <div class="n-steps">
-    <p class="n-p"><strong>Worked example.</strong> A PMMC movement has I<sub>m</sub> = 1 mA (0.001 A), R<sub>m</sub> = 100 Ω. Build an ammeter reading up to 1 A full scale.</p>
+    <p class="n-p"><strong>Worked example.</strong> A PMMC movement has I<sub>m</sub> = <span class="n-val">1 mA</span> (0.001 A), R<sub>m</sub> = 100 Ω. Build an ammeter reading up to 1 A full scale.</p>
     <p class="n-p">1. The shunt carries the rest of the current: I<sub>sh</sub> = 1 A − 0.001 A = 0.999 A.</p>
     <p class="n-p">2. R<sub>sh</sub> = (I<sub>m</sub> × R<sub>m</sub>) / I<sub>sh</sub> = (0.001 × 100) / 0.999 ≈ <span class="n-val">0.1 Ω</span>.</p>
-    <p class="n-p">3. Check: voltage across the pair at full scale is I<sub>m</sub>R<sub>m</sub> = 0.1 V, so I<sub>sh</sub> = 0.1 / 0.1 = 1 A, almost all of the 1 A total, with the movement carrying just 1 mA. The scale is relabelled 0 to 1 A.</p>
+    <p class="n-p">3. Check: voltage across the pair at full scale is I<sub>m</sub>R<sub>m</sub> = 0.1 V, so I<sub>sh</sub> = 0.1 / 0.1 = 1 A, almost all of the 1 A total, with the movement carrying just <span class="n-val">1 mA</span>. The scale is relabelled 0 to 1 A.</p>
   </div>
   <p class="n-p">Note how small R<sub>sh</sub> came out compared with R<sub>m</sub>: the shunt is a heavy, thick, low resistance strip (often manganin, for stable resistance with temperature) able to carry nearly the full circuit current, exactly what "low resistance in series with the circuit" demands. Multi-range ammeters simply switch between several shunts.</p>
 
@@ -98,9 +118,9 @@ window.loadNotes("F14", `<div class="view" id="view-notes-f14">
     <p class="n-p"><strong>Worked example.</strong> Same movement, I<sub>m</sub> = 1 mA, R<sub>m</sub> = 100 Ω, reads only 0.1 V full scale alone. Build a voltmeter reading up to 100 V full scale.</p>
     <p class="n-p">1. Total resistance needed: R<sub>total</sub> = V / I<sub>m</sub> = 100 / 0.001 = 100,000 Ω.</p>
     <p class="n-p">2. R<sub>s</sub> = R<sub>total</sub> − R<sub>m</sub> = 100,000 − 100 = <span class="n-val">99,900 Ω</span> (≈ 99.9 kΩ).</p>
-    <p class="n-p">3. Check: 99,900 Ω in series with 100 Ω across 100 V gives 100/100,000 = 1 mA, exactly full scale, with 0.1 V across the movement, which is "full scale" on a dial now printed 0 to 100 V.</p>
+    <p class="n-p">3. Check: 99,900 Ω in series with 100 Ω across 100 V gives 100/100,000 = <span class="n-val">1 mA</span>, exactly full scale, with 0.1 V across the movement, which is "full scale" on a dial now printed 0 to 100 V.</p>
   </div>
-  <p class="n-p">The multiplier came out large (99.9 kΩ), nearly a thousand times R<sub>m</sub>, exactly what "high resistance in parallel with the circuit under test" requires. Multi-range voltmeters, and the ohms-per-volt sensitivity rating on an analogue meter, follow directly from how large a multiplier is used per range.</p>
+  <p class="n-p">The multiplier came out large (<span class="n-val">99.9 kΩ</span>), nearly a thousand times R<sub>m</sub>, exactly what "high resistance in parallel with the circuit under test" requires. Multi-range voltmeters, and the ohms-per-volt sensitivity rating on an analogue meter, follow directly from how large a multiplier is used per range.</p>
 
   <div class="n-h1" id="s-wattmeter">Wattmeter</div>
   <p class="n-p">Power is volts times amps (and, for AC, times the power factor), so a wattmeter has to sense both quantities at once and combine them. The standard electrodynamometer wattmeter does this with two coils:</p>

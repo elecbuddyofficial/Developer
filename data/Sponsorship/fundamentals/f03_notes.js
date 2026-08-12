@@ -121,7 +121,7 @@ window.loadNotes("F03", `<div class="view" id="view-notes-f03">
   <div class="n-h1" id="s-numericals">Worked Numericals</div>
 
   <div class="n-h2">1. Capacitance from Charge and Voltage</div>
-  <p class="n-p">A capacitor stores 600 µC of charge when 100 V is applied. Find its capacitance.</p>
+  <p class="n-p">A capacitor stores <span class="n-val">600 µC</span> of charge when <span class="n-val">100 V</span> is applied. Find its capacitance.</p>
   <ol class="n-steps"><li>C = Q / V = 600 × 10<sup>-6</sup> / 100 = <span class="n-val">6 µF</span></li></ol>
 
   <div class="n-h2">2. Resistance from Resistivity</div>
@@ -136,7 +136,7 @@ window.loadNotes("F03", `<div class="view" id="view-notes-f03">
   <ol class="n-steps"><li>σ = 1 / ρ = 1 / (2 × 10<sup>-7</sup>) = <span class="n-val">5 × 10<sup>6</sup> S/m</span></li></ol>
 
   <div class="n-h2">4. Resistance Change with Temperature</div>
-  <p class="n-p">A copper resistor reads 20 Ω at 0°C. Find its resistance at 100°C, taking α = 0.004 per °C.</p>
+  <p class="n-p">A copper resistor reads <span class="n-val">20 Ω</span> at <span class="n-val">0°C</span>. Find its resistance at 100°C, taking α = 0.004 per °C.</p>
   <ol class="n-steps">
     <li>R<sub>100</sub> = 20 × (1 + 0.004 × 100) = 20 × 1.4 = <span class="n-val">28 Ω</span></li>
   </ol>

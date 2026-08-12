@@ -57,7 +57,7 @@ window.loadNotes("F25", `<div class="view" id="view-notes-f25">
     <p class="n-p">5. <strong>If it's a genuine breakdown,</strong> the motor doesn't return to service on one low reading, it needs opening up or workshop diagnosis beyond a hand-held megger.</p>
   </div>
 
-  <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>Never assume zero means "test it again harder."</strong> Cranking a 500V megger onto a genuine near-short risks driving further damage into failing insulation. Once two clean retests agree, move to physical inspection instead.</div></div>
+  <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>Never assume zero means "test it again harder."</strong> Cranking a <span class="n-val">500V</span> megger onto a genuine near-short risks driving further damage into failing insulation. Once two clean retests agree, move to physical inspection instead.</div></div>
 
   <div class="n-crit"><span class="icon">🔴</span><div class="body"><strong>Report.</strong> A confirmed zero or near-zero IR is a motor that cannot be safely re-energised. Report it to the Chief Engineer, log the readings, and isolate and tag it out rather than leaving it connected "just in case."</div></div>
 
@@ -67,7 +67,7 @@ window.loadNotes("F25", `<div class="view" id="view-notes-f25">
   <div class="n-steps">
     <p class="n-p">1. <strong>Confirm the prime mover is genuinely at rated, stable speed,</strong> since a self-excited machine's frequency and voltage both depend on shaft speed, and confirm the field breaker or switch is closed.</p>
     <p class="n-p">2. <strong>Measure residual voltage at the output terminals.</strong> A self-excited machine relies on leftover residual magnetism in the rotor poles to generate a few volts the instant the shaft turns, which the AVR amplifies and feeds back into the field in a self-reinforcing loop. With no residual voltage at all, there's nothing for the AVR to amplify, and it sits at zero.</p>
-    <p class="n-p">3. <strong>If residual magnetism is confirmed lost</strong> (long shutdown, a severe fault event, or field wiring disturbed and reconnected reversed), the fix is <strong>field flashing</strong>: briefly applying a low voltage DC source, commonly a 12V battery, to the field winding with the AVR disconnected first, never with the AVR still connected, external DC into a live AVR can destroy its electronics.</p>
+    <p class="n-p">3. <strong>If residual magnetism is confirmed lost</strong> (long shutdown, a severe fault event, or field wiring disturbed and reconnected reversed), the fix is <strong>field flashing</strong>: briefly applying a low voltage DC source, commonly a <span class="n-val">12V</span> battery, to the field winding with the AVR disconnected first, never with the AVR still connected, external DC into a live AVR can destroy its electronics.</p>
     <p class="n-p">4. <strong>If residual voltage is present but collapses or never rises,</strong> suspect the AVR or its sensing fuse, since a blown sensing fuse can make a healthy AVR believe target voltage is already reached.</p>
     <p class="n-p">5. <strong>If the AVR checks out, move to the field circuit:</strong> an open field winding, a failed rectifier diode on a brushless machine, or worn slip ring brushes can all stop field current flowing with a healthy AVR trying to drive it. Confirm the generator breaker is open too, build-up should happen on open circuit.</p>
   </div>
@@ -95,7 +95,7 @@ window.loadNotes("F25", `<div class="view" id="view-notes-f25">
   <p class="n-p">A large motor starts, the lighting visibly dims for a second, and contactors elsewhere chatter or drop out. Why, and what would you check?</p>
 
   <div class="n-steps">
-    <p class="n-p">1. <strong>Recognise the textbook voltage dip from F11, now in the field.</strong> A DOL start draws five to seven times full load current through the generator and cable's internal impedance, producing a real voltage drop across the whole busbar, felt by every load simultaneously, recovering as the motor accelerates.</p>
+    <p class="n-p">1. <strong>Recognise the textbook voltage dip from F11, now in the field.</strong> A DOL start draws <span class="n-val">five to seven times full load</span> current through the generator and cable's internal impedance, producing a real voltage drop across the whole busbar, felt by every load simultaneously, recovering as the motor accelerates.</p>
     <p class="n-p">2. <strong>Check the motor's size relative to the generator actually on line.</strong> At sea the supply is a genuinely limited source, not an infinite grid, a dip barely noticeable with two generators paralleled can be severe on one alone.</p>
     <p class="n-p">3. <strong>Check whether the starting method fits.</strong> A DOL start against an undersized supply is very possibly the whole answer, check whether star-delta, autotransformer, soft starter or VFD (F11) would suit better.</p>
     <p class="n-p">4. <strong>Check the AVR's transient response and the governor.</strong> A healthy AVR recovers busbar voltage within a second or two; a large step load also asks the governor for a power step it takes time to answer, so frequency can dip too.</p>

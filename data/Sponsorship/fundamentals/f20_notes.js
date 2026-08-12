@@ -55,9 +55,9 @@ window.loadNotes("F20", `<div class="view" id="view-notes-f20">
     <tr><td><strong>EPR</strong> (ethylene propylene rubber)</td><td>Thermoset (elastomer)</td><td><span class="n-val">90°C</span> typical, some to 105°C</td><td>More flexible than XLPE, suiting repeated flexing, and tolerates some emergency overload well. Traditionally common in marine and offshore installations.</td></tr>
   </table>
 
-  <p class="n-p">Under short circuit conditions, lasting only a second or so, the insulation is allowed a brief excursion well above its continuous rating: broadly on the order of 160°C for PVC and up to around 250°C for XLPE and EPR. This is why thermoset materials dominate marine power cabling: a higher short circuit withstand means the cable survives a fault without permanent damage, which matters when a ship cannot simply pull into a manufacturer's yard for a replacement run.</p>
+  <p class="n-p">Under short circuit conditions, lasting only a second or so, the insulation is allowed a brief excursion well above its continuous rating: broadly on the order of <span class="n-val">160°C</span> for PVC and up to around 250°C for XLPE and EPR. This is why thermoset materials dominate marine power cabling: a higher short circuit withstand means the cable survives a fault without permanent damage, which matters when a ship cannot simply pull into a manufacturer's yard for a replacement run.</p>
 
-  <div class="n-crit"><span class="icon">💡</span><div class="body"><strong>Why the temperature rating matters beyond "how hot can it get".</strong> Current carrying capacity tables are built around this figure. A 90°C-rated XLPE cable carries more current than a 70°C-rated PVC cable of identical conductor size, simply because it has more thermal headroom before its insulation is damaged.</div></div>
+  <div class="n-crit"><span class="icon">💡</span><div class="body"><strong>Why the temperature rating matters beyond "how hot can it get".</strong> Current carrying capacity tables are built around this figure. A <span class="n-val">90°C</span>-rated XLPE cable carries more current than a 70°C-rated PVC cable of identical conductor size, simply because it has more thermal headroom before its insulation is damaged.</div></div>
 
   <div class="n-h1" id="s-sizing">Cable Sizing: Current Carrying Capacity, Voltage Drop, Short Circuit Withstand and De-rating</div>
   <p class="n-p">Choosing a cable size is not just "pick a conductor that carries the running current". A correctly sized cable must satisfy three checks, all of which have to pass.</p>
@@ -72,7 +72,7 @@ window.loadNotes("F20", `<div class="view" id="view-notes-f20">
   <p class="n-p">During a fault the cable must survive the fault current for the time it takes upstream protection to clear it, without the conductor reaching a temperature that damages the insulation. This depends on conductor cross section, the insulation's short circuit temperature limit above, and the clearing time of the breaker or fuse protecting the circuit. A cable sized purely on running current can still fail this check if protection is slow or fault current is high, which is why cable sizing and protective device selection are done together.</p>
 
   <div class="n-h2">De-rating for grouping and ambient temperature</div>
-  <p class="n-p">A cable's tabulated current rating, like a breaker's nameplate current in F13, is measured at one defined set of reference conditions: a reference ambient (commonly 30 to 40°C depending on the standard), laid singly in free air, with no other heat sources nearby. Change those conditions and the current it can actually carry safely falls below the table figure. The two factors that matter most on board:</p>
+  <p class="n-p">A cable's tabulated current rating, like a breaker's nameplate current in F13, is measured at one defined set of reference conditions: a reference ambient (commonly <span class="n-val">30 to 40°C</span> depending on the standard), laid singly in free air, with no other heat sources nearby. Change those conditions and the current it can actually carry safely falls below the table figure. The two factors that matter most on board:</p>
 
   <table class="n-table">
     <tr><th>Factor</th><th>Why it matters</th></tr>
@@ -173,7 +173,7 @@ window.loadNotes("F20", `<div class="view" id="view-notes-f20">
   Conductor for carrying current, insulation to withstand working voltage, bedding to protect the insulation from the armour, armour for mechanical protection and often earth continuity, and an outer sheath protecting the armour and providing the weather and fire performance barrier.</p>
 
   <p class="n-p"><strong>What is the difference between PVC and XLPE insulation?</strong><br>
-  PVC is a thermoplastic rated to 70°C continuous and softens under heat. XLPE is cross-linked into a thermoset during manufacture, rated to 90°C, and does not soften when hot, giving a much higher short circuit withstand too. XLPE is the modern standard for marine power cable for those reasons.</p>
+  PVC is a thermoplastic rated to 70°C continuous and softens under heat. XLPE is cross-linked into a thermoset during manufacture, rated to <span class="n-val">90°C</span>, and does not soften when hot, giving a much higher short circuit withstand too. XLPE is the modern standard for marine power cable for those reasons.</p>
 
   <p class="n-p"><strong>What three checks does a cable have to pass when it is sized?</strong><br>
   Current carrying capacity corrected for actual ambient and grouping, voltage drop over the run length against the allowable percentage, and short circuit withstand for fault current and upstream clearing time. The final size is whichever check demands the largest conductor.</p>

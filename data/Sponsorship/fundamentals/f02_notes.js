@@ -50,7 +50,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
     <tr><td>5-10 mA</td><td>Painful shock, muscle contraction begins</td></tr>
     <tr><td>10-20 mA</td><td class="hl">Let-go threshold exceeded, muscles lock, victim cannot release the conductor</td></tr>
     <tr><td>50-100 mA</td><td class="bad">Ventricular fibrillation risk, potentially fatal</td></tr>
-    <tr><td>Above 200 mA</td><td class="bad">Severe burns, cardiac arrest, often less fibrillation risk than the 50-100 mA band due to sustained muscle clamping of the heart</td></tr>
+    <tr><td>Above 200 mA</td><td class="bad">Severe burns, cardiac arrest, often less fibrillation risk than the <span class="n-val">50-100 mA</span> band due to sustained muscle clamping of the heart</td></tr>
   </table>
 
   <p class="n-p"><strong>Path through the body</strong> decides which organs are exposed. Hand-to-hand contact drives current directly across the chest, through the heart, and is considered the most dangerous path. Hand-to-foot is also dangerous but a hand-to-single-foot path on the same side of the body is comparatively less likely to cross the heart. This is why standing with one hand in a pocket while testing live equipment is a recognised precaution, it reduces the chance of a hand-to-hand path if a shock occurs.</p>
@@ -69,7 +69,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
     <tr><td>Wet or sweaty skin</td><td class="bad">300-1000 Ω</td></tr>
     <tr><td>Internal body (skin bypassed)</td><td class="bad">100-500 Ω</td></tr>
   </table>
-  <p class="n-p"><strong>Why this matters directly:</strong> at 230 V, dry skin at 100,000 Ω would only drive 2.3 mA, barely felt. The same 230 V across wet skin at 500 Ω drives 460 mA, well past the fatal range. The voltage did not change. The resistance did. This is the complete answer to the interview trap from F01, "does voltage kill?" It is current that injures, and body resistance, which varies hugely with moisture, is what decides how much current a given voltage produces. This is also the reason engine rooms, deck areas and anywhere with wet or sweaty conditions are treated as higher risk for the exact same equipment and voltage as a dry switchboard room.</p>
+  <p class="n-p"><strong>Why this matters directly:</strong> at 230 V, dry skin at 100,000 Ω would only drive <span class="n-val">2.3 mA</span>, barely felt. The same 230 V across wet skin at 500 Ω drives 460 mA, well past the fatal range. The voltage did not change. The resistance did. This is the complete answer to the interview trap from F01, "does voltage kill?" It is current that injures, and body resistance, which varies hugely with moisture, is what decides how much current a given voltage produces. This is also the reason engine rooms, deck areas and anywhere with wet or sweaty conditions are treated as higher risk for the exact same equipment and voltage as a dry switchboard room.</p>
 
 
   <!-- TYPES OF CONTACT -->
@@ -112,7 +112,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
   <!-- RCD -->
   <div class="n-h1" id="s-rcd">RCD / ELCB / RCCB</div>
   <p class="n-p"><strong>Working principle:</strong> a residual current device continuously compares the current flowing out through the line conductor with the current returning through the neutral conductor, using a balance transformer. In a healthy circuit these currents are equal. If current is leaking to earth, for example through a person receiving a shock or through damaged insulation, the return current is less than the outgoing current, and this imbalance is detected and used to trip the device within milliseconds.</p>
-  <p class="n-p"><strong>Typical trip sensitivity for personnel protection is 30 mA</strong>, chosen because it sits below the fibrillation risk threshold with margin, while higher-rated devices, in the hundreds of milliamps, are used purely for equipment and fire protection rather than personnel protection. RCDs are commonly fitted on single-phase socket circuits serving accommodation, galley equipment, workshops and portable tools, situations where a person is most likely to be in direct contact with a faulty appliance.</p>
+  <p class="n-p"><strong>Typical trip sensitivity for personnel protection is <span class="n-val">30 mA</span></strong>, chosen because it sits below the fibrillation risk threshold with margin, while higher-rated devices, in the hundreds of milliamps, are used purely for equipment and fire protection rather than personnel protection. RCDs are commonly fitted on single-phase socket circuits serving accommodation, galley equipment, workshops and portable tools, situations where a person is most likely to be in direct contact with a faulty appliance.</p>
   <p class="n-p"><strong>An RCD is not a substitute for earthing or insulation monitoring</strong>, it is an additional, fast-acting layer that specifically protects against earth leakage current through a person, and the two systems are designed to work together rather than replace each other.</p>
 
 
@@ -122,7 +122,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
 
   <p class="n-p"><strong>What insulation resistance testing measures:</strong> the resistance of the insulation separating current-carrying conductors from each other and from earth, expressed in megohms (MΩ). It is the single most direct indicator of insulation health in a motor, generator, cable or switchboard, and a trend of falling IR values over time is one of the earliest warnings of developing insulation failure, often long before any other symptom appears.</p>
 
-  <p class="n-p"><strong>The instrument:</strong> a megger applies a steady, elevated DC test voltage internally generated by the instrument, well above normal operating voltage, and measures the resulting leakage current to calculate resistance. Common test voltages are 250 V, 500 V and 1000 V for low-voltage equipment, and higher, up to 2500 V or more, for high-voltage machines. The correct test voltage is selected based on the rated voltage of the equipment under test; using an excessive test voltage on low-voltage electronics or control wiring can damage them, which is exactly why associated control and electronic circuits are disconnected before testing.</p>
+  <p class="n-p"><strong>The instrument:</strong> a megger applies a steady, elevated DC test voltage internally generated by the instrument, well above normal operating voltage, and measures the resulting leakage current to calculate resistance. Common test voltages are <span class="n-val">250 V</span>, <span class="n-val">500 V</span> and <span class="n-val">1000 V</span> for low-voltage equipment, and higher, up to 2500 V or more, for high-voltage machines. The correct test voltage is selected based on the rated voltage of the equipment under test; using an excessive test voltage on low-voltage electronics or control wiring can damage them, which is exactly why associated control and electronic circuits are disconnected before testing.</p>
 
   <table class="n-table">
     <tr><th>Equipment Class</th><th>Typical Test Voltage</th></tr>
@@ -132,7 +132,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
     <tr><td>High voltage (3.3 kV, 6.6 kV) systems</td><td class="hl">2500 V or higher, specialised HV megger</td></tr>
   </table>
 
-  <p class="n-p"><strong>Minimum acceptable values, the standard rule of thumb:</strong> a commonly applied guideline is 1 MΩ per kV of rated voltage, plus a baseline minimum, so a low-voltage 440 V motor is often expected to read well above 1 MΩ, while absolute numeric pass or fail matters less than the trend over successive tests on the same machine. A machine reading 500 MΩ this year and 50 MΩ next year has a real problem developing even though 50 MΩ might still pass a bare minimum threshold, which is why every reading should be logged and compared historically, not treated as a single isolated pass or fail event.</p>
+  <p class="n-p"><strong>Minimum acceptable values, the standard rule of thumb:</strong> a commonly applied guideline is <span class="n-val">1 MΩ per kV</span> of rated voltage, plus a baseline minimum, so a low-voltage 440 V motor is often expected to read well above 1 MΩ, while absolute numeric pass or fail matters less than the trend over successive tests on the same machine. A machine reading 500 MΩ this year and 50 MΩ next year has a real problem developing even though 50 MΩ might still pass a bare minimum threshold, which is why every reading should be logged and compared historically, not treated as a single isolated pass or fail event.</p>
 
   <p class="n-p"><strong>Step-by-step procedure:</strong></p>
   <ol class="n-steps">
@@ -212,14 +212,14 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
   <table class="n-table">
     <tr><th>Question</th><th>Model Answer</th></tr>
     <tr><td>Does voltage or current kill?</td><td>Current causes injury. Voltage only drives current through the body; the actual current depends heavily on body resistance, which varies with skin condition.</td></tr>
-    <tr><td>What current range is considered the danger zone for fibrillation?</td><td>Roughly 50 to 100 mA at power frequency, though this depends on path and duration as well.</td></tr>
+    <tr><td>What current range is considered the danger zone for fibrillation?</td><td>Roughly <span class="n-val">50 to 100 mA</span> at power frequency, though this depends on path and duration as well.</td></tr>
     <tr><td>Why is a hand-to-hand shock path more dangerous than hand-to-foot on the same side?</td><td>Hand-to-hand drives current directly across the chest and through the heart, increasing fibrillation risk.</td></tr>
     <tr><td>Why does frequency affect shock severity?</td><td>Power frequency, 50-60 Hz, falls in the range the human heart is most susceptible to fibrillation, making it more dangerous than DC or much higher frequencies for the same current.</td></tr>
     <tr><td>Why do ships avoid solidly earthing the neutral?</td><td>A solidly earthed system trips immediately on a single earth fault. An insulated or high-resistance system allows the vessel to keep running on a first fault, critical for maintaining steering and propulsion at sea, at the cost of needing continuous insulation monitoring.</td></tr>
     <tr><td>What does an insulation monitoring device do?</td><td>Continuously monitors the insulation resistance of the whole system to earth and raises an alarm if it falls below a set threshold, indicating a developing or actual earth fault.</td></tr>
     <tr><td>Is an earth fault alarm an immediate emergency?</td><td>Not necessarily, since the system is designed to keep running on a first fault, but it must be investigated and cleared promptly to avoid a second fault creating a genuine short circuit.</td></tr>
     <tr><td>How does an RCD detect a fault?</td><td>It compares outgoing and returning current using a balance transformer. Any imbalance means current is leaking to earth, and the device trips.</td></tr>
-    <tr><td>What is the typical RCD trip current for personnel protection?</td><td>30 mA, chosen to sit safely below the fibrillation risk threshold.</td></tr>
+    <tr><td>What is the typical RCD trip current for personnel protection?</td><td><span class="n-val">30 mA</span>, chosen to sit safely below the fibrillation risk threshold.</td></tr>
     <tr><td>What does insulation resistance testing measure?</td><td>The resistance of insulation separating conductors from each other and from earth, in megohms, indicating insulation health.</td></tr>
     <tr><td>Why must equipment be discharged after a megger test?</td><td>Insulation behaves capacitively and can retain a dangerous stored charge from the test voltage itself.</td></tr>
     <tr><td>Why is temperature correction needed for IR readings?</td><td>Insulation resistance falls as winding temperature rises, so readings must be corrected to a standard reference temperature, commonly 40°C, before comparing against history.</td></tr>
@@ -238,7 +238,7 @@ window.loadNotes("F02", `<div class="view" id="view-notes-f02">
   <table class="n-table">
     <tr><th>Concept</th><th>One Line</th></tr>
     <tr><td>What kills</td><td>Current, not voltage. Body resistance decides how much current a given voltage produces.</td></tr>
-    <tr><td>Danger current range</td><td>50-100 mA, ventricular fibrillation risk at power frequency.</td></tr>
+    <tr><td>Danger current range</td><td><span class="n-val">50-100 mA</span>, ventricular fibrillation risk at power frequency.</td></tr>
     <tr><td>Most dangerous path</td><td>Hand-to-hand, across the chest and heart.</td></tr>
     <tr><td>Why 50-60 Hz is dangerous</td><td>Closest frequency range to human heart's fibrillation sensitivity.</td></tr>
     <tr><td>Ship earthing philosophy</td><td>Insulated or high-resistance neutral, keeps running on first fault, needs active monitoring.</td></tr>
