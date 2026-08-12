@@ -79,13 +79,13 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
 
   <!-- FARADAY -->
   <div class="n-h1" id="s-faraday">Faraday's Laws of Electromagnetic Induction</div>
-  <p class="n-p">The single most important principle in this module — every generator on every ship afloat exists because of these two laws.</p>
+  <p class="n-p">The single most important principle in this module, every generator on every ship afloat exists because of these two laws.</p>
   <div class="n-h2">Faraday's First Law</div>
   <p class="n-p"><strong>Definition:</strong> whenever a conductor is placed in a changing magnetic field, or a conductor moves through a magnetic field such that it cuts flux lines, an EMF is induced in that conductor.</p>
   <div class="n-h2">Faraday's Second Law</div>
   <p class="n-p"><strong>Definition:</strong> the magnitude of the induced EMF is directly proportional to the rate of change of flux linkage.</p>
   <div class="n-formula">e = -N × (dΦ / dt)<div class="label">e = induced EMF (V) · N = number of turns · dΦ/dt = rate of change of flux (Wb/s) · negative sign is Lenz's Law</div></div>
-  <p class="n-p"><strong>Explanation, simple English:</strong> nothing happens to a stationary conductor sitting in a steady, unchanging magnetic field, no matter how strong that field is. An EMF only appears when the flux linking the conductor is changing — either the conductor physically moves through the field (as in a rotating generator), or the field itself changes strength (as in a transformer with alternating current). This is the single fact that explains why a generator must rotate and a transformer must run on AC, never DC.</p>
+  <p class="n-p"><strong>Explanation, simple English:</strong> nothing happens to a stationary conductor sitting in a steady, unchanging magnetic field, no matter how strong that field is. An EMF only appears when the flux linking the conductor is changing, either the conductor physically moves through the field (as in a rotating generator), or the field itself changes strength (as in a transformer with alternating current). This is the single fact that explains why a generator must rotate and a transformer must run on AC, never DC.</p>
 
   <div class="n-crit"><div class="icon">❌</div><div class="body"><strong>Interview trap:</strong> "Will a stationary conductor next to a stationary, unchanging strong permanent magnet generate any voltage?" No, regardless of how strong the magnet is. Faraday's Law depends entirely on <em>change</em> of flux linkage, not on the magnitude of flux present. A very strong but constant field induces exactly zero EMF in a stationary conductor. Candidates who answer based on field strength alone, rather than rate of change, are marked down immediately.</div></div>
 
@@ -95,15 +95,15 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
   <!-- LENZ -->
   <div class="n-h1" id="s-lenz">Lenz's Law</div>
   <p class="n-p"><strong>Definition:</strong> the direction of an induced EMF, and the current it drives, is always such as to oppose the change in flux that produced it. This is the physical meaning of the minus sign in Faraday's equation above.</p>
-  <p class="n-p"><strong>Why it exists:</strong> Lenz's Law is a direct statement of conservation of energy applied to electromagnetism. If the induced current instead <em>assisted</em> the change producing it, the effect would reinforce its own cause, flux would run away uncontrolled, and energy would appear from nowhere — which nothing in nature permits. Opposition is not a coincidence; it is required for energy to balance.</p>
+  <p class="n-p"><strong>Why it exists:</strong> Lenz's Law is a direct statement of conservation of energy applied to electromagnetism. If the induced current instead <em>assisted</em> the change producing it, the effect would reinforce its own cause, flux would run away uncontrolled, and energy would appear from nowhere, which nothing in nature permits. Opposition is not a coincidence; it is required for energy to balance.</p>
   <p class="n-p"><strong>Working principle, step by step, moving a magnet toward a coil:</strong></p>
   <ol class="n-steps">
     <li>The magnet approaches the coil, flux linking the coil increases.</li>
     <li>An EMF is induced, driving a current in the coil.</li>
-    <li>By Lenz's Law, that induced current creates its own magnetic field opposing the increasing flux — meaning the coil's near face becomes the same pole as the approaching magnet's face, repelling it.</li>
+    <li>By Lenz's Law, that induced current creates its own magnetic field opposing the increasing flux, meaning the coil's near face becomes the same pole as the approaching magnet's face, repelling it.</li>
     <li>Work must be done against this repulsion to keep pushing the magnet in; that mechanical work is exactly what becomes the electrical energy delivered by the induced current.</li>
   </ol>
-  <p class="n-p"><strong>Shipboard:</strong> Lenz's Law is why a generator's prime mover must supply more mechanical power the moment more electrical load is connected — the increased induced current opposes the rotor's motion (as extra torque needed to overcome it), so the diesel engine driving the alternator genuinely works harder as electrical load increases, exactly as a chief engineer observes on the fuel rack when a large motor starts.</p>
+  <p class="n-p"><strong>Shipboard:</strong> Lenz's Law is why a generator's prime mover must supply more mechanical power the moment more electrical load is connected, the increased induced current opposes the rotor's motion (as extra torque needed to overcome it), so the diesel engine driving the alternator genuinely works harder as electrical load increases, exactly as a chief engineer observes on the fuel rack when a large motor starts.</p>
 
 
   <!-- FLEMING -->
@@ -111,10 +111,10 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
   <p class="n-p">Two closely related but opposite rules, both using the same three fingers of a hand held mutually perpendicular, and confusing them is one of the most common interview slips.</p>
   <table class="n-table">
     <tr><th>Rule</th><th>Hand</th><th>Used For</th><th>Thumb</th><th>First Finger</th><th>Second Finger</th></tr>
-    <tr><td>Right Hand Rule</td><td class="ok">Right hand</td><td>Generator — finding induced current direction</td><td>Motion of conductor</td><td>Field (N to S)</td><td>Induced Current</td></tr>
-    <tr><td>Left Hand Rule</td><td class="hl">Left hand</td><td>Motor — finding force/motion direction</td><td>Force / Motion produced</td><td>Field (N to S)</td><td>Current</td></tr>
+    <tr><td>Right Hand Rule</td><td class="ok">Right hand</td><td>Generator, finding induced current direction</td><td>Motion of conductor</td><td>Field (N to S)</td><td>Induced Current</td></tr>
+    <tr><td>Left Hand Rule</td><td class="hl">Left hand</td><td>Motor, finding force/motion direction</td><td>Force / Motion produced</td><td>Field (N to S)</td><td>Current</td></tr>
   </table>
-  <p class="n-p"><strong>Memory trick:</strong> "generators Right, motors Left" — alphabetically <strong>g</strong>enerator comes before <strong>m</strong>otor, and <strong>r</strong>ight comes before <strong>l</strong>eft in the same relative order, so pair them: right hand with generator, left hand with motor. Another common trick: "FBI" for the left hand motor rule — Force, B (field), I (current), spelling out thumb, first finger, second finger in order.</p>
+  <p class="n-p"><strong>Memory trick:</strong> "generators Right, motors Left", alphabetically <strong>g</strong>enerator comes before <strong>m</strong>otor, and <strong>r</strong>ight comes before <strong>l</strong>eft in the same relative order, so pair them: right hand with generator, left hand with motor. Another common trick: "FBI" for the left hand motor rule, Force, B (field), I (current), spelling out thumb, first finger, second finger in order.</p>
   <div class="n-crit"><div class="icon">❌</div><div class="body"><strong>Interview trap:</strong> "Which hand rule applies to a generator?" Candidates under pressure frequently answer "left hand" by reflex, since Fleming's Left Hand Rule is more commonly quoted in general physics teaching for motors. On a ship, generators vastly outnumber the specific need for this rule day to day, but the correct pairing must be automatic: Right Hand for generators (effect: induced EMF, from a known cause: motion in a field), Left Hand for motors (effect: force/motion, from a known cause: current in a field).</div></div>
   <p class="n-p"><strong>Interview answer:</strong> "Fleming's Right Hand Rule finds the direction of induced current in a generator: thumb for motion, first finger for field, second finger for current. Fleming's Left Hand Rule finds the direction of force in a motor: thumb for force, first finger for field, second finger for current. I remember it as right hand for generators, left hand for motors."</p>
 
@@ -123,8 +123,8 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
   <div class="n-h1" id="s-self-ind">Self Inductance</div>
   <p class="n-p"><strong>Definition:</strong> the property of a coil by which a changing current through it induces an EMF in the same coil, opposing the change that caused it. SI unit: <strong>henry (H)</strong>. One henry is the inductance of a coil in which a current changing at one ampere per second induces one volt.</p>
   <div class="n-formula">e = -L × (dI / dt)<div class="label">e = self-induced EMF (V) · L = self-inductance (H) · dI/dt = rate of change of current (A/s)</div></div>
-  <p class="n-p"><strong>Explanation:</strong> as current in a coil changes, the flux it produces changes with it, and by Faraday's Law that changing self-flux induces an EMF back into the very coil producing it. By Lenz's Law that self-induced EMF always opposes the change — opposing a rise in current, and opposing a fall in current, which is why an inductor resists sudden changes in current far more than it resists steady current.</p>
-  <p class="n-p"><strong>Shipboard:</strong> self-inductance is exactly why switching off a large inductive load — a motor, a contactor coil, a relay — produces a voltage spike far higher than the supply voltage: the collapsing field tries to maintain the current that was flowing, and with the circuit suddenly opened, that energy discharges as a brief high-voltage arc across the opening contacts. This is the reason contactors and relays are fitted with suppression devices (freewheel diodes on DC coils, RC snubbers on AC coils) to protect contacts and nearby electronics.</p>
+  <p class="n-p"><strong>Explanation:</strong> as current in a coil changes, the flux it produces changes with it, and by Faraday's Law that changing self-flux induces an EMF back into the very coil producing it. By Lenz's Law that self-induced EMF always opposes the change, opposing a rise in current, and opposing a fall in current, which is why an inductor resists sudden changes in current far more than it resists steady current.</p>
+  <p class="n-p"><strong>Shipboard:</strong> self-inductance is exactly why switching off a large inductive load, a motor, a contactor coil, a relay, produces a voltage spike far higher than the supply voltage: the collapsing field tries to maintain the current that was flowing, and with the circuit suddenly opened, that energy discharges as a brief high-voltage arc across the opening contacts. This is the reason contactors and relays are fitted with suppression devices (freewheel diodes on DC coils, RC snubbers on AC coils) to protect contacts and nearby electronics.</p>
 
 
   <!-- MUTUAL INDUCTANCE -->
@@ -180,7 +180,7 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
   <!-- WORKING STEP BY STEP -->
   <div class="n-h1" id="s-working">How Three-Phase AC Is Generated, Step by Step</div>
   <ol class="n-steps">
-    <li>The prime mover — diesel engine or turbine — rotates the rotor shaft at a speed fixed by the required frequency and pole count.</li>
+    <li>The prime mover, diesel engine or turbine, rotates the rotor shaft at a speed fixed by the required frequency and pole count.</li>
     <li>DC excitation current flows through the rotor field winding, creating a fixed magnetic field pattern that rotates with the shaft.</li>
     <li>As the rotor turns, its magnetic field sweeps past the three stationary stator windings, which are physically arranged 120 electrical degrees apart around the stator.</li>
     <li>Each stator winding experiences a continuously changing flux linkage as the rotating field passes it, and by Faraday's Law, an EMF is induced in each winding.</li>
@@ -331,13 +331,13 @@ window.loadNotes("F05", `<div class="view" id="view-notes-f05">
   <table class="n-table">
     <tr><th>Concept</th><th>One Line</th></tr>
     <tr><td>Flux / Flux density</td><td>Φ in weber, B = Φ/A in tesla.</td></tr>
-    <tr><td>MMF / Reluctance</td><td>MMF = NI, Φ = MMF/S — magnetic Ohm's Law.</td></tr>
+    <tr><td>MMF / Reluctance</td><td>MMF = NI, Φ = MMF/S, magnetic Ohm's Law.</td></tr>
     <tr><td>Faraday's Law</td><td>EMF needs changing flux linkage, not just strong flux.</td></tr>
-    <tr><td>Lenz's Law</td><td>Induced effect always opposes its cause — conservation of energy.</td></tr>
+    <tr><td>Lenz's Law</td><td>Induced effect always opposes its cause, conservation of energy.</td></tr>
     <tr><td>Fleming's Right</td><td>Generator: thumb motion, first finger field, second finger current.</td></tr>
     <tr><td>Fleming's Left</td><td>Motor: thumb force, first finger field, second finger current.</td></tr>
     <tr><td>Self inductance</td><td>Coil opposes its own current change. Cause of switch-off voltage spikes.</td></tr>
-    <tr><td>Mutual inductance</td><td>One coil induces EMF in another — the transformer principle.</td></tr>
+    <tr><td>Mutual inductance</td><td>One coil induces EMF in another, the transformer principle.</td></tr>
     <tr><td>EMF equation</td><td>E = 4.44 f Φ N K<sub>w</sub>. AVR changes Φ, governor changes f.</td></tr>
     <tr><td>Rotating field design</td><td>Only small DC field current through slip rings, not full load current.</td></tr>
     <tr><td>Salient vs cylindrical</td><td>Salient: low speed, diesel. Cylindrical: high speed, turbine.</td></tr>

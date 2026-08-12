@@ -39,15 +39,15 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <!-- OBJECTIVES -->
   <div class="n-h1" id="s-objectives">Learning Objectives</div>
   <p class="n-p">By the end of this module you should be able to explain the transformer's working principle from mutual inductance, derive and apply the transformer EMF equation, use turns ratio to relate voltage, current and impedance between windings, describe core type and shell type construction and why laminated cores are used, distinguish step-up, step-down, isolation, auto and current transformers, separate iron loss from copper loss and explain why each behaves differently with load, calculate efficiency and explain why it peaks where copper loss equals iron loss, define voltage regulation and explain what causes it, describe cooling methods and their designations, state the conditions for parallel operation of transformers, describe common three-phase transformer connections and why a star-delta connection is favoured for shipboard step-down duty, explain the role of current and potential transformers in metering and protection, and solve numericals on all of the above.</p>
-  <p class="n-p">F05 covered mutual inductance as one coil inducing EMF in another. A transformer is that principle built into a complete, purpose-engineered machine, and it is arguably the single most common piece of electrical equipment on a ship after the alternator and the motor — lighting transformers, control transformers, and where fitted, high-to-low voltage distribution transformers all work on exactly the theory below.</p>
+  <p class="n-p">F05 covered mutual inductance as one coil inducing EMF in another. A transformer is that principle built into a complete, purpose-engineered machine, and it is arguably the single most common piece of electrical equipment on a ship after the alternator and the motor, lighting transformers, control transformers, and where fitted, high-to-low voltage distribution transformers all work on exactly the theory below.</p>
 
 
   <!-- PRINCIPLE -->
   <div class="n-h1" id="s-principle">Working Principle</div>
   <p class="n-p"><strong>Definition:</strong> a transformer is a static electrical machine that transfers electrical energy from one circuit to another, at the same frequency, usually with a change in voltage and current, through the principle of mutual inductance, with no direct electrical connection between the two circuits and no moving parts.</p>
   <p class="n-p"><strong>Explanation, simple English:</strong> two separate coils, the primary and the secondary, are wound on a common iron core but never touch each other electrically. When AC flows in the primary, it creates an alternating flux in the core. That alternating flux links the secondary winding too, and by Faraday's Law from F05, an EMF is induced in the secondary purely because the flux linking it is changing. No current ever crosses from primary to secondary directly; only the changing magnetic field does the work.</p>
-  <div class="n-crit"><div class="icon">❌</div><div class="body"><strong>Interview trap:</strong> "Can a transformer work on DC?" No. A steady DC current produces a steady, unchanging flux, and as established in F05, Faraday's Law induces EMF only from a <em>changing</em> flux linkage. With DC, after the brief instant of switch-on, flux stops changing and secondary EMF collapses to zero — worse, sustained DC applied to a transformer's low-resistance primary draws a very high steady current with nothing to limit it, since the inductive reactance that normally limits current only exists for changing current, risking winding burnout.</div></div>
-  <p class="n-p"><strong>Shipboard:</strong> this is exactly why a ship's DC-fed emergency and battery systems (covered fully in F19) cannot use ordinary transformers to change DC voltage; DC-DC conversion instead uses switching power electronics, which effectively chop the DC into a changing waveform first, precisely to satisfy the same requirement a transformer needs — changing flux.</p>
+  <div class="n-crit"><div class="icon">❌</div><div class="body"><strong>Interview trap:</strong> "Can a transformer work on DC?" No. A steady DC current produces a steady, unchanging flux, and as established in F05, Faraday's Law induces EMF only from a <em>changing</em> flux linkage. With DC, after the brief instant of switch-on, flux stops changing and secondary EMF collapses to zero, worse, sustained DC applied to a transformer's low-resistance primary draws a very high steady current with nothing to limit it, since the inductive reactance that normally limits current only exists for changing current, risking winding burnout.</div></div>
+  <p class="n-p"><strong>Shipboard:</strong> this is exactly why a ship's DC-fed emergency and battery systems (covered fully in F19) cannot use ordinary transformers to change DC voltage; DC-DC conversion instead uses switching power electronics, which effectively chop the DC into a changing waveform first, precisely to satisfy the same requirement a transformer needs, changing flux.</p>
 
 
   <!-- EMF EQUATION -->
@@ -63,7 +63,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <div class="n-h1" id="s-turnsratio">Turns Ratio and the Ideal Transformer</div>
   <p class="n-p">Dividing the two EMF equations above cancels the common 4.44 f Φ<sub>m</sub> term, leaving a clean, purely geometric relationship.</p>
   <div class="n-formula">E<sub>1</sub> / E<sub>2</sub> = N<sub>1</sub> / N<sub>2</sub> = a<div class="label">a = turns ratio · N<sub>1</sub>, N<sub>2</sub> = primary, secondary turns</div></div>
-  <p class="n-p">For an ideal (lossless) transformer, input apparent power equals output apparent power, which forces current to scale inversely with the turns ratio — exactly opposite to how voltage scales.</p>
+  <p class="n-p">For an ideal (lossless) transformer, input apparent power equals output apparent power, which forces current to scale inversely with the turns ratio, exactly opposite to how voltage scales.</p>
   <div class="n-formula">I<sub>1</sub> / I<sub>2</sub> = N<sub>2</sub> / N<sub>1</sub> = 1/a<div class="label">Step up in voltage always means step down in current, and vice versa</div></div>
   <table class="n-table">
     <tr><th>Ratio N₁/N₂</th><th>Effect on Voltage</th><th>Effect on Current</th><th>Type</th></tr>
@@ -146,7 +146,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <!-- EFFICIENCY -->
   <div class="n-h1" id="s-efficiency">Efficiency</div>
   <div class="n-formula">η = Output Power / (Output Power + Iron Loss + Copper Loss)<div class="label">η = efficiency, usually expressed as a percentage</div></div>
-  <p class="n-p"><strong>Condition for maximum efficiency:</strong> because iron loss stays essentially fixed while copper loss rises with the square of the load, total loss as a function of load has a minimum point relative to output — efficiency is maximum exactly at the load where copper loss equals iron loss.</p>
+  <p class="n-p"><strong>Condition for maximum efficiency:</strong> because iron loss stays essentially fixed while copper loss rises with the square of the load, total loss as a function of load has a minimum point relative to output, efficiency is maximum exactly at the load where copper loss equals iron loss.</p>
   <div class="n-formula">Copper Loss = Iron Loss, at maximum efficiency<div class="label">The load fraction at which this occurs is x = √(Iron Loss / Full-Load Copper Loss)</div></div>
   <p class="n-p"><strong>Why this matters practically:</strong> transformers are deliberately designed so this maximum-efficiency point falls near their typical, most common operating load, not at full load, since most transformers spend the bulk of their life at partial load rather than continuously at rated capacity. A distribution transformer feeding lighting circuits, mostly lightly loaded outside peak hours, is a textbook case for this design choice.</p>
 
@@ -156,7 +156,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <p class="n-p"><strong>Definition:</strong> the change in secondary terminal voltage from no-load to full-load, expressed as a percentage of the no-load (or rated) voltage, at a stated power factor.</p>
   <div class="n-formula">% Regulation = [(E<sub>2</sub> - V<sub>2</sub>) / E<sub>2</sub>] × 100<div class="label">E<sub>2</sub> = no-load secondary voltage · V<sub>2</sub> = full-load secondary voltage</div></div>
   <p class="n-p"><strong>Why it happens:</strong> exactly as with the alternator's EMF vs terminal voltage relationship in F01 and F05, a real transformer has winding resistance and leakage reactance, so as load current is drawn, an internal voltage drop appears across those internal impedances, and the terminal voltage delivered to the load sags below the ideal no-load value. Regulation also depends on the load's power factor: a lagging power factor load generally produces worse (higher) regulation than a unity or leading power factor load, for the same current magnitude, because of how the resistive and reactive drops combine with the phase angle.</p>
-  <p class="n-p"><strong>Shipboard:</strong> voltage regulation is why a lightly loaded ship's lighting transformer secondary reads slightly above nominal, and why it sags back toward nominal as more lighting and small load is switched on — a normal, expected behaviour, not a fault, provided it stays within design tolerance.</p>
+  <p class="n-p"><strong>Shipboard:</strong> voltage regulation is why a lightly loaded ship's lighting transformer secondary reads slightly above nominal, and why it sags back toward nominal as more lighting and small load is switched on, a normal, expected behaviour, not a fault, provided it stays within design tolerance.</p>
 
 
   <!-- COOLING -->
@@ -168,7 +168,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
     <tr><td>ONAN (Oil Natural, Air Natural)</td><td class="hl">Oil circulates naturally, radiator cooled by natural air</td><td>Larger oil-filled power transformers, where fitted</td></tr>
     <tr><td>ONAF (Oil Natural, Air Forced)</td><td>Oil circulates naturally, radiator cooling assisted by fans</td><td>Higher-capacity oil-filled transformers under heavier load</td></tr>
   </table>
-  <p class="n-p"><strong>Shipboard:</strong> most transformers found aboard merchant ships — lighting, control, navigation supply — are small dry-type units, naturally or fan cooled, chosen specifically to avoid the fire risk and maintenance burden of oil-filled transformers in a confined engine room or switchboard space. Oil-filled units appear mainly on larger vessels with genuine high-voltage distribution needs.</p>
+  <p class="n-p"><strong>Shipboard:</strong> most transformers found aboard merchant ships, lighting, control, navigation supply, are small dry-type units, naturally or fan cooled, chosen specifically to avoid the fire risk and maintenance burden of oil-filled transformers in a confined engine room or switchboard space. Oil-filled units appear mainly on larger vessels with genuine high-voltage distribution needs.</p>
 
 
   <!-- PARALLEL OPERATION -->
@@ -195,7 +195,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
     <tr><td>Delta - Star</td><td>Dy</td><td>Common for step-up and distribution transformers needing a secondary neutral for single-phase loads</td></tr>
   </table>
   <p class="n-p"><strong>Why star-delta suits shipboard step-down duty:</strong> the star-connected high-voltage primary reduces the voltage each winding must be insulated for, while the delta-connected secondary provides a closed path for third-harmonic currents that would otherwise distort the output waveform, without needing a neutral conductor on that side. This combination is standard for HV-to-440 V shipboard distribution transformers where fitted.</p>
-  <p class="n-p"><strong>Interview trap check:</strong> star-delta and delta-star connections introduce a fixed phase shift, commonly 30°, between primary and secondary line voltages. This is normal and by design, but it is exactly the "same vector group" condition from the parallel operation table above — two transformers with different vector groups cannot simply be paralleled even if their voltage ratios match, because their secondary voltages would be out of phase with each other.</p>
+  <p class="n-p"><strong>Interview trap check:</strong> star-delta and delta-star connections introduce a fixed phase shift, commonly 30°, between primary and secondary line voltages. This is normal and by design, but it is exactly the "same vector group" condition from the parallel operation table above, two transformers with different vector groups cannot simply be paralleled even if their voltage ratios match, because their secondary voltages would be out of phase with each other.</p>
 
 
   <!-- INSTRUMENT TRANSFORMERS -->
@@ -286,7 +286,7 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <div class="n-h1" id="s-viva">Viva and Interview Questions</div>
   <table class="n-table">
     <tr><th>Question</th><th>Model Answer</th></tr>
-    <tr><td>What is the working principle of a transformer?</td><td>Mutual inductance — an alternating current in the primary creates an alternating flux in the shared core, inducing an EMF in the secondary by Faraday's Law.</td></tr>
+    <tr><td>What is the working principle of a transformer?</td><td>Mutual inductance, an alternating current in the primary creates an alternating flux in the shared core, inducing an EMF in the secondary by Faraday's Law.</td></tr>
     <tr><td>Can a transformer work on DC? Why not?</td><td>No. Steady DC produces unchanging flux, and Faraday's Law needs changing flux to induce EMF; sustained DC would also draw a very high current through the primary's low resistance with no reactance to limit it, risking burnout.</td></tr>
     <tr><td>Does frequency change across a transformer?</td><td>No, never. Secondary EMF is induced by the same alternating flux the primary produces, at the same frequency.</td></tr>
     <tr><td>Does a transformer increase power?</td><td>No. Apparent power in equals apparent power out, minus small real losses. It trades voltage for current, or current for voltage; it never creates energy.</td></tr>
@@ -313,11 +313,11 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
   <div class="n-h1" id="s-quickrev">Quick Revision</div>
   <table class="n-table">
     <tr><th>Concept</th><th>One Line</th></tr>
-    <tr><td>Principle</td><td>Mutual inductance — changing flux in a shared core, no electrical connection.</td></tr>
-    <tr><td>DC on a transformer</td><td>No induced EMF, and risk of winding burnout — never apply DC.</td></tr>
+    <tr><td>Principle</td><td>Mutual inductance, changing flux in a shared core, no electrical connection.</td></tr>
+    <tr><td>DC on a transformer</td><td>No induced EMF, and risk of winding burnout, never apply DC.</td></tr>
     <tr><td>Frequency</td><td>Never changes across a transformer.</td></tr>
     <tr><td>Turns ratio</td><td>E₁/E₂ = N₁/N₂. Current ratio is the inverse.</td></tr>
-    <tr><td>Power</td><td>Transferred, not created — kVA in ≈ kVA out.</td></tr>
+    <tr><td>Power</td><td>Transferred, not created, kVA in ≈ kVA out.</td></tr>
     <tr><td>Lamination</td><td>Cuts eddy current loss by breaking circulating current paths.</td></tr>
     <tr><td>Iron loss</td><td>Constant with load, depends on V and f.</td></tr>
     <tr><td>Copper loss</td><td>Rises with I², depends on load.</td></tr>
@@ -326,8 +326,8 @@ window.loadNotes("F06", `<div class="view" id="view-notes-f06">
     <tr><td>Auto-transformer</td><td>Single winding, no isolation, used for motor starting.</td></tr>
     <tr><td>Parallel operation</td><td>Match ratio, vector group, %impedance, phase sequence.</td></tr>
     <tr><td>Star-delta</td><td>Preferred for shipboard step-down: reduced insulation stress + harmonic suppression.</td></tr>
-    <tr><td>CT rule</td><td>Never open the secondary under load — induces dangerous voltage.</td></tr>
-    <tr><td>PT rule</td><td>Never short the secondary — opposite of CT rule.</td></tr>
+    <tr><td>CT rule</td><td>Never open the secondary under load, induces dangerous voltage.</td></tr>
+    <tr><td>PT rule</td><td>Never short the secondary, opposite of CT rule.</td></tr>
   </table>
   <p class="n-p">If asked something here you genuinely do not know, do not invent an answer. State what you do know, then say honestly you are not certain about the rest.</p>
 
