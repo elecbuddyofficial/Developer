@@ -19,6 +19,21 @@ only remote this project pushes to.
 
 ## 2026-08-12
 
+### `6579c2b` — "Who is where" is sortable, and the sorted column leads
+The list was ordered by `times_opened` then `last_seen`, which reads as no
+order at all: inside every "3 times" block the dates jumped around, so a visit
+from today sat below one from a week ago. Two useful orderings were competing
+and neither won.
+
+Adds a **Sort by** control (last seen, now the default; times they came back;
+how close they got to paying; signup date) and moves ordering out of the query
+into `renderFunnelUsers`, so changing it does not re-fetch. Default is recency
+because the panel answers "who do I contact".
+
+The right-hand emphasis now follows the sort. Sorting by date while the visit
+count was the bold number is what made the old order unreadable: the eye
+follows the emphasis, not the sort.
+
 ### `74b3796` — Funnel starts at the paywall, not at the price list 🗄️
 The funnel's first step was `upgrade_opened`, which only fires once somebody
 opens the price list, so it measured people already considering paying. Anyone
