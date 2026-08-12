@@ -50,16 +50,26 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <p class="n-p">For a given power transmitted, three phase needs less conductor material than single phase. A single phase circuit needs two conductors each carrying the full current. Three phase splits that current across three conductors, and the geometry of the three phase relationships means the total conductor cross section needed works out lower for the same power and the same loss. On a ship that means lighter, cheaper cabling through a hull where weight and space are always at a premium.</p>
 
   <div class="n-h2">A rotating field falls out for free</div>
-  <p class="n-p">This is the property that makes three phase indispensable for motors. Three fixed windings spaced 120 degrees apart in space, fed with three currents spaced 120 degrees apart in time, produce a magnetic field of constant magnitude that physically rotates around the stator at synchronous speed. A single phase winding cannot do this alone, it only produces a field pulsating along one fixed axis (which resolves into two counter-rotating fields of equal magnitude, precisely why a single phase motor develops zero net starting torque and needs an auxiliary winding or capacitor to get going). A three phase induction motor is inherently self-starting: switch it onto the supply and the rotating field alone drags the rotor around. That is why every significant motor on a ship, steering gear, bow thrusters, seawater pumps, is three phase.</p>
+  <p class="n-p">This is the property that makes three phase indispensable for motors. Three fixed windings spaced <span class="n-val">120°</span> apart in space, fed with three currents spaced <span class="n-val">120°</span> apart in time, produce a magnetic field of constant magnitude that physically rotates around the stator at synchronous speed. A single phase winding cannot do this alone, it only produces a field pulsating along one fixed axis (which resolves into two counter-rotating fields of equal magnitude, precisely why a single phase motor develops zero net starting torque and needs an auxiliary winding or capacitor to get going). A three phase induction motor is inherently self-starting: switch it onto the supply and the rotating field alone drags the rotor around. That is why every significant motor on a ship, steering gear, bow thrusters, seawater pumps, is three phase.</p>
+
+  <div class="n-h2">The four differences, side by side</div>
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>Single phase</th><th>Three phase</th></tr>
+    <tr><td>Instantaneous power</td><td>Pulsates, touches zero twice a cycle</td><td>Constant, ripple free</td></tr>
+    <tr><td>Torque</td><td>Pulsating, motor hums and vibrates</td><td>Steady</td></tr>
+    <tr><td>Starting</td><td>Not self-starting, needs auxiliary winding or capacitor</td><td>Inherently self-starting</td></tr>
+    <tr><td>Field produced</td><td>Pulsates along one fixed axis</td><td>Rotates, constant magnitude</td></tr>
+    <tr><td>Conductor material for the same power</td><td>More</td><td>Less</td></tr>
+  </table>
 
   <div class="n-h1" id="s-generation">Generation of Three Phase and the 120 Degree Displacement</div>
-  <p class="n-p">A ship's alternator generates three phase EMF by placing three separate stator windings physically 120 mechanical degrees apart around the stator bore (for a two pole machine; with more pole pairs the electrical displacement is still 120 degrees even though the mechanical spacing differs). A rotating field winding on the rotor, excited with DC, sweeps past all three stator windings as the rotor turns.</p>
+  <p class="n-p">A ship's alternator generates three phase EMF by placing three separate stator windings physically <span class="n-val">120°</span> mechanical apart around the stator bore (for a two pole machine; with more pole pairs the electrical displacement is still 120 degrees even though the mechanical spacing differs). A rotating field winding on the rotor, excited with DC, sweeps past all three stator windings as the rotor turns.</p>
   <p class="n-p">Because the windings are spaced 120 degrees apart in space, the rotating field induces an EMF in each that peaks 120 degrees later (in time) than the winding before it. The three EMFs are:</p>
   <div class="n-formula">e<sub>R</sub> = E<sub>m</sub>sin(ωt) &nbsp;&nbsp; e<sub>Y</sub> = E<sub>m</sub>sin(ωt − 120°) &nbsp;&nbsp; e<sub>B</sub> = E<sub>m</sub>sin(ωt − 240°)</div>
   <p class="n-p">Each has the same magnitude and frequency, only the phase differs, and at any instant the three sum to zero, exactly as with the power terms above. This is why a healthy, balanced three phase source needs no return conductor for the generated EMFs themselves, and is the starting point for understanding the neutral later in this module. The 120 degree spacing is not arbitrary, it is exactly the spacing that makes both the power-summing result above and the rotating field result work; any other spacing leaves ripple in the summed power and a wobbling, non-circular field instead of a smooth rotating one.</p>
 
   <div class="n-h1" id="s-sequence">Phase Sequence and Why It Matters</div>
-  <p class="n-p">Phase sequence (phase rotation) is the order in which the three phase voltages reach their peak: R then Y then B, repeating. Standard marine practice designates this R-Y-B (or equivalently 1-2-3, or L1-L2-L3), and it must be identical for the ship's supply, for any alternator being paralleled onto it, and for any three phase motor, in the sense that swapping it changes the motor's behaviour.</p>
+  <p class="n-p">Phase sequence (phase rotation) is the order in which the three phase voltages reach their peak: <span class="n-val">R-Y-B</span>, repeating. Standard marine practice designates this R-Y-B (or equivalently 1-2-3, or L1-L2-L3), and it must be identical for the ship's supply, for any alternator being paralleled onto it, and for any three phase motor, in the sense that swapping it changes the motor's behaviour.</p>
   <p class="n-p">The rotating field inside a three phase motor sweeps around the stator in the direction set by which winding's current peaks first. If the supply sequence is R-Y-B, the field rotates one way; swap any two of the three supply leads (say Y and B) and the sequence seen by the motor becomes R-B-Y, reversing the rotating field, and the rotor reverses with it. This is exactly why the standard way to reverse a three phase induction motor is to swap any two supply leads, never all three (which changes nothing, since it is relative sequence, not absolute polarity, that matters).</p>
 
   <div class="n-crit"><span class="icon">🔴</span><div class="body"><strong>Why this matters practically on board.</strong> After any work on a supply, a switchboard changeover, a new motor installation, or reconnecting after maintenance, phase sequence must be checked with a phase sequence indicator before starting rotating machinery. Running a pump or steering gear motor backwards can damage the driven equipment (a centrifugal pump running backwards can cavitate or fail to develop head; a fan running backwards moves far less air and can overheat). It is also one of the four conditions that must be matched before paralleling two alternators, covered later in this module.</div></div>
@@ -85,13 +95,24 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <p class="n-p">So in delta:</p>
   <div class="n-formula">I<sub>line</sub> = √3 × I<sub>phase</sub> &nbsp;&nbsp;&nbsp;&nbsp; V<sub>line</sub> = V<sub>phase</sub></div>
 
-  <div class="n-crit"><span class="icon">💡</span><div class="body">Star gets its root three factor on <strong>voltage</strong> (windings share a common point, voltages must be phasor-subtracted across it); delta gets its root three factor on <strong>current</strong> (windings share a common junction, currents must be phasor-subtracted at it). Same 120 degree geometry, same root three, whichever quantity involves two phasors meeting at the shared point.</div></div>
+  <div class="n-crit"><span class="icon">💡</span><div class="body">Star gets its root three factor on <strong>voltage</strong> (windings share a common point, voltages must be phasor-subtracted across it); delta gets its root three factor on <strong>current</strong> (windings share a common junction, currents must be phasor-subtracted at it). Same <span class="n-val">120°</span> geometry, same <span class="n-val">√3</span>, whichever quantity involves two phasors meeting at the shared point.</div></div>
+
+  <div class="n-h2">Star and delta, the whole answer on one line each</div>
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>Star (wye)</th><th>Delta</th></tr>
+    <tr><td>Windings joined at</td><td>One common point (the star point)</td><td>End to end in a closed loop</td></tr>
+    <tr><td>Voltage</td><td>V<sub>L</sub> = <span class="n-val">√3</span> × V<sub>ph</sub></td><td>V<sub>L</sub> = V<sub>ph</sub></td></tr>
+    <tr><td>Current</td><td>I<sub>L</sub> = I<sub>ph</sub></td><td>I<sub>L</sub> = <span class="n-val">√3</span> × I<sub>ph</sub></td></tr>
+    <tr><td>Root three appears on</td><td>Voltage</td><td>Current</td></tr>
+    <tr><td>Neutral available</td><td>Yes, from the star point</td><td>No</td></tr>
+  </table>
+  <p class="n-p">Numerically <span class="n-val">√3 = 1.732</span>, so on a <span class="n-val">440 V</span> star system the phase voltage is <span class="n-val">440 / 1.732 = 254 V</span>.</p>
 
   <div class="n-h1" id="s-terminalbox">Star and Delta as Wired on a Motor's Terminal Box Links</div>
   <p class="n-p">This is a genuinely separate question from the one above, asked separately in interviews. The question above is: given a star or delta connection, what is the relationship between line and phase quantities. This question is: given a real motor with its terminal box open, how do you physically arrange the connecting links, the small brass or copper strips inside the box, to put it into star or delta. Be ready to draw this from memory.</p>
 
   <div class="n-h2">The six leads</div>
-  <p class="n-p">A motor built for dual voltage or dual connection operation brings out all six ends of its three windings to the terminal box, rather than commoning any of them internally. Using the standard IEC 60034-8 marking convention, the six terminals are labelled:</p>
+  <p class="n-p">A motor built for dual voltage or dual connection operation brings out all six ends of its three windings to the terminal box, rather than commoning any of them internally. Using the standard <span class="n-val">IEC 60034-8</span> marking convention, the six terminals are labelled:</p>
   <table class="n-table">
     <tr><th>Winding</th><th>Start end</th><th>Finish end</th></tr>
     <tr><td>Phase 1 (U)</td><td>U1</td><td>U2</td></tr>
@@ -106,7 +127,16 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <p class="n-p"><strong>Delta:</strong> each winding's finish end is linked to the next winding's start end, forming a closed loop, the same triangle described in the standalone connection section above. Concretely: U2 to V1, V2 to W1, W2 to U1. Supply connects to the same three junction points used for star, U1, V1, W1, except each now also carries a link running diagonally down to the finish end of the next winding.</p>
   <div class="n-crit"><span class="icon">🔴</span><div class="body"><strong>Physically:</strong> three diagonal links, U1 to V2, V1 to W2, W1 to U2, each running from the top row down to the offset bottom row terminal. This is why the bottom row is offset: it keeps the three diagonal delta links short, identical strips, rather than long crossed wires. Supply again lands on U1, V1, W1.</div></div>
 
-  <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>The trap.</strong> An interviewer will sometimes get a correct answer on the standalone star/delta voltage and current relationships, then immediately ask "now show me how you would actually link that up in the terminal box." Candidates who only memorised V<sub>L</sub> = √3V<sub>ph</sub> and never looked inside a real terminal box are caught out here. Be ready to sketch the six terminals in their two offset rows from memory.</div></div>
+  <div class="n-h2">The links, side by side</div>
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>Star</th><th>Delta</th></tr>
+    <tr><td>Links fitted</td><td><span class="n-val">U2-V2</span> and <span class="n-val">V2-W2</span></td><td><span class="n-val">U1-V2</span>, <span class="n-val">V1-W2</span>, <span class="n-val">W1-U2</span></td></tr>
+    <tr><td>Number of links</td><td>Two, short, across the bottom row</td><td>Three, diagonal, top row down to bottom</td></tr>
+    <tr><td>Top row linked</td><td>No</td><td>Yes, each start end carries a link</td></tr>
+    <tr><td>Supply lands on</td><td>U1, V1, W1</td><td>U1, V1, W1</td></tr>
+  </table>
+
+  <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>The trap.</strong> An interviewer will sometimes get a correct answer on the standalone star/delta voltage and current relationships, then immediately ask "now show me how you would actually link that up in the terminal box." Candidates who only memorised V<sub>L</sub> = <span class="n-val">√3</span>V<sub>ph</sub> and never looked inside a real terminal box are caught out here. Be ready to sketch the six terminals in their two offset rows from memory.</div></div>
 
   <div class="n-h1" id="s-power">Three Phase Power, Derived</div>
   <p class="n-p">The power drawn by any one winding, treated as a single phase circuit on its own, is the standard single phase real power formula:</p>
@@ -117,7 +147,7 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <p class="n-p"><strong>Star:</strong> V<sub>ph</sub> = V<sub>L</sub>/√3, I<sub>ph</sub> = I<sub>L</sub>. Substitute: P = 3 × (V<sub>L</sub>/√3) × I<sub>L</sub>cos(φ) = (3/√3)V<sub>L</sub>I<sub>L</sub>cos(φ) = √3 × V<sub>L</sub>I<sub>L</sub>cos(φ) (since 3/√3 = √3).</p>
   <p class="n-p"><strong>Delta:</strong> V<sub>ph</sub> = V<sub>L</sub>, I<sub>ph</sub> = I<sub>L</sub>/√3. Substitute: P = 3 × V<sub>L</sub> × (I<sub>L</sub>/√3)cos(φ) = (3/√3)V<sub>L</sub>I<sub>L</sub>cos(φ) = √3 × V<sub>L</sub>I<sub>L</sub>cos(φ).</p>
   <p class="n-p">Both connections collapse to the same result, exactly as expected since the line-quantity formula must describe the same physical machine regardless of internal connection:</p>
-  <div class="n-formula">P = √3 × V<sub>L</sub> × I<sub>L</sub> × cos(φ)</div>
+  <div class="n-formula">P = <span class="n-val">√3</span> × V<sub>L</sub> × I<sub>L</sub> × cos(φ)</div>
   <p class="n-p">This is the formula on every switchboard power meter and generator nameplate. Reactive and apparent power follow the same pattern:</p>
   <div class="n-formula">Q = √3 × V<sub>L</sub>I<sub>L</sub>sin(φ) &nbsp;&nbsp;&nbsp;&nbsp; S = √3 × V<sub>L</sub>I<sub>L</sub></div>
 
@@ -126,13 +156,21 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <div class="n-h1" id="s-balance">Balanced vs Unbalanced Loads</div>
   <p class="n-p">A balanced three phase load draws identical current magnitude on all three phases, with identical power factor on each. The three line currents are then three phasors of equal length, 120 degrees apart, and (as shown under generation above) three such phasors sum to zero at every instant. Nothing needs to flow in a return or neutral path.</p>
   <p class="n-p">An unbalanced load draws unequal current on the three phases, either because single phase items are spread across the three phases unevenly (lighting, small power fed phase to neutral) or because a three phase load has developed a fault such as a partially shorted or open winding. The three line currents no longer sum to zero, and the residual has to flow somewhere: on a star-connected four wire system it flows in the neutral; on a three wire system with no neutral, unbalance instead shifts the star point voltage away from true electrical centre (neutral point displacement), distorting the voltage each phase of the load sees.</p>
+  <table class="n-table">
+    <tr><th>&nbsp;</th><th>Balanced</th><th>Unbalanced</th></tr>
+    <tr><td>Phase currents</td><td>Equal magnitude, equal power factor</td><td>Unequal</td></tr>
+    <tr><td>Sum of the three</td><td><span class="n-val">Zero</span> at every instant</td><td>Non-zero residual</td></tr>
+    <tr><td>Neutral current (four wire)</td><td><span class="n-val">Zero</span></td><td>Carries the residual</td></tr>
+    <tr><td>Three wire, no neutral</td><td>Star point at true centre</td><td>Star point displaced, phase voltages distorted</td></tr>
+    <tr><td>Cost on board</td><td>Full use of generator capacity</td><td>Wasted capacity, uneven winding heating</td></tr>
+  </table>
   <p class="n-p">Unbalance matters on a ship because it wastes generator capacity (rated for the highest of the three phase currents, even though the other two carry less), and it heats windings unevenly and, in a motor fed an unbalanced supply, adds a braking torque component on top of normal load heating. Loads are deliberately distributed across the three phases to keep unbalance small.</p>
 
   <div class="n-h1" id="s-neutral">The Neutral and Its Role</div>
   <p class="n-p">The neutral is the conductor brought out from the star point of a star-connected source (no neutral is available from delta, since delta has no common point). Its roles on board:</p>
   <div class="n-steps">
     <p class="n-p">1. <strong>Return path for unbalanced current.</strong> Any imbalance between the three phase currents has to return somewhere, and on a four wire system that is the neutral. A perfectly balanced load draws zero neutral current.</p>
-    <p class="n-p">2. <strong>Reference point, fixing phase-to-neutral voltage.</strong> With the star point earthed or referenced, each phase's voltage relative to neutral is held at a fixed value, V<sub>L</sub>/√3, letting single phase loads be fed phase to neutral at a stable voltage rather than the higher phase to phase voltage.</p>
+    <p class="n-p">2. <strong>Reference point, fixing phase-to-neutral voltage.</strong> With the star point earthed or referenced, each phase's voltage relative to neutral is held at a fixed value, <span class="n-val">V<sub>L</sub>/√3</span>, letting single phase loads be fed phase to neutral at a stable voltage rather than the higher phase to phase voltage.</p>
     <p class="n-p">3. <strong>Enables mixed distribution.</strong> A four wire star distribution (three lines plus neutral) lets one section feed both three phase motors (phase to phase) and single phase loads (phase to neutral) from the same source.</p>
   </div>
   <p class="n-p">Marine generator distribution systems are often deliberately not solidly earthed the way a shore supply is; earthing philosophy on board (insulated, high resistance earthed, first earth fault alarmed rather than tripping) is its own topic, but the neutral's role as an unbalance return path and phase-to-neutral reference holds regardless of the earthing arrangement chosen.</p>
@@ -144,7 +182,7 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
   <p class="n-p">A blown fuse, a failed contactor pole, a loose or corroded terminal, or a broken conductor can remove one of the three supply phases while leaving the other two intact. Because the motor is already turning, the rotor's residual rotation and the remaining two energised windings keep it running, which is exactly what makes single phasing dangerous: unlike a dead short or total loss of supply, there is no obvious dramatic event, the motor keeps turning and may look fine at a casual glance.</p>
 
   <div class="n-h2">Effect on the motor</div>
-  <p class="n-p">With one phase gone, the motor is effectively driven by two windings instead of three, but is still trying to deliver the same mechanical load and torque as before, so the remaining two windings have to carry more current to make up for the missing third winding's contribution. The rise is commonly cited in the region of √3, roughly 173 percent of the previous per-phase current, following from a simple power balance: if the motor must still deliver roughly the same power from two windings that three previously shared, each remaining winding's current rises by a factor in that region. Treat this as an order-of-magnitude guide, not an exact universal figure, since the real rise depends on loading at the moment of the fault and on how winding impedance and power factor shift; some sources cite figures up to roughly double rated current. What is certain: current in the surviving phases rises well above rated, and if left running, windings overheat and the motor can burn out. A lightly loaded motor may keep running with only a modest rise, which is exactly what makes single phasing a hidden hazard, unnoticed until the winding has already taken damage.</p>
+  <p class="n-p">With one phase gone, the motor is effectively driven by two windings instead of three, but is still trying to deliver the same mechanical load and torque as before, so the remaining two windings have to carry more current to make up for the missing third winding's contribution. The rise is commonly cited in the region of <span class="n-val">√3</span>, roughly <span class="n-val">173%</span> of the previous per-phase current, following from a simple power balance: if the motor must still deliver roughly the same power from two windings that three previously shared, each remaining winding's current rises by a factor in that region. Treat this as an order-of-magnitude guide, not an exact universal figure, since the real rise depends on loading at the moment of the fault and on how winding impedance and power factor shift; some sources cite figures up to roughly double rated current. What is certain: current in the surviving phases rises well above rated, and if left running, windings overheat and the motor can burn out. A lightly loaded motor may keep running with only a modest rise, which is exactly what makes single phasing a hidden hazard, unnoticed until the winding has already taken damage.</p>
 
   <div class="n-h2">Detection and protection</div>
   <p class="n-p">A conventional overload relay sized for general overcurrent may not respond to single phasing on a lightly loaded motor, since the absolute current may not cross its trip threshold even though the motor is running unbalanced. The reliable protection is a current unbalance (phase failure) relay, comparing the three phase currents against each other rather than against a single fixed threshold, tripping on the asymmetry itself. Modern motor protection relays typically combine thermal overload with a dedicated phase loss / current unbalance function in one unit.</p>
@@ -166,6 +204,14 @@ window.loadNotes("F08", `<div class="view" id="view-notes-f08">
 
   <div class="n-h2">The lamp methods</div>
   <p class="n-p">Where no synchroscope is fitted, or as a backup check, synchronizing lamps connected between phases of the incoming machine and the bus give a visual indication of phase difference. <strong>Dark lamp method:</strong> a lamp is connected so it goes fully dark at the instant the two voltages are in phase (zero potential difference across it) and is brightest at exact phase opposition; the breaker is closed in the middle of the dark period. Its weakness is that darkness is hardest to judge precisely, since the eye compares "off" against "just barely off." <strong>Two bright, one dark method:</strong> three lamps are cross-connected so that as the machines approach synchronism, two brighten together while the third dims towards darkness, reaching correct phase match at the instant the dark lamp is dimmest and the other two are equally bright, a more distinct visual event and generally easier to judge; the brightening/dimming sequence across the lamps also shows whether the incoming machine is running fast or slow. Either arrangement is a supplementary check to a synchroscope, or a fallback where one is not fitted.</p>
+
+  <div class="n-h2">The three methods compared</div>
+  <table class="n-table">
+    <tr><th>Method</th><th>Correct instant to close</th><th>Weakness</th></tr>
+    <tr><td>Synchroscope</td><td>Just before the pointer reaches vertical, allowing for breaker closing delay</td><td>Needs the instrument fitted and working</td></tr>
+    <tr><td>Dark lamp</td><td>Middle of the dark period</td><td>Darkness is hard to judge, the eye compares off against nearly off</td></tr>
+    <tr><td>Two bright, one dark</td><td>Dark lamp dimmest, other two equally bright</td><td>None significant; also shows fast or slow</td></tr>
+  </table>
 
   <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>What happens if you close out of phase.</strong> The incoming machine's voltage and the bus voltage are effectively fighting each other across the closed breaker. Because both are low impedance sources, even a modest phase mismatch drives a very large circulating current, far above normal load current, which can trip protective devices and stress or damage stator windings and breaker contacts. Mechanically it produces a sudden, severe torque transient on both machines' shafts and couplings, a shock load similar to (or worse than) an across the line motor start, capable of damaging the coupling, shaft line, or the alternator's bearings and windings. This is why the four conditions are checked carefully and the breaker is closed at the correct instant, not "close enough."</div></div>
 

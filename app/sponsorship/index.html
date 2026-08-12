@@ -128,6 +128,22 @@
   /* ── MISC ── */
   .anc-btn { background:none;border:1px solid var(--border2);border-radius:var(--r6);color:var(--text2);font-size:12.5px;padding:6px 14px;cursor:pointer;transition:border-color .15s }
   .anc-btn:hover { border-color:var(--blue);color:var(--blue) }
+  /* Previous / next module, appended below every set of notes. Reading order
+     is the whole point of a 25 module course, and until now the only way out
+     of a module was back to the grid. */
+  .tnav { display:flex;gap:10px;align-items:stretch;margin:34px 0 8px;padding-top:22px;border-top:1px solid var(--border2) }
+  .tnav-btn { flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:3px;background:none;border:1px solid var(--border2);border-radius:var(--r6);
+              padding:11px 14px;cursor:pointer;text-align:left;transition:border-color .15s,background .15s;color:var(--text) }
+  .tnav-btn:hover { border-color:var(--blue);background:var(--blue-dim) }
+  .tnav-btn.is-next { text-align:right;align-items:flex-end }
+  .tnav-dir { font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--text3) }
+  .tnav-name { font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100% }
+  /* At phone width the two stack rather than squeezing two names into one row,
+     and the next module goes on top: it is the one that gets tapped. */
+  @media (max-width:640px) {
+    .tnav { flex-direction:column-reverse;gap:8px }
+    .tnav-btn.is-next { text-align:left;align-items:flex-start }
+  }
   .coming-soon-banner { text-align:center;padding:60px 20px;color:var(--text3) }
   .coming-soon-banner .cs-icon { font-size:40px;margin-bottom:12px }
   .coming-soon-banner h3 { font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px }
@@ -765,6 +781,7 @@ function renderNotesView(id) {
   var inj = document.getElementById('notes-container').querySelector('.view');
   if (inj) inj.classList.add('active');
   buildTopicSideList(id);
+  injectTopicNav(id);
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   if (window._pendingScroll) {
     var s = window._pendingScroll; window._pendingScroll = null;
@@ -920,6 +937,53 @@ function openSectionQuiz() {
   setAllViewsInactive();
   document.getElementById('view-quiz').classList.add('active');
   var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
+}
+
+/* Previous / next module, appended to the end of every set of notes.
+
+   Built here rather than written into the 25 content files, for the reason
+   that matters: a hand-written "next" link in each file is 25 chances to point
+   at the wrong module, and every one of them goes stale the moment a module is
+   inserted, renamed or reordered. Generated from SECTIONS, it cannot disagree
+   with the grid the reader came from.
+
+   Only modules with notesReady are offered. Skipping a module the app hides
+   would otherwise send a reader to a blank page, which is exactly the fault
+   that had 23 finished modules invisible for weeks. */
+function injectTopicNav(id) {
+  var doc = document.querySelector('#notes-container .note-doc');
+  if (!doc) return;
+  var old = doc.querySelector('.tnav');
+  if (old) old.remove();
+
+  var sec = SECTIONS[ACTIVE_SECTION_ID];
+  if (!sec) return;
+  var list = sec.topics.filter(function (t) { return t.notesReady; });
+  var i = -1;
+  for (var k = 0; k < list.length; k++) { if (list[k].id === id) { i = k; break; } }
+  // Nothing to navigate between in a one-module section, and a topic that is
+  // not in this list (or not ready) has no place in the sequence either.
+  if (i === -1 || list.length < 2) return;
+
+  var prev = i > 0 ? list[i - 1] : null;
+  var next = i < list.length - 1 ? list[i + 1] : null;
+  if (!prev && !next) return;
+
+  function btn(t, isNext) {
+    return '<button class="tnav-btn' + (isNext ? ' is-next' : '') + '" '
+      + 'onclick="fetchTopicData(' + JSON.stringify(t.id) + ')">'
+      + '<span class="tnav-dir">' + (isNext ? 'Next' : 'Previous') + '</span>'
+      + '<span class="tnav-name">' + (t.icon ? t.icon + ' ' : '') + esc(t.name) + '</span>'
+      + '</button>';
+  }
+
+  var nav = document.createElement('div');
+  nav.className = 'tnav';
+  // Placeholders keep the remaining button on its own side at the two ends of
+  // the course, instead of a lone "Next" sliding across to the left.
+  nav.innerHTML = (prev ? btn(prev, false) : '<div style="flex:1 1 0"></div>')
+                + (next ? btn(next, true)  : '<div style="flex:1 1 0"></div>');
+  doc.appendChild(nav);
 }
 
 // ═══════════════════════════════════════════════
