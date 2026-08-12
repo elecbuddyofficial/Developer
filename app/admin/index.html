@@ -1332,7 +1332,8 @@
         worth more than the percentage: someone who opened the price four times and
         never picked a plan is a person to email, not a number to average away.
         <strong>Times</strong> counts how often they came back to look, which is the
-        clearest signal of interest. Click anyone to open their profile.
+        clearest signal of interest. Whichever column you sort by is the one shown
+        large on the right. Click anyone to open their profile.
       </div>
       <div class="ad-row" style="align-items:flex-end">
         <div class="ad-field" style="max-width:340px">
@@ -1346,6 +1347,15 @@
             <option value="failed">Payment failed or was blocked</option>
             <option value="4">Paid</option>
             <option value="all">Everyone</option>
+          </select>
+        </div>
+        <div class="ad-field" style="max-width:280px">
+          <label class="ad-label">Sort by</label>
+          <select class="ad-select" id="fbu-sort" onchange="renderFunnelUsers()">
+            <option value="recent">Last seen, newest first</option>
+            <option value="times">Times they came back</option>
+            <option value="step">How close they got to paying</option>
+            <option value="joined">Signed up, newest first</option>
           </select>
         </div>
         <div class="ad-field" style="max-width:220px">
@@ -2644,10 +2654,10 @@ var _fbu = [];
 async function loadFunnelUsers() {
   var list = document.getElementById('fbu-list');
   if (!list) return;
-  var res = await _sb.from('funnel_by_user')
-    .select('*')
-    .order('times_opened', { ascending: false })
-    .order('last_seen', { ascending: false, nullsFirst: false });
+  // No .order() here. Ordering is done in renderFunnelUsers so that changing
+  // the sort does not re-fetch, and so there is one place deciding the order
+  // rather than a server default that silently competes with it.
+  var res = await _sb.from('funnel_by_user').select('*');
   if (res.error) {
     list.innerHTML = '<div class="ad-loading">Run funnel_by_user_setup.sql to enable this.</div>';
     return;
@@ -2656,9 +2666,43 @@ async function loadFunnelUsers() {
   renderFunnelUsers();
 }
 
+/* Sorting. The list used to be ordered by times_opened and then last_seen,
+   which reads as no order at all: within every "3 times" block the dates jump
+   around, so a visit from today sits below one from a week ago and the eye
+   cannot follow either signal. Two useful orderings were fighting, and neither
+   won.
+
+   So: pick one, explicitly. Default is last seen, because the question this
+   panel answers is "who do I contact", and recency decides that more often
+   than repeat visits do. Times opened is still on the right of every row and
+   is one click away here.
+
+   `_t` returns a sortable number and pushes missing dates to the bottom rather
+   than the top: somebody who has never been seen is not the most recent. */
+var _fbuT = function (v) { return v ? new Date(v).getTime() : -Infinity; };
+var FBU_SORT = {
+  recent: function (a, b) {
+    return (_fbuT(b.last_seen) - _fbuT(a.last_seen))
+        || (_fbuT(b.signed_up_at) - _fbuT(a.signed_up_at));
+  },
+  times: function (a, b) {
+    return ((b.times_opened || 0) - (a.times_opened || 0))
+        || (_fbuT(b.last_seen) - _fbuT(a.last_seen));
+  },
+  step: function (a, b) {
+    return ((b.furthest_step || 0) - (a.furthest_step || 0))
+        || (_fbuT(b.last_seen) - _fbuT(a.last_seen));
+  },
+  joined: function (a, b) {
+    return (_fbuT(b.signed_up_at) - _fbuT(a.signed_up_at));
+  },
+};
+
 function renderFunnelUsers() {
   var list = document.getElementById('fbu-list');
   var f = document.getElementById('fbu-filter').value;
+  var sortEl = document.getElementById('fbu-sort');
+  var cmp = FBU_SORT[sortEl ? sortEl.value : 'recent'] || FBU_SORT.recent;
 
   var rows = _fbu.filter(function (u) {
     if (f === 'all') return true;
@@ -2668,7 +2712,7 @@ function renderFunnelUsers() {
     if (f === 'stuck')  return !u.paid && u.furthest_step >= 1;
     if (f === 'failed') return u.payment_failed || u.checkout_blocked;
     return String(u.furthest_step) === f;
-  });
+  }).sort(cmp);
 
   document.getElementById('fbu-count').textContent =
     rows.length + (rows.length === 1 ? ' person' : ' people');
@@ -2676,6 +2720,8 @@ function renderFunnelUsers() {
   if (!rows.length) { list.innerHTML = '<div class="ad-loading">Nobody in this group.</div>'; return; }
 
   var STEP_COLOR = ['var(--text3)', 'var(--orange)', 'var(--orange)', 'var(--red)', 'var(--green)'];
+  var sortKey = sortEl ? sortEl.value : 'recent';
+  var dateLed = (sortKey === 'recent' || sortKey === 'joined');
 
   list.innerHTML = rows.map(function (u) {
     // Someone who tried to pay and hit an error is the most urgent row here:
@@ -2694,9 +2740,17 @@ function renderFunnelUsers() {
       +   '<div class="fbu-email">' + esc(u.email || '-') + flag + '</div>'
       +   '<div class="fbu-meta">' + esc(u.dropped_at) + plan + '</div>'
       + '</div>'
+      // Whichever column the list is sorted by is the one printed large.
+      // Sorting by date while the count is the bold number is what made the
+      // old order unreadable: the eye follows the emphasis, not the sort.
       + '<div class="fbu-side">'
-      +   '<div style="color:' + STEP_COLOR[u.furthest_step] + ';font-weight:700">' + looks + '</div>'
-      +   '<div style="font-size:11px;color:var(--text3)">' + (u.last_seen ? fmtDateTime(u.last_seen) : 'no activity') + '</div>'
+      +   (dateLed
+            ? '<div style="color:' + STEP_COLOR[u.furthest_step] + ';font-weight:700;font-size:12.5px">'
+              + (u.last_seen ? fmtDateTime(u.last_seen) : 'no activity') + '</div>'
+              + '<div style="font-size:11px;color:var(--text3)">' + looks + '</div>'
+            : '<div style="color:' + STEP_COLOR[u.furthest_step] + ';font-weight:700">' + looks + '</div>'
+              + '<div style="font-size:11px;color:var(--text3)">'
+              + (u.last_seen ? fmtDateTime(u.last_seen) : 'no activity') + '</div>')
       + '</div>'
       + '</div>';
   }).join('');
