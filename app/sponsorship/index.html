@@ -748,8 +748,40 @@ var SECTIONS = {
     desc:'Aptitude test drills (QUANT, VERB, LOGIC, PSYCHO) and maritime current affairs.',
     color:'var(--purple)', quizLabel:'Practice Aptitude questions',
     topics:[
-      {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:true,  free:true},
-      {id:'CA',  key:'CA_CurrentAffairs',  name:'Current Affairs',        icon:'📰', notesFile:'aptitude/ca_notes.js',  quizFile:'aptitude/ca_quiz.js',  notesReady:false, free:false}
+      {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:false,  free:true},
+      {id:'CA',  key:'CA_CurrentAffairs',  name:'Current Affairs',        icon:'📰', notesFile:'aptitude/ca_notes.js',  quizFile:'aptitude/ca_quiz.js',  notesReady:false, free:false},
+      {id:'A01', key:'A01_Trains', name:'Problems on Trains', icon:'🚆', notesFile:'aptitude/a01_notes.js', quizFile:'aptitude/a01_quiz.js', notesReady:false, free:false},
+      {id:'A02', key:'A02_TimeDistance', name:'Time and Distance', icon:'🛣️', notesFile:'aptitude/a02_notes.js', quizFile:'aptitude/a02_quiz.js', notesReady:false, free:false},
+      {id:'A03', key:'A03_HeightDistance', name:'Height and Distance', icon:'📐', notesFile:'aptitude/a03_notes.js', quizFile:'aptitude/a03_quiz.js', notesReady:false, free:false},
+      {id:'A04', key:'A04_TimeWork', name:'Time and Work', icon:'⏱️', notesFile:'aptitude/a04_notes.js', quizFile:'aptitude/a04_quiz.js', notesReady:false, free:false},
+      {id:'A05', key:'A05_SimpleInterest', name:'Simple Interest', icon:'💵', notesFile:'aptitude/a05_notes.js', quizFile:'aptitude/a05_quiz.js', notesReady:false, free:false},
+      {id:'A06', key:'A06_CompoundInterest', name:'Compound Interest', icon:'📈', notesFile:'aptitude/a06_notes.js', quizFile:'aptitude/a06_quiz.js', notesReady:false, free:false},
+      {id:'A07', key:'A07_ProfitLoss', name:'Profit and Loss', icon:'💰', notesFile:'aptitude/a07_notes.js', quizFile:'aptitude/a07_quiz.js', notesReady:false, free:false},
+      {id:'A08', key:'A08_Partnership', name:'Partnership', icon:'🤝', notesFile:'aptitude/a08_notes.js', quizFile:'aptitude/a08_quiz.js', notesReady:false, free:false},
+      {id:'A09', key:'A09_Percentage', name:'Percentage', icon:'％', notesFile:'aptitude/a09_notes.js', quizFile:'aptitude/a09_quiz.js', notesReady:false, free:false},
+      {id:'A10', key:'A10_Ages', name:'Problems on Ages', icon:'🎂', notesFile:'aptitude/a10_notes.js', quizFile:'aptitude/a10_quiz.js', notesReady:false, free:false},
+      {id:'A11', key:'A11_Calendar', name:'Calendar', icon:'📅', notesFile:'aptitude/a11_notes.js', quizFile:'aptitude/a11_quiz.js', notesReady:false, free:false},
+      {id:'A12', key:'A12_Clock', name:'Clock', icon:'🕑', notesFile:'aptitude/a12_notes.js', quizFile:'aptitude/a12_quiz.js', notesReady:false, free:false},
+      {id:'A13', key:'A13_Average', name:'Average', icon:'⚖️', notesFile:'aptitude/a13_notes.js', quizFile:'aptitude/a13_quiz.js', notesReady:false, free:false},
+      {id:'A14', key:'A14_Area', name:'Area', icon:'◻️', notesFile:'aptitude/a14_notes.js', quizFile:'aptitude/a14_quiz.js', notesReady:false, free:false},
+      {id:'A15', key:'A15_VolumeSurfaceArea', name:'Volume and Surface Area', icon:'📦', notesFile:'aptitude/a15_notes.js', quizFile:'aptitude/a15_quiz.js', notesReady:false, free:false},
+      {id:'A16', key:'A16_PermutationCombination', name:'Permutation and Combination', icon:'🔀', notesFile:'aptitude/a16_notes.js', quizFile:'aptitude/a16_quiz.js', notesReady:false, free:false},
+      {id:'A17', key:'A17_Numbers', name:'Numbers', icon:'🔢', notesFile:'aptitude/a17_notes.js', quizFile:'aptitude/a17_quiz.js', notesReady:false, free:false},
+      {id:'A18', key:'A18_ProblemsNumbers', name:'Problems on Numbers', icon:'🧮', notesFile:'aptitude/a18_notes.js', quizFile:'aptitude/a18_quiz.js', notesReady:false, free:false},
+      {id:'A19', key:'A19_HCFLCM', name:'Problems on H.C.F and L.C.M', icon:'➗', notesFile:'aptitude/a19_notes.js', quizFile:'aptitude/a19_quiz.js', notesReady:false, free:false},
+      {id:'A20', key:'A20_DecimalFraction', name:'Decimal Fraction', icon:'🔹', notesFile:'aptitude/a20_notes.js', quizFile:'aptitude/a20_quiz.js', notesReady:false, free:false},
+      {id:'A21', key:'A21_Simplification', name:'Simplification', icon:'➖', notesFile:'aptitude/a21_notes.js', quizFile:'aptitude/a21_quiz.js', notesReady:false, free:false},
+      {id:'A22', key:'A22_Roots', name:'Square Root and Cube Root', icon:'√', notesFile:'aptitude/a22_notes.js', quizFile:'aptitude/a22_quiz.js', notesReady:false, free:false},
+      {id:'A23', key:'A23_SurdsIndices', name:'Surds and Indices', icon:'📊', notesFile:'aptitude/a23_notes.js', quizFile:'aptitude/a23_quiz.js', notesReady:false, free:false},
+      {id:'A24', key:'A24_RatioProportion', name:'Ratio and Proportion', icon:'➗', notesFile:'aptitude/a24_notes.js', quizFile:'aptitude/a24_quiz.js', notesReady:false, free:false},
+      {id:'A25', key:'A25_ChainRule', name:'Chain Rule', icon:'⛓️', notesFile:'aptitude/a25_notes.js', quizFile:'aptitude/a25_quiz.js', notesReady:false, free:false},
+      {id:'A26', key:'A26_PipesCistern', name:'Pipes and Cistern', icon:'🚰', notesFile:'aptitude/a26_notes.js', quizFile:'aptitude/a26_quiz.js', notesReady:false, free:false},
+      {id:'A27', key:'A27_BoatsStreams', name:'Boats and Streams', icon:'⛵', notesFile:'aptitude/a27_notes.js', quizFile:'aptitude/a27_quiz.js', notesReady:false, free:false},
+      {id:'A28', key:'A28_AlligationMixture', name:'Alligation or Mixture', icon:'🧪', notesFile:'aptitude/a28_notes.js', quizFile:'aptitude/a28_quiz.js', notesReady:false, free:false},
+      {id:'A29', key:'A29_Logarithm', name:'Logarithm', icon:'📉', notesFile:'aptitude/a29_notes.js', quizFile:'aptitude/a29_quiz.js', notesReady:false, free:false},
+      {id:'A30', key:'A30_RacesGames', name:'Races and Games', icon:'🏁', notesFile:'aptitude/a30_notes.js', quizFile:'aptitude/a30_quiz.js', notesReady:false, free:false},
+      {id:'A31', key:'A31_StocksShares', name:'Stocks and Shares', icon:'💹', notesFile:'aptitude/a31_notes.js', quizFile:'aptitude/a31_quiz.js', notesReady:false, free:false},
+      {id:'A32', key:'A32_Probability', name:'Probability', icon:'🎲', notesFile:'aptitude/a32_notes.js', quizFile:'aptitude/a32_quiz.js', notesReady:false, free:false}
     ]
   },
   interview: {
@@ -757,7 +789,7 @@ var SECTIONS = {
     desc:'Group discussion, HR interview, body language, and the mistakes that get candidates eliminated.',
     color:'var(--orange)', quizLabel:'Practice Interview scenarios',
     topics:[
-      {id:'IP01', key:'IP01_GD',           name:'Group Discussion',             icon:'🗣️', notesFile:'interview/ip01_notes.js', quizFile:'interview/ip01_quiz.js', notesReady:true,  free:true},
+      {id:'IP01', key:'IP01_GD',           name:'Group Discussion',             icon:'🗣️', notesFile:'interview/ip01_notes.js', quizFile:'interview/ip01_quiz.js', notesReady:false,  free:true},
       {id:'IP02', key:'IP02_HR',           name:'HR Interview',                 icon:'🤝', notesFile:'interview/ip02_notes.js', quizFile:'interview/ip02_quiz.js', notesReady:false, free:false},
       {id:'IP03', key:'IP03_BodyLanguage', name:'Body Language & Presentation', icon:'🪞', notesFile:'interview/ip03_notes.js', quizFile:'interview/ip03_quiz.js', notesReady:false, free:false},
       {id:'IP04', key:'IP04_Mistakes',     name:'Common Mistakes',              icon:'⚠️', notesFile:'interview/ip04_notes.js', quizFile:'interview/ip04_quiz.js', notesReady:false, free:false}
@@ -782,6 +814,7 @@ function renderNotesView(id) {
   var inj = document.getElementById('notes-container').querySelector('.view');
   if (inj) inj.classList.add('active');
   buildTopicSideList(id);
+  ensureBackButton(id);
   injectTopicNav(id);
   // Wide tables read as complete rather than cut off on a phone unless
   // something signals they scroll. Shared with the main app.
@@ -896,7 +929,10 @@ function buildSectionTopicGrid(sec) {
     if (t.notesReady || locked) card.style.cursor = 'pointer';
     card.innerHTML = '<div class="tc-id">' + t.icon + ' ' + t.id + '</div>'
       + '<div class="tc-name">' + t.name + '</div>'
-      + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + (t.quizFile ? ' · Quiz' : '') + '</div>';
+      // Quiz is only advertised on a live module. Every stub carries an empty
+      // quiz file as scaffolding, and "Coming soon · Quiz" promised something
+      // that would have opened to no questions.
+      + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + ((t.quizFile && t.notesReady) ? ' · Quiz' : '') + '</div>';
     if (locked) {
       var lk = document.createElement('span'); lk.className = 'gate-lock'; lk.textContent = '🔒';
       card.appendChild(lk);
@@ -954,6 +990,56 @@ function openSectionQuiz() {
    Only modules with notesReady are offered. Skipping a module the app hides
    would otherwise send a reader to a blank page, which is exactly the fault
    that had 23 finished modules invisible for weeks. */
+/* Guarantee a way back out of any set of notes.
+
+   All 25 fundamentals files carry a "← All Topics" button in their own markup.
+   None of the other six did, so opening Group Discussion or Aptitude landed the
+   reader on a page with no exit except the browser's back button. Same shape as
+   every other fault this section has had: the convention lived in 25 hand
+   written copies, and the files that were written later simply did not get it.
+
+   So it is enforced here instead of trusted to the next file's author. Injected
+   only when the notes do not already provide their own way back, which leaves
+   the 25 existing headers and the Overview page's "← Home" untouched. */
+function ensureBackButton(id) {
+  var box = document.getElementById('notes-container');
+  if (!box) return;
+  var view = box.querySelector('.view');
+  if (!view) return;
+  // Any control that leaves this page counts, whatever it is called.
+  if (view.querySelector('[onclick*="openSection"], [onclick*="showHome"], .tnav-back')) return;
+
+  var sec = SECTIONS[ACTIVE_SECTION_ID];
+  if (!sec) return;
+  var topic = sec.topics.find(function (t) { return t.id === id; });
+
+  var bar = document.createElement('div');
+  bar.style.cssText = 'margin-bottom:16px;display:flex;justify-content:space-between;gap:10px';
+
+  var back = document.createElement('button');
+  back.className = 'anc-btn tnav-back';
+  back.type = 'button';
+  back.style.cssText = 'border-color:var(--blue);color:var(--blue)';
+  back.textContent = '← All Topics';
+  back.addEventListener('click', function () { openSection(ACTIVE_SECTION_ID); });
+  bar.appendChild(back);
+
+  // The quiz button only appears when there is actually a quiz to take, so a
+  // stub module does not offer one and then do nothing.
+  if (topic && topic.quizFile && topic.notesReady) {
+    var q = document.createElement('button');
+    q.className = 'anc-btn';
+    q.type = 'button';
+    q.style.cssText = 'background-color:var(--green-dim);border-color:var(--green);color:var(--green)';
+    q.textContent = 'Take Quiz →';
+    q.addEventListener('click', function () { goToQuizFromNotes(id); });
+    bar.appendChild(q);
+  }
+
+  var host = view.querySelector('.note-doc') || view;
+  host.insertBefore(bar, host.firstChild);
+}
+
 function injectTopicNav(id) {
   var doc = document.querySelector('#notes-container .note-doc');
   if (!doc) return;

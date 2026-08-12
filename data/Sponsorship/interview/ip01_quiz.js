@@ -1,1 +1,1 @@
-window.loadQuizzes("IP01_GroupDiscussion", []);
+window.loadQuizzes("IP01_GD", []);

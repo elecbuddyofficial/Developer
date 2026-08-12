@@ -1,1 +1,1 @@
-window.loadQuizzes("IP04_CommonMistakes", []);
+window.loadQuizzes("IP04_Mistakes", []);

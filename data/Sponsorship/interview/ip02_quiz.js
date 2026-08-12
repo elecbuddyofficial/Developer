@@ -1,1 +1,1 @@
-window.loadQuizzes("IP02_HRInterview", []);
+window.loadQuizzes("IP02_HR", []);

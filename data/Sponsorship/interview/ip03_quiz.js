@@ -1,1 +1,1 @@
-window.loadQuizzes("IP03_BodyLanguageandPresentation", []);
+window.loadQuizzes("IP03_BodyLanguage", []);
