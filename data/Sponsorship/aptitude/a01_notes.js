@@ -21,6 +21,7 @@ window.loadNotes("A01", `<div class="view" id="view-notes-a01">
     <button class="anc-btn" onclick="jumpTo('s-summary')">Formula Summary</button>
     <button class="anc-btn" onclick="jumpTo('s-worked')">Worked Examples</button>
     <button class="anc-btn" onclick="jumpTo('s-traps')">Traps</button>
+    <button class="anc-btn" onclick="jumpTo('s-practice')">Practice Set</button>
   </div>
 
   <div class="note-content">
@@ -157,6 +158,91 @@ window.loadNotes("A01", `<div class="view" id="view-notes-a01">
   </table>
 
   <div class="n-crit"><span class="icon">💡</span><div class="body"><strong>If you remember one thing.</strong> Every question in this topic is <span class="n-val">distance ÷ relative speed</span>. The only two decisions are what counts as the distance (add every length involved) and what counts as the speed (add if opposing, subtract if agreeing, and a stationary object contributes zero). Get those two right and there is nothing else to recall.</div></div>
+
+  <div class="n-h1" id="s-practice">Practice Set: 20 Problems</div>
+  <p class="n-p">Work each one before reading the solution. Every answer below was recomputed from the numbers in the question rather than copied from a source, and the last one is included on purpose because it does not behave.</p>
+
+  <div class="n-h2">1. Passing a pole</div>
+  <p class="n-p">A train runs at 60 km/hr and crosses a pole in 9 seconds. Find its length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 60 &times; 5/18 = 50/3 m/s. A pole has no length, so the train covers only itself: (50/3) &times; 9. Answer: <span class="n-val">150 m</span></p>
+
+  <div class="n-h2">2. Passing a platform</div>
+  <p class="n-p">A train 180 m long runs at 54 km/hr. How long does it take to cross a platform 120 m long?</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 15 m/s. Distance = 180 + 120 = 300 m. Time = 300/15. Answer: <span class="n-val">20 seconds</span></p>
+
+  <div class="n-h2">3. Length from a signal post</div>
+  <p class="n-p">A train at 72 km/hr crosses a signal post in 10 seconds. Find its length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 20 m/s. A signal post is zero length, so length = 20 &times; 10. Answer: <span class="n-val">200 m</span></p>
+
+  <div class="n-h2">4. Platform length</div>
+  <p class="n-p">A 250 m train crosses a platform in 25 seconds at 72 km/hr. Find the platform length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 20 m/s, so total distance = 20 &times; 25 = 500 m. Subtract the train: 500 &minus; 250. Answer: <span class="n-val">250 m</span></p>
+
+  <div class="n-h2">5. Opposite directions</div>
+  <p class="n-p">Trains 150 m and 250 m long run in opposite directions at 45 km/hr and 55 km/hr. How long to cross?</p>
+  <p class="n-p"><strong>Solution.</strong> Total length = 400 m. Relative speed = 45 + 55 = 100 km/hr = 250/9 m/s. Time = 400 &divide; (250/9). Answer: <span class="n-val">14.4 seconds</span></p>
+
+  <div class="n-h2">6. Same direction</div>
+  <p class="n-p">A 120 m train at 72 km/hr overtakes a 180 m train at 54 km/hr. How long does it take?</p>
+  <p class="n-p"><strong>Solution.</strong> Total length = 300 m. Relative speed = 72 &minus; 54 = 18 km/hr = 5 m/s. Time = 300/5. Answer: <span class="n-val">60 seconds</span></p>
+
+  <div class="n-h2">7. Bridge length</div>
+  <p class="n-p">A 300 m train crosses a bridge in 30 seconds at 54 km/hr. Find the bridge length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 15 m/s, total distance = 450 m, so the bridge is 450 &minus; 300. Answer: <span class="n-val">150 m</span></p>
+
+  <div class="n-h2">8. A man running the same way</div>
+  <p class="n-p">A 125 m train passes a man running the same way at 5 km/hr in 10 seconds. Find the train's speed.</p>
+  <p class="n-p"><strong>Solution.</strong> Relative speed = 125/10 = 12.5 m/s = 45 km/hr. Same direction means speeds subtract, so the train is 45 + 5. Answer: <span class="n-val">50 km/hr</span></p>
+
+  <div class="n-h2">9. A man running the opposite way</div>
+  <p class="n-p">A 180 m train passes a man running towards it at 9 km/hr in 6 seconds. Find the train's speed.</p>
+  <p class="n-p"><strong>Solution.</strong> Relative speed = 180/6 = 30 m/s = 108 km/hr. Opposite directions means speeds add, so the train is 108 &minus; 9. Answer: <span class="n-val">99 km/hr</span></p>
+
+  <div class="n-h2">10. Two platforms, no length given</div>
+  <p class="n-p">A train crosses a 200 m platform in 20 seconds and a 300 m platform in 25 seconds. Find its speed.</p>
+  <p class="n-p"><strong>Solution.</strong> The train's own length appears in both, so subtracting removes it: 100 extra metres took 5 extra seconds. Speed = 100/5 = 20 m/s. Answer: <span class="n-val">72 km/hr</span></p>
+
+  <div class="n-h2">11. Pole and platform together</div>
+  <p class="n-p">A train crosses a pole in 12 seconds and a 180 m platform in 24 seconds. Find its length.</p>
+  <p class="n-p"><strong>Solution.</strong> With speed v, the pole gives L = 12v and the platform gives L + 180 = 24v. Subtracting, 180 = 12v, so v = 15 m/s and L = 12 &times; 15. Answer: <span class="n-val">180 m</span></p>
+
+  <div class="n-h2">12. Opposite directions again</div>
+  <p class="n-p">Trains 200 m and 300 m long run in opposite directions at 36 km/hr and 54 km/hr. Find the crossing time.</p>
+  <p class="n-p"><strong>Solution.</strong> Total = 500 m. Relative speed = 90 km/hr = 25 m/s. Time = 500/25. Answer: <span class="n-val">20 seconds</span></p>
+
+  <div class="n-h2">13. Overtaking a cyclist</div>
+  <p class="n-p">A train at 90 km/hr overtakes a cyclist at 18 km/hr in 10 seconds. Find the train's length.</p>
+  <p class="n-p"><strong>Solution.</strong> Relative speed = 90 &minus; 18 = 72 km/hr = 20 m/s. A cyclist is a point, so length = 20 &times; 10. Answer: <span class="n-val">200 m</span></p>
+
+  <div class="n-h2">14. Tunnel length</div>
+  <p class="n-p">A 240 m train at 72 km/hr crosses a tunnel in 36 seconds. Find the tunnel length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 20 m/s, total = 720 m, so the tunnel is 720 &minus; 240. Answer: <span class="n-val">480 m</span></p>
+
+  <div class="n-h2">15. Meeting between two stations</div>
+  <p class="n-p">Two trains start from stations 300 km apart and move towards each other at 60 km/hr and 40 km/hr. When do they meet?</p>
+  <p class="n-p"><strong>Solution.</strong> Train lengths are irrelevant here, since only the meeting instant is asked. Relative speed = 100 km/hr, so time = 300/100. Answer: <span class="n-val">3 hours</span></p>
+
+  <div class="n-h2">16. Platform length again</div>
+  <p class="n-p">A 150 m train crosses a platform in 15 seconds at 72 km/hr. Find the platform length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 20 m/s, total = 300 m, so the platform is 300 &minus; 150. Answer: <span class="n-val">150 m</span></p>
+
+  <div class="n-h2">17. Same direction overtaking</div>
+  <p class="n-p">Trains 100 m and 140 m long run the same way at 63 km/hr and 45 km/hr. How long for the faster to cross the slower?</p>
+  <p class="n-p"><strong>Solution.</strong> Total = 240 m. Relative speed = 18 km/hr = 5 m/s. Time = 240/5. Answer: <span class="n-val">48 seconds</span></p>
+
+  <div class="n-h2">18. Platform from two crossing times</div>
+  <p class="n-p">A train crosses a platform in 40 seconds and a standing person in 16 seconds, at 72 km/hr. Find the platform length.</p>
+  <p class="n-p"><strong>Solution.</strong> Speed = 20 m/s. The person gives the train's own length: 20 &times; 16 = 320 m. The platform crossing covers 20 &times; 40 = 800 m, so the platform is 800 &minus; 320. Answer: <span class="n-val">480 m</span></p>
+
+  <div class="n-h2">19. Train length from two times</div>
+  <p class="n-p">A train crosses a pole in 8 seconds and a 400 m bridge in 28 seconds. Find its length.</p>
+  <p class="n-p"><strong>Solution.</strong> The pole gives speed = L/8. The bridge gives L + 400 = 28(L/8), so 8L + 3200 = 28L and 20L = 3200. Answer: <span class="n-val">160 m</span></p>
+
+  <div class="n-h2">20. Two conditions, two unknowns</div>
+  <p class="n-p">Two trains are 100 m and 80 m long. They cross each other in 9 seconds moving in opposite directions, and the faster overtakes the slower in 18 seconds moving the same way. Find their speeds.</p>
+  <p class="n-p"><strong>Solution.</strong> The total length is 180 m in both cases. Opposite directions give a relative speed of 180/9 = 20 m/s = 72 km/hr, so u + v = 72. Same direction gives 180/18 = 10 m/s = 36 km/hr, so u &minus; v = 36. Adding the two equations, 2u = 108. Answer: <span class="n-val">54 km/hr</span> and <span class="n-val">18 km/hr</span>.</p>
+
+  <div class="n-crit"><span class="icon">⚠️</span><div class="body"><strong>Question 20 is a lesson in not trusting the options.</strong> This problem circulates with four choices, usually 45 and 35, 50 and 30, 60 and 20, or 72 and 28. <span class="n-val">None of them is correct.</span> The two conditions force u + v = 72 and u &minus; v = 36, which has exactly one solution, 54 and 18. Test any option that attracts you against both conditions: 50 and 30 sum to 80 rather than 72 and differ by 20 rather than 36, so it fails both. An answer you have derived and checked beats an option that merely looks plausible.</div></div>
 
   <div style="text-align:center; margin: 30px 0;">
     <button class="anc-btn" onclick="goToQuizFromNotes('A01')" style="background-color:var(--green-dim);border-color:var(--green);color:var(--green);padding:12px 24px;font-size:14px;">Take the A01 Quiz →</button>

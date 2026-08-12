@@ -60,8 +60,13 @@ function check(file) {
   const problems = [];
   const src = fs.readFileSync(file, 'utf8');
 
+  // Full modules wrap their HTML in one template literal, so two backticks.
+  // Stubs are single-quoted one-liners and legitimately have none. What is
+  // never legitimate is an ODD count: that means a backtick was opened and not
+  // closed, or one leaked into the HTML, and the file silently stops parsing.
   const ticks = (src.match(/`/g) || []).length;
-  if (ticks !== 2) problems.push(`${ticks} backticks, expected exactly 2`);
+  if (ticks % 2 !== 0) problems.push(`${ticks} backticks, an unclosed template literal`);
+  else if (ticks > 2) problems.push(`${ticks} backticks, expected 2 (one template literal) or 0 (a stub)`);
   if (src.includes('${')) problems.push('contains ${, which breaks the template literal');
   if (/—/.test(src)) problems.push('contains an em dash');
 
