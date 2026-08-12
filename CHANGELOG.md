@@ -17,6 +17,58 @@ only remote this project pushes to.
 
 ---
 
+## 2026-08-12
+
+### `74b3796` — Funnel starts at the paywall, not at the price list 🗄️
+The funnel's first step was `upgrade_opened`, which only fires once somebody
+opens the price list, so it measured people already considering paying. Anyone
+who met the wall and left recorded nothing: **34 expired users were active in
+seven days, 12 carried any funnel event, 22 were invisible**, and the largest
+drop-off was the one it could not show.
+
+`showGate()` now emits `paywall_shown`, deduped to one row per scope per page
+session so a reader who bounces off the wall five times is one person, not
+five. Fire and forget, and the gate still opens if tracking is unavailable.
+
+`funnel_summary` gains "Hit the paywall" as step 1 and renumbers the rest to
+five steps. That step counts `upgrade_opened` as well as `paywall_shown`, both
+because the steps are cumulative and because events cannot be backdated: on its
+own the new step would read 0 above an existing 16 and invert the funnel.
+`funnel_by_user` splits step 0, which used to mean "hit the wall and walked
+away" and "never saw a price" in the same sentence.
+
+Also checked: `payment_failed` and `checkout_blocked` have never fired, but
+both are wired correctly. With 6 `plan_selected` and 6 `checkout_opened` in the
+project's history, nobody has been blocked before checkout and no card has been
+declined. Rare, not broken. The Razorpay webhook never firing
+(`webhook_events` empty) is a real gap and is tracked separately.
+
+🗄️ SQL: `app/admin/funnel_setup.sql`, `app/admin/funnel_by_user_setup.sql`.
+Both are `CREATE OR REPLACE VIEW` and re-runnable; `hit_paywall` is appended
+last because replace can only add columns at the end. **Applied to production
+before this commit**, which is the safe order: the database can receive the new
+event before anything sends it.
+sw `v114 → v115`.
+
+**Reading the funnel correctly.** "Paid" is counted from `payments`, not from
+funnel events, so it is not a subset of the step above it. Of the 5 people who
+reached the payment window, 2 paid; the third payer has no `checkout_opened`
+event at all, having arrived by another route (a coupon grant, or a purchase
+predating the funnel table). So the step-to-step percentages hold everywhere
+except the last row, where the drop shown is smaller than the real one. That is
+the existing deliberate design, money over events, and is left alone.
+
+### `7d36331` · `7aacddb` · `ac0f1f2` — Sponsorship content complete
+25 modules of notes (0.81 MB) and 25 quizzes (1,564 questions, 1.16 MB).
+Interview coverage 8 → 30 of 32 questions.
+
+Two faults where the content existed and the feature did not: **23 of 25
+modules were flagged `notesReady:false`**, so the app hid them (F03–F06 had been
+finished and invisible for weeks), and **18 of 25 quizzes declared a key the app
+does not look up** (`F13_Electrical_Protection_Switchgear` vs `F13_Protection`),
+so those Take Quiz buttons would have loaded nothing. Both found by opening the
+app rather than by reading the repo.
+
 ## 2026-08-11
 
 ### `f5953be` — Blocked paywall attempts recorded separately 🗄️ ⚠️
