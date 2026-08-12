@@ -1326,6 +1326,19 @@
     </div>
 
     <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Why they did not buy</div>
+      <div class="ad-card-sub">
+        Asked once per person, ever, when they close the price list without buying.
+        The funnel says where people stop; this is the only thing that says why.
+        <strong>Read the notes</strong>: at this volume one sentence from a cadet is
+        worth more than any percentage.
+      </div>
+      <div id="pwf-stats" style="margin-bottom:12px"></div>
+      <div id="pwf-body"><div class="ad-loading">Loading...</div></div>
+      <div id="pwf-notes" style="margin-top:14px"></div>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Who is where</div>
       <div class="ad-card-sub">
         The same funnel, by person. With a few dozen users the individual answer is
@@ -2394,6 +2407,7 @@ function showTab(name) {
   if (name === 'funnel') {
     if (typeof loadFunnel === 'function') loadFunnel();
     if (typeof loadFunnelUsers === 'function') loadFunnelUsers();
+    if (typeof loadPaywallFeedback === 'function') loadPaywallFeedback();
   }
   // Refetched every visit: someone may have signed up since the page loaded,
   // and a stale empty queue is exactly the thing that leaves a cadet waiting.
@@ -2647,6 +2661,79 @@ function renderActivity() {
 
 var _actFilter = null;
 function setActFilter(v) { _actFilter = (_actFilter === v) ? null : v; renderActivity(); }
+
+/* ── Why they did not buy ────────────────────────────────────────── */
+var PWF_LABEL = {
+  price:            ['Price is higher than expected', 'var(--red)'],
+  not_ready:        ['Still deciding, not ready yet',  'var(--orange)'],
+  unsure_coverage:  ['Not sure it covers my exam',     'var(--orange)'],
+  payment_problem:  ['Ran into a problem paying',      'var(--red)'],
+  other:            ['Something else',                 'var(--text3)'],
+};
+
+async function loadPaywallFeedback() {
+  var body = document.getElementById('pwf-body');
+  if (!body) return;
+
+  var [sum, stats, notes] = await Promise.all([
+    _sb.from('paywall_feedback_summary').select('*'),
+    _sb.from('paywall_feedback_stats').select('*').single(),
+    _sb.from('paywall_feedback_notes').select('*').limit(50),
+  ]);
+
+  if (sum.error) {
+    body.innerHTML = '<div class="ad-loading">Run paywall_feedback_setup.sql to enable this.</div>';
+    return;
+  }
+
+  // Response rate first. A reason breakdown built on three answers is an
+  // anecdote, and showing the denominator is what keeps it honest.
+  var st = stats.data || { shown: 0, answered: 0, response_rate: 0, with_note: 0 };
+  document.getElementById('pwf-stats').innerHTML =
+      '<div style="display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--text2)">'
+    + '<span>Asked <strong style="color:var(--text)">' + (st.shown || 0) + '</strong></span>'
+    + '<span>Answered <strong style="color:var(--text)">' + (st.answered || 0) + '</strong></span>'
+    + '<span>Response rate <strong style="color:var(--text)">' + (st.response_rate == null ? 0 : st.response_rate) + '%</strong></span>'
+    + '<span>With a note <strong style="color:var(--text)">' + (st.with_note || 0) + '</strong></span>'
+    + '</div>'
+    + (st.answered > 0 && st.answered < 20
+        ? '<div style="margin-top:7px;font-size:11.5px;color:var(--orange)">Only ' + st.answered
+          + ' answers so far. Treat the split below as anecdote, not data, and read the notes.</div>'
+        : '');
+
+  var rows = sum.data || [];
+  if (!rows.length) { body.innerHTML = '<div class="ad-loading">No answers yet.</div>'; return; }
+
+  var top = rows.reduce(function (m, r) { return Math.max(m, r.people || 0); }, 0);
+  body.innerHTML = rows.map(function (r) {
+    var l = PWF_LABEL[r.reason] || [r.reason, 'var(--text3)'];
+    var pct = top > 0 ? Math.round(((r.people || 0) / top) * 100) : 0;
+    return '<div style="margin-bottom:10px">'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px">'
+      +   '<span style="font-size:13px;color:var(--text)">' + esc(l[0]) + '</span>'
+      +   '<span style="font-size:14px;font-weight:700;font-variant-numeric:tabular-nums">' + r.people
+      +     ' <span style="font-size:11px;color:var(--text3);font-weight:400">(' + (r.pct_of_answers || 0) + '%)</span></span>'
+      + '</div>'
+      + '<div style="height:7px;background:var(--surface2);border-radius:99px;overflow:hidden">'
+      +   '<div style="height:100%;width:' + Math.max(pct, 3) + '%;background:' + l[1] + ';border-radius:99px"></div>'
+      + '</div></div>';
+  }).join('');
+
+  var box = document.getElementById('pwf-notes');
+  var list = (notes.data || []);
+  if (!list.length) { box.innerHTML = ''; return; }
+  box.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">'
+    + 'What they wrote</div>'
+    + list.map(function (n) {
+        var l = PWF_LABEL[n.reason] || [n.reason, 'var(--text3)'];
+        return '<div style="padding:9px 0;border-bottom:1px solid var(--border2)">'
+          + '<div style="font-size:12px;color:' + l[1] + ';font-weight:600;margin-bottom:3px">' + esc(l[0]) + '</div>'
+          + '<div style="font-size:13px;color:var(--text);line-height:1.5">' + esc(n.note) + '</div>'
+          + '<div style="font-size:11px;color:var(--text3);margin-top:4px">' + esc(n.email || '')
+          + (n.plan_shown ? ' &middot; looking at ' + esc(n.plan_shown) + (n.scope_shown ? ' ' + esc(n.scope_shown) : '') : '')
+          + '</div></div>';
+      }).join('');
+}
 
 /* ── Funnel, per person ──────────────────────────────────────────── */
 var _fbu = [];

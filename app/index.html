@@ -793,10 +793,47 @@
 
   /* ── Notification detail modal ──────────────────────────────────────────
      Sits above #profile-modal (10000), which is what the list is inside. */
+  /* Exit feedback. Sits above the upgrade modal's stacking context because it
+     appears after that modal has closed, and below nothing else. */
+  .pwf-back{position:fixed;inset:0;z-index:10060;background:rgba(3,8,18,.72);
+    display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+  .pwf-back[hidden]{display:none}
+  .pwf{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:14px;
+    width:min(430px,100%);padding:22px 20px 18px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+  .pwf-x{position:absolute;top:12px;right:12px;background:none;border:0;color:var(--text3);
+    cursor:pointer;padding:4px;line-height:0;border-radius:6px}
+  .pwf-x:hover{color:var(--text)}
+  .pwf-title{font-size:17px;font-weight:700;color:var(--text);margin-bottom:5px;padding-right:26px}
+  .pwf-sub{font-size:13px;color:var(--text2);line-height:1.5;margin-bottom:15px}
+  .pwf-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+  /* Full-width targets stacked vertically: one tap, no aiming, and it reads
+     the same on a phone as on a laptop. */
+  .pwf-opt{width:100%;text-align:left;background:rgba(255,255,255,.04);
+    border:1px solid var(--border2);border-radius:9px;padding:11px 13px;
+    color:var(--text);font-size:13.5px;cursor:pointer;transition:border-color .15s,background .15s}
+  .pwf-opt:hover{border-color:var(--blue);background:var(--blue-dim)}
+  .pwf-opt:active{transform:translateY(1px)}
+  .pwf-note{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);
+    border-radius:9px;padding:10px 12px;color:var(--text);font-size:13.5px;
+    font-family:inherit;resize:vertical;margin-bottom:12px}
+  .pwf-note:focus{outline:none;border-color:var(--blue)}
+  .pwf-row{display:flex;align-items:center;gap:10px}
+  .pwf-send{background:var(--green-dim);border:1px solid var(--green);color:var(--green);
+    border-radius:9px;padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer}
+  .pwf-send:hover{filter:brightness(1.15)}
+  .pwf-skip{background:none;border:0;color:var(--text3);font-size:12.5px;cursor:pointer;
+    padding:6px 2px;text-decoration:underline}
+  .pwf-skip:hover{color:var(--text2)}
+  .pwf-inline{padding:9px 4px}
+  @media (max-width:480px){
+    .pwf{padding:20px 16px 16px}
+    .pwf-opt{font-size:13px;padding:12px}
+  }
+
   .nfd-back{position:fixed;inset:0;z-index:10050;background:rgba(3,8,18,.72);
     display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
   .nfd-back[hidden]{display:none}
-  .nfd{background:#0E1E33;border:1px solid var(--border2);border-radius:14px;
+  .nfd{background:var(--surface);border:1px solid var(--border2);border-radius:14px;
     width:min(460px,100%);max-height:88vh;overflow-y:auto;overscroll-behavior:contain;
     box-shadow:0 24px 70px rgba(0,0,0,.55)}
   .nfd-head{display:flex;align-items:flex-start;gap:10px;padding:18px 18px 0}
@@ -823,7 +860,7 @@
   .nfd-copy{flex-shrink:0;background:var(--amber,#C8A44A);color:#0A1526;border:none;border-radius:9px;
     padding:0 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .14s}
   .nfd-copy:hover{opacity:.9}
-  .nfd-copy.ok{background:var(--green,#22C55E);color:#06200F}
+  .nfd-copy.ok{background:var(--green,#22C55E);color:var(--on-accent)}
   .nfd-coupon-detail{font-size:12px;color:var(--text2);margin-top:9px;line-height:1.6}
   .nfd-coupon-exp{font-size:11px;color:var(--text3);margin-top:5px}
 
@@ -923,6 +960,46 @@
 
 <!-- Notification detail. Outside #profile-modal so it is not clipped by the
      panel's own scrolling, and above it in the stacking order. -->
+<!-- Exit feedback. Shown ONCE per user, ever, after they close the price list
+     without buying. Deliberately appears after the modal has already closed:
+     it must never stand between somebody and the exit. -->
+<div class="pwf-back" id="pwf-back" hidden onclick="if(event.target===this)pwfDismiss()">
+  <div class="pwf" role="dialog" aria-modal="true" aria-labelledby="pwf-title">
+    <button class="pwf-x" onclick="pwfDismiss()" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+
+    <div id="pwf-step1">
+      <div class="pwf-title" id="pwf-title">Before you go</div>
+      <div class="pwf-sub">One tap, and it helps us more than you would think. What stopped you?</div>
+      <div class="pwf-opts">
+        <button class="pwf-opt" data-reason="price">Price is higher than I expected</button>
+        <button class="pwf-opt" data-reason="not_ready">Still deciding, not ready yet</button>
+        <button class="pwf-opt" data-reason="unsure_coverage">Not sure it covers my exam</button>
+        <button class="pwf-opt" data-reason="payment_problem">I ran into a problem paying</button>
+        <button class="pwf-opt" data-reason="other">Something else</button>
+      </div>
+      <button class="pwf-skip" onclick="pwfDismiss()">No thanks</button>
+    </div>
+
+    <div id="pwf-step2" hidden>
+      <div class="pwf-title">Thank you</div>
+      <div class="pwf-sub" id="pwf-thanks">That is recorded. Anything you would like to add?</div>
+      <textarea class="pwf-note" id="pwf-note" rows="3" maxlength="500" placeholder="Optional, and read by a person"></textarea>
+      <div class="pwf-row">
+        <button class="pwf-send" onclick="pwfSendNote()">Send</button>
+        <button class="pwf-skip pwf-inline" onclick="pwfClose()">Skip</button>
+      </div>
+    </div>
+
+    <div id="pwf-step3" hidden>
+      <div class="pwf-title">Thank you</div>
+      <div class="pwf-sub">We read every one of these.</div>
+      <div class="pwf-row"><button class="pwf-send" onclick="pwfClose()">Close</button></div>
+    </div>
+  </div>
+</div>
+
 <div class="nfd-back" id="nfd-back" hidden onclick="if(event.target===this)closeNotifDetail()">
   <div class="nfd" role="dialog" aria-modal="true" aria-labelledby="nfd-title">
     <div class="nfd-head">
@@ -1031,7 +1108,7 @@
           </div>
 
           <label style="display:block;font-size:11px;color:#8FA3B8;margin-bottom:5px;">Type <strong id="del-email-hint" style="color:var(--text);"></strong> to confirm</label>
-          <input id="del-email-input" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="your email" style="width:100%;background:#070D1A;border:1px solid #1A3050;border-radius:6px;color:var(--text);font-size:13px;padding:10px 11px;font-family:inherit;margin-bottom:9px;">
+          <input id="del-email-input" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="your email" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:13px;padding:10px 11px;font-family:inherit;margin-bottom:9px;">
           <div id="del-msg" style="display:none;font-size:11.5px;margin-bottom:9px;"></div>
           <div style="display:flex;gap:8px;">
             <button onclick="cancelDeleteFlow()" style="flex:1;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Keep my account</button>
@@ -1258,7 +1335,7 @@
       <div id="up-coupon-box" style="display:none;margin-bottom:16px;">
         <div style="display:flex;gap:8px;">
           <input id="up-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false"
-                 style="flex:1;background:#0A1828;border:1px solid #1A3050;border-radius:8px;color:var(--text);font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
+                 style="flex:1;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:14px;padding:10px 12px;outline:none;font-family:inherit;text-transform:uppercase;">
           <button id="up-coupon-btn" onclick="applyCoupon()"
                   style="background:rgba(200,164,74,0.12);border:1px solid rgba(200,164,74,0.35);border-radius:8px;padding:10px 18px;font-size:13px;font-weight:700;color:#C8A44A;cursor:pointer;font-family:inherit;">Apply</button>
         </div>
@@ -3316,6 +3393,10 @@ window.trackFunnel = trackFunnel;
 
 function openUpgradeModal(preferredPlan, preferredScope) {
   trackFunnel('upgrade_opened', preferredPlan, preferredScope);
+  // Remembered for the exit survey: how long they looked, and at what.
+  window._upOpenedAt  = Date.now();
+  window._upLastPlan  = preferredPlan  || null;
+  window._upLastScope = preferredScope || null;
   var modal = document.getElementById('upgrade-modal');
   modal.style.display = 'block';
   document.body.style.overflow = 'hidden';
@@ -3353,6 +3434,7 @@ function openUpgradeModal(preferredPlan, preferredScope) {
 }
 
 function closeUpgradeModal() {
+  var wasOpen = document.getElementById('upgrade-modal').style.display !== 'none';
   document.getElementById('upgrade-modal').style.display = 'none';
   document.documentElement.classList.remove('_modal-open');
   document.body.style.overflow = '';
@@ -3361,7 +3443,122 @@ function closeUpgradeModal() {
   document.getElementById('up-coupon-box').style.display = 'none';
   document.getElementById('up-coupon-toggle').style.display = '';
   document.getElementById('up-coupon-input').value = '';
+
+  // Ask why, once ever. Guarded on wasOpen because this function is also
+  // called blind from the Escape handler, which fires whether or not the
+  // modal was showing, and from the success path after a purchase.
+  //
+  // A short delay lets the modal finish closing first, and filters out the
+  // instant close: opening the price list and shutting it inside a second is
+  // a misclick, not a decision worth surveying.
+  if (wasOpen) {
+    var opened = window._upOpenedAt || 0;
+    if (Date.now() - opened > 1500) {
+      setTimeout(function () {
+        maybeAskExitFeedback(window._upLastPlan, window._upLastScope);
+      }, 400);
+    }
+  }
 }
+
+/* ── Exit feedback ────────────────────────────────────────────────────────
+   Asks, exactly once per user ever, why they closed the price list without
+   buying. The funnel already says WHERE people stop; this is the only thing
+   that can say why, and the two likeliest answers ("too expensive" and "not
+   yet") need opposite responses.
+
+   ONCE, EVER. The guarantee lives in the database, not here. A localStorage
+   flag alone would re-ask the same person on their phone, after clearing site
+   data, or in a private window. eb_claim_paywall_feedback() does an
+   INSERT ... ON CONFLICT DO NOTHING against a table keyed on user_id and
+   returns true only to the caller that actually created the row, so the check
+   and the claim are one atomic step and two tabs cannot both win it.
+
+   localStorage is kept as a cheap short-circuit so the same browser does not
+   make the call twice, but it is an optimisation and never the authority.
+
+   Deliberately fired AFTER the modal has closed. It must never stand between
+   somebody and the exit, because trapping a hesitant buyer is how you turn a
+   maybe into a never. */
+var PWF_KEY = 'eb_pwf_asked';
+
+function maybeAskExitFeedback(plan, scope) {
+  try {
+    if (!window._sbClient || !window._sbUser) return;
+    // Somebody who just paid has nothing to explain, and asking would be
+    // absurd. paidThisSession is set by the successful-verification path.
+    if (window._pwfPaidThisSession) return;
+    if (localStorage.getItem(PWF_KEY)) return;
+
+    window._sbClient
+      .rpc('eb_claim_paywall_feedback', { p_plan: plan || null, p_scope: scope || null })
+      .then(function (res) {
+        // Mark the browser regardless of the answer: either we are about to
+        // ask (and must not ask again), or somebody already has.
+        try { localStorage.setItem(PWF_KEY, '1'); } catch (e) {}
+        if (res && !res.error && res.data === true) pwfOpen();
+      }, function () {});
+  } catch (e) { /* measurement must never break the close */ }
+}
+
+function pwfOpen() {
+  var back = document.getElementById('pwf-back');
+  if (!back) return;
+  // Reparent to body, so no ancestor transform or backdrop-filter traps it in
+  // a stacking context and renders it under the sidebar. Same fix the
+  // notification modal needed.
+  if (back.parentNode !== document.body) document.body.appendChild(back);
+  document.getElementById('pwf-step1').hidden = false;
+  document.getElementById('pwf-step2').hidden = true;
+  document.getElementById('pwf-step3').hidden = true;
+  document.getElementById('pwf-note').value = '';
+  back.hidden = false;
+}
+
+function pwfClose() {
+  var back = document.getElementById('pwf-back');
+  if (back) back.hidden = true;
+}
+
+// Dismissing without answering is a legitimate outcome and is already
+// recorded: the row exists with reason NULL, which is what stops us asking
+// again. Storing only answers would pester exactly the people least willing
+// to reply.
+function pwfDismiss() { pwfClose(); }
+
+function pwfSendNote() {
+  var note = (document.getElementById('pwf-note').value || '').trim();
+  if (!note) { pwfClose(); return; }
+  try {
+    window._sbClient.rpc('eb_answer_paywall_feedback', {
+      p_reason: window._pwfReason || 'other', p_note: note.slice(0, 500),
+    }).then(function () {}, function () {});
+  } catch (e) {}
+  document.getElementById('pwf-step2').hidden = true;
+  document.getElementById('pwf-step3').hidden = false;
+}
+
+document.addEventListener('click', function (e) {
+  var opt = e.target.closest && e.target.closest('.pwf-opt');
+  if (!opt) return;
+  var reason = opt.dataset.reason;
+  window._pwfReason = reason;
+  // Save on the tap, not on the follow-up. The tap is the answer; the note is
+  // a bonus, and closing the window at that point must not lose the reason.
+  try {
+    window._sbClient.rpc('eb_answer_paywall_feedback', { p_reason: reason, p_note: null })
+      .then(function () {}, function () {});
+  } catch (err) {}
+  document.getElementById('pwf-step1').hidden = true;
+  document.getElementById('pwf-step2').hidden = false;
+  var thanks = document.getElementById('pwf-thanks');
+  if (thanks) {
+    thanks.textContent = reason === 'payment_problem'
+      ? 'That is recorded. What went wrong? We will look into it.'
+      : 'That is recorded. Anything you would like to add?';
+  }
+  var n = document.getElementById('pwf-note'); if (n) n.focus();
+});
 
 function toggleCouponBox() {
   document.getElementById('up-coupon-box').style.display = 'block';
@@ -3547,6 +3744,7 @@ function setUpBtnsDisabled(disabled) {
 
 async function startPayment(plan, scope) {
   trackFunnel('plan_selected', plan, scope);
+  window._upLastPlan = plan; window._upLastScope = scope;
   if (!window._sbClient || !window._sbUser) {
     setUpStatus('You must be signed in to purchase.', false);
     return;
@@ -3647,6 +3845,7 @@ async function startPayment(plan, scope) {
           // preview did, so the success message matches what they were shown
           // before paying rather than a single blended date.
           var effectMsg = purchaseEffectText(verifyData.plan, vScope);
+          window._pwfPaidThisSession = true;
           setUpStatus('Payment successful! ' + planLabel + ' is active. ' + effectMsg, true);
 
           // Close modal after 2.5s and reload to reflect new plan
