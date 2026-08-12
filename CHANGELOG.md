@@ -17,6 +17,44 @@ only remote this project pushes to.
 
 ---
 
+## 2026-08-13
+
+### `e034791` — Notification modal unreadable in light theme ⚠️
+`.nfd` hardcoded `background:#0E1E33` while its text used `var(--text)`, so in
+light theme it was dark on dark. **Claimed fixed once before and was not**: the
+earlier pass replaced 32 hardcoded colours but missed the modal's own
+background. The new survey modal had already copied the same bug.
+
+`--amber` was never defined in any theme, so every use fell back to `#C8A44A`:
+**2.37:1 on white**, far under the AA floor. Now per-theme, `#846C31` on light,
+solved against `--surface3` as the worst case.
+
+**The rule:** a hardcoded colour is only a bug when paired with a theme
+variable. A pair hardcoded on both sides renders identically everywhere and is
+deliberate. That cut the list from 19 apparent problems to 3 real ones,
+including the **coupon input on the payment path**, unreadable while being
+typed into. sw `v120 → v122`.
+
+### `a45c958` — Exit feedback survey 🗄️
+Asks once per user, ever, why they closed the price list without buying. The
+guarantee lives in the database: `paywall_feedback` keyed on `user_id`, claimed
+via `INSERT ... ON CONFLICT DO NOTHING` so check and claim are one atomic step.
+The row is written when the survey is **shown**, not answered, so a dismissal
+still counts and nobody is asked twice.
+
+Fires on closing the price list, not on hitting the paywall (which is often
+accidental), ignores a close inside 1.5 s, never asks a buyer, and appears
+after the modal shuts so it never blocks the exit.
+
+🗄️ SQL: `app/admin/paywall_feedback_setup.sql`, applied to production.
+
+### `c7d076b` — Aptitude A01-A05
+Trains, Time and Distance, Height and Distance, Time and Work, Simple Interest.
+Notes plus quiz each, 80 questions, every formula verified numerically before
+being written. Four supplied practice questions carried the wrong option letter
+and one had no correct option; written up as worked problems so the fault is
+not propagated.
+
 ## 2026-08-12
 
 ### `6579c2b` — "Who is where" is sortable, and the sorted column leads
