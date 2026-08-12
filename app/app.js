@@ -39,47 +39,8 @@ function _setupProgressObserver(topicId) {
     headings.forEach(function(h) { window._progObserver.observe(h); });
 }
 
-// Tables that overflow horizontally on mobile (see .n-table's max-width:768px
-// rule in style.css) read as clean and complete, not cut off - nothing about
-// them signals there is more to the right. Wraps every table that actually
-// overflows (measured after render, not guessed from viewport width, so it
-// stays correct across orientation changes and tablet-sized screens) with a
-// small pulsing hint that fades out the first time that specific table is
-// scrolled or touched.
-function _addTableScrollHints(container) {
-    if (!container) return;
-    var tables = container.querySelectorAll('.n-table');
-    if (!tables.length) return;
-
-    function checkOne(table, wrap) {
-        var overflowing = table.scrollWidth > table.clientWidth + 2;
-        wrap.classList.toggle('has-scroll-hint', overflowing && !wrap.classList.contains('hint-dismissed'));
-    }
-
-    tables.forEach(function(table) {
-        if (table.dataset.scrollHinted) return;
-        table.dataset.scrollHinted = '1';
-
-        var wrap = document.createElement('div');
-        wrap.className = 'n-table-wrap';
-        table.parentNode.insertBefore(wrap, table);
-        wrap.appendChild(table);
-
-        var hint = document.createElement('span');
-        hint.className = 'n-table-hint';
-        hint.setAttribute('aria-hidden', 'true');
-        hint.textContent = '⇄'; // ⇄
-        wrap.appendChild(hint);
-
-        checkOne(table, wrap);
-
-        var dismiss = function() { wrap.classList.add('hint-dismissed'); wrap.classList.remove('has-scroll-hint'); };
-        table.addEventListener('scroll', dismiss, { passive: true, once: true });
-        table.addEventListener('touchstart', dismiss, { passive: true, once: true });
-
-        window.addEventListener('resize', function() { checkOne(table, wrap); });
-    });
-}
+// _addTableScrollHints() moved to table-hints.js, shared with the
+// Sponsorship page. Loaded before this file in index.html.
 
 function _dismissContinueDlg() {
     var dlg = document.getElementById('_continue-dlg');

@@ -238,6 +238,7 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../table-hints.js?v=1"></script>
 <script src="../account.js?v=1"></script>
 <script>
 (async () => {
@@ -782,6 +783,9 @@ function renderNotesView(id) {
   if (inj) inj.classList.add('active');
   buildTopicSideList(id);
   injectTopicNav(id);
+  // Wide tables read as complete rather than cut off on a phone unless
+  // something signals they scroll. Shared with the main app.
+  if (window._addTableScrollHints) _addTableScrollHints(document.getElementById('notes-container'));
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   if (window._pendingScroll) {
     var s = window._pendingScroll; window._pendingScroll = null;
@@ -969,20 +973,40 @@ function injectTopicNav(id) {
   var next = i < list.length - 1 ? list[i + 1] : null;
   if (!prev && !next) return;
 
+  // Built as real elements with a bound listener rather than an onclick
+  // attribute string. The attribute version shipped broken: the id was
+  // interpolated with JSON.stringify, whose double quotes closed the
+  // double-quoted onclick attribute early, so every button rendered with no
+  // handler at all. Nothing throws when that happens, the click just does
+  // nothing, and no string-level test catches it because the string looks
+  // correct until a parser reads it.
   function btn(t, isNext) {
-    return '<button class="tnav-btn' + (isNext ? ' is-next' : '') + '" '
-      + 'onclick="fetchTopicData(' + JSON.stringify(t.id) + ')">'
-      + '<span class="tnav-dir">' + (isNext ? 'Next' : 'Previous') + '</span>'
-      + '<span class="tnav-name">' + (t.icon ? t.icon + ' ' : '') + esc(t.name) + '</span>'
-      + '</button>';
+    var b = document.createElement('button');
+    b.className = 'tnav-btn' + (isNext ? ' is-next' : '');
+    b.type = 'button';
+    var dir = document.createElement('span');
+    dir.className = 'tnav-dir';
+    dir.textContent = isNext ? 'Next' : 'Previous';
+    var nm = document.createElement('span');
+    nm.className = 'tnav-name';
+    nm.textContent = (t.icon ? t.icon + ' ' : '') + t.name;
+    b.appendChild(dir);
+    b.appendChild(nm);
+    b.addEventListener('click', function () { fetchTopicData(t.id); });
+    return b;
+  }
+  function spacer() {
+    var d = document.createElement('div');
+    d.style.flex = '1 1 0';
+    return d;
   }
 
   var nav = document.createElement('div');
   nav.className = 'tnav';
   // Placeholders keep the remaining button on its own side at the two ends of
   // the course, instead of a lone "Next" sliding across to the left.
-  nav.innerHTML = (prev ? btn(prev, false) : '<div style="flex:1 1 0"></div>')
-                + (next ? btn(next, true)  : '<div style="flex:1 1 0"></div>');
+  nav.appendChild(prev ? btn(prev, false) : spacer());
+  nav.appendChild(next ? btn(next, true)  : spacer());
   doc.appendChild(nav);
 }
 
