@@ -3463,6 +3463,7 @@ async function loadProfActivity(u) {
   if (ev.error && pay.error) { el.innerHTML = '<div class="prof-empty">Could not load activity.</div>'; return; }
 
   var LABEL = {
+    paywall_shown:    ['Hit the paywall',             'var(--text3)'],
     upgrade_opened:   ['Opened the price list',       'var(--blue)'],
     plan_selected:    ['Picked a plan',               'var(--orange)'],
     checkout_opened:  ['Reached the payment window',  'var(--orange)'],

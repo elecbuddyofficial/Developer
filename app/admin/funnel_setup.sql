@@ -66,20 +66,41 @@ WITH (security_invoker = on) AS
 WITH ev AS (
   SELECT user_id, event, created_at FROM public.funnel_events WHERE user_id IS NOT NULL
 )
-SELECT 1 AS step, 'Opened the upgrade window' AS label,
+-- Step 1 is the wall itself, not the price list. Until `paywall_shown` was
+-- added the funnel began at 'opened the price list', which only happens once
+-- somebody is already considering paying: 34 expired users were active in a
+-- week, 12 carried any funnel event at all, and the other 22 were invisible.
+-- The biggest drop-off is meeting the wall and leaving, and it could not be
+-- seen.
+--
+-- 'upgrade_opened' is counted in this step as well, for two reasons. The
+-- steps are cumulative by the rule above, and opening the price list means
+-- you were stopped by something first. And it repairs the backfill gap:
+-- events cannot be backdated, so without it every user recorded before
+-- `paywall_shown` shipped would sit under an empty top and the funnel would
+-- read 0 -> 16, which is impossible rather than merely incomplete.
+--
+-- Consequence worth knowing when reading this: until the client that emits
+-- `paywall_shown` is deployed, steps 1 and 2 are the same 16 people by
+-- construction. They only separate once the new event starts arriving, and
+-- the gap between them is the number this whole change exists to show.
+SELECT 1 AS step, 'Hit the paywall' AS label,
        count(DISTINCT user_id) AS people
-  FROM ev WHERE event = 'upgrade_opened'
+  FROM ev WHERE event IN ('paywall_shown', 'upgrade_opened')
 UNION ALL
-SELECT 2, 'Picked a plan',
+SELECT 2, 'Opened the price list',
+       count(DISTINCT user_id) FROM ev WHERE event = 'upgrade_opened'
+UNION ALL
+SELECT 3, 'Picked a plan',
        count(DISTINCT user_id) FROM ev WHERE event = 'plan_selected'
 UNION ALL
-SELECT 3, 'Reached the payment window',
+SELECT 4, 'Reached the payment window',
        count(DISTINCT user_id) FROM ev WHERE event = 'checkout_opened'
 UNION ALL
 -- Taken from payments rather than from an event, because that is the only
 -- record that means money actually moved. A client-sent "I paid" event would
 -- be the one number in here worth faking.
-SELECT 4, 'Paid',
+SELECT 5, 'Paid',
        count(DISTINCT user_id) FROM public.payments WHERE status = 'paid'
 ORDER BY step;
 

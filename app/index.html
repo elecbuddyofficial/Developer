@@ -1438,8 +1438,26 @@ function setTheme(t) {
   }
   window.isLocked = isLocked;
 
+  // One row per scope per page session. Someone who bounces off the paywall
+  // five times in an evening is one person who was stopped, not five, and the
+  // funnel counts people. Reset on reload, which is what "a session" means
+  // here; _touchTopic's 5-minute window is the wrong shape for this because a
+  // gate is hit far more often than a topic is opened.
+  window._gateSeen = window._gateSeen || {};
+
   function showGate(triggerScope) {
     window._gateTriggerScope = triggerScope || null;
+    // The top of the funnel. Everything else it records starts at "opened the
+    // price list", which only happens once somebody is already considering
+    // paying, so the largest drop-off - meeting the wall and leaving - was
+    // invisible. Fire and forget, and never allowed to delay showing the gate.
+    try {
+      var _gk = triggerScope || 'any';
+      if (!window._gateSeen[_gk]) {
+        window._gateSeen[_gk] = true;
+        if (window.trackFunnel) window.trackFunnel('paywall_shown', null, triggerScope);
+      }
+    } catch (e) {}
     var el = document.getElementById('gate-overlay');
     el.style.display = 'flex';
     document.documentElement.classList.add('_modal-open');
@@ -3291,6 +3309,9 @@ function trackFunnel(event, plan, scope, detail) {
     }).then(function(){}, function(){});
   } catch (e) {}
 }
+// Exported because showGate() lives in an earlier <script> block and is the
+// one caller that fires before this file's own upgrade flow ever runs.
+window.trackFunnel = trackFunnel;
 
 function openUpgradeModal(preferredPlan, preferredScope) {
   trackFunnel('upgrade_opened', preferredPlan, preferredScope);

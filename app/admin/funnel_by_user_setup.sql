@@ -18,6 +18,10 @@ WITH (security_invoker = on) AS
 WITH ev AS (
   SELECT
     user_id,
+    -- Stopped by a locked topic, the question bank or Surveyor Q&A. Recorded
+    -- from showGate(), so it is the first thing that happens to anyone who
+    -- runs out of access, and the only step the funnel used to miss entirely.
+    bool_or(event = 'paywall_shown')    AS hit_paywall,
     bool_or(event = 'upgrade_opened')   AS opened,
     bool_or(event = 'plan_selected')    AS picked,
     bool_or(event = 'checkout_opened')  AS reached_checkout,
@@ -74,8 +78,18 @@ SELECT
     WHEN COALESCE(e.reached_checkout, false) THEN 'Left at the payment window'
     WHEN COALESCE(e.picked, false)           THEN 'Picked a plan, did not reach payment'
     WHEN COALESCE(e.opened, false)           THEN 'Opened prices, did not pick a plan'
+    -- Step 0 used to mean two very different things at once. Somebody who met
+    -- the paywall and walked away has told you they wanted something and the
+    -- price stopped them; somebody who never met it has told you nothing.
+    -- Same step number, because the numbering feeds the admin filter and the
+    -- colour scale, but no longer the same sentence.
+    WHEN COALESCE(e.hit_paywall, false)      THEN 'Hit the paywall, never opened prices'
     ELSE 'Never opened the upgrade window'
-  END AS dropped_at
+  END AS dropped_at,
+  -- Appended rather than slotted in beside the other flags: CREATE OR REPLACE
+  -- VIEW can only add columns at the end, and this file has to stay
+  -- re-runnable without a DROP.
+  COALESCE(e.hit_paywall, false)         AS hit_paywall
 FROM public.profiles p
 LEFT JOIN ev   e  ON e.user_id  = p.id
 LEFT JOIN paid pd ON pd.user_id = p.id
