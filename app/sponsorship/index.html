@@ -80,6 +80,11 @@
   .topic-card:hover { border-color:var(--blue) }
   .topic-card .tc-id { font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.5px }
   .topic-card .tc-name { font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35 }
+  /* Sits at the foot of the card, quiet when empty so an untouched module does
+     not look broken, and filling as the module is read. */
+  .topic-card .tc-prog { height:3px;background:var(--surface3);border-radius:99px;overflow:hidden;margin-top:8px }
+  .topic-card .tc-prog span { display:block;height:100%;width:0;background:var(--blue);
+    border-radius:99px;transition:width .3s ease }
   .topic-card .tc-status { font-size:11px;color:var(--text3);margin-top:2px }
   .topic-card.coming-soon { opacity:.55;cursor:default }
   .topic-card.coming-soon:hover { border-color:var(--border2) }
@@ -239,6 +244,7 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../table-hints.js?v=1"></script>
+<script src="../progress.js?v=1"></script>
 <script src="../account.js?v=1"></script>
 <script>
 (async () => {
@@ -801,6 +807,10 @@ var SECTIONS = {
 var SEARCH_INDEX = [], SEARCH_INDEX_BUILT = {}, SEARCH_INDEX_DONE = 0, SEARCH_INDEX_TOTAL = 0;
 
 window.loadQuizzes = function(key, data) { window.QD[key] = data; };
+// Restores the local progress map before the first grid is painted. Without
+// this every bar starts at zero and only fills in after something is read.
+if (window.ebProgress) ebProgress.load('eb_sp_progress');
+
 window.loadNotes   = function(id, html) {
   window.NOTE_HTML[id] = html;
   buildSearchIndexForTopic(id, html);
@@ -816,6 +826,24 @@ function renderNotesView(id) {
   buildTopicSideList(id);
   ensureBackButton(id);
   injectTopicNav(id);
+  /* Records the open and starts watching the headings. Both are fire and
+     forget: reading must never wait on measurement. The observer fires per
+     heading rather than per scroll event, which is what keeps this free. */
+  if (window.ebProgress) {
+    ebProgress.touch(id, 'notes');
+    ebProgress.observe(id, {
+      column: 'sponsorship_progress',
+      cacheKey: 'eb_sp_progress',
+      rootSelector: '#content',
+      containerSelector: '#notes-container',
+      onLocal: function (tid, ratio) {
+        // Paint the card behind the reader straight from the local value, so
+        // the bar has already moved by the time they go back to the grid.
+        var bar = document.querySelector('.topic-card[data-topic-id="' + tid + '"] .tc-prog span');
+        if (bar) bar.style.width = Math.round(ratio * 100) + '%';
+      },
+    });
+  }
   // Wide tables read as complete rather than cut off on a phone unless
   // something signals they scroll. Shared with the main app.
   if (window._addTableScrollHints) _addTableScrollHints(document.getElementById('notes-container'));
@@ -932,7 +960,9 @@ function buildSectionTopicGrid(sec) {
       // Quiz is only advertised on a live module. Every stub carries an empty
       // quiz file as scaffolding, and "Coming soon · Quiz" promised something
       // that would have opened to no questions.
-      + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + ((t.quizFile && t.notesReady) ? ' · Quiz' : '') + '</div>';
+      + '<div class="tc-status">' + (t.notesReady ? 'Notes ready' : 'Coming soon') + ((t.quizFile && t.notesReady) ? ' · Quiz' : '') + '</div>'
+      + (t.notesReady ? '<div class="tc-prog"><span style="width:'
+          + Math.round((window.ebProgress ? ebProgress.get(t.id) : 0) * 100) + '%"></span></div>' : '');
     if (locked) {
       var lk = document.createElement('span'); lk.className = 'gate-lock'; lk.textContent = '🔒';
       card.appendChild(lk);
@@ -1221,6 +1251,7 @@ function goToQuizFromNotes(topicId) {
   if (isLocked(topicId) && !topicObj.free) { showGate(); return; }
 
   ACTIVE_TOPIC_ID = topicId;
+  if (window.ebProgress) ebProgress.touch(topicId, 'quiz');
   document.getElementById('quiz-topic-label').textContent = topicObj.id + ' - ' + topicObj.name;
   document.getElementById('quiz-topic-h2').textContent    = topicObj.name + ' Quiz';
 
