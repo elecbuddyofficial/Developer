@@ -3683,13 +3683,22 @@ async function renderProfProgress(u) {
     return;
   }
 
-  var oral = rows.filter(function (k) { return k.charAt(0) === 'T'; }).length;
-  var written = rows.filter(function (k) { return k.charAt(0) === 'W'; }).length;
-  // Sponsorship modules are F, A, IP, S00, APT and CA. Counted separately, or
-  // the header reads "5 topics opened, 2 Oral, 1 Written" and leaves two
-  // unexplained, which looks like a bug in the count rather than a third
-  // section the reader was in.
-  var sponsor = rows.length - oral - written;
+  /* Which section a recorded id belongs to.
+     Matched explicitly rather than by subtracting the other two. "ALL" is the
+     marker used for the Surveyor Q&A and the question bank, which are ORAL
+     features, and it starts with A: counting Sponsorship as "everything that
+     is not T or W" filed all nine of those rows under Sponsorship. Aptitude
+     modules are A followed by digits, so the digits are what separate them. */
+  function _section(id) {
+    if (/^T\d/.test(id)) return 'oral';
+    if (/^W\d/.test(id)) return 'written';
+    if (id === 'ALL') return 'oral';               // Surveyor Q&A, question bank
+    if (/^(F\d|A\d|IP\d|S00|APT|CA)/.test(id)) return 'sponsorship';
+    return 'other';
+  }
+  var oral    = rows.filter(function (k) { return _section(k) === 'oral'; }).length;
+  var written = rows.filter(function (k) { return _section(k) === 'written'; }).length;
+  var sponsor = rows.filter(function (k) { return _section(k) === 'sponsorship'; }).length;
 
   el.innerHTML =
     '<div style="font-size:11.5px;color:var(--text3);padding:4px 2px 10px;margin-bottom:2px;border-bottom:1px solid var(--border2)">'
