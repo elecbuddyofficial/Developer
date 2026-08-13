@@ -43,7 +43,7 @@ products. The duration names were worse: they read as capability levels (Master
 Mariner is a real rank) over identical content, inventing a hierarchy the
 product does not have.
 
-**Internal keys unchanged** — // and // are
+**Internal keys unchanged** — `written`/`oral`/`both` and `3mo`/`6mo`/`12mo` are
 referenced by payments, entitlements, coupons and the funnel. Receipts verified
 across all nine subject lines; the card no longer prints the duration twice.
 
