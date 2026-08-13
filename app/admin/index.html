@@ -987,7 +987,19 @@
     .prof-mail-item { flex-direction: column; align-items: stretch; gap: 3px; }
     .prof-mail-subject { font-weight: 700; color: var(--text); font-size: 12.5px; }
     .prof-mail-meta { font-size: 10.5px; color: var(--text3); }
-    .prof-mail-body { font-size: 12px; color: var(--text2); line-height: 1.5; white-space: pre-wrap; margin-top: 2px; }
+    .prof-mail-body { font-size: 12px; color: var(--text2); line-height: 1.5; white-space: pre-wrap;
+      margin-top: 6px; padding-top: 8px; border-top: 1px solid var(--border);
+      /* A very long message still cannot push everything else off the panel. */
+      max-height: 320px; overflow-y: auto; }
+    .prof-mail-count { font-size: 11px; color: var(--text3); margin-bottom: 6px; }
+    .prof-mail-head { cursor: pointer; list-style: none; display: grid;
+      grid-template-columns: 1fr auto; gap: 2px 10px; align-items: baseline; padding: 2px 0; }
+    .prof-mail-head::-webkit-details-marker { display: none; }
+    .prof-mail-head:hover .prof-mail-subject { color: var(--blue); }
+    /* The preview spans both columns so the date stays on the subject line. */
+    .prof-mail-peek { grid-column: 1 / -1; font-size: 11.5px; color: var(--text3);
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    details[open] .prof-mail-peek { display: none; }
 
     #prof-send-status { display: none; font-size: 12px; padding: 8px 11px; border-radius: var(--r8); margin-top: 8px; }
     #prof-send-status.ok  { display: block; background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
@@ -3838,17 +3850,32 @@ async function loadProfMailHistory(userId) {
     return;
   }
 
-  document.getElementById('prof-mail-history').innerHTML = data && data.length
-    ? data.map(function(m) {
-        return '<div class="prof-mail-item">'
-          + '<div style="display:flex;justify-content:space-between;gap:8px">'
-          + '<span class="prof-mail-subject">' + esc(m.subject) + '</span>'
-          + '<span class="prof-mail-meta" style="white-space:nowrap">' + fmtDate(m.sent_at) + '</span>'
-          + '</div>'
+  /* Every email used to render at full length, stacked. One message is about
+     350px tall, so five of them put nearly two thousand pixels of text inside
+     a panel that is already scrolling, and finding the one you wanted meant
+     scrolling past all the others.
+
+     A single email still opens expanded, because collapsing a list of one is
+     pointless ceremony. More than one collapses to subject, date and a line of
+     preview, which is enough to pick the right one, and opens on click. */
+  var box = document.getElementById('prof-mail-history');
+  if (!data || !data.length) { box.innerHTML = '<div class="prof-empty">No emails sent yet</div>'; return; }
+
+  var only = data.length === 1;
+  box.innerHTML =
+      (only ? '' : '<div class="prof-mail-count">' + data.length + ' emails, newest first</div>')
+    + data.map(function (m, i) {
+        var firstLine = (m.message || '').replace(/\s+/g, ' ').trim();
+        return '<details class="prof-mail-item"' + (only ? ' open' : '') + '>'
+          + '<summary class="prof-mail-head">'
+          +   '<span class="prof-mail-subject">' + esc(m.subject) + '</span>'
+          +   '<span class="prof-mail-meta">' + fmtDate(m.sent_at) + '</span>'
+          +   (only ? '' : '<span class="prof-mail-peek">' + esc(firstLine.slice(0, 90))
+              + (firstLine.length > 90 ? '&hellip;' : '') + '</span>')
+          + '</summary>'
           + '<div class="prof-mail-body">' + esc(m.message) + '</div>'
-          + '</div>';
-      }).join('')
-    : '<div class="prof-empty">No emails sent yet</div>';
+          + '</details>';
+      }).join('');
 }
 
 function populateProfMailSender() {
