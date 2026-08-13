@@ -1267,6 +1267,16 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        16. PLC
        ========================================== -->
   <div class="n-h1" id="t4-plc">💻 16. PLC - PROGRAMMABLE LOGIC CONTROLLERS</div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t07-plc-ladder-logic.webp" alt="PLC ladder logic diagram - rungs with NO/NC contacts, output coils, motor start-stop interlock example" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRnAAAABXRUJQVlA4IGQAAADwAwCdASocABAAPu1iqU2ppaQiMAgBMB2JZwAAXBvY1cwpnv1FxVwAAP7wRveu9Z+ejJ0frswhsaMN5H/559YgrhLnHKY3p72CbmojlF/HMEPzfrAg1POvLei/LLaW+ux5H+QA">
+    <div class="note-diagram-cap">Fig. Ladder logic - rungs read left to right as a circuit: NO and NC contacts in series form an AND, in parallel an OR, and the coil at the right is the output</div>
+  </div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t07-plc-scan-cycle.webp" alt="PLC scan cycle - input scan, program execution, output scan, housekeeping, watchdog timer" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRsQAAABXRUJQVlA4ILgAAABQBQCdASocABwAPu1iqE2ppaOiMAgBMB2JaQAFEAKVzC+06QvZFnn7vdm5s80yUISr9AAA/vOCbIpswaj+pFHskaxceeyTKfInQzuuzrm0lnqIxJvCMTSz1zyqbWIF+u0eEw/wozM3KDhwfqXl8yQYLQCUQJophtRhZswXPOHKz4L8cx1WYG2ajA0H2N9XzN3kNh2xq3dt1ozSGZUvw44Q0EBkLNR3iULx7usCxaptAlsgTWNbEAAA">
+    <div class="note-diagram-cap">Fig. PLC scan cycle - the controller repeats input scan, program execution, output scan and housekeeping continuously, which is why an output can lag an input by up to one scan time</div>
+  </div>
   <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2020/FEB, 2021/JAN, 2021/FEB, 2022/FEB, 2025/MAR - 8+4+4 marks</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> With respect to PLCs used onboard ships: a) Draw and explain the block diagram of a PLC (8). b) Name the onboard ship equipment where PLCs are used (4). c) What are the advantages of PLC controllers over other types of controllers? (4). - 16 marks</div></div>
 
@@ -1387,6 +1397,11 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        18. PROPORTIONAL + INTEGRAL CONTROL
        ========================================== -->
   <div class="n-h1" id="t4-pi">🎛️ 18. PROPORTIONAL + INTEGRAL (P+I) CONTROL</div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/t07-open-closed-loop.webp" alt="Open loop vs closed loop control block diagrams - open loop without feedback, closed loop with feedback path and error signal" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRl4AAABXRUJQVlA4IFIAAACwAwCdASocABUAPu1ur1IppiQiqAgBMB2JaWDrABuz0yacLU8EAAD+8HwNHJ0nv4Nx/zSX+IcEzGCk2/Ms40Is/YfxQsmhGJx4hEmqzFogAAAA">
+    <div class="note-diagram-cap">Fig. Open loop vs closed loop - P+I control is a closed loop: the output is measured, compared with the setpoint, and the error drives the controller. Without that feedback path there is nothing for the P or the I term to act on</div>
+  </div>
   <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/APR2/Q2, 2021/SEP/Q3, 2022/MAR/Q3, 2023/APR/Q5, 2023/SEP/Q4, 2025/MAR/Q2, 2025/NOV/Q5 - 6+10 marks</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> a) Sketch an arrangement showing the principal of a proportional plus integral (P+I) control loop (6). b) Compare the series and parallel resonance circuits (10). - 16 marks (P+I part is 6 marks)</div></div>
 
