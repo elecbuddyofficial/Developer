@@ -68,7 +68,7 @@ function _restoreScroll(topicId) {
     dlg.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(0);background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:99990;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;color:var(--text);white-space:nowrap;opacity:0;transition:opacity .25s,transform .25s;pointer-events:auto;';
     dlg.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--blue)"><path d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg>'
         + '<span>Continue where you left off?</span>'
-        + '<button onclick="window._doContinue(' + saved + ')" style="background:var(--blue);color:#fff;border:none;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;">Continue</button>'
+        + '<button onclick="window._doContinue(' + saved + ')" style="background:var(--blue);color:var(--on-accent);border:none;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;">Continue</button>'
         + '<button onclick="_dismissContinueDlg()" style="background:transparent;color:var(--text2);border:none;font-size:12px;cursor:pointer;flex-shrink:0;padding:4px 6px;">Dismiss</button>';
     document.body.appendChild(dlg);
     requestAnimationFrame(function() {
@@ -102,7 +102,7 @@ function appToast(msg) {
     if (!el) {
         el = document.createElement('div');
         el.id = '_app-toast';
-        el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#e2e8f0;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:99999;pointer-events:none;transition:opacity .3s;white-space:nowrap;max-width:90vw;text-align:center;';
+        el.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--surface3);color:var(--text);padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:99999;pointer-events:none;transition:opacity .3s;white-space:nowrap;max-width:90vw;text-align:center;';
         document.body.appendChild(el);
     }
     el.textContent = msg;

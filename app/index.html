@@ -905,7 +905,7 @@
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
 
     <!-- Notifications -->
-    <button onclick="openNotifs();" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text3);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+    <button onclick="openNotifs();" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       Notifications
       <span class="nb-dot" id="nb-dot" style="position:absolute; right:10px; top:50%; transform:translateY(-50%);"></span>
@@ -917,7 +917,7 @@
 
 
     <!-- Settings -->
-    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text3);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Settings
     </button>
@@ -926,10 +926,10 @@
     <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:var(--amber);font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
     <!-- Courses -->
-    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text3);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
 
     <!-- Sign out -->
-    <button onclick="signOut()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text3);cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+    <button onclick="signOut()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
 
     <!-- Reference footer, pinned to the bottom of the panel. Reaching support
          should not require knowing it lives behind Settings, so it sits on the

@@ -44,10 +44,10 @@
   }
 
   var STATUS = {
-    paid:     { label: 'Paid',      color: '#7FD18B' },
-    refunded: { label: 'Refunded',  color: '#C08A3E' },
-    failed:   { label: 'Failed',    color: '#E06C6C' },
-    created:  { label: 'Incomplete', color: '#6E8AA6' },
+    paid:     { label: 'Paid',      color: 'var(--green)' },
+    refunded: { label: 'Refunded',  color: 'var(--orange)' },
+    failed:   { label: 'Failed',    color: 'var(--red)' },
+    created:  { label: 'Incomplete', color: 'var(--text3)' },
   };
 
   // One definition of where to find us. Three profile panels, two legal pages
@@ -73,8 +73,8 @@
     // the app; the natural height of this row was 38px, which is under it.
     var row = 'display:flex;align-items:center;justify-content:center;gap:7px;'
             + 'padding:9px 10px;min-height:44px;box-sizing:border-box;'
-            + 'border:1px solid #1A3050;border-radius:6px;'
-            + 'font-size:12px;color:#8FA3B8;text-decoration:none;min-width:0;';
+            + 'border:1px solid var(--border);border-radius:6px;'
+            + 'font-size:12px;color:var(--text2);text-decoration:none;min-width:0;';
     // Each control shows what it actually is, the handle and the address,
     // rather than a generic label with the address repeated underneath it.
     // The address is worth showing rather than hiding behind "Contact us":
@@ -97,16 +97,16 @@
     // the only useful outcome. It is selectable text for exactly that reason.
     var btn = 'display:flex;align-items:center;justify-content:center;'
             + 'flex:1;min-height:44px;box-sizing:border-box;'
-            + 'border:1px solid #1A3050;border-radius:8px;'
-            + 'color:#8FA3B8;text-decoration:none;transition:border-color .15s,color .15s;';
-    return '<div style="margin:14px 0;padding-top:14px;border-top:1px solid #1A3050;">'
-      + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6E8AA6;text-align:center;margin-bottom:9px;">Get in touch</div>'
+            + 'border:1px solid var(--border);border-radius:8px;'
+            + 'color:var(--text2);text-decoration:none;transition:border-color .15s,color .15s;';
+    return '<div style="margin:14px 0;padding-top:14px;border-top:1px solid var(--border);">'
+      + '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);text-align:center;margin-bottom:9px;">Get in touch</div>'
       + '<div style="display:flex;gap:8px;">'
       +   '<a href="mailto:' + CONTACT.email + '" title="Email support" aria-label="Email support" style="' + btn + '">' + MAIL_ICON + '</a>'
       +   '<a href="' + CONTACT.whatsapp + '" target="_blank" rel="noopener noreferrer" title="Updates on WhatsApp" aria-label="Updates on WhatsApp" style="' + btn + '">' + WA_ICON + '</a>'
       +   '<a href="https://instagram.com/' + CONTACT.instagram + '" target="_blank" rel="noopener noreferrer" title="@' + CONTACT.instagram + ' on Instagram" aria-label="Instagram" style="' + btn + '">' + IG_ICON + '</a>'
       + '</div>'
-      + '<div style="text-align:center;margin-top:8px;font-size:11px;color:#6E8AA6;user-select:text;">' + CONTACT.email + '</div>'
+      + '<div style="text-align:center;margin-top:8px;font-size:11px;color:var(--text2);user-select:text;">' + CONTACT.email + '</div>'
       + '</div>';
   }
 
@@ -156,7 +156,7 @@
 
     transactionsHtml(rows) {
       if (!rows || !rows.length) {
-        return '<div style="text-align:center;padding:34px 16px;color:#6E8AA6;font-size:13px;line-height:1.6">'
+        return '<div style="text-align:center;padding:34px 16px;color:var(--text2);font-size:13px;line-height:1.6">'
              + 'No payments yet.<br><span style="font-size:12px">Anything you buy will show up here with a full breakdown.</span>'
              + '</div>';
       }
@@ -171,12 +171,12 @@
         // What the money did. Only shown when a code actually moved the price,
         // so an ordinary purchase stays a single clean number.
         if (discounted) {
-          lines += row('Price before discount', '<s style="color:#6E8AA6">' + rupees(p.original_amount) + '</s>');
+          lines += row('Price before discount', '<s style="color:var(--text2)">' + rupees(p.original_amount) + '</s>');
           lines += row('Discount' + (p.coupon_code ? ' (' + esc(p.coupon_code) + ')' : ''),
-                       '<span style="color:#7FD18B">− ' + rupees(p.discount_amount) + '</span>');
+                       '<span style="color:var(--green)">− ' + rupees(p.discount_amount) + '</span>');
         }
         lines += row(p.status === 'paid' || p.status === 'refunded' ? 'Amount paid' : 'Amount',
-                     '<strong style="color:#DDE5EF">' + rupees(p.amount) + '</strong>');
+                     '<strong style="color:var(--text)">' + rupees(p.amount) + '</strong>');
 
         if (p.status === 'refunded') {
           lines += row('Refunded', rupees(p.refund_amount == null ? p.amount : p.refund_amount)
@@ -191,20 +191,20 @@
         var ref = p.razorpay_payment_id || p.razorpay_order_id;
         if (ref) lines += row('Reference', '<span style="font-family:ui-monospace,monospace;font-size:10.5px">' + esc(ref) + '</span>');
 
-        return '<div style="background:#0A1828;border:1px solid #1A3050;border-radius:8px;padding:13px 15px;margin-bottom:10px">'
+        return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:13px 15px;margin-bottom:10px">'
           + '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:9px">'
-          +   '<div style="font-size:13.5px;color:#DDE5EF;font-weight:600">' + esc(planWords(p)) + '</div>'
+          +   '<div style="font-size:13.5px;color:var(--text);font-weight:600">' + esc(planWords(p)) + '</div>'
           +   '<div style="font-size:10.5px;font-weight:700;color:' + st.color + ';white-space:nowrap">' + st.label + '</div>'
           + '</div>'
-          + '<div style="font-size:11px;color:#6E8AA6;margin-bottom:9px">' + longDate(when) + '</div>'
+          + '<div style="font-size:11px;color:var(--text2);margin-bottom:9px">' + longDate(when) + '</div>'
           + lines
           + '</div>';
       }).join('');
 
       function row(label, value) {
         return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:2.5px 0">'
-          + '<span style="color:#8FA3B8">' + label + '</span>'
-          + '<span style="text-align:right;color:#B8C6D6">' + value + '</span>'
+          + '<span style="color:var(--text2)">' + label + '</span>'
+          + '<span style="text-align:right;color:var(--text2)">' + value + '</span>'
           + '</div>';
       }
     },
@@ -215,13 +215,13 @@
      */
     async renderTransactions(container, sb, userId) {
       if (!container) return;
-      container.innerHTML = '<div style="text-align:center;padding:30px;color:#6E8AA6;font-size:13px">Loading…</div>';
+      container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text2);font-size:13px">Loading…</div>';
       try {
         var rows = await this.loadTransactions(sb, userId);
         container.innerHTML = this.transactionsHtml(rows);
       } catch (e) {
-        container.innerHTML = '<div style="text-align:center;padding:30px;color:#E06C6C;font-size:12.5px;line-height:1.6">'
-          + 'Could not load your payments.<br><span style="color:#6E8AA6">Check your connection and try again.</span></div>';
+        container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--red);font-size:12.5px;line-height:1.6">'
+          + 'Could not load your payments.<br><span style="color:var(--text2)">Check your connection and try again.</span></div>';
       }
     },
   };
@@ -268,23 +268,23 @@
       '#nf-toast-open{flex:1;min-width:0;display:flex;align-items:center;gap:10px;background:none;',
       'border:none;cursor:pointer;text-align:left;padding:11px 4px 11px 13px;font-family:inherit;color:inherit}',
       '.nf-toast-chip{flex-shrink:0;font-size:9px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;',
-      'padding:3px 7px;border-radius:100px;background:rgba(93,200,122,.16);color:#5DC87A}',
-      '.nf-toast-chip.t-info{background:rgba(122,184,224,.16);color:#7AB8E0}',
-      '.nf-toast-chip.t-warning{background:rgba(245,158,11,.16);color:#F59E0B}',
-      '.nf-toast-chip.t-deadline{background:rgba(224,90,106,.16);color:#E05A6A}',
+      'padding:3px 7px;border-radius:100px;background:var(--green-dim);color:var(--green)}',
+      '.nf-toast-chip.t-info{background:var(--blue-dim);color:var(--blue)}',
+      '.nf-toast-chip.t-warning{background:var(--orange-dim);color:var(--orange)}',
+      '.nf-toast-chip.t-deadline{background:var(--red-dim);color:var(--red)}',
       '.nf-toast-text{min-width:0;display:flex;flex-direction:column;gap:1px}',
-      '.nf-toast-title{font-size:13px;font-weight:650;color:#DDE5EF;line-height:1.3;overflow:hidden;',
+      '.nf-toast-title{font-size:13px;font-weight:650;color:var(--text);line-height:1.3;overflow:hidden;',
       'text-overflow:ellipsis;white-space:nowrap}',
-      '.nf-toast-sub{font-size:11px;color:#6E8AA6}',
-      '.nf-toast-arrow{flex-shrink:0;color:#4E6B88;margin-left:auto}',
-      '#nf-toast-x{flex-shrink:0;background:none;border:none;border-left:1px solid #1A3050;color:#5A7B98;',
+      '.nf-toast-sub{font-size:11px;color:var(--text2)}',
+      '.nf-toast-arrow{flex-shrink:0;color:var(--text3);margin-left:auto}',
+      '#nf-toast-x{flex-shrink:0;background:none;border:none;border-left:1px solid var(--border);color:var(--text3);',
       'font-size:19px;line-height:1;cursor:pointer;padding:0 13px;font-family:inherit}',
-      '#nf-toast-x:hover{color:#DDE5EF}',
+      '#nf-toast-x:hover{color:var(--text)}',
       // The dot becomes a count. Still circular at one digit so it reads as a
       // badge rather than stray text, and widens past nine.
       '.nb-dot.nb-count{width:auto!important;min-width:17px;height:17px!important;border-radius:9px;',
       'padding:0 4px;display:none;align-items:center;justify-content:center;font-size:10px;',
-      'font-weight:800;color:#fff;line-height:1;font-family:inherit}',
+      'font-weight:800;color:var(--on-accent);line-height:1;font-family:inherit}',
       '.nb-dot.nb-count.show{display:inline-flex!important}',
       '@media (max-width:600px){#nf-toast{top:10px;width:calc(100% - 20px);border-radius:11px}',
       '#nf-toast-open{padding:12px 4px 12px 12px;min-height:52px}#nf-toast-x{padding:0 15px}}',
@@ -508,7 +508,7 @@
 
     rowsHtml: function (rows, ctx) {
       if (!rows || !rows.length) {
-        return '<div style="font-size:11.5px;color:#6E8AA6;">No devices registered yet.</div>';
+        return '<div style="font-size:11.5px;color:var(--text2);">No devices registered yet.</div>';
       }
       var mine = null, self = this;
       try { mine = localStorage.getItem(this.KEY); } catch (e) {}
@@ -517,15 +517,15 @@
           ? new Date(r.last_seen).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
           : '';
         var isThis = r.fingerprint && mine && r.fingerprint === mine;
-        return '<div style="display:flex;align-items:center;gap:10px;background:#070D1A;border:1px solid #1A3050;border-radius:6px;padding:9px 11px;margin-bottom:8px;">'
+        return '<div style="display:flex;align-items:center;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:9px 11px;margin-bottom:8px;">'
           + '<div style="flex:1;min-width:0;">'
-          +   '<div style="font-size:12.5px;color:#DDE5EF;font-weight:600;">' + self.esc(r.device_label || 'Unknown device')
-          +     (isThis ? ' <span style="font-size:10px;color:#C8A44A;font-weight:700;white-space:nowrap;">THIS DEVICE</span>' : '')
+          +   '<div style="font-size:12.5px;color:var(--text);font-weight:600;">' + self.esc(r.device_label || 'Unknown device')
+          +     (isThis ? ' <span style="font-size:10px;color:var(--amber);font-weight:700;white-space:nowrap;">THIS DEVICE</span>' : '')
           +   '</div>'
-          +   (when ? '<div style="font-size:11px;color:#6E8AA6;margin-top:2px;">Last used ' + self.esc(when) + '</div>' : '')
+          +   (when ? '<div style="font-size:11px;color:var(--text2);margin-top:2px;">Last used ' + self.esc(when) + '</div>' : '')
           + '</div>'
           + '<button onclick="EBDevices.remove(' + JSON.stringify(String(r.id)).replace(/"/g, '&quot;') + ',&quot;' + ctx + '&quot;)" '
-          +   'style="flex-shrink:0;min-height:34px;padding:6px 12px;background:none;border:1px solid #E05A6A;border-radius:6px;font-size:12px;color:#E05A6A;font-weight:600;cursor:pointer;font-family:inherit;">Remove</button>'
+          +   'style="flex-shrink:0;min-height:34px;padding:6px 12px;background:none;border:1px solid #E05A6A;border-radius:6px;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;font-family:inherit;">Remove</button>'
           + '</div>';
       }).join('');
     },
@@ -551,14 +551,14 @@
       el.style.cssText = 'display:none;position:fixed;inset:0;z-index:10006;background:rgba(4,9,20,0.95);backdrop-filter:blur(6px);overflow-y:auto;';
       el.innerHTML =
         '<div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">'
-        + '<div style="width:100%;max-width:440px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">'
-        +   '<div style="font-size:18px;font-weight:700;color:#DDE5EF;">Too many devices</div>'
-        +   '<div style="font-size:12.5px;color:#8FA3B8;margin-top:6px;line-height:1.55;">'
+        + '<div style="width:100%;max-width:440px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">'
+        +   '<div style="font-size:18px;font-weight:700;color:var(--text);">Too many devices</div>'
+        +   '<div style="font-size:12.5px;color:var(--text2);margin-top:6px;line-height:1.55;">'
         +     'Your account is already signed in on <strong id="dev-block-limit">3</strong> devices, which is the limit. '
         +     'Remove one below to use this device. Whichever you remove is signed out the next time it opens the app.'
         +   '</div>'
         +   '<div id="dev-block-list" style="margin-top:16px;"></div>'
-        +   '<button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid #1A3050;border-radius:8px;font-size:13px;color:#8FA3B8;font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>'
+        +   '<button onclick="location.reload()" style="width:100%;min-height:44px;margin-top:14px;background:none;border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text2);font-weight:600;cursor:pointer;font-family:inherit;">Try again</button>'
         + '</div></div>';
       document.body.appendChild(el);
       return el;

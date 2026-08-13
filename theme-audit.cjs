@@ -168,6 +168,31 @@ for (const page of PAGES) {
   }
 }
 
+/* PASS THREE: markup built in JavaScript.
+   The two passes above parse the HTML pages, so anything a .js file writes
+   into the DOM at runtime is invisible to them. account.js builds the contact
+   footer and the payments list and carried 32 hardcoded colours through both
+   earlier sweeps untouched, which is why the social icons stayed pale after
+   the pages were fixed.
+
+   Executing those files to inspect the result would mean standing up most of
+   the app, so this settles for the cheaper and still decisive check: a colour
+   literal inside a style string in JS is a colour that cannot follow the
+   theme, whatever it resolves to. */
+const JS_FILES = ['app/app.js', 'app/account.js', 'app/table-hints.js'];
+const jsHits = [];
+for (const f of JS_FILES) {
+  if (!fs.existsSync(f)) continue;
+  fs.readFileSync(f, 'utf8').split('\n').forEach((line, i) => {
+    // Only colour and background declarations; ignore box-shadow, gradients
+    // and rgba() overlays, which are decoration rather than legibility.
+    for (const m of line.matchAll(/(?:^|[;"'\s])(color|background(?:-color)?)\s*:\s*(#[0-9a-fA-F]{3,6})/g)) {
+      jsHits.push({ file: f, line: i + 1, prop: m[1], value: m[2],
+                    snippet: line.trim().slice(0, 60) });
+    }
+  });
+}
+
 console.log('THEME RESPONSIVENESS AUDIT');
 console.log('Both directions: a fixed colour on one side of a pair and a theme');
 console.log('variable on the other, checked in every theme.\n');
@@ -190,6 +215,16 @@ if (!findings.length) {
     console.log('');
   }
 }
+console.log('\n── Colours hardcoded in JavaScript ───────────────────────');
+if (!jsHits.length) {
+  console.log('  None. Every colour written from JS goes through a token.');
+} else {
+  console.log('  These cannot follow the theme, wherever they end up:\n');
+  for (const h of jsHits.slice(0, 25))
+    console.log('  ' + (h.file + ':' + h.line).padEnd(24) + h.prop + ': ' + h.value + '   ' + h.snippet);
+  if (jsHits.length > 25) console.log('  ... and ' + (jsHits.length - 25) + ' more');
+}
+
 console.log('\nRule: a fixed colour on one side of a pair and a theme variable on');
 console.log('the other is always a bug. Fix both sides, or neither.');
-process.exitCode = findings.length ? 1 : 0;
+process.exitCode = (findings.length || jsHits.length) ? 1 : 0;
