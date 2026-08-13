@@ -19,6 +19,34 @@ only remote this project pushes to.
 
 ## 2026-08-13
 
+### `ed32773` — Offers show their deadline, and stop announcing dead sales ⚠️
+Blesson asked whether buyers see how long an offer lasts. They did not, and the
+question turned up three faults.
+
+**Every dated offer ended a day early.** A date input yields a bare day, and
+`new Date("2026-08-20")` is midnight at the *start* of the 20th, so an offer set
+to run "until 20 August" died as the 19th ended and never ran on the day it
+named. Start dates now take the beginning of the chosen day, end dates the end.
+
+**The banner announced sales that were not running.** It keyed off the offer
+name, written the moment the offer is set up, so a scheduled offer was
+advertised immediately over full-price cards and an expired one kept being
+advertised. It now keys off whether the discount is genuinely live.
+
+**The deadline is now shown**, getting louder as it closes: "Ends 12 September"
+→ "3 days left" → "Ends tomorrow" → "Ends today", with urgency styling in the
+last three days. No end date shows nothing rather than inventing one.
+
+Also **`.tag-green` had no CSS rule** while `.tag-blue` and `.tag-orange` did,
+so the "Topic Focused" tag rendered as a colourless pill. Found by a CSS
+coverage audit for classes used with no rule behind them. sw `v125 → v126`.
+
+### `90fcfe6` — plan-name-audit tool
+The plan names live in the database and in four hardcoded maps, so they can
+drift silently: the card would say one thing and the receipt another. This
+checks every copy against production and walks the payment path.
+
+
 ### `34d3c3a` — Plans tab: one price grid instead of three twelve-column tables
 Three tables of twelve columns, 27 inputs and nine Save buttons became a **3 x 3
 price grid** shaped like the offer selector above it. Seven of those columns
