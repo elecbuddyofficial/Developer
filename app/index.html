@@ -1946,32 +1946,100 @@ function setTheme(t) {
     // Built here rather than as markup in the page so it cannot be dismissed by
     // anything already on screen, and appended to <body> so no scrolling or
     // clipping ancestor can trap it.
-    function _showSignupHold(status) {
+    /* The three things a person can be told about their own signup.
+
+       Blesson: pending should say "wait while we verify", approved should say
+       so and start the trial, rejected should explain that the address was the
+       problem and then remove the account.
+
+       Every version names the DOMAIN. "We could not approve this account" is
+       useless: it reads as a judgement on the person. "We do not open accounts
+       on @miet.ac.in addresses" tells them exactly what to change, which is
+       the only thing they can act on. */
+    function _showSignupHold(status, domain) {
       if (document.getElementById('_signup-hold')) return;
       var rejected = status === 'rejected';
+      var at = domain ? '@' + domain : 'that address';
+
       var o = document.createElement('div');
       o.id = '_signup-hold';
+      // Scoped palette, like the paywall: this screen is the same in every
+      // theme, and pinning both sides means no theme can hide the text.
       o.style.cssText = 'position:fixed;inset:0;z-index:100000;background:#070D1A;' +
+        '--text:#F8FAFC;--text3:#94A3B8;--amber:#C8A44A;' +
         'display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;';
+
       o.innerHTML =
-        '<div style="max-width:440px;text-align:center;color:var(--text);font-size:14px;line-height:1.7;">' +
+        '<div style="max-width:460px;text-align:center;color:var(--text);font-size:14px;line-height:1.7;">' +
           '<div style="font-size:38px;margin-bottom:14px;">' + (rejected ? '&#9940;' : '&#9203;') + '</div>' +
           '<h2 style="font-size:19px;margin:0 0 12px;color:var(--amber);">' +
-            (rejected ? 'Account not approved' : 'Waiting for approval') + '</h2>' +
-          '<p style="margin:0 0 14px;">' + (rejected
-            ? 'We could not approve this account. If you believe that is a mistake, reply to your signup email and we will take another look.'
-            : 'You signed up with a company or college address, so we check it by hand before opening access. This is usually quick, and your free trial does not start counting until we approve you.') +
-          '</p>' +
+            (rejected ? 'We cannot open an account on this address'
+                      : 'Please wait while we verify your email') + '</h2>' +
+          (rejected
+            ? '<p style="margin:0 0 14px;">Accounts on <strong>' + escUp(at) + '</strong> are not accepted. ' +
+              'Please sign up again using a personal address from a common provider, ' +
+              'such as Gmail, Outlook, Yahoo or iCloud.</p>' +
+              '<p style="margin:0 0 18px;color:var(--text3);font-size:12.5px;">' +
+              'This account is being removed now. Nothing was charged, and none of your details are kept.</p>'
+            : '<p style="margin:0 0 14px;">You signed up with <strong>' + escUp(at) + '</strong>, which is not one of ' +
+              'the everyday email providers we recognise, so an admin checks it by hand before opening access. ' +
+              'It is usually quick.</p>' +
+              '<p style="margin:0 0 18px;">Your <strong>free trial has not started</strong> and will not begin ' +
+              'until you are approved, so nothing is being used up while you wait.</p>') +
           '<p style="margin:0 0 20px;color:var(--text3);font-size:12.5px;">' +
-            'Need it sooner? Reply to your signup email, or write to support@elec-buddy.com.</p>' +
+            (rejected ? 'If you think this is a mistake, write to support@elec-buddy.com.'
+                      : 'Need it sooner? Reply to your signup email, or write to support@elec-buddy.com.') + '</p>' +
           '<button id="_hold-out" style="background:transparent;border:1px solid #2A3550;color:var(--text3);' +
-            'padding:9px 20px;border-radius:8px;font-size:13px;cursor:pointer;font:inherit;">Sign out</button>' +
+            'padding:9px 20px;border-radius:8px;font-size:13px;cursor:pointer;font:inherit;">' +
+            (rejected ? 'Close' : 'Sign out') + '</button>' +
         '</div>';
       document.body.appendChild(o);
       document.documentElement.classList.add('_modal-open');
-      document.getElementById('_hold-out').onclick = function() {
+
+      /* Rejected accounts are deleted here rather than at the moment of
+         rejection. Deleting on the admin's click means the person is never
+         told anything: they come back, the login fails, and they cannot tell
+         whether it is their password, the site, or a decision somebody made.
+         The row survives exactly long enough to deliver the sentence above. */
+      if (rejected && window._sbClient) {
+        window._sbClient.rpc('eb_delete_my_rejected_account').then(function () {}, function () {});
+      }
+
+      document.getElementById('_hold-out').onclick = function () {
         if (window._sbClient) window._sbClient.auth.signOut().then(kick, kick);
         else kick();
+      };
+    }
+
+    /* Shown once, when a held account has been let in. Without it the only
+       signal is that content silently stops being locked, which nobody
+       notices, and the person has no idea their trial clock just started. */
+    function _showApproved() {
+      if (document.getElementById('_signup-ok')) return;
+      var o = document.createElement('div');
+      o.id = '_signup-ok';
+      o.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(4,9,20,0.93);' +
+        '--text:#F8FAFC;--text3:#94A3B8;--green:#5DC87A;' +
+        'display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;';
+      o.innerHTML =
+        '<div style="max-width:420px;text-align:center;color:var(--text);font-size:14px;line-height:1.7;' +
+          'background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:28px 24px;">' +
+          '<div style="font-size:40px;margin-bottom:12px;">&#9989;</div>' +
+          '<h2 style="font-size:19px;margin:0 0 12px;color:var(--green);">Your email has been verified</h2>' +
+          '<p style="margin:0 0 18px;">An admin has approved your address. Your <strong>free trial ' +
+            'starts now</strong>, and everything is open.</p>' +
+          '<button id="_ok-go" style="background:var(--green);color:#06200F;border:none;' +
+            'padding:11px 26px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font:inherit;">' +
+            'Start studying</button>' +
+        '</div>';
+      document.body.appendChild(o);
+      document.documentElement.classList.add('_modal-open');
+      document.getElementById('_ok-go').onclick = function () {
+        // Marked only when they acknowledge it, so a load that never finished
+        // rendering does not burn the one time it is shown.
+        if (window._sbClient) window._sbClient.rpc('eb_mark_approval_seen').then(function () {}, function () {});
+        o.remove();
+        document.documentElement.classList.remove('_modal-open');
       };
     }
 
@@ -1991,7 +2059,20 @@ function setTheme(t) {
         // the alternative is the upgrade modal telling them to buy, which is
         // the wrong story entirely: their trial has not started and there is
         // nothing they can do from here except wait.
-        if (profile.signup_status && profile.signup_status !== 'approved') {
+        /* One RPC rather than widening the profile read: it returns the
+           status, the domain to name in the message, and whether the approval
+           notice is still owed. Reading those off the profiles row instead
+           would mean granting the account holder read access to it before we
+           have decided they should be in at all. */
+        if (window._sbClient) {
+          var _ss = await window._sbClient.rpc('eb_my_signup_state');
+          var _st = _ss && _ss.data && _ss.data[0];
+          if (_st && _st.status && _st.status !== 'approved') {
+            _showSignupHold(_st.status, _st.domain);
+            return;
+          }
+          if (_st && _st.owed_notice) _showApproved();
+        } else if (profile.signup_status && profile.signup_status !== 'approved') {
           _showSignupHold(profile.signup_status);
           return;
         }
@@ -2034,6 +2115,13 @@ function setTheme(t) {
       }
     }
 
+    /* Run it once NOW, not only on the timer. checkSession() is what puts a
+       held or rejected account behind the notice, and it only ran every ten
+       minutes or when the tab regained focus. A new signup therefore had
+       several minutes inside the app before anything stopped them: one
+       pending account read two topics and met the paywall in the first two
+       minutes, entirely because this line was missing. */
+    checkSession();
     setInterval(checkSession, 10 * 60 * 1000);
     document.addEventListener('visibilitychange', function() {
       if (document.visibilityState === 'visible') checkSession();
