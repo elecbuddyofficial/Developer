@@ -19,6 +19,31 @@ only remote this project pushes to.
 
 ## 2026-08-13
 
+### `388df0a` — Offers: one named composer, and a sale no longer deletes Best Value
+A discount could be applied but never explained, so a sale showed as a
+struck-through number with no reason. The bulk panel was also four stacked
+blocks (one per track, plus "every plan") of five controls each: twenty
+controls for one idea, and none of them set the offer name.
+
+Replaced with a single composer: name, detail line, discount, dates, and a
+**3 x 3 selector** that is the product itself, tracks down the side and
+durations across the top. "Everything", "just Expedition" and "only the
+12-month plans" become the same gesture. Preview renders the real cards, and
+warns above 50%, above 100%, and when the offer has no name.
+
+**The bug behind the jargon:** the promo badge *replaced* the "Best Value"
+badge, so running a sale silently deleted the strongest nudge toward the
+12-month plan. The offer is now named once in a banner above the cards and the
+cards keep Best Value; differing names per plan still fall back to per-card
+badges. The admin preview was about to disagree with the app and now renders
+the banner too. sw `v122 → v124`.
+
+### `3a741e5` — Aptitude A13: Average
+Notes plus 17 questions. Weighted averages weight by counts not averages (30
+boys at 12 and 20 girls at 17 is 14, not 14.5), and equal distances at 60 and
+40 kmph average 48, not 50.
+
+
 ### `e034791` — Notification modal unreadable in light theme ⚠️
 `.nfd` hardcoded `background:#0E1E33` while its text used `var(--text)`, so in
 light theme it was dark on dark. **Claimed fixed once before and was not**: the
