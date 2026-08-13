@@ -19,6 +19,24 @@ only remote this project pushes to.
 
 ## 2026-08-13
 
+### `9d433e1` — Plans side by side on desktop, tabs stop repeating themselves
+**The tabs printed their own name twice.** Each shows a short label with the
+full track name beneath. Before the rename those differed ("WRITTEN" over
+"Passage"); after it every tab read "WRITTEN PAPER / WRITTEN PAPER". The
+sub-line now appears only when it adds something.
+
+**Plans are horizontal on desktop.** Stacked, three prices cannot be compared
+without scrolling. The modal widens from 520px to 880px above a 900px viewport.
+The grid minimum was solved, not guessed: 260px is the only value giving one
+column in the narrow modal and exactly three in the wide one; 215px would have
+left the phone at two cramped columns.
+
+**The offer banner was a hierarchy problem, not contrast.** Measured at 8.89:1,
+well above AA, but the campaign name was 800-weight uppercase on a solid fill
+while the actual offer was 12.5px muted grey. The message now leads.
+sw `v126 → v127`.
+
+
 ### `ed32773` — Offers show their deadline, and stop announcing dead sales ⚠️
 Blesson asked whether buyers see how long an offer lasts. They did not, and the
 question turned up three faults.
