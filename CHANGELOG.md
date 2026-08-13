@@ -19,6 +19,35 @@ only remote this project pushes to.
 
 ## 2026-08-13
 
+### `34d3c3a` — Plans tab: one price grid instead of three twelve-column tables
+Three tables of twelve columns, 27 inputs and nine Save buttons became a **3 x 3
+price grid** shaped like the offer selector above it. Seven of those columns
+were the offer composer's job (discount, both dates, effective price, offer name,
+description) and having them in two places meant two controls could disagree
+about the same sale.
+
+Adds a **live diff** naming every price about to change before it is written,
+and a Save that stays disabled until something actually differs. Names and the
+active switch moved into a panel that stays shut.
+
+**Coupons were printing the raw database key**: the list pushed `applies_scope`
+straight into the UI, so a targeted coupon read "written · 3mo". sw `v124 → v125`.
+
+### `50c0c51` — Plan names say what they are
+Passage / Voyage / Expedition → **Written Paper / Oral & Viva / Full COC
+Preparation**. Launch / Mariner / Master → **3 / 6 / 12 Months**.
+
+The track names always needed a bolted-on translation ("Passage - Written
+Only"), and read as a good/better/best ladder when they are three different
+products. The duration names were worse: they read as capability levels (Master
+Mariner is a real rank) over identical content, inventing a hierarchy the
+product does not have.
+
+**Internal keys unchanged** — // and // are
+referenced by payments, entitlements, coupons and the funnel. Receipts verified
+across all nine subject lines; the card no longer prints the duration twice.
+
+
 ### `388df0a` — Offers: one named composer, and a sale no longer deletes Best Value
 A discount could be applied but never explained, so a sale showed as a
 struck-through number with no reason. The bulk panel was also four stacked
