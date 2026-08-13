@@ -1305,7 +1305,7 @@
 <!-- ── Upgrade Modal ──────────────────────────────────────── -->
 <div id="upgrade-modal" style="display:none;position:fixed;inset:0;z-index:10002;background:rgba(4,9,20,0.92);backdrop-filter:blur(8px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div style="width:100%;max-width:520px;margin-top:20px;">
+    <div class="up-modal-inner">
 
       <!-- Header -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;">
@@ -1343,7 +1343,7 @@
 
       <!-- Duration cards (3 / 6 / 12 months), rendered from pricing_plans -->
       <div id="up-offer-banner"></div>
-        <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+        <div id="up-tier-cards"></div>
 
       <!-- Features -->
       <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
@@ -1378,6 +1378,25 @@
   .up-track-tab:hover { background: rgba(20,42,68,0.8); }
   .up-track-tab.active { background: #C8A44A; border-color: #C8A44A; color: #070D1A; }
 
+  /* The modal was capped at 520px, which is right for one column of cards but
+     leaves three at about 160px each: too narrow for a price, a line of
+     description and a Pay button. It widens only where there is room to widen,
+     so the phone layout is untouched. */
+  .up-modal-inner { width: 100%; max-width: 520px; margin-top: 20px; }
+  @media (min-width: 900px) { .up-modal-inner { max-width: 880px; } }
+
+  /* Three plans, side by side on a wide screen.
+     Stacked, they cannot be compared without scrolling, which is the one job
+     a pricing table has. Auto-fit rather than a fixed three columns so it
+     collapses to two and then one on its own as the space runs out, with no
+     breakpoint to keep in step with the modal width. */
+  #up-tier-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: stretch;
+  }
   .up-plan-card {
     background: rgba(13,30,51,0.7);
     border: 1px solid #1A3050;
@@ -1385,7 +1404,13 @@
     padding: 18px 18px 16px;
     position: relative;
     transition: border-color .15s, background .15s;
+    /* Column layout so the Pay button sits on the baseline in every card even
+       when the descriptions run to different lengths. */
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
   }
+  .up-plan-card .up-card-gets { flex: 1 0 auto; }
   .up-plan-card:hover { background: rgba(20,42,68,0.8); }
   .up-plan-card-best { border-color: #C8A44A; }
   .up-ribbon {
@@ -1405,15 +1430,15 @@
   }
   .up-offer-tag {
     background: var(--green); color: var(--on-accent);
-    font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+    font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
   }
-  .up-offer-desc { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
+  .up-offer-desc { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.45; }
   /* The deadline. Quiet when it is weeks away, loud in the last few days,
      because that is when it is actually a reason to decide. */
   .up-offer-ends {
     font-size: 11.5px; font-weight: 700; letter-spacing: .03em;
-    color: var(--text2); border: 1px solid var(--border2);
+    color: var(--text); border: 1px solid var(--border2);
     padding: 3px 9px; border-radius: 20px; white-space: nowrap;
   }
   .up-offer-ends.is-urgent {
@@ -3270,7 +3295,8 @@ function renderUpgradeTrackTabs() {
     var what  = SCOPE_TAB_LABEL[scope] || scope;
     return '<button type="button" class="up-track-tab' + (scope === _upActiveTrack ? ' active' : '') + '" data-scope="' + scope + '">'
       + escUp(what).toUpperCase()
-      + '<span class="utt-brand">' + escUp(brand) + '</span>'
+      + (brand && brand.toUpperCase() !== String(what).toUpperCase()
+          ? '<span class="utt-brand">' + escUp(brand) + '</span>' : '')
       + '</button>';
   }).join('');
 }
