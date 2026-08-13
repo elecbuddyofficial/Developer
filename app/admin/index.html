@@ -343,6 +343,30 @@
     /* Mirrors .up-offer in the app: the offer is named once above the cards,
        not repeated on each. If these two ever drift, the preview starts
        lying about the thing it previews. */
+    /* Price grid, same shape as the offer selector so the two read as one
+       idea rather than two features. */
+    .pe-tbl th { padding:0 }
+    .pe-hdr, .pe-rowhdr { display:inline-block; padding:7px 12px; font-size:12px; font-weight:600;
+      color:var(--text2); white-space:nowrap; }
+    .pe-rowhdr { text-align:left; }
+    .pe-cell { display:flex; align-items:center; gap:3px; flex-wrap:wrap;
+      background:var(--surface2); border:1px solid var(--border); border-radius:var(--r6);
+      padding:8px 10px; min-width:118px; }
+    .pe-cell:focus-within { border-color:var(--blue); }
+    .pe-off { opacity:.55; }
+    .pe-cur { font-size:12.5px; color:var(--text3); }
+    .pe-input { width:74px; background:none; border:0; color:var(--text); font-size:14px;
+      font-weight:700; font-family:inherit; font-variant-numeric:tabular-nums; padding:0; }
+    .pe-input:focus { outline:none; }
+    .pe-sale, .pe-hidden { flex-basis:100%; font-size:9.5px; letter-spacing:.03em; text-transform:uppercase; }
+    .pe-sale { color:var(--green); }
+    .pe-hidden { color:var(--orange); }
+    @media (max-width:720px) {
+      .pe-cell { min-width:0; padding:8px; }
+      .pe-input { width:58px; font-size:13px; }
+      .pe-hdr, .pe-rowhdr { padding:7px 6px; font-size:11px; }
+    }
+
     .of-banner { display:flex; align-items:center; gap:9px; flex-wrap:wrap;
       background:var(--green-dim); border:1px solid var(--green-border);
       border-radius:9px; padding:8px 12px; margin-bottom:10px; }
@@ -1482,9 +1506,9 @@
             <label class="ad-label">New Plan</label>
             <select class="ad-select" id="grant-plan" onchange="grantPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="3mo">3 Months - Launch</option>
-              <option value="6mo">6 Months - Mariner</option>
-              <option value="12mo">12 Months - Master</option>
+              <option value="3mo">3 Months</option>
+              <option value="6mo">6 Months</option>
+              <option value="12mo">12 Months</option>
               <option value="lifetime">Lifetime</option>
               <optgroup label="Legacy (no longer sold)">
                 <option value="starter">Starter</option>
@@ -1496,9 +1520,9 @@
           <div class="ad-field" id="grant-scope-field">
             <label class="ad-label">Scope</label>
             <select class="ad-select" id="grant-scope" onchange="_refreshGrantPreview()">
-              <option value="written">Written Only - Passage</option>
-              <option value="oral">Oral Only - Voyage</option>
-              <option value="both" selected>Both - Expedition</option>
+              <option value="written">Written Paper</option>
+              <option value="oral">Oral &amp; Viva</option>
+              <option value="both" selected>Full COC Preparation</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1710,9 +1734,9 @@
       </select>
       <select id="pay-filter-scope" onchange="loadPayments()" style="padding:7px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">
         <option value="">All scopes</option>
-        <option value="written">Written - Passage</option>
-        <option value="oral">Oral - Voyage</option>
-        <option value="both">Both - Expedition</option>
+        <option value="written">Written Paper</option>
+        <option value="oral">Oral &amp; Viva</option>
+        <option value="both">Full COC Preparation</option>
       </select>
       <input class="ad-input" id="pay-filter-from" type="date" onchange="loadPayments()" title="From date" style="max-width:150px">
       <input class="ad-input" id="pay-filter-to" type="date" onchange="loadPayments()" title="To date" style="max-width:150px">
@@ -1797,18 +1821,18 @@
         <div class="ad-field">
           <label class="ad-label">Grants Plan</label>
           <select class="ad-select" id="cp-plan" onchange="cpPlanChanged()">
-            <option value="3mo">3 Months - Launch</option>
-            <option value="6mo">6 Months - Mariner</option>
-            <option value="12mo">12 Months - Master</option>
+            <option value="3mo">3 Months</option>
+            <option value="6mo">6 Months</option>
+            <option value="12mo">12 Months</option>
             <option value="lifetime">Lifetime</option>
           </select>
         </div>
         <div class="ad-field" id="cp-scope-field">
           <label class="ad-label">Scope</label>
           <select class="ad-select" id="cp-scope">
-            <option value="written">Written Only - Passage</option>
-            <option value="oral">Oral Only - Voyage</option>
-            <option value="both" selected>Both - Expedition</option>
+            <option value="written">Written Paper</option>
+            <option value="oral">Oral &amp; Viva</option>
+            <option value="both" selected>Full COC Preparation</option>
           </select>
         </div>
         <div class="ad-field">
@@ -1833,9 +1857,9 @@
           <label class="ad-label">Applies to Scope</label>
           <select class="ad-select" id="cp-applies-scope" onchange="cpPreview()">
             <option value="">Any scope</option>
-            <option value="written">Written Only - Passage</option>
-            <option value="oral">Oral Only - Voyage</option>
-            <option value="both">Both - Expedition</option>
+            <option value="written">Written Paper</option>
+            <option value="oral">Oral &amp; Viva</option>
+            <option value="both">Full COC Preparation</option>
           </select>
           <div class="ad-hint">Which section the offer covers. "Any" lets the buyer choose.</div>
         </div>
@@ -1898,7 +1922,7 @@
   <div class="ad-tab" id="tab-plans">
     <div class="ad-ph">
       <h1>Plans</h1>
-      <p>Duration &times; scope pricing shown in the upgrade modal. Edits here go live immediately, no deploy needed.</p>
+      <p>What buyers pay, and what any sale is called. Edits go live immediately, no deploy needed.</p>
     </div>
 
     <div class="ad-card" style="margin-bottom:18px">
@@ -2232,9 +2256,9 @@
             <label class="ad-label">New Plan</label>
             <select class="ad-select" id="prof-edit-plan" onchange="profEditPlanChanged()">
               <option value="trial">Trial</option>
-              <option value="3mo">3 Months - Launch</option>
-              <option value="6mo">6 Months - Mariner</option>
-              <option value="12mo">12 Months - Master</option>
+              <option value="3mo">3 Months</option>
+              <option value="6mo">6 Months</option>
+              <option value="12mo">12 Months</option>
               <option value="lifetime">Lifetime</option>
               <optgroup label="Legacy (no longer sold)">
                 <option value="starter">Starter</option>
@@ -2246,9 +2270,9 @@
           <div class="ad-field" id="prof-edit-scope-field">
             <label class="ad-label">Scope</label>
             <select class="ad-select" id="prof-edit-scope" onchange="_refreshProfEditPreview()">
-              <option value="written">Written Only - Passage</option>
-              <option value="oral">Oral Only - Voyage</option>
-              <option value="both" selected>Both - Expedition</option>
+              <option value="written">Written Paper</option>
+              <option value="oral">Oral &amp; Viva</option>
+              <option value="both" selected>Full COC Preparation</option>
             </select>
           </div>
           <div class="ad-field">
@@ -2513,7 +2537,7 @@ function loadPricingPlanCache() {
   return _pricingPlanCachePromise;
 }
 
-// Branded "Track Tier" name (e.g. "Voyage Mariner") for a duration+scope
+// Full "Track Duration" name (e.g. "Oral & Viva 6 Months") for a duration+scope
 // pair; falls back to the old plain name for legacy/trial/lifetime values
 // that have no track/tier concept.
 function planLabel(plan, scope) {
@@ -2525,10 +2549,10 @@ function planLabel(plan, scope) {
   return legacyNames[plan] || plan || 'Trial';
 }
 
-// Just the tier name (Launch/Mariner/Master) for duration-only contexts -
+// Just the duration label for duration-only contexts -
 // shared across all three tracks in the seed data, so scope isn't needed.
 function tierLabel(duration) {
-  var names = { '3mo': 'Launch', '6mo': 'Mariner', '12mo': 'Master' };
+  var names = { '3mo': '3 Months', '6mo': '6 Months', '12mo': '12 Months' };
   return names[duration] || duration;
 }
 
@@ -3322,9 +3346,9 @@ function drawPlanDist(all, now) {
   // future new duration value doesn't silently become invisible here again.
   var PLAN_META = [
     { key: 'lifetime', label: 'Lifetime',         color: 'var(--orange)' },
-    { key: '12mo',     label: 'Master (12mo)',     color: 'var(--purple)' },
-    { key: '6mo',      label: 'Mariner (6mo)',     color: 'var(--blue)' },
-    { key: '3mo',      label: 'Launch (3mo)',      color: 'var(--green)' },
+    { key: '12mo',     label: '12 Months',         color: 'var(--purple)' },
+    { key: '6mo',      label: '6 Months',          color: 'var(--blue)' },
+    { key: '3mo',      label: '3 Months',          color: 'var(--green)' },
     { key: 'pro',      label: 'Pro (legacy)',      color: 'var(--purple)' },
     { key: 'standard', label: 'Standard (legacy)', color: 'var(--blue)' },
     { key: 'starter',  label: 'Starter (legacy)',  color: 'var(--green)' },
@@ -5613,8 +5637,8 @@ async function loadCoupons() {
     var target = '';
     if (c.kind !== 'grant') {
       var bits = [];
-      if (c.applies_duration) bits.push(c.applies_duration);
-      if (c.applies_scope)    bits.push(c.applies_scope);
+      if (c.applies_duration) bits.push(tierLabel(c.applies_duration));
+      if (c.applies_scope)    bits.push(TRACK_LABEL_ADMIN[c.applies_scope] || c.applies_scope);
       if (c.min_amount)       bits.push('min &#8377;' + (c.min_amount / 100).toFixed(0));
       target = '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (bits.length ? bits.join(' &middot; ') : 'any plan') + '</div>';
     }
@@ -5774,16 +5798,16 @@ async function setCouponActive(code, active) {
 
    So: one offer, named, with a grid for who gets it. The grid is 3 tracks by
    3 durations because that is exactly what the product is, and it makes
-   "everything", "just Expedition" and "only the 12-month plans" the same
+   "everything", "just Full COC" and "only the 12-month plans" the same
    gesture instead of three different features.
 
    Base price, track and tier names and the active switch are still never
    touched here, so an offer can never quietly undo a price edit. */
 
 var TRACKS_OF = [
-  { key: 'written', name: 'Passage',    sub: 'Written only' },
-  { key: 'oral',    name: 'Voyage',     sub: 'Oral only' },
-  { key: 'both',    name: 'Expedition', sub: 'Both' },
+  { key: 'written', name: 'Written Paper', sub: 'Written exam' },
+  { key: 'oral',    name: 'Oral & Viva',   sub: 'Oral exam' },
+  { key: 'both',    name: 'Full COC',      sub: 'Written + Oral' },
 ];
 var DURS_OF = [
   { key: '3mo',  name: '3 months' },
@@ -6066,7 +6090,7 @@ function renderBulkControls() { renderOfferControls(); }
 
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
-var TRACK_LABEL_ADMIN = { written: 'Passage - Written Only', oral: 'Voyage - Oral Only', both: 'Expedition - Both' };
+var TRACK_LABEL_ADMIN = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation' };
 
 async function loadPlansTab() {
   var wrap = document.getElementById('plans-groups');
@@ -6087,82 +6111,201 @@ function planEffectiveAmount(row) {
   return active ? Math.round(row.base_amount * (1 - row.discount_percent / 100)) : row.base_amount;
 }
 
+/* ── PLAN EDITOR ──────────────────────────────────────────────────────
+   The nine plans as one price grid, matching the offer selector directly
+   above it: tracks down the side, durations across the top.
+
+   It used to be three tables of twelve columns, twenty-seven inputs and nine
+   Save buttons. Seven of those columns are now the offer composer's job
+   (discount, both dates, effective price, the offer name and its detail), and
+   duplicating them here meant two places could disagree about the same sale.
+   They are gone from this editor entirely.
+
+   What is genuinely edited here is the base price, so that is what the grid
+   holds. Names and the active switch are real but rare, so they sit in a
+   panel that stays shut until asked for.
+
+   Nothing saves until you press Save, and the button says exactly what it is
+   about to change. */
+
 function renderPlansTab() {
-  renderBulkControls();
+  renderOfferControls();
   var wrap = document.getElementById('plans-groups');
   if (!window._plansRows || !window._plansRows.length) {
     wrap.innerHTML = '<div class="ad-loading">No pricing rows found. Run pricing_v2_setup.sql to seed them.</div>';
     return;
   }
-  wrap.innerHTML = TRACK_ORDER_ADMIN.map(function(scope) {
-    var rows = TIER_ORDER_ADMIN.map(function(dur) {
-      return window._plansRows.filter(function(r) { return r.scope === scope && r.duration === dur; })[0];
-    }).filter(Boolean);
-    if (!rows.length) return '';
-    return '<div class="ad-card" style="margin-bottom:16px">'
-      + '<div class="ad-card-head">' + esc(TRACK_LABEL_ADMIN[scope] || scope) + '</div>'
-      + '<div class="ad-table-wrap"><table class="ad-table">'
-      + '<thead><tr><th>Duration</th><th>Track Name</th><th>Tier Name</th><th>Base Price (₹)</th><th>Discount %</th>'
-      + '<th>Discount From</th><th>Discount Until</th><th>Effective</th><th>Promo Label</th><th>Description</th><th>Active</th><th></th></tr></thead>'
-      + '<tbody>' + rows.map(planRowHtml).join('') + '</tbody>'
-      + '</table></div></div>';
+
+  var html = '<div class="ad-card" style="margin-bottom:16px">'
+    + '<div class="ad-card-head">Prices</div>'
+    + '<div class="ad-card-sub">The nine plans, laid out the same way as the offer selector above. '
+    +   'Type a new price and press Save. Amounts are in rupees, and a sale never changes these: '
+    +   'it is applied on top.</div>'
+    + '<div style="overflow-x:auto"><table class="of-tbl pe-tbl"><thead><tr><th></th>'
+    + TIER_ORDER_ADMIN.map(function (d) {
+        return '<th><span class="pe-hdr">' + esc(tierLabel(d)) + '</span></th>';
+      }).join('')
+    + '</tr></thead><tbody>'
+    + TRACK_ORDER_ADMIN.map(function (scope) {
+        return '<tr><th><span class="pe-rowhdr">' + esc(TRACK_LABEL_ADMIN[scope] || scope) + '</span></th>'
+          + TIER_ORDER_ADMIN.map(function (dur) {
+              var r = planRowFor(dur, scope);
+              if (!r) return '<td class="pe-cell">&mdash;</td>';
+              var rid = dur + '-' + scope;
+              return '<td><div class="pe-cell' + (r.active ? '' : ' pe-off') + '">'
+                + '<span class="pe-cur">&#8377;</span>'
+                + '<input class="pe-input" type="number" min="0" step="1" id="pp-amount-' + rid + '" '
+                +   'value="' + (r.base_amount / 100) + '" data-orig="' + (r.base_amount / 100) + '" '
+                +   'oninput="planDirty()">'
+                + ((r.discount_percent || 0) > 0
+                    ? '<span class="pe-sale">on sale, ' + r.discount_percent + '% off</span>' : '')
+                + (r.active ? '' : '<span class="pe-hidden">hidden</span>')
+                + '</div></td>';
+            }).join('')
+          + '</tr>';
+      }).join('')
+    + '</tbody></table></div>'
+    + '<div id="pe-diff" class="ad-hint" style="margin-top:10px"></div>'
+    + '<div style="display:flex;gap:10px;align-items:center;margin-top:12px">'
+    +   '<button class="ad-btn btn-primary" id="pe-save" onclick="savePrices()" disabled>Save prices</button>'
+    +   '<button class="ad-btn btn-ghost btn-sm" onclick="renderPlansTab()">Undo changes</button>'
+    + '</div>'
+    + '</div>';
+
+  /* Names and availability. Real, but touched once a year, so it does not get
+     to make the everyday job look complicated. */
+  html += '<details class="ad-card" style="margin-bottom:16px">'
+    + '<summary style="cursor:pointer;list-style:none"><span class="ad-card-head" style="display:inline">'
+    +   'Names and availability</span>'
+    +   '<span class="ad-hint" style="display:inline;margin-left:8px">what each plan is called, and whether it is on sale at all</span>'
+    + '</summary>'
+    + '<div style="margin-top:12px;overflow-x:auto"><table class="ad-table">'
+    + '<thead><tr><th>Plan</th><th>Track name</th><th>Duration label</th><th>Shown to buyers</th></tr></thead><tbody>'
+    + TRACK_ORDER_ADMIN.map(function (scope) {
+        return TIER_ORDER_ADMIN.map(function (dur) {
+          var r = planRowFor(dur, scope);
+          if (!r) return '';
+          var rid = dur + '-' + scope;
+          return '<tr>'
+            + '<td style="white-space:nowrap;font-size:12px;color:var(--text3)">' + esc(scope) + ' &middot; ' + esc(dur) + '</td>'
+            + '<td><input class="ad-input" style="min-width:150px" id="pp-track-' + rid + '" value="' + esc(r.track_name) + '" oninput="planDirty()"></td>'
+            + '<td><input class="ad-input" style="min-width:110px" id="pp-tier-' + rid + '" value="' + esc(r.tier_name) + '" oninput="planDirty()"></td>'
+            + '<td style="text-align:center"><input type="checkbox" id="pp-active-' + rid + '" ' + (r.active ? 'checked' : '') + ' onchange="planDirty()"></td>'
+            + '</tr>';
+        }).join('');
+      }).join('')
+    + '</tbody></table></div>'
+    + '<div style="margin-top:12px"><button class="ad-btn btn-primary btn-sm" onclick="saveNames()">Save names and availability</button></div>'
+    + '</details>';
+
+  wrap.innerHTML = html;
+}
+
+function planRowFor(dur, scope) {
+  return (window._plansRows || []).filter(function (r) { return r.duration === dur && r.scope === scope; })[0];
+}
+
+/* Says what is about to change, in money, before anything is written. The old
+   editor saved one row at a time with no summary, so a mistyped price looked
+   identical to a correct one until a buyer met it. */
+function planDirty() {
+  var changed = [];
+  TRACK_ORDER_ADMIN.forEach(function (scope) {
+    TIER_ORDER_ADMIN.forEach(function (dur) {
+      var el = document.getElementById('pp-amount-' + dur + '-' + scope);
+      if (!el) return;
+      var was = parseFloat(el.dataset.orig), now = parseFloat(el.value);
+      if (now === was || isNaN(now)) return;
+      changed.push({ dur: dur, scope: scope, was: was, now: now });
+    });
+  });
+  var box = document.getElementById('pe-diff');
+  var btn = document.getElementById('pe-save');
+  if (!box || !btn) return;
+  if (!changed.length) { box.innerHTML = ''; btn.disabled = true; btn.textContent = 'Save prices'; return; }
+  btn.disabled = false;
+  btn.textContent = 'Save ' + changed.length + ' price' + (changed.length === 1 ? '' : 's');
+  box.innerHTML = changed.map(function (c) {
+    var up = c.now > c.was;
+    return '<div>' + esc(TRACK_LABEL_ADMIN[c.scope] || c.scope) + ' ' + esc(tierLabel(c.dur)) + ': '
+      + '<span style="text-decoration:line-through;color:var(--text3)">&#8377;' + c.was + '</span> '
+      + '<strong style="color:' + (up ? 'var(--orange)' : 'var(--green)') + '">&#8377;' + c.now + '</strong>'
+      + ' <span style="color:var(--text3)">(' + (up ? '+' : '') + Math.round((c.now - c.was) / c.was * 100) + '%)</span></div>';
   }).join('');
 }
 
-function planRowHtml(r) {
-  var rid = r.duration + '-' + r.scope;
-  var eff = planEffectiveAmount(r);
-  var dFrom = r.discount_starts_at ? r.discount_starts_at.substring(0, 10) : '';
-  var dTo   = r.discount_ends_at   ? r.discount_ends_at.substring(0, 10)   : '';
-  return '<tr>'
-    + '<td style="font-weight:700;white-space:nowrap">' + esc(tierLabel(r.duration)) + ' (' + esc(r.duration) + ')</td>'
-    + '<td><input class="ad-input" style="min-width:100px" id="pp-track-' + rid + '" value="' + esc(r.track_name) + '"></td>'
-    + '<td><input class="ad-input" style="min-width:100px" id="pp-tier-' + rid + '" value="' + esc(r.tier_name) + '"></td>'
-    + '<td><input class="ad-input" type="number" min="0" step="1" style="width:90px" id="pp-amount-' + rid + '" value="' + (r.base_amount / 100) + '"></td>'
-    + '<td><input class="ad-input" type="number" min="0" max="100" style="width:70px" id="pp-discount-' + rid + '" value="' + r.discount_percent + '"></td>'
-    + '<td><input class="ad-input" type="date" style="width:140px" id="pp-dfrom-' + rid + '" value="' + dFrom + '"></td>'
-    + '<td><input class="ad-input" type="date" style="width:140px" id="pp-dto-' + rid + '" value="' + dTo + '"></td>'
-    + '<td style="font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap" id="pp-eff-' + rid + '">' + fmtINR(eff) + '</td>'
-    + '<td><input class="ad-input" style="min-width:110px" id="pp-label-' + rid + '" value="' + esc(r.label || '') + '" placeholder="e.g. Friday Special"></td>'
-    + '<td><input class="ad-input" style="min-width:130px" id="pp-desc-' + rid + '" value="' + esc(r.description || '') + '" placeholder="optional"></td>'
-    + '<td style="text-align:center"><input type="checkbox" id="pp-active-' + rid + '" ' + (r.active ? 'checked' : '') + '></td>'
-    + '<td><button class="ad-btn btn-primary btn-sm" onclick="savePlanRow(' + attrJs(r.duration) + ',' + attrJs(r.scope) + ')">Save</button></td>'
-    + '</tr>';
+async function savePrices() {
+  var changed = [];
+  TRACK_ORDER_ADMIN.forEach(function (scope) {
+    TIER_ORDER_ADMIN.forEach(function (dur) {
+      var el = document.getElementById('pp-amount-' + dur + '-' + scope);
+      if (!el) return;
+      var was = parseFloat(el.dataset.orig), now = parseFloat(el.value);
+      if (now === was || isNaN(now)) return;
+      if (!(now > 0)) { toast('Price for ' + dur + ' ' + scope + ' must be above 0', 'err'); changed = null; return; }
+      if (changed) changed.push({ dur: dur, scope: scope, was: was, now: now });
+    });
+  });
+  if (!changed || !changed.length) return;
+
+  var lines = changed.map(function (c) {
+    return '  ' + (TRACK_LABEL_ADMIN[c.scope] || c.scope) + ' ' + tierLabel(c.dur)
+         + ':  ' + c.was + '  ->  ' + c.now;
+  }).join('\n');
+  if (!confirm('Change ' + changed.length + ' price' + (changed.length === 1 ? '' : 's') + '?\n\n' + lines
+    + '\n\nThis is what buyers pay from the moment you confirm.')) return;
+
+  var failed = [];
+  for (var i = 0; i < changed.length; i++) {
+    var c = changed[i];
+    var res = await _sb.from('pricing_plans').update({ base_amount: Math.round(c.now * 100) })
+                       .eq('duration', c.dur).eq('scope', c.scope);
+    if (res.error) failed.push(c.dur + ' ' + c.scope);
+    else {
+      var row = planRowFor(c.dur, c.scope);
+      if (row) row.base_amount = Math.round(c.now * 100);
+      logAdminAction('update_plan_price', null, { duration: c.dur, scope: c.scope, from: c.was, to: c.now });
+    }
+  }
+  if (failed.length) { toast('Failed on ' + failed.join(', '), 'err'); return; }
+  toast(changed.length + ' price' + (changed.length === 1 ? '' : 's') + ' updated');
+  renderPlansTab();
 }
 
-async function savePlanRow(duration, scope) {
-  var rid = duration + '-' + scope;
-  var amountRaw   = parseFloat(document.getElementById('pp-amount-' + rid).value);
-  var discountRaw = parseInt(document.getElementById('pp-discount-' + rid).value, 10) || 0;
-  if (!(amountRaw > 0)) { toast('Enter a valid base price', 'err'); return; }
+async function saveNames() {
+  var updates = [];
+  TRACK_ORDER_ADMIN.forEach(function (scope) {
+    TIER_ORDER_ADMIN.forEach(function (dur) {
+      var rid = dur + '-' + scope, r = planRowFor(dur, scope);
+      if (!r) return;
+      var track = (document.getElementById('pp-track-' + rid).value || '').trim();
+      var tier  = (document.getElementById('pp-tier-' + rid).value || '').trim();
+      var act   = document.getElementById('pp-active-' + rid).checked;
+      if (track === r.track_name && tier === r.tier_name && act === r.active) return;
+      if (!track || !tier) { toast('Track and duration labels cannot be blank', 'err'); updates = null; return; }
+      if (updates) updates.push({ dur: dur, scope: scope, patch: { track_name: track, tier_name: tier, active: act } });
+    });
+  });
+  if (!updates || !updates.length) { toast('Nothing changed', 'err'); return; }
 
-  var dFromVal = document.getElementById('pp-dfrom-' + rid).value;
-  var dToVal   = document.getElementById('pp-dto-' + rid).value;
+  var hiding = updates.filter(function (u) { return u.patch.active === false; }).length;
+  if (hiding && !confirm(hiding + ' plan' + (hiding === 1 ? '' : 's')
+      + ' will be hidden from buyers entirely. Continue?')) return;
 
-  var payload = {
-    track_name:         (document.getElementById('pp-track-' + rid).value || '').trim(),
-    tier_name:          (document.getElementById('pp-tier-' + rid).value || '').trim(),
-    base_amount:        Math.round(amountRaw * 100),
-    discount_percent:   Math.max(0, Math.min(100, discountRaw)),
-    discount_starts_at: dFromVal ? new Date(dFromVal).toISOString() : null,
-    discount_ends_at:   dToVal   ? new Date(dToVal).toISOString()   : null,
-    label:              (document.getElementById('pp-label-' + rid).value || '').trim() || null,
-    description:        (document.getElementById('pp-desc-' + rid).value || '').trim() || null,
-    active:             document.getElementById('pp-active-' + rid).checked,
-  };
-  if (!payload.track_name || !payload.tier_name) { toast('Track and tier name are required', 'err'); return; }
-
-  var { error } = await _sb.from('pricing_plans').update(payload).eq('duration', duration).eq('scope', scope);
-  if (error) { toast('Failed: ' + error.message, 'err'); return; }
-
-  logAdminAction('update_plan', null, Object.assign({ duration: duration, scope: scope }, payload));
-  toast('Plan updated');
-
-  // Keep local caches (planBadge everywhere reads _pricingPlanCache) and the
-  // row list in sync so the rest of the admin UI reflects the edit at once.
-  var row = window._plansRows.filter(function(r) { return r.duration === duration && r.scope === scope; })[0];
-  if (row) { for (var k in payload) row[k] = payload[k]; }
-  _pricingPlanCache[duration + '|' + scope] = { track_name: payload.track_name, tier_name: payload.tier_name };
+  var failed = [];
+  for (var i = 0; i < updates.length; i++) {
+    var u = updates[i];
+    var res = await _sb.from('pricing_plans').update(u.patch).eq('duration', u.dur).eq('scope', u.scope);
+    if (res.error) failed.push(u.dur + ' ' + u.scope);
+    else {
+      var row = planRowFor(u.dur, u.scope);
+      if (row) for (var k in u.patch) row[k] = u.patch[k];
+      _pricingPlanCache[u.dur + '|' + u.scope] = { track_name: u.patch.track_name, tier_name: u.patch.tier_name };
+      logAdminAction('update_plan', null, Object.assign({ duration: u.dur, scope: u.scope }, u.patch));
+    }
+  }
+  if (failed.length) { toast('Failed on ' + failed.join(', '), 'err'); return; }
+  toast('Updated ' + updates.length + ' plan' + (updates.length === 1 ? '' : 's'));
   renderPlansTab();
 }
 
@@ -6470,7 +6613,7 @@ function renderPreview(body, coupon) {
     .split('{{name}}').join('<strong>Arun</strong>')
     .split('{{first_name}}').join('<strong>Arun</strong>')
     .split('{{trial_days}}').join('3')
-    .split('{{plan}}').join('Expedition Master')
+    .split('{{plan}}').join('Full COC Preparation 12 Months')
     .split('{{amount}}').join('&#8377;2,699')
     .split('{{coupon}}').join(coupon
       ? '<strong style="color:var(--green)">' + esc(coupon) + '</strong>'
