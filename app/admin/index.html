@@ -309,6 +309,62 @@
     /* Small note under a single field, for the ones where getting it wrong
        costs money rather than just looking untidy. */
     .ad-hint { font-size:11px; color:var(--text3); line-height:1.45; margin-top:5px; }
+
+    /* ── Offer composer ────────────────────────────────────────────────
+       The selector is the product itself: tracks down the side, durations
+       across the top. Every cell shows its own price, so choosing who gets
+       the offer and seeing what they pay are the same glance. */
+    .of-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .of-tbl { border-collapse:separate; border-spacing:6px; margin-left:-6px; }
+    .of-tbl th { padding:0; font-weight:400; }
+    .of-hdr, .of-all, .of-cell {
+      background:var(--surface2); border:1px solid var(--border); border-radius:var(--r6);
+      color:var(--text2); cursor:pointer; font-family:inherit; transition:border-color .12s, background .12s, color .12s;
+    }
+    .of-hdr, .of-all { padding:7px 12px; font-size:12px; font-weight:600; white-space:nowrap; }
+    .of-hdr:hover, .of-all:hover, .of-cell:hover { border-color:var(--blue); }
+    .of-hdr.on, .of-all.on { background:var(--blue-dim); border-color:var(--blue-border); color:var(--blue); }
+    .of-row { display:flex; flex-direction:column; align-items:flex-start; gap:1px; text-align:left; width:100%; }
+    .of-row small { font-size:10px; font-weight:400; color:var(--text3); }
+    .of-row.on small { color:var(--blue); }
+    /* The cell is the tap target, so it is generous and shows two things:
+       whether it is in, and what it costs. */
+    .of-cell { display:flex; flex-direction:column; align-items:center; gap:2px; padding:9px 16px; min-width:92px; }
+    .of-cell.on { background:var(--blue-dim); border-color:var(--blue-border); }
+    .of-tick { font-size:12px; line-height:1; height:12px; color:var(--blue); }
+    .of-amt { font-size:12.5px; font-weight:700; font-variant-numeric:tabular-nums; color:var(--text3); }
+    .of-cell.on .of-amt { color:var(--text); }
+
+    /* Preview cards. Deliberately shaped like the real plan card rather than
+       a table row, because a percentage does not tell you whether the result
+       reads well but a price on a card does. */
+    .of-card { position:relative; background:var(--surface2); border:1px solid var(--border2);
+      border-radius:var(--r8); padding:11px 13px; min-width:150px; }
+    /* Mirrors .up-offer in the app: the offer is named once above the cards,
+       not repeated on each. If these two ever drift, the preview starts
+       lying about the thing it previews. */
+    .of-banner { display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+      background:var(--green-dim); border:1px solid var(--green-border);
+      border-radius:9px; padding:8px 12px; margin-bottom:10px; }
+    .of-banner-tag { background:var(--green); color:var(--on-accent); font-size:9.5px;
+      font-weight:800; letter-spacing:.06em; text-transform:uppercase;
+      padding:3px 9px; border-radius:99px; white-space:nowrap; }
+    .of-banner-desc { font-size:11.5px; color:var(--text2); }
+    .of-card-track { font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--text3); }
+    .of-card-tier { font-size:12.5px; font-weight:700; color:var(--text); margin-top:1px; }
+    .of-card-dur { font-size:10.5px; color:var(--text3); }
+    .of-card-price { margin-top:5px; display:flex; align-items:baseline; gap:6px; flex-wrap:wrap; }
+    .of-was { font-size:11px; color:var(--text3); text-decoration:line-through; }
+    .of-now { font-size:16px; font-weight:800; color:var(--text); font-variant-numeric:tabular-nums; }
+    .of-card-desc { font-size:10.5px; color:var(--text2); margin-top:4px; line-height:1.4; }
+    .of-card-save { font-size:10px; color:var(--green); margin-top:3px; font-weight:600; }
+
+    @media (max-width:720px) {
+      .of-grid2 { grid-template-columns:1fr; }
+      .of-cell { min-width:0; padding:9px 8px; }
+      .of-hdr, .of-all { padding:7px 8px; font-size:11px; }
+      .of-tbl { width:100%; }
+    }
     /* Panel that explains what the currently selected coupon type actually
        does, in plain words with a worked example. */
     .ad-explain {
@@ -1846,12 +1902,11 @@
     </div>
 
     <div class="ad-card" style="margin-bottom:18px">
-      <div class="ad-card-head">Run a sale</div>
+      <div class="ad-card-head">Run an offer</div>
       <div class="ad-card-sub">
-        Sets the same discount across a whole track at once, instead of editing three rows
-        by hand. It only touches the discount and its dates: base prices, names and the
-        active switch are left exactly as they are. Every plan keeps its own controls
-        below, so you can still override any single one afterwards.
+        Name the offer, set the discount, pick who gets it. The name is shown to buyers above the plan cards, so they see <em>why</em> the price dropped
+        rather than just a struck-through number. Base prices, plan names and the active switch are never changed
+        here, and the preview shows the real cards before anything is written.
       </div>
       <div id="bulk-controls"></div>
     </div>
@@ -5706,164 +5761,308 @@ async function setCouponActive(code, active) {
    pricing_v2_setup.sql seeds all 9). Edits here are what the upgrade modal
    and every plan-display surface in the app read live, no redeploy. */
 
-/* ── BULK PRICING ─────────────────────────────────────────────────────
-   Running a sale meant editing nine rows by hand, which is slow and, more to
-   the point, easy to get half-done: three plans on sale and six not is a
-   pricing bug your customers see before you do.
+/* ── OFFERS ───────────────────────────────────────────────────────────
+   One composer for the whole thing, replacing four stacked blocks of five
+   controls each.
 
-   These controls write ONLY discount_percent and the two discount dates.
-   Base price, track and tier names, label, description and the active switch
-   are never touched, so a bulk action can never quietly undo a price edit.  */
+   The old version had a separate panel per track plus one for "every plan",
+   which is twenty controls to express a single idea, and it wrote ONLY the
+   discount and its dates. There was no way to say WHY the price had dropped,
+   so a sale showed as a struck-through number with no explanation. Naming the
+   offer meant typing the same label into nine rows of the table below and
+   hoping they matched.
 
-var BULK_TARGETS = [
-  { key: 'written', label: 'Passage (Written only)' },
-  { key: 'oral',    label: 'Voyage (Oral only)' },
-  { key: 'both',    label: 'Expedition (Both)' },
-  { key: 'all',     label: 'Every plan' },
+   So: one offer, named, with a grid for who gets it. The grid is 3 tracks by
+   3 durations because that is exactly what the product is, and it makes
+   "everything", "just Expedition" and "only the 12-month plans" the same
+   gesture instead of three different features.
+
+   Base price, track and tier names and the active switch are still never
+   touched here, so an offer can never quietly undo a price edit. */
+
+var TRACKS_OF = [
+  { key: 'written', name: 'Passage',    sub: 'Written only' },
+  { key: 'oral',    name: 'Voyage',     sub: 'Oral only' },
+  { key: 'both',    name: 'Expedition', sub: 'Both' },
+];
+var DURS_OF = [
+  { key: '3mo',  name: '3 months' },
+  { key: '6mo',  name: '6 months' },
+  { key: '12mo', name: '12 months' },
 ];
 
-function bulkRowsFor(target) {
-  var rows = window._plansRows || [];
-  return target === 'all' ? rows.slice() : rows.filter(function (r) { return r.scope === target; });
+// Selection is a plain set of "duration|scope" keys. Defaults to everything,
+// because "the whole shop is on sale" is the common case and anything
+// narrower is a deliberate act.
+window._offerSel = window._offerSel || null;
+
+function offerKey(d, s) { return d + '|' + s; }
+
+function offerDefaultSel() {
+  var set = {};
+  TRACKS_OF.forEach(function (t) { DURS_OF.forEach(function (d) { set[offerKey(d.key, t.key)] = true; }); });
+  return set;
 }
 
-function renderBulkControls() {
+function offerSel() {
+  if (!window._offerSel) window._offerSel = offerDefaultSel();
+  return window._offerSel;
+}
+
+function offerSelectedRows() {
+  var sel = offerSel();
+  return (window._plansRows || []).filter(function (r) { return sel[offerKey(r.duration, r.scope)]; });
+}
+
+function offerToggle(d, s)  { var k = offerKey(d, s); offerSel()[k] = !offerSel()[k]; renderOfferGrid(); offerPreview(); }
+function offerToggleRow(s)  {
+  var sel = offerSel();
+  var on = DURS_OF.every(function (d) { return sel[offerKey(d.key, s)]; });
+  DURS_OF.forEach(function (d) { sel[offerKey(d.key, s)] = !on; });
+  renderOfferGrid(); offerPreview();
+}
+function offerToggleCol(d)  {
+  var sel = offerSel();
+  var on = TRACKS_OF.every(function (t) { return sel[offerKey(d, t.key)]; });
+  TRACKS_OF.forEach(function (t) { sel[offerKey(d, t.key)] = !on; });
+  renderOfferGrid(); offerPreview();
+}
+function offerToggleAll() {
+  var sel = offerSel();
+  var all = Object.keys(sel).length === 9 && Object.keys(sel).every(function (k) { return sel[k]; });
+  TRACKS_OF.forEach(function (t) { DURS_OF.forEach(function (d) { sel[offerKey(d.key, t.key)] = !all; }); });
+  renderOfferGrid(); offerPreview();
+}
+
+function renderOfferControls() {
   var el = document.getElementById('bulk-controls');
   if (!el) return;
+  var live = (window._plansRows || []).filter(function (r) { return (r.discount_percent || 0) > 0 || r.label; });
 
-  el.innerHTML = BULK_TARGETS.map(function (t) {
-    var rows = bulkRowsFor(t.key);
-    var onSale = rows.filter(function (r) { return (r.discount_percent || 0) > 0; }).length;
-    var isAll = t.key === 'all';
-    return '<div style="border:1px solid ' + (isAll ? 'var(--border2)' : 'var(--border)') + ';border-radius:var(--r8);padding:12px 14px;margin-bottom:10px;'
-      + (isAll ? 'background:var(--surface2)' : '') + '">'
-      + '<div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:9px">'
-      +   '<strong style="font-size:13px">' + esc(t.label) + '</strong>'
-      +   '<span style="font-size:11.5px;color:var(--text3)">' + rows.length + ' plan' + (rows.length === 1 ? '' : 's')
-      +     (onSale ? ', ' + onSale + ' currently discounted' : '') + '</span>'
-      + '</div>'
-      + '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">'
-      +   '<div><label class="ad-label" style="font-size:10.5px">Discount %</label>'
-      +     '<input class="ad-input" type="number" min="0" max="100" step="1" style="width:96px" id="bk-pct-' + t.key + '" placeholder="0" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
-      +   '<div><label class="ad-label" style="font-size:10.5px">From (optional)</label>'
-      +     '<input class="ad-input" type="date" style="width:158px" id="bk-from-' + t.key + '" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
-      +   '<div><label class="ad-label" style="font-size:10.5px">Until (optional)</label>'
-      +     '<input class="ad-input" type="date" style="width:158px" id="bk-to-' + t.key + '" oninput="bulkPreview(' + attrJs(t.key) + ')"></div>'
-      +   '<button class="ad-btn btn-primary btn-sm" onclick="applyBulkDiscount(' + attrJs(t.key) + ')">Apply</button>'
-      +   '<button class="ad-btn btn-ghost btn-sm" onclick="clearBulkDiscount(' + attrJs(t.key) + ')" style="color:var(--orange)">End sale</button>'
-      + '</div>'
-      + '<div id="bk-prev-' + t.key + '" class="ad-hint" style="margin-top:8px"></div>'
-      + '</div>';
-  }).join('');
-
-  BULK_TARGETS.forEach(function (t) { bulkPreview(t.key); });
-}
-
-/* Shows the plans as the BUYER will see them, not as a row of numbers.
-   A percentage does not tell you whether the result reads well: 40% off 1299
-   is 779, which looks deliberate, while 35% is 844, which looks like a
-   mistake. Seeing the actual cards is also the guard against a mistyped 90
-   that was meant to be 9, and across nine plans that mistake costs far more
-   than it does on one row. */
-function bulkPreview(target) {
-  var box = document.getElementById('bk-prev-' + target);
-  if (!box) return;
-  var pctEl = document.getElementById('bk-pct-' + target);
-  var pct = parseInt(pctEl && pctEl.value, 10);
-  if (!(pct > 0)) { box.innerHTML = ''; return; }
-  if (pct > 100) {
-    box.innerHTML = '<span style="color:var(--red)">A discount cannot be more than 100%.</span>';
-    return;
-  }
-
-  var rows = bulkRowsFor(target);
-  var warn = pct >= 50
-    ? '<div style="color:var(--orange);font-size:11.5px;margin-bottom:7px">'
-      + 'That is ' + pct + '% off. Check the prices below are what you meant.</div>'
-    : '';
-
-  box.innerHTML = warn
-    + '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:7px">'
-    +   'How buyers will see it</div>'
-    + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
-    + rows.map(function (r) {
-        var now = Math.round(r.base_amount * (1 - pct / 100));
-        return '<div style="background:#0D1E33;border:1px solid #1A3050;border-radius:8px;padding:9px 11px;min-width:132px">'
-          + '<div style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#6E8AA6">' + esc(r.track_name || r.scope) + '</div>'
-          + '<div style="font-size:12.5px;font-weight:700;color:#DDE5EF;margin-top:1px">' + esc(r.tier_name || '') + '</div>'
-          + '<div style="font-size:10.5px;color:#6E8AA6">' + esc(r.duration.replace('mo', ' months')) + '</div>'
-          + '<div style="margin-top:5px;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap">'
-          +   '<span style="font-size:15px;font-weight:700;color:#C8A44A">' + fmtINR(now) + '</span>'
-          +   '<span style="font-size:11px;color:#6E8AA6;text-decoration:line-through">' + fmtINR(r.base_amount) + '</span>'
+  el.innerHTML =
+      (live.length
+        ? '<div style="border:1px solid var(--orange-border);background:var(--orange-dim);border-radius:var(--r8);'
+          + 'padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:var(--text)">'
+          + '<strong>' + (live[0].label ? esc(live[0].label) : 'An unnamed sale') + '</strong> is live on '
+          + live.length + ' plan' + (live.length === 1 ? '' : 's') + '.'
+          + ' <button class="ad-btn btn-ghost btn-sm" style="margin-left:6px;color:var(--orange)" onclick="endOffer()">End it</button>'
           + '</div>'
-          + '<div style="font-size:10px;color:#5DC87A;margin-top:2px">Save ' + fmtINR(r.base_amount - now) + '</div>'
-          + '</div>';
-      }).join('')
+        : '')
+
+    + '<div class="of-grid2" style="margin-bottom:12px">'
+    +   '<div><label class="ad-label">Offer name</label>'
+    +     '<input class="ad-input" id="of-name" maxlength="40" placeholder="Independence Day Offer" oninput="offerPreview()">'
+    +     '<div class="ad-hint">Shown to buyers above the plan cards, so they can see why the price dropped. Keep it short.</div></div>'
+    +   '<div><label class="ad-label">One line of detail</label>'
+    +     '<input class="ad-input" id="of-desc" maxlength="90" placeholder="20% off everything until 20 August" oninput="offerPreview()">'
+    +     '<div class="ad-hint">Optional. Appears next to the offer name, for a deadline or a condition.</div></div>'
+    + '</div>'
+
+    + '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:14px">'
+    +   '<div><label class="ad-label">Discount</label>'
+    +     '<input class="ad-input" type="number" min="0" max="100" step="1" style="width:92px" id="of-pct" placeholder="20" oninput="offerPreview()"></div>'
+    +   '<div><label class="ad-label">Runs from</label>'
+    +     '<input class="ad-input" type="date" style="width:156px" id="of-from" oninput="offerPreview()"></div>'
+    +   '<div><label class="ad-label">Runs until</label>'
+    +     '<input class="ad-input" type="date" style="width:156px" id="of-to" oninput="offerPreview()"></div>'
+    + '</div>'
+
+    + '<label class="ad-label">Applies to</label>'
+    + '<div id="of-grid" style="margin:4px 0 14px;overflow-x:auto"></div>'
+
+    + '<div id="of-preview"></div>'
+
+    + '<div style="display:flex;gap:10px;align-items:center;margin-top:14px">'
+    +   '<button class="ad-btn btn-primary" onclick="applyOffer()">Apply offer</button>'
+    +   '<button class="ad-btn btn-ghost btn-sm" onclick="offerReset()">Reset form</button>'
     + '</div>';
+
+  renderOfferGrid();
+  offerPreview();
 }
 
-function bulkDates(target) {
-  var f = (document.getElementById('bk-from-' + target) || {}).value;
-  var t = (document.getElementById('bk-to-' + target) || {}).value;
+/* The selector. A 3 x 3 grid of the actual product, with the track name down
+   the side and the duration across the top, so "which plans" is answered by
+   looking rather than by reading checkbox labels. Clicking a track name takes
+   its whole row, clicking a duration takes its whole column. */
+function renderOfferGrid() {
+  var box = document.getElementById('of-grid');
+  if (!box) return;
+  var sel = offerSel();
+  var n = offerSelectedRows().length;
+  var allOn = n === 9;
+
+  var html = '<table class="of-tbl"><thead><tr>'
+    + '<th><button class="of-all' + (allOn ? ' on' : '') + '" onclick="offerToggleAll()">'
+    +   (allOn ? 'All 9' : 'Select all') + '</button></th>';
+  DURS_OF.forEach(function (d) {
+    var colOn = TRACKS_OF.every(function (t) { return sel[offerKey(d.key, t.key)]; });
+    html += '<th><button class="of-hdr' + (colOn ? ' on' : '') + '" onclick="offerToggleCol(' + attrJs(d.key) + ')">'
+          + esc(d.name) + '</button></th>';
+  });
+  html += '</tr></thead><tbody>';
+
+  TRACKS_OF.forEach(function (t) {
+    var rowOn = DURS_OF.every(function (d) { return sel[offerKey(d.key, t.key)]; });
+    html += '<tr><th><button class="of-hdr of-row' + (rowOn ? ' on' : '') + '" onclick="offerToggleRow(' + attrJs(t.key) + ')">'
+          + '<span>' + esc(t.name) + '</span><small>' + esc(t.sub) + '</small></button></th>';
+    DURS_OF.forEach(function (d) {
+      var row = (window._plansRows || []).filter(function (r) { return r.duration === d.key && r.scope === t.key; })[0];
+      var on = !!sel[offerKey(d.key, t.key)];
+      html += '<td><button class="of-cell' + (on ? ' on' : '') + '" onclick="offerToggle(' + attrJs(d.key) + ',' + attrJs(t.key) + ')">'
+        + '<span class="of-tick">' + (on ? '&#10003;' : '') + '</span>'
+        + '<span class="of-amt">' + (row ? fmtINR(row.base_amount) : '&mdash;') + '</span>'
+        + '</button></td>';
+    });
+    html += '</tr>';
+  });
+  box.innerHTML = html + '</tbody></table>';
+}
+
+function offerFields() {
+  var g = function (id) { var e = document.getElementById(id); return e ? e.value : ''; };
   return {
-    discount_starts_at: f ? new Date(f).toISOString() : null,
-    discount_ends_at:   t ? new Date(t).toISOString() : null,
+    name: (g('of-name') || '').trim(),
+    desc: (g('of-desc') || '').trim(),
+    pct:  parseInt(g('of-pct'), 10),
+    from: g('of-from'),
+    to:   g('of-to'),
   };
 }
 
-async function writeBulk(target, payload, verb) {
-  var rows = bulkRowsFor(target);
-  if (!rows.length) { toast('No plans to update', 'err'); return; }
+/* Shows the plans as the BUYER will see them, not as a row of numbers. A
+   percentage does not tell you whether the result reads well: 40% off 1299 is
+   779, which looks deliberate, while 35% is 844, which looks like a mistake.
+   Seeing the actual cards, with the ribbon and the strike-through, is also the
+   guard against a mistyped 90 that was meant to be 9, and across nine plans
+   that mistake costs far more than it does on one row. */
+function offerPreview() {
+  var box = document.getElementById('of-preview');
+  if (!box) return;
+  var f = offerFields();
+  var rows = offerSelectedRows();
 
-  // One statement per scope rather than per row. 'all' has no scope filter at
-  // all, so a partially applied sale is not possible.
-  var q = _sb.from('pricing_plans').update(payload);
-  if (target !== 'all') q = q.eq('scope', target);
-  var { error } = await q.gte('base_amount', 0);   // no-op predicate: makes the update explicit
-  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  if (!rows.length) {
+    box.innerHTML = '<div class="ad-hint" style="color:var(--orange)">No plans selected, so nothing would change.</div>';
+    return;
+  }
+  if (!(f.pct > 0)) {
+    box.innerHTML = '<div class="ad-hint">' + rows.length + ' plan' + (rows.length === 1 ? '' : 's')
+      + ' selected. Enter a discount to see how the cards will look.</div>';
+    return;
+  }
+  if (f.pct > 100) {
+    box.innerHTML = '<div class="ad-hint" style="color:var(--red)">A discount cannot be more than 100%.</div>';
+    return;
+  }
 
-  logAdminAction('update_plan', null, Object.assign({ bulk: target, rows: rows.length, action: verb }, payload));
-  toast(verb + ' on ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's'));
+  var warn = f.pct >= 50
+    ? '<div style="color:var(--orange);font-size:12px;margin-bottom:8px">That is <strong>' + f.pct
+      + '% off</strong>. Read the prices below before applying.</div>' : '';
+  var noName = !f.name
+    ? '<div style="color:var(--orange);font-size:12px;margin-bottom:8px">No offer name, so buyers see a lower price with no reason given.</div>' : '';
 
-  await loadPlansTab();
+  var total = rows.reduce(function (a, r) { return a + r.base_amount; }, 0);
+  var after = rows.reduce(function (a, r) { return a + Math.round(r.base_amount * (1 - f.pct / 100)); }, 0);
+
+  box.innerHTML = warn + noName
+    + '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">'
+    +   'How buyers will see it</div>'
+    + (f.name
+        ? '<div class="of-banner"><span class="of-banner-tag">' + esc(f.name) + '</span>'
+          + (f.desc ? '<span class="of-banner-desc">' + esc(f.desc) + '</span>' : '') + '</div>'
+        : '')
+    + '<div style="display:flex;gap:9px;flex-wrap:wrap">'
+    + rows.map(function (r) {
+        var now = Math.round(r.base_amount * (1 - f.pct / 100));
+        return '<div class="of-card">'
+          + '<div class="of-card-track">' + esc(r.track_name || r.scope) + '</div>'
+          + '<div class="of-card-tier">' + esc(r.tier_name || '') + '</div>'
+          + '<div class="of-card-dur">' + esc(r.duration.replace('mo', ' months')) + '</div>'
+          + '<div class="of-card-price"><span class="of-was">' + fmtINR(r.base_amount) + '</span>'
+          +   '<span class="of-now">' + fmtINR(now) + '</span></div>'
+          + '<div class="of-card-save">Save ' + fmtINR(r.base_amount - now) + '</div>'
+          + '</div>';
+      }).join('')
+    + '</div>'
+    + '<div class="ad-hint" style="margin-top:9px">'
+    +   rows.length + ' plan' + (rows.length === 1 ? '' : 's') + ' &middot; '
+    +   'full price total ' + fmtINR(total) + ' &rarr; ' + fmtINR(after)
+    +   ' &middot; ' + (f.from ? 'from ' + esc(f.from) : 'starts immediately')
+    +   ' &middot; ' + (f.to ? 'until ' + esc(f.to) : 'no end date')
+    + '</div>';
 }
 
-async function applyBulkDiscount(target) {
-  var pct = parseInt((document.getElementById('bk-pct-' + target) || {}).value, 10);
-  if (!(pct > 0)) { toast('Enter a discount above 0', 'err'); return; }
-  if (pct > 100) { toast('A discount cannot be more than 100%', 'err'); return; }
+function offerReset() {
+  ['of-name', 'of-desc', 'of-pct', 'of-from', 'of-to'].forEach(function (id) {
+    var e = document.getElementById(id); if (e) e.value = '';
+  });
+  window._offerSel = offerDefaultSel();
+  renderOfferGrid(); offerPreview();
+}
 
-  var rows = bulkRowsFor(target);
-  var dates = bulkDates(target);
-  if (dates.discount_starts_at && dates.discount_ends_at
-      && new Date(dates.discount_ends_at) < new Date(dates.discount_starts_at)) {
+async function writeOffer(rows, patch, okMsg) {
+  var failed = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    var res = await _sb.from('pricing_plans').update(patch).eq('duration', r.duration).eq('scope', r.scope);
+    if (res.error) failed.push(r.duration + ' ' + r.scope);
+    else for (var k in patch) r[k] = patch[k];
+  }
+  if (failed.length) { toast('Failed on ' + failed.join(', '), 'err'); return false; }
+  logAdminAction('bulk_offer', null, { plans: rows.length, patch: patch });
+  toast(okMsg);
+  renderPlansTab();
+  return true;
+}
+
+async function applyOffer() {
+  var f = offerFields();
+  var rows = offerSelectedRows();
+  if (!rows.length) { toast('Select at least one plan', 'err'); return; }
+  if (!(f.pct > 0))  { toast('Enter a discount above 0', 'err'); return; }
+  if (f.pct > 100)   { toast('A discount cannot be more than 100%', 'err'); return; }
+  if (f.from && f.to && new Date(f.to) < new Date(f.from)) {
     toast('The end date is before the start date', 'err'); return;
   }
 
-  // Deliberately spells out the money rather than the percentage. Half off
-  // across every plan is a decision worth reading twice.
+  // Spells out the money rather than the percentage. A sale across nine plans
+  // is a decision worth reading twice.
   var lines = rows.map(function (r) {
     return '  ' + tierLabel(r.duration) + ' ' + r.scope + ':  '
-         + fmtINR(r.base_amount) + '  ->  ' + fmtINR(Math.round(r.base_amount * (1 - pct / 100)));
+         + fmtINR(r.base_amount) + '  ->  ' + fmtINR(Math.round(r.base_amount * (1 - f.pct / 100)));
   }).join('\n');
-  var when = dates.discount_starts_at || dates.discount_ends_at
-    ? '\n\nRunning ' + (dates.discount_starts_at ? 'from ' + dates.discount_starts_at.slice(0, 10) : 'from now')
-      + (dates.discount_ends_at ? ' until ' + dates.discount_ends_at.slice(0, 10) : ' with no end date')
-    : '\n\nStarts immediately, with no end date.';
-  if (!confirm(pct + '% off ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's') + ':\n\n' + lines + when)) return;
+  var when = '\n\n' + (f.from ? 'From ' + f.from : 'Starts immediately')
+           + (f.to ? ', until ' + f.to : ', with no end date');
+  var named = f.name ? '"' + f.name + '"\n\n' : 'WITHOUT A NAME (buyers see no reason for the lower price)\n\n';
+  if (!confirm(named + f.pct + '% off ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's') + ':\n\n' + lines + when)) return;
 
-  await writeBulk(target, Object.assign({ discount_percent: pct }, dates), pct + '% applied');
+  await writeOffer(rows, {
+    discount_percent:   f.pct,
+    discount_starts_at: f.from ? new Date(f.from).toISOString() : null,
+    discount_ends_at:   f.to   ? new Date(f.to).toISOString()   : null,
+    label:              f.name || null,
+    description:        f.desc || null,
+  }, 'Offer applied to ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's'));
 }
 
-async function clearBulkDiscount(target) {
-  var rows = bulkRowsFor(target);
-  var live = rows.filter(function (r) { return (r.discount_percent || 0) > 0; });
-  if (!live.length) { toast('Nothing is discounted there', 'err'); return; }
-  if (!confirm('End the sale on ' + live.length + ' plan' + (live.length === 1 ? '' : 's')
-      + '? They go back to full price immediately. Base prices are not changed.')) return;
+/* Ending an offer clears the name and the description too. Leaving a
+   "Independence Day Offer" ribbon on a plan that is back to full price is
+   worse than having no ribbon at all. */
+async function endOffer() {
+  var live = (window._plansRows || []).filter(function (r) { return (r.discount_percent || 0) > 0 || r.label; });
+  if (!live.length) { toast('No offer is running', 'err'); return; }
+  if (!confirm('End the offer on ' + live.length + ' plan' + (live.length === 1 ? '' : 's') + '?\n\n'
+    + 'They go back to full price immediately and the offer name disappears. Base prices are not changed.')) return;
 
-  await writeBulk(target, { discount_percent: 0, discount_starts_at: null, discount_ends_at: null }, 'Sale ended');
+  await writeOffer(live, {
+    discount_percent: 0, discount_starts_at: null, discount_ends_at: null,
+    label: null, description: null,
+  }, 'Offer ended');
 }
+
+// Kept so any older call site still resolves to the new composer.
+function renderBulkControls() { renderOfferControls(); }
 
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];

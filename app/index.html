@@ -1342,7 +1342,8 @@
       </div>
 
       <!-- Tier cards (Launch / Mariner / Master), rendered from pricing_plans -->
-      <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
+      <div id="up-offer-banner"></div>
+        <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
 
       <!-- Features -->
       <div style="background:rgba(13,30,51,0.5);border:1px solid #0F2035;border-radius:10px;padding:16px 18px;margin-bottom:20px;">
@@ -1394,6 +1395,20 @@
     letter-spacing: 0.08em; text-transform: uppercase;
   }
   .up-ribbon-promo { background: #5DC87A; }
+  /* Offer banner. Said once above the cards rather than repeated on each,
+     which also frees the cards to keep their own Best Value badge. */
+  .up-offer {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    flex-wrap: wrap; text-align: center;
+    background: var(--green-dim); border: 1px solid var(--green-border);
+    border-radius: 10px; padding: 9px 14px; margin: 0 0 18px;
+  }
+  .up-offer-tag {
+    background: var(--green); color: var(--on-accent);
+    font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 20px; white-space: nowrap;
+  }
+  .up-offer-desc { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
   .up-tier-name { font-size: 15px; font-weight: 700; color: #DDE5EF; }
   .up-tier-duration { font-size: 12px; color: #6E8AA6; margin-top: 3px; }
   .up-price { font-size: 20px; font-weight: 700; color: #C8A44A; letter-spacing: -0.5px; }
@@ -3231,13 +3246,40 @@ function renderUpgradeCards() {
     }).join('');
   }
 
+  /* An offer usually covers every plan on a track, in which case repeating
+     its name on all three cards is noise, and it used to REPLACE the "Best
+     Value" badge, so running a sale quietly deleted the one signal steering
+     people to the 12-month plan.
+
+     So: when every discounted card on this track carries the same offer name,
+     say it once in a banner above the cards and let the cards keep Best
+     Value. Only when the names differ between plans does it fall back to a
+     per-card badge, because then it genuinely is per-card information. */
+  var offerRows = TIER_ORDER.map(function (d) { return findPlanRow(d, scope); })
+                            .filter(function (r) { return r && r.label; });
+  var offerNames = offerRows.map(function (r) { return r.label; })
+                            .filter(function (v, i, a) { return a.indexOf(v) === i; });
+  var sharedOffer = offerNames.length === 1 ? offerRows[0] : null;
+
+  var bannerEl = document.getElementById('up-offer-banner');
+  if (bannerEl) {
+    bannerEl.innerHTML = sharedOffer
+      ? '<div class="up-offer">'
+        + '<span class="up-offer-tag">' + escUp(sharedOffer.label) + '</span>'
+        + (sharedOffer.description ? '<span class="up-offer-desc">' + escUp(sharedOffer.description) + '</span>' : '')
+        + '</div>'
+      : '';
+  }
+
   wrap.innerHTML = TIER_ORDER.map(function(dur) {
     var row = findPlanRow(dur, scope);
     if (!row) return '';
     var price = effectivePrice(row);
     var cp = couponPrice(row, dur, scope);
     var isBest = dur === bestDur;
-    var ribbon = row.label
+    // With a shared offer the name lives in the banner, so the card is free to
+    // keep its own badge.
+    var ribbon = (row.label && !sharedOffer)
       ? '<div class="up-ribbon up-ribbon-promo">' + escUp(row.label) + '</div>'
       : (isBest ? '<div class="up-ribbon">Best Value</div>' : '');
     // Three states: a code is cutting this price, the plan's own sale is, or
@@ -3258,7 +3300,7 @@ function renderUpgradeCards() {
     } else if (cp.couponApplied) {
       codeNote = '<div class="up-card-effect" style="color:#7FD18B">' + escUp(window._upCoupon.code + ' applied.') + '</div>';
     }
-    var descHtml = row.description ? '<div class="up-card-desc">' + escUp(row.description) + '</div>' : '';
+    var descHtml = (row.description && !sharedOffer) ? '<div class="up-card-desc">' + escUp(row.description) + '</div>' : '';
     // Every card says what you get and what it does to your dates, so a card
     // is self-explanatory without reading the track blurb above it.
     var getsHtml = '<div class="up-card-gets">' + escUp(SCOPE_CARD_SUMMARY[scope] || '') + '</div>';
