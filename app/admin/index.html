@@ -2671,20 +2671,56 @@ var PWF_LABEL = {
   other:            ['Something else',                 'var(--text3)'],
 };
 
+/* ONE round trip, not three.
+
+   Measured against production: a PostgREST call costs 200-500 ms end to end
+   while the query behind it executes in under 5 ms. Almost all of it is
+   connection and pooler overhead, so on this panel the only number that
+   affects how fast a tab feels is HOW MANY requests it makes, never how much
+   work each one does.
+
+   This card originally fetched three views (summary, stats, notes) and cost
+   about 900 ms on its own. All three are derivable from the same handful of
+   rows, and there are at most a few hundred of them ever, so it fetches the
+   base table once and computes the rest here. The views still exist and are
+   fine for querying by hand; they are just not worth a round trip each.
+
+   Emails for the notes come from _fbu, which the sibling loader on this same
+   tab has already fetched, so they cost nothing extra. If that has not landed
+   yet the notes render without them and renderPaywallNotes() is called again
+   when it does. */
+var _pwf = [];
+
 async function loadPaywallFeedback() {
   var body = document.getElementById('pwf-body');
   if (!body) return;
 
-  var [sum, stats, notes] = await Promise.all([
-    _sb.from('paywall_feedback_summary').select('*'),
-    _sb.from('paywall_feedback_stats').select('*').single(),
-    _sb.from('paywall_feedback_notes').select('*').limit(50),
-  ]);
-
-  if (sum.error) {
+  var res = await _sb.from('paywall_feedback').select('*');
+  if (res.error) {
     body.innerHTML = '<div class="ad-loading">Run paywall_feedback_setup.sql to enable this.</div>';
     return;
   }
+  _pwf = res.data || [];
+
+  var answered = _pwf.filter(function (r) { return r.reason; });
+  var withNote = _pwf.filter(function (r) { return r.note && r.note.trim(); });
+  var counts = {};
+  answered.forEach(function (r) { counts[r.reason] = (counts[r.reason] || 0) + 1; });
+
+  var stats = {
+    data: {
+      shown: _pwf.length,
+      answered: answered.length,
+      with_note: withNote.length,
+      response_rate: _pwf.length ? Math.round(1000 * answered.length / _pwf.length) / 10 : 0,
+    },
+  };
+  var sum = {
+    data: Object.keys(counts).map(function (k) {
+      return { reason: k, people: counts[k],
+               pct_of_answers: answered.length ? Math.round(1000 * counts[k] / answered.length) / 10 : 0 };
+    }).sort(function (a, b) { return b.people - a.people; }),
+  };
 
   // Response rate first. A reason breakdown built on three answers is an
   // anecdote, and showing the denominator is what keeps it honest.
@@ -2700,6 +2736,8 @@ async function loadPaywallFeedback() {
         ? '<div style="margin-top:7px;font-size:11.5px;color:var(--orange)">Only ' + st.answered
           + ' answers so far. Treat the split below as anecdote, not data, and read the notes.</div>'
         : '');
+
+  renderPaywallNotes();
 
   var rows = sum.data || [];
   if (!rows.length) { body.innerHTML = '<div class="ad-loading">No answers yet.</div>'; return; }
@@ -2718,19 +2756,31 @@ async function loadPaywallFeedback() {
       +   '<div style="height:100%;width:' + Math.max(pct, 3) + '%;background:' + l[1] + ';border-radius:99px"></div>'
       + '</div></div>';
   }).join('');
+}
 
+// Split out so it can be re-run when _fbu lands, without re-fetching anything.
+function renderPaywallNotes() {
   var box = document.getElementById('pwf-notes');
-  var list = (notes.data || []);
+  if (!box) return;
+  var list = _pwf.filter(function (r) { return r.note && r.note.trim(); })
+                 .sort(function (a, b) { return (b.answered_at || '').localeCompare(a.answered_at || ''); });
   if (!list.length) { box.innerHTML = ''; return; }
+
+  // Emails ride along on data the sibling loader already fetched, so putting a
+  // name to a note costs no extra request.
+  var byId = {};
+  (_fbu || []).forEach(function (u) { byId[u.user_id] = u.email; });
+
   box.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:8px">'
     + 'What they wrote</div>'
     + list.map(function (n) {
         var l = PWF_LABEL[n.reason] || [n.reason, 'var(--text3)'];
+        var email = byId[n.user_id] || '';
         return '<div style="padding:9px 0;border-bottom:1px solid var(--border2)">'
           + '<div style="font-size:12px;color:' + l[1] + ';font-weight:600;margin-bottom:3px">' + esc(l[0]) + '</div>'
           + '<div style="font-size:13px;color:var(--text);line-height:1.5">' + esc(n.note) + '</div>'
-          + '<div style="font-size:11px;color:var(--text3);margin-top:4px">' + esc(n.email || '')
-          + (n.plan_shown ? ' &middot; looking at ' + esc(n.plan_shown) + (n.scope_shown ? ' ' + esc(n.scope_shown) : '') : '')
+          + '<div style="font-size:11px;color:var(--text3);margin-top:4px">' + esc(email)
+          + (n.plan_shown ? (email ? ' &middot; ' : '') + 'looking at ' + esc(n.plan_shown) + (n.scope_shown ? ' ' + esc(n.scope_shown) : '') : '')
           + '</div></div>';
       }).join('');
 }
@@ -2751,6 +2801,10 @@ async function loadFunnelUsers() {
   }
   _fbu = res.data || [];
   renderFunnelUsers();
+  // Emails for the feedback notes come from this same data. Re-rendering here
+  // costs nothing and avoids a request that would only have fetched addresses
+  // already in hand.
+  if (typeof renderPaywallNotes === 'function') renderPaywallNotes();
 }
 
 /* Sorting. The list used to be ordered by times_opened and then last_seen,
@@ -2848,7 +2902,16 @@ async function loadFunnel() {
   var body = document.getElementById('funnel-body');
   if (!body) return;
 
-  var res = await _sb.from('funnel_summary').select('*').order('step');
+  // Both queries fired together, not one after the other. A round trip on this
+  // panel costs 200-500 ms while the query behind it runs in under 5 ms, so two
+  // sequential awaits cost twice the wall time for no reason: neither depends
+  // on the other's result.
+  var [res, errs] = await Promise.all([
+    _sb.from('funnel_summary').select('*').order('step'),
+    _sb.from('funnel_events').select('event, detail, created_at')
+       .in('event', ['payment_failed', 'checkout_blocked'])
+       .order('created_at', { ascending: false }).limit(200),
+  ]);
   if (res.error) {
     body.innerHTML = '<div class="ad-loading">Run funnel_setup.sql to enable the funnel.</div>';
     return;
@@ -2885,11 +2948,6 @@ async function loadFunnel() {
 
   // Checkout errors, grouped. A repeated message here is a broken checkout,
   // which reads very differently from people simply changing their minds.
-  var errs = await _sb.from('funnel_events')
-    .select('event, detail, created_at')
-    .in('event', ['payment_failed', 'checkout_blocked'])
-    .order('created_at', { ascending: false })
-    .limit(200);
 
   var box = document.getElementById('funnel-problems');
   var list = (errs.data || []);
