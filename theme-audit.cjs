@@ -133,8 +133,44 @@ for (const page of PAGES) {
   }
 }
 
+/* PASS TWO: the mirror image, and the one this audit itself caused.
+   Converting a hardcoded dark panel to var(--surface) fixes the background but
+   leaves any hardcoded pale text still tuned for a dark ground. On the light
+   palette that text lands on white and disappears. Fixing one side of a pair
+   without the other just moves the bug. */
+for (const page of PAGES) {
+  const src = fs.readFileSync(page, 'utf8');
+  const dom = new JSDOM(src);
+  const doc = dom.window.document;
+
+  for (const kid of doc.querySelectorAll('[style*="color"]')) {
+    const col = (kid.getAttribute('style').match(/(?:^|;)\s*color\s*:\s*([^;]+)/) || [])[1];
+    if (!isFixed(col)) continue;                       // only fixed text
+
+    // Nearest ancestor (or self) that actually paints a background.
+    let a = kid, bg = null;
+    while (a) {
+      const s = a.getAttribute && a.getAttribute('style');
+      const m = s && s.match(/background(?:-color)?\s*:\s*([^;]+)/);
+      if (m && !/none|transparent/.test(m[1])) { bg = m[1].trim(); break; }
+      a = a.parentElement;
+    }
+    if (!bg || !isVar(bg)) continue;                   // only themed grounds
+
+    for (const [name, theme] of Object.entries(THEMES)) {
+      const b = resolve(bg, theme), f = resolve(col, theme);
+      if (!b || !f) continue;
+      const r = ratio(f, b);
+      if (r < 4.5) findings.push({ page, theme: name, ratio: r, bg: bg, fg: col,
+        text: (kid.textContent || '').trim().slice(0, 46) || '(icon or empty)',
+        id: kid.id || '', reverse: true });
+    }
+  }
+}
+
 console.log('THEME RESPONSIVENESS AUDIT');
-console.log('Fixed background + theme-variable text, checked in every theme.\n');
+console.log('Both directions: a fixed colour on one side of a pair and a theme');
+console.log('variable on the other, checked in every theme.\n');
 
 if (!findings.length) {
   console.log('  No collisions. Every fixed background holding themed text stays');
