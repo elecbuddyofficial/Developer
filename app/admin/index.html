@@ -1923,6 +1923,32 @@
       after the limit was reached; the money was taken so it was honoured, and it is
       shown here rather than hidden.
     </div>
+    <div class="ad-row" style="align-items:flex-end;margin-bottom:10px">
+      <div class="ad-field" style="max-width:230px">
+        <label class="ad-label">Show</label>
+        <select class="ad-select" id="cp-filter" onchange="renderCoupons()">
+          <option value="live">Live codes</option>
+          <option value="spent">Used up</option>
+          <option value="expired">Expired</option>
+          <option value="disabled">Turned off</option>
+          <option value="attention">Needs attention</option>
+          <option value="all">Everything</option>
+        </select>
+      </div>
+      <div class="ad-field" style="max-width:230px">
+        <label class="ad-label">Sort by</label>
+        <select class="ad-select" id="cp-sort" onchange="renderCoupons()">
+          <option value="new">Newest first</option>
+          <option value="used">Most used</option>
+          <option value="expiring">Expiring soonest</option>
+          <option value="code">Code A to Z</option>
+        </select>
+      </div>
+      <div class="ad-field" style="max-width:260px">
+        <label class="ad-label">&nbsp;</label>
+        <div id="cp-count" style="font-size:12.5px;color:var(--text3);padding-bottom:10px"></div>
+      </div>
+    </div>
     <div class="ad-table-wrap">
       <table class="ad-table">
         <thead><tr>
@@ -5656,15 +5682,79 @@ async function loadCoupons() {
     tbody.innerHTML = '<tr><td colspan="7" class="empty">Run coupon_discounts_setup.sql to enable coupons.</td></tr>';
     return;
   }
-  if (!data || !data.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty">No coupons yet.</td></tr>';
-    return;
-  }
 
   // code -> kind, so the edit handler knows whether its value field is a
   // percentage or an amount in paise without re-reading the row.
   window._couponCache = {};
-  data.forEach(function(c) { window._couponCache[c.code] = c.kind; });
+  (data || []).forEach(function(c) { window._couponCache[c.code] = c.kind; });
+
+  // Held here so changing the filter re-renders rather than re-fetching, and
+  // so one place decides the order instead of a server default competing with
+  // the control above the table.
+  window._couponRows = data || [];
+  renderCoupons();
+}
+
+/* Which state a code is in. Codes accumulate and never leave: a sale that ran
+   last August is still in the list, dimmed, between the two you actually use.
+   Sorting alone does not fix that, because the dead ones still take up space,
+   so the default view is the codes that still work. */
+function cpState(c) {
+  var limit = c.max_redemptions || 1;
+  // over_redeemed is deliberately NOT a state here. A code can be over-redeemed
+  // and still live, and making it a state would have hidden it from the
+  // default view, which is the one view where a problem needs to be seen.
+  // "Needs attention" is a lens over the list instead.
+  if (!c.active) return 'disabled';
+  if (c.expires_at && new Date(c.expires_at) < new Date()) return 'expired';
+  if (c.live_used >= limit) return 'spent';
+  return 'live';
+}
+
+var CP_SORTS = {
+  new:      function (a, b) { return new Date(b.created_at) - new Date(a.created_at); },
+  used:     function (a, b) { return (b.live_used || 0) - (a.live_used || 0)
+                                  || new Date(b.created_at) - new Date(a.created_at); },
+  code:     function (a, b) { return String(a.code).localeCompare(String(b.code)); },
+  // No expiry means it never expires, so it sorts last rather than first.
+  expiring: function (a, b) {
+    var x = a.expires_at ? new Date(a.expires_at).getTime() : Infinity;
+    var y = b.expires_at ? new Date(b.expires_at).getTime() : Infinity;
+    return x - y;
+  },
+};
+
+function renderCoupons() {
+  var tbody = document.getElementById('cp-tbody');
+  var all = window._couponRows || [];
+  if (!all.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">No coupons yet.</td></tr>';
+    var c0 = document.getElementById('cp-count'); if (c0) c0.textContent = '';
+    return;
+  }
+
+  var fEl = document.getElementById('cp-filter'), sEl = document.getElementById('cp-sort');
+  var f = fEl ? fEl.value : 'live';
+  var data = (f === 'all'       ? all.slice()
+            : f === 'attention' ? all.filter(function (c) { return c.over_redeemed; })
+            : all.filter(function (c) { return cpState(c) === f; }))
+    .sort(CP_SORTS[sEl ? sEl.value : 'new'] || CP_SORTS.new);
+
+  // Always says how many are hidden, so a filtered view is never mistaken for
+  // the whole list.
+  var cnt = document.getElementById('cp-count');
+  if (cnt) {
+    var live = all.filter(function (c) { return cpState(c) === 'live'; }).length;
+    var flag = all.filter(function (c) { return c.over_redeemed; }).length;
+    cnt.innerHTML = data.length + ' of ' + all.length
+      + (f !== 'live' ? ' &middot; ' + live + ' live' : '')
+      + (flag ? ' &middot; <span style="color:var(--red);font-weight:700">' + flag + ' need attention</span>' : '');
+  }
+
+  if (!data.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">Nothing in this group.</td></tr>';
+    return;
+  }
 
   tbody.innerHTML = data.map(function(c) {
     var limit   = c.max_redemptions || 1;
