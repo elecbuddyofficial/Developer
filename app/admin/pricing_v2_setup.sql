@@ -74,9 +74,9 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 -- (see security_fix_setup.sql) — no need to re-CREATE TRIGGER.
 
 -- ── 5. Pricing plans table — admin-editable price/discount/branding ───────
--- Duration x scope = 9 fixed combos, branded as three "tracks" (Passage =
--- written, Voyage = oral, Expedition = both) each with three named tiers
--- (Launch = 3mo, Mariner = 6mo, Master = 12mo). track_name/tier_name are
+-- Duration x scope = 9 fixed combos, named for the exam each prepares you
+-- for (Written Paper, Oral & Viva, Full COC Preparation), each sold in
+-- three access lengths. track_name/tier_name are
 -- editable here rather than hardcoded, so a future rebrand is an admin edit,
 -- not a code change. The upgrade modal and every plan-display surface in the
 -- app read this table directly.
@@ -127,15 +127,15 @@ CREATE TRIGGER touch_pricing_plans
 
 -- Seed the 9 combos at the agreed prices/names, no discount.
 INSERT INTO public.pricing_plans (duration, scope, track_name, tier_name, base_amount) VALUES
-  ('3mo', 'written','Passage',   'Launch',   49900),
-  ('6mo', 'written','Passage',   'Mariner',  79900),
-  ('12mo','written','Passage',   'Master',  129900),
-  ('3mo', 'oral',   'Voyage',    'Launch',   69900),
-  ('6mo', 'oral',   'Voyage',    'Mariner',  89900),
-  ('12mo','oral',   'Voyage',    'Master',  149900),
-  ('3mo', 'both',   'Expedition','Launch',   99900),
-  ('6mo', 'both',   'Expedition','Mariner', 149900),
-  ('12mo','both',   'Expedition','Master',  269900)
+  ('3mo', 'written','Written Paper','3 Months',   49900),
+  ('6mo', 'written','Written Paper','6 Months',  79900),
+  ('12mo','written','Written Paper','12 Months',  129900),
+  ('3mo', 'oral',   'Oral & Viva',  '3 Months',   69900),
+  ('6mo', 'oral',   'Oral & Viva',  '6 Months',  89900),
+  ('12mo','oral',   'Oral & Viva',  '12 Months',  149900),
+  ('3mo', 'both',   'Full COC Preparation','3 Months',   99900),
+  ('6mo', 'both',   'Full COC Preparation','6 Months', 149900),
+  ('12mo','both',   'Full COC Preparation','12 Months',  269900)
 ON CONFLICT (duration, scope) DO NOTHING;
 
 -- ── 6. Verify ───────────────────────────────────────────────────────────

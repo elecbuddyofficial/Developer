@@ -1341,7 +1341,7 @@
         </div>
       </div>
 
-      <!-- Tier cards (Launch / Mariner / Master), rendered from pricing_plans -->
+      <!-- Duration cards (3 / 6 / 12 months), rendered from pricing_plans -->
       <div id="up-offer-banner"></div>
         <div id="up-tier-cards" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px;"></div>
 
@@ -2712,7 +2712,7 @@ function setTheme(t) {
         // (the previous approach) was wrong: someone who bought Written 12mo
         // and later Oral 3mo separately has BOTH sections live on different
         // dates, which made that logic synthesize scope='both' and look up a
-        // combined-bundle tier name (e.g. "Expedition Launch") that was never
+        // combined-bundle tier name (e.g. "Full COC Preparation 3 Months") that was never
         // purchased - Written was never part of that 3-month package. Reading
         // plan_scope directly names only the real, most recent transaction,
         // while the status line below independently and correctly discloses
@@ -3020,35 +3020,37 @@ var SUPABASE_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
 var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
 
 // ── Pricing data (admin-editable via the Plans tab, fetched live) ───────────
-var TRACK_ORDER = ['written', 'oral', 'both'];   // Passage, Voyage, Expedition
-var TIER_ORDER  = ['3mo', '6mo', '12mo'];        // Launch, Mariner, Master
-var TRACK_FALLBACK_NAME = { written: 'Passage', oral: 'Voyage', both: 'Expedition' };
+var TRACK_ORDER = ['written', 'oral', 'both'];   // Written Paper, Oral & Viva, Full COC Preparation
+var TIER_ORDER  = ['3mo', '6mo', '12mo'];        // 3 / 6 / 12 Months
+var TRACK_FALLBACK_NAME = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation' };
 
-// What the tab LEADS with. Deliberately not the track name.
+// What the tab LEADS with: the exam it prepares you for.
 //
-// The tabs used to read PASSAGE / VOYAGE / EXPEDITION, and the only thing that
-// explained them was a subhead under whichever tab was already selected. Three
-// problems with that, in order of cost:
+// The tabs used to read PASSAGE / VOYAGE / EXPEDITION, with a subhead under
+// the selected one as the only explanation. Three problems, in order of cost:
 //
 //   1. They read as a good/better/best ladder, because that is what
 //      passage -> voyage -> expedition sounds like. They are not a ladder,
-//      they are three different products. Someone who needs Oral reads Voyage
-//      as the middle upgrade rather than "the Oral one", and someone
+//      they are three different products. Someone who needs Oral reads the
+//      middle one as an upgrade rather than "the Oral one", and someone
 //      economising picks the cheapest and gets Written when they came for
-//      Oral. That is not confusion, it is buying the wrong thing, and it comes
-//      back as a refund.
-//   2. Both axes were nautical progressions, so nothing in "Passage Launch"
-//      signalled that one word means what you get and the other how long.
-//   3. You could not compare the three without clicking each one.
+//      Oral. That is not confusion, it is buying the wrong thing, and it
+//      comes back as a refund.
+//   2. Every place the name appeared it was bolted to a translation
+//      ("Passage - Written Only"). A name that needs a subtitle to be
+//      understood is not doing its job.
+//   3. The duration names had the same fault, worse: Launch / Mariner /
+//      Master read as capability levels, and Master Mariner is a real rank.
+//      They were only access lengths over identical content, so the naming
+//      invented a hierarchy the product does not have.
 //
-// So the function leads and the track name rides underneath as branding. The
-// tier names are untouched: "Launch" sits directly above "3 Months", where the
-// ladder metaphor is actually true.
-var SCOPE_TAB_LABEL = { written: 'Written', oral: 'Oral', both: 'Both' };
+// Both axes now say what they are. The track names the exam, the tier names
+// the months, and nothing needs a legend.
+var SCOPE_TAB_LABEL = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC' };
 var SCOPE_SUBHEAD = {
-  written: 'Written exam prep',
-  oral:    'Oral exam prep, quizzes & Surveyor Q&A',
-  both:    'Everything - Written + Oral',
+  written: 'Written exam preparation',
+  oral:    'Oral exam preparation, quizzes and Surveyor Q&A',
+  both:    'Written and Oral together, everything in one plan',
 };
 var SCOPE_FEATURES = {
   written: ['7 written exam topics with solved papers', 'Offline access via service worker cache'],
@@ -3141,7 +3143,7 @@ function bestValueDuration(scope) {
 // server recomputes this independently and is the source of truth; this exists
 // so the buyer is told, in dates, exactly what their money does BEFORE they
 // spend it. Stacking is invisible otherwise: someone holding Written who buys
-// Expedition cannot otherwise tell whether they are gaining 3 months or losing
+// Full COC cannot otherwise tell whether they are gaining 3 months or losing
 // the 10 they already paid for.
 function _scopesCovered(scope) {
   return scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
@@ -3308,7 +3310,7 @@ function renderUpgradeCards() {
     return '<div class="up-plan-card' + (isBest ? ' up-plan-card-best' : '') + '" id="up-card-' + dur + '-' + scope + '" data-duration="' + dur + '">'
       + ribbon
       + '<div style="display:flex;align-items:center;justify-content:space-between;">'
-      +   '<div><div class="up-tier-name">' + escUp(row.tier_name) + '</div><div class="up-tier-duration">' + escUp(dur.replace('mo', ' Months')) + '</div></div>'
+      +   '<div><div class="up-tier-name">' + escUp(row.tier_name || dur.replace('mo', ' Months')) + '</div></div>'
       +   '<div style="text-align:right;">' + priceHtml + '</div>'
       + '</div>'
       + descHtml

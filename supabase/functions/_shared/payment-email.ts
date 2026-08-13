@@ -18,7 +18,7 @@ const DURATION_LABELS: Record<string, string> = {
 // branded name for each scope, shown next to the plain duration so the
 // receipt reads the same way the purchase screen did.
 const TRACK_NAME: Record<string, string> = {
-  written: 'Passage', oral: 'Voyage', both: 'Expedition',
+  written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation',
 };
 
 const SCOPE_ACCESS_DESCRIPTION: Record<string, string> = {
