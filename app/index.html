@@ -1409,6 +1409,16 @@
     padding: 4px 10px; border-radius: 20px; white-space: nowrap;
   }
   .up-offer-desc { font-size: 12.5px; color: var(--text2); line-height: 1.45; }
+  /* The deadline. Quiet when it is weeks away, loud in the last few days,
+     because that is when it is actually a reason to decide. */
+  .up-offer-ends {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .03em;
+    color: var(--text2); border: 1px solid var(--border2);
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  }
+  .up-offer-ends.is-urgent {
+    color: var(--orange); border-color: var(--orange-border); background: var(--orange-dim);
+  }
   .up-tier-name { font-size: 15px; font-weight: 700; color: #DDE5EF; }
   .up-tier-duration { font-size: 12px; color: #6E8AA6; margin-top: 3px; }
   .up-price { font-size: 20px; font-weight: 700; color: #C8A44A; letter-spacing: -0.5px; }
@@ -3081,6 +3091,38 @@ function findPlanRow(duration, scope) {
   })[0];
 }
 
+/* When a sale ends, said in the banner without the admin having to remember to
+   type it into the description.
+
+   A dated offer that does not show its deadline is throwing away the reason
+   for dating it: the whole point of "ends 20 August" is that it gives somebody
+   who is still deciding a reason to decide now. Counted in days rather than
+   printed as a date once it is close, because "2 days left" reads as urgency
+   and "20 August" reads as an administrative detail.
+
+   No end date is a legitimate state and says nothing at all, rather than
+   inventing a deadline. */
+function offerDeadlineHtml(row) {
+  if (!row || !row.discount_ends_at) return '';
+  var end = new Date(row.discount_ends_at);
+  if (isNaN(end.getTime())) return '';
+
+  // Whole days between today and the end date, counted from midnight so an
+  // offer ending tonight reads "today" rather than "0 days".
+  var today = new Date(); today.setHours(0, 0, 0, 0);
+  var endDay = new Date(end); endDay.setHours(0, 0, 0, 0);
+  var days = Math.round((endDay - today) / 86400000);
+  if (days < 0) return '';
+
+  var text, urgent = days <= 3;
+  if (days === 0)      text = 'Ends today';
+  else if (days === 1) text = 'Ends tomorrow';
+  else if (days <= 7)  text = days + ' days left';
+  else                 text = 'Ends ' + end.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+
+  return '<span class="up-offer-ends' + (urgent ? ' is-urgent' : '') + '">' + escUp(text) + '</span>';
+}
+
 function effectivePrice(row) {
   var now = new Date();
   var active = row.discount_percent > 0
@@ -3257,8 +3299,13 @@ function renderUpgradeCards() {
      say it once in a banner above the cards and let the cards keep Best
      Value. Only when the names differ between plans does it fall back to a
      per-card badge, because then it genuinely is per-card information. */
+  /* Only plans whose sale is ACTUALLY RUNNING count. The offer name is stored
+     on the row the moment it is set up, so keying the banner off the name
+     alone announced a sale that had not started yet, and kept announcing it
+     after the end date had passed, both times over full-price cards. The
+     discount dates decide, the same way effectivePrice() decides the price. */
   var offerRows = TIER_ORDER.map(function (d) { return findPlanRow(d, scope); })
-                            .filter(function (r) { return r && r.label; });
+                            .filter(function (r) { return r && r.label && effectivePrice(r).active; });
   var offerNames = offerRows.map(function (r) { return r.label; })
                             .filter(function (v, i, a) { return a.indexOf(v) === i; });
   var sharedOffer = offerNames.length === 1 ? offerRows[0] : null;
@@ -3269,6 +3316,7 @@ function renderUpgradeCards() {
       ? '<div class="up-offer">'
         + '<span class="up-offer-tag">' + escUp(sharedOffer.label) + '</span>'
         + (sharedOffer.description ? '<span class="up-offer-desc">' + escUp(sharedOffer.description) + '</span>' : '')
+        + offerDeadlineHtml(sharedOffer)
         + '</div>'
       : '';
   }

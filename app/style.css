@@ -126,6 +126,7 @@ a.sb-item{text-decoration:none}
 .tag{padding:4px 12px;border-radius:20px;font-size:11.5px;font-weight:600;letter-spacing:.2px}
 .tag-blue{background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue)}
 .tag-orange{background:var(--orange-dim);border:1px solid var(--orange-border);color:var(--orange)}
+.tag-green{background:var(--green-dim);border:1px solid var(--green-border);color:var(--green)}
 .tag-purple{background:var(--purple-dim);border:1px solid rgba(168,85,247,.3);color:var(--purple)}
 
 /* Section headings */

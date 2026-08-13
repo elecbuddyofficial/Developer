@@ -374,6 +374,9 @@
       font-weight:800; letter-spacing:.06em; text-transform:uppercase;
       padding:3px 9px; border-radius:99px; white-space:nowrap; }
     .of-banner-desc { font-size:11.5px; color:var(--text2); }
+    .of-banner-ends { font-size:10.5px; font-weight:700; color:var(--text2);
+      border:1px solid var(--border2); padding:2px 8px; border-radius:20px; white-space:nowrap; }
+    .of-banner-ends.is-urgent { color:var(--orange); border-color:var(--orange-border); background:var(--orange-dim); }
     .of-card-track { font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--text3); }
     .of-card-tier { font-size:12.5px; font-weight:700; color:var(--text); margin-top:1px; }
     .of-card-dur { font-size:10.5px; color:var(--text3); }
@@ -5960,6 +5963,23 @@ function offerFields() {
    Seeing the actual cards, with the ribbon and the strike-through, is also the
    guard against a mistyped 90 that was meant to be 9, and across nine plans
    that mistake costs far more than it does on one row. */
+/* Mirrors offerDeadlineHtml() in app/index.html. If these two drift, the
+   preview stops describing the thing it previews. */
+function offerDeadlinePreview(endStr) {
+  if (!endStr) return '';
+  var end = new Date(endStr);
+  if (isNaN(end.getTime())) return '';
+  var today = new Date(); today.setHours(0,0,0,0);
+  var endDay = new Date(end); endDay.setHours(0,0,0,0);
+  var days = Math.round((endDay - today) / 86400000);
+  if (days < 0) return '<span class="of-banner-ends is-urgent">end date is in the past</span>';
+  var text = days === 0 ? 'Ends today'
+           : days === 1 ? 'Ends tomorrow'
+           : days <= 7  ? days + ' days left'
+           : 'Ends ' + end.toLocaleDateString('en-GB', { day:'numeric', month:'long' });
+  return '<span class="of-banner-ends' + (days <= 3 ? ' is-urgent' : '') + '">' + esc(text) + '</span>';
+}
+
 function offerPreview() {
   var box = document.getElementById('of-preview');
   if (!box) return;
@@ -5994,7 +6014,8 @@ function offerPreview() {
     +   'How buyers will see it</div>'
     + (f.name
         ? '<div class="of-banner"><span class="of-banner-tag">' + esc(f.name) + '</span>'
-          + (f.desc ? '<span class="of-banner-desc">' + esc(f.desc) + '</span>' : '') + '</div>'
+          + (f.desc ? '<span class="of-banner-desc">' + esc(f.desc) + '</span>' : '')
+          + offerDeadlinePreview(f.to) + '</div>'
         : '')
     + '<div style="display:flex;gap:9px;flex-wrap:wrap">'
     + rows.map(function (r) {
@@ -6063,8 +6084,13 @@ async function applyOffer() {
 
   await writeOffer(rows, {
     discount_percent:   f.pct,
-    discount_starts_at: f.from ? new Date(f.from).toISOString() : null,
-    discount_ends_at:   f.to   ? new Date(f.to).toISOString()   : null,
+    // A date input gives a bare day, and new Date("2026-08-20") is MIDNIGHT AT
+    // THE START of the 20th. Stored raw, an offer set to run "until 20 August"
+    // died as the 19th ended and never ran on the day it named, cutting every
+    // dated sale a full day short. Start dates take the beginning of the day
+    // and end dates the end of it, so both read the way the admin meant them.
+    discount_starts_at: f.from ? new Date(f.from + 'T00:00:00').toISOString() : null,
+    discount_ends_at:   f.to   ? new Date(f.to   + 'T23:59:59.999').toISOString() : null,
     label:              f.name || null,
     description:        f.desc || null,
   }, 'Offer applied to ' + rows.length + ' plan' + (rows.length === 1 ? '' : 's'));
