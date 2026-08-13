@@ -732,8 +732,8 @@
 
   #profile-panel, #settings-panel, #tx-panel {
     position: fixed; right: 0; top: 0; bottom: 0;
-    width: 300px; background: #0D1E33;
-    border-left: 1px solid #1A3050;
+    width: 300px; background: var(--surface);
+    border-left: 1px solid var(--border);
     padding: 22px; box-shadow: -4px 0 24px rgba(0,0,0,0.5);
     transform: translateX(100%);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -892,7 +892,7 @@
     </div>
 
     <!-- Plan box -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;margin-bottom:14px;">
       <div style="font-size:10.5px;color:#6E8AA6;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:7px;">Current Plan</div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
         <div id="pm-plan-label" style="font-size:14px;font-weight:700;"></div>
@@ -905,7 +905,7 @@
     <button id="pm-upgrade-btn" style="display:none;width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:6px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;margin-bottom:10px;letter-spacing:0.03em;">Upgrade to Full Access</button>
 
     <!-- Notifications -->
-    <button onclick="openNotifs();" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+    <button onclick="openNotifs();" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       Notifications
       <span class="nb-dot" id="nb-dot" style="position:absolute; right:10px; top:50%; transform:translateY(-50%);"></span>
@@ -917,7 +917,7 @@
 
 
     <!-- Settings -->
-    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
+    <button onclick="openSettings()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Settings
     </button>
@@ -926,10 +926,10 @@
     <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
     <!-- Courses -->
-    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
 
     <!-- Sign out -->
-    <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
+    <button onclick="signOut()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
 
     <!-- Reference footer, pinned to the bottom of the panel. Reaching support
          should not require knowing it lives behind Settings, so it sits on the
@@ -1020,18 +1020,18 @@
 
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="backToProfile()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <button onclick="backToProfile()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         </button>
         <div style="font-size:15px;font-weight:700;color:var(--text);">Settings</div>
       </div>
-      <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
+      <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
     </div>
 
     <div id="set-main-view">
 
     <!-- Data Saver -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
       <div style="min-width:0;">
         <div style="font-size:12.5px;font-weight:600;color:var(--text);">Data Saver</div>
         <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;line-height:1.4;">Diagrams load only when tapped</div>
@@ -1046,35 +1046,35 @@
          scores and wiping which chapters you have read are different regrets,
          and someone clearing a stale quiz score should not lose their place in
          23 topics as well. -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;">
       <div style="font-size:12.5px;font-weight:600;color:var(--text);">Reset Statistics</div>
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Clear your reading or quiz progress.</div>
-      <button onclick="setView('stats')" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Reset statistics</button>
+      <button onclick="setView('stats')" style="width:100%;min-height:40px;background:none;border:1px solid var(--border);border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Reset statistics</button>
     </div>
 
     <!-- Take a tour. Moved out of the profile menu: it is a one-off, and it
          was sitting between two things people open constantly. -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-top:14px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;margin-top:14px;">
       <div style="font-size:12.5px;font-weight:600;color:var(--text);">Take the tour</div>
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">A quick walkthrough of where everything is.</div>
-      <button onclick="closeSettings({target:{closest:function(){return true}}}); document.getElementById('profile-modal').style.display='none'; setTimeout(startGuide, 340);" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Start the tour</button>
+      <button onclick="closeSettings({target:{closest:function(){return true}}}); document.getElementById('profile-modal').style.display='none'; setTimeout(startGuide, 340);" style="width:100%;min-height:40px;background:none;border:1px solid var(--border);border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Start the tour</button>
     </div>
 
     <!-- Signed-in devices -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;">
       <div style="font-size:12.5px;font-weight:600;color:var(--text);">Signed in devices</div>
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">
         Your account works on up to <strong id="dev-limit-txt">3</strong> devices. Removing one frees a slot straight away.
       </div>
-      <button onclick="setView('devices')" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Manage devices</button>
+      <button onclick="setView('devices')" style="width:100%;min-height:40px;background:none;border:1px solid var(--border);border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Manage devices</button>
     </div>
 
     <!-- Payments. Moved out of the profile menu: looked at occasionally, not
          daily, and it opens its own panel anyway. -->
-    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;margin-bottom:14px;">
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;margin-bottom:14px;">
       <div style="font-size:12.5px;font-weight:600;color:var(--text);">Payments</div>
       <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;margin-bottom:11px;line-height:1.4;">Every purchase on this account, with receipts.</div>
-      <button onclick="openTransactions()" style="width:100%;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">View payments</button>
+      <button onclick="openTransactions()" style="width:100%;min-height:40px;background:none;border:1px solid var(--border);border-radius:6px;padding:9px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">View payments</button>
     </div>
 
     <!-- Delete account -->
@@ -1111,7 +1111,7 @@
           <input id="del-email-input" type="email" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="your email" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:13px;padding:10px 11px;font-family:inherit;margin-bottom:9px;">
           <div id="del-msg" style="display:none;font-size:11.5px;margin-bottom:9px;"></div>
           <div style="display:flex;gap:8px;">
-            <button onclick="cancelDeleteFlow()" style="flex:1;min-height:40px;background:none;border:1px solid #1A3050;border-radius:6px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Keep my account</button>
+            <button onclick="cancelDeleteFlow()" style="flex:1;min-height:40px;background:none;border:1px solid var(--border);border-radius:6px;font-size:12.5px;color:#8FA3B8;font-weight:600;cursor:pointer;">Keep my account</button>
             <button id="del-go-btn" onclick="confirmDeleteAccount()" style="flex:1;min-height:40px;background:rgba(224,90,106,0.15);border:1px solid rgba(224,90,106,0.45);border-radius:6px;font-size:12.5px;color:#E05A6A;font-weight:700;cursor:pointer;">Delete account</button>
           </div>
         </div>
@@ -1133,7 +1133,7 @@
          list or a destructive action never sits in the middle of a scroll. -->
     <div id="set-stats-view" style="display:none;">
       <div style="display:flex;align-items:center;margin-bottom:16px;"><button onclick="setView('main')" style="background:none;border:none;color:#8FA3B8;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;font-size:13px;font-family:inherit;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back</button><div style="flex:1;text-align:center;font-weight:700;color:var(--text);font-size:15px;margin-right:45px;">Reset statistics</div></div>
-      <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;">
         <div style="font-size:10.5px;color:#6E8AA6;margin-bottom:11px;line-height:1.45;">Two separate resets. Neither can be undone.</div>
 
         <div style="font-size:10.5px;color:#6E8AA6;margin-bottom:6px;line-height:1.4;">Which topics and sections you have marked as read.</div>
@@ -1148,7 +1148,7 @@
 
     <div id="set-devices-view" style="display:none;">
       <div style="display:flex;align-items:center;margin-bottom:16px;"><button onclick="setView('main')" style="background:none;border:none;color:#8FA3B8;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;font-size:13px;font-family:inherit;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back</button><div style="flex:1;text-align:center;font-weight:700;color:var(--text);font-size:15px;margin-right:45px;">Devices</div></div>
-      <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px;">
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:13px 15px;">
         <div style="font-size:10.5px;color:#6E8AA6;margin-bottom:11px;line-height:1.45;">
           Your account works on up to <strong>3</strong> devices. Removing one frees a slot straight away.
         </div>
@@ -1177,7 +1177,7 @@
 <!-- ── What's new ──────────────────────────────────────────── -->
 <div id="upd-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div style="width:100%;max-width:480px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:24px;">
+    <div style="width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
       <div style="font-size:18px;font-weight:700;color:var(--text);">What&rsquo;s new</div>
       <div style="font-size:12.5px;color:#8FA3B8;margin-top:5px;line-height:1.55;">Since you were last here. You will only see these once.</div>
       <!-- Deliberately not a scrolling pane with the button pinned below it.
@@ -1193,7 +1193,7 @@
 <!-- ── First-run welcome ───────────────────────────── -->
 <div id="wel-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div style="width:100%;max-width:460px;background:#0D1E33;border:1px solid #1A3050;border-radius:16px;padding:26px 24px;text-align:center;">
+    <div style="width:100%;max-width:460px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:26px 24px;text-align:center;">
 
       <div style="font-family:Georgia,serif;font-size:26px;font-weight:700;color:#C8A44A;line-height:1.2;">Welcome to Elec-Buddy</div>
       <div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#6E8AA6;margin-top:6px;">ETO Exam Preparation</div>
@@ -1203,15 +1203,15 @@
       </p>
 
       <div style="display:flex;gap:10px;margin:20px 0 0;flex-wrap:wrap;">
-        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+        <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
           <div style="font-size:19px;font-weight:800;color:#C8A44A;">23</div>
           <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Oral topics with full notes and diagrams</div>
         </div>
-        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+        <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
           <div style="font-size:19px;font-weight:800;color:#C8A44A;">5,643</div>
           <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Practice questions with explanations</div>
         </div>
-        <div style="flex:1 1 130px;background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:12px 10px;">
+        <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
           <div style="font-size:19px;font-weight:800;color:#C8A44A;">1,196</div>
           <div style="font-size:10.5px;color:#8FA3B8;margin-top:2px;line-height:1.4;">Real surveyor questions and answers</div>
         </div>
@@ -1233,7 +1233,7 @@
       <p style="font-size:13.5px;color:var(--text);margin:20px 0 0;font-weight:600;">Happy studying.</p>
 
       <button onclick="dismissWelcome()" style="width:100%;min-height:46px;margin-top:18px;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Start studying</button>
-      <button onclick="dismissWelcome(true)" style="width:100%;min-height:44px;margin-top:8px;background:none;border:1px solid #1A3050;border-radius:9px;color:#8FA3B8;font-size:12.5px;cursor:pointer;font-family:inherit;">Show me around first</button>
+      <button onclick="dismissWelcome(true)" style="width:100%;min-height:44px;margin-top:8px;background:none;border:1px solid var(--border);border-radius:9px;color:#8FA3B8;font-size:12.5px;cursor:pointer;font-family:inherit;">Show me around first</button>
     </div>
   </div>
 </div>
@@ -1241,11 +1241,11 @@
 <!-- ── Feedback / bug report ───────────────────────────────── -->
 <div id="fb-modal" onclick="closeFeedback(event)" style="display:none;position:fixed;inset:0;z-index:10003;background:rgba(4,9,20,0.92);backdrop-filter:blur(6px);overflow-y:auto;">
   <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div id="fb-card" style="width:100%;max-width:520px;background:#0D1E33;border:1px solid #1A3050;border-radius:14px;padding:22px;">
+    <div id="fb-card" style="width:100%;max-width:520px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;">
 
       <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;">
         <div style="font-size:17px;font-weight:700;color:var(--text);">Report a bug or request content</div>
-        <button onclick="closeFeedback({target:this})" class="fb-close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;flex-shrink:0;">&times;</button>
+        <button onclick="closeFeedback({target:this})" class="fb-close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;flex-shrink:0;">&times;</button>
       </div>
       <div style="font-size:12.5px;color:#8FA3B8;line-height:1.6;margin-bottom:16px;">
         This goes straight to our support inbox with your account details attached, so you do not need to explain who you are. We reply to the email address on your account.
@@ -1272,7 +1272,7 @@
 
       <label class="fb-lbl" style="margin-top:14px;">Attachments <span style="color:#6E8AA6;font-weight:400;">(optional)</span></label>
       <input id="fb-files" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt" onchange="fbFilesChanged()"
-             style="width:100%;min-height:44px;font-size:12px;color:#8FA3B8;padding:11px 10px;background:#0A1828;border:1px dashed #1A3050;border-radius:8px;box-sizing:border-box;">
+             style="width:100%;min-height:44px;font-size:12px;color:#8FA3B8;padding:11px 10px;background:var(--surface2);border:1px dashed var(--border);border-radius:8px;box-sizing:border-box;">
       <div class="fb-hint">Screenshots help most for a bug. For content you can attach a PDF, Word document or notes. Up to 5 files, 5&nbsp;MB each.</div>
       <div id="fb-file-list" style="margin-top:8px;"></div>
 
@@ -1280,7 +1280,7 @@
 
       <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;">
         <button id="fb-send" onclick="sendFeedback()" style="flex:1 1 160px;min-height:44px;background:#C8A44A;color:#070D1A;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Send</button>
-        <button onclick="closeFeedback({target:this})" class="fb-close" style="flex:0 1 110px;min-height:44px;background:none;border:1px solid #1A3050;border-radius:8px;color:#8FA3B8;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
+        <button onclick="closeFeedback({target:this})" class="fb-close" style="flex:0 1 110px;min-height:44px;background:none;border:1px solid var(--border);border-radius:8px;color:#8FA3B8;font-size:13px;cursor:pointer;font-family:inherit;">Cancel</button>
       </div>
     </div>
   </div>
@@ -1291,12 +1291,12 @@
   <div id="tx-panel">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         </button>
         <div style="font-size:15px;font-weight:700;color:var(--text);">Payment History</div>
       </div>
-      <button onclick="closeTransactions({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
+      <button onclick="closeTransactions({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">&times;</button>
     </div>
     <div id="tx-list"></div>
   </div>
@@ -1313,7 +1313,7 @@
           <div style="font-family:Georgia,serif;font-size:22px;font-weight:normal;color:#C8A44A;letter-spacing:0.02em;">Elec-Buddy</div>
           <div style="font-size:11px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#6E8AA6;margin-top:3px;">Choose your plan</div>
         </div>
-        <button onclick="closeUpgradeModal()" class="up-close-btn" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:36px;height:36px;color:#6E8AA6;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">&times;</button>
+        <button onclick="closeUpgradeModal()" class="up-close-btn" style="background:rgba(255,255,255,0.06);border:1px solid var(--border);border-radius:50%;width:36px;height:36px;color:#6E8AA6;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.06)'">&times;</button>
       </div>
 
       <!-- Trial notice -->
@@ -2418,7 +2418,7 @@ function setTheme(t) {
 
       document.getElementById('upd-list').innerHTML = fresh.map(function(n) {
         var t = n.type || 'info';
-        return '<div style="background:#0A1828;border:1px solid #1A3050;border-radius:9px;padding:13px 15px;margin-bottom:10px;">'
+        return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:13px 15px;margin-bottom:10px;">'
           + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
           +   '<span class="nf-chip nf-chip-' + t + '">' + t + '</span>'
           +   '<span style="font-size:11px;color:#6E8AA6;">' + nfTimeAgo(n.created_at) + '</span>'
@@ -4032,7 +4032,7 @@ function confirmPurchase(duration, scope, onConfirm) {
   var ov = document.createElement('div');
   ov.style.cssText = 'position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
   ov.innerHTML =
-    '<div style="background:#0D1E33;border:1px solid #1A3050;border-radius:14px;padding:22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);">'
+    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);">'
     + '<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;">Confirm your purchase</div>'
     + '<div style="font-size:12.5px;color:#8FA3B8;margin-bottom:14px;line-height:1.5;">Here is exactly what changes:</div>'
     + '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">' + rows + '</table>'
