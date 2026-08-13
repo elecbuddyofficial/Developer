@@ -52,30 +52,92 @@ const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.0
 const lum = r => 0.2126 * lin(r[0]) + 0.7152 * lin(r[1]) + 0.0722 * lin(r[2]);
 const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 
-/* Resolve a CSS colour to rgb under one theme, or null if it cannot be
-   resolved (gradients, currentColor, transparent and so on). */
-function resolve(value, theme) {
-  if (!value) return null;
-  const v = value.trim();
-  if (/^#[0-9a-f]{6}$/i.test(v)) return hex(v);
-  if (/^#[0-9a-f]{3}$/i.test(v)) return hex('#' + v[1] + v[1] + v[2] + v[2] + v[3] + v[3]);
-  const varM = /^var\(\s*(--[\w-]+)\s*(?:,\s*([^)]+))?\)$/.exec(v);
-  if (varM) {
-    if (theme[varM[1]]) return hex(theme[varM[1]]);
-    return varM[2] ? resolve(varM[2], theme) : null;
+/* Resolve a CSS colour to [r,g,b,a] under one theme, or null if it cannot be
+   resolved. Alpha is kept, because a translucent layer has to be composited
+   over what is beneath it before any contrast number means anything.
+
+   The first four versions of this audit only understood #hex. Every rgba()
+   background was skipped in silence, which is how .up-plan-card, a fixed
+   translucent dark panel holding var(--text), passed four consecutive clean
+   runs while being unreadable in light theme. */
+const NAMED = { white: [255,255,255,1], black: [0,0,0,1], transparent: [0,0,0,0] };
+
+function resolve(value, theme, depth) {
+  if (!value || (depth || 0) > 4) return null;
+  const v = String(value).trim().toLowerCase();
+  if (NAMED[v]) return NAMED[v].slice();
+  let m;
+  if ((m = /^#([0-9a-f]{6})$/.exec(v))) return [...hex('#' + m[1]), 1];
+  if ((m = /^#([0-9a-f]{3})$/.exec(v)))
+    return [...hex('#' + m[1][0] + m[1][0] + m[1][1] + m[1][1] + m[1][2] + m[1][2]), 1];
+  if ((m = /^var\(\s*(--[\w-]+)\s*(?:,\s*([^)]+))?\)$/.exec(v))) {
+    if (theme[m[1]]) return resolve(theme[m[1]], theme, (depth || 0) + 1);
+    return m[2] ? resolve(m[2], theme, (depth || 0) + 1) : null;
   }
-  const rgb = /^rgba?\(([^)]+)\)$/.exec(v);
-  if (rgb) {
-    const p = rgb[1].split(',').map(x => parseFloat(x));
-    if (p.length >= 3 && (p.length < 4 || p[3] > 0.85)) return [p[0], p[1], p[2]];
+  if ((m = /^rgba?\(([^)]+)\)$/.exec(v))) {
+    const p = m[1].split(/[,\s/]+/).filter(Boolean).map(parseFloat);
+    if (p.length >= 3) return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1];
   }
   return null;
 }
+
+/* Flatten a stack of layers, nearest first, onto an opaque base. */
+function flatten(layers, base) {
+  let out = base.slice(0, 3);
+  for (let i = layers.length - 1; i >= 0; i--) {
+    const l = layers[i];
+    if (!l) continue;
+    const a = l[3] == null ? 1 : l[3];
+    out = [0, 1, 2].map(k => Math.round(l[k] * a + out[k] * (1 - a)));
+  }
+  return out;
+}
+
 const isVar = v => /var\(/.test(v || '');
-const isFixed = v => v && !isVar(v) && /^#[0-9a-f]{3,6}$/i.test(v.trim());
+const isFixed = v => {
+  if (!v || isVar(v)) return false;
+  const t = String(v).trim().toLowerCase();
+  return /^#[0-9a-f]{3,6}$/.test(t) || /^rgba?\(/.test(t) || !!NAMED[t];
+};
 
 const PAGES = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html'];
 const findings = [];
+
+/* Scoped palettes. #gate-overlay redefines --text, --surface and the rest
+   inside itself so the paywall stays dark whatever the page theme is, which is
+   a deliberate and correct pattern. An audit that does not know about it
+   reports every element in there as broken, which is worse than useless: cry
+   wolf often enough and the real findings get skipped too.
+
+   So: collect every selector that redefines tokens, and when scoring an
+   element, merge the overrides of any ancestor that matches one. */
+function collectScopes(src) {
+  const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+            + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+  const scopes = [];
+  for (const m of css.matchAll(/([^{}@\n]+)\{([^}]*--[\w-]+\s*:[^}]*)\}/g)) {
+    const selector = m[1].trim();
+    if (!selector || selector === ':root' || /^\[data-theme/.test(selector)) continue;
+    const tokens = {};
+    for (const t of m[2].matchAll(/(--[\w-]+)\s*:\s*([^;]+)/g)) tokens[t[1]] = t[2].trim();
+    if (Object.keys(tokens).length) scopes.push({ selector, tokens });
+  }
+  return scopes;
+}
+
+/* The palette in force for one element: the page theme, with any scoped
+   overrides from itself or an ancestor layered on top. */
+function themeFor(el, baseTheme, scopes) {
+  let merged = null;
+  for (let a = el; a; a = a.parentElement) {
+    for (const sc of scopes) {
+      let hit = false;
+      try { hit = a.matches(sc.selector); } catch (e) { continue; }
+      if (hit) merged = Object.assign({}, sc.tokens, merged || {});
+    }
+  }
+  return merged ? Object.assign({}, baseTheme, merged) : baseTheme;
+}
 
 /* Every element carrying a fixed background, whether it came from a style
    attribute or a CSS rule. The first version looked only at style attributes
@@ -88,7 +150,7 @@ function elementsWithFixedBackground(doc, src) {
   }
   // Rules in <style> blocks: take the selector, find what it matches.
   const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n');
-  for (const m of css.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*(#[0-9a-fA-F]{3,6})[^}]*)\}/g)) {
+  for (const m of css.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*(#[0-9a-fA-F]{3,6}|rgba?\([^)]*\))[^}]*)\}/g)) {
     const selector = m[1].trim().split('\n').pop().trim();
     if (!selector || /[%]/.test(selector)) continue;   // skip keyframes
     let matched = [];
@@ -102,8 +164,27 @@ for (const page of PAGES) {
   const src = fs.readFileSync(page, 'utf8');
   const dom = new JSDOM(src);
   const doc = dom.window.document;
+  const scopes = collectScopes(src);
+  // Every element that paints a background from any source, used below to tell
+  // whether a nearer layer stands between a scrim and its text.
+  const painted = elementsWithFixedBackground(doc, src);
+  const painters = new Set(painted.map(x => x[0]));
+  for (const el of doc.querySelectorAll('[style*="background"]')) {
+    const st = el.getAttribute('style') || '';
+    if (/background(?:-color)?\s*:\s*(?!none|transparent)/.test(st)) painters.add(el);
+  }
+  {
+    const allCss = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+      + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+    for (const m of allCss.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*([^;}]+))/g)) {
+      if (/none|transparent|inherit/.test(m[3])) continue;
+      const sel = m[1].trim().split('\n').pop().trim();
+      if (!sel || /[%]/.test(sel)) continue;
+      try { doc.querySelectorAll(sel).forEach(e => painters.add(e)); } catch (e) {}
+    }
+  }
 
-  for (const [el, bg] of elementsWithFixedBackground(doc, src)) {
+  for (const [el, bg] of painted) {
 
     // Every descendant that sets a text colour, plus the element itself.
     const kids = [el, ...el.querySelectorAll('[style*="color"]')];
@@ -111,17 +192,23 @@ for (const page of PAGES) {
       const col = (kid.getAttribute('style') || '').match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
       if (!col || !isVar(col[1])) continue;           // only theme-driven text
 
-      // Does an inner element re-declare the background between the two?
+      // Does anything between the two paint its own background? Checked
+      // against elements painted from EITHER source: a child panel styled by
+      // a CSS rule shadows the scrim behind it just as surely as an inline
+      // one, and missing that scored everything inside #profile-panel against
+      // the dim overlay instead of the panel it actually sits on.
       let a = kid.parentElement, shadowed = false;
       while (a && a !== el) {
-        if (/background(?:-color)?\s*:/.test(a.getAttribute('style') || '')) { shadowed = true; break; }
+        if (painters.has(a) || /background(?:-color)?\s*:/.test(a.getAttribute('style') || '')) { shadowed = true; break; }
         a = a.parentElement;
       }
       if (shadowed) continue;
 
-      for (const [name, theme] of Object.entries(THEMES)) {
-        const b = resolve(bg, theme), f = resolve(col[1], theme);
-        if (!b || !f) continue;
+      for (const [name, baseTheme] of Object.entries(THEMES)) {
+        const theme = themeFor(kid, baseTheme, scopes);
+        const braw = resolve(bg, theme), f = resolve(col[1], theme);
+        if (!braw || !f) continue;
+        const b = flatten([braw], resolve(theme['--bg'], theme));
         const r = ratio(f, b);
         if (r < 4.5) {
           findings.push({ page, theme: name, ratio: r, bg: bg.trim(), fg: col[1].trim(),
@@ -142,6 +229,7 @@ for (const page of PAGES) {
   const src = fs.readFileSync(page, 'utf8');
   const dom = new JSDOM(src);
   const doc = dom.window.document;
+  const scopes = collectScopes(src);
 
   for (const kid of doc.querySelectorAll('[style*="color"]')) {
     const col = (kid.getAttribute('style').match(/(?:^|;)\s*color\s*:\s*([^;]+)/) || [])[1];
@@ -157,9 +245,11 @@ for (const page of PAGES) {
     }
     if (!bg || !isVar(bg)) continue;                   // only themed grounds
 
-    for (const [name, theme] of Object.entries(THEMES)) {
-      const b = resolve(bg, theme), f = resolve(col, theme);
-      if (!b || !f) continue;
+    for (const [name, baseTheme] of Object.entries(THEMES)) {
+      const theme = themeFor(kid, baseTheme, scopes);
+      const braw = resolve(bg, theme), f = resolve(col, theme);
+      if (!braw || !f) continue;
+      const b = flatten([braw], resolve(theme['--bg'], theme));
       const r = ratio(f, b);
       if (r < 4.5) findings.push({ page, theme: name, ratio: r, bg: bg, fg: col,
         text: (kid.textContent || '').trim().slice(0, 46) || '(icon or empty)',

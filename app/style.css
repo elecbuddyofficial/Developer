@@ -1454,7 +1454,13 @@ a.sb-item{text-decoration:none}
 .theme-btn:hover{border-color:var(--border2);background:var(--surface3);color:var(--text)}
 .theme-btn.t-active{border-color:var(--blue-border);background:var(--blue-dim);color:var(--blue)}
 /* Gate overlay always stays dark - theme toggle doesn't reach inside */
-#gate-overlay{--bg:#07080e;--surface:#0D1E33;--surface2:#0D1E33;--surface3:#132030;--border:#1A3050;--border2:#1A3050;--text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;--blue:#f59e0b;--blue-dim:rgba(245,158,11,.12);--blue-border:rgba(245,158,11,.35)}
+#gate-overlay{--bg:#07080e;--surface:#0D1E33;--surface2:#0D1E33;--surface3:#132030;--border:#1A3050;--border2:#1A3050;--text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;--blue:#f59e0b;--blue-dim:rgba(245,158,11,.12);--blue-border:rgba(245,158,11,.35);--amber:#C8A44A}
+/* The upgrade modal is a deliberate dark surface in every theme, gold on
+   near-black, the same decision as the paywall above. Pinning the palette
+   here is what makes that safe: both sides of every pair move together, so
+   no theme can leave dark text on the dark scrim. */
+#upgrade-modal{--bg:#040914;--surface:#0D1E33;--surface2:#0D1E33;--surface3:#132030;--border:#1A3050;--border2:#1A3050;--text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;--amber:#C8A44A;--green:#5DC87A;--green-dim:rgba(93,200,122,.14);--green-border:rgba(93,200,122,.35);--red:#E06C6C;--orange:#f59e0b}
+
 /* Light theme global fixes */
 [data-theme="light"] body{background:var(--bg);color:var(--text)}
 /* Answer feedback text is tuned for a dark card (pale mint / pale red). On the
