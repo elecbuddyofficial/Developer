@@ -317,6 +317,12 @@ window._authReady = (async () => {
     <button class="sb-item" id="si-aptitude" onclick="openSection('aptitude')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></span><span class="label">Aptitude</span>
     </button>
+    <button class="sb-item" id="si-datainterp" onclick="openSection('datainterp')">
+      <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></span><span class="label">Data Interpretation</span>
+    </button>
+    <button class="sb-item" id="si-currentaffairs" onclick="openSection('currentaffairs')">
+      <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></span><span class="label">Current Affairs</span>
+    </button>
     <button class="sb-item" id="si-companyqa" onclick="openSection('companyqa')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l18 0"/><path d="M9 8l1 0"/><path d="M9 12l1 0"/><path d="M9 16l1 0"/><path d="M14 8l1 0"/><path d="M14 12l1 0"/><path d="M14 16l1 0"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"/></svg></span><span class="label">Company Q&A</span>
     </button>
@@ -423,9 +429,31 @@ window._authReady = (async () => {
         <div class="sc-stripe" style="background:var(--purple)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></div>
         <h3>Aptitude</h3>
-        <p>Quantitative, verbal, logical reasoning, and psychometric drills. Plus a current affairs bank for maritime awareness questions.</p>
+        <p>Quantitative aptitude, topic by topic. Formulas derived rather than listed, with worked examples and the traps that cost marks.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">Aptitude · Current Affairs</span>
+          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">32 Topics · Quiz</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('datainterp')" style="--sc-color:var(--amber);--sc-dim:var(--amber-dim);--sc-border:var(--amber-border);--sc-glow:rgba(200,164,74,.18);--sc-drop:rgba(200,164,74,.6)">
+        <div class="sc-stripe" style="background:var(--amber)"></div>
+        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></div>
+        <h3>Data Interpretation</h3>
+        <p>Tables, bar charts, pie charts and line graphs. The arithmetic is easy; reading the chart correctly under time pressure is the actual test.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--amber-dim);border-color:var(--amber-border);color:var(--amber)">4 Chart Types · Quiz</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('currentaffairs')" style="--sc-color:var(--red);--sc-dim:var(--red-dim);--sc-border:var(--red-border);--sc-glow:rgba(224,112,112,.18);--sc-drop:rgba(224,112,112,.6)">
+        <div class="sc-stripe" style="background:var(--red)"></div>
+        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></div>
+        <h3>Current Affairs</h3>
+        <p>Maritime and general awareness: shipping news, regulations and world events that interviewers use to check whether you follow the industry.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--red-dim);border-color:var(--red-border);color:var(--red)">Maritime · General</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
@@ -478,7 +506,7 @@ window._authReady = (async () => {
 <div class="view" id="view-section">
   <div class="section-landing">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <button class="anc-btn" onclick="showHome()">← Home</button>
+      <button class="anc-btn" onclick="showStudyHub()">← Study Materials</button>
     </div>
     <div class="sec-header" id="sec-header">
       <div class="sec-header-icon" id="sec-icon"></div>
@@ -499,7 +527,7 @@ window._authReady = (async () => {
 <div class="view" id="view-companyqa">
   <div style="max-width:1060px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <button class="anc-btn" onclick="showHome()">← Home</button>
+      <button class="anc-btn" onclick="showStudyHub()">← Study Materials</button>
       <h2 style="font-size:17px;font-weight:800;color:var(--text)">🏢 Company Interview Q&amp;A</h2>
     </div>
     <div class="cqa-layout">
@@ -755,11 +783,10 @@ var SECTIONS = {
   },
   aptitude: {
     label:'Aptitude', icon:'🧮', sbId:'si-aptitude',
-    desc:'Aptitude test drills (QUANT, VERB, LOGIC, PSYCHO) and maritime current affairs.',
+    desc:'Quantitative aptitude drills: the formula topics that make up the written test.',
     color:'var(--purple)', quizLabel:'Practice Aptitude questions',
     topics:[
       {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:false,  free:true},
-      {id:'CA',  key:'CA_CurrentAffairs',  name:'Current Affairs',        icon:'📰', notesFile:'aptitude/ca_notes.js',  quizFile:'aptitude/ca_quiz.js',  notesReady:false, free:false},
       {id:'A01', key:'A01_Trains', name:'Problems on Trains', icon:'🚆', notesFile:'aptitude/a01_notes.js', quizFile:'aptitude/a01_quiz.js', notesReady:true , free:true},
       {id:'A02', key:'A02_TimeDistance', name:'Time and Distance', icon:'🛣️', notesFile:'aptitude/a02_notes.js', quizFile:'aptitude/a02_quiz.js', notesReady:true , free:false},
       {id:'A03', key:'A03_HeightDistance', name:'Height and Distance', icon:'📐', notesFile:'aptitude/a03_notes.js', quizFile:'aptitude/a03_quiz.js', notesReady:true , free:false},
@@ -794,6 +821,36 @@ var SECTIONS = {
       {id:'A32', key:'A32_Probability', name:'Probability', icon:'🎲', notesFile:'aptitude/a32_notes.js', quizFile:'aptitude/a32_quiz.js', notesReady:true, free:false}
     ]
   },
+  /* Data Interpretation is its own section rather than a corner of Aptitude.
+     It is a distinct skill: the arithmetic is easy, and what is actually
+     being tested is reading a chart under time pressure. Companies set it as
+     a separate paper, so it is studied separately here too. */
+  datainterp: {
+    label:'Data Interpretation', icon:'📊', sbId:'si-datainterp',
+    desc:'Reading tables, bar charts, pie charts and line graphs under time pressure, and the arithmetic shortcuts that make it survivable.',
+    color:'var(--amber)', quizLabel:'Practice Data Interpretation sets',
+    topics:[
+      {id:'DI01', key:'DI01_Tables',     name:'Table Charts',  icon:'🧾', notesFile:'datainterp/di01_notes.js', quizFile:'datainterp/di01_quiz.js', notesReady:true , free:true},
+      {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:false, free:false},
+      {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:false, free:false},
+      {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:false, free:false}
+    ]
+  },
+
+  /* Current Affairs moved out of Aptitude. It is not a drill topic: there is
+     nothing to practise and no method to learn, only material to keep up
+     with, and it goes stale in a way none of the aptitude modules do. Mixing
+     it in with the formula topics made both harder to navigate. */
+  currentaffairs: {
+    label:'Current Affairs', icon:'📰', sbId:'si-currentaffairs',
+    desc:'Maritime and general awareness: the shipping news, regulations and world events that come up in interviews.',
+    color:'var(--red)', quizLabel:'Practice Current Affairs questions',
+    topics:[
+      {id:'CA', key:'CA_CurrentAffairs', name:'Current Affairs', icon:'📰',
+       notesFile:'aptitude/ca_notes.js', quizFile:'aptitude/ca_quiz.js', notesReady:false, free:false}
+    ]
+  },
+
   interview: {
     label:'Interview Prep', icon:'🎙️', sbId:'si-interview',
     desc:'Group discussion, HR interview, body language, and the mistakes that get candidates eliminated.',

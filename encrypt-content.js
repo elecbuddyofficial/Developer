@@ -86,6 +86,7 @@ const KEY_GROUPS = {
             'data/Sponsorship/fundamentals',
             'data/Sponsorship/aptitude',
             'data/Sponsorship/interview',
+            'data/Sponsorship/datainterp',
             'data/Sponsorship/CompanyQA',
             // s01-s09, referenced by nothing since SECTIONS was rewritten.
             // Encrypted anyway: they are real content sitting in the open, and
