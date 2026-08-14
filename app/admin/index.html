@@ -931,11 +931,24 @@
       background: var(--blue-dim); border-color: var(--blue-border);
       color: var(--blue);
     }
-    /* Collapsed rail on narrow screens: the labels do not fit, so the
-       switcher hides rather than wrapping into an unreadable stack. The
-       course still switches from the header chip. */
-    @media (max-width: 1100px) {
-      .ad-course { display: none; }
+    /* NEVER hidden.
+       This used to be `display:none` below 1100px, with a comment claiming
+       the course could still be switched "from the header chip". There is no
+       header chip; it was never built. So on any window under 1100px the
+       switcher simply vanished and there was no way to change course at all,
+       which looked exactly like the switcher not working.
+       The sidebar itself only collapses to a 58px rail at 960px, so between
+       960 and 1100 there was plenty of room and it was hidden for no reason.
+       Below 960 it stays, using the short labels, the same way .ad-nav-btn
+       span is swapped out for icons. */
+    .acs-short { display: none; }
+    @media (max-width: 960px) {
+      .ad-course { padding: 10px 6px 0; }
+      .ad-course-label { display: none; }
+      .ad-course-switch { flex-direction: column; gap: 3px; padding: 2px; }
+      .acs-btn { padding: 7px 2px; font-size: 10.5px; letter-spacing: .3px; }
+      .acs-long { display: none; }
+      .acs-short { display: inline; }
     }
 
     /* Shown on a tab whose data simply does not exist for the selected
@@ -1141,9 +1154,9 @@
     <span class="ad-course-label">Course</span>
     <div class="ad-course-switch" role="group" aria-label="Which course to show">
       <button type="button" class="acs-btn active" data-course="coc"
-              onclick="setAdminCourse('coc')" title="Oral and Written, the COC exam prep course">COC</button>
+              onclick="setAdminCourse('coc')" title="Oral and Written, the COC exam prep course"><span class="acs-long">COC</span><span class="acs-short">COC</span></button>
       <button type="button" class="acs-btn" data-course="sponsorship"
-              onclick="setAdminCourse('sponsorship')" title="Sponsorship and company selection">Sponsorship</button>
+              onclick="setAdminCourse('sponsorship')" title="Sponsorship and company selection"><span class="acs-long">Sponsorship</span><span class="acs-short">SPON</span></button>
     </div>
   </div>
 
@@ -2653,14 +2666,21 @@ function logAdminAction(action, target, details) {
     // tell you someone is waiting without you going looking for them.
     loadApprovals();
     buildStatusBoard();
-    // Reflect the saved course choice, and paint any not-tracked notice
-    // for whichever tab the URL hash opened on.
+  } catch (e) {
+    console.error('Admin dashboard init error:', e);
+  }
+
+  // Deliberately OUTSIDE the block above. The course filter decides what
+  // every scope dropdown offers, so it has to run even when an unrelated
+  // loader has just thrown: sharing their try meant one failed fetch left
+  // the whole console showing the wrong course's controls.
+  try {
     document.querySelectorAll('.acs-btn').forEach(function (b) {
       b.classList.toggle('active', b.dataset.course === _adminCourse);
     });
     applyCourseScope();
   } catch (e) {
-    console.error('Admin dashboard init error:', e);
+    console.error('Course scope init failed:', e);
   }
 })();
 
@@ -7457,7 +7477,11 @@ var COURSE_UNTRACKED = {
 function applyCourseScope() {
   // Scope dropdowns first: they exist on tabs that are not currently visible
   // too, and a hidden tab still needs to be correct when it is opened.
-  try { applyScopeOptionFilter(); } catch (e) {}
+  // Logged rather than swallowed. A silent catch here would leave every
+  // dropdown showing the other course's options with nothing to say why,
+  // which is precisely the failure that made this look broken.
+  try { applyScopeOptionFilter(); }
+  catch (e) { console.error('applyScopeOptionFilter failed:', e); }
 
   var untracked = COURSE_UNTRACKED[_adminCourse] || {};
   TAB_NAMES.forEach(function (name) {
