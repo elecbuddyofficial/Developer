@@ -247,7 +247,11 @@
 <script src="../progress.js?v=1"></script>
 <script src="../account.js?v=1"></script>
 <script>
-(async () => {
+/* Assigned to window._authReady rather than left as a bare IIFE, because
+   content loading now has to wait for it. Until the content key exists,
+   fetching a topic gets an encrypted envelope it cannot read. Nothing used to
+   await this, which was fine while every file was plain JS. */
+window._authReady = (async () => {
   try {
     if (typeof supabase === 'undefined') throw new Error('CDN unavailable');
     const _sb = supabase.createClient('https://vcofgjuwprylojgyfbtr.supabase.co','sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW');
@@ -994,10 +998,22 @@ function openSectionQuiz() {
     if (t.quizFile && window.QD[t.key]) allQ = allQ.concat(window.QD[t.key]);
   });
   if (!allQ.length) {
-    sec.topics.forEach(function(t) {
-      if (t.quizFile) window._loadEncryptedScript(BASE + t.quizFile).catch(function(){});
-    });
+    // Warm the section's quizzes, then say what actually happened. Swallowing
+    // these used to be harmless: the toast said "try again in a moment" and a
+    // moment later the files had arrived. If the content key is missing they
+    // will never arrive, and the unchanged toast would loop forever telling
+    // the reader to keep waiting for something that is not coming.
+    var loads = sec.topics
+      .filter(function(t){ return t.quizFile; })
+      .map(function(t){ return window._loadEncryptedScript(BASE + t.quizFile); });
     appToast('Loading quiz questions... try again in a moment.');
+    Promise.allSettled(loads).then(function(results) {
+      var keyFailed = results.some(function(r) {
+        return r.status === 'rejected'
+          && String((r.reason && r.reason.message) || '').indexOf('No content key') !== -1;
+      });
+      if (keyFailed) appToast('Could not unlock the quiz. Reload the page to try again.');
+    });
     return;
   }
   ACTIVE_TOPIC_ID = '__section_' + ACTIVE_SECTION_ID;
@@ -1142,13 +1158,26 @@ window.fetchTopicData = function(topicId, topicObj) {
   var tNum = topicId.replace(/[^0-9]/g,'') || '0';
 
   if (!window.NOTE_HTML[topicId]) {
-    window._loadEncryptedScript(BASE + topicObj.notesFile).catch(function() {
+    window._loadEncryptedScript(BASE + topicObj.notesFile).catch(function(err) {
       var c = document.getElementById('notes-container');
-      if (c) c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">Could not load notes. Check your connection.</div>';
+      if (!c) return;
+      c.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">'
+        + window._loadFailMessage(err)
+        + '<div style="margin-top:14px"><button type="button" id="notes-retry-btn" '
+        + 'style="background:var(--accent);color:var(--on-accent);border:0;border-radius:6px;'
+        + 'padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer">Try again</button></div></div>';
+      // Listener rather than an inline onclick: topicId has to survive into
+      // the handler, and building it into a string is how the prev/next nav
+      // shipped broken once already.
+      var b = document.getElementById('notes-retry-btn');
+      if (b) b.addEventListener('click', function(){ window.fetchTopicData(topicId, topicObj); });
     });
   } else {
     renderNotesView(topicId);
   }
+  // Prefetch only. A failure here is silent on purpose: the reader has not
+  // asked for the quiz yet, and goToQuizFromNotes re-requests it and reports
+  // properly if it is still unavailable.
   if (topicObj.quizFile && !window.QD[topicObj.key]) {
     window._loadEncryptedScript(BASE + topicObj.quizFile).catch(function(){});
   }
@@ -1199,8 +1228,9 @@ function showCompanyQA() {
   window._loadEncryptedScript(BASE + 'CompanyQA/company_data.js').then(function() {
     _cqaData = window.COMPANY_DATA;
     renderCQAList();
-  }).catch(function() {
-    document.getElementById('cqa-detail').innerHTML = '<div class="cqa-empty">Could not load company data. Check your connection.</div>';
+  }).catch(function(err) {
+    document.getElementById('cqa-detail').innerHTML =
+      '<div class="cqa-empty">' + window._loadFailMessage(err) + '</div>';
   });
 }
 
@@ -1265,7 +1295,22 @@ function goToQuizFromNotes(topicId) {
   };
 
   if (!window.QD[topicObj.key]) {
-    window._loadEncryptedScript(BASE + topicObj.quizFile).then(launch).catch(launch);
+    // Previously .catch(launch), which opened the quiz view regardless. With
+    // plaintext files that was nearly always right, since the only way to get
+    // here was a network blip. Now a load can fail because the content key is
+    // missing, and launching anyway renders `window.QD[key] || []` as a quiz
+    // with no questions and no explanation: the reader is left staring at an
+    // empty screen believing the quiz does not exist. buildCatGrid renders
+    // "Quiz questions coming soon." for an empty set, which is exactly the
+    // wrong thing to tell someone whose decrypt failed.
+    window._loadEncryptedScript(BASE + topicObj.quizFile).then(launch).catch(function(err) {
+      setAllViewsInactive();
+      document.getElementById('view-quiz').classList.add('active');
+      var sbEl = document.getElementById(SECTIONS[ACTIVE_SECTION_ID].sbId); if (sbEl) sbEl.classList.add('active');
+      var g = document.getElementById('qcat-grid');
+      if (g) g.innerHTML = '<div style="padding:40px;text-align:center;color:var(--text2)">'
+        + window._loadFailMessage(err) + '</div>';
+    });
   } else { launch(); }
 }
 
@@ -1455,7 +1500,18 @@ function startBackgroundIndexing() {
     if (i >= allTopics.length) { window._bgIndexing = false; return; }
     var t = allTopics[i++];
     if (window.NOTE_HTML[t.id]) { buildSearchIndexForTopic(t.id, window.NOTE_HTML[t.id]); setTimeout(next, 30); return; }
-    window._loadEncryptedScript(BASE + t.notesFile).then(function(){ setTimeout(next,100); }).catch(function(){ SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[t.id]=true; setTimeout(next,100); });
+    window._loadEncryptedScript(BASE + t.notesFile).then(function(){ setTimeout(next,100); }).catch(function(err){
+      // Only mark a topic as indexed when it genuinely cannot be indexed. The
+      // old handler set SEARCH_INDEX_BUILT unconditionally, which was
+      // harmless while a failure meant "file missing" but is not now: a
+      // key failure would permanently mark all 128 topics done, leaving
+      // search silently empty for the whole session with no way to recover
+      // short of a reload. Leaving the flag unset lets a later pass index it.
+      if (String((err && err.message) || '').indexOf('No content key') === -1) {
+        SEARCH_INDEX_DONE++; SEARCH_INDEX_BUILT[t.id] = true;
+      }
+      setTimeout(next, 100);
+    });
   }
   setTimeout(next, 2500);
 }
@@ -1487,29 +1543,186 @@ if ('serviceWorker' in navigator) {
 // ── Diagram zoom ──
 document.addEventListener('click', function(e){ if(e.target.matches('.note-diagram-wrap img')) e.target.classList.toggle('zoomed'); });
 
-startBackgroundIndexing();
+// startBackgroundIndexing() is deliberately NOT called here any more. It now
+// runs from the encryption block below, once the content key has settled.
+// Called from here it fired on a bare 2.5s timer and could beat the key,
+// failing every load and marking each topic indexed anyway.
 </script>
 
 <!-- ═══ GATE + ENCRYPTION + SESSION + PROFILE SCRIPTS ═══ -->
 <script>
 (function() {
-  // Sponsorship is fully public as of the pricing-scope redesign — "a
-  // glimpse of what's coming," no key, no gate, no purchase flow. Kept as
-  // no-ops rather than ripped out at every call site, since isLocked/showGate
-  // are still referenced from several places elsewhere in this file.
+  // Sponsorship is still free to read once you are signed in — no purchase,
+  // no plan check. isLocked/showGate stay as no-ops because they are called
+  // from several places elsewhere in this file.
+  //
+  // What changed on 14 Aug 2026 is that the FILES are now encrypted at rest.
+  // The whole course used to sit in the public GitHub repo as readable
+  // plaintext, which meant a competitor could take months of work with one
+  // `git clone` and no account. Every logged-in user gets the key, so this is
+  // deterrence against scraping rather than an access gate, and it is not
+  // pretending to be more than that.
   window.isLocked = function() { return false; };
   window.showGate = function() {};
   window.closeGate = function() {};
 
-  // Content files under data/Sponsorship are always plaintext now — no
-  // decrypt path needed, just fetch and execute.
+  // ── Key cache ───────────────────────────────────────────────────────────
+  // Own record key 'sk1', deliberately NOT merged into the COC page's 'ck2'.
+  // Merging would mean touching _keysAreStale and the shared expiry, and the
+  // COC record holds PAID entitlements with offline fallback: a migration
+  // there converts "works on a plane" into "locked out until next online
+  // load" for people who have paid, in exchange for nothing.
+  var _IDB_NAME = 'eb_secure', _IDB_STORE = 'keys', _REC = 'sk1';
+
+  // Version 1, matching app/index.html. Opening v2 from here would fire
+  // onupgradeneeded, which BLOCKS while any COC tab holds a v1 connection —
+  // the open would never settle and this page would hang with no error.
+  function _openKeyDB() {
+    return new Promise(function(resolve, reject) {
+      var req = indexedDB.open(_IDB_NAME, 1);
+      req.onupgradeneeded = function(e) {
+        var db = e.target.result;
+        if (!db.objectStoreNames.contains(_IDB_STORE)) db.createObjectStore(_IDB_STORE);
+      };
+      req.onsuccess = function(e) { resolve(e.target.result); };
+      req.onerror = function() { reject(req.error); };
+    });
+  }
+
+  async function _saveKey(cryptoKey, expiresAt, userId) {
+    try {
+      var db = await _openKeyDB();
+      await new Promise(function(resolve, reject) {
+        var tx = db.transaction(_IDB_STORE, 'readwrite');
+        tx.objectStore(_IDB_STORE).put({ key: cryptoKey, expiresAt: expiresAt, userId: userId }, _REC);
+        tx.oncomplete = resolve; tx.onerror = function(){ reject(tx.error); };
+      });
+    } catch (e) { /* cache is an optimisation; never fatal */ }
+  }
+
+  async function _loadKey(userId) {
+    try {
+      var db = await _openKeyDB();
+      var stored = await new Promise(function(resolve, reject) {
+        var tx = db.transaction(_IDB_STORE, 'readonly');
+        var rq = tx.objectStore(_IDB_STORE).get(_REC);
+        rq.onsuccess = function(){ resolve(rq.result || null); };
+        rq.onerror = function(){ reject(rq.error); };
+      });
+      if (!stored || !stored.key) return null;
+      if (stored.userId && stored.userId !== userId) return null;   // different account, same device
+      if (stored.expiresAt && Date.now() > stored.expiresAt) return null;
+      return stored;
+    } catch (e) { return null; }
+  }
+
+  // ── Fetch the key ───────────────────────────────────────────────────────
+  // Its own endpoint, not a third key bolted onto get-content-key. That
+  // function answers 403 for a caller with no subscription, and the COC
+  // client leans on the 403 to leave its cached keys intact. Making it answer
+  // 200 for everyone would let a response carrying no oral/written key
+  // overwrite a paying user's cache with an empty, already-expired record.
+  async function initSponsorshipKey() {
+    try {
+      if (!window._sbClient || !window._sbUser) return;
+      var userId = window._sbUser.id;
+
+      var stored = await _loadKey(userId);
+      if (stored) { window._spKey = stored.key; return; }
+
+      var s = await window._sbClient.auth.getSession();
+      var session = s.data && s.data.session;
+      if (!session) return;
+
+      // Timed out deliberately. Everything on this page now waits on
+      // _accessPromise, so a fetch that never settles is not a slow page, it
+      // is a permanently blank one: no notes, no quizzes, no search index, and
+      // no error either, because nothing rejected. Ten seconds then give up,
+      // and let the loader report a missing key the normal way.
+      var ctl = new AbortController();
+      var timer = setTimeout(function(){ ctl.abort(); }, 10000);
+      var resp;
+      try {
+        resp = await fetch('https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/get-sponsorship-key', {
+          headers: { 'Authorization': 'Bearer ' + session.access_token },
+          signal: ctl.signal
+        });
+      } finally { clearTimeout(timer); }
+      if (!resp.ok) return;
+      var json = await resp.json();
+      if (!json.key || json.key.length !== 64) return;
+
+      var bytes = new Uint8Array(32);
+      for (var i = 0; i < 64; i += 2) bytes[i / 2] = parseInt(json.key.substr(i, 2), 16);
+      var cryptoKey = await crypto.subtle.importKey('raw', bytes, { name: 'AES-GCM' }, false, ['decrypt']);
+
+      await _saveKey(cryptoKey, json.expiresAt, userId);
+      window._spKey = cryptoKey;
+    } catch (e) { /* leave _spKey unset; the loader reports it properly */ }
+  }
+
+  // Resolves once the key is either in hand or definitively unavailable. It
+  // never rejects: a failed key fetch must not turn into an unhandled
+  // rejection that strands every awaiting caller.
+  window._accessPromise = (window._authReady || Promise.resolve()).then(initSponsorshipKey);
+
+  window._decryptContent = async function(encryptedJson, cryptoKey) {
+    var parsed = JSON.parse(encryptedJson);
+    var iv   = Uint8Array.from(atob(parsed.iv),   function(c){ return c.charCodeAt(0); });
+    var data = Uint8Array.from(atob(parsed.data), function(c){ return c.charCodeAt(0); });
+    var tag  = Uint8Array.from(atob(parsed.tag),  function(c){ return c.charCodeAt(0); });
+    // WebCrypto wants ciphertext and tag as one buffer; Node keeps them apart.
+    var combined = new Uint8Array(data.length + tag.length);
+    combined.set(data); combined.set(tag, data.length);
+    var decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, cryptoKey, combined);
+    return new TextDecoder().decode(decrypted);
+  };
+
+  // ── The loader ──────────────────────────────────────────────────────────
+  // Waits for the key ITSELF rather than relying on each call site to await
+  // first. There are six call sites (section-quiz warm-up, notes, quiz
+  // prefetch, CompanyQA, quiz-from-notes, background indexer) and a wrapper
+  // around fetchTopicData would only cover one of them. Doing it here means a
+  // caller added next year cannot reintroduce the race.
+  //
+  // The plaintext branch is not dead code and must not be removed: it is what
+  // lets one client read both formats, which is the only reason the encryption
+  // rollout can be staged rather than a flag-day. It is also the rollback.
   window._loadEncryptedScript = async function(url) {
     var resp = await fetch(url);
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    var code = await resp.text();
+    var text = await resp.text();
+    var code;
+    if (text.trimStart().startsWith('{')) {
+      try { await window._accessPromise; } catch (e) {}
+      if (!window._spKey) throw new Error('No content key available for Sponsorship');
+      code = await window._decryptContent(text, window._spKey);
+    } else {
+      code = text;                      // plain JS, nothing to decrypt
+    }
     // eslint-disable-next-line no-eval
     (0, eval)(code);
   };
+
+  // Tells the reader which of the two failures happened, because the fix is
+  // different: a missing key is fixed by reloading, a dead network is not.
+  // Everything under data/Sponsorship used to be plaintext, so "check your
+  // connection" was the only possible cause and every call site said so. Now
+  // it is one of two, and guessing wrong sends people to their router.
+  window._loadFailMessage = function(err) {
+    var msg = String((err && err.message) || err || '');
+    return msg.indexOf('No content key') !== -1
+      ? 'Could not unlock this content. Reload the page to try again.'
+      : 'Could not load. Check your connection and try again.';
+  };
+
+  // Held back until the key is settled. It walks every notesReady topic on a
+  // 2.5s timer, and its own catch marks a topic as indexed even when the load
+  // failed — so racing the key fetch would poison the search index for the
+  // whole session, silently, with nothing shown to the user.
+  window._accessPromise.then(function() {
+    if (typeof startBackgroundIndexing === 'function') startBackgroundIndexing();
+  });
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.addEventListener('message', function(e) {

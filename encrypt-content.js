@@ -33,11 +33,21 @@
  *   fall back to whole-group only when you genuinely mean to touch most/all
  *   of a group in one pass.
  *
- * data/Sponsorship/** is deliberately NOT in any group — it's permanently
- * public/plaintext and this script never touches it.
+ * data/Sponsorship/** IS now a group, as of 14 Aug 2026. It used to be
+ * excluded here as permanently public plaintext, which meant the entire
+ * course sat readable in the public GitHub repo: a competitor could take
+ * months of writing with one `git clone` and no account. It is encrypted the
+ * same way as the other two now.
+ *
+ * The difference is who gets the key. Oral and Written keys come from
+ * get-content-key after an entitlement check. The Sponsorship key comes from
+ * get-sponsorship-key and goes to ANY logged-in user, because the course is
+ * still free to read once signed in. That makes it deterrence against
+ * scraping rather than a paywall, which is the honest description of it.
  *
  * Required env var (matching the chosen --group):
- *   CONTENT_KEY_ORAL / CONTENT_KEY_WRITTEN — 64 hex characters (32 bytes / 256-bit AES key)
+ *   CONTENT_KEY_ORAL / CONTENT_KEY_WRITTEN / CONTENT_KEY_SPONSORSHIP
+ *   — 64 hex characters (32 bytes / 256-bit AES key)
  *
  * Generate a key once and store it in Supabase secrets + your own notes:
  *   node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -64,13 +74,34 @@ const KEY_GROUPS = {
             'data/Written/notes',
         ],
     },
+    // Every one of the eight subfolders has to be named. collectCandidates()
+    // uses a non-recursive readdirSync per directory, so a folder left off
+    // this list is not encrypted AND produces no warning — it just silently
+    // stays plaintext. That is why the rollout gate is the --status COUNT
+    // (155 files) rather than "the command printed no errors".
+    sponsorship: {
+        keyEnv: 'CONTENT_KEY_SPONSORSHIP',
+        dirs: [
+            'data/Sponsorship/overview',
+            'data/Sponsorship/fundamentals',
+            'data/Sponsorship/aptitude',
+            'data/Sponsorship/interview',
+            'data/Sponsorship/CompanyQA',
+            // s01-s09, referenced by nothing since SECTIONS was rewritten.
+            // Encrypted anyway: they are real content sitting in the open, and
+            // deciding whether to delete them is a separate question.
+            'data/Sponsorship/notes',
+            'data/Sponsorship/quizzes',
+            'data/Sponsorship/videos',
+        ],
+    },
 };
 
 const groupArg = process.argv.find(a => a.startsWith('--group='));
 const groupName = groupArg && groupArg.split('=')[1];
 const group = groupName && KEY_GROUPS[groupName];
 if (!group) {
-    console.error('ERROR: Pass --group=oral or --group=written');
+    console.error(`ERROR: Pass --group=<name>. Known groups: ${Object.keys(KEY_GROUPS).join(', ')}`);
     process.exit(1);
 }
 
