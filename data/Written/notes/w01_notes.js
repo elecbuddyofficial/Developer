@@ -501,6 +501,11 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        6. OVERCURRENT PROTECTION
        ========================================== -->
   <div class="n-h1" id="t4-overcurrent">⚡ 6. OVERCURRENT PROTECTION - 3 METHODS + INVERSE TIME</div>
+
+  <div class="note-diagram-wrap">
+    <img src="../data/diagrams/w01-idmt-relay-characteristics.webp" alt="Overcurrent relay characteristics - operating time against multiples of plug setting, showing definite time flat, IDMT, very inverse and extremely inverse curves each dropping more steeply as fault current rises" loading="lazy" decoding="async" data-blur="data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAACQAwCdASoVABgAPzmUwFmvKiajqAgB4CcJZwDNwBEcSypKbtMAAP7ep8kWGHcPS5NmfCYKtGpviF+Cw4xRj3lK97VwAAqUFZOIAAAA">
+    <div class="note-diagram-cap">Fig. Overcurrent relay characteristics - the whole point of an inverse-time relay is the SHAPE. Definite time trips after the same delay whatever the current. The three inverse curves trip sooner the bigger the fault, and the steeper the curve the more sharply that happens, which is what lets relays in series discriminate: the one nearest the fault sees the most current and goes first.</div>
+  </div>
   <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/FEB-2025/AUG (VERY FREQUENTLY ASKED)</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> a) Explain three methods of overcurrent protection for electrical circuit (8). b) Explain with aid of diagram the meaning of the term inverse current time characteristic (8). - 16 marks</div></div>
 

@@ -68,3 +68,7 @@ DecryptEncrypt/
 
 # Supabase CLI local state, not project config
 supabase/.temp/
+
+# Tooling only (sharp, for diagram conversion). There is no package.json here;
+# this repo ships as a static site, so node_modules is never part of a deploy.
+node_modules/
