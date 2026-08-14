@@ -17,6 +17,19 @@
 //  (verify-razorpay-payment, razorpay-webhook, redeem-coupon) and two derive
 //  access (get-content-key, send-expiry-emails). Those copies drifting apart
 //  is exactly how the original bug survived review.
+//
+//  ── WHY THIS IS KEYED BY SCOPE RATHER THAN WRITTEN/ORAL PAIRS ─────────────
+//
+//  It used to be pairs: an Access of {written, oral}, two named columns, and
+//  a two-way ternary in baseFor and applyPurchase. Adding Sponsorship as a
+//  third sellable course meant either a third branch in every one of those
+//  places, or doing it once here. Everything is now driven off SCOPE_COLUMN,
+//  so a fourth course is a line of data rather than six more branches.
+//
+//  The maths is unchanged. That is not an aspiration: entitlements.diff.mjs
+//  runs the old implementation and this one over the same inputs and fails on
+//  any difference, because a rounding change here silently robs somebody who
+//  paid.
 // ═══════════════════════════════════════════════════════════════════════════
 
 export const TRIAL_DAYS = 3;
@@ -30,14 +43,42 @@ export const PLAN_MONTHS: Record<string, number> = {
   '12mo': 12,
 };
 
-export type Scope = 'written' | 'oral' | 'both';
+/** A course someone can actually hold access to. One expiry column each. */
+export type AccessScope = 'written' | 'oral' | 'sponsorship';
+
+/**
+ * What a purchase can be sold as.
+ *
+ * 'both' still means written + oral, NOT everything. Every historical
+ * payments and coupons row says 'both', and those rows have to keep meaning
+ * exactly what the customer was sold. An everything-bundle, if it is ever
+ * wanted, is a NEW value here and never a redefinition of this one.
+ */
+export type Scope = AccessScope | 'both';
+
+/** Where each scope's live expiry lives on the profiles row. */
+export const SCOPE_COLUMN: Record<AccessScope, string> = {
+  written:     'written_expires_at',
+  oral:        'oral_expires_at',
+  sponsorship: 'sponsorship_expires_at',
+};
+
+/** The grant-only ledger, same shape. See applyGrant. */
+export const GRANT_COLUMN: Record<AccessScope, string> = {
+  written:     'granted_written_expires_at',
+  oral:        'granted_oral_expires_at',
+  sponsorship: 'granted_sponsorship_expires_at',
+};
+
+export const ACCESS_SCOPES: AccessScope[] = ['written', 'oral', 'sponsorship'];
 
 /** The scopes a purchase of `scope` actually grants. */
-export function scopesCovered(scope: string | null | undefined): ('written' | 'oral')[] {
+export function scopesCovered(scope: string | null | undefined): AccessScope[] {
   const s = scope || 'both';
-  if (s === 'written') return ['written'];
-  if (s === 'oral') return ['oral'];
-  return ['written', 'oral'];
+  if (s === 'written')     return ['written'];
+  if (s === 'oral')        return ['oral'];
+  if (s === 'sponsorship') return ['sponsorship'];
+  return ['written', 'oral'];          // 'both' = the two COC scopes
 }
 
 export interface EntitlementProfile {
@@ -45,6 +86,7 @@ export interface EntitlementProfile {
   trial_started_at?: string | null;
   written_expires_at?: string | null;
   oral_expires_at?: string | null;
+  sponsorship_expires_at?: string | null;
   // Legacy single-slot columns. Still written for display/back-compat, but
   // never read for access decisions once the migration has run.
   plan_scope?: string | null;
@@ -57,12 +99,11 @@ export interface EntitlementProfile {
   // replays does not recover the grant, it lands weeks out.
   granted_written_expires_at?: string | null;
   granted_oral_expires_at?: string | null;
+  granted_sponsorship_expires_at?: string | null;
+  [key: string]: unknown;
 }
 
-export interface Access {
-  written: boolean;
-  oral: boolean;
-}
+export type Access = Record<AccessScope, boolean>;
 
 export function trialEnd(profile: EntitlementProfile): Date | null {
   if (!profile.trial_started_at) return null;
@@ -75,30 +116,38 @@ export function addMonths(date: Date, months: number): Date {
   return d;
 }
 
+function expiryOf(profile: EntitlementProfile, scope: AccessScope): string | null {
+  return (profile[SCOPE_COLUMN[scope]] as string | null | undefined) ?? null;
+}
+
 /**
  * Who can read what, right now.
  *
  * Lifetime and an active trial both grant everything; a trial is never
- * scope-restricted, it is a full preview of both sections. Paid access is
+ * scope-restricted, it is a full preview of every section. Paid access is
  * purely per-scope and does NOT consult subscription_plan, so a buyer whose
  * Written has lapsed while Oral is still running resolves correctly rather
  * than being judged by whichever plan they happened to buy last.
+ *
+ * Note that "everything" now includes Sponsorship. That follows the existing
+ * rule rather than inventing an exception: a trial has always been a full
+ * preview of the whole app, and carving one course out of it would be a new
+ * behaviour, not a preserved one.
  */
 export function deriveAccess(profile: EntitlementProfile, now: Date = new Date()): Access {
-  if (profile.subscription_plan === 'lifetime') {
-    return { written: true, oral: true };
-  }
+  const all = (v: boolean): Access =>
+    ACCESS_SCOPES.reduce((acc, s) => { acc[s] = v; return acc; }, {} as Access);
+
+  if (profile.subscription_plan === 'lifetime') return all(true);
 
   const tEnd = trialEnd(profile);
-  if (tEnd && now < tEnd) {
-    return { written: true, oral: true };
-  }
+  if (tEnd && now < tEnd) return all(true);
 
   const live = (iso: string | null | undefined) => !!iso && now < new Date(iso);
-  return {
-    written: live(profile.written_expires_at),
-    oral:    live(profile.oral_expires_at),
-  };
+  return ACCESS_SCOPES.reduce((acc, s) => {
+    acc[s] = live(expiryOf(profile, s));
+    return acc;
+  }, {} as Access);
 }
 
 /**
@@ -110,17 +159,13 @@ export function deriveAccess(profile: EntitlementProfile, now: Date = new Date()
  * long-standing behaviour that buying early during a trial does not burn the
  * free days already given.
  */
-function baseFor(
-  profile: EntitlementProfile,
-  scope: 'written' | 'oral',
-  now: Date,
-): Date {
+function baseFor(profile: EntitlementProfile, scope: AccessScope, now: Date): Date {
   let base = now;
 
   const tEnd = trialEnd(profile);
   if (tEnd && tEnd > base) base = tEnd;
 
-  const current = scope === 'written' ? profile.written_expires_at : profile.oral_expires_at;
+  const current = expiryOf(profile, scope);
   if (current) {
     const cur = new Date(current);
     if (cur > base) base = cur;
@@ -132,9 +177,10 @@ function baseFor(
 export interface PurchaseEffect {
   written_expires_at: string | null;
   oral_expires_at: string | null;
+  sponsorship_expires_at: string | null;
   /** Per-scope before/after, for telling the buyer exactly what they got. */
   changes: {
-    scope: 'written' | 'oral';
+    scope: AccessScope;
     from: string | null;
     to: string;
     extended: boolean;   // true = they already had this scope and it grew
@@ -155,18 +201,18 @@ export function applyPurchase(
   now: Date = new Date(),
 ): PurchaseEffect {
   const result: PurchaseEffect = {
-    written_expires_at: profile.written_expires_at ?? null,
-    oral_expires_at:    profile.oral_expires_at ?? null,
+    written_expires_at:     profile.written_expires_at ?? null,
+    oral_expires_at:        profile.oral_expires_at ?? null,
+    sponsorship_expires_at: profile.sponsorship_expires_at ?? null,
     changes: [],
   };
 
   for (const s of scopesCovered(scope)) {
-    const from = (s === 'written' ? profile.written_expires_at : profile.oral_expires_at) ?? null;
+    const from = expiryOf(profile, s);
     const to = addMonths(baseFor(profile, s, now), months);
     const iso = to.toISOString();
 
-    if (s === 'written') result.written_expires_at = iso;
-    else                 result.oral_expires_at = iso;
+    (result as unknown as Record<string, unknown>)[SCOPE_COLUMN[s]] = iso;
 
     // "Extended" means they held live access to this scope already. An
     // expired date is a restart, not an extension, and should read that way.
@@ -183,7 +229,7 @@ export function applyPurchase(
 }
 
 /**
- * Rebuild both expiries from scratch by replaying every still-valid paid
+ * Rebuild every expiry from scratch by replaying each still-valid paid
  * purchase in the order it was paid.
  *
  * Used after a refund, where incremental arithmetic cannot work: you cannot
@@ -222,9 +268,10 @@ export function recomputeFromPayments(
   let running: EntitlementProfile = {
     subscription_plan: profile.subscription_plan,
     trial_started_at:  profile.trial_started_at,
-    written_expires_at: profile.granted_written_expires_at ?? null,
-    oral_expires_at:    profile.granted_oral_expires_at ?? null,
   };
+  for (const s of ACCESS_SCOPES) {
+    running[SCOPE_COLUMN[s]] = (profile[GRANT_COLUMN[s]] as string | null | undefined) ?? null;
+  }
 
   for (const p of ordered) {
     const months = PLAN_MONTHS[p.plan];
@@ -233,20 +280,19 @@ export function recomputeFromPayments(
     // stacking maths matches what the buyer was told at the time.
     const at = p.paid_at ? new Date(p.paid_at) : new Date();
     const eff = applyPurchase(running, p.scope, months, at);
-    running = {
-      ...running,
-      written_expires_at: eff.written_expires_at,
-      oral_expires_at:    eff.oral_expires_at,
-    };
+    running = { ...running };
+    for (const s of ACCESS_SCOPES) {
+      running[SCOPE_COLUMN[s]] = (eff as unknown as Record<string, string | null>)[SCOPE_COLUMN[s]];
+    }
   }
 
   return {
-    written_expires_at: running.written_expires_at ?? null,
-    oral_expires_at:    running.oral_expires_at ?? null,
+    written_expires_at:     (running.written_expires_at as string | null) ?? null,
+    oral_expires_at:        (running.oral_expires_at as string | null) ?? null,
+    sponsorship_expires_at: (running.sponsorship_expires_at as string | null) ?? null,
     changes: [],
   };
 }
-
 
 /**
  * Apply a grant (comp coupon or admin Grant Access) to the grant-only ledger.
@@ -261,16 +307,20 @@ export function applyGrant(
   scope: string | null | undefined,
   months: number,
   now: Date = new Date(),
-): { granted_written_expires_at: string | null; granted_oral_expires_at: string | null } {
-  const eff = applyPurchase({
-    subscription_plan:  profile.subscription_plan,
-    trial_started_at:   profile.trial_started_at,
-    written_expires_at: profile.granted_written_expires_at ?? null,
-    oral_expires_at:    profile.granted_oral_expires_at ?? null,
-  }, scope, months, now);
-
-  return {
-    granted_written_expires_at: eff.written_expires_at,
-    granted_oral_expires_at:    eff.oral_expires_at,
+): Record<string, string | null> {
+  const seed: EntitlementProfile = {
+    subscription_plan: profile.subscription_plan,
+    trial_started_at:  profile.trial_started_at,
   };
+  for (const s of ACCESS_SCOPES) {
+    seed[SCOPE_COLUMN[s]] = (profile[GRANT_COLUMN[s]] as string | null | undefined) ?? null;
+  }
+
+  const eff = applyPurchase(seed, scope, months, now);
+
+  const out: Record<string, string | null> = {};
+  for (const s of ACCESS_SCOPES) {
+    out[GRANT_COLUMN[s]] = (eff as unknown as Record<string, string | null>)[SCOPE_COLUMN[s]];
+  }
+  return out;
 }
