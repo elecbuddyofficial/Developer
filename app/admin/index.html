@@ -1774,6 +1774,20 @@
       <p>All Razorpay transactions. Service role reads bypass RLS.</p>
     </div>
 
+    <!-- Orders that started and never finished.
+         On 14 Aug a customer paid Rs 764 by UPI, closed the tab before the
+         browser could confirm it, and the order sat at 'created' while
+         Razorpay held the money. It was only noticed because the receipt
+         email was forwarded. The webhook now covers that case, but a webhook
+         can be disabled again (this one was, silently, for four days), so
+         this panel exists to make the failure visible in the console instead
+         of depending on somebody spotting an email. -->
+    <div class="ad-card" id="pay-stuck-card" style="margin-bottom:18px;display:none">
+      <div class="ad-card-head">Started but never completed</div>
+      <div class="ad-card-sub" id="pay-stuck-sub"></div>
+      <div style="overflow-x:auto"><table class="ad-table" id="pay-stuck-table"></table></div>
+    </div>
+
     <!-- Revenue summary -->
     <div id="pay-stats" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;">
       <div class="pay-stat-card" id="psc-total">
@@ -4284,6 +4298,66 @@ function scopeAccessUpdate(plan, scope, expiry) {
   return upd;
 }
 
+/* ── Orders that started and never finished ────────────────────────────────
+   Every payment begins as a 'created' row. It becomes 'paid' either when the
+   buyer's browser confirms it or when Razorpay's webhook does. If BOTH fail,
+   the row stays 'created' forever while Razorpay may well be holding the
+   money, and nothing anywhere says so.
+
+   That is not hypothetical: it happened on 14 Aug 2026 and was found only
+   because the customer's receipt was forwarded by hand.
+
+   Deliberately NOT called "abandoned". Most of these are people who opened
+   checkout and thought better of it, which is normal and not a problem. This
+   panel cannot tell those apart from a real capture, because only Razorpay
+   knows. So it lists them and says plainly what to do: check the ones over an
+   hour old against the Razorpay dashboard. Anything Razorpay shows as
+   Captured is money taken with nothing given.
+
+   Under an hour is excluded because a checkout genuinely in progress would
+   otherwise appear here and cause a false alarm every time somebody buys. */
+async function loadStuckOrders() {
+  var card = document.getElementById('pay-stuck-card');
+  if (!card) return;
+  var cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+
+  var res = await _sb.from('payments')
+    .select('id,created_at,plan,scope,amount,razorpay_order_id,user_id')
+    .eq('status', 'created')
+    .lt('created_at', cutoff)
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  var rows = res.data || [];
+  if (res.error || !rows.length) { card.style.display = 'none'; return; }
+
+  var emails = await resolvePayEmails(rows);
+  var table = document.getElementById('pay-stuck-table');
+  var sub   = document.getElementById('pay-stuck-sub');
+
+  sub.innerHTML = rows.length + ' order' + (rows.length === 1 ? '' : 's')
+    + ' opened checkout over an hour ago and never completed. Most will simply have '
+    + 'changed their mind. Check any you do not recognise against the Razorpay '
+    + 'dashboard: if Razorpay shows it as <strong>Captured</strong>, that person paid '
+    + 'and has nothing, and it needs fixing by hand.';
+
+  table.innerHTML =
+    '<thead><tr><th>When</th><th>Who</th><th>Wanted</th><th>Amount</th><th>Razorpay order id</th></tr></thead><tbody>'
+    + rows.map(function (r) {
+        var age = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 3600000);
+        return '<tr>'
+          + '<td style="white-space:nowrap">' + fmtDate(r.created_at)
+          + '<div style="font-size:11px;color:var(--text3)">' + (age > 48 ? Math.floor(age / 24) + ' days' : age + ' hours') + ' ago</div></td>'
+          + '<td>' + esc(emails[r.user_id] || 'unknown') + '</td>'
+          + '<td>' + esc((r.plan || '?') + ' / ' + (r.scope || '?')) + '</td>'
+          + '<td style="font-variant-numeric:tabular-nums">&#8377;' + ((r.amount || 0) / 100).toFixed(2) + '</td>'
+          + '<td style="font-family:monospace;font-size:11.5px">' + esc(r.razorpay_order_id || '-') + '</td>'
+          + '</tr>';
+      }).join('')
+    + '</tbody>';
+  card.style.display = '';
+}
+
 /* ── The Sponsorship paywall switch ────────────────────────────────────────
    One row in course_config. get-sponsorship-key reads it server-side to
    decide whether to check entitlement or keep handing the key to every
@@ -5175,6 +5249,7 @@ async function loadPayments(reset) {
   if (_payOffset === 0) {
     _payRows = payments.slice();
     loadPayStats(f);
+    loadStuckOrders();
   } else {
     _payRows = _payRows.concat(payments);
   }
