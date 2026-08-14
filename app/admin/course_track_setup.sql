@@ -24,14 +24,25 @@
 --  This is the reading-progress tracking built on 14 Aug. It has been dead the
 --  whole time.
 --
---  ── 2. THE NEW COLUMN ─────────────────────────────────────────────────────
+--  ── 2. THE NEW COLUMN, RESERVED AND CURRENTLY UNUSED ──────────────────────
 --
---  default_track replaces localStorage 'eb_track', which app/courses.html
---  writes and app/auth.html reads to skip the course picker on later logins.
---  As device-local state it fails in three ways: it does not follow anyone to
---  their phone, clearing site data loses it, and courses.html signOut() never
---  cleared it, so on a shared browser the next person inherited the last
---  person's course.
+--  NOTHING READS OR WRITES default_track. Blesson parked the feature on
+--  14 Aug 2026 ("leave it as an option for future"), so the column is here
+--  and the guard permits it, but no client code touches it and the course
+--  picker still behaves exactly as it always has.
+--
+--  Leaving the column in place rather than dropping it is deliberate: it is
+--  free, it is already permitted by the guard below, and re-adding it later
+--  would mean re-doing the allowlist edit, which is the exact step that got
+--  forgotten for sponsorship_progress and cost a week of lost writes.
+--
+--  The intent, if it is ever picked up: replace localStorage 'eb_track',
+--  which app/courses.html writes and app/auth.html reads to skip the course
+--  picker on later logins. As device-local state that fails three ways: it
+--  does not follow anyone to their phone, clearing site data loses it, and
+--  courses.html signOut() never cleared it, so on a shared browser the next
+--  person inherits the last person's course. Those three are all still true
+--  today, and are the reason to finish this if it ever matters.
 --
 --  Deliberately NOT part of the entitlement vocabulary. Scope
 --  ('written'|'oral'|'both') is hard-wired through _shared/entitlements.ts,
@@ -56,9 +67,11 @@ ALTER TABLE public.profiles
   CHECK (default_track IS NULL OR default_track IN ('coc', 'sponsorship'));
 
 COMMENT ON COLUMN public.profiles.default_track IS
-  'Which course to open after sign-in: coc or sponsorship. NULL means never '
-  'asked, which is what makes the first-load question fire exactly once. A '
-  'navigation preference only - it grants nothing and is never read for access.';
+  'RESERVED, NOT IN USE as of 2026-08-14. Nothing reads or writes this; the '
+  'course picker still uses localStorage eb_track. Intended meaning: which '
+  'course to open after sign-in (coc or sponsorship), NULL meaning never '
+  'asked. A navigation preference only - it grants nothing and must never be '
+  'read for access.';
 
 
 -- ── The guard, with the two missing columns added ─────────────────────────
