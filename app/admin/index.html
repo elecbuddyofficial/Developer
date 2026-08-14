@@ -1602,6 +1602,7 @@
               <option value="written">Written Paper</option>
               <option value="oral">Oral &amp; Viva</option>
               <option value="both" selected>Full COC Preparation</option>
+              <option value="sponsorship">Sponsorship</option>
             </select>
           </div>
           <div class="ad-field">
@@ -1816,6 +1817,7 @@
         <option value="written">Written Paper</option>
         <option value="oral">Oral &amp; Viva</option>
         <option value="both">Full COC Preparation</option>
+              <option value="sponsorship">Sponsorship</option>
       </select>
       <input class="ad-input" id="pay-filter-from" type="date" onchange="loadPayments()" title="From date" style="max-width:150px">
       <input class="ad-input" id="pay-filter-to" type="date" onchange="loadPayments()" title="To date" style="max-width:150px">
@@ -1912,6 +1914,7 @@
             <option value="written">Written Paper</option>
             <option value="oral">Oral &amp; Viva</option>
             <option value="both" selected>Full COC Preparation</option>
+              <option value="sponsorship">Sponsorship</option>
           </select>
         </div>
         <div class="ad-field">
@@ -1939,6 +1942,7 @@
             <option value="written">Written Paper</option>
             <option value="oral">Oral &amp; Viva</option>
             <option value="both">Full COC Preparation</option>
+              <option value="sponsorship">Sponsorship</option>
           </select>
           <div class="ad-hint">Which section the offer covers. "Any" lets the buyer choose.</div>
         </div>
@@ -2028,6 +2032,21 @@
     <div class="ad-ph">
       <h1>Plans</h1>
       <p>What buyers pay, and what any sale is called. Edits go live immediately, no deploy needed.</p>
+    </div>
+
+    <!-- The Sponsorship paywall switch. Deliberately the first thing on this
+         tab and deliberately blunt: it is the single control that decides
+         whether a whole course costs money, and it should not be findable by
+         accident or flipped without reading the sentence next to it. -->
+    <div class="ad-card" style="margin-bottom:18px">
+      <div class="ad-card-head">Sponsorship access</div>
+      <div class="ad-card-sub" id="spaid-sub">Loading...</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px">
+        <button type="button" class="upill" id="spaid-toggle" onclick="toggleSponsorshipPaid()">
+          <span id="spaid-label">...</span>
+        </button>
+        <div id="spaid-warn" style="font-size:12.5px;color:var(--text2);flex:1;min-width:220px"></div>
+      </div>
     </div>
 
     <div class="ad-card" style="margin-bottom:18px">
@@ -2378,6 +2397,7 @@
               <option value="written">Written Paper</option>
               <option value="oral">Oral &amp; Viva</option>
               <option value="both" selected>Full COC Preparation</option>
+              <option value="sponsorship">Sponsorship</option>
             </select>
           </div>
           <div class="ad-field">
@@ -4245,31 +4265,100 @@ function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-sc
 function scopeAccessUpdate(plan, scope, expiry) {
   var upd = { subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope };
 
-  if (plan === 'lifetime') {
-    // Not date-based; stale per-scope dates would later contradict it.
-    upd.written_expires_at = null;
-    upd.oral_expires_at = null;
-    upd.granted_written_expires_at = null;
-    upd.granted_oral_expires_at = null;
+  // Keyed rather than branched, mirroring _shared/entitlements.ts. Both sides
+  // of this now have to agree about what a scope covers, and two hand-written
+  // ternaries are how they would quietly stop agreeing.
+  if (plan === 'lifetime' || plan === 'trial') {
+    // Lifetime is not date-based, and trial clears paid access outright.
+    // Either way, stale per-scope dates would later contradict the plan.
+    ACCESS_SCOPES_ADMIN.forEach(function (s) {
+      upd[s + '_expires_at'] = null;
+      upd['granted_' + s + '_expires_at'] = null;
+    });
     return upd;
   }
-  if (plan === 'trial') {
-    upd.written_expires_at = null;
-    upd.oral_expires_at = null;
-    upd.granted_written_expires_at = null;
-    upd.granted_oral_expires_at = null;
-    return upd;
-  }
-  var covered = scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
-  if (covered.indexOf('written') !== -1) {
-    upd.written_expires_at = expiry;
-    upd.granted_written_expires_at = expiry;
-  }
-  if (covered.indexOf('oral') !== -1) {
-    upd.oral_expires_at = expiry;
-    upd.granted_oral_expires_at = expiry;
-  }
+  scopesCoveredAdmin(scope).forEach(function (s) {
+    upd[s + '_expires_at'] = expiry;
+    upd['granted_' + s + '_expires_at'] = expiry;
+  });
   return upd;
+}
+
+/* ── The Sponsorship paywall switch ────────────────────────────────────────
+   One row in course_config. get-sponsorship-key reads it server-side to
+   decide whether to check entitlement or keep handing the key to every
+   signed-in user, which is what it does today.
+
+   The button here only reflects and sets that row. It is not the gate: a
+   browser cannot grant itself the course by lying about this value, because
+   nothing client-side is consulted when the key is issued.
+
+   Guarded by a confirm, and the confirm names the consequence rather than
+   asking "are you sure": switching this on takes away access that 116
+   accounts currently have. */
+var _spaidState = null;
+
+async function loadSponsorshipPaid() {
+  var sub = document.getElementById('spaid-sub');
+  if (!sub) return;
+  try {
+    var res = await _sb.from('course_config').select('sponsorship_paid').single();
+    if (res.error) throw res.error;
+    _spaidState = !!res.data.sponsorship_paid;
+  } catch (e) {
+    sub.textContent = 'Could not read the setting: ' + (e.message || e);
+    return;
+  }
+  renderSponsorshipPaid();
+}
+
+function renderSponsorshipPaid() {
+  var sub  = document.getElementById('spaid-sub');
+  var btn  = document.getElementById('spaid-toggle');
+  var lbl  = document.getElementById('spaid-label');
+  var warn = document.getElementById('spaid-warn');
+  if (!sub || !btn) return;
+
+  if (_spaidState) {
+    sub.textContent  = 'Sponsorship requires a purchase. Only the free preview topics are readable without one.';
+    lbl.textContent  = 'Paid';
+    btn.classList.add('active');
+    warn.textContent = 'Switch back to Free to reopen the whole course to every signed-in user.';
+  } else {
+    sub.textContent  = 'Sponsorship is free to any signed-in user. This is how it shipped.';
+    lbl.textContent  = 'Free';
+    btn.classList.remove('active');
+    warn.textContent = 'Do not switch to Paid until the course is finished. Aptitude and Interview Prep are still largely stubs, and the Content Status tab shows what is ready.';
+  }
+}
+
+async function toggleSponsorshipPaid() {
+  var next = !_spaidState;
+  var msg = next
+    ? 'Make Sponsorship a paid course?\n\nEveryone without a purchase loses access to everything except the free preview topics. Accounts reading it right now are included.\n\nThe three Sponsorship price rows must also be set active on this page before anyone can actually buy it.'
+    : 'Make Sponsorship free again?\n\nEvery signed-in user immediately regains the whole course, whether or not they paid.';
+  if (!confirm(msg)) return;
+
+  var res = await _sb.from('course_config')
+    .update({ sponsorship_paid: next, updated_at: new Date().toISOString(), updated_by: _myId })
+    .eq('id', true);
+  if (res.error) { alert('Failed: ' + res.error.message); return; }
+
+  _spaidState = next;
+  renderSponsorshipPaid();
+  logAdminAction(next ? 'sponsorship_paid_on' : 'sponsorship_paid_off', null, { sponsorship_paid: next });
+}
+
+/* The admin-side mirror of scopesCovered() in _shared/entitlements.ts.
+   Kept identical on purpose, including that 'both' means Written + Oral and
+   never Sponsorship: every historical row saying 'both' has to keep meaning
+   what the customer was actually sold. */
+var ACCESS_SCOPES_ADMIN = ['written', 'oral', 'sponsorship'];
+function scopesCoveredAdmin(scope) {
+  if (scope === 'written')     return ['written'];
+  if (scope === 'oral')        return ['oral'];
+  if (scope === 'sponsorship') return ['sponsorship'];
+  return ['written', 'oral'];
 }
 
 /** Plain-English description of what a grant will do, shown before saving. */
@@ -4279,18 +4368,25 @@ function scopeAccessPreview(user, plan, scope, expiry) {
   if (!expiry)             return '';
 
   var when = fmtDate(expiry);
-  var covered = scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
-  var names = { written: 'Written', oral: 'Oral' };
+  var covered = scopesCoveredAdmin(scope);
+  var names = { written: 'Written', oral: 'Oral', sponsorship: 'Sponsorship' };
   var setPart = covered.map(function(s) { return names[s]; }).join(' and ') + ' set to ' + when + '.';
 
-  var untouched = ['written', 'oral'].filter(function(s) { return covered.indexOf(s) === -1; });
-  var keepPart = '';
+  var untouched = ACCESS_SCOPES_ADMIN.filter(function(s) { return covered.indexOf(s) === -1; });
+  // Accumulated, not assigned. With two scopes there was only ever one
+  // untouched, so overwriting was harmless; with three there can be two, and
+  // assigning would silently drop one from a message whose entire job is
+  // reassuring the admin that nothing else got clobbered.
+  var keeps = [];
   untouched.forEach(function(s) {
     var cur = user && user[s + '_expires_at'];
     if (cur && new Date(cur) > new Date()) {
-      keepPart = ' ' + names[s] + ' is left unchanged, still running to ' + fmtDate(cur) + '.';
+      keeps.push(names[s] + ' (to ' + fmtDate(cur) + ')');
     }
   });
+  var keepPart = keeps.length
+    ? ' ' + keeps.join(' and ') + (keeps.length > 1 ? ' are' : ' is') + ' left unchanged.'
+    : '';
   return setPart + keepPart;
 }
 
@@ -6070,10 +6166,13 @@ async function setCouponActive(code, active) {
    Base price, track and tier names and the active switch are still never
    touched here, so an offer can never quietly undo a price edit. */
 
+// Sponsorship is ONE product: no Written/Oral split, no bundle. So it is a
+// fourth row of three durations, not another 3x3 block.
 var TRACKS_OF = [
-  { key: 'written', name: 'Written Paper', sub: 'Written exam' },
-  { key: 'oral',    name: 'Oral & Viva',   sub: 'Oral exam' },
-  { key: 'both',    name: 'Full COC',      sub: 'Written + Oral' },
+  { key: 'written',     name: 'Written Paper', sub: 'Written exam' },
+  { key: 'oral',        name: 'Oral & Viva',   sub: 'Oral exam' },
+  { key: 'both',        name: 'Full COC',      sub: 'Written + Oral' },
+  { key: 'sponsorship', name: 'Sponsorship',   sub: 'Company selection' },
 ];
 var DURS_OF = [
   { key: '3mo',  name: '3 months' },
@@ -6119,7 +6218,8 @@ function offerToggleCol(d)  {
 }
 function offerToggleAll() {
   var sel = offerSel();
-  var all = Object.keys(sel).length === 9 && Object.keys(sel).every(function (k) { return sel[k]; });
+  var _cells = TRACKS_OF.length * DURS_OF.length;
+  var all = Object.keys(sel).length === _cells && Object.keys(sel).every(function (k) { return sel[k]; });
   TRACKS_OF.forEach(function (t) { DURS_OF.forEach(function (d) { sel[offerKey(d.key, t.key)] = !all; }); });
   renderOfferGrid(); offerPreview();
 }
@@ -6180,7 +6280,7 @@ function renderOfferGrid() {
   if (!box) return;
   var sel = offerSel();
   var n = offerSelectedRows().length;
-  var allOn = n === 9;
+  var allOn = n === TRACKS_OF.length * DURS_OF.length;
 
   var html = '<table class="of-tbl"><thead><tr>'
     + '<th><button class="of-all' + (allOn ? ' on' : '') + '" onclick="offerToggleAll()">'
@@ -6379,7 +6479,7 @@ function renderBulkControls() { renderOfferControls(); }
 
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
-var TRACK_LABEL_ADMIN = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation' };
+var TRACK_LABEL_ADMIN = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation', sponsorship: 'Sponsorship' };
 
 async function loadPlansTab() {
   var wrap = document.getElementById('plans-groups');
@@ -7144,6 +7244,7 @@ window.showTab = function(name) {
   if (name === 'plans' && !_tabLoaded.plans) {
     _tabLoaded.plans = true;
     loadPlansTab();
+    loadSponsorshipPaid();
   }
   if (name === 'videos' && !_tabLoaded.videos) {
     _tabLoaded.videos = true;
@@ -7193,13 +7294,16 @@ function setAdminCourse(course) {
    does not populate at all yet. Listed explicitly rather than inferred:
    an inferred rule would quietly start hiding a tab the day someone adds
    a sponsorship pricing row, which is exactly when you want to see it. */
+// Cut back deliberately once Sponsorship became sellable. Payments, Coupons,
+// Plans and Mail all have a real data path now: there are Sponsorship price
+// rows, coupons can target it, and a purchase writes an ordinary payments
+// row. Blocking those tabs would have hidden the Plans editor, which is the
+// one place the Sponsorship prices are set. An empty list under a working
+// filter is fine and honest; a blocked tab that will never unblock itself is
+// not. Only the two with genuinely no path remain.
 var COURSE_UNTRACKED = {
   sponsorship: {
-    payments: 'Sponsorship has no paid plans, so no payments are recorded against it.',
-    coupons:  'Coupons carry a COC scope (Written, Oral, Full COC). None target Sponsorship.',
-    plans:    'pricing_plans holds nine COC rows: three durations by three scopes. Sponsorship has none.',
-    funnel:   'The Sponsorship app records no funnel events. Every funnel row belongs to COC.',
-    mail:     'Email segments are built from plan state, which only COC has.'
+    funnel: 'The Sponsorship app does not record funnel events yet: it has no checkout to instrument until the paywall is switched on. Every funnel row currently belongs to COC.'
   },
   // The Content Status board is built entirely from the Sponsorship module
   // list. Left unlabelled it would show Sponsorship modules while the
