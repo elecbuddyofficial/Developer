@@ -951,20 +951,11 @@
       .acs-short { display: inline; }
     }
 
-    /* Shown on a tab whose data simply does not exist for the selected
-       course. An empty table reads as a data-loss bug and costs an
-       investigation every time; saying so costs nothing. */
-    .ad-nodata {
-      padding: 44px 24px; text-align: center;
-      color: var(--text2); font-size: 13.5px; line-height: 1.6;
-    }
-    .ad-nodata strong { color: var(--text); display: block; margin-bottom: 6px; font-size: 15px; }
-    .ad-nodata button {
-      margin-top: 16px; padding: 8px 16px; border-radius: 6px;
-      background: var(--blue-dim); border: 1px solid var(--blue-border);
-      color: var(--blue); font-size: 12.5px; font-weight: 700;
-      cursor: pointer; font-family: inherit;
-    }
+    /* .ad-nodata lived here: the "Not tracked for Sponsorship yet" panel.
+       Deleted along with the approach. Showing every tab under both courses
+       and explaining the empty ones was not a split, it was the same menu
+       twice with apologies. Tabs are now owned by the course they belong to,
+       so a tab with nothing to show is simply not in that menu. */
     .upill.active .upill-count { background: rgba(59,130,246,.18); }
 
     /* Payments tab */
@@ -7460,17 +7451,36 @@ function setAdminCourse(course) {
 // one place the Sponsorship prices are set. An empty list under a working
 // filter is fine and honest; a blocked tab that will never unblock itself is
 // not. Only the two with genuinely no path remain.
-var COURSE_UNTRACKED = {
-  sponsorship: {
-    funnel: 'The Sponsorship app does not record funnel events yet: it has no checkout to instrument until the paywall is switched on. Every funnel row currently belongs to COC.'
-  },
-  // The Content Status board is built entirely from the Sponsorship module
-  // list. Left unlabelled it would show Sponsorship modules while the
-  // switcher reads COC, which is worse than showing nothing.
-  coc: {
-    status: 'The content readiness board is built from the Sponsorship module list. There is no COC equivalent yet.'
-  }
+/* Which tabs each course actually owns.
+
+   The first attempt showed every tab under both courses and put an
+   explanation on the ones with no data. Blesson's objection was the right
+   one: if a tab is identical in both places, it should not be in both
+   places. A menu that repeats itself is not a split.
+
+   So the rule is ownership, not availability:
+
+     - A tab whose data is PER-COURSE appears under the course it belongs to.
+       Payments, Coupons and Plans appear under both because each course has
+       its own money; they show different rows, not the same rows twice.
+     - A tab that is ONE THING FOR THE WHOLE SITE lives in one place only.
+       There is a single user list, a single admin team, a single approvals
+       queue. None of them has a Sponsorship version, so none appears twice.
+     - A tab whose data belongs to exactly one course appears only there:
+       Funnel is COC-only (Sponsorship records no funnel events), Content
+       Status is Sponsorship-only (it is built from the Sponsorship module
+       list and has no COC equivalent).
+
+   Listed explicitly rather than derived. A rule like "hide anything empty"
+   would start hiding tabs the day a query returned nothing, which is exactly
+   when you most want to look at them. */
+var COURSE_TABS = {
+  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'status'],
+  coc:         ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications',
+                'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity'],
 };
+
+function tabsForCourse() { return COURSE_TABS[_adminCourse] || COURSE_TABS.coc; }
 
 /* Paints or clears the not-tracked notice for whichever tab is open, and
    strips every control that does not apply to the current course. */
@@ -7483,51 +7493,25 @@ function applyCourseScope() {
   try { applyScopeOptionFilter(); }
   catch (e) { console.error('applyScopeOptionFilter failed:', e); }
 
-  var untracked = COURSE_UNTRACKED[_adminCourse] || {};
+  var allowed = tabsForCourse();
+  var strandedOn = null;
+
   TAB_NAMES.forEach(function (name) {
-    var panel = document.getElementById('tab-' + name);
-    if (!panel) return;
-    var existing = panel.querySelector('.ad-nodata');
-    var reason = untracked[name];
-
-    if (!reason) {
-      if (existing) {
-        existing.remove();
-        // Restore whatever was hidden when the notice went up.
-        panel.querySelectorAll('[data-course-hidden]').forEach(function (el) {
-          el.style.display = el.getAttribute('data-course-hidden') || '';
-          el.removeAttribute('data-course-hidden');
-        });
-      }
-      return;
-    }
-    if (existing) return;                       // already showing
-
-    // Hide the tab's own children rather than blanking innerHTML: the
-    // markup has to come back intact when the course switches back, and
-    // rebuilding it would mean duplicating every tab's HTML in JS.
-    Array.prototype.forEach.call(panel.children, function (el) {
-      el.setAttribute('data-course-hidden', el.style.display || '');
-      el.style.display = 'none';
-    });
-
-    var other = (_adminCourse === 'coc') ? 'sponsorship' : 'coc';
-    var box = document.createElement('div');
-    box.className = 'ad-nodata';
-    var strong = document.createElement('strong');
-    strong.textContent = 'Not tracked for ' + COURSE_LABEL[_adminCourse] + ' yet';
-    var p = document.createElement('div');
-    p.textContent = reason;
-    var btn = document.createElement('button');
-    btn.type = 'button';
-    btn.textContent = 'Switch to ' + COURSE_LABEL[other];
-    // Listener, not an inline onclick built from a string. Building handlers
-    // into markup is how the topic prev/next nav shipped dead once: the
-    // string looked right and the parse was wrong.
-    btn.addEventListener('click', function () { setAdminCourse(other); });
-    box.appendChild(strong); box.appendChild(p); box.appendChild(btn);
-    panel.appendChild(box);
+    var btn = document.querySelector('.ad-nav-btn[data-tab="' + name + '"]');
+    if (!btn) return;
+    var show = allowed.indexOf(name) !== -1;
+    btn.style.display = show ? '' : 'none';
+    // Remember if the tab currently OPEN is one we are hiding, or the switch
+    // leaves the console showing a panel with no menu entry to return to.
+    if (!show && btn.classList.contains('active')) strandedOn = name;
   });
+
+  // Covers both switching course while on a now-hidden tab, and landing via a
+  // bookmarked #hash that does not belong to this course.
+  if (strandedOn && typeof showTab === 'function' && !applyCourseScope._moving) {
+    applyCourseScope._moving = true;     // showTab calls back into here
+    try { showTab('dashboard'); } finally { applyCourseScope._moving = false; }
+  }
 }
 
 // Theme Toggler
