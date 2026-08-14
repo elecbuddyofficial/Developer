@@ -1,1 +1,1 @@
-window.loadQuizzes("IP02_HR", []);
+{"v":1,"iv":"nbaMrvVwXZ+EhSsy","data":"L3NWaOVfcbPBa1ZGeZsLPl0q9f2U/6OZe5OzRsuUaTLNxQ==","tag":"AadVurXQ0qPumQjHIouMfA=="}

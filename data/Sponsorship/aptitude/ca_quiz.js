@@ -1,1 +1,1 @@
-window.loadQuizzes("CA_CurrentAffairs", []);
+{"v":1,"iv":"EoOQ/t6GOE48ZSo3","data":"cDac9ZhTIbwAB/zDIfy1OpbPbMQHkcAI4FWGxvD5GYBO9GeXOkSYB7pNZ24=","tag":"unUvENnU2YvMJdJfXGbrzQ=="}

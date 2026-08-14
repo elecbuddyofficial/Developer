@@ -1,1 +1,1 @@
-window.loadQuizzes("A20_DecimalFraction", []);
+{"v":1,"iv":"ryuu9T+FmBq5bPTP","data":"mCXC3egS1Z4KlIqRpOUqi5UXrw/jKVXJerHgdlWLuoudHArV4/8Dx2t5OStRSA==","tag":"RNRK4AQAqrOKU2sdCqyCWg=="}

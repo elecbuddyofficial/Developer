@@ -1,1 +1,1 @@
-window.loadQuizzes("IP01_GD", []);
+{"v":1,"iv":"Gy8u+bLgP6Y6oio5","data":"OGEx8Ygua68V76yFL43qxo4dnt7UAl/f6xAYW+HWkKt4tQ==","tag":"PAWr+emT7kb0r6nnwoD7WA=="}

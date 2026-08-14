@@ -1,1 +1,1 @@
-window.loadQuizzes("A32_Probability", []);
+{"v":1,"iv":"JGr7QhyZ7YE6GCI6","data":"z/eOrJep0gvnftDMKG8QmSg3UojDOh+Xo/hMoE7vUiL5QWus4FXkaOhE","tag":"7LETIoBbPd/IkWEHGQ+vzg=="}

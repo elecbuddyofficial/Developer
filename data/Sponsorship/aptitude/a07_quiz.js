@@ -1,1 +1,1 @@
-window.loadQuizzes("A07_ProfitLoss", []);
+{"v":1,"iv":"DICuT5z9H40FIXaU","data":"64aJjjMY5yeGZioYl/SFLOi72B9HmTFD7N3lAuQDZE7cObUVS+EjoyU=","tag":"fJFoy76XEf9WvkCIGu6OQw=="}

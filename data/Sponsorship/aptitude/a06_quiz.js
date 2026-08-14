@@ -1,1 +1,1 @@
-window.loadQuizzes("A06_CompoundInterest", []);
+{"v":1,"iv":"/KTPdYt+9Y/dv4/O","data":"Qibpo6ZRY3iE/zRIINjHX7HT/9ME1KAWkfpAhO3hcIAyxK/tYv2WLmx3kjrW7F4=","tag":"Siazza6wSwpTWPQC+zrmPw=="}

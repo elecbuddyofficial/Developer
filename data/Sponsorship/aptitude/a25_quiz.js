@@ -1,1 +1,1 @@
-window.loadQuizzes("A25_ChainRule", []);
+{"v":1,"iv":"0UPJwKXvUGxCGIfW","data":"FVHhbQXZPOU38ECa1GpCSmXUwaE3uJnYptQt6BGXhepJcV9tR2UN1w==","tag":"8LzGNtIKvGEqv2/0XMjRYg=="}

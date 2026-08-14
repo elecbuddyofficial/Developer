@@ -1,1 +1,1 @@
-window.loadQuizzes("A31_StocksShares", []);
+{"v":1,"iv":"YRxj1N2MjqKGdB9r","data":"Jk3W0Y3rI7QfoC9cH463K+eDoTdwYU1dkHCnnjRQPl6Ak5rOUs86VRk0Mg==","tag":"VUq0c2fAFIVLG3NR4hoERg=="}

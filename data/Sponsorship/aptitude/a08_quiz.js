@@ -1,1 +1,1 @@
-window.loadQuizzes("A08_Partnership", []);
+{"v":1,"iv":"87k3mKxnMrIAMWbL","data":"kulQX+9csjwqKiNmZmtP2THrsFVS2kBv6PZyDnwM3zOamTK/3RPYpU5L","tag":"espLeYKI3KuwYVIxgkCAzw=="}

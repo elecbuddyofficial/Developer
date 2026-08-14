@@ -1,1 +1,1 @@
-window.loadQuizzes("APT_Aptitude", []);
+{"v":1,"iv":"Rh5P0ihO+5GmPzHI","data":"IW/dHS8hrmtuKr5DbBJ0fjreXBuq5Aq7ZV/km+YKxZ7X8clTagSX","tag":"n9Rs+WSyjnrK/wOdCSpcWw=="}

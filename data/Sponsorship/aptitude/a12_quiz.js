@@ -1,1 +1,1 @@
-window.loadQuizzes("A12_Clock", []);
+{"v":1,"iv":"cQ9gYS4nt7YJghgQ","data":"SpItKMmfBpxldEwFJ3iHIndGvbDahi17DQUeC9K0FBzI6urG","tag":"xjj9yAdQnENaX/tAxRxf3g=="}

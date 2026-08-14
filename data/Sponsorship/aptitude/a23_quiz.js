@@ -1,1 +1,1 @@
-window.loadQuizzes("A23_SurdsIndices", []);
+{"v":1,"iv":"+/Ng7Ykc2nkTwOkh","data":"Iluzg0kSH5R6M+p0LjQiHKpCrLl+FtNJflHNJfFUUwnEy+E+TApEHg3Olw==","tag":"vNE11gDmm/In+LZIyVRmQg=="}

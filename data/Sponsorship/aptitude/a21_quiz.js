@@ -1,1 +1,1 @@
-window.loadQuizzes("A21_Simplification", []);
+{"v":1,"iv":"FCC+efRFYitUji/a","data":"j88BLKK+4jj9ZPt65SUwTPkFxJLfUYnUEnkUbNtnitlseM+J8ustDNNhGQgO","tag":"47Ip4xZ7wAPYbdBBz3HPwA=="}

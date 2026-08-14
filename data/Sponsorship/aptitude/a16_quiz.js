@@ -1,1 +1,1 @@
-window.loadQuizzes("A16_PermutationCombination", []);
+{"v":1,"iv":"+QXzbfCEz8L+ok9A","data":"Q4Xsforaj1NQ3lslNVS+LaEPumRw0Z462rEghyrPZaLcCwUECOkrojtC/zDZ04SiXlcmWfc=","tag":"7ICAbBvqRm7ZV5/FQ4sLpQ=="}

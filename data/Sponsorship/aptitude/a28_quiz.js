@@ -1,1 +1,1 @@
-window.loadQuizzes("A28_AlligationMixture", []);
+{"v":1,"iv":"1Hur3n6Dadzb29fw","data":"nio74BZC6B1VnY6Tl0Qy9jZvZhZ8Yg4400bBQugbCozTm5KzoQUfeUSKnD36HzFM","tag":"qap5r4i8BIwFJ042TfvegQ=="}

@@ -1,1 +1,1 @@
-window.loadQuizzes("A24_RatioProportion", []);
+{"v":1,"iv":"qAadFDr7p8j6E3EK","data":"Jh1+A6tCKA4SFU/VICs5tWid03QFI4fHGXfwJzzJgZEkmeEiXI+sXh7SG1Y71w==","tag":"01yQZuZbZvXsM6G+SOiT9g=="}

@@ -1,1 +1,1 @@
-window.loadQuizzes("A09_Percentage", []);
+{"v":1,"iv":"RA3LuZ6zqPToTb/d","data":"wWlyEzrLSRJ4maPyJTAggTicjrYzYpcdgaw3BAFbrTSTik29DMgu2cE=","tag":"9SVvV3Qte4MdIoxfz16LUg=="}
