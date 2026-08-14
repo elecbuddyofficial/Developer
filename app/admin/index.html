@@ -1810,16 +1810,18 @@
          can be disabled again (this one was, silently, for four days), so
          this panel makes the failure visible in the console instead of
          depending on somebody spotting an email. -->
-    <div class="ad-card" id="pay-stuck-card" style="margin-bottom:18px;display:none">
-      <div class="ad-card-head">Started but never completed</div>
-      <div class="ad-card-sub" id="pay-stuck-sub"></div>
-      <!-- Capped and scrolled. There are 21 of these today and the list only
-           grows, so unbounded it would push the actual payments table off the
-           screen and bury the thing this tab is for. -->
-      <div style="max-height:280px;overflow:auto;border:1px solid var(--border2);border-radius:8px">
-        <table class="ad-table" id="pay-stuck-table"></table>
-      </div>
-    </div>
+    <!-- One line, not a table. This matters, but far less than the real
+         payments below it, and a 21-row table sitting above them inverted
+         that. Click to open the detail. -->
+    <button type="button" id="pay-stuck-bar" onclick="openStuckOrders()"
+            style="display:none;width:100%;text-align:left;margin-bottom:18px;padding:11px 14px;
+                   background:var(--surface2);border:1px solid var(--border2);border-radius:8px;
+                   color:var(--text2);font-size:13px;font-family:inherit;cursor:pointer;
+                   align-items:center;gap:10px">
+      <span id="pay-stuck-count" style="font-weight:700;color:var(--amber)"></span>
+      <span id="pay-stuck-line" style="flex:1"></span>
+      <span style="color:var(--text3);font-size:12px">Review &rsaquo;</span>
+    </button>
 
     <!-- Filter row -->
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center;">
@@ -2342,6 +2344,28 @@
 
 </main>
 
+<!-- ══ STUCK ORDERS MODAL ════════════════════════════════
+     Reuses .prof-overlay / .prof-card so it behaves like the user drawer:
+     same backdrop, same click-outside-to-close, same full-screen treatment
+     on a phone. -->
+<div class="prof-overlay" id="stuck-overlay" onclick="if(event.target===this) closeStuckOrders()">
+  <div class="prof-card" style="max-width:900px">
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:18px 20px 0">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:800;color:var(--text)">Started but never completed</div>
+        <div id="stuck-sub" style="font-size:12.5px;color:var(--text2);margin-top:5px;line-height:1.55"></div>
+      </div>
+      <button type="button" onclick="closeStuckOrders()"
+              style="background:none;border:0;color:var(--text3);font-size:22px;line-height:1;cursor:pointer;padding:0 2px">&times;</button>
+    </div>
+    <div style="padding:14px 20px 20px">
+      <div style="max-height:60vh;overflow:auto;border:1px solid var(--border2);border-radius:8px">
+        <table class="ad-table" id="stuck-table"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ══ USER PROFILE MODAL ═══════════════════════════════════════ -->
 <div class="prof-overlay" id="prof-overlay" onclick="if(event.target===this) closeUserProfile()">
   <div class="prof-card">
@@ -2694,7 +2718,12 @@ document.addEventListener('click', function(e) {
 });
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeUserProfile();
+  if (e.key !== 'Escape') return;
+  // Topmost first: the stuck-orders modal can be opened from the Payments
+  // tab while the user drawer is also open.
+  var stuck = document.getElementById('stuck-overlay');
+  if (stuck && stuck.classList.contains('open')) { closeStuckOrders(); return; }
+  closeUserProfile();
 });
 
 /* ── TABS ────────────────────────────────────────────────────────── */
@@ -4336,49 +4365,87 @@ function scopeAccessUpdate(plan, scope, expiry) {
 
    Under an hour is excluded because a checkout genuinely in progress would
    otherwise appear here and cause a false alarm every time somebody buys. */
+var _stuckRows = [];
+
+/* The one-line summary. Detail is behind a click, deliberately: this matters,
+   it is how a captured payment with no access granted becomes visible, but it
+   matters less than the real payments underneath, and a 21-row table sitting
+   above them said the opposite. */
 async function loadStuckOrders() {
-  var card = document.getElementById('pay-stuck-card');
-  if (!card) return;
+  var bar = document.getElementById('pay-stuck-bar');
+  if (!bar) return;
   var cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString();
 
   var res = await _sb.from('payments')
-    .select('id,created_at,plan,scope,amount,razorpay_order_id,user_id')
+    .select('id,created_at,plan,scope,amount,currency,razorpay_order_id,user_id')
     .eq('status', 'created')
     .lt('created_at', cutoff)
     .order('created_at', { ascending: false })
-    .limit(50);
+    .limit(100);
 
-  var rows = res.data || [];
-  if (res.error || !rows.length) { card.style.display = 'none'; return; }
+  _stuckRows = res.data || [];
+  if (res.error || !_stuckRows.length) { bar.style.display = 'none'; return; }
 
-  var emails = await resolvePayEmails(rows);
-  var table = document.getElementById('pay-stuck-table');
-  var sub   = document.getElementById('pay-stuck-sub');
+  var total = _stuckRows.reduce(function (s, r) { return s + (r.amount || 0); }, 0) / 100;
+  document.getElementById('pay-stuck-count').textContent = _stuckRows.length;
+  document.getElementById('pay-stuck-line').textContent =
+    'order' + (_stuckRows.length === 1 ? '' : 's') + ' started checkout and never completed'
+    + '  ·  ₹' + total.toFixed(0) + ' unaccounted for';
+  bar.style.display = 'flex';
+}
 
-  sub.innerHTML = rows.length + ' order' + (rows.length === 1 ? '' : 's')
-    + ' opened checkout over an hour ago and never completed. Most will simply have '
-    + 'changed their mind. Check any you do not recognise against the Razorpay '
-    + 'dashboard: if Razorpay shows it as <strong>Captured</strong>, that person paid '
-    + 'and has nothing, and it needs fixing by hand.';
+async function openStuckOrders() {
+  var ov = document.getElementById('stuck-overlay');
+  if (!ov) return;
+  ov.classList.add('open');
+  document.body.style.overflow = 'hidden';
 
-  // Sticky header: the list scrolls inside a fixed-height box, and without
-  // this the column names are gone the moment you look past the first few.
-  table.innerHTML =
+  var emails = await resolvePayEmails(_stuckRows);
+
+  document.getElementById('stuck-sub').innerHTML =
+    'These opened Razorpay checkout over an hour ago and never came back as paid. '
+    + '<strong>Most simply changed their mind.</strong> This list cannot tell those from a real '
+    + 'capture, because only Razorpay knows: check any you do not recognise in the Razorpay '
+    + 'dashboard, and if it shows as <strong>Captured</strong>, that person paid and has nothing.';
+
+  document.getElementById('stuck-table').innerHTML =
+    // Sticky header: the list scrolls, and without this the column names are
+    // gone the moment you look past the first few rows.
     '<thead><tr style="position:sticky;top:0;z-index:1;background:var(--surface)">'
-    + '<th>When</th><th>Who</th><th>Wanted</th><th>Amount</th><th>Razorpay order id</th></tr></thead><tbody>'
-    + rows.map(function (r) {
-        var age = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 3600000);
+    + '<th>Started</th><th>Who</th><th>Wanted</th><th>Amount</th>'
+    + '<th>Razorpay order id</th><th>Payment id</th></tr></thead><tbody>'
+    + _stuckRows.map(function (r) {
+        var mins = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 60000);
+        var age  = mins > 2880 ? Math.floor(mins / 1440) + ' days'
+                 : mins > 120  ? Math.floor(mins / 60) + ' hours'
+                 : mins + ' min';
         return '<tr>'
           + '<td style="white-space:nowrap">' + fmtDate(r.created_at)
-          + '<div style="font-size:11px;color:var(--text3)">' + (age > 48 ? Math.floor(age / 24) + ' days' : age + ' hours') + ' ago</div></td>'
-          + '<td>' + esc(emails[r.user_id] || 'unknown') + '</td>'
-          + '<td>' + esc((r.plan || '?') + ' / ' + (r.scope || '?')) + '</td>'
-          + '<td style="font-variant-numeric:tabular-nums">&#8377;' + ((r.amount || 0) / 100).toFixed(2) + '</td>'
-          + '<td style="font-family:monospace;font-size:11.5px">' + esc(r.razorpay_order_id || '-') + '</td>'
+          + '<div style="font-size:11px;color:var(--text3)">' + age + ' ago</div></td>'
+          + '<td style="word-break:break-all">' + esc(emails[r.user_id] || 'unknown') + '</td>'
+          + '<td>' + esc(planLabelFor(r.plan, r.scope)) + '</td>'
+          + '<td style="font-variant-numeric:tabular-nums;white-space:nowrap">'
+            + esc(!r.currency || r.currency === 'INR' ? '₹' : r.currency + ' ')
+            + ((r.amount || 0) / 100).toFixed(2) + '</td>'
+          + '<td style="font-family:monospace;font-size:11px;word-break:break-all">' + esc(r.razorpay_order_id || '-') + '</td>'
+          // Always "none" by definition: a stuck order has no payment id, and
+          // that absence IS the problem. Shown rather than implied.
+          + '<td style="font-family:monospace;font-size:11px;color:var(--text3)">none</td>'
           + '</tr>';
       }).join('')
     + '</tbody>';
-  card.style.display = '';
+}
+
+function closeStuckOrders() {
+  document.getElementById('stuck-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+/* Readable name for what someone was trying to buy, rather than "6mo / oral". */
+function planLabelFor(plan, scope) {
+  var dur = { '3mo': '3 months', '6mo': '6 months', '12mo': '12 months',
+              starter: 'Starter', standard: 'Standard', pro: 'Pro', lifetime: 'Lifetime' };
+  return (dur[plan] || plan || '?') + ' · ' + (TRACK_LABEL_ADMIN[scope] || scope || '?');
 }
 
 /* ── The Sponsorship paywall switch ────────────────────────────────────────
