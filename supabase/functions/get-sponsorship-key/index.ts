@@ -36,6 +36,7 @@
 
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { deriveAccess } from '../_shared/entitlements.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -52,7 +53,14 @@ const CORS = {
 // that shared value at now+7d instead would be worse: it would keep a lapsed
 // buyer's Oral key valid for a week past their expiry. Separate lifetime,
 // separate field, no interaction.
-const KEY_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const KEY_TTL_FREE_MS = 7 * 24 * 60 * 60 * 1000;
+
+// Once the course is SOLD the cache has to be revisited far sooner, because
+// the key now expires with the subscription. A week-long cache would let a
+// lapsed buyer keep reading for up to seven days after their access ended,
+// which is the client-side mirror of the bug get-content-key avoids by
+// deriving its TTL from the earliest live entitlement.
+const KEY_TTL_PAID_MS = 6 * 60 * 60 * 1000;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS });
@@ -71,21 +79,20 @@ serve(async (req) => {
     const { data: { user }, error: userErr } = await supabase.auth.getUser();
     if (userErr || !user) return new Response('Unauthorized', { status: 401, headers: CORS });
 
-    // Confirm a profile row exists, so a token for a deleted account cannot
-    // still pull content. No plan, no expiry, no scope is read: Sponsorship
-    // has no paid tier and inventing an entitlement check here would gate
-    // content that is free today.
+    // Everything needed to answer both the free and the paid case in one
+    // round trip. The expiry columns are read but only consulted when the
+    // course is actually being sold.
     //
     // signup_status is deliberately NOT checked. A pending account can already
     // read every Sponsorship page today, because the hold screen only exists
     // in app/index.html. Refusing them the key here would take away access
-    // they currently have, as a side effect of an encryption change. Whether
-    // the hold should cover Sponsorship is a real product question and it is
-    // being handled separately, where it can be given a proper screen instead
-    // of silently failing to decrypt.
+    // they currently have, as a side effect of a payments change. Whether the
+    // hold should cover Sponsorship is a real product question and belongs
+    // somewhere it can be given a proper screen instead of silently failing
+    // to decrypt.
     const { data: profile, error: profErr } = await supabase
       .from('profiles')
-      .select('id')
+      .select('id, subscription_plan, trial_started_at, sponsorship_expires_at')
       .eq('id', user.id)
       .single();
 
@@ -94,6 +101,37 @@ serve(async (req) => {
         status: 403,
         headers: { ...CORS, 'Content-Type': 'application/json' },
       });
+    }
+
+    // ── Is Sponsorship being sold yet? ───────────────────────────────────
+    //
+    // Read from the database, never from the request. A browser cannot grant
+    // itself the course by claiming the course is free, because this is the
+    // only place the answer is consulted.
+    //
+    // FAILING CLOSED WOULD BE WRONG HERE, which is worth stating because it
+    // is the opposite of the usual instinct. If this read fails, treating the
+    // course as PAID would lock every reader out of content that is currently
+    // free, turning a transient database blip into a site-wide outage for a
+    // course nobody has paid for. Treating it as free costs, at worst, giving
+    // away access that is already being given away today. So: default false.
+    let sponsorshipPaid = false;
+    try {
+      const { data: cfg } = await supabase
+        .from('course_config')
+        .select('sponsorship_paid')
+        .single();
+      if (cfg && cfg.sponsorship_paid === true) sponsorshipPaid = true;
+    } catch (_) { /* stay free */ }
+
+    if (sponsorshipPaid) {
+      const { sponsorship } = deriveAccess(profile, new Date());
+      if (!sponsorship) {
+        return new Response(JSON.stringify({ error: 'No active Sponsorship subscription' }), {
+          status: 403,
+          headers: { ...CORS, 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     const key = Deno.env.get('CONTENT_KEY_SPONSORSHIP') ?? '';
@@ -105,7 +143,11 @@ serve(async (req) => {
     }
 
     return new Response(
-      JSON.stringify({ key, expiresAt: Date.now() + KEY_TTL_MS, userId: user.id }),
+      JSON.stringify({
+        key,
+        expiresAt: Date.now() + (sponsorshipPaid ? KEY_TTL_PAID_MS : KEY_TTL_FREE_MS),
+        userId: user.id,
+      }),
       { headers: { ...CORS, 'Content-Type': 'application/json' } }
     );
   } catch (err) {
