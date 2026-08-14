@@ -6249,6 +6249,62 @@ var TRACKS_OF = [
   { key: 'both',        name: 'Full COC',      sub: 'Written + Oral' },
   { key: 'sponsorship', name: 'Sponsorship',   sub: 'Company selection' },
 ];
+
+/* Which scopes belong to the course currently being viewed.
+
+   COC covers Written, Oral and the Full COC bundle. Sponsorship is one
+   product on its own. Nothing overlaps, which is what makes filtering safe:
+   there is no scope that would disappear from both views. */
+var COURSE_SCOPES = {
+  coc:         ['written', 'oral', 'both'],
+  sponsorship: ['sponsorship'],
+};
+function scopesForCourse() { return COURSE_SCOPES[_adminCourse] || COURSE_SCOPES.coc; }
+
+/* The price/offer grid for the current course only.
+
+   Showing all four rows in both views was the thing Blesson objected to:
+   picking "Sponsorship" and still being offered Written Paper, Oral & Viva
+   and Full COC is noise at best, and at worst an invitation to put a COC
+   price under a Sponsorship heading. */
+function TRACKS_VIEW() {
+  var allowed = scopesForCourse();
+  return TRACKS_OF.filter(function (t) { return allowed.indexOf(t.key) !== -1; });
+}
+
+/* Hide the scope options that do not belong to the current course.
+
+   Options are hidden AND disabled rather than removed. Removing them would
+   mean rebuilding each select on every switch and losing any custom markup;
+   disabling also stops a hidden option being submitted by keyboard, which
+   hidden alone does not reliably prevent.
+
+   If the currently selected option gets hidden, the select is moved to the
+   first visible one and told about it, so a form is never silently sitting
+   on a value the admin can no longer see. */
+var SCOPE_SELECTS = ['grant-scope', 'cp-scope', 'cp-applies-scope', 'pay-filter-scope', 'prof-edit-scope'];
+
+function applyScopeOptionFilter() {
+  var allowed = scopesForCourse();
+  SCOPE_SELECTS.forEach(function (id) {
+    var sel = document.getElementById(id);
+    if (!sel) return;
+    var firstVisible = null, selectedHidden = false;
+    Array.prototype.forEach.call(sel.options, function (opt) {
+      // '' is "Any scope" / "All scopes" and always belongs.
+      var show = opt.value === '' || allowed.indexOf(opt.value) !== -1;
+      opt.hidden = !show;
+      opt.disabled = !show;
+      if (show && firstVisible === null) firstVisible = opt.value;
+      if (!show && opt.selected) selectedHidden = true;
+    });
+    if (selectedHidden && firstVisible !== null) {
+      sel.value = firstVisible;
+      // Let anything listening (previews, filters) recompute.
+      try { sel.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+    }
+  });
+}
 var DURS_OF = [
   { key: '3mo',  name: '3 months' },
   { key: '6mo',  name: '6 months' },
@@ -6264,7 +6320,7 @@ function offerKey(d, s) { return d + '|' + s; }
 
 function offerDefaultSel() {
   var set = {};
-  TRACKS_OF.forEach(function (t) { DURS_OF.forEach(function (d) { set[offerKey(d.key, t.key)] = true; }); });
+  TRACKS_VIEW().forEach(function (t) { DURS_OF.forEach(function (d) { set[offerKey(d.key, t.key)] = true; }); });
   return set;
 }
 
@@ -6287,15 +6343,15 @@ function offerToggleRow(s)  {
 }
 function offerToggleCol(d)  {
   var sel = offerSel();
-  var on = TRACKS_OF.every(function (t) { return sel[offerKey(d, t.key)]; });
-  TRACKS_OF.forEach(function (t) { sel[offerKey(d, t.key)] = !on; });
+  var on = TRACKS_VIEW().every(function (t) { return sel[offerKey(d, t.key)]; });
+  TRACKS_VIEW().forEach(function (t) { sel[offerKey(d, t.key)] = !on; });
   renderOfferGrid(); offerPreview();
 }
 function offerToggleAll() {
   var sel = offerSel();
-  var _cells = TRACKS_OF.length * DURS_OF.length;
+  var _cells = TRACKS_VIEW().length * DURS_OF.length;
   var all = Object.keys(sel).length === _cells && Object.keys(sel).every(function (k) { return sel[k]; });
-  TRACKS_OF.forEach(function (t) { DURS_OF.forEach(function (d) { sel[offerKey(d.key, t.key)] = !all; }); });
+  TRACKS_VIEW().forEach(function (t) { DURS_OF.forEach(function (d) { sel[offerKey(d.key, t.key)] = !all; }); });
   renderOfferGrid(); offerPreview();
 }
 
@@ -6355,19 +6411,19 @@ function renderOfferGrid() {
   if (!box) return;
   var sel = offerSel();
   var n = offerSelectedRows().length;
-  var allOn = n === TRACKS_OF.length * DURS_OF.length;
+  var allOn = n === TRACKS_VIEW().length * DURS_OF.length;
 
   var html = '<table class="of-tbl"><thead><tr>'
     + '<th><button class="of-all' + (allOn ? ' on' : '') + '" onclick="offerToggleAll()">'
     +   (allOn ? 'All 9' : 'Select all') + '</button></th>';
   DURS_OF.forEach(function (d) {
-    var colOn = TRACKS_OF.every(function (t) { return sel[offerKey(d.key, t.key)]; });
+    var colOn = TRACKS_VIEW().every(function (t) { return sel[offerKey(d.key, t.key)]; });
     html += '<th><button class="of-hdr' + (colOn ? ' on' : '') + '" onclick="offerToggleCol(' + attrJs(d.key) + ')">'
           + esc(d.name) + '</button></th>';
   });
   html += '</tr></thead><tbody>';
 
-  TRACKS_OF.forEach(function (t) {
+  TRACKS_VIEW().forEach(function (t) {
     var rowOn = DURS_OF.every(function (d) { return sel[offerKey(d.key, t.key)]; });
     html += '<tr><th><button class="of-hdr of-row' + (rowOn ? ' on' : '') + '" onclick="offerToggleRow(' + attrJs(t.key) + ')">'
           + '<span>' + esc(t.name) + '</span><small>' + esc(t.sub) + '</small></button></th>';
@@ -6553,7 +6609,11 @@ async function endOffer() {
 function renderBulkControls() { renderOfferControls(); }
 
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
-var TRACK_ORDER_ADMIN = ['written', 'oral', 'both'];
+// Rows the price grid shows, for the course being viewed. This used to be a
+// hardcoded [written,oral,both], which silently hid the Sponsorship
+// prices entirely: the rows existed in the database and there was no way to
+// see or edit them.
+function TRACK_ORDER_ADMIN() { return scopesForCourse(); }
 var TRACK_LABEL_ADMIN = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation', sponsorship: 'Sponsorship' };
 
 async function loadPlansTab() {
@@ -6610,7 +6670,7 @@ function renderPlansTab() {
         return '<th><span class="pe-hdr">' + esc(tierLabel(d)) + '</span></th>';
       }).join('')
     + '</tr></thead><tbody>'
-    + TRACK_ORDER_ADMIN.map(function (scope) {
+    + TRACK_ORDER_ADMIN().map(function (scope) {
         return '<tr><th><span class="pe-rowhdr">' + esc(TRACK_LABEL_ADMIN[scope] || scope) + '</span></th>'
           + TIER_ORDER_ADMIN.map(function (dur) {
               var r = planRowFor(dur, scope);
@@ -6645,7 +6705,7 @@ function renderPlansTab() {
     + '</summary>'
     + '<div style="margin-top:12px;overflow-x:auto"><table class="ad-table">'
     + '<thead><tr><th>Plan</th><th>Track name</th><th>Duration label</th><th>Shown to buyers</th></tr></thead><tbody>'
-    + TRACK_ORDER_ADMIN.map(function (scope) {
+    + TRACK_ORDER_ADMIN().map(function (scope) {
         return TIER_ORDER_ADMIN.map(function (dur) {
           var r = planRowFor(dur, scope);
           if (!r) return '';
@@ -6674,7 +6734,7 @@ function planRowFor(dur, scope) {
    identical to a correct one until a buyer met it. */
 function planDirty() {
   var changed = [];
-  TRACK_ORDER_ADMIN.forEach(function (scope) {
+  TRACK_ORDER_ADMIN().forEach(function (scope) {
     TIER_ORDER_ADMIN.forEach(function (dur) {
       var el = document.getElementById('pp-amount-' + dur + '-' + scope);
       if (!el) return;
@@ -6700,7 +6760,7 @@ function planDirty() {
 
 async function savePrices() {
   var changed = [];
-  TRACK_ORDER_ADMIN.forEach(function (scope) {
+  TRACK_ORDER_ADMIN().forEach(function (scope) {
     TIER_ORDER_ADMIN.forEach(function (dur) {
       var el = document.getElementById('pp-amount-' + dur + '-' + scope);
       if (!el) return;
@@ -6738,7 +6798,7 @@ async function savePrices() {
 
 async function saveNames() {
   var updates = [];
-  TRACK_ORDER_ADMIN.forEach(function (scope) {
+  TRACK_ORDER_ADMIN().forEach(function (scope) {
     TIER_ORDER_ADMIN.forEach(function (dur) {
       var rid = dur + '-' + scope, r = planRowFor(dur, scope);
       if (!r) return;
@@ -7361,6 +7421,10 @@ function setAdminCourse(course) {
   // section, which is where that question actually belongs.
   try { if (typeof loadDashboard === 'function') loadDashboard(); } catch (e) {}
   try { if (typeof initVideosTab === 'function') initVideosTab(); } catch (e) {}
+  // The price grid and offer composer are built from TRACKS_VIEW(), so they
+  // have to be redrawn for the switch to take effect.
+  try { if (typeof loadPlansTab === 'function') loadPlansTab(); } catch (e) {}
+  try { if (typeof renderOfferGrid === 'function') renderOfferGrid(); } catch (e) {}
 
   applyCourseScope();
 }
@@ -7388,8 +7452,13 @@ var COURSE_UNTRACKED = {
   }
 };
 
-/* Paints or clears the not-tracked notice for whichever tab is open. */
+/* Paints or clears the not-tracked notice for whichever tab is open, and
+   strips every control that does not apply to the current course. */
 function applyCourseScope() {
+  // Scope dropdowns first: they exist on tabs that are not currently visible
+  // too, and a hidden tab still needs to be correct when it is opened.
+  try { applyScopeOptionFilter(); } catch (e) {}
+
   var untracked = COURSE_UNTRACKED[_adminCourse] || {};
   TAB_NAMES.forEach(function (name) {
     var panel = document.getElementById('tab-' + name);
