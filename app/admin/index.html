@@ -1778,20 +1778,6 @@
       <p>All Razorpay transactions. Service role reads bypass RLS.</p>
     </div>
 
-    <!-- Orders that started and never finished.
-         On 14 Aug a customer paid Rs 764 by UPI, closed the tab before the
-         browser could confirm it, and the order sat at 'created' while
-         Razorpay held the money. It was only noticed because the receipt
-         email was forwarded. The webhook now covers that case, but a webhook
-         can be disabled again (this one was, silently, for four days), so
-         this panel exists to make the failure visible in the console instead
-         of depending on somebody spotting an email. -->
-    <div class="ad-card" id="pay-stuck-card" style="margin-bottom:18px;display:none">
-      <div class="ad-card-head">Started but never completed</div>
-      <div class="ad-card-sub" id="pay-stuck-sub"></div>
-      <div style="overflow-x:auto"><table class="ad-table" id="pay-stuck-table"></table></div>
-    </div>
-
     <!-- Revenue summary -->
     <div id="pay-stats" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;">
       <div class="pay-stat-card" id="psc-total">
@@ -1809,6 +1795,29 @@
       <div class="pay-stat-card">
         <div class="psc-label">Refunded</div>
         <div class="psc-value" id="psc-refunded" style="color:var(--red)">-</div>
+      </div>
+    </div>
+
+    <!-- Orders that started and never finished.
+         Sits BELOW the revenue summary deliberately: the headline numbers are
+         what you open this tab for, and this is a "check these" list, not the
+         main event.
+
+         On 14 Aug a customer paid Rs 764 by UPI, closed the tab before the
+         browser could confirm it, and the order sat at 'created' while
+         Razorpay held the money. It was only noticed because the receipt
+         email was forwarded. The webhook now covers that case, but a webhook
+         can be disabled again (this one was, silently, for four days), so
+         this panel makes the failure visible in the console instead of
+         depending on somebody spotting an email. -->
+    <div class="ad-card" id="pay-stuck-card" style="margin-bottom:18px;display:none">
+      <div class="ad-card-head">Started but never completed</div>
+      <div class="ad-card-sub" id="pay-stuck-sub"></div>
+      <!-- Capped and scrolled. There are 21 of these today and the list only
+           grows, so unbounded it would push the actual payments table off the
+           screen and bury the thing this tab is for. -->
+      <div style="max-height:280px;overflow:auto;border:1px solid var(--border2);border-radius:8px">
+        <table class="ad-table" id="pay-stuck-table"></table>
       </div>
     </div>
 
@@ -4352,8 +4361,11 @@ async function loadStuckOrders() {
     + 'dashboard: if Razorpay shows it as <strong>Captured</strong>, that person paid '
     + 'and has nothing, and it needs fixing by hand.';
 
+  // Sticky header: the list scrolls inside a fixed-height box, and without
+  // this the column names are gone the moment you look past the first few.
   table.innerHTML =
-    '<thead><tr><th>When</th><th>Who</th><th>Wanted</th><th>Amount</th><th>Razorpay order id</th></tr></thead><tbody>'
+    '<thead><tr style="position:sticky;top:0;z-index:1;background:var(--surface)">'
+    + '<th>When</th><th>Who</th><th>Wanted</th><th>Amount</th><th>Razorpay order id</th></tr></thead><tbody>'
     + rows.map(function (r) {
         var age = Math.floor((Date.now() - new Date(r.created_at).getTime()) / 3600000);
         return '<tr>'
