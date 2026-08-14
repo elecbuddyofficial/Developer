@@ -160,11 +160,44 @@ function elementsWithFixedBackground(doc, src) {
   return out;
 }
 
+/* Every element whose TEXT COLOUR comes from a CSS rule rather than a style
+   attribute.
+
+   This is the third blind spot found in this file, and it is the exact mirror
+   of the second. That one collected backgrounds from style attributes only and
+   missed backgrounds set in <style> blocks; it was fixed. The foreground side
+   was left reading `kid.getAttribute('style')` and nothing else, so any text
+   coloured by a rule stayed invisible to the audit.
+
+   That mattered most on the page with the fewest inline styles. app/admin sets
+   nearly every colour in a rule, so a hardcoded background holding var(--text)
+   there scored clean no matter how badly it broke. Found by planting a
+   deliberate bug and watching the audit report "no collisions", which is the
+   only way to trust a check that has already been wrong twice.
+
+   Later rules win, which approximates the cascade well enough here: this is
+   looking for pairs, not computing exact specificity. */
+function ruleTextColours(doc, src) {
+  const map = new Map();
+  const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+            + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+  for (const m of css.matchAll(/([^{}@]+)\{([^}]*)\}/g)) {
+    // (?:^|;) so background-color and border-color are not read as color.
+    const c = m[2].match(/(?:^|;)\s*color\s*:\s*([^;}]+)/);
+    if (!c) continue;
+    const sel = m[1].trim().split('\n').pop().trim();
+    if (!sel || /[%]/.test(sel)) continue;              // skip keyframe stops
+    try { doc.querySelectorAll(sel).forEach(e => map.set(e, c[1].trim())); } catch (e) {}
+  }
+  return map;
+}
+
 for (const page of PAGES) {
   const src = fs.readFileSync(page, 'utf8');
   const dom = new JSDOM(src);
   const doc = dom.window.document;
   const scopes = collectScopes(src);
+  const ruleColours = ruleTextColours(doc, src);
   // Every element that paints a background from any source, used below to tell
   // whether a nearer layer stands between a scrim and its text.
   const painted = elementsWithFixedBackground(doc, src);
@@ -186,18 +219,33 @@ for (const page of PAGES) {
 
   for (const [el, bg] of painted) {
 
-    // Every descendant that sets a text colour, plus the element itself.
-    const kids = [el, ...el.querySelectorAll('[style*="color"]')];
+    // Every descendant that sets a text colour from EITHER source, plus the
+    // element itself. Restricting this to [style*="color"] is what let a
+    // rule-coloured element sit on a hardcoded background unnoticed.
+    const kids = new Set([el, ...el.querySelectorAll('[style*="color"]')]);
+    for (const e of ruleColours.keys()) if (el.contains(e)) kids.add(e);
+
     for (const kid of kids) {
-      const col = (kid.getAttribute('style') || '').match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
-      if (!col || !isVar(col[1])) continue;           // only theme-driven text
+      // A style attribute beats a rule, as it does in the browser.
+      const inline = (kid.getAttribute('style') || '').match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
+      const colour = inline ? inline[1] : ruleColours.get(kid);
+      if (!colour || !isVar(colour)) continue;         // only theme-driven text
+      const col = [null, colour];
 
       // Does anything between the two paint its own background? Checked
       // against elements painted from EITHER source: a child panel styled by
       // a CSS rule shadows the scrim behind it just as surely as an inline
       // one, and missing that scored everything inside #profile-panel against
       // the dim overlay instead of the panel it actually sits on.
-      let a = kid.parentElement, shadowed = false;
+      // When the background and the text are on the SAME element there is
+      // nothing in between, so the walk must not run at all. It used to start
+      // at el.parentElement regardless, and since the loop stops at `el` -
+      // which it can never reach going upwards - it climbed to the document
+      // root and found some painted ancestor practically every time. Every
+      // same-element pair was therefore discarded as "shadowed". That is the
+      // single commonest shape of this bug: one rule setting both background
+      // and color.
+      let a = (kid === el) ? null : kid.parentElement, shadowed = false;
       while (a && a !== el) {
         if (painters.has(a) || /background(?:-color)?\s*:/.test(a.getAttribute('style') || '')) { shadowed = true; break; }
         a = a.parentElement;

@@ -263,7 +263,7 @@
     tr.dom-new td:first-child { box-shadow:inset 2px 0 0 var(--amber,#c2891a); }
     /* Count of accounts waiting, on the nav item itself, so the queue is
        visible from any tab rather than only once you go looking. */
-    .ad-nav-badge { margin-left:auto; background:#c2891a; color:var(--on-accent); border-radius:20px;
+    .ad-nav-badge { margin-left:auto; background:var(--amber-dim); color:var(--amber); border:1px solid var(--amber-border); border-radius:20px;
       min-width:18px; padding:1px 6px; font-size:10px; font-weight:700;
       text-align:center; font-variant-numeric:tabular-nums; }
     .ad-nav-badge[hidden] { display:none; }
@@ -898,6 +898,60 @@
       background: var(--surface3); border-radius: 10px; padding: 1px 6px;
       font-variant-numeric: tabular-nums;
     }
+
+    /* ── Course switcher ──────────────────────────────────────────────
+       Which course the console is looking at. Every colour here is a
+       token, including the active state, which reuses the
+       --blue-dim / --blue-border / --blue triple that .upill already
+       uses. That triple exists precisely because a translucent tint plus
+       a themed foreground is the pair that has broken four times in this
+       codebase: the page shows through the tint, so a hardcoded rgba()
+       looks right on the dark surfaces and unreadable on the light one. */
+    .ad-course {
+      padding: 12px 12px 0; flex-shrink: 0;
+    }
+    .ad-course-label {
+      display: block; font-size: 9.5px; font-weight: 700;
+      color: var(--text3); text-transform: uppercase;
+      letter-spacing: .6px; margin-bottom: 6px; padding-left: 2px;
+    }
+    .ad-course-switch {
+      display: flex; gap: 4px; padding: 3px;
+      background: var(--surface2); border: 1px solid var(--border2);
+      border-radius: 8px;
+    }
+    .acs-btn {
+      flex: 1; padding: 6px 4px; border: 1px solid transparent;
+      border-radius: 6px; background: transparent; color: var(--text3);
+      font-size: 11.5px; font-weight: 700; cursor: pointer;
+      font-family: inherit; transition: all .15s; white-space: nowrap;
+    }
+    .acs-btn:hover { color: var(--text); }
+    .acs-btn.active {
+      background: var(--blue-dim); border-color: var(--blue-border);
+      color: var(--blue);
+    }
+    /* Collapsed rail on narrow screens: the labels do not fit, so the
+       switcher hides rather than wrapping into an unreadable stack. The
+       course still switches from the header chip. */
+    @media (max-width: 1100px) {
+      .ad-course { display: none; }
+    }
+
+    /* Shown on a tab whose data simply does not exist for the selected
+       course. An empty table reads as a data-loss bug and costs an
+       investigation every time; saying so costs nothing. */
+    .ad-nodata {
+      padding: 44px 24px; text-align: center;
+      color: var(--text2); font-size: 13.5px; line-height: 1.6;
+    }
+    .ad-nodata strong { color: var(--text); display: block; margin-bottom: 6px; font-size: 15px; }
+    .ad-nodata button {
+      margin-top: 16px; padding: 8px 16px; border-radius: 6px;
+      background: var(--blue-dim); border: 1px solid var(--blue-border);
+      color: var(--blue); font-size: 12.5px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+    }
     .upill.active .upill-count { background: rgba(59,130,246,.18); }
 
     /* Payments tab */
@@ -1080,6 +1134,16 @@
     <div>
       <div class="ad-logo-name">Elec-Buddy</div>
       <div class="ad-logo-sub">Admin</div>
+    </div>
+  </div>
+
+  <div class="ad-course">
+    <span class="ad-course-label">Course</span>
+    <div class="ad-course-switch" role="group" aria-label="Which course to show">
+      <button type="button" class="acs-btn active" data-course="coc"
+              onclick="setAdminCourse('coc')" title="Oral and Written, the COC exam prep course">COC</button>
+      <button type="button" class="acs-btn" data-course="sponsorship"
+              onclick="setAdminCourse('sponsorship')" title="Sponsorship and company selection">Sponsorship</button>
     </div>
   </div>
 
@@ -2414,7 +2478,62 @@ var SB_KEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
 var _sb, _grantUserId, _grantUser, _myId, _myEmail;
 var _allUsers = [];
 var _dashProfiles = [];
-var TAB_NAMES = ['dashboard', 'users', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'status'];
+/* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
+   deep-linking and the hashchange handler, so #approvals silently did
+   nothing and the tab could only be reached by clicking. */
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'status'];
+
+/* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
+   Elec-Buddy sells two separate courses: COC (Oral + Written) and
+   Sponsorship. Until now the console silently showed COC for anything
+   money-shaped and Sponsorship for the content board, with nothing saying
+   so anywhere.
+
+   ONE console with a switcher, not two consoles. A second copy of this
+   file would be 7,000 lines that have to be changed in lockstep forever,
+   and this codebase has already been bitten twice by copied logic
+   drifting apart (the scope-overwrite bug, the table-hint duplication).
+
+   Read this honestly though: most tabs CANNOT be scoped today, because
+   the Sponsorship app writes almost nothing. It records no funnel events,
+   no payments, no coupon scope and has no pricing_plans rows. So the
+   switcher genuinely filters the tabs that have per-course data, and
+   says plainly that the rest are not tracked. It does not fake a split
+   that the data cannot support. */
+var ADMIN_COURSE_KEY = 'eb_admin_course';
+var _adminCourse = (function () {
+  try { var v = localStorage.getItem(ADMIN_COURSE_KEY); return v === 'sponsorship' ? v : 'coc'; }
+  catch (e) { return 'coc'; }
+})();
+
+var COURSE_LABEL = { coc: 'COC', sponsorship: 'Sponsorship' };
+
+/* Which course a recorded topic id belongs to.
+
+   Hoisted out of renderProfProgress(), where it was a nested function
+   that nothing else could reach. The classification itself is unchanged
+   and its edge cases are load-bearing: 'ALL' is the marker for the
+   Surveyor Q&A and the question bank, which are ORAL features despite
+   starting with A, and Aptitude modules are A followed by DIGITS, which
+   is what separates them from it. Counting Sponsorship as "everything
+   that is not T or W" filed all nine of those under the wrong course
+   once already. */
+function _section(id) {
+  if (/^T\d/.test(id)) return 'oral';
+  if (/^W\d/.test(id)) return 'written';
+  if (id === 'ALL') return 'oral';               // Surveyor Q&A, question bank
+  if (/^(F\d|A\d|IP\d|S00|APT|CA)/.test(id)) return 'sponsorship';
+  return 'other';
+}
+
+/* The course a topic id rolls up to. Oral and Written are both COC. */
+function _courseOf(id) {
+  var s = _section(id);
+  return s === 'sponsorship' ? 'sponsorship' : (s === 'other' ? 'other' : 'coc');
+}
+
+/* True when a topic id belongs to the course currently being shown. */
+function inCourse(id) { return _courseOf(id) === _adminCourse; }
 
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -2500,6 +2619,12 @@ function logAdminAction(action, target, details) {
     // tell you someone is waiting without you going looking for them.
     loadApprovals();
     buildStatusBoard();
+    // Reflect the saved course choice, and paint any not-tracked notice
+    // for whichever tab the URL hash opened on.
+    document.querySelectorAll('.acs-btn').forEach(function (b) {
+      b.classList.toggle('active', b.dataset.course === _adminCourse);
+    });
+    applyCourseScope();
   } catch (e) {
     console.error('Admin dashboard init error:', e);
   }
@@ -3094,7 +3219,7 @@ async function loadFunnel() {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress, sponsorship_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, scope, created_at, paid_at, user_id, razorpay_payment_id')
@@ -3102,11 +3227,12 @@ async function loadDashboard() {
       .order('paid_at', { ascending: false }),
   ]);
 
-  // topic_progress powers the engagement panel but is not essential. If that
-  // column is missing the whole select fails, which would blank every KPI on
-  // the page, so fall back to the core fields rather than showing zeros.
+  // The two progress columns power the engagement panel but are not
+  // essential. If either is missing the whole select fails, which would blank
+  // every KPI on the page, so fall back to the core fields rather than
+  // showing zeros.
   if (profilesRes.error) {
-    console.warn('dashboard profile query failed, retrying without topic_progress:', profilesRes.error.message);
+    console.warn('dashboard profile query failed, retrying without progress columns:', profilesRes.error.message);
     profilesRes = await _sb.from('profiles')
       .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name')
       .order('created_at', { ascending: false });
@@ -3294,8 +3420,16 @@ function drawSparkline(all) {
    Built from profiles.topic_progress, a map of topic id to how far through
    that topic the reader has scrolled (0 to 1). Quiz scores live only in
    localStorage on each device, so they cannot be reported on here. */
+/* Names for both courses. This used to read _SECTIONS only, which holds
+   the Sponsorship modules, so every COC topic in the engagement panel
+   rendered as a bare id like "T07" while the Sponsorship ones had proper
+   names. TOPIC_NAMES has the COC side and was simply never consulted
+   here. Declared later in the file, hence the typeof guard. */
 function topicNameMap() {
   var map = {};
+  if (typeof TOPIC_NAMES !== 'undefined') {
+    Object.keys(TOPIC_NAMES).forEach(function(k) { map[k] = TOPIC_NAMES[k]; });
+  }
   (window._SECTIONS || []).forEach(function(sec) {
     (sec.topics || []).forEach(function(t) { map[t.id] = t.name; });
   });
@@ -3313,9 +3447,15 @@ function drawEngagement(all) {
   var totalOpens   = 0;
 
   all.forEach(function(u) {
-    var tp = u.topic_progress;
+    // The two courses record progress in two different columns, because
+    // both are written as whole objects and would otherwise clobber each
+    // other. Sponsorship progress will read empty until users generate it:
+    // every write was being silently discarded by the profiles guard
+    // until the allowlist was fixed on 14 Aug 2026, so there is no history
+    // to show, and an empty panel here is the truth rather than a fault.
+    var tp = (_adminCourse === 'sponsorship') ? u.sponsorship_progress : u.topic_progress;
     if (!tp || typeof tp !== 'object') return;
-    var ids = Object.keys(tp);
+    var ids = Object.keys(tp).filter(inCourse);
     if (!ids.length) return;
     engagedUsers++;
     ids.forEach(function(id) {
@@ -3709,19 +3849,10 @@ async function renderProfProgress(u) {
     return;
   }
 
-  /* Which section a recorded id belongs to.
-     Matched explicitly rather than by subtracting the other two. "ALL" is the
-     marker used for the Surveyor Q&A and the question bank, which are ORAL
-     features, and it starts with A: counting Sponsorship as "everything that
-     is not T or W" filed all nine of those rows under Sponsorship. Aptitude
-     modules are A followed by digits, so the digits are what separate them. */
-  function _section(id) {
-    if (/^T\d/.test(id)) return 'oral';
-    if (/^W\d/.test(id)) return 'written';
-    if (id === 'ALL') return 'oral';               // Surveyor Q&A, question bank
-    if (/^(F\d|A\d|IP\d|S00|APT|CA)/.test(id)) return 'sponsorship';
-    return 'other';
-  }
+  /* _section() used to be defined here, nested and unreachable from
+     anywhere else. It now lives at module scope next to _courseOf, so the
+     course switcher can use the same classification rather than a second
+     copy that drifts. Its behaviour is unchanged. */
   var oral    = rows.filter(function (k) { return _section(k) === 'oral'; }).length;
   var written = rows.filter(function (k) { return _section(k) === 'written'; }).length;
   var sponsor = rows.filter(function (k) { return _section(k) === 'sponsorship'; }).length;
@@ -6493,9 +6624,23 @@ function rowLang(r) {
 
 async function initVideosTab() {
   var opts = '';
-  for (var i = 1; i <= 23; i++) {
-    var id = 'T' + String(i).padStart(2, '0');
-    opts += '<option value="' + id + '">' + id + (id === 'T01' ? ' (free preview)' : '') + '</option>';
+  if (_adminCourse === 'sponsorship') {
+    // Read from _SECTIONS, the same array the Content Status board uses, so
+    // the list cannot drift from the modules that actually exist. Hardcoding
+    // it here is what left this tab stuck on Oral in the first place.
+    var secs = window._SECTIONS || [];
+    secs.forEach(function (sec) {
+      (sec.topics || []).forEach(function (t) {
+        opts += '<option value="' + esc(t.id) + '">' + esc(t.id)
+              + (t.name ? ' - ' + esc(t.name) : '') + '</option>';
+      });
+    });
+    if (!opts) opts = '<option value="">No Sponsorship modules found</option>';
+  } else {
+    for (var i = 1; i <= 23; i++) {
+      var id = 'T' + String(i).padStart(2, '0');
+      opts += '<option value="' + id + '">' + id + (id === 'T01' ? ' (free preview)' : '') + '</option>';
+    }
   }
   document.getElementById('vid-topic').innerHTML = opts;
   document.getElementById('nv-topic').innerHTML = opts;
@@ -7005,7 +7150,113 @@ window.showTab = function(name) {
     initVideosTab();
   }
   if (name === 'activity') loadActivity();
+  applyCourseScope();          // repaint any not-tracked notice for this tab
 };
+
+/* ── SWITCHING COURSE ──────────────────────────────────────────────────
+   Resetting _tabLoaded and _payOffset is the whole reason this is a
+   function rather than a variable assignment. Tab loading here is a mix
+   of three strategies: eager at boot (dashboard, users, admins,
+   approvals, status), lazy-once behind _tabLoaded (coupons, plans,
+   videos), and refetch-every-visit (mail, online, funnel, activity).
+   Without the reset, a lazy-once tab keeps showing whatever it loaded
+   under the previous course, and looks convincingly correct while being
+   wrong, which is worse than an error. */
+function setAdminCourse(course) {
+  if (course !== 'coc' && course !== 'sponsorship') return;
+  if (course === _adminCourse) return;
+  _adminCourse = course;
+  try { localStorage.setItem(ADMIN_COURSE_KEY, course); } catch (e) {}
+
+  document.querySelectorAll('.acs-btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.course === course);
+  });
+
+  _tabLoaded = {};
+  _payOffset = 0;
+
+  // Re-render what the course actually changes.
+  //
+  // The USERS list is deliberately NOT filtered. An account is an account:
+  // one person, one row, not a per-course enrolment. Filtering it by which
+  // course someone has touched would invent a distinction the data does not
+  // make and would quietly hide real users from a list whose whole job is to
+  // show all of them. The per-user drawer already breaks progress down by
+  // section, which is where that question actually belongs.
+  try { if (typeof loadDashboard === 'function') loadDashboard(); } catch (e) {}
+  try { if (typeof initVideosTab === 'function') initVideosTab(); } catch (e) {}
+
+  applyCourseScope();
+}
+
+/* Tabs whose data is genuinely per-course but which the Sponsorship side
+   does not populate at all yet. Listed explicitly rather than inferred:
+   an inferred rule would quietly start hiding a tab the day someone adds
+   a sponsorship pricing row, which is exactly when you want to see it. */
+var COURSE_UNTRACKED = {
+  sponsorship: {
+    payments: 'Sponsorship has no paid plans, so no payments are recorded against it.',
+    coupons:  'Coupons carry a COC scope (Written, Oral, Full COC). None target Sponsorship.',
+    plans:    'pricing_plans holds nine COC rows: three durations by three scopes. Sponsorship has none.',
+    funnel:   'The Sponsorship app records no funnel events. Every funnel row belongs to COC.',
+    mail:     'Email segments are built from plan state, which only COC has.'
+  },
+  // The Content Status board is built entirely from the Sponsorship module
+  // list. Left unlabelled it would show Sponsorship modules while the
+  // switcher reads COC, which is worse than showing nothing.
+  coc: {
+    status: 'The content readiness board is built from the Sponsorship module list. There is no COC equivalent yet.'
+  }
+};
+
+/* Paints or clears the not-tracked notice for whichever tab is open. */
+function applyCourseScope() {
+  var untracked = COURSE_UNTRACKED[_adminCourse] || {};
+  TAB_NAMES.forEach(function (name) {
+    var panel = document.getElementById('tab-' + name);
+    if (!panel) return;
+    var existing = panel.querySelector('.ad-nodata');
+    var reason = untracked[name];
+
+    if (!reason) {
+      if (existing) {
+        existing.remove();
+        // Restore whatever was hidden when the notice went up.
+        panel.querySelectorAll('[data-course-hidden]').forEach(function (el) {
+          el.style.display = el.getAttribute('data-course-hidden') || '';
+          el.removeAttribute('data-course-hidden');
+        });
+      }
+      return;
+    }
+    if (existing) return;                       // already showing
+
+    // Hide the tab's own children rather than blanking innerHTML: the
+    // markup has to come back intact when the course switches back, and
+    // rebuilding it would mean duplicating every tab's HTML in JS.
+    Array.prototype.forEach.call(panel.children, function (el) {
+      el.setAttribute('data-course-hidden', el.style.display || '');
+      el.style.display = 'none';
+    });
+
+    var other = (_adminCourse === 'coc') ? 'sponsorship' : 'coc';
+    var box = document.createElement('div');
+    box.className = 'ad-nodata';
+    var strong = document.createElement('strong');
+    strong.textContent = 'Not tracked for ' + COURSE_LABEL[_adminCourse] + ' yet';
+    var p = document.createElement('div');
+    p.textContent = reason;
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = 'Switch to ' + COURSE_LABEL[other];
+    // Listener, not an inline onclick built from a string. Building handlers
+    // into markup is how the topic prev/next nav shipped dead once: the
+    // string looked right and the parse was wrong.
+    btn.addEventListener('click', function () { setAdminCourse(other); });
+    box.appendChild(strong); box.appendChild(p); box.appendChild(btn);
+    panel.appendChild(box);
+  });
+}
 
 // Theme Toggler
 function setTheme(t) {
