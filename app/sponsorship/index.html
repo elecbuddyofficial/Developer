@@ -25,6 +25,62 @@
   .sb-item.active .cnt { background:rgba(245,158,11,.18);color:var(--blue) }
   .note-title { background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(168,85,247,.06)) }
 
+  /* ── DATA INTERPRETATION CHARTS ──
+     Inline SVG, drawn from the data rather than shipped as images: it scales
+     crisply, costs about 3 KB (roughly 700 bytes gzipped), needs no external
+     asset, and survives the content encryption because it is just text in the
+     notes/quiz JS.
+
+     Every colour here is a theme token and the <svg> itself paints no
+     background, so it inherits whatever surface it sits on. That is the case
+     the four-theme rule allows: neither side of the pair is fixed. Putting a
+     literal fill on a bar while the text around it stays tokenised is the bug
+     that has shipped four times, so bars take --blue/--purple/--green.
+
+     Type sizes are large in viewBox units on purpose. An SVG scales with its
+     viewBox, so an 11px label in a 520-wide chart renders near 7px on a phone.
+     These sit at 15-16 against a 440-wide box, which lands around 12px at
+     360px screen width. */
+  /* No min-width. An earlier version held the chart at 400px so its text would
+     not shrink, which clipped the last two bars on a 360px phone and put a
+     scrollbar under a quiz question: worse than the problem it solved.
+     The type is scaled up on small screens instead, see the media query below. */
+  .di-chart { width:100%;height:auto;max-width:520px;margin:4px auto 0;display:block }
+  .di-grid  { stroke:var(--border);stroke-width:1 }
+  .di-axis  { stroke:var(--border2);stroke-width:1.5 }
+  .di-bar-a { fill:var(--blue) }
+  .di-bar-b { fill:var(--purple) }
+  .di-bar-c { fill:var(--green) }
+  .di-ax    { fill:var(--text3);font-size:15px;text-anchor:middle;font-family:inherit }
+  .di-ax-y  { text-anchor:end }
+  .di-val   { fill:var(--text2);font-size:13px;font-weight:700;text-anchor:middle }
+  .di-ttl   { fill:var(--text2);font-size:15px;font-weight:700;text-anchor:middle }
+  .di-figure{ margin:14px 0;padding:14px 10px 10px;background:var(--surface2);
+              border:1px solid var(--border);border-radius:var(--r12);overflow-x:auto }
+  .di-figure .di-cap { font-size:12.5px;color:var(--text3);text-align:center;
+              margin-top:8px;line-height:1.5 }
+  .qchart   { margin-top:14px;overflow-x:auto }
+  /* SVG text scales with the viewBox, so on a phone every label shrinks by the
+     same factor the chart does: at ~328px wide that is 0.68, turning 13px into
+     8.9px. Scaling the type up here restores it to about 12px rendered, and it
+     still fits: the plot is ~288px across, so each of 12 bars gets ~24px while
+     a 3-digit label at 12px needs ~20px. The value labels stay smaller than
+     the axis labels because the tightest chart (2-decimal values, 10 bars) has
+     only ~29px per bar and "48.17" at 10px needs ~25px of it. */
+  @media (max-width:520px){
+    /* Axis labels grow, since each has a whole group's width to sit in.
+       Value labels are left alone: measuring the tightest ADJACENT pair on
+       each chart shows nearly all of them fit, because real pairs look like
+       "80" and "105" rather than the worst case of two 3-digit numbers.
+       Only charts the generator marks .di-tight lose them, which today is the
+       one carrying 2-decimal values: "48.17" beside "10.19" would need about
+       7px type. Those are read against the gridlines, and their questions
+       carry the figures in the text. */
+    .di-ax { font-size:19px }
+    .di-tight .di-val { display:none }
+    .di-figure { padding:10px 6px 8px }
+  }
+
   /* ── HOME ── */
   #view-home.active { display:flex;align-items:center;min-height:100% }
   #view-home.active .spon-home { width:100% }
@@ -563,7 +619,7 @@ window._authReady = (async () => {
       <div class="qbar"><div class="qfill" id="qfill" style="width:0%"></div></div>
     </div>
     <div class="quiz-card">
-      <div class="quiz-q-area"><div class="qtext" id="qtext">Loading…</div></div>
+      <div class="quiz-q-area"><div class="qtext" id="qtext">Loading…</div><div class="qchart" id="qchart" hidden></div></div>
       <div class="quiz-opts" id="qopts"></div>
       <div class="quiz-exp" id="qexp"></div>
       <div class="quiz-actions">
@@ -831,7 +887,7 @@ var SECTIONS = {
     color:'var(--amber)', quizLabel:'Practice Data Interpretation sets',
     topics:[
       {id:'DI01', key:'DI01_Tables',     name:'Table Charts',  icon:'🧾', notesFile:'datainterp/di01_notes.js', quizFile:'datainterp/di01_quiz.js', notesReady:true , free:true},
-      {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:false, free:false},
+      {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:true , free:false},
       {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:false, free:false},
       {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:false, free:false}
     ]
@@ -1432,6 +1488,14 @@ function renderQ(){
   document.getElementById('qcat-tag').textContent=CAT_NAMES[q.cat]||q.cat||'';
   document.getElementById('qscore').textContent='Score: '+QZ.correct+'/'+QZ.i;
   document.getElementById('qtext').textContent=q.q;
+  // Optional chart. Data Interpretation needs the graphic in the question
+  // itself, since reading a value off it is the skill being tested. Opt-in:
+  // a question with no .svg takes exactly the path it did before, so every
+  // existing quiz is untouched. Content is ours and encrypted at rest, and
+  // q.svg is authored markup rather than anything a user supplies.
+  var chartEl=document.getElementById('qchart');
+  if(q.svg){ chartEl.innerHTML=q.svg; chartEl.hidden=false; }
+  else { chartEl.innerHTML=''; chartEl.hidden=true; }
   var opts=shuffle(q.opts.slice()); var optsEl=document.getElementById('qopts'); optsEl.innerHTML='';
   opts.forEach(function(opt,idx){
     var btn=document.createElement('button'); btn.className='qopt'; btn.dataset.answer=opt;

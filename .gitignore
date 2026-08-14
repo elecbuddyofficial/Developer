@@ -88,3 +88,9 @@ supabase/.temp/
 # Tooling only (sharp, for diagram conversion). There is no package.json here;
 # this repo ships as a static site, so node_modules is never part of a deploy.
 node_modules/
+
+# Local preview harness for the DI charts, not part of the site.
+/_di_preview.html
+/_di_preview_frame.html
+# Build artifact from _digen.cjs
+/_dicharts.json
