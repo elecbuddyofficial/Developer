@@ -62,6 +62,22 @@ data/written_notes_data.js
 data/Orals/Backup/
 data/**/Backup/
 data/PLAINTEXT_BACKUP_do_not_delete/
+# Root-level backups too. The rule above only matches a Backup/ nested under
+# data/, so top-level ones fell straight through: Backup/ (278 plaintext Oral
+# files, 9.1 MB) and _backup_Sandra/ (46 more), both of which `git add -A`
+# staged in full. Neither was ever committed, caught first.
+#
+# A plaintext copy of paid content in a public repo defeats the encryption
+# completely: a competitor gets the whole Oral course from one `git clone`,
+# no account needed. That is the exact scenario the encryption was added to
+# prevent, so match these wherever they sit, not just under data/.
+/Backup/
+/_backup_Sandra/
+# Catch-all for future ones, since these keep appearing under new names.
+# Verify with: git status --porcelain -uall | grep '^??'
+/*backup*/
+/*_bak/
+/*.bak
 
 # Local key storage — never commit real secret values
 DecryptEncrypt/
