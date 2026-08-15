@@ -280,6 +280,29 @@
     .pb-standard { background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); }
     .pb-starter  { background:var(--green-dim); color:var(--green); border:1px solid var(--green-border); }
 
+    /* Sponsorship notice status. Same shape and the same *-dim tokens as the
+       plan badges above, so all four themes are already solved: a fixed
+       colour on one side of the pair is what broke the last four panels.
+       nowrap because these labels are three words where a plan name is one,
+       and the Status column is narrow enough to split them mid-phrase. */
+    .nt-open, .nt-soon, .nt-upcoming, .nt-closed, .nt-draft { white-space:nowrap; }
+    .nt-open     { background:var(--green-dim); color:var(--green); border:1px solid var(--green-border); }
+    .nt-soon     { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
+    .nt-upcoming { background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); }
+    .nt-closed   { background:var(--surface3); color:var(--text3); border:1px solid var(--border2); }
+    .nt-draft    { background:var(--surface3); color:var(--text2); border:1px dashed var(--border2); }
+    .nt-row-dead td { opacity:.55; }
+    /* Company name over its host. Wrapped in one element rather than left as
+       two children of the cell, because on a phone the cell becomes a flex
+       row with space-between and any loose sibling is pushed to the far edge:
+       the name and the link ended up overlapping each other. */
+    .nt-co { display:flex; flex-direction:column; gap:2px; }
+    .nt-co-name { font-weight:600; }
+    .nt-co-link { font-size:11.5px; color:var(--blue); text-decoration:none; }
+    .nt-co-link:hover { text-decoration:underline; }
+    .nt-win { white-space:nowrap; }
+    .nt-win i { font-style:normal; color:var(--text3); }
+
     .expired-tag { color:var(--red); font-size:12px; }
     .active-tag  { color:var(--green); font-size:12px; }
     /* Live countdown under an expiry date. Tabular figures so the digits do
@@ -668,7 +691,17 @@
          label out of step, which is what happened to the coupons table. */
       #dom-panel .ad-table td::before,
       #apr-tbody td::before,
+      #nt-tbody td::before,
       #nfr-tbody td::before { content: attr(data-label); }
+
+      /* The company block and the note are the two cells with real prose in
+         them. Squeezed into the label-left/value-right row they wrap into a
+         column two words wide, so they get the full width under their label. */
+      #nt-tbody td[data-label="Company"],
+      #nt-tbody td[data-label="Note"] { flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; }
+      #nt-tbody td[data-label="Company"]::before,
+      #nt-tbody td[data-label="Note"]::before { margin-right: 0; }
+      #nt-tbody .nt-co-link { word-break: break-all; }
 
       /* Notification composer and preview on a phone */
       .nfp-card { max-width: none; }
@@ -949,6 +982,31 @@
       .acs-btn { padding: 7px 2px; font-size: 10.5px; letter-spacing: .3px; }
       .acs-long { display: none; }
       .acs-short { display: inline; }
+      /* Stacked in the 58px rail, a transparent inactive button sits under a
+         filled active one and reads as its caption rather than as the other
+         half of a switch. Side by side the group's own border carries that
+         job; stacked, it does not. */
+      .acs-btn:not(.active) { border-color: var(--border2); }
+    }
+
+    /* Below 600px the sidebar is a 260px drawer, which has MORE room for this
+       control than the 220px desktop sidebar does. It was inheriting the rail
+       treatment above: caption hidden, stacked, 10.5px, abbreviated to "SPON".
+       Present, but reading as a heading rather than as something you can tap,
+       which is indistinguishable from missing. The drawer already restores
+       full labels for .ad-nav-btn span for exactly this reason; the switcher
+       was left out of that list. */
+    @media (max-width: 600px) {
+      #ad-side.mob-open .ad-course { padding: 12px 16px 0; }
+      #ad-side.mob-open .ad-course-label { display: block; }
+      #ad-side.mob-open .ad-course-switch { flex-direction: row; gap: 4px; padding: 3px; }
+      #ad-side.mob-open .acs-btn {
+        padding: 10px 6px; font-size: 12.5px; letter-spacing: 0;
+        border-color: transparent;
+      }
+      #ad-side.mob-open .acs-btn.active { border-color: var(--blue-border); }
+      #ad-side.mob-open .acs-long { display: inline; }
+      #ad-side.mob-open .acs-short { display: none; }
     }
 
     /* .ad-nodata lived here: the "Not tracked for Sponsorship yet" panel.
@@ -1209,6 +1267,10 @@
       <span>Activity Log</span>
     </button>
     <div class="ad-nav-divider"></div>
+    <button class="ad-nav-btn" onclick="showTab('notices');closeMobNav()" data-tab="notices" title="Sponsorship Notices">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1Z"/><path d="M16.5 8.5a4 4 0 0 1 0 7"/><path d="M19.5 5.5a8 8 0 0 1 0 13"/></svg>
+      <span>Sponsorship Notices</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('status');closeMobNav()" data-tab="status" title="Content Status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
       <span>Content Status</span>
@@ -1766,6 +1828,83 @@
           <th>Email</th><th>Name</th><th>Added Since</th><th></th>
         </tr></thead>
         <tbody id="admins-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SPONSORSHIP NOTICES ────────────────────────────────────────
+       Application windows, not announcements. Separate table, separate tab,
+       and Sponsorship-only: a COC admin has no use for it and the COC app
+       never reads the table. Every row is typed by hand because the link is
+       the source of truth, and a deadline nobody can verify is worse than
+       no deadline at all. -->
+  <div class="ad-tab" id="tab-notices">
+    <div class="ad-ph">
+      <h1>Sponsorship Notices</h1>
+      <p>Application windows shown to cadets in the Sponsorship app. Open ones come first, expired ones drop off on their own.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head" id="nt-form-head">Add Notice</div>
+      <div class="ad-card-sub" id="nt-form-sub">The link is what a cadet actually applies through, so point it at the company's own page rather than a summary of it.</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:2">
+          <label class="ad-label">Company</label>
+          <input class="ad-input" id="nt-company" placeholder="e.g. Synergy Marine Group">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Course</label>
+          <select class="ad-select" id="nt-course">
+            <option value="ETO">ETO</option>
+            <option value="GME">GME</option>
+            <option value="DNS">DNS</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Link</label>
+          <input class="ad-input" id="nt-link" placeholder="https://company.com/careers/cadet">
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Opens on</label>
+          <input class="ad-input" id="nt-opens" type="date">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Closes on</label>
+          <input class="ad-input" id="nt-closes" type="date">
+        </div>
+        <div class="ad-field" style="flex:2">
+          <label class="ad-label">Note <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+          <input class="ad-input" id="nt-note" placeholder="e.g. 60% aggregate, sponsored 3-year cadetship">
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="nt-published" checked>
+          <span style="font-weight:400">Visible to cadets. Uncheck to keep it as a draft while you confirm the dates.</span>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="ad-btn btn-primary" id="nt-save" onclick="saveNotice()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="nt-save-label">Add Notice</span>
+        </button>
+        <button class="ad-btn" id="nt-cancel" onclick="cancelNoticeEdit()" style="display:none">Cancel</button>
+      </div>
+    </div>
+
+    <div class="ad-section-head">All Notices</div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Company</th><th>Course</th><th>Window</th><th>Status</th><th>Note</th><th></th>
+        </tr></thead>
+        <tbody id="nt-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -2560,7 +2699,7 @@ var _dashProfiles = [];
 /* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
    deep-linking and the hashchange handler, so #approvals silently did
    nothing and the tab could only be reached by clicking. */
-var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'status'];
 
 /* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
    Elec-Buddy sells two separate courses: COC (Oral + Written) and
@@ -2748,6 +2887,11 @@ function showTab(name) {
   // Refetched every visit: someone may have signed up since the page loaded,
   // and a stale empty queue is exactly the thing that leaves a cadet waiting.
   if (name === 'approvals' && typeof loadApprovals === 'function') loadApprovals();
+  // Loaded here rather than at startup: this tab only exists on the
+  // Sponsorship side, so a COC admin should never pay for the query. Every
+  // status shown is computed against today's date, which is another reason
+  // not to render it once and leave it sitting.
+  if (name === 'notices' && typeof loadNotices === 'function') loadNotices();
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
@@ -5057,6 +5201,213 @@ async function deleteNotification(id) {
   if (error) { toast('Failed', 'err'); return; }
   toast('Deleted');
   loadNotifications();
+}
+
+/* ── SPONSORSHIP NOTICES ─────────────────────────────────────────────
+   Application windows with a lifecycle, which is what separates them from
+   notifications: they open, they close, and then they must stop being shown.
+
+   DATES ARE COMPARED AS STRINGS, ON PURPOSE.
+
+   opens_on and closes_on are DATE columns and come back as 'YYYY-MM-DD'.
+   Feeding those to new Date() parses them as UTC midnight, so anywhere west
+   of Greenwich a window reads as opening a day early and closing a day early.
+   ISO dates sort lexicographically, so comparing the strings is both correct
+   and free. Day counts go through Date.UTC on the parsed parts, which keeps
+   the arithmetic in one zone rather than straddling two. */
+
+// Today in the admin's own timezone, formatted to match the column.
+function ntToday() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
+       + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+// Whole days from a to b, both 'YYYY-MM-DD'. Positive means b is later.
+function ntDays(a, b) {
+  var pa = a.split('-'), pb = b.split('-');
+  var ua = Date.UTC(+pa[0], +pa[1] - 1, +pa[2]);
+  var ub = Date.UTC(+pb[0], +pb[1] - 1, +pb[2]);
+  return Math.round((ub - ua) / 86400000);
+}
+
+function ntDate(s) {
+  if (!s) return '-';
+  var p = s.split('-');
+  return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]))
+    .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+
+/* One place that decides what a notice currently is. The admin table and the
+   cadet-facing list both need this answer and they must not disagree, so the
+   Sponsorship app carries the same rules. rank drives the ordering: open
+   first, then what is coming, then drafts, then what has finished. */
+function noticeState(n) {
+  var today = ntToday();
+  if (n.closes_on < today) return { rank: 3, cls: 'nt-closed', label: 'Closed', dead: true };
+  if (!n.is_published)     return { rank: 2, cls: 'nt-draft',  label: 'Draft' };
+  if (n.opens_on > today) {
+    var d = ntDays(today, n.opens_on);
+    return { rank: 1, cls: 'nt-upcoming', label: d === 1 ? 'Opens tomorrow' : 'Opens in ' + d + ' days' };
+  }
+  var left = ntDays(today, n.closes_on);
+  if (left === 0) return { rank: 0, cls: 'nt-soon', label: 'Closes today' };
+  if (left === 1) return { rank: 0, cls: 'nt-soon', label: 'Closes tomorrow' };
+  if (left <= 7)  return { rank: 0, cls: 'nt-soon', label: 'Closes in ' + left + ' days' };
+  return { rank: 0, cls: 'nt-open', label: 'Open, ' + left + ' days left' };
+}
+
+var _editingNoticeId = null;
+
+async function loadNotices() {
+  var body = document.getElementById('nt-tbody');
+  if (!body) return;
+  var { data, error } = await _sb.from('sponsorship_notices')
+    .select('*').order('closes_on', { ascending: true });
+
+  if (error) {
+    // Named rather than swallowed. If the setup SQL has not been run this is
+    // the only thing that says so, and a blank table would look like "none".
+    body.innerHTML = '<tr><td colspan="6" class="empty">Could not load notices: '
+      + esc(error.message) + '</td></tr>';
+    return;
+  }
+  if (!data || !data.length) {
+    body.innerHTML = '<tr><td colspan="6" class="empty">No notices yet. Add the first one above.</td></tr>';
+    return;
+  }
+
+  var rows = data.map(function (n) { return { n: n, s: noticeState(n) }; })
+    .sort(function (a, b) {
+      if (a.s.rank !== b.s.rank) return a.s.rank - b.s.rank;
+      // Within a group, whatever ends soonest is the most urgent.
+      return a.n.closes_on < b.n.closes_on ? -1 : a.n.closes_on > b.n.closes_on ? 1 : 0;
+    });
+
+  body.innerHTML = rows.map(function (r) {
+    var n = r.n, s = r.s;
+    return '<tr' + (s.dead ? ' class="nt-row-dead"' : '') + '>'
+      + '<td data-label="Company"><div class="nt-co">'
+        + '<span class="nt-co-name">' + esc(n.company) + '</span>'
+        + '<a class="nt-co-link" href="' + esc(n.link) + '" target="_blank" rel="noopener noreferrer" '
+        + 'title="' + esc(n.link) + '">' + esc(noticeHost(n.link)) + '</a>'
+      + '</div></td>'
+      + '<td data-label="Course">' + esc(n.course || 'ETO') + '</td>'
+      + '<td data-label="Window"><span class="nt-win">' + ntDate(n.opens_on)
+        + '<i> to </i>' + ntDate(n.closes_on) + '</span></td>'
+      + '<td data-label="Status"><span class="pbadge ' + s.cls + '">' + esc(s.label) + '</span></td>'
+      + '<td data-label="Note" style="color:var(--text2)">' + esc(n.note || '-') + '</td>'
+      + '<td style="white-space:nowrap">'
+        + '<button class="ad-btn btn-sm" onclick="editNotice(' + attrJs(n.id) + ')">Edit</button> '
+        + '<button class="ad-btn btn-sm btn-danger" onclick="deleteNotice(' + attrJs(n.id) + ',' + attrJs(n.company) + ')">Delete</button>'
+      + '</td></tr>';
+  }).join('');
+}
+
+/* Just the host, because that is the part an admin reads to confirm the link
+   points where they meant. Printing the whole URL made the column wrap into
+   three broken pieces mid-word, and told nobody anything the host did not.
+   The full address is still there on hover and behind the link itself. */
+function noticeHost(link) {
+  try { return new URL(link).hostname.replace(/^www\./, ''); }
+  catch (e) { return link; }
+}
+
+// Reads the form once, so add and edit cannot drift apart in what they check.
+function noticeForm() {
+  var v = function (id) { return (document.getElementById(id).value || '').trim(); };
+  return {
+    company:      v('nt-company'),
+    link:         v('nt-link'),
+    opens_on:     v('nt-opens'),
+    closes_on:    v('nt-closes'),
+    course:       document.getElementById('nt-course').value,
+    note:         v('nt-note') || null,
+    is_published: document.getElementById('nt-published').checked,
+  };
+}
+
+async function saveNotice() {
+  var f = noticeForm();
+
+  /* Checked here as well as in the database. The CHECK constraints are the
+     real guarantee, but a constraint violation surfaces as Postgres prose
+     about an unnamed constraint, which tells an admin nothing about which
+     box to fix. */
+  if (!f.company)   { toast('Company name required', 'err'); return; }
+  if (!f.link)      { toast('Link required', 'err'); return; }
+  if (!/^https?:\/\//i.test(f.link)) { toast('Link must start with http:// or https://', 'err'); return; }
+  if (!f.opens_on)  { toast('Opening date required', 'err'); return; }
+  if (!f.closes_on) { toast('Closing date required', 'err'); return; }
+  if (f.closes_on < f.opens_on) { toast('The window closes before it opens', 'err'); return; }
+
+  var btn = document.getElementById('nt-save');
+  btn.disabled = true;
+  var res = _editingNoticeId
+    ? await _sb.from('sponsorship_notices').update(f).eq('id', _editingNoticeId)
+    : await _sb.from('sponsorship_notices').insert(f);
+  btn.disabled = false;
+
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+
+  logAdminAction(_editingNoticeId ? 'notice_update' : 'notice_add', f.company,
+                 { window: f.opens_on + ' to ' + f.closes_on, course: f.course });
+  // Says "draft" out loud. An unpublished notice looks saved and reaches
+  // nobody, and that is a quiet enough failure to be worth naming here.
+  var what = _editingNoticeId ? 'Notice updated' : 'Notice added';
+  toast(what + (f.is_published ? '' : ', not visible yet (draft)'));
+  cancelNoticeEdit();
+  loadNotices();
+}
+
+function editNotice(id) {
+  _sb.from('sponsorship_notices').select('*').eq('id', id).single().then(function (res) {
+    if (res.error || !res.data) { toast('Could not open that notice', 'err'); return; }
+    var n = res.data;
+    document.getElementById('nt-company').value   = n.company || '';
+    document.getElementById('nt-link').value      = n.link || '';
+    document.getElementById('nt-opens').value     = n.opens_on || '';
+    document.getElementById('nt-closes').value    = n.closes_on || '';
+    document.getElementById('nt-course').value    = n.course || 'ETO';
+    document.getElementById('nt-note').value      = n.note || '';
+    document.getElementById('nt-published').checked = !!n.is_published;
+
+    _editingNoticeId = id;
+    document.getElementById('nt-form-head').textContent = 'Edit Notice';
+    document.getElementById('nt-form-sub').textContent  = 'Editing ' + n.company + '. Cancel to go back to adding a new one.';
+    document.getElementById('nt-save-label').textContent = 'Save Changes';
+    document.getElementById('nt-cancel').style.display = '';
+    // The form sits above a table the admin scrolled down to reach, so
+    // without this the fields fill in somewhere off screen and the click
+    // looks like it did nothing.
+    document.getElementById('nt-form-head').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+}
+
+function cancelNoticeEdit() {
+  _editingNoticeId = null;
+  ['nt-company', 'nt-link', 'nt-opens', 'nt-closes', 'nt-note'].forEach(function (id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('nt-course').value = 'ETO';
+  document.getElementById('nt-published').checked = true;
+  document.getElementById('nt-form-head').textContent = 'Add Notice';
+  document.getElementById('nt-form-sub').textContent  =
+    "The link is what a cadet actually applies through, so point it at the company's own page rather than a summary of it.";
+  document.getElementById('nt-save-label').textContent = 'Add Notice';
+  document.getElementById('nt-cancel').style.display = 'none';
+}
+
+async function deleteNotice(id, company) {
+  if (!confirm('Delete the ' + company + ' notice? Cadets will no longer see it.\n\nAn expired notice already hides itself, so there is usually no need to delete one.')) return;
+  var { error } = await _sb.from('sponsorship_notices').delete().eq('id', id);
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  logAdminAction('notice_delete', company, null);
+  toast('Deleted');
+  // An admin who deletes the row they were editing would otherwise keep a
+  // form pointed at an id that no longer exists, and Save would fail silently.
+  if (_editingNoticeId === id) cancelNoticeEdit();
+  loadNotices();
 }
 
 /* ── TEAM ADMINS ─────────────────────────────────────────────────── */
@@ -7567,7 +7918,7 @@ function setAdminCourse(course) {
    would start hiding tabs the day a query returned nothing, which is exactly
    when you most want to look at them. */
 var COURSE_TABS = {
-  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'status'],
+  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notices', 'status'],
   coc:         ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications',
                 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity'],
 };

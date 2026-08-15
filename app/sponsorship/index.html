@@ -322,6 +322,25 @@
   .nf-item-meta{font-size:11px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:6px}
   .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px}
   .nf-chip-info{background:var(--blue-dim);color:var(--blue)}.nf-chip-update{background:var(--green-dim);color:var(--green)}.nf-chip-warning{background:var(--orange-dim);color:var(--orange)}.nf-chip-deadline{background:var(--red-dim);color:var(--red)}
+  /* Sponsorship windows. Every colour pair here is a *-dim token with its
+     matching foreground, which is what keeps them readable in all four
+     themes: a fixed background under themed text is the bug that has shipped
+     four times. */
+  .nf-group{padding:11px 18px 7px;font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
+  .nf-sp{display:block;padding:13px 18px;border-bottom:1px solid var(--border);text-decoration:none;transition:background .1s}
+  .nf-sp:hover{background:var(--surface2)}
+  .nf-sp-top{display:flex;align-items:center;gap:8px}
+  .nf-sp-co{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nf-sp-course{font-size:9.5px;font-weight:700;letter-spacing:.4px;padding:1.5px 5px;border-radius:100px;background:var(--surface3);color:var(--text2);flex-shrink:0}
+  .nf-sp-note{font-size:12.5px;color:var(--text2);margin-top:4px;line-height:1.55}
+  .nf-sp-meta{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
+  .nf-sp-dates{font-size:11px;color:var(--text3)}
+  .nf-sp-state{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 6px;border-radius:100px}
+  .nf-sp-open{background:var(--green-dim);color:var(--green)}
+  .nf-sp-soon{background:var(--orange-dim);color:var(--orange)}
+  .nf-sp-last{background:var(--red-dim);color:var(--red)}
+  .nf-sp-next{background:var(--blue-dim);color:var(--blue)}
+  .nf-sp-go{font-size:11px;font-weight:600;color:var(--blue);margin-left:auto;flex-shrink:0}
 </style>
 <script>
   (function(){
@@ -2091,26 +2110,144 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       .order('created_at', { ascending: false });
   }
 
+  /* ── Sponsorship windows ──────────────────────────────────────────
+     Application deadlines, entered by hand in the admin console. They differ
+     from announcements in having an end: a cadet who acts on a window that
+     shut last month has been actively misled, which is the failure this whole
+     feature exists to prevent.
+
+     Expiry is enforced in the QUERY, not in the rendering. A closed window
+     never reaches the client at all, so there is no path where a forgotten
+     branch or a thrown error leaves a dead deadline on screen.
+
+     Dates are compared as 'YYYY-MM-DD' strings. new Date('2026-08-20') parses
+     as UTC midnight, so west of Greenwich every window would read as opening
+     and closing a day early. ISO dates sort lexicographically, so string
+     comparison is both correct and free. */
+  function spToday() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function spDays(a, b) {
+    var pa = a.split('-'), pb = b.split('-');
+    return Math.round((Date.UTC(+pb[0], +pb[1]-1, +pb[2]) - Date.UTC(+pa[0], +pa[1]-1, +pa[2])) / 86400000);
+  }
+  function spDate(s) {
+    var p = String(s).split('-');
+    return new Date(Date.UTC(+p[0], +p[1]-1, +p[2]))
+      .toLocaleDateString('en-GB', { day:'numeric', month:'short', timeZone:'UTC' });
+  }
+  // escNf leaves the double quote alone, which is fine inside text but would
+  // break out of an href. The link is admin-entered, so this is belt and
+  // braces rather than a live hole, but an attribute needs attribute escaping.
+  function escAttr(s) { return escNf(s).replace(/"/g, '&quot;'); }
+
+  /* The same rules the admin table uses, so the two never disagree about
+     what a window currently is. rank orders the list: open first, and inside
+     that whatever shuts soonest. */
+  function spState(n) {
+    var today = spToday();
+    if (n.opens_on > today) {
+      var till = spDays(today, n.opens_on);
+      return { rank:1, cls:'nf-sp-next', label: till === 1 ? 'Opens tomorrow' : 'Opens in ' + till + ' days' };
+    }
+    var left = spDays(today, n.closes_on);
+    if (left === 0) return { rank:0, cls:'nf-sp-last', label:'Closes today' };
+    if (left === 1) return { rank:0, cls:'nf-sp-last', label:'Closes tomorrow' };
+    if (left <= 7)  return { rank:0, cls:'nf-sp-soon', label:'Closes in ' + left + ' days' };
+    return { rank:0, cls:'nf-sp-open', label:'Open, ' + left + ' days left' };
+  }
+
+  /* Returns [] on any failure rather than throwing. The table may not exist
+     on an older database, and a cadet losing their announcements because a
+     second query failed would be a worse bug than the one being fixed. */
+  async function spNotices(sb) {
+    try {
+      var r = await sb.from('sponsorship_notices')
+        .select('id,company,link,opens_on,closes_on,course,note,created_at')
+        .eq('is_published', true)
+        .gte('closes_on', spToday())
+        .order('closes_on', { ascending: true });
+      return (r.error || !r.data) ? [] : r.data;
+    } catch (e) { return []; }
+  }
+
+  function spCard(n) {
+    var s = spState(n);
+    return '<a class="nf-sp" href="' + escAttr(n.link) + '" target="_blank" rel="noopener noreferrer">'
+      + '<div class="nf-sp-top">'
+        + '<span class="nf-sp-co">' + escNf(n.company) + '</span>'
+        + '<span class="nf-sp-course">' + escNf(n.course || 'ETO') + '</span>'
+      + '</div>'
+      + (n.note ? '<div class="nf-sp-note">' + escNf(n.note) + '</div>' : '')
+      + '<div class="nf-sp-meta">'
+        + '<span class="nf-sp-state ' + s.cls + '">' + escNf(s.label) + '</span>'
+        + '<span class="nf-sp-dates">' + spDate(n.opens_on) + ' to ' + spDate(n.closes_on) + '</span>'
+        + '<span class="nf-sp-go">Apply →</span>'
+      + '</div></a>';
+  }
+
   async function loadNotifs() {
     var list = document.getElementById('nf-list');
     if (!window._sbClient) { list.innerHTML = '<div class="nf-empty">Not connected</div>'; return; }
     list.innerHTML = '<div class="nf-loading">Loading…</div>';
-    var { data, error } = await nfQuery(window._sbClient, 'id,title,body,type,created_at', ['sponsorship','both']);
-    if (error || !data) { list.innerHTML = '<div class="nf-empty">Failed to load</div>'; return; }
-    if (!data.length) { list.innerHTML = '<div class="nf-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>No notifications yet</div>'; return; }
-    var seen = localStorage.getItem('eb_notif_seen');
-    list.innerHTML = data.map(function(n) {
-      var u = !seen || new Date(n.created_at) > new Date(seen), t = n.type || 'info';
-      return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + escNf(n.body) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
-    }).join('');
+
+    // Both at once. They are independent, and running them in sequence would
+    // make the panel wait on the slower of the two twice over.
+    var pair = await Promise.all([
+      nfQuery(window._sbClient, 'id,title,body,type,created_at', ['sponsorship','both']),
+      spNotices(window._sbClient)
+    ]);
+    var res = pair[0], notices = pair[1];
+    var data = res.error ? null : res.data;
+
+    if (!data && !notices.length) { list.innerHTML = '<div class="nf-empty">Failed to load</div>'; return; }
+    if ((!data || !data.length) && !notices.length) {
+      list.innerHTML = '<div class="nf-empty"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>No notifications yet</div>';
+      return;
+    }
+
+    var html = '';
+    if (notices.length) {
+      // Sorted here rather than trusting the query alone: the query orders by
+      // closing date, which would float a window opening next month above one
+      // that is open today and shuts a week later.
+      var sorted = notices.map(function(n) { return { n:n, s:spState(n) }; })
+        .sort(function(a, b) {
+          if (a.s.rank !== b.s.rank) return a.s.rank - b.s.rank;
+          return a.n.closes_on < b.n.closes_on ? -1 : a.n.closes_on > b.n.closes_on ? 1 : 0;
+        });
+      html += '<div class="nf-group">Sponsorship windows</div>'
+            + sorted.map(function(r) { return spCard(r.n); }).join('');
+    }
+
+    if (data && data.length) {
+      var seen = localStorage.getItem('eb_notif_seen');
+      if (notices.length) html += '<div class="nf-group">Announcements</div>';
+      html += data.map(function(n) {
+        var u = !seen || new Date(n.created_at) > new Date(seen), t = n.type || 'info';
+        return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + escNf(n.body) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
+      }).join('');
+    }
+
+    list.innerHTML = html;
   }
   async function checkNotifsUnread() {
     if (!window._sbClient) return;
-    var { data } = await nfQuery(window._sbClient, 'created_at', ['sponsorship','both']);
-    if (data && data.length) {
-      var seen = localStorage.getItem('eb_notif_seen');
-      if (!seen || new Date(data[0].created_at) > new Date(seen)) document.getElementById('nb-dot').classList.add('show');
-    }
+    // A new sponsorship window lights the dot too. It is the item most worth
+    // opening the panel for, and a deadline that arrives silently is one a
+    // cadet finds out about too late.
+    var pair = await Promise.all([
+      nfQuery(window._sbClient, 'created_at', ['sponsorship','both']),
+      spNotices(window._sbClient)
+    ]);
+    var newest = null;
+    ((pair[0] || {}).data || []).concat(pair[1] || []).forEach(function(r) {
+      if (r.created_at && (!newest || new Date(r.created_at) > new Date(newest))) newest = r.created_at;
+    });
+    if (!newest) return;
+    var seen = localStorage.getItem('eb_notif_seen');
+    if (!seen || new Date(newest) > new Date(seen)) document.getElementById('nb-dot').classList.add('show');
   }
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotifs(); });
   checkNotifsUnread();
