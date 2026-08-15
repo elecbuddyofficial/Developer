@@ -1651,6 +1651,14 @@
           </select>
         </div>
         <div class="ad-field" style="flex:1">
+          <label class="ad-label">Show in</label>
+          <select class="ad-select" id="notif-course">
+            <option value="coc">COC app only</option>
+            <option value="sponsorship">Sponsorship app only</option>
+            <option value="both">Both apps</option>
+          </select>
+        </div>
+        <div class="ad-field">
           <label class="ad-label">Audience</label>
           <select class="ad-select" id="notif-target">
             <option value="">Everyone</option>
@@ -5023,13 +5031,18 @@ async function sendNotification() {
   }
 
   var target = document.getElementById('notif-target').value || null;
+  // Which app shows it. The column defaults to 'coc', so without sending
+  // this a Sponsorship notice would silently reach COC readers instead.
+  var course = (document.getElementById('notif-course') || {}).value || 'coc';
+
 
   var { error } = await _sb.from('notifications')
     .insert({ title: title, body: body, type: type, target_plan: target,
-              template: template, meta: meta });
+              template: template, meta: meta, course: course });
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
 
-  toast(target ? 'Sent to ' + target + ' users' : 'Notification sent');
+  var where = course === 'both' ? 'both apps' : (course === 'sponsorship' ? 'Sponsorship' : 'COC');
+  toast('Sent to ' + where + (target ? ', ' + target + ' users' : ''));
   ['notif-title','notif-body','notif-code','notif-code-detail','notif-code-exp',
    'notif-cta-label','notif-cta-url'].forEach(function(id) {
     var f = document.getElementById(id); if (f) f.value = '';
