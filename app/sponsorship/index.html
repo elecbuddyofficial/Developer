@@ -409,7 +409,7 @@ window._authReady = (async () => {
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></span><span class="label">Data Interpretation</span>
     </button>
     <button class="sb-item" id="si-currentaffairs" onclick="openSection('currentaffairs')">
-      <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></span><span class="label">Current Affairs</span>
+      <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></span><span class="label">Maritime News</span>
     </button>
     <button class="sb-item" id="si-companyqa" onclick="openSection('companyqa')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l18 0"/><path d="M9 8l1 0"/><path d="M9 12l1 0"/><path d="M9 16l1 0"/><path d="M14 8l1 0"/><path d="M14 12l1 0"/><path d="M14 16l1 0"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"/></svg></span><span class="label">Company Q&A</span>
@@ -538,7 +538,7 @@ window._authReady = (async () => {
       <div class="section-card" onclick="openSection('currentaffairs')" style="--sc-color:var(--red);--sc-dim:var(--red-dim);--sc-border:var(--red-border);--sc-glow:rgba(224,112,112,.18);--sc-drop:rgba(224,112,112,.6)">
         <div class="sc-stripe" style="background:var(--red)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></div>
-        <h3>Current Affairs</h3>
+        <h3>Maritime News</h3>
         <p>Maritime and general awareness: shipping news, regulations and world events that interviewers use to check whether you follow the industry.</p>
         <div class="sc-meta">
           <span class="sc-badge" style="background:var(--red-dim);border-color:var(--red-border);color:var(--red)">Maritime · General</span>
@@ -930,11 +930,11 @@ var SECTIONS = {
      with, and it goes stale in a way none of the aptitude modules do. Mixing
      it in with the formula topics made both harder to navigate. */
   currentaffairs: {
-    label:'Current Affairs', icon:'📰', sbId:'si-currentaffairs',
+    label:'Maritime News', icon:'📰', sbId:'si-currentaffairs',
     desc:'Maritime and general awareness: the shipping news, regulations and world events that come up in interviews.',
     color:'var(--red)', quizLabel:'Practice Current Affairs questions',
     topics:[
-      {id:'CA', key:'CA_CurrentAffairs', name:'Current Affairs', icon:'📰',
+      {id:'CA', key:'CA_CurrentAffairs', name:'Maritime News', icon:'📰',
        notesFile:'aptitude/ca_notes.js', quizFile:'aptitude/ca_quiz.js', notesReady:false, free:false}
     ]
   },
