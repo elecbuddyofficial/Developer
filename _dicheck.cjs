@@ -47,6 +47,45 @@ for (const [k, want] of Object.entries(EXPECT)) {
   ok(worst < 0.001, k, `${want.length} bars, max error ${(worst * 100).toFixed(3)}% of axis`);
 }
 
+/* Pie slices: does each wedge's ANGLE match the value it claims?
+   Recovered from the arc endpoints rather than trusted, the same way the bar
+   heights are. The expected shares are written out here so a change to the
+   generator cannot quietly redefine what a chart says. */
+console.log('\n── pie geometry: does each wedge match its share? ──');
+const PIES = {
+  p1: [29952, 11486, 11252, 4910],
+  p2: [81, 63, 54, 50, 45, 36, 31],
+  p3: [17, 17, 14, 13, 39],
+  p4: [21, 15, 14, 12, 38],
+  p5: [22, 15, 10, 17, 8, 12, 16],
+  p6: [18, 17, 13, 16, 9, 15, 12],
+  p7: [70, 16, 14],
+  p8: [10, 12, 5, 3],
+  p9: [34, 33, 22, 11],
+};
+for (const [k, want] of Object.entries(PIES)) {
+  const d = doc(C[k]);
+  const paths = [...d.querySelectorAll('path')];
+  if (paths.length !== want.length) { ok(false, k, `${paths.length} slices, expected ${want.length}`); continue; }
+  const total = want.reduce((a, b) => a + b, 0);
+  // Each path is "M cx cy L x0 y0 A r r 0 f 1 x1 y1 Z": recover the two
+  // endpoint angles about the centre and take the swept angle between them.
+  let a0 = -Math.PI / 2, worst = 0;
+  for (let i = 0; i < paths.length; i++) {
+    // "M cx cy L x0 y0 A r r 0 largeArc sweep x1 y1 Z" is 11 numbers, so the
+    // arc endpoint is at indices 9 and 10, after both flags.
+    const n = paths[i].getAttribute('d').match(/-?\d+(?:\.\d+)?/g).map(Number);
+    const cx = n[0], cy = n[1], x1 = n[9], y1 = n[10];
+    let a1 = Math.atan2(y1 - cy, x1 - cx);
+    while (a1 <= a0 + 1e-9) a1 += Math.PI * 2;
+    worst = Math.max(worst, Math.abs((a1 - a0) / (Math.PI * 2) - want[i] / total));
+    a0 = a1;
+  }
+  const closes = Math.abs(a0 - (-Math.PI / 2 + Math.PI * 2)) < 1e-6;
+  ok(worst < 0.0005 && closes, k,
+     `${want.length} slices, max share error ${(worst * 100).toFixed(3)}%` + (closes ? ', circle closes' : ', CIRCLE DOES NOT CLOSE'));
+}
+
 console.log('\n── markup: valid SVG, no hardcoded colour ──');
 for (const [k, svg] of Object.entries(C)) {
   ok(!doc(svg).querySelector('parsererror'), k + ' parses as XML');
@@ -83,14 +122,50 @@ for (const [k, svg] of Object.entries(C)) {
   const scale = avail / vb[2], px = AX_CSS * scale;
   const items = [...d.querySelectorAll('text.di-ax[style]')];
   if (items.length < 2) { ok(true, k + ': no legend'); continue; }
-  const sw = [...d.querySelectorAll('rect')].filter(r => +r.getAttribute('width') === 12);
-  let worst = 0;
-  for (let i = 1; i < items.length; i++) {
-    const endPrev = (+items[i - 1].getAttribute('x')) * scale + textW(items[i - 1].textContent, px);
-    const startNext = (+(sw[i] ? sw[i].getAttribute('x') : items[i].getAttribute('x'))) * scale;
-    worst = Math.max(worst, endPrev - startNext);
+  /* Bar legends sit in one horizontal row; pie legends stack in rows of one or
+     two. Comparing every item with the next in document order therefore
+     measured a meaningless gap between the end of one row and the start of the
+     next, and reported every pie as broken. Group by y and compare only within
+     a row. Swatches are 12px on bars and 13px on pies. */
+  /* A stacked pair shifts its halves with <g transform="translate(0 Y)">, which
+     leaves each element's own y attribute untouched. Grouping on the raw
+     attribute therefore put the two halves' legends in the same row and
+     reported a collision that does not exist on screen. Add the ancestors. */
+  const absY = el => {
+    let y = +el.getAttribute('y') || 0;
+    for (let p = el.parentElement; p; p = p.parentElement) {
+      const m = (p.getAttribute && p.getAttribute('transform') || '')
+        .match(/translate\(\s*-?[\d.]+[ ,]+(-?[\d.]+)\s*\)/);
+      if (m) y += parseFloat(m[1]);
+    }
+    return y;
+  };
+  const rows = new Map();
+  for (const t of items) {
+    const y = Math.round(absY(t));
+    if (!rows.has(y)) rows.set(y, []);
+    rows.get(y).push(t);
   }
-  ok(worst <= 0, k, worst > 0 ? `legend overlap ${worst.toFixed(1)}px` : 'clear');
+  const swAt = y => [...d.querySelectorAll('rect')]
+    .filter(r => [12, 13].includes(+r.getAttribute('width')) &&
+                 Math.abs(absY(r) + 11 - y) < 6)
+    .sort((a, b) => +a.getAttribute('x') - +b.getAttribute('x'));
+  let worst = 0, over = 0;
+  for (const [y, row] of rows) {
+    row.sort((a, b) => +a.getAttribute('x') - +b.getAttribute('x'));
+    const sw = swAt(y);
+    for (let i = 1; i < row.length; i++) {
+      const endPrev = (+row[i - 1].getAttribute('x')) * scale + textW(row[i - 1].textContent, px);
+      const startNext = (+(sw[i] ? sw[i].getAttribute('x') : row[i].getAttribute('x'))) * scale;
+      worst = Math.max(worst, endPrev - startNext);
+    }
+    // The last entry in a row must also stay inside the chart.
+    const last = row[row.length - 1];
+    over = Math.max(over, (+last.getAttribute('x')) * scale + textW(last.textContent, px) - avail);
+  }
+  ok(worst <= 0 && over <= 0, k,
+     worst > 0 ? `legend overlap ${worst.toFixed(1)}px`
+     : over > 0 ? `legend runs ${over.toFixed(1)}px past the edge` : `clear, ${rows.size} row(s)`);
 }
 
 /* The generator is only worth committing if it still reproduces what shipped.
@@ -99,7 +174,9 @@ for (const [k, svg] of Object.entries(C)) {
 console.log('\n── does the generator still match the shipped content? ──');
 let checked = 0;
 const seen = new Set();
-for (const f of ['data/Sponsorship/datainterp/di02_notes.js', 'data/Sponsorship/datainterp/di02_quiz.js']) {
+for (const f of ['data/Sponsorship/datainterp/di02_notes.js', 'data/Sponsorship/datainterp/di02_quiz.js',
+                 'data/Sponsorship/datainterp/di03_notes.js', 'data/Sponsorship/datainterp/di03_quiz.js',
+                 'data/Sponsorship/datainterp/di04_notes.js', 'data/Sponsorship/datainterp/di04_quiz.js']) {
   if (!fs.existsSync(f)) continue;
   const body = fs.readFileSync(f, 'utf8');
   if (/^\s*\{"v":1,/.test(body)) { console.log('  (encrypted, skipped) ' + f); continue; }
@@ -119,7 +196,7 @@ if (!checked) {
   // The notes deliberately use a subset, so the requirement is that every
   // chart appears in at least one of the two files, not in both.
   const absent = Object.keys(C).filter(k => !seen.has(k));
-  ok(absent.length === 0, `all 10 charts appear in the shipped content (${checked} file(s) readable)`,
+  ok(absent.length === 0, `all ${Object.keys(C).length} charts appear in the shipped content (${checked} file(s) readable)`,
      absent.length ? 'missing: ' + absent.join(', ') : '');
 }
 

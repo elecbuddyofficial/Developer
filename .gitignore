@@ -94,3 +94,5 @@ node_modules/
 /_di_preview_frame.html
 # Build artifact from _digen.cjs
 /_dicharts.json
+/_di_pies.html
+/_di_pies_frame.html

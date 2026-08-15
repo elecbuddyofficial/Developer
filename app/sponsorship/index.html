@@ -55,6 +55,38 @@
   .di-ax-y  { text-anchor:end }
   .di-val   { fill:var(--text2);font-size:13px;font-weight:700;text-anchor:middle }
   .di-ttl   { fill:var(--text2);font-size:15px;font-weight:700;text-anchor:middle }
+  /* Pie slices. Six tokens, then a seventh reusing the first at reduced
+     opacity, which stays theme-correct because it is still the same token.
+     --orange is deliberately not used: this page redefines --blue to the same
+     amber, so the two would be indistinguishable side by side. --text3 serves
+     as the sixth, reading as a neutral slice in every theme.
+     The share printed inside a slice sits ON a filled accent, so it takes
+     --on-accent and never a literal white: the accents invert between themes,
+     and white-on-amber is unreadable in the light one. */
+  .di-s0 { fill:var(--blue) }
+  .di-s1 { fill:var(--purple) }
+  .di-s2 { fill:var(--green) }
+  .di-s3 { fill:var(--red) }
+  .di-s4 { fill:var(--amber) }
+  .di-s5 { fill:var(--text3) }
+  .di-sl { stroke:var(--surface2);stroke-width:1.5 }
+  .di-pv { fill:var(--on-accent);font-size:14px;font-weight:700;text-anchor:middle }
+  .di-lv { fill:var(--text3);font-weight:600 }
+  .di-pie { max-width:440px }
+
+  /* Line graphs. Points are drawn as well as joined: the values here are exact,
+     and a bare line makes the reader estimate against the grid instead of
+     reading. Same three accents as the grouped bars, so a reader moving between
+     DI02 and DI04 sees series X, Y and Z in the same colours throughout. */
+  .di-ln { fill:none;stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round }
+  .di-l0 { stroke:var(--blue) }
+  .di-l1 { stroke:var(--purple) }
+  .di-l2 { stroke:var(--green) }
+  .di-pt { stroke:var(--surface2);stroke-width:1.5 }
+  .di-p0 { fill:var(--blue) }
+  .di-p1 { fill:var(--purple) }
+  .di-p2 { fill:var(--green) }
+
   .di-figure{ margin:14px 0;padding:14px 10px 10px;background:var(--surface2);
               border:1px solid var(--border);border-radius:var(--r12);overflow-x:auto }
   .di-figure .di-cap { font-size:12.5px;color:var(--text3);text-align:center;
@@ -888,8 +920,8 @@ var SECTIONS = {
     topics:[
       {id:'DI01', key:'DI01_Tables',     name:'Table Charts',  icon:'🧾', notesFile:'datainterp/di01_notes.js', quizFile:'datainterp/di01_quiz.js', notesReady:true , free:true},
       {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:true , free:false},
-      {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:false, free:false},
-      {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:false, free:false}
+      {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:true , free:false},
+      {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:true , free:false}
     ]
   },
 
