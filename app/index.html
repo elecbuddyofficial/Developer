@@ -2474,6 +2474,22 @@ function setTheme(t) {
     // moment an admin published something. On opening the app, and nowhere else.
     var _updRan = false;
 
+  /* COC and Sponsorship share the notifications table, so without a filter each
+     app shows the other's notices. Falls back to the unfiltered query while the
+     course column is not yet applied: shipping the filter first would otherwise
+     leave every user with an empty bell. */
+  async function nfQuery(cols, limit) {
+    var sb = window._sbClient;
+    var q = sb.from('notifications').select(cols + ',course')
+      .in('course', ['coc','both']).order('created_at', { ascending: false });
+    if (limit) q = q.limit(limit);
+    var r = await q;
+    if (!r.error) return r;
+    var q2 = sb.from('notifications').select(cols).order('created_at', { ascending: false });
+    if (limit) q2 = q2.limit(limit);
+    return await q2;
+  }
+
     window.maybeShowUpdates = async function() {
       if (_updRan) return;
       _updRan = true;
@@ -2486,9 +2502,7 @@ function setTheme(t) {
       var since;
       try { since = localStorage.getItem(_updKey()); } catch (e) { return; }
 
-      var res = await window._sbClient.from('notifications')
-        .select('id,title,body,type,created_at,target_plan,template,meta')
-        .order('created_at', { ascending: false }).limit(20);
+      var res = await nfQuery('id,title,body,type,created_at,target_plan,template,meta', 20);
       // Same audience filter the bell uses, so a notice aimed at another plan
       // is never forced in front of the wrong reader.
       var all = (res.data || []).filter(nfVisible);
@@ -2975,7 +2989,7 @@ function setTheme(t) {
     var list = document.getElementById('nf-list');
     if (!window._sbClient) { list.innerHTML = '<div class="nf-empty">Not connected</div>'; return; }
     list.innerHTML = '<div class="nf-loading">Loading…</div>';
-    var res = await window._sbClient.from('notifications').select('id,title,body,type,created_at,target_plan').order('created_at', { ascending: false });
+    var res = await nfQuery('id,title,body,type,created_at,target_plan');
     var error = res.error;
     var data  = res.data ? res.data.filter(nfVisible) : null;
     if (error || !data) { list.innerHTML = '<div class="nf-empty">Failed to load</div>'; return; }
@@ -3084,7 +3098,7 @@ function setTheme(t) {
     if (window.EBNotify) { EBNotify.refreshBadge(window._sbClient); return; }
     // Pull a few and filter, so the dot never lights up for a notification
     // aimed at a different audience than this viewer.
-    var { data } = await window._sbClient.from('notifications').select('created_at,target_plan').order('created_at', { ascending: false }).limit(20);
+    var { data } = await nfQuery('created_at,target_plan', 20);
     var visible = (data || []).filter(nfVisible);
     if (visible.length) {
       var seen = localStorage.getItem('eb_notif_seen');
