@@ -470,7 +470,7 @@ window._authReady = (async () => {
         <h3>Study Materials</h3>
         <p>All prep content in one place: electrical fundamentals, aptitude drills, company Q&amp;A, and interview techniques.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:rgba(129,140,248,.12);border-color:rgba(129,140,248,.35);color:#818cf8">4 Sections · Quiz</span>
+          <span class="sc-badge" id="sc-badge-sections" style="background:var(--purple-dim);border-color:var(--purple);color:var(--purple)">Sections</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
@@ -826,6 +826,16 @@ var CAT_NAMES = {
   CA:'Current Affairs', GD:'Group Discussion', HR:'HR Interview', INTRO:'Self Introduction', MOTIV:'Motivation',
   COMP:'Company Research', PROC:'Sponsorship Process', TIME:'Timeline', ELIG:'Eligibility'
 };
+
+  /* The section count is derived, never typed. It read "4 Sections" while
+     there were six, because it was hand-written when the list was shorter. */
+  try {
+    var _scb = document.getElementById('sc-badge-sections');
+    if (_scb) {
+      var _n = Object.keys(SECTIONS).length;
+      _scb.textContent = _n + ' Sections';
+    }
+  } catch (e) {}
 
 var SECTIONS = {
   overview: {
