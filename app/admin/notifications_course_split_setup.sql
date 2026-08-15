@@ -79,3 +79,21 @@ COMMENT ON COLUMN public.notifications.course IS
 --
 --  app/admin  the notification composer gains a course selector writing this
 --  column. Default it to the course tab the admin is currently on.
+
+-- ============================================================
+--  ADDENDUM, after applying and auditing the above
+-- ============================================================
+--  The audit found notifications has SELECT, INSERT and DELETE policies but no
+--  UPDATE policy. That predates this change, and it did not matter while a
+--  notice was only ever posted or removed. It matters now, because course is a
+--  field an admin will plausibly want to correct after posting.
+--
+--  Without this, changing a notice's course means deleting and reposting it,
+--  which also resets created_at and re-marks it unread for everyone.
+--
+--  Optional. Apply only if you want notices to be editable in the console.
+
+-- DROP POLICY IF EXISTS "Admin can update notifications" ON public.notifications;
+-- CREATE POLICY "Admin can update notifications"
+--   ON public.notifications FOR UPDATE
+--   USING (public.is_admin()) WITH CHECK (public.is_admin());
