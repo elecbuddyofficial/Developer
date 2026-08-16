@@ -303,6 +303,40 @@
     .nt-win { white-space:nowrap; }
     .nt-win i { font-style:normal; color:var(--text3); }
 
+    /* ── Shared-device clusters ── */
+    .dvc { border:1px solid var(--border2); border-radius:var(--r8); margin-bottom:12px; overflow:hidden; }
+    .dvc-hd { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+              padding:10px 14px; background:var(--surface2); border-bottom:1px solid var(--border); }
+    .dvc-n { font-weight:700; font-size:13px; color:var(--text); }
+    .dvc-fp { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; color:var(--text3); }
+    .dvc-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+               padding:10px 14px; border-bottom:1px solid var(--border); font-size:13px; }
+    .dvc-row:last-child { border-bottom:none; }
+    .dvc-who { flex:1; min-width:0; }
+    .dvc-name { font-weight:600; color:var(--text); }
+    /* overflow-wrap, not word-break. break-all splits every address at
+       whatever character lands on the edge; anywhere only breaks when the
+       word genuinely cannot fit. */
+    .dvc-mail { font-size:11.5px; color:var(--text3); overflow-wrap:anywhere; }
+    /* Same *-dim token pairs as every other badge here, so all four themes
+       are solved by construction rather than by checking afterwards. */
+    .dvc-tag { font-size:9.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+               padding:2px 7px; border-radius:100px; white-space:nowrap; }
+    .dvc-odd  { background:var(--red-dim);    color:var(--red);    border:1px solid var(--red-border); }
+    .dvc-paid { background:var(--green-dim);  color:var(--green);  border:1px solid var(--green-border); }
+    .dvc-team { background:var(--blue-dim);   color:var(--blue);   border:1px solid var(--blue-border); }
+    .dvc-warn { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
+    .dvc-mute { background:var(--surface3);   color:var(--text3);  border:1px solid var(--border2); }
+    .dvc-quiet { opacity:.6; }
+    /* On a phone the name, the tags, the date and the button cannot share one
+       line. Squeezed together they left the address wrapping a single
+       character per line, so the identity takes the full width and everything
+       else moves underneath it. */
+    @media (max-width: 640px) {
+      .dvc-row { flex-wrap:wrap; row-gap:8px; }
+      .dvc-who { flex:1 0 100%; }
+    }
+
     .expired-tag { color:var(--red); font-size:12px; }
     .active-tag  { color:var(--green); font-size:12px; }
     /* Live countdown under an expiry date. Tabular figures so the digits do
@@ -1501,6 +1535,23 @@
         <tbody id="apr-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
+
+    <!-- SHARED DEVICES ─────────────────────────────────────────────
+         Higher signal than the domain queue, and it sits above the collapsed
+         providers panel for that reason. The email guard cannot see a person
+         who comes back on a new address; this can, because the browser is the
+         same. It found solankihitarth512 cycling two throwaway domains over
+         twelve days, which nothing else caught. -->
+    <div class="ad-section-head">Accounts sharing a device</div>
+    <p class="dom-note" style="margin-left:0;margin-right:0;">
+      One browser, several accounts. That is how a used-up trial comes back on a
+      fresh address, and it is the one thing an email check cannot see.
+      <strong>It is not proof.</strong> A family on one laptop, two cadets on a
+      college machine, or you and your own team all look exactly the same from
+      here, and clearing browser storage sheds the fingerprint entirely. So
+      nothing here is blocked or acted on automatically. Read it and decide.
+    </p>
+    <div id="dev-clusters"><div class="ad-loading">Loading...</div></div>
 
     <!-- Approved providers. Secondary to the queue, so it is collapsed. -->
     <details class="dom-panel" id="dom-panel">
@@ -2887,6 +2938,11 @@ function showTab(name) {
   // Refetched every visit: someone may have signed up since the page loaded,
   // and a stale empty queue is exactly the thing that leaves a cadet waiting.
   if (name === 'approvals' && typeof loadApprovals === 'function') loadApprovals();
+  // Separate call, not chained onto loadApprovals: the two read different
+  // tables, and a failure in one must not leave the other blank. The domain
+  // queue going quiet because the devices read failed would hide the very
+  // thing this tab exists for.
+  if (name === 'approvals' && typeof loadDeviceClusters === 'function') loadDeviceClusters();
   // Loaded here rather than at startup: this tab only exists on the
   // Sponsorship side, so a COC admin should never pay for the query. Every
   // status shown is computed against today's date, which is another reason
@@ -5201,6 +5257,146 @@ async function deleteNotification(id) {
   if (error) { toast('Failed', 'err'); return; }
   toast('Deleted');
   loadNotifications();
+}
+
+/* ── SHARED DEVICES ──────────────────────────────────────────────────
+   Which accounts have been used from the same browser.
+
+   COMPUTED ON READ, DELIBERATELY. No trigger, no flag column, no write path
+   of any kind: this runs when you open the tab and touches nothing. A trigger
+   that quietly stopped doing its job is exactly the failure recorded at the
+   bottom of CHANGE_LEDGER.md, and there is no reason to take that risk for a
+   panel that is only ever read by one person.
+
+   IT RANKS, IT DOES NOT JUDGE. Three of the six clusters in the data when
+   this was written were Blesson's own accounts and two staff members, and one
+   was a paying customer sharing a device with a team account. Anything that
+   auto-blocked on this signal would have banned a customer on day one. */
+
+// Compares against the real allowlist rather than a list hardcoded here, so
+// approving a college domain in the panel below immediately stops it being
+// counted as unrecognised. Falls back to counting nothing odd if the table
+// cannot be read, which under-reports rather than crying wolf.
+async function _devAllowedDomains() {
+  try {
+    var r = await _sb.from('allowed_email_domains').select('domain');
+    if (r.error || !r.data) return null;
+    var set = {};
+    r.data.forEach(function (d) { set[String(d.domain).toLowerCase()] = true; });
+    return set;
+  } catch (e) { return null; }
+}
+
+/* How suspicious one cluster is, and why. Split out from the loader so the
+   judgement can be tested on its own: reached only through a live query, the
+   ranking could quietly start burying the real cases under your own laptop
+   and nothing would say so. Tags each member in place as a side effect, which
+   is what the rendering below reads.
+
+   An unrecognised domain on a repeat device is the pattern that actually
+   caught someone, so it dominates. A team member or a paying customer pulls
+   the cluster down: neither is farming a free trial. */
+function scoreDeviceCluster(members, allowed) {
+  var odd = 0, team = 0, paid = 0;
+  members.forEach(function (m) {
+    var dom = String(m.email || '').split('@')[1] || '';
+    m._dom  = dom;
+    m._team = !!m.is_admin || dom.toLowerCase() === 'elec-buddy.com';
+    m._paid = !!(m.written_expires_at || m.oral_expires_at);
+    // Unrecognised means "not on the approved provider list". Without that
+    // list every domain would look odd, so the flag is suppressed entirely
+    // rather than turned into noise.
+    m._odd  = !!allowed && !m._team && !allowed[dom.toLowerCase()];
+    if (m._odd)  odd++;
+    if (m._team) team++;
+    if (m._paid) paid++;
+  });
+  return { odd: odd, team: team, paid: paid,
+           score: odd * 5 + (members.length - 1) - (team ? 10 : 0) - (paid ? 4 : 0) };
+}
+
+async function loadDeviceClusters() {
+  var host = document.getElementById('dev-clusters');
+  if (!host) return;
+
+  var res = await Promise.all([
+    _sb.from('devices').select('user_id, fingerprint, device_label, created_at, last_seen').limit(5000),
+    _sb.from('profiles').select('id, email, full_name, is_admin, subscription_plan, trial_started_at, written_expires_at, oral_expires_at, signup_status, created_at').limit(5000),
+    _devAllowedDomains()
+  ]);
+  var devs = res[0], profs = res[1], allowed = res[2];
+
+  if (devs.error) {
+    host.innerHTML = '<div class="ad-loading">Could not read devices: ' + esc(devs.error.message) + '</div>';
+    return;
+  }
+  if (profs.error) {
+    host.innerHTML = '<div class="ad-loading">Could not read profiles: ' + esc(profs.error.message) + '</div>';
+    return;
+  }
+
+  var byId = {};
+  (profs.data || []).forEach(function (p) { byId[p.id] = p; });
+
+  // fingerprint -> { users: {id: true}, label, first, last }
+  var groups = {};
+  (devs.data || []).forEach(function (d) {
+    if (!d.fingerprint || !byId[d.user_id]) return;
+    var g = groups[d.fingerprint] || (groups[d.fingerprint] =
+      { fp: d.fingerprint, users: {}, label: d.device_label || '', first: d.created_at, last: d.last_seen });
+    g.users[d.user_id] = true;
+    if (d.created_at && d.created_at < g.first) g.first = d.created_at;
+    if (d.last_seen && d.last_seen > g.last)    g.last  = d.last_seen;
+    if (!g.label && d.device_label) g.label = d.device_label;
+  });
+
+  var clusters = Object.keys(groups).map(function (fp) {
+    var g = groups[fp];
+    var members = Object.keys(g.users).map(function (id) { return byId[id]; })
+      .sort(function (a, b) { return (a.created_at || '') < (b.created_at || '') ? -1 : 1; });
+
+    var s = scoreDeviceCluster(members, allowed);
+    return { fp: fp, members: members, label: g.label, first: g.first, last: g.last,
+             odd: s.odd, team: s.team, paid: s.paid, score: s.score };
+  }).filter(function (c) { return c.members.length > 1; })
+    .sort(function (a, b) { return b.score - a.score; });
+
+  if (!clusters.length) {
+    host.innerHTML = '<div class="ad-loading">No device has been used by more than one account.</div>';
+    return;
+  }
+
+  host.innerHTML = clusters.map(function (c) {
+    var quiet = c.team > 0;
+    var head = '<div class="dvc-hd">'
+      + '<span class="dvc-n">' + c.members.length + ' accounts on one device</span>'
+      + (c.odd  ? '<span class="dvc-tag dvc-odd">' + c.odd + ' unrecognised domain' + (c.odd > 1 ? 's' : '') + '</span>' : '')
+      + (c.team ? '<span class="dvc-tag dvc-team">your team</span>' : '')
+      + (c.paid ? '<span class="dvc-tag dvc-paid">has a paying account</span>' : '')
+      + '<span class="dvc-fp" style="margin-left:auto">' + esc(String(c.fp).slice(0, 8)) + '</span>'
+      + '</div>';
+
+    var rows = c.members.map(function (m) {
+      var tags = '';
+      if (m._team) tags += '<span class="dvc-tag dvc-team">team</span> ';
+      if (m._paid) tags += '<span class="dvc-tag dvc-paid">paid</span> ';
+      if (m._odd)  tags += '<span class="dvc-tag dvc-odd">' + esc(m._dom) + '</span> ';
+      if (m.signup_status === 'rejected') tags += '<span class="dvc-tag dvc-warn">rejected</span> ';
+      if (m.signup_status === 'pending')  tags += '<span class="dvc-tag dvc-warn">pending</span> ';
+      if (!m.trial_started_at && !m._paid) tags += '<span class="dvc-tag dvc-mute">no trial</span> ';
+      return '<div class="dvc-row">'
+        + '<div class="dvc-who">'
+          + '<div class="dvc-name">' + esc(m.full_name || '(no name)') + '</div>'
+          + '<div class="dvc-mail">' + esc(m.email || '') + '</div>'
+        + '</div>'
+        + '<div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center">' + tags + '</div>'
+        + '<div class="dvc-fp">' + (m.created_at ? fmtDate(m.created_at) : '') + '</div>'
+        + '<button class="ad-btn btn-sm" onclick="openUserProfile(' + attrJs(m.id) + ')">Open</button>'
+        + '</div>';
+    }).join('');
+
+    return '<div class="dvc' + (quiet ? ' dvc-quiet' : '') + '">' + head + rows + '</div>';
+  }).join('');
 }
 
 /* ── SPONSORSHIP NOTICES ─────────────────────────────────────────────
