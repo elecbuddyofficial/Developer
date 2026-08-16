@@ -145,6 +145,28 @@
     .msg.success { background: #0A1F12; border: 1px solid #3A9E5F; color: #5DC87A; display: block; }
     .msg.info    { background: #0A1828; border: 1px solid #3A6898; color: #7AB8E0; display: block; }
 
+    /* "Did you mean gmail.com?" under a mistyped address.
+       Every colour here is a literal, like the rest of this page. auth.html
+       carries no theme tokens and does not load style.css, so a var(--text)
+       here would resolve to nothing and the text would vanish. */
+    .mailfix { display: none; margin-top: 6px; font-size: 12px; line-height: 1.55; color: #8FA3B8; }
+    /* Flex with a gap rather than a margin on the dismiss button. On a phone
+       the two parts do not fit on one line, and a left margin on the wrapped
+       item left it hanging indented under the question as though it had been
+       positioned by accident. The question is one span so it stays whole. */
+    .mailfix.show { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+    .mailfix-q { min-width: 0; }
+    .mailfix button {
+      background: none; border: none; padding: 0;
+      font: inherit; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .mailfix .mailfix-yes { color: #C8A44A; font-weight: 600; }
+    .mailfix .mailfix-yes:hover { color: #DFC069; }
+    .mailfix .mailfix-no { color: #6E8AA6; }
+    .mailfix .mailfix-no:hover { color: #8FA3B8; }
+    .mailfix button:focus-visible { outline: 1px solid #3A6898; outline-offset: 2px; border-radius: 2px; }
+
     .divider { height: 1px; background: #1A3050; }
 
     .footer-note {
@@ -222,6 +244,7 @@
     <div>
       <label>Email address</label>
       <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-login-email" aria-live="polite"></div>
     </div>
     <div>
       <label>Password</label>
@@ -240,6 +263,7 @@
     <div>
       <label>Email address</label>
       <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-reg-email" aria-live="polite"></div>
     </div>
     <div>
       <label>Password</label>
@@ -261,6 +285,7 @@
     <div>
       <label>Enter your email address</label>
       <input type="email" id="reset-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-reset-email" aria-live="polite"></div>
     </div>
     <button class="btn" type="submit" id="reset-btn">Send Reset Link</button>
     <button type="button" class="link-btn" onclick="switchTab('login')">Back to Sign In</button>
@@ -445,6 +470,152 @@
       redirectAfterLogin();
     }
   }
+
+  /* ── "Did you mean gmail.com?" ─────────────────────────────────────────
+     A real cadet signed up on gmail.CON at 01:33 on 16 Aug, got no
+     confirmation mail because that domain has no mail server, and retyped it
+     correctly two minutes later. He recovered on his own. Most would not:
+     they wait for an email that cannot arrive, and the only trace is a row
+     in the review queue nobody can explain.
+
+     type="email" does not catch this. It validates shape, and gmail.con is a
+     perfectly well formed address. Nor does the signup guard, which sees an
+     unknown domain and correctly queues it for review rather than calling it
+     a mistake.
+
+     IT SUGGESTS, IT NEVER REFUSES. There are live accounts on tulas.edu.in
+     and miet.ac.in, and the next one might be a shipping company nobody has
+     seen before. Guessing wrong and blocking would be worse than the typo.
+     The same reasoning is written into signup_guard_setup.sql about why a
+     pure allowlist is the wrong shape. */
+
+  // Consumer providers only, and deliberately hardcoded rather than read from
+  // allowed_email_domains: that table is REVOKEd from anon, the signup page
+  // has no session yet, and a stale list here can only ever mean a missed
+  // suggestion, never a wrong block. These names do not change.
+  var MAIL_PROVIDERS = [
+    'gmail.com', 'googlemail.com',
+    'yahoo.com', 'yahoo.in', 'yahoo.co.in', 'ymail.com', 'rediffmail.com',
+    'outlook.com', 'hotmail.com', 'live.com', 'msn.com',
+    'icloud.com', 'me.com',
+    'protonmail.com', 'proton.me', 'zoho.com', 'zohomail.com', 'aol.com'
+  ];
+
+  /* Optimal string alignment: Levenshtein plus transposition. Transposition
+     matters because swapping two letters is the most common typing mistake
+     there is, and plain Levenshtein scores gmial.com against gmail.com as 2,
+     the same as a domain that genuinely differs. With transposition it scores
+     1, alongside gmail.con and gnail.com, which is what it actually is. */
+  function mailDistance(a, b) {
+    var m = a.length, n = b.length, i, j;
+    var d = [];
+    for (i = 0; i <= m; i++) { d[i] = [i]; }
+    for (j = 0; j <= n; j++) { d[0][j] = j; }
+    for (i = 1; i <= m; i++) {
+      for (j = 1; j <= n; j++) {
+        var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 &&
+            a.charAt(i - 1) === b.charAt(j - 2) &&
+            a.charAt(i - 2) === b.charAt(j - 1)) {
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+        }
+      }
+    }
+    return d[m][n];
+  }
+
+  // The corrected address, or null when there is nothing worth saying.
+  function mailSuggest(email) {
+    var at = email.lastIndexOf('@');
+    if (at < 1 || at === email.length - 1) return null;
+    var local  = email.slice(0, at);
+    var domain = email.slice(at + 1).toLowerCase();
+
+    // Already a provider we know: nothing to fix.
+    if (MAIL_PROVIDERS.indexOf(domain) !== -1) return null;
+
+    /* No dot at all. HTML email validation permits it, so "sam@gmail" reaches
+       here as a valid address, and its distance from gmail.com is 4, far
+       outside the threshold below. Matching the first label catches it. */
+    if (domain.indexOf('.') === -1) {
+      for (var k = 0; k < MAIL_PROVIDERS.length; k++) {
+        if (MAIL_PROVIDERS[k].split('.')[0] === domain) return local + '@' + MAIL_PROVIDERS[k];
+      }
+      return null;
+    }
+
+    /* How far off we are willing to call a typo, scaled to how long the
+       domain is. One edit away from gmail.com is strong evidence, because
+       there are very few real nine-character domains that close to it. One
+       edit away from me.com is weak evidence: we.com and he.com are equally
+       plausible real domains, and suggesting against them is noise.
+
+       So short domains get no suggestion at all rather than a bad one. The
+       cost is missing me.con, which is a provider almost nobody here uses
+       against gmail's 90% share. */
+    var limit = domain.length <= 6 ? 0
+              : domain.length <= 9 ? 1
+              : 2;
+    if (limit === 0) return null;
+
+    var best = null, bestD = limit + 1;
+    for (var i = 0; i < MAIL_PROVIDERS.length; i++) {
+      var dist = mailDistance(domain, MAIL_PROVIDERS[i]);
+      if (dist > 0 && dist < bestD) { bestD = dist; best = MAIL_PROVIDERS[i]; }
+    }
+    if (!best) return null;
+
+    return local + '@' + best;
+  }
+
+  function escMail(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function wireMailFix(inputId) {
+    var input = document.getElementById(inputId);
+    var box   = document.getElementById('mailfix-' + inputId);
+    if (!input || !box) return;
+    var dismissed = '';
+
+    function hide() { box.className = 'mailfix'; box.innerHTML = ''; }
+
+    function check() {
+      var suggestion = mailSuggest(input.value.trim());
+      if (!suggestion || suggestion.toLowerCase() === dismissed) { hide(); return; }
+
+      box.innerHTML = '<span class="mailfix-q">Did you mean '
+        + '<button type="button" class="mailfix-yes">' + escMail(suggestion) + '</button>?</span>'
+        + '<button type="button" class="mailfix-no">No, it is right</button>';
+      box.className = 'mailfix show';
+
+      box.querySelector('.mailfix-yes').addEventListener('click', function () {
+        input.value = suggestion;
+        hide();
+        // Focus goes back to the field rather than nowhere. The button that
+        // was just clicked is about to be removed from the page, and leaving
+        // focus on a removed element strands anyone using a keyboard.
+        input.focus();
+      });
+      box.querySelector('.mailfix-no').addEventListener('click', function () {
+        dismissed = suggestion.toLowerCase();
+        hide();
+        input.focus();
+      });
+    }
+
+    // Checked when they leave the field, not while they type: half a typed
+    // address is nearly always wrong, and correcting someone mid-word is
+    // how a helpful hint turns into a nuisance.
+    input.addEventListener('blur', check);
+    input.addEventListener('input', function () {
+      if (box.className.indexOf('show') !== -1) hide();
+    });
+  }
+
+  ['reg-email', 'login-email', 'reset-email'].forEach(wireMailFix);
 
   async function handleRegister(e) {
     e.preventDefault();
