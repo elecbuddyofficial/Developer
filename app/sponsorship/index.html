@@ -1115,6 +1115,19 @@ function showNotifications() {
 function openSection(sectionId) {
   if (window.innerWidth <= 768) closeMobileMenu();
   if (sectionId === 'companyqa') { showCompanyQA(); return; }
+  /* Maritime News opens straight to the stories, the same way Overview opens
+     straight to its page. A section holding exactly one topic otherwise shows
+     a header, then a grid with a single card in it, then the same title again
+     on the page behind the card: three headings and a click for one thing. */
+  if (sectionId === 'currentaffairs') {
+    ACTIVE_SECTION_ID = 'currentaffairs';
+    var sbCA = document.getElementById('si-currentaffairs');
+    if (sbCA) sbCA.classList.add('active');
+    document.getElementById('si-home').classList.remove('active');
+    fetchTopicData('CA', SECTIONS.currentaffairs.topics[0]);
+    try { if (location.protocol !== 'file:') history.pushState(null,'','#notes=CA'); } catch(e){}
+    return;
+  }
   if (sectionId === 'overview') {
     ACTIVE_SECTION_ID = 'overview';
     document.getElementById('si-overview').classList.add('active');
@@ -1410,17 +1423,39 @@ function _newsAgo(iso) {
   return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
 }
 
+/* renderNotesView takes the HTML, calls setAllViewsInactive(), then looks for
+   a .view INSIDE it to activate. Every notes file on disk is wrapped that way.
+   Without the wrapper nothing gets activated, so the stories rendered loose on
+   whatever page happened to be open, which is exactly how they ended up under
+   the section cards on the home screen. */
+function _newsShell(inner) {
+  /* Carries its own back control, which also stops ensureBackButton adding
+     one. Its default is "← All Topics" pointing at openSection(ACTIVE_SECTION_ID),
+     and since Maritime News now opens straight to the stories that button
+     would just reload this page: a back button that goes nowhere. Study
+     Materials is where a reader actually wants to land. */
+  return '<div class="view" id="view-notes-ca"><div class="note-doc">'
+    + '<div style="margin-bottom:16px">'
+    + '<button type="button" class="anc-btn tnav-back" onclick="showStudyHub()" '
+    + 'style="border-color:var(--blue);color:var(--blue)">← Study Materials</button>'
+    + '</div>'
+    + inner + '</div></div>';
+}
+
 async function buildLiveNews(topicId) {
-  var wrap = '<div class="n-h1">📰 Maritime News</div>';
+  /* No n-h1 here. The section header above already says Maritime News, and a
+     second copy of the title immediately under it was the duplication in the
+     screenshot. */
+  var wrap = '';
 
   if (!window._sbClient) {
-    window.NOTE_HTML[topicId] = wrap
-      + '<div class="n-info">You need to be signed in to read the latest maritime news.</div>';
+    window.NOTE_HTML[topicId] = _newsShell(wrap
+      + '<div class="n-info">You need to be signed in to read the latest maritime news.</div>');
     renderNotesView(topicId);
     return;
   }
 
-  window.NOTE_HTML[topicId] = wrap + '<div class="n-info">Loading the latest…</div>';
+  window.NOTE_HTML[topicId] = _newsShell(wrap + '<div class="n-info">Loading the latest…</div>');
   renderNotesView(topicId);
 
   var res;
@@ -1434,9 +1469,9 @@ async function buildLiveNews(topicId) {
   } catch (e) { res = { error: e }; }
 
   if (res.error) {
-    window.NOTE_HTML[topicId] = wrap
+    window.NOTE_HTML[topicId] = _newsShell(wrap
       + '<div class="n-warn"><b>Could not load the news just now.</b><br>'
-      + 'Check your connection and open this again.</div>';
+      + 'Check your connection and open this again.</div>');
     renderNotesView(topicId);
     return;
   }
@@ -1445,10 +1480,10 @@ async function buildLiveNews(topicId) {
   if (!rows.length) {
     /* Empty is a normal state here, not a fault, and saying so plainly beats
        an error box that makes a working app look broken. */
-    window.NOTE_HTML[topicId] = wrap
+    window.NOTE_HTML[topicId] = _newsShell(wrap
       + '<div class="n-info"><b>Nothing published at the moment.</b><br>'
       + 'Stories are added as they break and drop off once they stop being current, '
-      + 'so this page is short by design. Check back in a day or two.</div>';
+      + 'so this page is short by design. Check back in a day or two.</div>');
     renderNotesView(topicId);
     return;
   }
@@ -1471,7 +1506,7 @@ async function buildLiveNews(topicId) {
       + '</div>';
   });
 
-  window.NOTE_HTML[topicId] = html;
+  window.NOTE_HTML[topicId] = _newsShell(html);
   renderNotesView(topicId);
 }
 

@@ -127,6 +127,26 @@ function decode(s: string): string {
     .trim();
 }
 
+/* Wire copy opens with boilerplate that means nothing to a reader here:
+   "By Arsalan Shahla, Catherine Lucey and Sara Gharaibeh Aug 15, 2026
+   (Bloomberg) –" and "CAIRO, Aug 15 (Reuters) –". Left in, the first line of
+   every card is a byline instead of the story, and with the summary trimmed
+   to a couple of hundred characters that boilerplate crowds out the actual
+   news.
+
+   Anchored to the start and bounded in length on purpose. A greedy rule would
+   happily eat a sentence that merely begins with a place name. */
+function stripDateline(s: string): string {
+  return s
+    // "By Name, Name and Name Aug 15, 2026 (Bloomberg) -"
+    .replace(/^By\s+[^.]{0,120}?\((?:Bloomberg|Reuters|AP|AFP|PA)\)\s*[–—-]+\s*/i, '')
+    // "CAIRO, Aug 15 (Reuters) -"
+    .replace(/^[A-Z][A-Za-z .'-]{0,30},?\s+\w{3,9}\s+\d{1,2}\s*\((?:Reuters|Bloomberg|AP|AFP|PA)\)\s*[–—-]+\s*/, '')
+    // A bare trailing byline with no agency, e.g. "By Jane Doe -"
+    .replace(/^By\s+[A-Z][A-Za-z .'-]{2,60}\s*[–—-]+\s*/, '')
+    .trim();
+}
+
 function toISO(raw: string | null): string | null {
   if (!raw) return null;
   const t = Date.parse(raw);            // handles RFC 822 and ISO 8601 alike
@@ -148,7 +168,7 @@ function parseFeed(xml: string, source: string): Item[] {
 
     const summaryRaw = tag(b, 'description') ?? tag(b, 'summary') ?? tag(b, 'content');
     const dateRaw    = tag(b, 'pubDate') ?? tag(b, 'published') ?? tag(b, 'updated');
-    const summary    = summaryRaw ? decode(summaryRaw).slice(0, 600) : null;
+    const summary    = summaryRaw ? stripDateline(decode(summaryRaw)).slice(0, 600) : null;
 
     out.push({
       link: decode(link),
