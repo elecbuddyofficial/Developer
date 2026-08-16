@@ -8,10 +8,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 // purge-deleted-accounts and send-expiry-emails are. There is no pg_cron on
 // this project.
 //
-// IT PROPOSES, IT DOES NOT PUBLISH. Everything lands with is_published false
-// and stays invisible to cadets until an admin decides otherwise. The feeds
-// are a firehose and most of what they carry is useless in an interview, so
-// the gate is the point of the feature rather than an obstacle to it.
+// IT RUNS ITSELF. The model scores every story for interview usefulness and
+// the best few are published automatically. There is nobody to work a review
+// queue daily, and a gate nobody operates leaves the module empty forever,
+// which is worse than an imperfect automatic one. Changed from human curation
+// on 16 Aug 2026 at Blesson's direction.
+//
+// The feeds are still a firehose, so the selection is the point of the
+// feature: about 62 stories arrive daily and perhaps five matter. A score
+// threshold plus a per-run cap does what the reviewer was there for, and the
+// one-week expiry keeps the page from growing into a wall.
+//
+// Anything published can still be pulled by hand in the database. The model
+// decides what goes up; it does not get the last word on what stays.
 //
 // WHY THIS RUNS SERVER SIDE AT ALL. None of the four feeds sends an
 // Access-Control-Allow-Origin header, checked rather than assumed, so a
@@ -42,15 +51,50 @@ const MAX_PER_FEED = 25;
 // those were worth keeping.
 const PRUNE_DAYS = 30;
 
-/* Gemini sorts the queue. It does not write the module.
-   Set with:  supabase secrets set GEMINI_API_KEY=...
-   Leave it unset and everything below still works; stories simply arrive
-   unscored, which is exactly how this ran before the key existed. */
-const GEMINI_MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash-lite';
+/* Claude picks what is worth reading.
+   Set with:  supabase secrets set ANTHROPIC_API_KEY=sk-ant-...
+
+   Gemini was tried first and abandoned: an AI Studio key works for listing
+   models but returns 403 PERMISSION_DENIED on generateContent, because the
+   Cloud project behind it is refused. Anthropic keys carry no Cloud project,
+   so there is nothing equivalent to go wrong.
+
+   Leave the key unset and everything else still works. Stories are fetched and
+   stored, just never scored, and with nothing scored nothing is published.
+
+   Haiku rather than Sonnet: this is classification against a written rubric,
+   which is what the small model is for, and it runs once a day over about
+   sixty short headlines. Override with CLAUDE_MODEL if the picks look poor. */
+const CLAUDE_MODEL = Deno.env.get('CLAUDE_MODEL') ?? 'claude-haiku-4-5-20251001';
+
+/* Only enough of the summary to disambiguate a vague headline. Feed titles
+   are written to stand alone, so this is a hint rather than the evidence, and
+   sending the full 300 characters for all sixty stories tripled the input for
+   almost no change in the scores. */
+const SUMMARY_CHARS_SENT = 90;
 
 // One batch a day, so a limit far above a day's volume. Caps the blast radius
 // of a feed suddenly returning hundreds of items.
 const MAX_TO_SCORE = 80;
+
+/* ── Autonomous publishing ────────────────────────────────────────────
+   There is nobody to work a review queue daily, and a gate nobody operates
+   means an empty module forever, which is worse than an imperfect automatic
+   one. So the model's score decides.
+
+   THE SCORE IS A JUDGEMENT, WHICH IS THE SAFE PART TO AUTOMATE. What is not
+   safe is generated prose asserted as fact, so the page always shows the
+   publisher's own headline and summary beside the note, and links out to the
+   source. A cadet can always see where it came from.
+
+   THE THRESHOLD AND THE CAP TOGETHER DO WHAT THE HUMAN WAS FOR. 62 stories a
+   day arrive and perhaps five matter. Publishing everything above a bar would
+   still flood the page on a busy news day, so the cap holds the module to a
+   readable size no matter what the feeds do. Combined with the one-week
+   expiry, a cadet sees roughly a fortnight's worth of significant stories
+   rather than a wall. */
+const AUTO_PUBLISH_MIN_SCORE = 7;   // 10 is a major industry event, 0 is a vessel delivery
+const AUTO_PUBLISH_MAX_PER_RUN = 8;
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
@@ -135,65 +179,80 @@ type Scored = { i: number; score: number; note: string };
 async function scoreBatch(items: { title: string; summary: string | null; source: string }[],
                           apiKey: string): Promise<Scored[]> {
   const list = items.map((it, i) =>
-    `${i}. [${it.source}] ${it.title}${it.summary ? '\n   ' + it.summary.slice(0, 300) : ''}`
+    `${i}|${it.source}|${it.title}${it.summary ? ' — ' + it.summary.slice(0, SUMMARY_CHARS_SENT) : ''}`
   ).join('\n');
 
+  /* Terse on purpose. Every word here is paid for once per run, and a rubric
+     the model can apply does not need to be written out as prose. */
   const prompt =
-`You are helping an Indian marine engineering cadet prepare for a sponsorship interview with a shipping company. They will be asked what is happening in the industry.
+`Indian marine engineering cadets face sponsorship interviews where they are asked what is happening in the shipping industry.
 
-Score each story 0-10 for how useful it would be to know in that interview.
+Score each story 0-10 for how useful it is to know in that interview.
+8-10: regulation, casualties, war, sanctions, trade routes, fuel and emissions, big shifts in employment or company activity.
+4-7: notable but narrow.
+0-3: one company's routine news, a vessel delivery, a product launch, an appointment.
 
-10 means a major industry event any cadet should be able to discuss: regulation, casualties, war or trade routes affecting shipping, fuel and emissions, big changes in employment or company activity.
-0 means a single company's routine announcement, a product launch, a vessel delivery, or anything a cadet could not build an answer around.
+note: leave it EMPTY unless the score is 7 or more. For 7+, at most 20 words on why it matters to a cadet.
+Use only the text given. Add no facts, figures, dates or context that are not above. If the line is too vague to judge, score it low.
 
-Then write "note": at most 25 words on why it matters, aimed at the cadet.
-
-RULES, and the second one matters most:
-- Base everything only on the text given. Do not add facts, numbers, dates, names or context that do not appear above.
-- If the headline does not say enough to know why it matters, score it low and write "not enough detail in the headline". Never guess to fill the field.
-- Do not recommend publishing. You are ranking, someone else decides.
-
-Stories:
+id|source|headline
 ${list}`;
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
-    {
-      method: 'POST',
-      headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },
-      signal: AbortSignal.timeout(45000),
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2,          // ranking, not writing: keep it steady
-          responseMimeType: 'application/json',
-          responseSchema: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                i:     { type: 'integer' },
-                score: { type: 'integer' },
-                note:  { type: 'string' },
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+    },
+    signal: AbortSignal.timeout(90000),
+    body: JSON.stringify({
+      model: CLAUDE_MODEL,
+      /* Enough for sixty {i,score} pairs plus the handful of notes. Notes are
+         suppressed below the bar precisely because they are most of the
+         output cost: roughly eight of sixty qualify. */
+      max_tokens: 3000,
+      temperature: 0,               // classification, not writing: no variance wanted
+      /* A tool schema rather than "please reply in JSON". The API enforces
+         the shape, so there is no prose to strip, no markdown fence to trip
+         over, and no wasted tokens explaining the format. */
+      tools: [{
+        name: 'rank',
+        description: 'Return a score for every story, in order.',
+        input_schema: {
+          type: 'object',
+          properties: {
+            s: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  i:     { type: 'integer', description: 'the id from the list' },
+                  score: { type: 'integer', description: '0-10' },
+                  note:  { type: 'string',  description: 'empty unless score >= 7' },
+                },
+                required: ['i', 'score', 'note'],
               },
-              required: ['i', 'score', 'note'],
             },
           },
+          required: ['s'],
         },
-      }),
-    },
-  );
-  if (!res.ok) throw new Error('gemini HTTP ' + res.status + ' ' + (await res.text()).slice(0, 200));
+      }],
+      tool_choice: { type: 'tool', name: 'rank' },
+      messages: [{ role: 'user', content: prompt }],
+    }),
+  });
+  if (!res.ok) throw new Error('claude HTTP ' + res.status + ' ' + (await res.text()).slice(0, 200));
 
   const body = await res.json();
-  const text = body?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('gemini returned no text');
+  const block = (body?.content ?? []).find((c: { type: string }) => c.type === 'tool_use');
+  if (!block) throw new Error('claude returned no tool_use block');
 
   /* Validated rather than trusted. The schema makes the shape very likely,
      not certain, and a bad index would write one story's note onto another. */
-  const parsed = JSON.parse(text);
-  if (!Array.isArray(parsed)) throw new Error('gemini did not return an array');
-  return parsed.filter((r: Scored) =>
+  const rows = block.input?.s;
+  if (!Array.isArray(rows)) throw new Error('claude did not return an array');
+  return rows.filter((r: Scored) =>
     Number.isInteger(r?.i) && r.i >= 0 && r.i < items.length &&
     Number.isInteger(r?.score) && r.score >= 0 && r.score <= 10 &&
     typeof r?.note === 'string'
@@ -259,9 +318,9 @@ serve(async (req) => {
        about a schema costs the sorting and nothing else: the stories are
        already saved by this point, and an unranked queue in date order is
        exactly what this did before the key existed. */
-    let scored = 0;
-    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-    if (GEMINI_API_KEY) {
+    let scored = 0, published = 0;
+    const ANTHROPIC_API_KEY = Deno.env.get('ANTHROPIC_API_KEY');
+    if (ANTHROPIC_API_KEY) {
       try {
         // Only what has never been scored, so a re-run does not re-spend on
         // stories already ranked, and a manual re-trigger is cheap.
@@ -275,18 +334,58 @@ serve(async (req) => {
         if (todoErr) throw new Error(todoErr.message);
 
         if (todo && todo.length) {
-          const ranked = await scoreBatch(todo, GEMINI_API_KEY);
+          const ranked = await scoreBatch(todo, ANTHROPIC_API_KEY);
+
+          // Step one: record what the model thought. No publishing here.
           for (const r of ranked) {
             const row = todo[r.i];
             if (!row) continue;
-            /* Written to ai_note, never to editor_note. Nothing the model
-               produced can reach a cadet until a person moves it across in
-               the console, which is the point of the two columns. */
             const { error: upErr } = await sb.from('maritime_news')
-              .update({ ai_score: r.score, ai_note: r.note.slice(0, 300), ai_model: GEMINI_MODEL })
+              .update({
+                ai_score: r.score,
+                ai_note: r.note.slice(0, 300),
+                ai_model: CLAUDE_MODEL,
+              })
               .eq('id', row.id);
             if (!upErr) scored++;
           }
+        }
+
+        /* Step two, and deliberately a SEPARATE query over everything still
+           unpublished rather than only over what was scored a moment ago.
+
+           The first version capped this run's winners, which quietly threw
+           work away: today's real batch scored 17 stories at 7 or above
+           against a cap of 8, so nine good stories would have been marked
+           scored, never published, and then skipped by every future run
+           because they already had a score. Nine lost per day, invisibly.
+
+           Reading the whole unpublished pool instead means a story that lost
+           to a busier day is still in the running tomorrow, and a quiet day
+           fills its slots from the backlog rather than publishing nothing. */
+        const backlogSince = new Date(Date.now() - 3 * 86400000).toISOString();
+        const { data: best, error: bestErr } = await sb
+          .from('maritime_news')
+          .select('id, ai_note')
+          .eq('is_published', false)
+          .gte('ai_score', AUTO_PUBLISH_MIN_SCORE)
+          // Not older than a few days: a week-old story published today would
+          // expire almost immediately and reads as stale on arrival.
+          .gte('fetched_at', backlogSince)
+          .order('ai_score', { ascending: false })
+          .order('published_at', { ascending: false, nullsFirst: false })
+          .limit(AUTO_PUBLISH_MAX_PER_RUN);
+        if (bestErr) throw new Error(bestErr.message);
+
+        for (const row of best ?? []) {
+          /* editor_note is written from ai_note here rather than the app
+             reading ai_note directly. It keeps what was published distinct
+             from what the model last said, so a note corrected by hand is not
+             reverted by a later run. */
+          const { error: pubErr } = await sb.from('maritime_news')
+            .update({ is_published: true, editor_note: (row.ai_note ?? '').slice(0, 300) })
+            .eq('id', row.id);
+          if (!pubErr) published++;
         }
       } catch (e) {
         errors.push('scoring: ' + String(e).slice(0, 160));
@@ -325,11 +424,11 @@ serve(async (req) => {
       ok,
       sent: added,
       failed: FEEDS.length - feedsOk,
-      skipped: seen - added,
+      skipped: published,   // reused: how many auto-published this run
       error: errors.length ? errors.join(' | ').slice(0, 500) : null,
     });
 
-    return json({ ok, feeds_ok: feedsOk, of: FEEDS.length, items_seen: seen, added, scored, errors });
+    return json({ ok, feeds_ok: feedsOk, of: FEEDS.length, items_seen: seen, added, scored, published, errors });
 
   } catch (e) {
     await sb.from('cron_runs').insert({

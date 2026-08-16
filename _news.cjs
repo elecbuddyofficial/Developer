@@ -35,15 +35,46 @@ const yml = fs.readFileSync(YML, 'utf8');
 
 console.log('MARITIME NEWS PIPELINE\n');
 
-/* ── The curation gate ───────────────────────────────────────────────── */
-console.log('── Nothing reaches a cadet unreviewed ───────────────────');
+/* ── Selection ───────────────────────────────────────────────────────── */
+console.log('── Only the best few are published ──────────────────────');
+
+/* Publishing became automatic on 16 Aug 2026: there is nobody to work a queue
+   daily, and a gate nobody operates leaves the module empty. What replaced the
+   reviewer is a threshold and a cap, so these check that the selection is
+   still a selection rather than a firehose. */
 
 ok(/is_published\s+BOOLEAN\s+NOT NULL\s+DEFAULT\s+FALSE/i.test(sql),
-   'is_published defaults to FALSE in the schema');
+   'is_published still defaults to FALSE, so nothing publishes by accident');
 
-// The fetcher must never set it. Publishing is a human act.
-ok(!/is_published\s*:\s*true/i.test(fn),
-   'the fetcher never sets is_published');
+/* Scoring and publishing are two steps over two queries. The first version
+   published from this run's batch only, which threw work away: a real run
+   scored 17 stories at 7+ against a cap of 8, and the other nine would have
+   been marked scored, never published, then skipped forever because they
+   already had a score. Nine lost a day, invisibly. */
+const pubFrom = fn.indexOf('Step two'), pubTo = fn.indexOf('Housekeeping');
+ok(pubFrom > 0 && pubTo > pubFrom, 'the publishing step was located  (anchors still match)');
+const pubBlock = fn.slice(pubFrom, pubTo);
+
+ok(/\.eq\('is_published', false\)/.test(pubBlock),
+   'publishing reads the whole unpublished pool, not just this run');
+ok(/\.gte\('ai_score', AUTO_PUBLISH_MIN_SCORE\)/.test(pubBlock),
+   'and takes only what cleared the score bar');
+ok(/\.order\('ai_score', \{ ascending: false \}\)/.test(pubBlock),
+   'best-scoring first');
+ok(/\.limit\(AUTO_PUBLISH_MAX_PER_RUN\)/.test(pubBlock),
+   'and capped, so a busy news day cannot flood the page');
+ok(/\.gte\('fetched_at'/.test(pubBlock),
+   'a stale backlog item cannot surface days later and expire on arrival');
+
+// The scoring step must record only. Publishing belongs to the step above.
+const scoreStep = fn.slice(fn.indexOf('Step one'), pubFrom);
+ok(!/is_published/.test(scoreStep),
+   'the scoring step records a score and never publishes');
+
+const minScore = Number((fn.match(/AUTO_PUBLISH_MIN_SCORE = (\d+)/) || [])[1]);
+ok(minScore >= 6 && minScore <= 9,
+   'the bar is set somewhere defensible  (' + minScore + '/10)',
+   'below 6 publishes vessel deliveries; above 9 publishes almost nothing');
 
 /* Matched on the two halves rather than one literal string, so reformatting
    the policy does not fail the check while rewriting its meaning does. */
@@ -112,24 +143,32 @@ console.log('\n── Nothing a model wrote can reach a cadet ──────
 ok(/ai_note\s+TEXT/i.test(sql) && /editor_note\s+TEXT/i.test(sql),
    'ai_note and editor_note are separate columns');
 
-/* This is the guarantee, and it is structural rather than a rule someone has
-   to remember: there is no code path from the model to a reader.
+/* editor_note is now written by the fetcher, but only for a story that won on
+   score. Keeping it separate from ai_note still matters: it holds what was
+   actually published, so a note corrected by hand is not silently reverted by
+   tomorrow's run, and an unpublished row keeps its raw suggestion.
 
-   Comments are stripped first. The prose explaining WHY the fetcher must not
-   touch editor_note obviously mentions it, and a check that cannot tell code
-   from a comment fails on its own documentation. */
+   Comments are stripped first, or the prose explaining this fails the check
+   that enforces it. */
 const fnCode = fn.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-ok(!/editor_note/.test(fnCode),
-   'the fetcher never writes editor_note, so a draft cannot publish itself',
-   'the app reads editor_note; ai_note has to be moved across by a person');
+const editorWrites = (fnCode.match(/editor_note/g) || []).length;
+ok(editorWrites === 1,
+   'editor_note is written in exactly one place, inside the winners branch',
+   'found ' + editorWrites + ' references; a second write path is how an edited note gets reverted');
+ok(/is_published: true, editor_note/.test(fnCode),
+   'and only in the same update that publishes, never on its own');
 
 ok(/ai_note:\s*r\.note/.test(fn) && /ai_score:\s*r\.score/.test(fn),
    'model output lands in the ai_ columns only');
 
 // Grounding instructions, because the prompt is the only thing standing
 // between a thin headline and an invented explanation.
-ok(/Do not add facts/i.test(fn) && /Never guess/i.test(fn),
+/* Matched on both halves of the rule rather than one sentence, so rewording
+   the prompt is fine but dropping the grounding is not. */
+ok(/Use only the text given/i.test(fn) && /Add no facts/i.test(fn),
    'the prompt forbids adding anything not in the source text');
+ok(/too vague to judge, score it low/i.test(fn),
+   'and tells it to score low rather than reach when a headline says too little');
 
 // A wrong index would write one story's note onto another, silently.
 ok(/r\.i >= 0 && r\.i < items\.length/.test(fn),
@@ -145,7 +184,7 @@ const scoreBlock = fn.slice(fn.indexOf('Rank what came in'), fn.indexOf('Houseke
 ok(scoreBlock.length > 200, 'the scoring block was located  (anchors still match)');
 ok(/try\s*\{/.test(scoreBlock) && /catch\s*\(/.test(scoreBlock),
    'scoring failures are caught, so the fetch still succeeds without them');
-ok(/if \(GEMINI_API_KEY\)/.test(scoreBlock),
+ok(/if \(ANTHROPIC_API_KEY\)/.test(scoreBlock),
    'with no key configured the pipeline still runs, just unranked');
 ok(/\.is\('ai_score', null\)/.test(scoreBlock),
    'only unscored stories are sent, so a re-run does not re-spend');
@@ -153,7 +192,7 @@ ok(/AbortSignal\.timeout/.test(fn.slice(fn.indexOf('async function scoreBatch'))
    'the model call is bounded by a timeout');
 
 // The key must come from the environment, never the repo, which is public.
-ok(/Deno\.env\.get\('GEMINI_API_KEY'\)/.test(fn),
+ok(/Deno\.env\.get\('ANTHROPIC_API_KEY'\)/.test(fn),
    'the key is read from the environment');
 ok(!/AIza[0-9A-Za-z_\-]{20,}/.test(fn + sql + yml),
    'no API key is hardcoded anywhere in the pipeline');

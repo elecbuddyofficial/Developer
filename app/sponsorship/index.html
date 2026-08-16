@@ -341,6 +341,20 @@
   .nf-sp-last{background:var(--red-dim);color:var(--red)}
   .nf-sp-next{background:var(--blue-dim);color:var(--blue)}
   .nf-sp-go{font-size:11px;font-weight:600;color:var(--blue);margin-left:auto;flex-shrink:0}
+  /* Maritime News cards. Every colour is a token and the card paints its own
+     surface, so the pair moves together in all four themes. */
+  .news-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
+             border-radius:10px;padding:14px 16px;margin:0 0 12px}
+  .news-meta{font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--text3)}
+  .news-dot{opacity:.6}
+  .news-title{font-size:15.5px;font-weight:700;color:var(--text);line-height:1.4;margin-top:5px}
+  .news-note{font-size:13.5px;color:var(--text);line-height:1.6;margin-top:8px;
+             background:var(--red-dim);border-radius:7px;padding:9px 11px}
+  .news-sum{font-size:13px;color:var(--text2);line-height:1.6;margin-top:8px}
+  .news-link{display:inline-block;margin-top:10px;font-size:12.5px;font-weight:600;
+             color:var(--blue);text-decoration:none}
+  .news-link:hover{text-decoration:underline}
+  @media (max-width:600px){ .news-card{padding:12px 13px} .news-title{font-size:14.5px} }
 </style>
 <script>
   (function(){
@@ -963,8 +977,14 @@ var SECTIONS = {
     desc:'Maritime and general awareness: the shipping news, regulations and world events that come up in interviews.',
     color:'var(--red)', quizLabel:'Practice Current Affairs questions',
     topics:[
+      /* The only live topic in the app. Everything else is an encrypted file
+         built at deploy time; this one is read from public.maritime_news on
+         open, because news that needs a deploy to change is not news.
+         notesFile is null and `live` says where the content really comes
+         from, so nothing tries to fetch and decrypt a file that will never
+         exist. */
       {id:'CA', key:'CA_CurrentAffairs', name:'Maritime News', icon:'📰',
-       notesFile:'aptitude/ca_notes.js', quizFile:'aptitude/ca_quiz.js', notesReady:false, free:false}
+       notesFile:null, quizFile:null, notesReady:true, free:false, live:true}
     ]
   },
 
@@ -1331,6 +1351,15 @@ window.fetchTopicData = function(topicId, topicObj) {
 
   var tNum = topicId.replace(/[^0-9]/g,'') || '0';
 
+  /* A live topic is built from the database rather than fetched and
+     decrypted. Rebuilt on every open rather than cached, because the whole
+     point is that it changed since last time. */
+  if (topicObj.live) {
+    buildLiveNews(topicId);
+    try { if (location.protocol !== 'file:') history.pushState(null,'','#notes='+topicId); } catch(e){}
+    return;
+  }
+
   if (!window.NOTE_HTML[topicId]) {
     window._loadEncryptedScript(BASE + topicObj.notesFile).catch(function(err) {
       var c = document.getElementById('notes-container');
@@ -1357,6 +1386,94 @@ window.fetchTopicData = function(topicId, topicObj) {
   }
   try { if (location.protocol !== 'file:') history.pushState(null,'','#notes='+topicId); } catch(e){}
 };
+
+/* ── Maritime News, read live from the database ──────────────────────────
+   Builds the same NOTE_HTML shape every other topic produces, so the normal
+   renderer handles layout, the sidebar, progress and navigation. Nothing here
+   knows it is special beyond where the words came from.
+
+   Only published, unexpired stories arrive: both conditions live in the RLS
+   policy on maritime_news, so this cannot show a stale item even if the query
+   below were wrong. The editor note is the only prose displayed. Whatever the
+   model suggested sits in a different column that this never reads. */
+function _newsEsc(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function _newsAgo(iso) {
+  if (!iso) return '';
+  var d = Math.floor((Date.now() - new Date(iso).getTime()) / 86400000);
+  if (d <= 0) return 'today';
+  if (d === 1) return 'yesterday';
+  if (d < 7)   return d + ' days ago';
+  return new Date(iso).toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+}
+
+async function buildLiveNews(topicId) {
+  var wrap = '<div class="n-h1">📰 Maritime News</div>';
+
+  if (!window._sbClient) {
+    window.NOTE_HTML[topicId] = wrap
+      + '<div class="n-info">You need to be signed in to read the latest maritime news.</div>';
+    renderNotesView(topicId);
+    return;
+  }
+
+  window.NOTE_HTML[topicId] = wrap + '<div class="n-info">Loading the latest…</div>';
+  renderNotesView(topicId);
+
+  var res;
+  try {
+    res = await window._sbClient
+      .from('maritime_news')
+      .select('title, link, source, summary, published_at, editor_note')
+      .eq('is_published', true)
+      .order('published_at', { ascending: false })
+      .limit(60);
+  } catch (e) { res = { error: e }; }
+
+  if (res.error) {
+    window.NOTE_HTML[topicId] = wrap
+      + '<div class="n-warn"><b>Could not load the news just now.</b><br>'
+      + 'Check your connection and open this again.</div>';
+    renderNotesView(topicId);
+    return;
+  }
+
+  var rows = res.data || [];
+  if (!rows.length) {
+    /* Empty is a normal state here, not a fault, and saying so plainly beats
+       an error box that makes a working app look broken. */
+    window.NOTE_HTML[topicId] = wrap
+      + '<div class="n-info"><b>Nothing published at the moment.</b><br>'
+      + 'Stories are added as they break and drop off once they stop being current, '
+      + 'so this page is short by design. Check back in a day or two.</div>';
+    renderNotesView(topicId);
+    return;
+  }
+
+  var html = wrap
+    + '<div class="n-info">Recent maritime stories worth knowing before an interview. '
+    + 'Read the headline and the note, then follow the link if you want the detail. '
+    + 'Older stories drop off automatically, so everything here is current.</div>';
+
+  rows.forEach(function (n) {
+    html += '<div class="news-card">'
+      + '<div class="news-meta">' + _newsEsc(n.source)
+        + (n.published_at ? ' <span class="news-dot">·</span> ' + _newsEsc(_newsAgo(n.published_at)) : '')
+      + '</div>'
+      + '<div class="news-title">' + _newsEsc(n.title) + '</div>'
+      + (n.editor_note ? '<div class="news-note">' + _newsEsc(n.editor_note) + '</div>' : '')
+      + (n.summary ? '<div class="news-sum">' + _newsEsc(n.summary) + '</div>' : '')
+      + '<a class="news-link" href="' + _newsEsc(n.link) + '" target="_blank" rel="noopener noreferrer">'
+      + 'Read the full story →</a>'
+      + '</div>';
+  });
+
+  window.NOTE_HTML[topicId] = html;
+  renderNotesView(topicId);
+}
 
 // ── Sidebar topic list while reading notes ──
 function buildTopicSideList(activeId) {
