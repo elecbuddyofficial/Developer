@@ -1,0 +1,64 @@
+name: Fetch Maritime News
+
+# Pulls maritime headlines into public.maritime_news once a day.
+#
+# NOTHING THIS FETCHES REACHES A CADET. Every row lands with is_published
+# false and waits for someone to publish it in the admin console. The feeds
+# carry perhaps a hundred stories a day and a handful are worth an interview,
+# so the fetch is the easy half and the choosing is the point.
+#
+# Daily at 03:40 UTC, which is 09:10 IST: late enough to have the previous
+# day's stories from the American and European feeds, early enough that the
+# queue is waiting when Blesson looks. Off the hour, and away from the 08:00
+# and 09:00 jobs, because GitHub drops scheduled runs at busy minutes.
+#
+# Daily is also the whole point rather than a compromise. Hourly would mean
+# reviewing the same firehose over and over for stories that have not changed,
+# and news that is a few hours old is no less useful for interview prep.
+#
+# Missing a day costs nothing. The next run picks up everything still in the
+# feeds, and the unique link means re-reading yesterday's stories inserts
+# nothing twice.
+#
+# Uses the same CRON_SECRET and SUPABASE_FUNCTIONS_URL secrets already
+# configured for the expiry emails.
+
+on:
+  schedule:
+    - cron: '40 3 * * *'   # 03:40 UTC daily = 09:10 IST
+  workflow_dispatch:        # manual trigger, and how to test it the first time
+
+# A slow run must never overlap the next. Harmless anyway, since the upsert is
+# keyed on the link, but there is no reason to have two fetching at once.
+concurrency:
+  group: maritime-news
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger fetch-maritime-news Edge Function
+        run: |
+          HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_FUNCTIONS_URL }}/fetch-maritime-news")
+
+          echo "HTTP status: $HTTP_STATUS"
+          cat /tmp/response.json
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Edge Function returned non-200 status"
+            exit 1
+          fi
+
+          # A 200 with ok:false means at least one feed failed while the others
+          # worked. The rows that came in are already saved, so this must not
+          # fail the job and start paging anyone: it is recorded in cron_runs
+          # and shows up in the console. Surfaced here only so a glance at the
+          # run log says which site was down.
+          if grep -q '"ok":false' /tmp/response.json; then
+            echo "::warning::One or more feeds failed. Stored what was fetched; see cron_runs."
+          fi
