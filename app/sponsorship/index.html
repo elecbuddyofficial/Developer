@@ -1428,6 +1428,15 @@ function _newsAgo(iso) {
    Without the wrapper nothing gets activated, so the stories rendered loose on
    whatever page happened to be open, which is exactly how they ended up under
    the section cards on the home screen. */
+/* The same .note-title block every written module opens with, so this page
+   does not look like a different app. The sub line carries live counts rather
+   than a fixed "Study Time", because that is the honest equivalent here: what
+   is on the page and how long it stays. */
+function _newsHeader(sub) {
+  return '<div class="note-title"><h1>Maritime News</h1>'
+    + '<div class="sub">' + sub + '</div></div>';
+}
+
 function _newsShell(inner) {
   /* Carries its own back control, which also stops ensureBackButton adding
      one. Its default is "← All Topics" pointing at openSection(ACTIVE_SECTION_ID),
@@ -1443,10 +1452,9 @@ function _newsShell(inner) {
 }
 
 async function buildLiveNews(topicId) {
-  /* No n-h1 here. The section header above already says Maritime News, and a
-     second copy of the title immediately under it was the duplication in the
-     screenshot. */
-  var wrap = '';
+  /* Every state gets the header, including loading and failure. A page whose
+     title appears only once the data lands reads as broken while it waits. */
+  var wrap = _newsHeader('Updated daily · Selected for interviews · Stories drop off after a week');
 
   if (!window._sbClient) {
     window.NOTE_HTML[topicId] = _newsShell(wrap
@@ -1488,7 +1496,12 @@ async function buildLiveNews(topicId) {
     return;
   }
 
-  var html = wrap
+  var fresh = rows.filter(function (r) {
+    return r.published_at && (Date.now() - new Date(r.published_at).getTime()) < 172800000;
+  }).length;
+  var html = _newsHeader(rows.length + (rows.length === 1 ? ' story' : ' stories')
+      + (fresh ? ' · ' + fresh + ' from the last two days' : '')
+      + ' · Updated daily')
     + '<div class="n-info">Recent maritime stories worth knowing before an interview. '
     + 'Read the headline and the note, then follow the link if you want the detail. '
     + 'Older stories drop off automatically, so everything here is current.</div>';
