@@ -45,7 +45,11 @@ ok(/is_published\s+BOOLEAN\s+NOT NULL\s+DEFAULT\s+FALSE/i.test(sql),
 ok(!/is_published\s*:\s*true/i.test(fn),
    'the fetcher never sets is_published');
 
-ok(/USING \(is_published OR public\.is_admin\(\)\)/.test(sql),
+/* Matched on the two halves rather than one literal string, so reformatting
+   the policy does not fail the check while rewriting its meaning does. */
+const selectPolicy = sql.slice(sql.indexOf('CREATE POLICY "Authenticated read published news"'),
+                               sql.indexOf('DROP POLICY IF EXISTS "Admin insert news"'));
+ok(/is_published\s+AND/.test(selectPolicy) && /OR public\.is_admin\(\)/.test(selectPolicy),
    'RLS hides unpublished rows from everyone but an admin');
 
 /* The single most damaging regression available here: drop
@@ -58,6 +62,44 @@ ok(/onConflict:\s*'link'/.test(fn),
    'de-duplication is keyed on the link');
 ok(/link\s+TEXT NOT NULL UNIQUE/i.test(sql),
    'and the database enforces that key rather than trusting the fetcher');
+
+/* ── Freshness ───────────────────────────────────────────────────────── */
+console.log('\n── Stale news cannot reach a cadet ──────────────────────');
+
+/* This is a CURRENT affairs module, so an old story is not untidy, it is
+   wrong: a cadet citing a three-month-old event as recent is worse off than
+   one who says nothing. */
+
+ok(/published_until DATE NOT NULL DEFAULT \(CURRENT_DATE \+ 7\)/i.test(sql),
+   'every story gets a week by default');
+
+/* NOT NULL matters more than the 7 does. Nullable, meaning "never expires",
+   would let one forgotten field pin a story on the page forever, which is
+   the exact failure the column exists to prevent. */
+ok(!/published_until\s+DATE\s*,/i.test(sql) && /published_until DATE NOT NULL/i.test(sql),
+   'the column cannot be left empty, so the fail-safe direction is "expires"');
+
+// Enforced in RLS, not in a query a future change could forget.
+ok(/is_published AND published_until >= CURRENT_DATE/.test(sql),
+   'the expiry is enforced by RLS, so no client query can leak a stale story');
+
+/* Pruning is housekeeping, NOT the freshness mechanism. It must never be able
+   to remove something still visible, or a bug in the fetcher becomes a hole
+   in the module. */
+/* Anchored on both ends, and asserted non-empty. Renaming the comment made
+   indexOf return -1, which sliced from the end of the file: here that failed
+   loudly, but the same slip on a negative assertion would have passed while
+   testing nothing at all. */
+const pruneFrom = fn.indexOf('Housekeeping'), pruneTo = fn.indexOf('const ok =');
+ok(pruneFrom > 0 && pruneTo > pruneFrom,
+   'the housekeeping block was located  (anchors still match)',
+   'from ' + pruneFrom + ' to ' + pruneTo);
+const pruneBlock = fn.slice(pruneFrom, pruneTo);
+ok(/PRUNE_DAYS/.test(pruneBlock) && !/published_until',\s*(new Date\(\)|today)/.test(pruneBlock),
+   'the delete runs well after expiry, never on the day it happens',
+   'deleting on expiry would destroy the editor note, the one part nobody can re-fetch');
+ok(/\.lt\('published_until'/.test(pruneBlock),
+   'long-expired rows are eventually reclaimed');
 
 /* ── Both feed formats ───────────────────────────────────────────────── */
 console.log('\n── Both feed formats are handled ────────────────────────');
@@ -94,10 +136,9 @@ ok(/const ok = feedsOk === FEEDS\.length/.test(fn),
 /* ── Housekeeping cannot eat curated work ────────────────────────────── */
 console.log('\n── Pruning only touches what nobody kept ────────────────');
 
-const prune = fn.slice(fn.indexOf('// Housekeeping'), fn.indexOf('const ok ='));
-ok(/\.eq\('is_published',\s*false\)/.test(prune),
-   'the prune is restricted to unpublished rows');
-ok(/\.lt\('fetched_at'/.test(prune),
+ok(/\.eq\('is_published',\s*false\)/.test(pruneBlock),
+   'the review queue prune is restricted to unpublished rows');
+ok(/\.lt\('fetched_at'/.test(pruneBlock),
    'and to old ones');
 
 /* ── Wiring ──────────────────────────────────────────────────────────── */

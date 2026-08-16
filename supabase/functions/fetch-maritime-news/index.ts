@@ -162,11 +162,27 @@ serve(async (req) => {
       }
     }
 
-    // Housekeeping, and only ever on rows nobody chose to keep.
+    /* Housekeeping. Note this is NOT what makes the module fresh: a story
+       stops being shown the day published_until passes, enforced in the RLS
+       policy, with nothing needing to run at all. This only reclaims rows
+       long after they went dark.
+
+       Two cases, kept separate because they are different mistakes to make:
+       headlines nobody ever chose, and stories whose week ran out a month
+       ago. Neither can touch anything currently visible. */
     const cutoff = new Date(Date.now() - PRUNE_DAYS * 86400000).toISOString();
-    const { error: pruneErr } = await sb.from('maritime_news')
+
+    const { error: pruneQueueErr } = await sb.from('maritime_news')
       .delete().eq('is_published', false).lt('fetched_at', cutoff);
-    if (pruneErr) errors.push('prune: ' + pruneErr.message);
+    if (pruneQueueErr) errors.push('prune queue: ' + pruneQueueErr.message);
+
+    // A DATE column, so this is compared as a plain date string. Building it
+    // from toISOString and slicing keeps it in UTC rather than straddling the
+    // function's timezone and the database's.
+    const expiredBefore = new Date(Date.now() - PRUNE_DAYS * 86400000).toISOString().slice(0, 10);
+    const { error: pruneOldErr } = await sb.from('maritime_news')
+      .delete().lt('published_until', expiredBefore);
+    if (pruneOldErr) errors.push('prune expired: ' + pruneOldErr.message);
 
     /* ok means every feed answered. A partial run still stores what it got,
        but it must not report itself as healthy: a feed that quietly stopped
