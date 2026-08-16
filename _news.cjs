@@ -101,6 +101,63 @@ ok(/PRUNE_DAYS/.test(pruneBlock) && !/published_until',\s*(new Date\(\)|today)/.
 ok(/\.lt\('published_until'/.test(pruneBlock),
    'long-expired rows are eventually reclaimed');
 
+/* ── The model ranks; it does not write the module ──────────────────── */
+console.log('\n── Nothing a model wrote can reach a cadet ──────────────');
+
+/* The specific failure this guards against: a model invents a plausible
+   reason a story matters, it gets published unchecked, and a cadet repeats
+   something untrue in an interview. Scoring is a judgement and safe to
+   automate. Facts are not. */
+
+ok(/ai_note\s+TEXT/i.test(sql) && /editor_note\s+TEXT/i.test(sql),
+   'ai_note and editor_note are separate columns');
+
+/* This is the guarantee, and it is structural rather than a rule someone has
+   to remember: there is no code path from the model to a reader.
+
+   Comments are stripped first. The prose explaining WHY the fetcher must not
+   touch editor_note obviously mentions it, and a check that cannot tell code
+   from a comment fails on its own documentation. */
+const fnCode = fn.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+ok(!/editor_note/.test(fnCode),
+   'the fetcher never writes editor_note, so a draft cannot publish itself',
+   'the app reads editor_note; ai_note has to be moved across by a person');
+
+ok(/ai_note:\s*r\.note/.test(fn) && /ai_score:\s*r\.score/.test(fn),
+   'model output lands in the ai_ columns only');
+
+// Grounding instructions, because the prompt is the only thing standing
+// between a thin headline and an invented explanation.
+ok(/Do not add facts/i.test(fn) && /Never guess/i.test(fn),
+   'the prompt forbids adding anything not in the source text');
+
+// A wrong index would write one story's note onto another, silently.
+ok(/r\.i >= 0 && r\.i < items\.length/.test(fn),
+   'returned indices are range-checked before being used');
+ok(/r\.score >= 0 && r\.score <= 10/.test(fn),
+   'scores are range-checked too');
+ok(/ai_score\s+SMALLINT CHECK \(ai_score BETWEEN 0 AND 10\)/i.test(sql),
+   'and the database enforces the range independently');
+
+/* Scoring is a convenience for sorting a queue. If Gemini is down, out of
+   quota or newly fussy about a schema, the day's news must still land. */
+const scoreBlock = fn.slice(fn.indexOf('Rank what came in'), fn.indexOf('Housekeeping'));
+ok(scoreBlock.length > 200, 'the scoring block was located  (anchors still match)');
+ok(/try\s*\{/.test(scoreBlock) && /catch\s*\(/.test(scoreBlock),
+   'scoring failures are caught, so the fetch still succeeds without them');
+ok(/if \(GEMINI_API_KEY\)/.test(scoreBlock),
+   'with no key configured the pipeline still runs, just unranked');
+ok(/\.is\('ai_score', null\)/.test(scoreBlock),
+   'only unscored stories are sent, so a re-run does not re-spend');
+ok(/AbortSignal\.timeout/.test(fn.slice(fn.indexOf('async function scoreBatch'))),
+   'the model call is bounded by a timeout');
+
+// The key must come from the environment, never the repo, which is public.
+ok(/Deno\.env\.get\('GEMINI_API_KEY'\)/.test(fn),
+   'the key is read from the environment');
+ok(!/AIza[0-9A-Za-z_\-]{20,}/.test(fn + sql + yml),
+   'no API key is hardcoded anywhere in the pipeline');
+
 /* ── Both feed formats ───────────────────────────────────────────────── */
 console.log('\n── Both feed formats are handled ────────────────────────');
 

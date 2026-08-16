@@ -42,6 +42,16 @@ const MAX_PER_FEED = 25;
 // those were worth keeping.
 const PRUNE_DAYS = 30;
 
+/* Gemini sorts the queue. It does not write the module.
+   Set with:  supabase secrets set GEMINI_API_KEY=...
+   Leave it unset and everything below still works; stories simply arrive
+   unscored, which is exactly how this ran before the key existed. */
+const GEMINI_MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash-lite';
+
+// One batch a day, so a limit far above a day's volume. Caps the blast radius
+// of a feed suddenly returning hundreds of items.
+const MAX_TO_SCORE = 80;
+
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } });
 
@@ -108,6 +118,88 @@ function parseFeed(xml: string, source: string): Item[] {
   return out;
 }
 
+type Scored = { i: number; score: number; note: string };
+
+/* Rank a batch by how useful each story would be in a sponsorship interview,
+   and draft one line on why.
+
+   THE PROMPT IS WRITTEN AROUND ONE RULE: never state a fact that is not in
+   the text supplied. A model that invents a plausible-sounding reason, copied
+   into the module unchecked, sends a cadet to repeat something untrue in an
+   interview. So it is told to work only from what it is given, and to score
+   low rather than reach when a headline does not say enough.
+
+   Returns [] on any failure. Scoring is a convenience for sorting a queue; if
+   it does not happen, the queue is simply in date order and the day's news is
+   still there. It must never cost us the fetch. */
+async function scoreBatch(items: { title: string; summary: string | null; source: string }[],
+                          apiKey: string): Promise<Scored[]> {
+  const list = items.map((it, i) =>
+    `${i}. [${it.source}] ${it.title}${it.summary ? '\n   ' + it.summary.slice(0, 300) : ''}`
+  ).join('\n');
+
+  const prompt =
+`You are helping an Indian marine engineering cadet prepare for a sponsorship interview with a shipping company. They will be asked what is happening in the industry.
+
+Score each story 0-10 for how useful it would be to know in that interview.
+
+10 means a major industry event any cadet should be able to discuss: regulation, casualties, war or trade routes affecting shipping, fuel and emissions, big changes in employment or company activity.
+0 means a single company's routine announcement, a product launch, a vessel delivery, or anything a cadet could not build an answer around.
+
+Then write "note": at most 25 words on why it matters, aimed at the cadet.
+
+RULES, and the second one matters most:
+- Base everything only on the text given. Do not add facts, numbers, dates, names or context that do not appear above.
+- If the headline does not say enough to know why it matters, score it low and write "not enough detail in the headline". Never guess to fill the field.
+- Do not recommend publishing. You are ranking, someone else decides.
+
+Stories:
+${list}`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+    {
+      method: 'POST',
+      headers: { 'x-goog-api-key': apiKey, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(45000),
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.2,          // ranking, not writing: keep it steady
+          responseMimeType: 'application/json',
+          responseSchema: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                i:     { type: 'integer' },
+                score: { type: 'integer' },
+                note:  { type: 'string' },
+              },
+              required: ['i', 'score', 'note'],
+            },
+          },
+        },
+      }),
+    },
+  );
+  if (!res.ok) throw new Error('gemini HTTP ' + res.status + ' ' + (await res.text()).slice(0, 200));
+
+  const body = await res.json();
+  const text = body?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('gemini returned no text');
+
+  /* Validated rather than trusted. The schema makes the shape very likely,
+     not certain, and a bad index would write one story's note onto another. */
+  const parsed = JSON.parse(text);
+  if (!Array.isArray(parsed)) throw new Error('gemini did not return an array');
+  return parsed.filter((r: Scored) =>
+    Number.isInteger(r?.i) && r.i >= 0 && r.i < items.length &&
+    Number.isInteger(r?.score) && r.score >= 0 && r.score <= 10 &&
+    typeof r?.note === 'string'
+  );
+}
+
 serve(async (req) => {
   const SUPABASE_URL     = Deno.env.get('SUPABASE_URL')!;
   const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -162,6 +254,45 @@ serve(async (req) => {
       }
     }
 
+    /* ── Rank what came in ────────────────────────────────────────────
+       Wrapped whole. Gemini being down, out of quota, slow or newly fussy
+       about a schema costs the sorting and nothing else: the stories are
+       already saved by this point, and an unranked queue in date order is
+       exactly what this did before the key existed. */
+    let scored = 0;
+    const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
+    if (GEMINI_API_KEY) {
+      try {
+        // Only what has never been scored, so a re-run does not re-spend on
+        // stories already ranked, and a manual re-trigger is cheap.
+        const { data: todo, error: todoErr } = await sb
+          .from('maritime_news')
+          .select('id, title, summary, source')
+          .is('ai_score', null)
+          .eq('is_published', false)
+          .order('fetched_at', { ascending: false })
+          .limit(MAX_TO_SCORE);
+        if (todoErr) throw new Error(todoErr.message);
+
+        if (todo && todo.length) {
+          const ranked = await scoreBatch(todo, GEMINI_API_KEY);
+          for (const r of ranked) {
+            const row = todo[r.i];
+            if (!row) continue;
+            /* Written to ai_note, never to editor_note. Nothing the model
+               produced can reach a cadet until a person moves it across in
+               the console, which is the point of the two columns. */
+            const { error: upErr } = await sb.from('maritime_news')
+              .update({ ai_score: r.score, ai_note: r.note.slice(0, 300), ai_model: GEMINI_MODEL })
+              .eq('id', row.id);
+            if (!upErr) scored++;
+          }
+        }
+      } catch (e) {
+        errors.push('scoring: ' + String(e).slice(0, 160));
+      }
+    }
+
     /* Housekeeping. Note this is NOT what makes the module fresh: a story
        stops being shown the day published_until passes, enforced in the RLS
        policy, with nothing needing to run at all. This only reclaims rows
@@ -198,7 +329,7 @@ serve(async (req) => {
       error: errors.length ? errors.join(' | ').slice(0, 500) : null,
     });
 
-    return json({ ok, feeds_ok: feedsOk, of: FEEDS.length, items_seen: seen, added, errors });
+    return json({ ok, feeds_ok: feedsOk, of: FEEDS.length, items_seen: seen, added, scored, errors });
 
   } catch (e) {
     await sb.from('cron_runs').insert({

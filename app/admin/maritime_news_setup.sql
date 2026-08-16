@@ -51,6 +51,25 @@ CREATE TABLE IF NOT EXISTS public.maritime_news (
   published_by  UUID REFERENCES auth.users ON DELETE SET NULL,
   published_at_by_us TIMESTAMPTZ,
 
+  /* WHAT THE MODEL SAID, KEPT APART FROM WHAT WE PUBLISH.
+
+     ai_score sorts the review queue so the handful worth reading float above
+     the newbuild deliveries. ai_note is a suggested line, nothing more.
+
+     These are separate columns from editor_note ON PURPOSE, and it is the
+     whole safety design rather than tidiness. The app only ever reads
+     editor_note, so nothing a model wrote can reach a cadet unless a human
+     moved it across first. Not a policy that could be forgotten: there is no
+     code path from ai_note to a reader.
+
+     That matters because the failure here is specific and bad. A model that
+     invents a plausible reason a story matters, published unchecked, sends a
+     cadet into an interview to repeat something untrue. Scoring is a
+     judgement and safe to automate. Facts are not. */
+  ai_score      SMALLINT CHECK (ai_score BETWEEN 0 AND 10),
+  ai_note       TEXT,
+  ai_model      TEXT,                    -- which model, so a bad batch is traceable
+
   /* WHEN IT STOPS BEING SHOWN.
      This module is current affairs, so stale content is not untidy, it is
      wrong: a cadet citing a three-month-old story as recent is worse off than
@@ -77,9 +96,11 @@ CREATE INDEX IF NOT EXISTS maritime_news_published_idx
   ON public.maritime_news (published_until, published_at DESC NULLS LAST)
   WHERE is_published;
 
--- The admin review read: what has come in and not been decided on.
+-- The admin review read: what has come in and not been decided on, best
+-- first. NULLS LAST so an unscored story sits below the ranked ones rather
+-- than at the top, which is what happens when the scoring step is skipped.
 CREATE INDEX IF NOT EXISTS maritime_news_queue_idx
-  ON public.maritime_news (fetched_at DESC)
+  ON public.maritime_news (ai_score DESC NULLS LAST, fetched_at DESC)
   WHERE NOT is_published;
 
 ALTER TABLE public.maritime_news ENABLE ROW LEVEL SECURITY;
