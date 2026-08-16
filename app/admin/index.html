@@ -328,6 +328,17 @@
     .dvc-warn { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
     .dvc-mute { background:var(--surface3);   color:var(--text3);  border:1px solid var(--border2); }
     .dvc-quiet { opacity:.6; }
+
+    /* Disify verdict. Empty until the lookup answers, and it stays empty if
+       the lookup never answers, so a third party being down shows as nothing
+       rather than as an error the reader has to interpret. */
+    .dfy { display:inline-flex; align-items:center; gap:5px; }
+    .dfy-tag { font-size:9.5px; font-weight:700; letter-spacing:.4px; text-transform:uppercase;
+               padding:2px 7px; border-radius:100px; white-space:nowrap; }
+    .dfy-bad  { background:var(--red-dim);    color:var(--red);    border:1px solid var(--red-border); }
+    .dfy-nomx { background:var(--orange-dim); color:var(--orange); border:1px solid var(--orange-border); }
+    .dfy-ok   { background:var(--green-dim);  color:var(--green);  border:1px solid var(--green-border); }
+    .dfy-why  { font-size:10.5px; color:var(--text3); }
     /* On a phone the name, the tags, the date and the button cannot share one
        line. Squeezed together they left the address wrapping a single
        character per line, so the identity takes the full width and everything
@@ -5259,6 +5270,84 @@ async function deleteNotification(id) {
   loadNotifications();
 }
 
+/* ── DISIFY: is this domain a throwaway? ─────────────────────────────
+   disify.com, free, no key. Asked only about a DOMAIN, never an address, so
+   no cadet's email leaves this machine.
+
+   WHY AN API AND NOT A SHIPPED LIST. Measured, not assumed: the best known
+   open blocklist, 8,201 domains, holds yopmail.com and misses dnsink.com,
+   maximail.fyi and luhupo.com. One of the four that actually turned up here,
+   and only the oldest. Disify returned all four at confidence 100 and cleared
+   gmail.com, tulas.edu.in, miet.ac.in and elec-buddy.com. It also catches
+   gmail.con, with dns:false and a no_mx_records signal, which is the typo
+   case rather than the abuse case.
+
+   IT ANNOTATES, IT NEVER DECIDES. This runs in the admin console only, well
+   away from the signup path, so disify being slow or gone costs a label in a
+   table Blesson is reading and nothing else. Every failure resolves to "say
+   nothing": a free service with no SLA must never be able to make the queue
+   look broken, or worse, turn into an outage for someone registering. */
+
+var _disifyCache = {};   // domain -> verdict object, or null meaning "asked, no answer"
+
+async function disifyDomain(domain) {
+  if (Object.prototype.hasOwnProperty.call(_disifyCache, domain)) return _disifyCache[domain];
+  try {
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, 6000);
+    var r = await fetch('https://disify.com/api/domain/' + encodeURIComponent(domain), { signal: ctl.signal });
+    clearTimeout(timer);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    _disifyCache[domain] = await r.json();
+  } catch (e) {
+    // Cached as null on purpose. Without this a dead endpoint is retried on
+    // every render, which turns one slow lookup into a stalled table.
+    _disifyCache[domain] = null;
+  }
+  return _disifyCache[domain];
+}
+
+/* Fills every <span class="dfy" data-disify="domain"> on the page, wherever it
+   came from. One pass rather than one per panel, so the approvals queue and
+   the shared-device list share both the cache and the wording. */
+async function annotateDisify() {
+  var slots = [].slice.call(document.querySelectorAll('.dfy[data-disify]'));
+  if (!slots.length) return;
+
+  var domains = {};
+  slots.forEach(function (s) {
+    var d = (s.getAttribute('data-disify') || '').toLowerCase();
+    if (d) (domains[d] = domains[d] || []).push(s);
+  });
+
+  // Sequential, not Promise.all. There are only ever a handful of distinct
+  // domains in front of an admin, and a free endpoint with no published rate
+  // limit does not deserve a burst.
+  var names = Object.keys(domains);
+  for (var i = 0; i < names.length; i++) {
+    var d = names[i];
+    var v = await disifyDomain(d);
+    if (!v) continue;                       // no answer: leave the slot empty
+
+    var html = '';
+    if (v.disposable && v.dns === false) {
+      // Both true means the domain cannot receive mail at all. That reads as
+      // a typo, not as somebody farming trials, and it is a different
+      // decision, so it gets its own wording.
+      html = '<span class="dfy-tag dfy-nomx">no mail server</span>'
+           + '<span class="dfy-why">nothing can be delivered here</span>';
+    } else if (v.disposable) {
+      html = '<span class="dfy-tag dfy-bad">throwaway</span>'
+           + '<span class="dfy-why">' + esc(String(v.confidence || 0)) + '% confident</span>';
+    } else if (v.dns === false) {
+      html = '<span class="dfy-tag dfy-nomx">no mail server</span>';
+    } else {
+      html = '<span class="dfy-tag dfy-ok">real provider</span>';
+    }
+    domains[d].forEach(function (s) { s.innerHTML = html; });
+  }
+}
+
 /* ── SHARED DEVICES ──────────────────────────────────────────────────
    Which accounts have been used from the same browser.
 
@@ -5380,7 +5469,10 @@ async function loadDeviceClusters() {
       var tags = '';
       if (m._team) tags += '<span class="dvc-tag dvc-team">team</span> ';
       if (m._paid) tags += '<span class="dvc-tag dvc-paid">paid</span> ';
-      if (m._odd)  tags += '<span class="dvc-tag dvc-odd">' + esc(m._dom) + '</span> ';
+      // Only the unrecognised ones get looked up. Asking about gmail.com for
+      // every row would be a hundred pointless requests to a free endpoint.
+      if (m._odd)  tags += '<span class="dvc-tag dvc-odd">' + esc(m._dom) + '</span> '
+                         + '<span class="dfy" data-disify="' + esc(m._dom) + '"></span> ';
       if (m.signup_status === 'rejected') tags += '<span class="dvc-tag dvc-warn">rejected</span> ';
       if (m.signup_status === 'pending')  tags += '<span class="dvc-tag dvc-warn">pending</span> ';
       if (!m.trial_started_at && !m._paid) tags += '<span class="dvc-tag dvc-mute">no trial</span> ';
@@ -5397,6 +5489,8 @@ async function loadDeviceClusters() {
 
     return '<div class="dvc' + (quiet ? ' dvc-quiet' : '') + '">' + head + rows + '</div>';
   }).join('');
+
+  annotateDisify();
 }
 
 /* ── SPONSORSHIP NOTICES ─────────────────────────────────────────────
@@ -6519,7 +6613,8 @@ async function loadApprovals() {
     return '<tr>'
       + '<td data-label="Email">' + esc(r.email) + '</td>'
       + '<td data-label="Name">' + esc(r.full_name || '-') + '</td>'
-      + '<td data-label="Domain"><code>' + esc(r.domain) + '</code> ' + shared + '</td>'
+      + '<td data-label="Domain"><code>' + esc(r.domain) + '</code> ' + shared
+        + ' <span class="dfy" data-disify="' + esc(r.domain) + '"></span></td>'
       + '<td data-label="Signed up">' + new Date(r.created_at).toLocaleDateString() + '</td>'
       + '<td data-label="Status">' + (pending
           ? '<span class="dom-tag dom-tag-new">pending</span>'
@@ -6533,6 +6628,11 @@ async function loadApprovals() {
           : '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>')
       + '</td></tr>';
   }).join('');
+
+  // Not awaited. The queue paints from our own database immediately and the
+  // third-party labels fill in behind it, so disify being slow costs a label
+  // rather than the whole table.
+  annotateDisify();
 }
 
 async function reviewSignup(id, approve, allowDomainToo) {

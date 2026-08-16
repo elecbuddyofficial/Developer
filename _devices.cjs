@@ -34,7 +34,11 @@ function ok(cond, label, detail) {
 }
 
 function extract(s, name) {
-  const at = s.search(new RegExp('function\\s+' + name + '\\s*\\('));
+  // The `async` prefix has to come along. Starting at `function` produced a
+  // body full of awaits with nothing to await in, which fails at parse rather
+  // than at the assertion, so it looked like a broken check instead of a
+  // broken extractor.
+  const at = s.search(new RegExp('(?:async\\s+)?function\\s+' + name + '\\s*\\('));
   if (at === -1) throw new Error('not found in ' + ADMIN + ': ' + name);
   let i = s.indexOf('{', at), depth = 0;
   for (let j = i; j < s.length; j++) {
@@ -130,7 +134,61 @@ const fn = extract(src, 'loadDeviceClusters');
 ok(!/\.(insert|update|upsert|delete)\(/.test(fn),
    'the panel only reads, so nothing it does can break a signup');
 
-console.log('\n' + (fails === 0
-  ? checks + ' checks, all passing.'
-  : fails + ' of ' + checks + ' checks FAILED.'));
-process.exit(fails === 0 ? 0 : 1);
+/* ── Disify: a free third party, kept where it cannot hurt ──────────── */
+console.log('\n── Disify lookups fail open ─────────────────────────────');
+
+/* The point of these is not that the lookup works. It is that nothing breaks
+   when it does not. disify.com has no SLA, and a labelling nicety must never
+   be able to make the console look broken, still less reach the signup path. */
+
+ok(/disify\.com\/api\/domain\//.test(src) && !/disify\.com\/api\/email\//.test(src),
+   'only the DOMAIN endpoint is used, so no cadet address leaves the machine');
+
+const dfy = extract(src, 'disifyDomain');
+ok(/AbortController/.test(dfy) && /setTimeout/.test(dfy),
+   'the request is bounded by a timeout rather than hanging forever');
+
+// Executed rather than pattern matched: the failure path is the whole point.
+const sandbox = vm.createContext({
+  Object, setTimeout, clearTimeout, AbortController,
+  _disifyCache: {}, calls: 0,
+});
+vm.runInContext('var _disifyCache = {}; var calls = 0;', sandbox);
+vm.runInContext(dfy, sandbox);
+
+(async () => {
+  // 1. A thrown fetch must resolve to null, never propagate.
+  sandbox.fetch = () => { sandbox.calls++; return Promise.reject(new Error('offline')); };
+  let threw = false, v1;
+  try { v1 = await sandbox.disifyDomain('luhupo.com'); } catch (e) { threw = true; }
+  ok(!threw && v1 === null, 'a failed lookup returns null instead of throwing');
+
+  // 2. And it must be remembered, or a dead endpoint is retried on every
+  //    render, turning one slow lookup into a stalled table.
+  const before = sandbox.calls;
+  await sandbox.disifyDomain('luhupo.com');
+  ok(sandbox.calls === before, 'a failure is cached, so a dead endpoint is not retried in a loop');
+
+  // 3. A non-200 is a failure too, not a body to parse.
+  sandbox.fetch = () => Promise.resolve({ ok: false, status: 500 });
+  ok(await sandbox.disifyDomain('example.invalid') === null, 'an HTTP error resolves to null');
+
+  // 4. A good answer is passed through intact.
+  sandbox.fetch = () => Promise.resolve({ ok: true, status: 200,
+    json: () => Promise.resolve({ domain: 'dnsink.com', disposable: true, confidence: 100 }) });
+  const good = await sandbox.disifyDomain('dnsink.com');
+  ok(good && good.disposable === true && good.confidence === 100, 'a real verdict is returned unchanged');
+
+  // 5. Neither renderer may block on it. Awaiting a third party before
+  //    painting is how a free endpoint becomes a blank screen.
+  for (const fname of ['loadApprovals', 'loadDeviceClusters']) {
+    const body = extract(src, fname);
+    ok(/(^|[^.\w])annotateDisify\(\)/m.test(body) && !/await\s+annotateDisify/.test(body),
+       fname + ' calls the lookup without awaiting it');
+  }
+
+  console.log('\n' + (fails === 0
+    ? checks + ' checks, all passing.'
+    : fails + ' of ' + checks + ' checks FAILED.'));
+  process.exit(fails === 0 ? 0 : 1);
+})();
