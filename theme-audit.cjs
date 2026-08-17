@@ -100,8 +100,16 @@ const isFixed = v => {
   return /^#[0-9a-f]{3,6}$/.test(t) || /^rgba?\(/.test(t) || !!NAMED[t];
 };
 
-const PAGES = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html',
-               'app/admin/finance.html'];
+/* Overridable so this file can be tested against fixtures. It has now been
+   wrong three times (style attributes only; single-attribute pairs only; and
+   blind to anything inside a media query), each time found by a person rather
+   than by anything automatic, so `_themetest.cjs` exercises it against pages
+   built to collide. Without an override that test would have to mutate a real
+   page, which is how Phase 4 of the finance page got destroyed today. */
+const PAGES = process.env.THEME_AUDIT_PAGES
+  ? process.env.THEME_AUDIT_PAGES.split(',')
+  : ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html',
+     'app/admin/finance.html'];
 const findings = [];
 
 /* Scoped palettes. #gate-overlay redefines --text, --surface and the rest
@@ -112,8 +120,92 @@ const findings = [];
 
    So: collect every selector that redefines tokens, and when scoring an
    element, merge the overrides of any ancestor that matches one. */
+/* Removes @media print blocks, and ONLY those, before anything below looks at
+   the CSS.
+
+   THIS IS NOT A WEAKENING OF THE CHECK, and the distinction matters because
+   two earlier versions of this file were weakened and let real bugs through.
+   The rule being enforced is that a fixed colour paired with a theme variable
+   breaks when the theme changes. Inside @media print there is no theme: the
+   page is going on paper, where the background is white and the ink is black
+   whatever the viewer had selected on screen. Fixed colours there are the
+   correct answer, and a token is the bug, because a dark surface prints as a
+   solid block or is dropped and takes the text with it.
+
+   Screen media queries are deliberately NOT stripped. A colour inside
+   `@media (max-width: 780px)` absolutely can collide, and those rules are
+   still analysed exactly as before.
+
+   The parser below treats rules nested in any @media as though they were
+   top-level, which is why a print rule was being scored against the screen
+   palettes at all. */
+/* Two jobs, because they are the same walk over the same at-rules:
+
+   PRINT blocks are removed entirely, for the reason above.
+
+   EVERY OTHER at-rule is FLATTENED: the `@media (max-width: 780px) {` header
+   and its matching `}` are deleted and the rules inside are left behind as
+   top-level rules.
+
+   THE BUG THIS FIXES, WHICH WAS HERE BEFORE THE PRINT WORK. Every scan below
+   matches `selector { ... }` with a selector pattern that excludes `@`. A rule
+   nested inside a media query therefore never matched cleanly, so **a fixed
+   background declared inside `@media (max-width: 780px)` was invisible to this
+   audit**. It was measured, not guessed: the identical mutation was run
+   against the version of this file before any of today's changes and it passed
+   just as happily. That is a third way this check has been half-blind, after
+   the style-attribute-only version and the single-attribute-pair version.
+
+   It matters here specifically because this app does a lot of mobile-only
+   styling, which is exactly where a hardcoded background would hide.
+
+   Flattening deliberately over-reports rather than under-reports: a rule that
+   only applies below 780px is judged as though it always applies. If that ever
+   produces a false positive, the collision it names is still real on a phone,
+   and this file's whole history says the expensive direction is the other one. */
+function stripPrintCss(css) {
+  let out = '', i = 0;
+  while (i < css.length) {
+    const at = css.indexOf('@', i);
+    if (at === -1) { out += css.slice(i); break; }
+
+    const brace = css.indexOf('{', at);
+    const semi  = css.indexOf(';', at);
+    // A statement at-rule (@import, @charset) has no block. Copy and move on.
+    if (brace === -1 || (semi !== -1 && semi < brace)) {
+      out += css.slice(i, semi === -1 ? css.length : semi + 1);
+      i = semi === -1 ? css.length : semi + 1;
+      continue;
+    }
+
+    const head = css.slice(at, brace);
+    // Only at-rules that WRAP other rules may be flattened. @font-face and
+    // @keyframes contain declarations, not rules, and unwrapping them would
+    // invent selectors that do not exist.
+    const wraps = /^@(media|supports|layer|container)\b/.test(head);
+
+    let d = 0, end = -1;
+    for (let j = brace; j < css.length; j++) {
+      if (css[j] === '{') d++;
+      else if (css[j] === '}') { d--; if (d === 0) { end = j; break; } }
+    }
+    if (end === -1) { out += css.slice(i); break; }
+
+    out += css.slice(i, at);
+    if (wraps && !/\bprint\b/.test(head)) {
+      // Recurse: media queries can nest, and so can @supports inside @media.
+      out += '\n' + stripPrintCss(css.slice(brace + 1, end)) + '\n';
+    } else if (!wraps) {
+      out += css.slice(at, end + 1);          // @font-face and friends, intact
+    }
+    // print blocks: contribute nothing
+    i = end + 1;
+  }
+  return out;
+}
+
 function collectScopes(src) {
-  const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+  const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
             + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
   const scopes = [];
   for (const m of css.matchAll(/([^{}@\n]+)\{([^}]*--[\w-]+\s*:[^}]*)\}/g)) {
@@ -150,7 +242,7 @@ function elementsWithFixedBackground(doc, src) {
     if (isFixed(bg)) out.push([el, bg]);
   }
   // Rules in <style> blocks: take the selector, find what it matches.
-  const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n');
+  const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'));
   for (const m of css.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*(#[0-9a-fA-F]{3,6}|rgba?\([^)]*\))[^}]*)\}/g)) {
     const selector = m[1].trim().split('\n').pop().trim();
     if (!selector || /[%]/.test(selector)) continue;   // skip keyframes
@@ -180,7 +272,7 @@ function elementsWithFixedBackground(doc, src) {
    looking for pairs, not computing exact specificity. */
 function ruleTextColours(doc, src) {
   const map = new Map();
-  const css = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+  const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
             + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
   for (const m of css.matchAll(/([^{}@]+)\{([^}]*)\}/g)) {
     // (?:^|;) so background-color and border-color are not read as color.
@@ -208,7 +300,7 @@ for (const page of PAGES) {
     if (/background(?:-color)?\s*:\s*(?!none|transparent)/.test(st)) painters.add(el);
   }
   {
-    const allCss = (src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n')
+    const allCss = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
       + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
     for (const m of allCss.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*([^;}]+))/g)) {
       if (/none|transparent|inherit/.test(m[3])) continue;

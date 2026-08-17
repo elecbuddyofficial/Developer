@@ -614,7 +614,27 @@ if (!fs.existsSync(PAGE)) {
   // A hardcoded colour beside a themed one is the bug that has shipped four
   // times here. Comments are stripped first, because the note explaining the
   // rule contains the very literal the scan looks for.
-  const hexes = (stripPageComments(page).match(/#[0-9a-fA-F]{3,8}\b/g) || []);
+  //
+  // @media print is the one legitimate exception and is cut out before the
+  // scan. Paper is white and ink is black; there is no theme to respond to,
+  // and a token would print a dark surface as a solid block or drop it
+  // entirely, taking the text with it. The exception is narrow on purpose:
+  // only inside the print block, which is verified to exist so this cannot
+  // silently become a hole.
+  const printAt = page.indexOf('@media print');
+  ok(printAt !== -1, 'a print stylesheet exists for the P&L');
+  let printBlock = '';
+  if (printAt !== -1) {
+    let d = 0;
+    for (let j = page.indexOf('{', printAt); j < page.length; j++) {
+      if (page[j] === '{') d++;
+      else if (page[j] === '}') { d--; if (d === 0) { printBlock = page.slice(printAt, j + 1); break; } }
+    }
+  }
+  ok(printBlock.length > 200, 'located the print block to exempt (' + printBlock.length + ' chars)',
+     'if this is empty the exemption below removes nothing and the scan stays honest');
+  const scanned = stripPageComments(page).replace(printBlock, '');
+  const hexes = (scanned.match(/#[0-9a-fA-F]{3,8}\b/g) || []);
   ok(hexes.length === 0, 'no hardcoded hex colours anywhere on the page',
      'found ' + hexes.join(', ') + '; use theme tokens, and --on-accent for text on a filled accent');
   ok(/var\(--on-accent\)/.test(page),
