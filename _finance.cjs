@@ -185,9 +185,27 @@ OWNED.forEach(function (t) {
                 '\\s+FOR INSERT WITH CHECK \\(partner_id = public\\.current_partner_id\\(\\)\\)', 'i').test(sql),
      t + ' INSERT policy pins partner_id to the caller',
      'Without this the DEFAULT is decoration and a direct POST can name anyone.');
+  // Checked on EVERY owned table, not just expenses.
+  //
+  // This is the check that was missing, and it cost a live bug:
+  // recurring_expenses shipped without the DEFAULT, so the column arrived NULL
+  // (the page never sends it, by design), the policy compared NULL and refused
+  // every insert. The table was unusable and the error message blamed the
+  // user. The policy check above passed the whole time, because the policy was
+  // fine; it was the other half of the pair that was missing.
+  //
+  // The lesson generalises: the DEFAULT and the policy are a PAIR, and
+  // verifying one of them on one table is not verifying the mechanism.
+  ok(/DEFAULT public\.current_partner_id\(\)/.test(b),
+     t + '.partner_id defaults from the session',
+     'without it the column arrives NULL and the INSERT policy refuses every row');
 });
-ok(/DEFAULT public\.current_partner_id\(\)/.test(tableBody(sql, 'expenses') || ''),
-   'expenses.partner_id defaults from the session');
+// CREATE TABLE IF NOT EXISTS is a no-op on an existing table, so a DEFAULT
+// added later never reaches a database that already has the table. The repair
+// has to be an explicit ALTER or the file only fixes fresh installs.
+ok(/ALTER TABLE public\.recurring_expenses\s*\n?\s*ALTER COLUMN partner_id SET DEFAULT public\.current_partner_id\(\)/.test(sql),
+   'an ALTER repairs databases created before the DEFAULT existed',
+   'IF NOT EXISTS would silently skip the fix on the one database that needs it');
 
 console.log('\nVIEWS CANNOT BYPASS RLS');
 VIEWS.forEach(function (v) {

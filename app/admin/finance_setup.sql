@@ -221,7 +221,14 @@ ON CONFLICT (name) DO NOTHING;
 -- re-typing them monthly is exactly the manual work this system removes.
 CREATE TABLE IF NOT EXISTS public.recurring_expenses (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  partner_id   UUID NOT NULL REFERENCES public.partners(id) ON DELETE RESTRICT,
+  -- Same auto-assignment as expenses and partner_transactions. This DEFAULT
+  -- was missing on the first apply and the table was unusable: the page
+  -- deliberately does not send partner_id, so it arrived NULL, and the INSERT
+  -- policy's `partner_id = current_partner_id()` evaluated to NULL rather than
+  -- true. Every attempt was refused with "you can only add this against
+  -- yourself", which was exactly wrong: the caller WAS themselves.
+  partner_id   UUID NOT NULL REFERENCES public.partners(id) ON DELETE RESTRICT
+                 DEFAULT public.current_partner_id(),
   category_id  UUID REFERENCES public.expense_categories(id) ON DELETE SET NULL,
   vendor       TEXT,
   description  TEXT NOT NULL,
@@ -238,6 +245,14 @@ CREATE TABLE IF NOT EXISTS public.recurring_expenses (
   created_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   created_by   UUID REFERENCES auth.users(id) ON DELETE SET NULL
 );
+
+
+-- CREATE TABLE IF NOT EXISTS does nothing to a table that already exists, so
+-- the DEFAULT above never reaches a database created before it was added.
+-- This ALTER is what repairs one. Harmless on a fresh install: it sets the
+-- default the CREATE just set.
+ALTER TABLE public.recurring_expenses
+  ALTER COLUMN partner_id SET DEFAULT public.current_partner_id();
 
 
 -- ── The core table ─────────────────────────────────────────────────────────
