@@ -159,6 +159,15 @@
     }
     /* Figures line up only if the digits are the same width. */
     .fn-num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    /* A header must sit over its own column.
+       `.fn-table th` is (0,1,1) and `.fn-num` is only (0,1,0), so the header's
+       text-align:left quietly won and every money column had its label pinned
+       left while the figures ran right. It reads as the numbers drifting out
+       from under their heading. Same collision on tfoot, which carries no
+       text-align today but would inherit the same trap the moment one is
+       added, so both are pinned here rather than left to specificity luck. */
+    .fn-table th.fn-num,
+    .fn-table tfoot td.fn-num { text-align:right; }
     /* nowrap, not break-all. In a narrow column break-all shreds an address
        into "bless on@e lec-b uddy. com", four lines of nonsense that cannot be
        read or compared. The table already scrolls inside .fn-table-wrap, so

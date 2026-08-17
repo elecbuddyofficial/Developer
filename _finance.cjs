@@ -724,6 +724,23 @@ if (!fs.existsSync(PAGE)) {
   ok(/var\(--on-accent\)/.test(page),
      'text on a filled accent uses --on-accent rather than white');
 
+  // A specificity collision, not a missing class. `.fn-table th` is (0,1,1)
+  // and `.fn-num` is (0,1,0), so the header's text-align:left silently won and
+  // every money column had its label pinned left while the figures ran right.
+  // It shipped looking like the numbers had drifted out from under their
+  // heading, and was spotted on screen rather than by anything here.
+  ok(/\.fn-table th\.fn-num/.test(page),
+     'numeric headers are pinned right against .fn-table th',
+     'without this the label sits left of its own column');
+  const nonNumHeaders = (page.match(/<th>([^<]*)<\/th>/g) || [])
+    .map(function (h) { return h.replace(/<[^>]*>/g, '').trim(); });
+  const looksNumeric = nonNumHeaders.filter(function (h) {
+    return /^(amount|gross|refund|fee|fees|costs|profit|capital|share|owed|total|usual|revenue|drawings|repaid)$/i.test(h);
+  });
+  ok(looksNumeric.length === 0,
+     'no money or percentage header is missing class="fn-num"',
+     'found ' + looksNumeric.join(', '));
+
   console.log('\nCONSOLE WIRING');
   const admin = fs.readFileSync('app/admin/index.html', 'utf8');
   ok(/onclick="window\.location\.href='finance\.html'"/.test(admin),
