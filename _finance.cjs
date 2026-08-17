@@ -605,6 +605,90 @@ if (!fs.existsSync(PAGE)) {
        'the file records that it must be deployed with --no-verify-jwt');
   }
 
+  console.log('\nRECURRING COSTS');
+  {
+    const ctx4 = {};
+    vm.createContext(ctx4);
+    vm.runInContext(pull(page, 'advanceRecurring'), ctx4);
+    const adv = function (d, p) { return ctx4.advanceRecurring({ next_due_on: d, period: p }); };
+
+    const CASES = [
+      ['2026-01-15', 'monthly',   '2026-02-15'],
+      ['2026-08-31', 'monthly',   '2026-10-01'],  // see the note below
+      ['2026-01-31', 'quarterly', '2026-05-01'],
+      ['2026-02-15', 'yearly',    '2027-02-15'],
+      ['2026-12-15', 'monthly',   '2027-01-15'],  // year rollover
+    ];
+    let bad = [];
+    CASES.forEach(function (c) {
+      const got = adv(c[0], c[1]);
+      if (got !== c[2]) bad.push(c[0] + ' +' + c[1] + ' -> ' + got + ', want ' + c[2]);
+    });
+    ok(bad.length === 0, 'the next due date advances correctly, year rollover included',
+       bad.join('; '));
+    // 31 Aug + 1 month has no answer everyone agrees on. JavaScript rolls into
+    // the next month, so it lands on 1 Oct rather than 30 Sep. Asserted so the
+    // behaviour is known and deliberate rather than discovered later on a
+    // bill that seemed to skip a month. It only ever moves the reminder, and
+    // the amount is confirmed by a human before anything is recorded.
+    ok(adv('2026-08-31', 'monthly') === '2026-10-01',
+       'a 31st rolls forward rather than clamping, and this is known');
+
+    const recSrc = stripPageComments(pull(page, 'recordRecurring') || '');
+    ok(recSrc.length > 100, 'found recordRecurring to inspect');
+    // The whole point of auto_post defaulting false: this must PREFILL, never
+    // write. An amount posted without being read is an invented number.
+    ok(!/\.insert\(|\.update\(|\.upsert\(/.test(recSrc),
+       'Record on a recurring cost writes nothing, it only fills the form',
+       'these amounts move; posting last month\'s figure unread would invent a number');
+    const saveSrc2 = stripPageComments(pull(page, 'saveExpense') || '');
+    ok(/_pendingRecurringId/.test(saveSrc2) && saveSrc2.indexOf('_pendingRecurringId')
+         > saveSrc2.indexOf('if (error)'),
+       'the schedule advances only after the expense actually saved',
+       'advancing on a failed save would hide the next bill');
+  }
+
+  console.log('\nRECEIPTS');
+  {
+    const up = stripPageComments(pull(page, 'uploadReceipt') || '');
+    ok(up.length > 100, 'found uploadReceipt to inspect');
+    // The first path segment IS the permission: the storage policy requires it
+    // to equal the uploader's own partner id.
+    ok(/_me\.id \+ '\/'/.test(up),
+       'the object path starts with the uploader\'s own partner id');
+    ok(/randomUUID|Math\.random/.test(up) && !/file\.name\s*\)/.test(up.replace(/split/g, '')),
+       'the stored name is a uuid, not the original filename',
+       'filenames carry personal information and the path is visible to every partner');
+    ok(/5 \* 1024 \* 1024/.test(up), 'the size limit is checked client side too, so the message names it');
+
+    const sv = stripPageComments(pull(page, 'saveExpense') || '');
+    ok(sv.indexOf('uploadReceipt') !== -1
+       && sv.indexOf('uploadReceipt') < sv.indexOf(".from('expenses')"),
+       'the receipt uploads BEFORE the expense row is written',
+       'the other order can leave an expense pointing at a file that does not exist');
+
+    const op = stripPageComments(pull(page, 'openReceipt') || '');
+    ok(/createSignedUrl/.test(op), 'receipts are opened through a signed URL, not a public one');
+    ok(/no longer stored/.test(pull(page, 'openReceipt') || ''),
+       'a deleted receipt reports itself instead of failing silently');
+  }
+
+  console.log('\nMANUAL INCOME');
+  {
+    const mi = stripPageComments(pull(page, 'renderManualIncome') || '');
+    ok(mi.length > 100, 'found renderManualIncome to inspect');
+    ok(/Nothing recorded/.test(pull(page, 'renderManualIncome') || ''),
+       'an empty state says so rather than showing an always-empty table');
+    const del = stripPageComments(pull(page, 'deleteManualIncome') || '');
+    ok(/deleted_at/.test(del) && !/\.delete\(/.test(del),
+       'removing manual income is a soft delete');
+    ok(/delete_reason/.test(del), 'a removal records why');
+    // The P&L counts manual income, so a change to it invalidates the numbers
+    // on the dashboard.
+    ok(/loadDashboard/.test(stripPageComments(pull(page, 'saveManualIncome') || '')),
+       'recording income refreshes the P&L that counts it');
+  }
+
   console.log('\nPAGE HYGIENE');
   const scriptBody = page.slice(page.indexOf('var SB_URL'));
   ok(!/from\(['"]payments['"]\)/.test(page),

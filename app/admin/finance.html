@@ -470,10 +470,59 @@
           <div class="hint">This is what makes the partner statement work. Money
             you fronted comes back to you; company money does not.</div>
         </div>
+        <div class="fn-field">
+          <label for="fn-exp-receipt">Receipt</label>
+          <input type="file" id="fn-exp-receipt" accept="image/jpeg,image/png,image/webp,image/heic,application/pdf">
+          <div class="hint" id="fn-exp-receipt-hint">Optional. Photo or PDF, up
+            to 5MB. Stored privately and opened through a link that expires.</div>
+        </div>
       </div>
       <div class="fn-actions" style="margin-top:14px">
         <button class="fn-btn" id="fn-exp-btn" onclick="saveExpense()">Record expense</button>
         <button class="fn-btn ghost" id="fn-exp-cancel" onclick="cancelExpenseEdit()" style="display:none">Cancel</button>
+      </div>
+    </div>
+
+    <div class="fn-card" id="fn-rec-card">
+      <div class="fn-card-head">Recurring costs</div>
+      <div class="fn-card-sub">Supabase, Resend, the domain, the Anthropic
+        credit. Nothing here posts itself: these amounts move, and writing last
+        month's figure into the books unread would be inventing a number.
+        <strong>Record</strong> fills in the form above with the date and the
+        last known amount, for you to correct before saving.</div>
+      <div id="fn-rec-list"></div>
+      <div class="fn-form" style="margin-top:14px">
+        <div class="fn-field">
+          <label for="fn-rec-desc">What it is</label>
+          <input type="text" id="fn-rec-desc" placeholder="Supabase Pro" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-rec-vendor">Vendor</label>
+          <input type="text" id="fn-rec-vendor" placeholder="Supabase" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-rec-amount">Usual amount (₹)</label>
+          <input type="text" id="fn-rec-amount" placeholder="2075.00" inputmode="decimal" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-rec-cat">Category</label>
+          <select id="fn-rec-cat"></select>
+        </div>
+        <div class="fn-field">
+          <label for="fn-rec-period">How often</label>
+          <select id="fn-rec-period">
+            <option value="monthly">Monthly</option>
+            <option value="quarterly">Quarterly</option>
+            <option value="yearly">Yearly</option>
+          </select>
+        </div>
+        <div class="fn-field">
+          <label for="fn-rec-due">Next due</label>
+          <input type="date" id="fn-rec-due">
+        </div>
+      </div>
+      <div class="fn-actions" style="margin-top:12px">
+        <button class="fn-btn ghost" id="fn-rec-btn" onclick="saveRecurring()">Add recurring cost</button>
       </div>
     </div>
 
@@ -539,6 +588,52 @@
       <div class="fn-actions">
         <button class="fn-btn ghost sm" onclick="syncFees()" id="fn-sync-btn">Sync Razorpay fees</button>
         <button class="fn-btn ghost sm" onclick="exportRevenueCsv()">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="fn-card" id="fn-mi-card">
+      <div class="fn-card-head">Income that did not come through Razorpay</div>
+      <div class="fn-card-sub">Cash, a direct transfer, an invoice paid by a
+        college. It counts in the profit and loss above, but it is kept apart
+        from the table below, because that one is the Razorpay record and
+        mixing hand-entered rows into it would make neither trustworthy.</div>
+      <div id="fn-mi-list"></div>
+      <div class="fn-form" style="margin-top:14px">
+        <div class="fn-field">
+          <label for="fn-mi-date">Received on</label>
+          <input type="date" id="fn-mi-date">
+        </div>
+        <div class="fn-field">
+          <label for="fn-mi-amount">Amount (₹)</label>
+          <input type="text" id="fn-mi-amount" placeholder="5000.00" inputmode="decimal" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-mi-source">What it was for</label>
+          <input type="text" id="fn-mi-source" placeholder="Required" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-mi-payer">Who paid</label>
+          <input type="text" id="fn-mi-payer" placeholder="Optional" autocomplete="off">
+        </div>
+        <div class="fn-field">
+          <label for="fn-mi-method">How</label>
+          <select id="fn-mi-method">
+            <option value="">Not recorded</option>
+            <option value="upi">UPI</option>
+            <option value="bank_transfer">Bank transfer</option>
+            <option value="cash">Cash</option>
+            <option value="cheque">Cheque</option>
+            <option value="card">Card</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="fn-field">
+          <label for="fn-mi-ref">Reference</label>
+          <input type="text" id="fn-mi-ref" placeholder="Optional" autocomplete="off">
+        </div>
+      </div>
+      <div class="fn-actions" style="margin-top:12px">
+        <button class="fn-btn ghost" id="fn-mi-btn" onclick="saveManualIncome()">Record income</button>
       </div>
     </div>
 
@@ -685,6 +780,7 @@ var _editingShareId = null;
 var _categories = [], _expenses = [], _editingExpenseId = null;
 var _revenue = [];
 var _config = null, _pnl = [], _totals = null, _stmt = [];
+var _recurring = [], _manual = [], _pendingRecurringId = null;
 
 /* ══ MONEY AND PERCENTAGE ═══════════════════════════════════════════════
    Defined once and used everywhere. Every money value in this system is an
@@ -1182,6 +1278,11 @@ function fillCategorySelects() {
   sel.innerHTML = '<option value="">Uncategorised</option>' + opts;
   if (keep) sel.value = keep;
 
+  var rec = document.getElementById('fn-rec-cat');
+  var keepR = rec.value;
+  rec.innerHTML = '<option value="">Uncategorised</option>' + opts;
+  if (keepR) rec.value = keepR;
+
   var f = document.getElementById('fn-f-cat');
   var keepF = f.value;
   f.innerHTML = '<option value="">All</option>' + opts;
@@ -1251,9 +1352,13 @@ function renderExpenses() {
       + '<td>' + esc(e.partner_name) + (mine ? ' <span class="fn-chip blue">you</span>' : '') + '</td>'
       + '<td>' + (e.is_reimbursable
           ? '<span class="fn-chip amber">own money</span>'
-          : '<span class="fn-chip">company</span>') + '</td>'
+          : '<span class="fn-chip">company</span>')
+        + (e.payment_method ? '<div class="fn-dim">' + esc(methodLabel(e.payment_method)) + '</div>' : '') + '</td>'
       + '<td class="fn-num">' + rupees(e.total_paise)
-        + (e.tax_paise ? '<div class="fn-dim">incl ' + rupees(e.tax_paise) + ' tax</div>' : '') + '</td>'
+        + (e.tax_paise ? '<div class="fn-dim">incl ' + rupees(e.tax_paise) + ' tax</div>' : '')
+        + (e.receipt_path
+            ? '<div><button class="fn-btn ghost sm" onclick="openReceipt(\''
+              + esc(e.receipt_path) + '\')">Receipt</button></div>' : '') + '</td>'
       + '<td><div class="fn-actions">' + (canEdit
           ? '<button class="fn-btn ghost sm" onclick="editExpense(\'' + e.id + '\')">Edit</button>'
             + '<button class="fn-btn danger sm" onclick="deleteExpense(\'' + e.id + '\')">Delete</button>'
@@ -1320,6 +1425,20 @@ async function saveExpense() {
 
   btn.disabled = true;
   try {
+    // Uploaded BEFORE the row is written. If storage refuses the file, nothing
+    // has been recorded yet and the user can fix it and press save again. The
+    // other order leaves an expense claiming a receipt that does not exist.
+    var fileEl = document.getElementById('fn-exp-receipt');
+    var file = fileEl && fileEl.files && fileEl.files[0];
+    if (file) {
+      try {
+        v.receipt_path = await uploadReceipt(file);
+      } catch (ue) {
+        toast('The receipt did not upload, so nothing was saved: ' + (ue.message || ue), 'err');
+        return;
+      }
+    }
+
     var error;
     if (_editingExpenseId) {
       var upd = await _sb.from('expenses').update(v).eq('id', _editingExpenseId);
@@ -1339,6 +1458,19 @@ async function saveExpense() {
         : 'Could not save: ' + error.message, 'err');
       return;
     }
+    // Only now that the expense is definitely saved. Advancing the schedule on
+    // a failed save would hide the next bill.
+    if (_pendingRecurringId) {
+      var rec = _recurring.filter(function (x) { return x.id === _pendingRecurringId; })[0];
+      if (rec) {
+        await _sb.from('recurring_expenses')
+          .update({ next_due_on: advanceRecurring(rec), amount_paise: v.amount_paise })
+          .eq('id', rec.id);
+      }
+      _pendingRecurringId = null;
+      await loadRecurring();
+    }
+
     var wasEditing = !!_editingExpenseId;
     _editingExpenseId = null;
     resetExpenseForm();
@@ -1374,9 +1506,10 @@ function cancelExpenseEdit() {
 }
 
 function resetExpenseForm() {
-  ['fn-exp-amount','fn-exp-tax','fn-exp-vendor','fn-exp-desc','fn-exp-invoice']
+  ['fn-exp-amount','fn-exp-tax','fn-exp-vendor','fn-exp-desc','fn-exp-invoice','fn-exp-receipt']
     .forEach(function (id) { document.getElementById(id).value = ''; });
   document.getElementById('fn-exp-date').value = today();
+  _pendingRecurringId = null;
   applyExpenseMode();
 }
 
@@ -1543,6 +1676,18 @@ function renderPnl() {
     + '<td class="fn-num">' + rupees(col('operating_paise') + col('tax_expense_paise')) + '</td>'
     + '<td class="fn-num ' + (tProfit < 0 ? 'fn-loss' : 'fn-gain') + '">' + rupees(tProfit) + '</td>'
     + '<td class="fn-num fn-dim">' + rupees(col('capital_paise')) + '</td></tr>';
+}
+
+/* Database enum values are for the database. Showing "bank_transfer" on screen
+   reads as something half-built leaking through. */
+var METHOD_LABELS = {
+  upi:'UPI', card:'Card', netbanking:'Net banking', auto_debit:'Auto debit',
+  wallet:'Wallet', cash:'Cash', cheque:'Cheque', bank_transfer:'Bank transfer',
+  other:'Other',
+};
+function methodLabel(m) {
+  if (!m) return '-';
+  return METHOD_LABELS[m] || String(m).replace(/_/g, ' ');
 }
 
 function monthLabel(m) {
@@ -1810,6 +1955,253 @@ function exportRevenueCsv() {
   downloadCsv('revenue', lines);
 }
 
+/* ══ RECEIPTS ══════════════════════════════════════════════════════════
+   Objects live at <partner_id>/<uuid>.<ext> in a PRIVATE bucket. The first
+   path segment is the permission: the storage policy requires it to equal the
+   uploader's own partner id, so the same rule that governs an expense row
+   governs its attachment, and it holds against a direct call to the Storage
+   API rather than only against this form.
+
+   Reading is done through a signed URL with a short life. The bucket is
+   private precisely so a receipt is never sitting on a guessable public URL,
+   and an invoice can carry a name, an address and an amount. */
+
+var RECEIPT_BUCKET = 'receipts';
+
+async function uploadReceipt(file) {
+  if (!file) return null;
+  if (!_me) throw new Error('not a partner');
+  // Checked here as well as by the bucket, so the message names the limit
+  // instead of surfacing a raw 413 from storage.
+  if (file.size > 5 * 1024 * 1024) throw new Error('That file is over 5MB.');
+
+  var ext = (file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g, '');
+  // The stored name is a uuid, not the original filename. Filenames carry
+  // personal information surprisingly often, and the path is visible to every
+  // partner.
+  var key = _me.id + '/' + (crypto.randomUUID ? crypto.randomUUID()
+            : String(Date.now()) + Math.random().toString(36).slice(2)) + '.' + ext;
+
+  var { error } = await _sb.storage.from(RECEIPT_BUCKET)
+    .upload(key, file, { contentType: file.type || undefined, upsert: false });
+  if (error) throw new Error(error.message);
+  return key;
+}
+
+async function openReceipt(path) {
+  var { data, error } = await _sb.storage.from(RECEIPT_BUCKET).createSignedUrl(path, 120);
+  if (error || !data) {
+    // A deleted file is a normal state: a receipt can be removed while the
+    // expense stays. Say so rather than failing silently.
+    toast(/not found|does not exist/i.test(error && error.message || '')
+      ? 'That receipt is no longer stored. The expense itself is unchanged.'
+      : 'Could not open the receipt: ' + ((error && error.message) || 'unknown'), 'err');
+    return;
+  }
+  window.open(data.signedUrl, '_blank', 'noopener');
+}
+
+/* ══ RECURRING COSTS ═══════════════════════════════════════════════════ */
+
+async function loadRecurring() {
+  var { data, error } = await _sb.from('recurring_expenses')
+    .select('*').eq('is_active', true).order('next_due_on');
+  if (error) { toast('Could not load recurring costs: ' + error.message, 'err'); return; }
+  _recurring = data || [];
+  renderRecurring();
+}
+
+function renderRecurring() {
+  var host = document.getElementById('fn-rec-list');
+  if (!_recurring.length) {
+    host.innerHTML = '<div class="fn-dim">Nothing set up yet.</div>';
+    return;
+  }
+  var t = today();
+  host.innerHTML = '<div class="fn-table-wrap"><table class="fn-table"><thead><tr>'
+    + '<th>What</th><th>Vendor</th><th class="fn-num">Usual</th><th>Every</th>'
+    + '<th>Next due</th><th></th></tr></thead><tbody>'
+    + _recurring.map(function (r) {
+        var due = String(r.next_due_on) <= t;
+        return '<tr>'
+          + '<td>' + esc(r.description) + '</td>'
+          + '<td class="fn-dim">' + esc(r.vendor || '-') + '</td>'
+          + '<td class="fn-num">' + rupees(r.amount_paise) + '</td>'
+          + '<td class="fn-dim">' + esc(r.period) + '</td>'
+          + '<td class="fn-dim">' + fmtDate(r.next_due_on)
+            + (due ? ' <span class="fn-chip amber">due</span>' : '') + '</td>'
+          + '<td><div class="fn-actions">'
+          + '<button class="fn-btn ' + (due ? '' : 'ghost') + ' sm" onclick="recordRecurring(\'' + r.id + '\')">Record</button>'
+          + '<button class="fn-btn ghost sm" onclick="stopRecurring(\'' + r.id + '\')">Stop</button>'
+          + '</div></td></tr>';
+      }).join('')
+    + '</tbody></table></div>';
+}
+
+/* Fills the expense form and stops. It does NOT write anything.
+
+   auto_post exists on the table and stays false for a reason: Supabase
+   overage, an Anthropic top-up and a price rise all change the figure, and
+   posting last month's amount unread would put a number in the books that
+   nobody has read. So this prefills, and a human confirms. */
+function recordRecurring(id) {
+  var r = _recurring.filter(function (x) { return x.id === id; })[0];
+  if (!r) return;
+  _editingExpenseId = null;
+  _pendingRecurringId = id;
+  document.getElementById('fn-exp-date').value    = today();
+  document.getElementById('fn-exp-amount').value  = (Number(r.amount_paise) / 100).toFixed(2);
+  document.getElementById('fn-exp-tax').value     = '';
+  document.getElementById('fn-exp-cat').value     = r.category_id || '';
+  document.getElementById('fn-exp-vendor').value  = r.vendor || '';
+  document.getElementById('fn-exp-desc').value    = r.description || '';
+  document.getElementById('fn-exp-invoice').value = '';
+  applyExpenseMode();
+  document.getElementById('fn-exp-card').scrollIntoView({ behavior:'smooth', block:'start' });
+  document.getElementById('fn-exp-amount').focus();
+  document.getElementById('fn-exp-amount').select();
+  toast('Check the amount before saving. It may have changed.');
+}
+
+// Advances next_due_on by one period. Called only after the expense actually
+// saved, so a failed save never moves the schedule on and hides the bill.
+function advanceRecurring(r) {
+  var p = String(r.next_due_on).split('-');
+  var d = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+  if (r.period === 'monthly') d.setMonth(d.getMonth() + 1);
+  else if (r.period === 'quarterly') d.setMonth(d.getMonth() + 3);
+  else d.setFullYear(d.getFullYear() + 1);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
+       + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+async function saveRecurring() {
+  var btn = document.getElementById('fn-rec-btn');
+  var desc = document.getElementById('fn-rec-desc').value.trim();
+  var amount = paise(document.getElementById('fn-rec-amount').value);
+  var due = document.getElementById('fn-rec-due').value || today();
+  if (!desc) { toast('Say what the cost is.', 'err'); return; }
+  if (amount === null || amount <= 0) { toast('Amount must be a positive number of rupees.', 'err'); return; }
+
+  btn.disabled = true;
+  try {
+    var { error } = await _sb.from('recurring_expenses').insert({
+      description: desc,
+      vendor: document.getElementById('fn-rec-vendor').value.trim() || null,
+      amount_paise: amount,
+      category_id: document.getElementById('fn-rec-cat').value || null,
+      period: document.getElementById('fn-rec-period').value,
+      next_due_on: due,
+    });
+    if (error) {
+      toast(/violates row-level|permission/i.test(error.message)
+        ? 'You can only add this against yourself.' : 'Could not save: ' + error.message, 'err');
+      return;
+    }
+    logAction('finance.recurring.create', { description: desc, amount_paise: amount });
+    ['fn-rec-desc','fn-rec-vendor','fn-rec-amount'].forEach(function (id) {
+      document.getElementById(id).value = '';
+    });
+    toast('Added.');
+    await loadRecurring();
+  } finally { btn.disabled = false; }
+}
+
+async function stopRecurring(id) {
+  var r = _recurring.filter(function (x) { return x.id === id; })[0];
+  if (!r || !confirm('Stop tracking "' + r.description + '"?\n\nExpenses already recorded from it are untouched.')) return;
+  var { error } = await _sb.from('recurring_expenses').update({ is_active: false }).eq('id', id);
+  if (error) { toast('Could not stop it: ' + error.message, 'err'); return; }
+  logAction('finance.recurring.stop', { id: id, description: r.description });
+  toast('Stopped.');
+  await loadRecurring();
+}
+
+/* ══ MANUAL INCOME ═════════════════════════════════════════════════════ */
+
+async function loadManualIncome() {
+  var { data, error } = await _sb.from('manual_income')
+    .select('*').is('deleted_at', null).order('received_on', { ascending: false });
+  if (error) { toast('Could not load manual income: ' + error.message, 'err'); return; }
+  _manual = data || [];
+  renderManualIncome();
+}
+
+function renderManualIncome() {
+  var host = document.getElementById('fn-mi-list');
+  if (!_manual.length) {
+    // Kept quiet rather than showing an always-empty table. Revenue is
+    // Razorpay-only today, so an empty panel here would be permanent noise.
+    host.innerHTML = '<div class="fn-dim">Nothing recorded. Everything so far came through Razorpay.</div>';
+    return;
+  }
+  var total = _manual.reduce(function (a, m) { return a + Number(m.amount_paise); }, 0);
+  host.innerHTML = '<div class="fn-table-wrap"><table class="fn-table"><thead><tr>'
+    + '<th>Received</th><th>What for</th><th>From</th><th>How</th>'
+    + '<th class="fn-num">Amount</th><th></th></tr></thead><tbody>'
+    + _manual.map(function (m) {
+        return '<tr>'
+          + '<td class="fn-dim">' + fmtDate(m.received_on) + '</td>'
+          + '<td>' + esc(m.source) + '</td>'
+          + '<td class="fn-dim">' + esc(m.payer || '-') + '</td>'
+          + '<td class="fn-dim">' + esc(methodLabel(m.method)) + '</td>'
+          + '<td class="fn-num">' + rupees(m.amount_paise) + '</td>'
+          + '<td><div class="fn-actions"><button class="fn-btn danger sm" onclick="deleteManualIncome(\'' + m.id + '\')">Remove</button></div></td>'
+          + '</tr>';
+      }).join('')
+    + '</tbody><tfoot><tr><td colspan="4">' + _manual.length + ' entries</td>'
+    + '<td class="fn-num">' + rupees(total) + '</td><td></td></tr></tfoot></table></div>';
+}
+
+async function saveManualIncome() {
+  var btn = document.getElementById('fn-mi-btn');
+  var amount = paise(document.getElementById('fn-mi-amount').value);
+  var source = document.getElementById('fn-mi-source').value.trim();
+  if (amount === null || amount <= 0) { toast('Amount must be a positive number of rupees.', 'err'); return; }
+  if (!source) { toast('Say what the money was for.', 'err'); return; }
+
+  btn.disabled = true;
+  try {
+    var { error } = await _sb.from('manual_income').insert({
+      received_on: document.getElementById('fn-mi-date').value || today(),
+      amount_paise: amount,
+      source: source,
+      payer: document.getElementById('fn-mi-payer').value.trim() || null,
+      method: document.getElementById('fn-mi-method').value || null,
+      reference_no: document.getElementById('fn-mi-ref').value.trim() || null,
+    });
+    if (error) { toast('Could not save: ' + error.message, 'err'); return; }
+    logAction('finance.manual_income.create', { amount_paise: amount, source: source });
+    ['fn-mi-amount','fn-mi-source','fn-mi-payer','fn-mi-ref'].forEach(function (id) {
+      document.getElementById(id).value = '';
+    });
+    toast('Recorded.');
+    await loadManualIncome();
+    // The P&L counts manual income, so it is now out of date.
+    await loadDashboard();
+  } finally { btn.disabled = false; }
+}
+
+async function deleteManualIncome(id) {
+  var m = _manual.filter(function (x) { return x.id === id; })[0];
+  if (!m) return;
+  var reason = prompt('Remove "' + m.source + '" (' + rupees(m.amount_paise) + ')?\n\n'
+    + 'The row is kept and marked as removed, so the audit trail stays intact.\n'
+    + 'Why is it being removed?');
+  if (reason === null) return;
+  reason = reason.trim();
+  if (!reason) { toast('A reason is required.', 'err'); return; }
+
+  var { error } = await _sb.from('manual_income')
+    .update({ deleted_at: new Date().toISOString(), deleted_by: _myId, delete_reason: reason })
+    .eq('id', id);
+  if (error) { toast('Could not remove: ' + error.message, 'err'); return; }
+  logAction('finance.manual_income.delete', { id: id, reason: reason });
+  toast('Removed.');
+  await loadManualIncome();
+  await loadDashboard();
+}
+
 /* ══ CSV ═══════════════════════════════════════════════════════════════ */
 function csvCell(v) {
   if (v === null || v === undefined) return '';
@@ -1980,6 +2372,10 @@ async function bootstrapSelf() {
     // thing on this page a partner needs to see without going looking for it,
     // because it is the reason a profit figure elsewhere is wrong.
     await loadRevenue();
+    await loadRecurring();
+    await loadManualIncome();
+    document.getElementById('fn-rec-due').value = today();
+    document.getElementById('fn-mi-date').value = today();
     // Last, because the statement needs _me and the partner list to exist.
     await loadDashboard();
   } catch (e) {
