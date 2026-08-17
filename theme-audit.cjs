@@ -100,7 +100,8 @@ const isFixed = v => {
   return /^#[0-9a-f]{3,6}$/.test(t) || /^rgba?\(/.test(t) || !!NAMED[t];
 };
 
-const PAGES = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html'];
+const PAGES = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html',
+               'app/admin/finance.html'];
 const findings = [];
 
 /* Scoped palettes. #gate-overlay redefines --text, --surface and the rest

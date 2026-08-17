@@ -154,6 +154,43 @@ serve(async (req) => {
         return finish({ unknown_order: orderId });
       }
 
+      // ── Razorpay's cut, recorded where it belongs ──────────────────────
+      //
+      // DELIBERATELY SEPARATE FROM EVERYTHING BELOW, AND IT MUST STAY THAT WAY.
+      //
+      // Three properties, each load-bearing:
+      //
+      //  1. It runs BEFORE and INDEPENDENTLY of the compare-and-swap. When the
+      //     client-side verify has already flipped the row to paid, the CAS
+      //     below matches nothing and returns early, so anything written after
+      //     it would never run for that payment. Fees would then be captured
+      //     only for buyers whose tab happened to close.
+      //  2. It is keyed on razorpay_order_id and touches only the fee columns,
+      //     so it cannot disturb status, expiry or entitlement.
+      //  3. It is wrapped in its own try/catch. A fee is bookkeeping; the
+      //     purchase is the customer's money. If this throws, the sale must
+      //     still complete, so the error is logged and swallowed.
+      //
+      // fee and tax are in paise, like amount. They can be absent for some
+      // methods until settlement, in which case we write nothing and leave the
+      // columns NULL, meaning "not known yet" rather than "free".
+      // sync-razorpay-fees picks those up later.
+      try {
+        const feePaise = entity?.fee;
+        const taxPaise = entity?.tax;
+        if (typeof feePaise === 'number') {
+          await sb.from('payments')
+            .update({
+              gateway_fee_paise: feePaise,
+              gateway_tax_paise: typeof taxPaise === 'number' ? taxPaise : null,
+              fee_synced_at:     new Date().toISOString(),
+            })
+            .eq('razorpay_order_id', orderId);
+        }
+      } catch (feeErr) {
+        console.error('Gateway fee capture failed (payment unaffected):', feeErr);
+      }
+
       const months = PLAN_MONTHS[payment.plan];
       if (!months) return finish({}, `Unknown plan on payment: ${payment.plan}`);
 

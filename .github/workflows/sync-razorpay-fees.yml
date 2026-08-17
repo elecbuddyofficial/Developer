@@ -1,0 +1,68 @@
+name: Sync Razorpay Fees
+
+# Fills in what Razorpay charged us on each sale.
+#
+# WHY THIS RUNS ON A SCHEDULE AND NOT ONLY ON A BUTTON. The webhook writes the
+# fee straight off the payment.captured payload, which handles the normal case
+# the moment a sale lands. Two cases it cannot handle:
+#
+#   - For some methods Razorpay computes the fee at SETTLEMENT rather than at
+#     capture, so the captured payload carries no fee and the webhook correctly
+#     writes nothing. That fee only becomes knowable a day or two later.
+#   - A webhook can be missed. Razorpay retries, but not forever.
+#
+# So a daily sweep picks up whatever is still unpriced. It is cheap: the query
+# only returns rows where gateway_fee_paise IS NULL, which is normally none,
+# and the function then does nothing at all.
+#
+# WHY IT MATTERS THAT IT NEVER GUESSES. A payment Razorpay has not yet priced
+# keeps NULL, which the finance page reports as "unknown" and counts in a
+# warning. It is never written as 0, because 0 is a claim that the sale cost
+# nothing, and that claim would sit in the profit figure forever with nothing
+# on screen to question it.
+#
+# 05:20 UTC = 10:50 IST. After the 03:40 news job, off the hour, and away from
+# the 08:00/09:00 jobs, because GitHub drops scheduled runs at busy minutes.
+#
+# Missing a day costs nothing: the next run picks up everything still unpriced.
+#
+# Uses the same CRON_SECRET and SUPABASE_FUNCTIONS_URL secrets as the other
+# jobs. The function accepts that secret OR a signed-in admin's own token,
+# which is what the Sync button on the finance page uses.
+
+on:
+  schedule:
+    - cron: '20 5 * * *'   # 05:20 UTC daily = 10:50 IST
+  workflow_dispatch:        # manual trigger, and how to run the first backfill
+
+concurrency:
+  group: sync-razorpay-fees
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger sync-razorpay-fees Edge Function
+        run: |
+          HTTP_STATUS=$(curl -s -o /tmp/response.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            "${{ secrets.SUPABASE_FUNCTIONS_URL }}/sync-razorpay-fees")
+
+          echo "HTTP status: $HTTP_STATUS"
+          cat /tmp/response.json
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "Edge Function returned non-200 status"
+            exit 1
+          fi
+
+          # still_unknown is NORMAL and must not fail the job. It means Razorpay
+          # has not priced those payments yet, which is a state, not an error.
+          # Only a genuine failure (an API error, a write that did not land)
+          # sets ok:false.
+          if grep -q '"ok":false' /tmp/response.json; then
+            echo "::warning::At least one fee lookup failed. See cron_runs."
+          fi

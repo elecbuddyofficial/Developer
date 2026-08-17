@@ -1321,6 +1321,14 @@
       <span>Content Status</span>
     </button>
     <div class="ad-nav-divider"></div>
+    <!-- Links out rather than being a tab. Finance is company-wide, so it
+         belongs to neither course, and deliberately carries no data-tab
+         attribute: applyCourseScope() walks TAB_NAMES and would otherwise hide
+         it whenever the course switcher moved. -->
+    <button class="ad-nav-btn" onclick="window.location.href='finance.html'" title="Partner finances, expenses and profit split">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <span>Finance</span>
+    </button>
     <div class="sidebar-theme-row" style="margin-top:auto; padding-top:10px;">
       <button class="theme-btn" data-t="dark" onclick="setTheme('dark')" title="Midnight Navy">🌙</button>
       <button class="theme-btn" data-t="amoled" onclick="setTheme('amoled')" title="AMOLED Black">⚫</button>
