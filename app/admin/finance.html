@@ -92,6 +92,21 @@
     .fn-card { background:var(--surface); border:1px solid var(--border);
       border-radius:var(--r12); padding:18px 20px; margin-bottom:18px; }
     .fn-card-head { font-size:13px; font-weight:700; color:var(--text); margin-bottom:4px; }
+    /* Title left, action right. The action is what stops the card growing
+       without limit as entries accumulate. */
+    .fn-card-head-row { display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px; margin-bottom:4px; }
+    .fn-card-head-row .fn-card-head { margin-bottom:0; }
+
+    /* A list that stays the same height however many rows it holds. Without
+       this the card grows every time something is added, and the form under it
+       walks further down the page until it is off screen. The header stays put
+       while the rows move, so you can still read the columns at row twenty. */
+    .fn-scroll { max-height:236px; overflow-y:auto; }
+    .fn-scroll .fn-table thead th { position:sticky; top:0; z-index:1; }
+    .fn-scroll::-webkit-scrollbar { width:8px; }
+    .fn-scroll::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+    .fn-scroll::-webkit-scrollbar-track { background:transparent; }
     .fn-card-sub  { font-size:12px; color:var(--text3); margin-bottom:14px; line-height:1.55; }
 
     /* ── TABLE ── */
@@ -493,13 +508,17 @@
     </div>
 
     <div class="fn-card" id="fn-rec-card">
-      <div class="fn-card-head">Recurring costs</div>
+      <div class="fn-card-head-row">
+        <div class="fn-card-head">Recurring costs</div>
+        <button class="fn-btn ghost sm" id="fn-rec-toggle" onclick="toggleForm('rec')">+ Add new</button>
+      </div>
       <div class="fn-card-sub">Supabase, Resend, the domain, the Anthropic
         credit. Nothing here posts itself: these amounts move, and writing last
         month's figure into the books unread would be inventing a number.
         <strong>Record</strong> fills in the form above with the date and the
         last known amount, for you to correct before saving.</div>
       <div id="fn-rec-list"></div>
+      <div id="fn-rec-form" hidden>
       <div class="fn-form" style="margin-top:14px">
         <div class="fn-field">
           <label for="fn-rec-desc">What it is</label>
@@ -531,7 +550,9 @@
         </div>
       </div>
       <div class="fn-actions" style="margin-top:12px">
-        <button class="fn-btn ghost" id="fn-rec-btn" onclick="saveRecurring()">Add recurring cost</button>
+        <button class="fn-btn" id="fn-rec-btn" onclick="saveRecurring()">Add recurring cost</button>
+        <button class="fn-btn ghost" onclick="toggleForm('rec')">Cancel</button>
+      </div>
       </div>
     </div>
 
@@ -601,12 +622,16 @@
     </div>
 
     <div class="fn-card" id="fn-mi-card">
-      <div class="fn-card-head">Income that did not come through Razorpay</div>
+      <div class="fn-card-head-row">
+        <div class="fn-card-head">Income that did not come through Razorpay</div>
+        <button class="fn-btn ghost sm" id="fn-mi-toggle" onclick="toggleForm('mi')">+ Add new</button>
+      </div>
       <div class="fn-card-sub">Cash, a direct transfer, an invoice paid by a
         college. It counts in the profit and loss above, but it is kept apart
         from the table below, because that one is the Razorpay record and
         mixing hand-entered rows into it would make neither trustworthy.</div>
       <div id="fn-mi-list"></div>
+      <div id="fn-mi-form" hidden>
       <div class="fn-form" style="margin-top:14px">
         <div class="fn-field">
           <label for="fn-mi-date">Received on</label>
@@ -642,7 +667,9 @@
         </div>
       </div>
       <div class="fn-actions" style="margin-top:12px">
-        <button class="fn-btn ghost" id="fn-mi-btn" onclick="saveManualIncome()">Record income</button>
+        <button class="fn-btn" id="fn-mi-btn" onclick="saveManualIncome()">Record income</button>
+        <button class="fn-btn ghost" onclick="toggleForm('mi')">Cancel</button>
+      </div>
       </div>
     </div>
 
@@ -2010,6 +2037,25 @@ async function openReceipt(path) {
   window.open(data.signedUrl, '_blank', 'noopener');
 }
 
+/* Collapsible entry forms.
+
+   These cards are read far more often than they are written to: you look at
+   what is due, and occasionally add something. Leaving the form open by
+   default put six fields of empty inputs between you and the list every time,
+   and pushed the list further down the page with every entry added. The button
+   inverts that. */
+function toggleForm(which, force) {
+  var form = document.getElementById('fn-' + which + '-form');
+  var btn  = document.getElementById('fn-' + which + '-toggle');
+  var open = force === undefined ? form.hidden : force;
+  form.hidden = !open;
+  btn.textContent = open ? 'Close' : '+ Add new';
+  if (open) {
+    var first = form.querySelector('input, select');
+    if (first) first.focus();
+  }
+}
+
 /* ══ RECURRING COSTS ═══════════════════════════════════════════════════ */
 
 async function loadRecurring() {
@@ -2027,7 +2073,7 @@ function renderRecurring() {
     return;
   }
   var t = today();
-  host.innerHTML = '<div class="fn-table-wrap"><table class="fn-table"><thead><tr>'
+  host.innerHTML = '<div class="fn-table-wrap fn-scroll"><table class="fn-table"><thead><tr>'
     + '<th>What</th><th>Vendor</th><th class="fn-num">Usual</th><th>Every</th>'
     + '<th>Next due</th><th></th></tr></thead><tbody>'
     + _recurring.map(function (r) {
@@ -2111,6 +2157,9 @@ async function saveRecurring() {
     ['fn-rec-desc','fn-rec-vendor','fn-rec-amount'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
+    // Collapsed only once the row is safely saved, so a refused insert leaves
+    // what you typed on screen instead of hiding it along with the form.
+    toggleForm('rec', false);
     toast('Added.');
     await loadRecurring();
   } finally { btn.disabled = false; }
@@ -2145,7 +2194,7 @@ function renderManualIncome() {
     return;
   }
   var total = _manual.reduce(function (a, m) { return a + Number(m.amount_paise); }, 0);
-  host.innerHTML = '<div class="fn-table-wrap"><table class="fn-table"><thead><tr>'
+  host.innerHTML = '<div class="fn-table-wrap fn-scroll"><table class="fn-table"><thead><tr>'
     + '<th>Received</th><th>What for</th><th>From</th><th>How</th>'
     + '<th class="fn-num">Amount</th><th></th></tr></thead><tbody>'
     + _manual.map(function (m) {
@@ -2184,6 +2233,7 @@ async function saveManualIncome() {
     ['fn-mi-amount','fn-mi-source','fn-mi-payer','fn-mi-ref'].forEach(function (id) {
       document.getElementById(id).value = '';
     });
+    toggleForm('mi', false);
     toast('Recorded.');
     await loadManualIncome();
     // The P&L counts manual income, so it is now out of date.
