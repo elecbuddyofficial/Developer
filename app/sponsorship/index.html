@@ -441,6 +441,9 @@ window._authReady = (async () => {
     <button class="sb-item" id="si-datainterp" onclick="openSection('datainterp')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></span><span class="label">Data Interpretation</span>
     </button>
+    <button class="sb-item" id="si-entrancetest" onclick="openSection('entrancetest')">
+      <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2l4 -4"/><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/></svg></span><span class="label">Entrance Test</span>
+    </button>
     <button class="sb-item" id="si-currentaffairs" onclick="openSection('currentaffairs')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></span><span class="label">Maritime News</span>
     </button>
@@ -965,6 +968,23 @@ var SECTIONS = {
       {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:true , free:false},
       {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:true , free:false},
       {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:true , free:false}
+    ]
+  },
+
+  entrancetest: {
+    label:'Entrance Test', icon:'🎓', sbId:'si-entrancetest',
+    desc:'Degree-level electrical and electronics theory for the ETO Entrance Exam: circuit theorems, fields, signals and systems, power systems, control systems, digital and analog electronics, plus English and reasoning.',
+    color:'var(--blue)', quizLabel:'Practice Entrance Test questions',
+    topics:[
+      {id:'ET01', key:'ET01_Circuits',   name:'Circuit Theorems & AC Analysis',        icon:'🔀', notesFile:'entrancetest/et01_notes.js', quizFile:null, notesReady:true,  free:true},
+      {id:'ET02', key:'ET02_Fields',     name:'Electromagnetic Field Theory',          icon:'🧲', notesFile:'entrancetest/et02_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET03', key:'ET03_Signals',    name:'Signals & Systems',                     icon:'📶', notesFile:'entrancetest/et03_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET04', key:'ET04_PowerSys',   name:'Power Systems Analysis',                icon:'🏭', notesFile:'entrancetest/et04_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET05', key:'ET05_Control',    name:'Control Systems',                       icon:'🎚️', notesFile:'entrancetest/et05_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET06', key:'ET06_English',    name:'English & Verbal Ability',              icon:'📖', notesFile:'entrancetest/et06_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET07', key:'ET07_Reasoning',  name:'Reasoning: Abstract, Spatial & Logical', icon:'🧩', notesFile:'entrancetest/et07_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET08', key:'ET08_Digital',    name:'Digital Electronics',                   icon:'🔢', notesFile:'entrancetest/et08_notes.js', quizFile:null, notesReady:true,  free:false},
+      {id:'ET09', key:'ET09_Analog',     name:'Analog Electronics & Microprocessors',  icon:'💠', notesFile:'entrancetest/et09_notes.js', quizFile:null, notesReady:true,  free:false}
     ]
   },
 
