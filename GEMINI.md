@@ -41,3 +41,67 @@ Plan-badge display, plan-name logic, and gating logic are each duplicated across
 ## Style
 
 Match what's already there: vanilla JS (no TypeScript, no bundler, no new npm dependencies), inline `<style>`/`style.css` (no CSS-in-JS, no Tailwind), plain `fetch`/Supabase JS client calls. Don't introduce a build step.
+
+## The workspace is one level UP from this repo
+
+This file sits inside `ETO_Study_App/`. The project root is its **parent**, and
+it holds two things this file never mentioned, so nothing scoped to this repo
+ever saw them:
+
+    D:\Notes 1\Original\        <- workspace root
+      CLAUDE.md                 <- the fuller brief, worth reading
+      claude-cowork\            <- the shared log, NOT in git
+      ETO_Study_App\            <- this repo, where you are
+
+`claude-cowork/` is outside version control, so it is never pushed and a pull
+will not bring it. Read it from disk at `../claude-cowork/`.
+
+## Append to the shared log every session
+
+`../claude-cowork/LOG.md`. Add a **dated entry at the end**; do not rewrite what
+is already there. Keep it skimmable, it is a handover and not a diary. Cover
+what you worked on and why, which files you actually changed, anything you
+flagged as uncertain rather than guessed, and whether work was left staged
+rather than committed (it should be, unless asked otherwise).
+
+**Why this matters, from a real day.** On 18 Aug 2026 nine Entrance Test
+modules, three Fundamentals revisions and a one-line change to
+`encrypt-content.js` were finished and left uncommitted with nothing in the
+log. They were found only because Blesson mentioned them in passing. Had that
+`encrypt-content.js` line stayed local, a later whole-group decrypt would have
+silently skipped all nine new files. A `.git/index.lock` from a crashed git
+process was also left behind, blocking commits.
+
+Record production SQL, edge-function deploys, secrets and hand-edited data in
+`../claude-cowork/CHANGE_LEDGER.md`, always with how to undo it.
+
+## Two traps that look like disasters and are not
+
+**`encrypt-content.js --status` fails silently.** It needs `CONTENT_KEY_ORAL` /
+`CONTENT_KEY_WRITTEN` / `CONTENT_KEY_SPONSORSHIP` exported in the shell.
+Without them it prints `ERROR:` and exits, and piping that to
+`grep -c PLAINTEXT` returns 0, which is indistinguishable from a clean result.
+That produced a false "encryption clean" before four separate pushes. **Read
+the real output. If it starts with `ERROR:`, you have verified nothing.**
+
+Key-free check that works from any shell, since an encrypted file starts
+`{"v":1`:
+
+    find data/Orals data/Written data/Sponsorship -name '*.js' -type f \
+      | while read f; do head -c 14 "$f" | grep -q '{"v":1' \
+      || echo "PLAINTEXT $f"; done
+
+**`data/Orals/Backup/notes/` is 23 topics of plaintext, and that is CORRECT.**
+It is a local working copy: 0 files tracked, ignored via `.gitignore:63`
+(`data/**/Backup/`), never committed to any branch. Verified 18 Aug 2026. Do
+not encrypt it, do not delete it, do not "fix" it. Outside `Backup/`, expect
+exactly four plaintext files: the free previews `t01` notes/quiz/videos and
+`w01` notes. Anything else is a real problem.
+
+## Stale drafts in claude-cowork/
+
+`../claude-cowork/ET01_notes.js` through `ET09_notes.js` are the plaintext
+drafts of the Entrance Test module. **Eight of the nine are out of date:** they
+read `Module N of 7` where the shipped, encrypted copies correctly read
+`Module N of 9`. The repo is right and the drafts are wrong. Editing from those
+drafts would reintroduce the error across eight files.
