@@ -84,6 +84,7 @@ const KEY_GROUPS = {
         dirs: [
             'data/Sponsorship/overview',
             'data/Sponsorship/fundamentals',
+            'data/Sponsorship/entrancetest',
             'data/Sponsorship/aptitude',
             'data/Sponsorship/interview',
             'data/Sponsorship/datainterp',
