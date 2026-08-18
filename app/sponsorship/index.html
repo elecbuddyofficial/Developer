@@ -10,20 +10,20 @@
   html { visibility: hidden; }
   @media print { body { display: none !important; } }
 
-  /* Amber accent — overrides var(--blue) for the sponsorship shell */
+  /* Amber accent, overrides var(--blue) for the sponsorship shell */
   :root {
     --blue:#f59e0b;
-    --blue-dim:rgba(245,158,11,.14);
-    --blue-border:rgba(245,158,11,.40);
+    --blue-dim:rgba(245,158,11.14);
+    --blue-border:rgba(245,158,11.40);
   }
   /* Light theme: keep amber accent on white */
   [data-theme="light"] {
     --blue:#D97706;
-    --blue-dim:rgba(217,119,6,.12);
-    --blue-border:rgba(217,119,6,.35);
+    --blue-dim:rgba(217,119,6.12);
+    --blue-border:rgba(217,119,6.35);
   }
-  .sb-item.active .cnt { background:rgba(245,158,11,.18);color:var(--blue) }
-  .note-title { background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(168,85,247,.06)) }
+  .sb-item.active .cnt { background:rgba(245,158,11.18);color:var(--blue) }
+  .note-title { background:linear-gradient(135deg,rgba(245,158,11.10),rgba(168,85,247.06)) }
 
   /* ── DATA INTERPRETATION CHARTS ──
      Inline SVG, drawn from the data rather than shipped as images: it scales
@@ -132,10 +132,10 @@
   .section-card:hover {
     border-color:var(--sc-color,var(--blue));
     transform:translateY(-8px) scale(1.02);
-    box-shadow:0 20px 40px var(--sc-glow,rgba(245,158,11,.18)), 0 0 20px var(--sc-glow,rgba(245,158,11,.10));
+    box-shadow:0 20px 40px var(--sc-glow,rgba(245,158,11.18)), 0 0 20px var(--sc-glow,rgba(245,158,11.10));
   }
   .section-card .sc-icon { font-size:32px;line-height:1;transition:transform .2s,filter .2s }
-  .section-card:hover .sc-icon { transform:translateY(-6px);filter:drop-shadow(0 8px 12px var(--sc-drop,rgba(245,158,11,.6))) }
+  .section-card:hover .sc-icon { transform:translateY(-6px);filter:drop-shadow(0 8px 12px var(--sc-drop,rgba(245,158,11.6))) }
   .section-card h3 { font-size:15px;font-weight:800;color:var(--text);margin:0 }
   .section-card p { font-size:12.5px;color:var(--text2);line-height:1.6;margin:0;flex:1 }
   .section-card .sc-meta { display:flex;align-items:center;gap:8px;margin-top:4px }
@@ -260,7 +260,7 @@
     .topic-card-grid { grid-template-columns:1fr }
   }
 
-  /* profile reuse — matches the main app's slide-in panel */
+  /* profile reuse, matches the main app's slide-in panel */
   #profile-panel {
     position: fixed; right: 0; top: 0; bottom: 0;
     width: 300px; background: #0D1E33;
@@ -289,8 +289,8 @@
      more than a settings toggle. */
   #tx-panel {
     position:fixed; right:0; top:0; bottom:0; width:360px; background:#0D1E33;
-    border-left:1px solid #1A3050; padding:22px; box-shadow:-4px 0 24px rgba(0,0,0,.5);
-    transform:translateX(100%); transition:transform .3s cubic-bezier(.16,1,.3,1);
+    border-left:1px solid #1A3050; padding:22px; box-shadow:-4px 0 24px rgba(0,0,0.5);
+    transform:translateX(100%); transition:transform .3s cubic-bezier(.16,1.3,1);
     overflow-y:auto; margin:0;
   }
   #tx-panel.open { transform: translateX(0); }
@@ -300,20 +300,20 @@
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
   .nb-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:none}
   .nb-dot.show{display:block}
-  .nf-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:600;opacity:0;pointer-events:none;transition:opacity .22s}
+  .nf-overlay{position:fixed;inset:0;background:rgba(0,0,0.55);backdrop-filter:blur(4px);z-index:600;opacity:0;pointer-events:none;transition:opacity .22s}
   .nf-overlay.open{opacity:1;pointer-events:all}
-  .nf-panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:92vw;background:var(--surface);border-left:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:601}
+  .nf-panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:92vw;background:var(--surface);border-left:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0.2,1);z-index:601}
   .nf-overlay.open .nf-panel{transform:translateX(0)}
   .nf-head{display:flex;align-items:center;gap:10px;padding:16px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
   .nf-head-title{flex:1;font-size:15px;font-weight:700;color:var(--text)}
   .nf-close{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:50%;color:var(--text3);font-size:18px;line-height:1;cursor:pointer;transition:background .12s,color .12s}
   .nf-close:hover{background:var(--surface2);color:var(--text)}
   .nf-list{flex:1;overflow-y:auto}
-  .nf-loading,.nf-empty{padding:48px 20px;text-align:center;font-size:13px;color:var(--text3)}
+  .nf-loading.nf-empty{padding:48px 20px;text-align:center;font-size:13px;color:var(--text3)}
   .nf-empty svg{display:block;margin:0 auto 12px;opacity:.35}
   .nf-item{display:flex;gap:11px;padding:13px 18px;border-bottom:1px solid var(--border);transition:background .1s}
   .nf-item:last-child{border-bottom:none}
-  .nf-item.unread{background:rgba(200,164,74,.08)}
+  .nf-item.unread{background:rgba(200,164,74.08)}
   .nf-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
   .nf-dot-info{background:var(--blue)}.nf-dot-update{background:var(--green)}.nf-dot-warning{background:var(--orange)}.nf-dot-deadline{background:var(--red)}
   .nf-content{flex:1;min-width:0}
@@ -460,7 +460,7 @@ window._authReady = (async () => {
   </div>
   <div id="topic-side-list"></div>
   <div class="sb-spacer"></div>
-  <a class="sb-item" href="mailto:support@elec-buddy.com?subject=Sponsorship%20Prep%20Feedback" style="color:var(--blue);font-weight:700;background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.2);margin-top:8px;">
+  <a class="sb-item" href="mailto:support@elec-buddy.com?subject=Sponsorship%20Prep%20Feedback" style="color:var(--blue);font-weight:700;background:rgba(245,158,11.05);border:1px solid rgba(245,158,11.2);margin-top:8px;">
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg></span><span class="label">Feedback / Bug</span>
   </a>
   <div class="sb-divider"></div>
@@ -489,7 +489,7 @@ window._authReady = (async () => {
     </div>
     <div class="section-grid">
 
-      <div class="section-card" onclick="openSection('overview')" style="--sc-color:var(--green);--sc-dim:var(--green-dim);--sc-border:var(--green-border);--sc-glow:rgba(34,197,94,.18);--sc-drop:rgba(34,197,94,.6)">
+      <div class="section-card" onclick="openSection('overview')" style="--sc-color:var(--green);--sc-dim:var(--green-dim);--sc-border:var(--green-border);--sc-glow:rgba(34,197,94.18);--sc-drop:rgba(34,197,94.6)">
         <div class="sc-stripe"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13"/><path d="M9 4v13"/><path d="M15 7v13"/></svg></div>
         <h3>Overview</h3>
@@ -500,7 +500,7 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="showStudyHub()" style="--sc-color:#818cf8;--sc-dim:rgba(129,140,248,.12);--sc-border:rgba(129,140,248,.35);--sc-glow:rgba(129,140,248,.18);--sc-drop:rgba(129,140,248,.6)">
+      <div class="section-card" onclick="showStudyHub()" style="--sc-color:#818cf8;--sc-dim:rgba(129,140,248.12);--sc-border:rgba(129,140,248.35);--sc-glow:rgba(129,140,248.18);--sc-drop:rgba(129,140,248.6)">
         <div class="sc-stripe" style="background:#818cf8"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -14"/><path d="M9 5a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -14"/><path d="M5 8h4"/><path d="M9 16h4"/><path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041"/><path d="M14 9l4 -1"/><path d="M16 16l3.923 -.98"/></svg></div>
         <h3>Study Materials</h3>
@@ -511,13 +511,13 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="showNotifications()" style="--sc-color:#38bdf8;--sc-dim:rgba(56,189,248,.12);--sc-border:rgba(56,189,248,.35);--sc-glow:rgba(56,189,248,.18);--sc-drop:rgba(56,189,248,.6)">
+      <div class="section-card" onclick="showNotifications()" style="--sc-color:#38bdf8;--sc-dim:rgba(56,189,248.12);--sc-border:rgba(56,189,248.35);--sc-glow:rgba(56,189,248.18);--sc-drop:rgba(56,189,248.6)">
         <div class="sc-stripe" style="background:#38bdf8"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg></div>
         <h3>Notifications</h3>
         <p>Registration deadlines, new company Q&amp;A drops, exam date reminders, and sponsorship alerts for ETO cadets.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.35);color:#38bdf8">Stay Updated</span>
+          <span class="sc-badge" style="background:rgba(56,189,248.12);border-color:rgba(56,189,248.35);color:#38bdf8">Stay Updated</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
@@ -549,18 +549,18 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('aptitude')" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247,.35);--sc-glow:rgba(168,85,247,.18);--sc-drop:rgba(168,85,247,.6)">
+      <div class="section-card" onclick="openSection('aptitude')" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247.35);--sc-glow:rgba(168,85,247.18);--sc-drop:rgba(168,85,247.6)">
         <div class="sc-stripe" style="background:var(--purple)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></div>
         <h3>Aptitude</h3>
         <p>Quantitative aptitude, topic by topic. Formulas derived rather than listed, with worked examples and the traps that cost marks.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">32 Topics · Quiz</span>
+          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247.35);color:var(--purple)">32 Topics · Quiz</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('datainterp')" style="--sc-color:var(--amber);--sc-dim:var(--amber-dim);--sc-border:var(--amber-border);--sc-glow:rgba(200,164,74,.18);--sc-drop:rgba(200,164,74,.6)">
+      <div class="section-card" onclick="openSection('datainterp')" style="--sc-color:var(--amber);--sc-dim:var(--amber-dim);--sc-border:var(--amber-border);--sc-glow:rgba(200,164,74.18);--sc-drop:rgba(200,164,74.6)">
         <div class="sc-stripe" style="background:var(--amber)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></div>
         <h3>Data Interpretation</h3>
@@ -571,7 +571,18 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('currentaffairs')" style="--sc-color:var(--red);--sc-dim:var(--red-dim);--sc-border:var(--red-border);--sc-glow:rgba(224,112,112,.18);--sc-drop:rgba(224,112,112,.6)">
+      <div class="section-card" onclick="openSection('entrancetest')" style="--sc-color:var(--teal);--sc-dim:var(--teal-dim);--sc-border:var(--teal-border);--sc-glow:rgba(45,212,191.18);--sc-drop:rgba(45,212,191.6)">
+        <div class="sc-stripe" style="background:var(--teal)"></div>
+        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2l4 -4"/><path d="M12 3a12 12 0 0 0 8.5 3a12 12 0 0 1 -8.5 15a12 12 0 0 1 -8.5 -15a12 12 0 0 0 8.5 -3"/></svg></div>
+        <h3>Entrance Test</h3>
+        <p>The written entrance paper: circuits, machines, control, electronics, plus English and reasoning. Nine modules covering the full syllabus.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--teal-dim);border-color:var(--teal-border);color:var(--teal)">9 Modules</span>
+          <span class="sc-arrow">&rarr;</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('currentaffairs')" style="--sc-color:var(--red);--sc-dim:var(--red-dim);--sc-border:var(--red-border);--sc-glow:rgba(224,112,112.18);--sc-drop:rgba(224,112,112.6)">
         <div class="sc-stripe" style="background:var(--red)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"/><path d="M8 8h4"/><path d="M8 12h4"/><path d="M8 16h4"/></svg></div>
         <h3>Maritime News</h3>
@@ -582,18 +593,18 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('companyqa')" style="--sc-color:var(--cyan);--sc-dim:var(--cyan-dim);--sc-border:rgba(6,182,212,.35);--sc-glow:rgba(6,182,212,.18);--sc-drop:rgba(6,182,212,.6)">
+      <div class="section-card" onclick="openSection('companyqa')" style="--sc-color:var(--cyan);--sc-dim:var(--cyan-dim);--sc-border:rgba(6,182,212.35);--sc-glow:rgba(6,182,212.18);--sc-drop:rgba(6,182,212.6)">
         <div class="sc-stripe" style="background:var(--cyan)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l18 0"/><path d="M9 8l1 0"/><path d="M9 12l1 0"/><path d="M9 16l1 0"/><path d="M14 8l1 0"/><path d="M14 12l1 0"/><path d="M14 16l1 0"/><path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16"/></svg></div>
         <h3>Company Q&amp;A</h3>
         <p>Company-specific interview question patterns: what MSC, BSM, Anglo Eastern, and others have asked real candidates.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:var(--cyan-dim);border-color:rgba(6,182,212,.35);color:var(--cyan)">Browse by Company</span>
+          <span class="sc-badge" style="background:var(--cyan-dim);border-color:rgba(6,182,212.35);color:var(--cyan)">Browse by Company</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('interview')" style="--sc-color:var(--orange);--sc-dim:var(--orange-dim);--sc-border:var(--orange-border);--sc-glow:rgba(245,158,11,.18);--sc-drop:rgba(245,158,11,.6)">
+      <div class="section-card" onclick="openSection('interview')" style="--sc-color:var(--orange);--sc-dim:var(--orange-dim);--sc-border:var(--orange-border);--sc-glow:rgba(245,158,11.18);--sc-drop:rgba(245,158,11.6)">
         <div class="sc-stripe" style="background:var(--orange)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12.9a5 5 0 1 0 -3.902 -3.9"/><path d="M15 12.9l-3.902 -3.899l-7.513 8.584a2 2 0 1 0 2.827 2.83l8.588 -7.515"/></svg></div>
         <h3>Interview Prep</h3>
@@ -707,7 +718,7 @@ window._authReady = (async () => {
 <!-- ═══ NOTES CONTAINER ═══ -->
 <div id="notes-container"></div>
 
-<button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0,behavior:'smooth'})" style="display:flex;position:fixed;bottom:30px;right:30px;z-index:999;background:var(--blue);color:var(--on-accent);border:none;width:48px;height:48px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.3);align-items:center;justify-content:center;padding-bottom:4px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;">↑</button>
+<button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0,behavior:'smooth'})" style="display:flex;position:fixed;bottom:30px;right:30px;z-index:999;background:var(--blue);color:var(--on-accent);border:none;width:48px;height:48px;border-radius:50%;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0.3);align-items:center;justify-content:center;padding-bottom:4px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s;">↑</button>
 
 <div id="nf-overlay" class="nf-overlay" onclick="closeNotifsIfBg(event)">
   <div class="nf-panel" id="nf-panel">
@@ -720,14 +731,14 @@ window._authReady = (async () => {
 </div>
 
 <!-- ═══ PROFILE ═══ -->
-<div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)">
+<div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0.55);backdrop-filter:blur(3px)">
   <div id="profile-panel">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
       <div id="pm-avatar" style="width:46px;height:46px;border-radius:50%;background:#C8A44A;color:#070D1A;font-size:20px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:Georgia,serif"></div>
       <div style="min-width:0">
         <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap">
           <div id="pm-name" style="font-size:14.5px;color:#DDE5EF;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
-          <span id="pm-admin-badge" style="display:none;font-size:9.5px;font-weight:700;background:rgba(200,164,74,.15);border:1px solid rgba(200,164,74,.4);color:#C8A44A;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">✓ admin</span>
+          <span id="pm-admin-badge" style="display:none;font-size:9.5px;font-weight:700;background:rgba(200,164,74.15);border:1px solid rgba(200,164,74.4);color:#C8A44A;padding:2px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.3px">✓ admin</span>
         </div>
         <div id="pm-email" style="font-size:11.5px;color:#6E8AA6;margin-top:3px;word-break:break-all;line-height:1.4"></div>
       </div>
@@ -752,7 +763,7 @@ window._authReady = (async () => {
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Settings
     </button>
-    <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
+    <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74.12);border:1px solid rgba(200,164,74.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
     <button onclick="window.location.href='../courses.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
     <div data-eb-contact></div>
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
@@ -764,12 +775,12 @@ window._authReady = (async () => {
   <div id="tx-panel">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
       <div style="display:flex;align-items:center;gap:10px">
-        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255,.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <button onclick="backToProfileFromTx()" title="Back" aria-label="Back to profile menu" style="background:rgba(255,255,255.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#8FA3B8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
         </button>
         <div style="font-size:15px;font-weight:700;color:#DDE5EF">Payment History</div>
       </div>
-      <button onclick="closeTransactions({target:this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&times;</button>
+      <button onclick="closeTransactions({target:this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&times;</button>
     </div>
     <div id="tx-list"></div>
   </div>
@@ -890,29 +901,29 @@ var SECTIONS = {
     topics:[
       {id:'F01', key:'F01_Fundamentals',  name:'Basic Electrical Fundamentals',   icon:'⚡', notesFile:'fundamentals/f01_notes.js', quizFile:'fundamentals/f01_quiz.js', notesReady:true,  free:true},
       {id:'F02', key:'F02_Safety',        name:'Electrical Safety & Earthing',    icon:'🦺', notesFile:'fundamentals/f02_notes.js', quizFile:'fundamentals/f02_quiz.js', notesReady:true,  free:false},
-      {id:'F03', key:'F03_Components',    name:'Components & Materials',          icon:'🧩', notesFile:'fundamentals/f03_notes.js', quizFile:'fundamentals/f03_quiz.js', notesReady:true , free:false},
-      {id:'F04', key:'F04_Power',         name:'Electrical Power',                icon:'📊', notesFile:'fundamentals/f04_notes.js', quizFile:'fundamentals/f04_quiz.js', notesReady:true , free:false},
-      {id:'F05', key:'F05_Generation',    name:'Electromagnetism & Generation',   icon:'🧲', notesFile:'fundamentals/f05_notes.js', quizFile:'fundamentals/f05_quiz.js', notesReady:true , free:false},
-      {id:'F06', key:'F06_Transformers',  name:'Transformers',                    icon:'🔄', notesFile:'fundamentals/f06_notes.js', quizFile:'fundamentals/f06_quiz.js', notesReady:true , free:false},
-      {id:'F07', key:'F07_Machines',      name:'Electrical Machines',             icon:'⚙️', notesFile:'fundamentals/f07_notes.js', quizFile:'fundamentals/f07_quiz.js', notesReady:true , free:false},
-      {id:'F08', key:'F08_ThreePhase',    name:'Three-Phase System',              icon:'🔺', notesFile:'fundamentals/f08_notes.js', quizFile:'fundamentals/f08_quiz.js', notesReady:true , free:false},
-      {id:'F09', key:'F09_Induction',     name:'Induction Motors',                icon:'🌀', notesFile:'fundamentals/f09_notes.js', quizFile:'fundamentals/f09_quiz.js', notesReady:true , free:false},
-      {id:'F10', key:'F10_DCMotors',      name:'DC Motors',                       icon:'🔧', notesFile:'fundamentals/f10_notes.js', quizFile:'fundamentals/f10_quiz.js', notesReady:true , free:false},
-      {id:'F11', key:'F11_Starting',      name:'Motor Starting',                  icon:'🎛️', notesFile:'fundamentals/f11_notes.js', quizFile:'fundamentals/f11_quiz.js', notesReady:true , free:false},
-      {id:'F12', key:'F12_MotorProtect',  name:'Motor Protection',                icon:'🛡️', notesFile:'fundamentals/f12_notes.js', quizFile:'fundamentals/f12_quiz.js', notesReady:true , free:false},
-      {id:'F13', key:'F13_Protection',    name:'Electrical Protection',           icon:'🔌', notesFile:'fundamentals/f13_notes.js', quizFile:'fundamentals/f13_quiz.js', notesReady:true , free:false},
-      {id:'F14', key:'F14_Instruments',   name:'Measuring Instruments',           icon:'📏', notesFile:'fundamentals/f14_notes.js', quizFile:'fundamentals/f14_quiz.js', notesReady:true , free:false},
-      {id:'F15', key:'F15_Insulation',    name:'Insulation Testing',              icon:'🔍', notesFile:'fundamentals/f15_notes.js', quizFile:'fundamentals/f15_quiz.js', notesReady:true , free:false},
-      {id:'F16', key:'F16_PowerElec',     name:'Power Electronics',               icon:'💠', notesFile:'fundamentals/f16_notes.js', quizFile:'fundamentals/f16_quiz.js', notesReady:true , free:false},
-      {id:'F17', key:'F17_Electronics',   name:'Basic Electronics',               icon:'💡', notesFile:'fundamentals/f17_notes.js', quizFile:'fundamentals/f17_quiz.js', notesReady:true , free:false},
-      {id:'F18', key:'F18_Sensors',       name:'Sensors & Transducers',           icon:'📡', notesFile:'fundamentals/f18_notes.js', quizFile:'fundamentals/f18_quiz.js', notesReady:true , free:false},
-      {id:'F19', key:'F19_Batteries',     name:'Batteries, UPS & Lighting',       icon:'🔋', notesFile:'fundamentals/f19_notes.js', quizFile:'fundamentals/f19_quiz.js', notesReady:true , free:false},
-      {id:'F20', key:'F20_Cables',        name:'Cables, Wiring & Drawings',       icon:'🔗', notesFile:'fundamentals/f20_notes.js', quizFile:'fundamentals/f20_quiz.js', notesReady:true , free:false},
-      {id:'F21', key:'F21_Automation',    name:'Marine Automation Basics',        icon:'🤖', notesFile:'fundamentals/f21_notes.js', quizFile:'fundamentals/f21_quiz.js', notesReady:true , free:false},
-      {id:'F22', key:'F22_Refrigeration', name:'Refrigeration',                   icon:'❄️', notesFile:'fundamentals/f22_notes.js', quizFile:'fundamentals/f22_quiz.js', notesReady:true , free:false},
-      {id:'F23', key:'F23_Losses',        name:'Electrical Losses',               icon:'📉', notesFile:'fundamentals/f23_notes.js', quizFile:'fundamentals/f23_quiz.js', notesReady:true , free:false},
-      {id:'F24', key:'F24_MarineElec',    name:'Marine Electrical Systems',       icon:'🚢', notesFile:'fundamentals/f24_notes.js', quizFile:'fundamentals/f24_quiz.js', notesReady:true , free:false},
-      {id:'F25', key:'F25_Practical',     name:'Practical Engineering Questions', icon:'❓', notesFile:'fundamentals/f25_notes.js', quizFile:'fundamentals/f25_quiz.js', notesReady:true , free:false}
+      {id:'F03', key:'F03_Components',    name:'Components & Materials',          icon:'🧩', notesFile:'fundamentals/f03_notes.js', quizFile:'fundamentals/f03_quiz.js', notesReady:true, free:false},
+      {id:'F04', key:'F04_Power',         name:'Electrical Power',                icon:'📊', notesFile:'fundamentals/f04_notes.js', quizFile:'fundamentals/f04_quiz.js', notesReady:true, free:false},
+      {id:'F05', key:'F05_Generation',    name:'Electromagnetism & Generation',   icon:'🧲', notesFile:'fundamentals/f05_notes.js', quizFile:'fundamentals/f05_quiz.js', notesReady:true, free:false},
+      {id:'F06', key:'F06_Transformers',  name:'Transformers',                    icon:'🔄', notesFile:'fundamentals/f06_notes.js', quizFile:'fundamentals/f06_quiz.js', notesReady:true, free:false},
+      {id:'F07', key:'F07_Machines',      name:'Electrical Machines',             icon:'⚙️', notesFile:'fundamentals/f07_notes.js', quizFile:'fundamentals/f07_quiz.js', notesReady:true, free:false},
+      {id:'F08', key:'F08_ThreePhase',    name:'Three-Phase System',              icon:'🔺', notesFile:'fundamentals/f08_notes.js', quizFile:'fundamentals/f08_quiz.js', notesReady:true, free:false},
+      {id:'F09', key:'F09_Induction',     name:'Induction Motors',                icon:'🌀', notesFile:'fundamentals/f09_notes.js', quizFile:'fundamentals/f09_quiz.js', notesReady:true, free:false},
+      {id:'F10', key:'F10_DCMotors',      name:'DC Motors',                       icon:'🔧', notesFile:'fundamentals/f10_notes.js', quizFile:'fundamentals/f10_quiz.js', notesReady:true, free:false},
+      {id:'F11', key:'F11_Starting',      name:'Motor Starting',                  icon:'🎛️', notesFile:'fundamentals/f11_notes.js', quizFile:'fundamentals/f11_quiz.js', notesReady:true, free:false},
+      {id:'F12', key:'F12_MotorProtect',  name:'Motor Protection',                icon:'🛡️', notesFile:'fundamentals/f12_notes.js', quizFile:'fundamentals/f12_quiz.js', notesReady:true, free:false},
+      {id:'F13', key:'F13_Protection',    name:'Electrical Protection',           icon:'🔌', notesFile:'fundamentals/f13_notes.js', quizFile:'fundamentals/f13_quiz.js', notesReady:true, free:false},
+      {id:'F14', key:'F14_Instruments',   name:'Measuring Instruments',           icon:'📏', notesFile:'fundamentals/f14_notes.js', quizFile:'fundamentals/f14_quiz.js', notesReady:true, free:false},
+      {id:'F15', key:'F15_Insulation',    name:'Insulation Testing',              icon:'🔍', notesFile:'fundamentals/f15_notes.js', quizFile:'fundamentals/f15_quiz.js', notesReady:true, free:false},
+      {id:'F16', key:'F16_PowerElec',     name:'Power Electronics',               icon:'💠', notesFile:'fundamentals/f16_notes.js', quizFile:'fundamentals/f16_quiz.js', notesReady:true, free:false},
+      {id:'F17', key:'F17_Electronics',   name:'Basic Electronics',               icon:'💡', notesFile:'fundamentals/f17_notes.js', quizFile:'fundamentals/f17_quiz.js', notesReady:true, free:false},
+      {id:'F18', key:'F18_Sensors',       name:'Sensors & Transducers',           icon:'📡', notesFile:'fundamentals/f18_notes.js', quizFile:'fundamentals/f18_quiz.js', notesReady:true, free:false},
+      {id:'F19', key:'F19_Batteries',     name:'Batteries, UPS & Lighting',       icon:'🔋', notesFile:'fundamentals/f19_notes.js', quizFile:'fundamentals/f19_quiz.js', notesReady:true, free:false},
+      {id:'F20', key:'F20_Cables',        name:'Cables, Wiring & Drawings',       icon:'🔗', notesFile:'fundamentals/f20_notes.js', quizFile:'fundamentals/f20_quiz.js', notesReady:true, free:false},
+      {id:'F21', key:'F21_Automation',    name:'Marine Automation Basics',        icon:'🤖', notesFile:'fundamentals/f21_notes.js', quizFile:'fundamentals/f21_quiz.js', notesReady:true, free:false},
+      {id:'F22', key:'F22_Refrigeration', name:'Refrigeration',                   icon:'❄️', notesFile:'fundamentals/f22_notes.js', quizFile:'fundamentals/f22_quiz.js', notesReady:true, free:false},
+      {id:'F23', key:'F23_Losses',        name:'Electrical Losses',               icon:'📉', notesFile:'fundamentals/f23_notes.js', quizFile:'fundamentals/f23_quiz.js', notesReady:true, free:false},
+      {id:'F24', key:'F24_MarineElec',    name:'Marine Electrical Systems',       icon:'🚢', notesFile:'fundamentals/f24_notes.js', quizFile:'fundamentals/f24_quiz.js', notesReady:true, free:false},
+      {id:'F25', key:'F25_Practical',     name:'Practical Engineering Questions', icon:'❓', notesFile:'fundamentals/f25_notes.js', quizFile:'fundamentals/f25_quiz.js', notesReady:true, free:false}
     ]
   },
   aptitude: {
@@ -920,12 +931,12 @@ var SECTIONS = {
     desc:'Quantitative aptitude drills: the formula topics that make up the written test.',
     color:'var(--purple)', quizLabel:'Practice Aptitude questions',
     topics:[
-      {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:true ,  free:true},
-      {id:'A01', key:'A01_Trains', name:'Problems on Trains', icon:'🚆', notesFile:'aptitude/a01_notes.js', quizFile:'aptitude/a01_quiz.js', notesReady:true , free:true},
-      {id:'A02', key:'A02_TimeDistance', name:'Time and Distance', icon:'🛣️', notesFile:'aptitude/a02_notes.js', quizFile:'aptitude/a02_quiz.js', notesReady:true , free:false},
-      {id:'A03', key:'A03_HeightDistance', name:'Height and Distance', icon:'📐', notesFile:'aptitude/a03_notes.js', quizFile:'aptitude/a03_quiz.js', notesReady:true , free:false},
-      {id:'A04', key:'A04_TimeWork', name:'Time and Work', icon:'⏱️', notesFile:'aptitude/a04_notes.js', quizFile:'aptitude/a04_quiz.js', notesReady:true , free:false},
-      {id:'A05', key:'A05_SimpleInterest', name:'Simple Interest', icon:'💵', notesFile:'aptitude/a05_notes.js', quizFile:'aptitude/a05_quiz.js', notesReady:true , free:false},
+      {id:'APT', key:'APT_Aptitude',       name:'Aptitude Test Strategy', icon:'🧮', notesFile:'aptitude/apt_notes.js', quizFile:'aptitude/apt_quiz.js', notesReady:true,  free:true},
+      {id:'A01', key:'A01_Trains', name:'Problems on Trains', icon:'🚆', notesFile:'aptitude/a01_notes.js', quizFile:'aptitude/a01_quiz.js', notesReady:true, free:true},
+      {id:'A02', key:'A02_TimeDistance', name:'Time and Distance', icon:'🛣️', notesFile:'aptitude/a02_notes.js', quizFile:'aptitude/a02_quiz.js', notesReady:true, free:false},
+      {id:'A03', key:'A03_HeightDistance', name:'Height and Distance', icon:'📐', notesFile:'aptitude/a03_notes.js', quizFile:'aptitude/a03_quiz.js', notesReady:true, free:false},
+      {id:'A04', key:'A04_TimeWork', name:'Time and Work', icon:'⏱️', notesFile:'aptitude/a04_notes.js', quizFile:'aptitude/a04_quiz.js', notesReady:true, free:false},
+      {id:'A05', key:'A05_SimpleInterest', name:'Simple Interest', icon:'💵', notesFile:'aptitude/a05_notes.js', quizFile:'aptitude/a05_quiz.js', notesReady:true, free:false},
       {id:'A06', key:'A06_CompoundInterest', name:'Compound Interest', icon:'📈', notesFile:'aptitude/a06_notes.js', quizFile:'aptitude/a06_quiz.js', notesReady:true, free:false},
       {id:'A07', key:'A07_ProfitLoss', name:'Profit and Loss', icon:'💰', notesFile:'aptitude/a07_notes.js', quizFile:'aptitude/a07_quiz.js', notesReady:true, free:false},
       {id:'A08', key:'A08_Partnership', name:'Partnership', icon:'🤝', notesFile:'aptitude/a08_notes.js', quizFile:'aptitude/a08_quiz.js', notesReady:true, free:false},
@@ -933,7 +944,7 @@ var SECTIONS = {
       {id:'A10', key:'A10_Ages', name:'Problems on Ages', icon:'🎂', notesFile:'aptitude/a10_notes.js', quizFile:'aptitude/a10_quiz.js', notesReady:true, free:false},
       {id:'A11', key:'A11_Calendar', name:'Calendar', icon:'📅', notesFile:'aptitude/a11_notes.js', quizFile:'aptitude/a11_quiz.js', notesReady:true, free:false},
       {id:'A12', key:'A12_Clock', name:'Clock', icon:'🕑', notesFile:'aptitude/a12_notes.js', quizFile:'aptitude/a12_quiz.js', notesReady:true, free:false},
-      {id:'A13', key:'A13_Average', name:'Average', icon:'⚖️', notesFile:'aptitude/a13_notes.js', quizFile:'aptitude/a13_quiz.js', notesReady:true , free:false},
+      {id:'A13', key:'A13_Average', name:'Average', icon:'⚖️', notesFile:'aptitude/a13_notes.js', quizFile:'aptitude/a13_quiz.js', notesReady:true, free:false},
       {id:'A14', key:'A14_Area', name:'Area', icon:'◻️', notesFile:'aptitude/a14_notes.js', quizFile:'aptitude/a14_quiz.js', notesReady:true, free:false},
       {id:'A15', key:'A15_VolumeSurfaceArea', name:'Volume and Surface Area', icon:'📦', notesFile:'aptitude/a15_notes.js', quizFile:'aptitude/a15_quiz.js', notesReady:true, free:false},
       {id:'A16', key:'A16_PermutationCombination', name:'Permutation and Combination', icon:'🔀', notesFile:'aptitude/a16_notes.js', quizFile:'aptitude/a16_quiz.js', notesReady:true, free:false},
@@ -964,17 +975,17 @@ var SECTIONS = {
     desc:'Reading tables, bar charts, pie charts and line graphs under time pressure, and the arithmetic shortcuts that make it survivable.',
     color:'var(--amber)', quizLabel:'Practice Data Interpretation sets',
     topics:[
-      {id:'DI01', key:'DI01_Tables',     name:'Table Charts',  icon:'🧾', notesFile:'datainterp/di01_notes.js', quizFile:'datainterp/di01_quiz.js', notesReady:true , free:true},
-      {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:true , free:false},
-      {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:true , free:false},
-      {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:true , free:false}
+      {id:'DI01', key:'DI01_Tables',     name:'Table Charts',  icon:'🧾', notesFile:'datainterp/di01_notes.js', quizFile:'datainterp/di01_quiz.js', notesReady:true, free:true},
+      {id:'DI02', key:'DI02_BarCharts',  name:'Bar Charts',    icon:'📊', notesFile:'datainterp/di02_notes.js', quizFile:'datainterp/di02_quiz.js', notesReady:true, free:false},
+      {id:'DI03', key:'DI03_PieCharts',  name:'Pie Charts',    icon:'🥧', notesFile:'datainterp/di03_notes.js', quizFile:'datainterp/di03_quiz.js', notesReady:true, free:false},
+      {id:'DI04', key:'DI04_LineGraphs', name:'Line Graphs',   icon:'📈', notesFile:'datainterp/di04_notes.js', quizFile:'datainterp/di04_quiz.js', notesReady:true, free:false}
     ]
   },
 
   entrancetest: {
     label:'Entrance Test', icon:'🎓', sbId:'si-entrancetest',
     desc:'Degree-level electrical and electronics theory for the ETO Entrance Exam: circuit theorems, fields, signals and systems, power systems, control systems, digital and analog electronics, plus English and reasoning.',
-    color:'var(--blue)', quizLabel:'Practice Entrance Test questions',
+    color:'var(--teal)', quizLabel:'Practice Entrance Test questions',
     topics:[
       {id:'ET01', key:'ET01_Circuits',   name:'Circuit Theorems & AC Analysis',        icon:'🔀', notesFile:'entrancetest/et01_notes.js', quizFile:null, notesReady:true,  free:true},
       {id:'ET02', key:'ET02_Fields',     name:'Electromagnetic Field Theory',          icon:'🧲', notesFile:'entrancetest/et02_notes.js', quizFile:null, notesReady:true,  free:false},
@@ -1013,10 +1024,10 @@ var SECTIONS = {
     desc:'Group discussion, HR interview, body language, and the mistakes that get candidates eliminated.',
     color:'var(--orange)', quizLabel:'Practice Interview scenarios',
     topics:[
-      {id:'IP01', key:'IP01_Process',      name:'The Selection Process',        icon:'🧭', notesFile:'interview/ip01_notes.js', quizFile:null, notesReady:true ,  free:true},
-      {id:'IP02', key:'IP02_HR',           name:'HR Interview',                 icon:'🤝', notesFile:'interview/ip02_notes.js', quizFile:null, notesReady:true , free:false},
-      {id:'IP03', key:'IP03_BodyLanguage', name:'Body Language & Presentation', icon:'🪞', notesFile:'interview/ip03_notes.js', quizFile:null, notesReady:true , free:false},
-      {id:'IP04', key:'IP04_Mistakes',     name:'Common Mistakes',              icon:'⚠️', notesFile:'interview/ip04_notes.js', quizFile:null, notesReady:true , free:false}
+      {id:'IP01', key:'IP01_Process',      name:'The Selection Process',        icon:'🧭', notesFile:'interview/ip01_notes.js', quizFile:null, notesReady:true,  free:true},
+      {id:'IP02', key:'IP02_HR',           name:'HR Interview',                 icon:'🤝', notesFile:'interview/ip02_notes.js', quizFile:null, notesReady:true, free:false},
+      {id:'IP03', key:'IP03_BodyLanguage', name:'Body Language & Presentation', icon:'🪞', notesFile:'interview/ip03_notes.js', quizFile:null, notesReady:true, free:false},
+      {id:'IP04', key:'IP04_Mistakes',     name:'Common Mistakes',              icon:'⚠️', notesFile:'interview/ip04_notes.js', quizFile:null, notesReady:true, free:false}
     ]
   }
 };
@@ -1280,7 +1291,7 @@ function ensureBackButton(id) {
   var view = box.querySelector('.view');
   if (!view) return;
   // Any control that leaves this page counts, whatever it is called.
-  if (view.querySelector('[onclick*="openSection"], [onclick*="showHome"], .tnav-back')) return;
+  if (view.querySelector('[onclick*="openSection"], [onclick*="showHome"].tnav-back')) return;
 
   var sec = SECTIONS[ACTIVE_SECTION_ID];
   if (!sec) return;
@@ -1680,7 +1691,7 @@ function exitQuizToSection() {
 
 // Remembers the full (unfiltered) question set behind whatever picker grid
 // is currently shown, so exitQuiz() can restore it correctly. Without this,
-// exitQuiz() rebuilt the grid from QZ.qs — the *last quiz taken's* question
+// exitQuiz() rebuilt the grid from QZ.qs, the *last quiz taken's* question
 // set, which is already filtered down to one category once the user drills
 // into a single topic. That made every category but the one just quizzed
 // vanish from the grid after clicking Continue.
@@ -1919,7 +1930,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
 <!-- ═══ GATE + ENCRYPTION + SESSION + PROFILE SCRIPTS ═══ -->
 <script>
 (function() {
-  // Sponsorship is still free to read once you are signed in — no purchase,
+  // Sponsorship is still free to read once you are signed in, no purchase,
   // no plan check. isLocked/showGate stay as no-ops because they are called
   // from several places elsewhere in this file.
   //
@@ -1942,8 +1953,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   var _IDB_NAME = 'eb_secure', _IDB_STORE = 'keys', _REC = 'sk1';
 
   // Version 1, matching app/index.html. Opening v2 from here would fire
-  // onupgradeneeded, which BLOCKS while any COC tab holds a v1 connection —
-  // the open would never settle and this page would hang with no error.
+  // onupgradeneeded, which BLOCKS while any COC tab holds a v1 connection, // the open would never settle and this page would hang with no error.
   function _openKeyDB() {
     return new Promise(function(resolve, reject) {
       var req = indexedDB.open(_IDB_NAME, 1);
@@ -2085,7 +2095,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
 
   // Held back until the key is settled. It walks every notesReady topic on a
   // 2.5s timer, and its own catch marks a topic as indexed even when the load
-  // failed — so racing the key fetch would poison the search index for the
+  // failed, so racing the key fetch would poison the search index for the
   // whole session, silently, with nothing shown to the user.
   window._accessPromise.then(function() {
     if (typeof startBackgroundIndexing === 'function') startBackgroundIndexing();
@@ -2104,7 +2114,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   function kick(){ window.location.replace('../auth.html'); }
   async function checkSession(){
     // Sponsorship content isn't gated, so this only needs to catch an
-    // invalid/expired session — no plan/access tracking required here.
+    // invalid/expired session, no plan/access tracking required here.
     if(!window._sbClient)return;
     try{
       var s=await window._sbClient.auth.getSession(); if(!s.data.session){kick();return;}
@@ -2113,11 +2123,9 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   setInterval(checkSession,10*60*1000);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkSession();});
 
-  // Move every full-screen overlay to be a direct child of <body> — see the
+  // Move every full-screen overlay to be a direct child of <body>, see the
   // matching comment in ../index.html for why (backdrop-filter establishes a
-  // containing block for position:fixed descendants, which on real WebKit —
-  // confirmed on iPhone Safari and Firefox-iOS, both WebKit under the hood —
-  // also breaks paint order against position:sticky #topbar despite a much
+  // containing block for position:fixed descendants, which on real WebKit, // confirmed on iPhone Safari and Firefox-iOS, both WebKit under the hood, // also breaks paint order against position:sticky #topbar despite a much
   // higher z-index; Chrome's desktop mobile-emulation does not reproduce
   // this because it never leaves the Blink engine).
   // tx-modal was added with the payment history panel and inherits exactly
@@ -2257,7 +2265,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
     else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000);var ms=te-Date.now();if(ms>0){lbl.textContent='Free Trial';lbl.style.color='#5DC87A';exp.textContent=Math.ceil(ms/864e5)+' days remaining';}else{lbl.textContent='Trial Expired';lbl.style.color='#E07070';exp.textContent='Upgrade to continue';}upg.style.display='block';}
     else{var names={starter:'Starter',standard:'Standard',pro:'Pro','3mo':'3-Month','6mo':'6-Month','12mo':'12-Month'};lbl.textContent=names[plan]||plan;lbl.style.color='#C8A44A';if(profile.subscription_expires_at){var dl=Math.ceil((new Date(profile.subscription_expires_at)-Date.now())/864e5);if(dl>0){exp.textContent=dl+' days remaining';}else{exp.textContent='Expired';lbl.style.color='#E07070';upg.style.display='block';}}}
   }
-  // Sponsorship itself is free — this button sends the user to the main app
+  // Sponsorship itself is free, this button sends the user to the main app
   // to manage their Oral/Written plan, since there's nothing to gate here.
   document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ window.location.href='../index.html?stay=1'; });
   window.addEventListener('load',function(){ var user=window._sbUser; if(user){var n=user.user_metadata?.full_name||user.email; document.getElementById('profile-btn').textContent=n.charAt(0).toUpperCase();} });

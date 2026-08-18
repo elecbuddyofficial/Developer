@@ -97,7 +97,7 @@
       <input id="gsearch-input" type="text" placeholder="Search notes..." oninput="gSearch(this.value)" onfocus="gSearch(this.value)" autocomplete="off" spellcheck="false" style="width:100%;padding:8px 58px 8px 28px;border-radius:8px;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-size:12.5px;outline:none;box-sizing:border-box;transition:border-color 0.2s" onfocusin="this.style.borderColor='var(--blue)'" onfocusout="this.style.borderColor='var(--border2)'">
       <div style="position:absolute;right:5px;top:50%;transform:translateY(-50%)">
         <button id="gsf-btn" onclick="gFilterToggle(event)" style="background:var(--surface3);border:1px solid var(--border);color:var(--text2);font-size:10.5px;font-weight:700;padding:3px 6px;border-radius:5px;cursor:pointer;white-space:nowrap;letter-spacing:.2px">All ▾</button>
-        <div id="gsf-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--border2);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0,.5);overflow:hidden;z-index:2100;min-width:88px">
+        <div id="gsf-dropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--border2);border-radius:9px;box-shadow:0 8px 24px rgba(0,0,0.5);overflow:hidden;z-index:2100;min-width:88px">
           <button class="gsf-opt" onclick="setGFilter('all')">All Topics</button>
           <button class="gsf-opt" onclick="setGFilter('oral')">Oral Only</button>
           <button class="gsf-opt" onclick="setGFilter('written')">Written Only</button>
@@ -187,7 +187,7 @@
         <div class="wc-icon">🎓</div>
         <h3>Surveyor Q&A</h3>
         <p>Actual questions asked by MMD Surveyors, paired with AI-generated ideal answers.</p>
-        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">281 questions</div>
+        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247.35);color:var(--purple)">281 questions</div>
       </div>
     </div>
   </div>
@@ -243,7 +243,7 @@
         <div class="wc-icon">📅</div>
         <h3>By Year</h3>
         <p>Browse numerical questions based on the year they were asked in past papers.</p>
-        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">Chronological</div>
+        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247.35);color:var(--purple)">Chronological</div>
       </div>
     </div>
   </div>
@@ -511,8 +511,8 @@
     <div style="text-align:center;margin-top:20px;">
       <button class="anc-btn sq-back-btn" onclick="showView('oral')">← Back to Oral Section</button>
     </div>
-    <div style="margin-top:28px;padding:16px 20px;background:linear-gradient(135deg,rgba(168,85,247,.07),rgba(168,85,247,.03));border:1px solid rgba(168,85,247,.25);border-radius:var(--r12);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.3);display:flex;align-items:center;justify-content:center;font-size:16px;">🔄</div>
+    <div style="margin-top:28px;padding:16px 20px;background:linear-gradient(135deg,rgba(168,85,247.07),rgba(168,85,247.03));border:1px solid rgba(168,85,247.25);border-radius:var(--r12);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <div style="flex-shrink:0;width:36px;height:36px;border-radius:50%;background:rgba(168,85,247.15);border:1px solid rgba(168,85,247.3);display:flex;align-items:center;justify-content:center;font-size:16px;">🔄</div>
       <div>
         <div style="font-size:12px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;">Work in Progress</div>
         <p style="margin:0;font-size:13px;color:var(--text2);line-height:1.5">We're still processing questions from the exam database - answers are added in batches as each question is reviewed. Check back regularly for updates.</p>
@@ -676,7 +676,7 @@
 <button id="back-to-top" onclick="document.getElementById('content').scrollTo({top:0, behavior:'smooth'})" style="display:flex; position:fixed; bottom:30px; right:30px; z-index:999; background:var(--blue); color:var(--on-accent); border:none; width:48px; height:48px; border-radius:50%; font-size:24px; cursor:pointer; box-shadow:0 4px 12px rgba(0,0,0,0.3); align-items:center; justify-content:center; padding-bottom:4px; opacity:0; visibility:hidden; transition:opacity 0.25s,visibility 0.25s;">&#x2191;</button>
 <!-- ── Content Gate Overlay ───────────────────────────────── -->
 <div id="gate-overlay" style="display:none;position:fixed;inset:0;z-index:9500;background:linear-gradient(to bottom,rgba(7,13,26,0) 0%,rgba(7,13,26,0.6) 30%,rgba(7,13,26,0.97) 55%);backdrop-filter:blur(2px);align-items:center;justify-content:center;padding:20px;overflow-y:auto;">
-  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:28px 28px 24px;background:rgba(8,15,30,0.90);border:1px solid rgba(200,164,74,0.18);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0,.75),0 0 0 1px rgba(200,164,74,.06),0 0 60px rgba(7,13,26,.5);backdrop-filter:blur(40px);">
+  <div style="max-width:420px;width:100%;margin:auto;text-align:center;padding:28px 28px 24px;background:rgba(8,15,30,0.90);border:1px solid rgba(200,164,74,0.18);border-radius:18px;box-shadow:0 32px 80px rgba(0,0,0.75),0 0 0 1px rgba(200,164,74.06),0 0 60px rgba(7,13,26.5);backdrop-filter:blur(40px);">
     <div style="font-size:40px;margin-bottom:12px;">🔒</div>
     <div style="font-size:19px;font-weight:700;color:var(--text);margin-bottom:10px;">Full Access Required</div>
     <div id="gate-sub" style="font-size:13.5px;color:var(--text3);margin-bottom:14px;line-height:1.65;">Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.</div>
@@ -766,7 +766,7 @@
      and sponsorship/ looked correct. Card styling below is this app's own
      look; the inner structure matches the shared renderer. */
   .nf-item{display:flex;gap:11px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r8);padding:14px;position:relative}
-  .nf-item.unread{border-left:3px solid var(--blue);background:linear-gradient(90deg, rgba(37,99,235,.04) 0%, rgba(37,99,235,0) 100%), var(--surface2)}
+  .nf-item.unread{border-left:3px solid var(--blue);background:linear-gradient(90deg, rgba(37,99,235.04) 0%, rgba(37,99,235,0) 100%), var(--surface2)}
   .nf-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
   .nf-dot-info{background:var(--blue)}
   .nf-dot-update{background:var(--green)}
@@ -795,11 +795,11 @@
      Sits above #profile-modal (10000), which is what the list is inside. */
   /* Exit feedback. Sits above the upgrade modal's stacking context because it
      appears after that modal has closed, and below nothing else. */
-  .pwf-back{position:fixed;inset:0;z-index:10060;background:rgba(3,8,18,.72);
+  .pwf-back{position:fixed;inset:0;z-index:10060;background:rgba(3,8,18.72);
     display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
   .pwf-back[hidden]{display:none}
   .pwf{position:relative;background:var(--surface);border:1px solid var(--border2);border-radius:14px;
-    width:min(430px,100%);padding:22px 20px 18px;box-shadow:0 24px 70px rgba(0,0,0,.55)}
+    width:min(430px,100%);padding:22px 20px 18px;box-shadow:0 24px 70px rgba(0,0,0.55)}
   .pwf-x{position:absolute;top:12px;right:12px;background:none;border:0;color:var(--text3);
     cursor:pointer;padding:4px;line-height:0;border-radius:6px}
   .pwf-x:hover{color:var(--text)}
@@ -808,12 +808,12 @@
   .pwf-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
   /* Full-width targets stacked vertically: one tap, no aiming, and it reads
      the same on a phone as on a laptop. */
-  .pwf-opt{width:100%;text-align:left;background:rgba(255,255,255,.04);
+  .pwf-opt{width:100%;text-align:left;background:rgba(255,255,255.04);
     border:1px solid var(--border2);border-radius:9px;padding:11px 13px;
     color:var(--text);font-size:13.5px;cursor:pointer;transition:border-color .15s,background .15s}
   .pwf-opt:hover{border-color:var(--blue);background:var(--blue-dim)}
   .pwf-opt:active{transform:translateY(1px)}
-  .pwf-note{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border2);
+  .pwf-note{width:100%;background:rgba(255,255,255.04);border:1px solid var(--border2);
     border-radius:9px;padding:10px 12px;color:var(--text);font-size:13.5px;
     font-family:inherit;resize:vertical;margin-bottom:12px}
   .pwf-note:focus{outline:none;border-color:var(--blue)}
@@ -830,12 +830,12 @@
     .pwf-opt{font-size:13px;padding:12px}
   }
 
-  .nfd-back{position:fixed;inset:0;z-index:10050;background:rgba(3,8,18,.72);
+  .nfd-back{position:fixed;inset:0;z-index:10050;background:rgba(3,8,18.72);
     display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
   .nfd-back[hidden]{display:none}
   .nfd{background:var(--surface);border:1px solid var(--border2);border-radius:14px;
     width:min(460px,100%);max-height:88vh;overflow-y:auto;overscroll-behavior:contain;
-    box-shadow:0 24px 70px rgba(0,0,0,.55)}
+    box-shadow:0 24px 70px rgba(0,0,0.55)}
   .nfd-head{display:flex;align-items:flex-start;gap:10px;padding:18px 18px 0}
   .nfd-title{flex:1;font-size:17px;font-weight:800;color:var(--text);line-height:1.3}
   .nfd-x{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;
@@ -849,13 +849,13 @@
 
   /* Coupon template */
   .nfd-coupon{margin:14px 18px 4px;border:1px dashed var(--amber,#C8A44A);border-radius:12px;
-    background:linear-gradient(135deg,rgba(200,164,74,.14),rgba(200,164,74,.04));padding:14px}
+    background:linear-gradient(135deg,rgba(200,164,74.14),rgba(200,164,74.04));padding:14px}
   .nfd-coupon-label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
     color:var(--amber,#C8A44A);margin-bottom:8px}
   .nfd-code-row{display:flex;gap:8px;align-items:stretch}
   .nfd-code{flex:1;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-    font-size:19px;font-weight:700;letter-spacing:.09em;color:var(--text);background:rgba(0,0,0,.28);
-    border:1px solid rgba(200,164,74,.34);border-radius:9px;padding:11px 12px;text-align:center;
+    font-size:19px;font-weight:700;letter-spacing:.09em;color:var(--text);background:rgba(0,0,0.28);
+    border:1px solid rgba(200,164,74.34);border-radius:9px;padding:11px 12px;text-align:center;
     overflow-x:auto;white-space:nowrap}
   .nfd-copy{flex-shrink:0;background:var(--amber,#C8A44A);color:#0A1526;border:none;border-radius:9px;
     padding:0 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .14s}
@@ -1271,7 +1271,7 @@
       <div class="fb-hint" id="fb-msg-hint"></div>
 
       <label class="fb-lbl" style="margin-top:14px;">Attachments <span style="color:var(--text3);font-weight:400;">(optional)</span></label>
-      <input id="fb-files" type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt" onchange="fbFilesChanged()"
+      <input id="fb-files" type="file" multiple accept="image/*.pdf.doc.docx.txt" onchange="fbFilesChanged()"
              style="width:100%;min-height:44px;font-size:12px;color:var(--text3);padding:11px 10px;background:var(--surface2);border:1px dashed var(--border);border-radius:8px;box-sizing:border-box;">
       <div class="fb-hint">Screenshots help most for a bug. For content you can attach a PDF, Word document or notes. Up to 5 files, 5&nbsp;MB each.</div>
       <div id="fb-file-list" style="margin-top:8px;"></div>
@@ -2132,10 +2132,10 @@ function setTheme(t) {
     // #layout. backdrop-filter establishes a new containing block for fixed
     // descendants (same rule as `filter`/`transform`), and on some WebKit
     // versions that also disrupts paint order against `position:sticky`
-    // siblings (#topbar) despite a much higher z-index — the overlay renders
+    // siblings (#topbar) despite a much higher z-index, the overlay renders
     // behind the topbar instead of above it. Relocating to <body> removes
     // every intermediate ancestor, so there is nothing left that could ever
-    // establish a containing block for it — a structural fix rather than a
+    // establish a containing block for it, a structural fix rather than a
     // guess at compositing behaviour, and it makes the z-index comparison
     // against #topbar a simple top-level one.
     //
@@ -2960,7 +2960,7 @@ function setTheme(t) {
     return escNf(text).replace(/https?:\/\/[^\s<"']+/g, function(url) {
       // Trailing punctuation is nearly always the sentence, not the address.
       var tail = '';
-      var m = url.match(/[.,;:!?)\]]+$/);
+      var m = url.match(/[.;:!?)\]]+$/);
       if (m) { tail = m[0]; url = url.slice(0, -tail.length); }
       return '<a href="' + url + '" target="_blank" rel="noopener noreferrer"'
            + ' style="color:#7AB8E0;text-decoration:underline;text-underline-offset:2px;word-break:break-all">'
@@ -4134,11 +4134,11 @@ function confirmPurchase(duration, scope, onConfirm) {
   var ov = document.createElement('div');
   ov.style.cssText = 'position:fixed;inset:0;z-index:10050;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;';
   ov.innerHTML =
-    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.6);">'
+    '<div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:360px;width:100%;box-shadow:0 20px 60px rgba(0,0,0.6);">'
     + '<div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:4px;">Confirm your purchase</div>'
     + '<div style="font-size:12.5px;color:var(--text3);margin-bottom:14px;line-height:1.5;">Here is exactly what changes:</div>'
     + '<table style="width:100%;border-collapse:collapse;margin-bottom:14px;">' + rows + '</table>'
-    + '<div style="font-size:12px;color:#5DC87A;background:rgba(93,200,122,.09);border:1px solid rgba(93,200,122,.25);border-radius:8px;padding:9px 11px;line-height:1.5;margin-bottom:16px;">Nothing you already paid for is lost. New time is added on top of what you have.</div>'
+    + '<div style="font-size:12px;color:#5DC87A;background:rgba(93,200,122.09);border:1px solid rgba(93,200,122.25);border-radius:8px;padding:9px 11px;line-height:1.5;margin-bottom:16px;">Nothing you already paid for is lost. New time is added on top of what you have.</div>'
     + '<button id="_cp-go" style="width:100%;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Continue to payment</button>'
     + '<button id="_cp-no" style="width:100%;background:none;color:var(--text3);border:none;padding:11px;font-size:13px;cursor:pointer;margin-top:4px;">Cancel</button>'
     + '</div>';

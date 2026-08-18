@@ -14,6 +14,9 @@
   --red:#F36E6E;--red-dim:rgba(239,68,68,.14);--red-border:rgba(239,68,68,.40);
   --orange:#f59e0b;--orange-dim:rgba(245,158,11,.14);--orange-border:rgba(245,158,11,.40);
   --cyan:#06b6d4;--cyan-dim:rgba(6,182,212,.14);
+  /* Eighth section accent. Seven cards had seven accents and the eighth
+     (Entrance Test) had nowhere to go, so it borrowed Fundamentals' blue. */
+  --teal:#2DD4BF;--teal-dim:rgba(45,212,191,.14);--teal-border:rgba(45,212,191,.40);
   --text:#F8FAFC;--text2:#CBD5E1;--text3:#94A3B8;
   --amber:#C8A44A;
   --amber-dim:rgba(200,164,74,.14);
@@ -64,7 +67,7 @@
   --green:#117F3A;--green-dim:rgba(22,163,74,.10);--green-border:rgba(22,163,74,.30);
   --red:#D52222;--red-dim:rgba(220,38,38,.10);--red-border:rgba(220,38,38,.30);
   --orange:#A25905;--orange-dim:rgba(217,119,6,.10);--orange-border:rgba(217,119,6,.30);
-  --cyan:#06758F;--cyan-dim:rgba(8,145,178,.10);
+  --cyan:#06758F;--teal:#0F766E;--teal-dim:rgba(15,118,110,.12);--teal-border:rgba(15,118,110,.35);--cyan-dim:rgba(8,145,178,.10);
   --text:#0F172A;--text2:#475569;--text3:#5C708A;
   /* Same hue and saturation as the dark themes, darkened only as far as
      needed: #C8A44A measures 2.37:1 on white. Solved against --surface3
