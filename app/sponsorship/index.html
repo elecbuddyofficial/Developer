@@ -237,6 +237,28 @@
     .tnav { flex-direction:column-reverse;gap:8px }
     .tnav-btn.is-next { text-align:left;align-items:flex-start }
   }
+  .nt-list { display:flex;flex-direction:column;gap:12px;margin-top:4px }
+  .nt-card {
+    background:var(--surface);border:1px solid var(--border2);border-left:4px solid var(--nt-accent,var(--green));
+    border-radius:var(--r12,12px);padding:16px 18px;display:flex;flex-direction:column;gap:8px
+  }
+  .nt-top { display:flex;align-items:center;gap:10px;flex-wrap:wrap }
+  .nt-company { font-size:15px;font-weight:800;color:var(--text);margin-right:auto }
+  .nt-pill {
+    font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;
+    padding:4px 10px;border-radius:999px;border:1px solid var(--nt-border);
+    background:var(--nt-dim);color:var(--nt-accent);white-space:nowrap
+  }
+  .nt-course { font-size:11px;font-weight:700;color:var(--text3);border:1px solid var(--border2);border-radius:6px;padding:3px 8px }
+  .nt-window { font-size:13px;color:var(--text2);font-variant-numeric:tabular-nums }
+  .nt-note { font-size:13px;color:var(--text2);line-height:1.65 }
+  .nt-apply {
+    align-self:flex-start;font-size:12.5px;font-weight:700;text-decoration:none;
+    padding:7px 14px;border-radius:8px;border:1px solid var(--blue);
+    background:var(--blue-dim);color:var(--blue);transition:filter .15s
+  }
+  .nt-apply:hover { filter:brightness(1.12) }
+  @media (max-width:768px) { .nt-company { margin-right:0;width:100% } }
   .coming-soon-banner { text-align:center;padding:60px 20px;color:var(--text3) }
   .coming-soon-banner .cs-icon { font-size:40px;margin-bottom:12px }
   .coming-soon-banner h3 { font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px }
@@ -435,7 +457,7 @@ window._authReady = (async () => {
     <button class="sb-item" id="si-fundamentals" onclick="openSection('fundamentals')">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0l8 -11"/></svg></span><span class="label">Fundamentals</span>
     </button>
-    <button class="sb-item" id="si-aptitude" onclick="openSection('aptitude')">
+    <button class="sb-item" id="si-aptitude" onclick="showAptitudeHub()">
       <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></span><span class="label">Aptitude</span>
     </button>
     <button class="sb-item" id="si-datainterp" onclick="openSection('datainterp')">
@@ -549,24 +571,13 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="openSection('aptitude')" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247,.35);--sc-glow:rgba(168,85,247,.18);--sc-drop:rgba(168,85,247,.6)">
+      <div class="section-card" onclick="showAptitudeHub()" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247,.35);--sc-glow:rgba(168,85,247,.18);--sc-drop:rgba(168,85,247,.6)">
         <div class="sc-stripe" style="background:var(--purple)"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></div>
         <h3>Aptitude</h3>
-        <p>Quantitative aptitude, topic by topic. Formulas derived rather than listed, with worked examples and the traps that cost marks.</p>
+        <p>Quantitative aptitude and data interpretation. Formulas derived rather than listed, with worked examples and the traps that cost marks.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">32 Topics · Quiz</span>
-          <span class="sc-arrow">→</span>
-        </div>
-      </div>
-
-      <div class="section-card" onclick="openSection('datainterp')" style="--sc-color:var(--amber);--sc-dim:var(--amber-dim);--sc-border:var(--amber-border);--sc-glow:rgba(200,164,74,.18);--sc-drop:rgba(200,164,74,.6)">
-        <div class="sc-stripe" style="background:var(--amber)"></div>
-        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></div>
-        <h3>Data Interpretation</h3>
-        <p>Tables, bar charts, pie charts and line graphs. The arithmetic is easy; reading the chart correctly under time pressure is the actual test.</p>
-        <div class="sc-meta">
-          <span class="sc-badge" style="background:var(--amber-dim);border-color:var(--amber-border);color:var(--amber)">4 Chart Types · Quiz</span>
+          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">Aptitude · Data Interpretation</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
@@ -619,6 +630,44 @@ window._authReady = (async () => {
   </div>
 </div>
 
+<!-- ═══ APTITUDE HUB ═══ -->
+<div class="view" id="view-aptitude-hub">
+  <div class="spon-home">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <button class="anc-btn" onclick="showStudyHub()">&larr; Study Materials</button>
+    </div>
+    <div class="spon-hero" style="padding-top:10px">
+      <h1>Aptitude <span>Papers</span></h1>
+      <p>Companies set quantitative aptitude and data interpretation as separate papers, so they are studied separately here.</p>
+    </div>
+    <div class="section-grid">
+
+      <div class="section-card" onclick="openSection('aptitude')" style="--sc-color:var(--purple);--sc-dim:var(--purple-dim);--sc-border:rgba(168,85,247,.35);--sc-glow:rgba(168,85,247,.18);--sc-drop:rgba(168,85,247,.6)">
+        <div class="sc-stripe" style="background:var(--purple)"></div>
+        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l18 0"/><path d="M12 3l0 18"/><path d="M16.5 4.5l3 3"/><path d="M19.5 4.5l-3 3"/><path d="M6 4l0 4"/><path d="M4 6l4 0"/><path d="M18 16l.01 0"/><path d="M18 20l.01 0"/><path d="M4 18l4 0"/></svg></div>
+        <h3>Aptitude</h3>
+        <p>Quantitative aptitude, topic by topic. Formulas derived rather than listed, with worked examples and the traps that cost marks.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">32 Topics · Quiz</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="section-card" onclick="openSection('datainterp')" style="--sc-color:var(--amber);--sc-dim:var(--amber-dim);--sc-border:var(--amber-border);--sc-glow:rgba(200,164,74,.18);--sc-drop:rgba(200,164,74,.6)">
+        <div class="sc-stripe" style="background:var(--amber)"></div>
+        <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M9 17V9"/><path d="M13 17V5"/><path d="M17 17v-6"/></svg></div>
+        <h3>Data Interpretation</h3>
+        <p>Tables, bar charts, pie charts and line graphs. The arithmetic is easy; reading the chart correctly under time pressure is the actual test.</p>
+        <div class="sc-meta">
+          <span class="sc-badge" style="background:var(--amber-dim);border-color:var(--amber-border);color:var(--amber)">4 Chart Types · Quiz</span>
+          <span class="sc-arrow">→</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- ═══ NOTIFICATIONS ═══ -->
 <div class="view" id="view-notifications">
   <div class="spon-home">
@@ -629,10 +678,12 @@ window._authReady = (async () => {
       <h1><span>Notifications</span></h1>
       <p>Registration deadlines, new content drops, and sponsorship alerts for ETO cadets.</p>
     </div>
-    <div class="coming-soon-banner">
-      <div class="cs-icon">🔔</div>
-      <h3>No notifications yet</h3>
-      <p>Registration alerts, new company Q&amp;A drops, exam date reminders, and sponsorship notices will appear here.</p>
+    <div class="nt-list" id="nt-list">
+      <div class="coming-soon-banner">
+        <div class="cs-icon">🔔</div>
+        <h3>Loading…</h3>
+        <p>Checking for open sponsorship windows.</p>
+      </div>
     </div>
   </div>
 </div>
@@ -641,7 +692,7 @@ window._authReady = (async () => {
 <div class="view" id="view-section">
   <div class="section-landing">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-      <button class="anc-btn" onclick="showStudyHub()">← Study Materials</button>
+      <button class="anc-btn" id="sec-back-btn" onclick="showStudyHub()">← Study Materials</button>
     </div>
     <div class="sec-header" id="sec-header">
       <div class="sec-header-icon" id="sec-icon"></div>
@@ -1132,6 +1183,130 @@ function showStudyHub() {
   try { if (location.protocol !== 'file:') history.pushState(null,'','#study-hub'); } catch(e){}
 }
 
+/* Aptitude and Data Interpretation are separate papers with separate topic
+   sets, so they keep separate SECTIONS entries and separate quizzes. They sit
+   behind one card on Study Materials because a cadet thinks of them as one
+   subject, and the grid there was drifting past the point where it scans. */
+function showAptitudeHub() {
+  if (window.innerWidth <= 768) closeMobileMenu();
+  setAllViewsInactive();
+  document.getElementById('view-aptitude-hub').classList.add('active');
+  var sbApt = document.getElementById('si-aptitude');
+  if (sbApt) sbApt.classList.add('active');
+  document.getElementById('topic-side-list').style.display = 'none';
+  document.getElementById('sb-nav-sections').style.display = '';
+  ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
+  document.getElementById('content').scrollTo({top:0, behavior:'instant'});
+  try { if (location.protocol !== 'file:') history.pushState(null,'','#aptitude-hub'); } catch(e){}
+}
+window.showAptitudeHub = showAptitudeHub;
+
+/* Sponsorship notices, read live from public.sponsorship_notices, the same
+   table the admin console writes to. The rules below are a deliberate copy of
+   noticeState() in app/admin/index.html: the admin table and this list must
+   never disagree about whether a window is open, so if one changes the other
+   has to change with it.
+
+   RLS already hides unpublished rows from a non-admin, and is_published is in
+   the query as well so an admin reading their own page sees what a cadet sees
+   rather than their own drafts. */
+function _ntToday() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
+       + '-' + String(d.getDate()).padStart(2, '0');
+}
+function _ntDays(a, b) {
+  var pa = a.split('-'), pb = b.split('-');
+  return Math.round((Date.UTC(+pb[0], +pb[1] - 1, +pb[2])
+                   - Date.UTC(+pa[0], +pa[1] - 1, +pa[2])) / 86400000);
+}
+function _ntDate(v) {
+  if (!v) return '';
+  var p = v.split('-');
+  return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]))
+    .toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+function _ntState(n) {
+  var today = _ntToday();
+  if (n.closes_on < today) return null;                       // finished, drops off
+  if (n.opens_on > today) {
+    var d = _ntDays(today, n.opens_on);
+    return { rank: 1, tone: 'amber', label: d === 1 ? 'Opens tomorrow' : 'Opens in ' + d + ' days' };
+  }
+  var left = _ntDays(today, n.closes_on);
+  if (left === 0) return { rank: 0, tone: 'red', label: 'Closes today' };
+  if (left === 1) return { rank: 0, tone: 'red', label: 'Closes tomorrow' };
+  if (left <= 7)  return { rank: 0, tone: 'red', label: 'Closes in ' + left + ' days' };
+  return { rank: 0, tone: 'green', label: 'Open, ' + left + ' days left' };
+}
+function _ntEsc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function _ntEmpty(head, body) {
+  return '<div class="coming-soon-banner"><div class="cs-icon">🔔</div>'
+       + '<h3>' + head + '</h3><p>' + body + '</p></div>';
+}
+
+async function loadSponsorshipNotices() {
+  var box = document.getElementById('nt-list');
+  if (!box) return;
+
+  if (!window._sbClient) {
+    box.innerHTML = _ntEmpty('Sign in to see notices',
+      'Sponsorship windows are shown to signed-in cadets.');
+    return;
+  }
+
+  var res;
+  try {
+    res = await window._sbClient
+      .from('sponsorship_notices')
+      .select('company, link, opens_on, closes_on, course, note')
+      .eq('is_published', true)
+      .gte('closes_on', _ntToday())
+      .order('closes_on', { ascending: true })
+      .limit(50);
+  } catch (e) { res = { error: e }; }
+
+  if (res.error) {
+    box.innerHTML = _ntEmpty('Could not load notices',
+      'Check your connection and open this again.');
+    return;
+  }
+
+  var rows = (res.data || []).map(function (n) { return { n: n, s: _ntState(n) }; })
+    .filter(function (x) { return x.s; })
+    .sort(function (a, b) {
+      if (a.s.rank !== b.s.rank) return a.s.rank - b.s.rank;
+      return a.n.closes_on < b.n.closes_on ? -1 : 1;
+    });
+
+  if (!rows.length) {
+    box.innerHTML = _ntEmpty('No open windows right now',
+      'Sponsorship application windows appear here as soon as a company opens one.');
+    return;
+  }
+
+  box.innerHTML = rows.map(function (x) {
+    var n = x.n, st = x.s;
+    var tone = 'var(--' + st.tone + ')';
+    var style = '--nt-accent:' + tone
+              + ';--nt-dim:var(--' + st.tone + '-dim)'
+              + ';--nt-border:var(--' + st.tone + '-border)';
+    return '<div class="nt-card" style="' + style + '">'
+      + '<div class="nt-top">'
+      +   '<span class="nt-company">' + _ntEsc(n.company) + '</span>'
+      +   '<span class="nt-course">' + _ntEsc(n.course || 'ETO') + '</span>'
+      +   '<span class="nt-pill">' + _ntEsc(st.label) + '</span>'
+      + '</div>'
+      + '<div class="nt-window">' + _ntDate(n.opens_on) + ' to ' + _ntDate(n.closes_on) + '</div>'
+      + (n.note ? '<div class="nt-note">' + _ntEsc(n.note) + '</div>' : '')
+      + '<a class="nt-apply" href="' + _ntEsc(n.link) + '" target="_blank" rel="noopener noreferrer">Apply on the company site →</a>'
+      + '</div>';
+  }).join('');
+}
+
 function showNotifications() {
   if (window.innerWidth <= 768) closeMobileMenu();
   setAllViewsInactive();
@@ -1141,6 +1316,7 @@ function showNotifications() {
   ACTIVE_SECTION_ID = null; ACTIVE_TOPIC_ID = null;
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   try { if (location.protocol !== 'file:') history.pushState(null,'','#notifications'); } catch(e){}
+  loadSponsorshipNotices();
 }
 
 function openSection(sectionId) {
@@ -1175,6 +1351,15 @@ function openSection(sectionId) {
   var sbEl = document.getElementById(sec.sbId); if (sbEl) sbEl.classList.add('active');
   document.getElementById('topic-side-list').style.display = 'none';
   document.getElementById('sb-nav-sections').style.display = '';
+
+  /* Both aptitude papers hang off the hub, so their back button has to return
+     there. Everything else came straight from Study Materials. */
+  var backBtn = document.getElementById('sec-back-btn');
+  if (backBtn) {
+    var viaHub = (sectionId === 'aptitude' || sectionId === 'datainterp');
+    backBtn.textContent = viaHub ? '← Aptitude' : '← Study Materials';
+    backBtn.setAttribute('onclick', viaHub ? 'showAptitudeHub()' : 'showStudyHub()');
+  }
 
   document.getElementById('sec-icon').textContent  = sec.icon;
   document.getElementById('sec-title').textContent = sec.label;
@@ -1901,6 +2086,9 @@ window.addEventListener('DOMContentLoaded', function(){
   else if (hash.startsWith('section=')) { openSection(hash.split('=')[1]); }
   else if (hash.startsWith('notes='))   { var id=hash.split('=')[1]; for(var sid in SECTIONS){var t=SECTIONS[sid].topics.find(function(x){return x.id===id;});if(t){ACTIVE_SECTION_ID=sid;fetchTopicData(id,t);break;}} }
   else if (hash === 'companyqa')         { showCompanyQA(); }
+  else if (hash === 'notifications')     { showNotifications(); }
+  else if (hash === 'aptitude-hub')      { showAptitudeHub(); }
+  else if (hash === 'study-hub')         { showStudyHub(); }
   else { showHome(); }
 });
 window.addEventListener('popstate', function(){
@@ -1908,6 +2096,9 @@ window.addEventListener('popstate', function(){
   if (!hash) showHome();
   else if (hash.startsWith('section=')) openSection(hash.split('=')[1]);
   else if (hash === 'companyqa') showCompanyQA();
+  else if (hash === 'notifications') showNotifications();
+  else if (hash === 'aptitude-hub') showAptitudeHub();
+  else if (hash === 'study-hub') showStudyHub();
   else showHome();
 });
 
