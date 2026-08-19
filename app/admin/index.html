@@ -1316,6 +1316,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1Z"/><path d="M16.5 8.5a4 4 0 0 1 0 7"/><path d="M19.5 5.5a8 8 0 0 1 0 13"/></svg>
       <span>Sponsorship Notices</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('mock');closeMobNav()" data-tab="mock" title="Mock Interviews">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
+      <span>Mock Interviews</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('status');closeMobNav()" data-tab="status" title="Content Status">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6"/><path d="M9 16h4"/></svg>
       <span>Content Status</span>
@@ -1975,6 +1979,119 @@
           <th>Company</th><th>Course</th><th>Window</th><th>Status</th><th>Note</th><th></th>
         </tr></thead>
         <tbody id="nt-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MOCK INTERVIEWS ─────────────────────────────────────────
+       The first thing sold here that is not course access, so it has its own
+       tables and its own order/verify functions and never touches
+       public.payments. See app/admin/mock_interview_setup.sql for why.
+
+       Three panels because they are three jobs on three rhythms: the price is
+       set once, slots are added weekly, bookings are read before each
+       session. -->
+  <div class="ad-tab" id="tab-mock">
+    <div class="ad-ph">
+      <h1>Mock Interviews</h1>
+      <p>One cadet per slot. A booked slot disappears from the app on its own, and the assessment goes to the email the cadet signed up with.</p>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">Settings</div>
+      <div class="ad-card-sub">Price and wording are read live by the Sponsorship app, so a change here takes effect without a deploy.</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Price (₹)</label>
+          <input class="ad-input" id="mi-price" inputmode="decimal" placeholder="499">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Session length (minutes)</label>
+          <input class="ad-input" id="mi-duration" inputmode="numeric" placeholder="30">
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Headline</label>
+        <input class="ad-input" id="mi-headline" placeholder="Test your interview prep">
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Blurb</label>
+        <textarea class="ad-input" id="mi-blurb" rows="3" style="resize:vertical"></textarea>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="mi-enabled">
+          <span style="font-weight:400">Live in the Sponsorship app. While this is off, no cadet sees the button and the payment function refuses every call.</span>
+        </label>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="ad-btn btn-primary" id="mi-save" onclick="saveMockConfig()">Save Settings</button>
+      </div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">Add Slots</div>
+      <div class="ad-card-sub">Times are IST. Adding a week at a time is the point of the second row: one slot at a time is how this stops getting used.</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Date</label>
+          <input class="ad-input" id="mi-date" type="date">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Time</label>
+          <input class="ad-input" id="mi-time" type="time">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Note (optional, admin only)</label>
+          <input class="ad-input" id="mi-note" placeholder="e.g. evening batch">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
+        <button class="ad-btn btn-primary" onclick="addMockSlot()">Add Slot</button>
+      </div>
+
+      <div class="ad-section-head">Or add several at once</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">From</label>
+          <input class="ad-input" id="mi-bulk-from" type="date">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">To</label>
+          <input class="ad-input" id="mi-bulk-to" type="date">
+        </div>
+        <div class="ad-field" style="flex:2">
+          <label class="ad-label">Times each day</label>
+          <input class="ad-input" id="mi-bulk-times" placeholder="18:00, 19:30, 21:00">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="ad-btn" onclick="bulkAddMockSlots()">Add For Every Day In Range</button>
+      </div>
+    </div>
+
+    <div class="ad-section-head">Slots</div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>When (IST)</th><th>Status</th><th>Booked by</th><th>Note</th><th></th>
+        </tr></thead>
+        <tbody id="mi-slot-tbody"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="ad-section-head" style="margin-top:22px">Bookings</div>
+    <div class="ad-card-sub" style="margin-bottom:10px">The candidate sheet. Everything the cadet gave you at booking, so you can run the interview from this row.</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
+      <button class="ad-btn" onclick="exportMockBookings()">Export CSV</button>
+      <button class="ad-btn" onclick="loadMockBookings()">Refresh</button>
+    </div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th>Cadet</th><th>Contact</th><th>Education</th><th>Slot (IST)</th><th>Amount</th><th>Status</th><th></th>
+        </tr></thead>
+        <tbody id="mi-book-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
   </div>
@@ -2769,7 +2886,7 @@ var _dashProfiles = [];
 /* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
    deep-linking and the hashchange handler, so #approvals silently did
    nothing and the tab could only be reached by clicking. */
-var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'mock', 'status'];
 
 /* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
    Elec-Buddy sells two separate courses: COC (Oral + Written) and
@@ -2946,6 +3063,10 @@ document.addEventListener('keydown', function(e) {
 /* ── TABS ────────────────────────────────────────────────────────── */
 function showTab(name) {
   if (name === 'mail' && typeof initMailTab === 'function') initMailTab();
+  // Refetched every visit. Slots go stale the moment somebody books one, and
+  // an admin adding a slot that was taken a minute ago is the one mistake
+  // this tab can make that a cadet notices.
+  if (name === 'mock' && typeof loadMockTab === 'function') loadMockTab();
   // Refetched on every visit: "online now" is a live figure, and showing one
   // cached from an hour ago would be worse than showing nothing.
   if (name === 'online' && typeof loadUserActivity === 'function') loadUserActivity();
@@ -5708,6 +5829,317 @@ async function deleteNotice(id, company) {
   loadNotices();
 }
 
+/* ── MOCK INTERVIEWS ──────────────────────────────────────────────────
+   Reads and writes public.mock_interview_config / _slots / _bookings. No
+   booking is ever created here: those come from the cadet through
+   create-mock-interview-order, which runs as the service role. This tab can
+   set the price, open and close slots, and settle a booking afterwards.
+
+   Money is paise everywhere, parsed as a string. parseFloat('4.99')*100 is
+   498.99999999999994, and that rounds into a real price. Same pair as
+   app/admin/finance.html. */
+function miPaise(input) {
+  var t = String(input == null ? '' : input).trim().replace(/[₹,\s]/g, '');
+  if (t === '' || t === '.' ) return null;
+  if (!/^\d*(\.\d{0,2})?$/.test(t)) return null;
+  var parts = t.split('.');
+  var whole = parts[0] || '0';
+  var frac  = (parts[1] || '').padEnd(2, '0');
+  var v = parseInt(whole, 10) * 100 + parseInt(frac || '0', 10);
+  return isFinite(v) ? v : null;
+}
+function miRupees(paise) {
+  var n = Math.round(Number(paise) || 0);
+  var sign = n < 0 ? '-' : '';
+  n = Math.abs(n);
+  return sign + '₹' + Math.floor(n / 100).toLocaleString('en-IN')
+       + '.' + String(n % 100).padStart(2, '0');
+}
+
+/* IST everywhere, and it says so on screen. The database holds TIMESTAMPTZ;
+   an admin in any timezone and a cadet in India must read the same time, so
+   the zone is pinned here rather than left to the browser. */
+function miWhen(iso) {
+  if (!iso) return '-';
+  return new Date(iso).toLocaleString('en-IN', {
+    weekday: 'short', day: 'numeric', month: 'short',
+    hour: 'numeric', minute: '2-digit', hour12: true,
+    timeZone: 'Asia/Kolkata'
+  });
+}
+/* A local date+time typed by an admin is IST. Built by hand rather than with
+   new Date(str), which reads a bare "2026-08-22T18:00" as the BROWSER's zone:
+   correct on Blesson's laptop, an hour out for anyone else, and silently. */
+function miToUtcIso(dateStr, timeStr) {
+  var d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || '');
+  var t = /^(\d{1,2}):(\d{2})$/.exec(timeStr || '');
+  if (!d || !t) return null;
+  var hh = +t[1], mm = +t[2];
+  if (hh > 23 || mm > 59) return null;
+  // IST is UTC+5:30, no DST, ever.
+  var ms = Date.UTC(+d[1], +d[2] - 1, +d[3], hh, mm) - (5.5 * 3600 * 1000);
+  return new Date(ms).toISOString();
+}
+
+var _miSlots = [], _miBookings = [], _miConfig = null;
+
+async function loadMockTab() {
+  await loadMockConfig();
+  await loadMockSlots();
+  await loadMockBookings();
+}
+
+async function loadMockConfig() {
+  var res = await _sb.from('mock_interview_config').select('*').limit(1).maybeSingle();
+  if (res.error || !res.data) {
+    // Named rather than swallowed: if the setup SQL has not been applied this
+    // is the only thing that says so, and empty fields look like defaults.
+    toast('Could not load settings: ' + (res.error ? res.error.message : 'no config row'), 'err');
+    return;
+  }
+  _miConfig = res.data;
+  document.getElementById('mi-price').value    = (res.data.price_paise / 100).toFixed(2).replace(/\.00$/, '');
+  document.getElementById('mi-duration').value = res.data.duration_minutes;
+  document.getElementById('mi-headline').value = res.data.headline || '';
+  document.getElementById('mi-blurb').value    = res.data.blurb || '';
+  document.getElementById('mi-enabled').checked = !!res.data.is_enabled;
+}
+
+async function saveMockConfig() {
+  var price = miPaise(document.getElementById('mi-price').value);
+  if (price === null || price <= 0) { toast('Enter a price like 499 or 499.50', 'err'); return; }
+
+  var mins = parseInt(document.getElementById('mi-duration').value, 10);
+  if (!(mins >= 10 && mins <= 180)) { toast('Session length must be between 10 and 180 minutes', 'err'); return; }
+
+  var headline = document.getElementById('mi-headline').value.trim();
+  var blurb    = document.getElementById('mi-blurb').value.trim();
+  if (!headline || !blurb) { toast('Headline and blurb are shown to cadets, so neither can be blank', 'err'); return; }
+
+  var enabled = document.getElementById('mi-enabled').checked;
+
+  // Turning it on is the moment cadets can spend money, so it asks once.
+  if (enabled && _miConfig && !_miConfig.is_enabled) {
+    if (!confirm('This makes mock interviews bookable at ' + miRupees(price)
+      + ' for every signed-in cadet.\n\nAdd some slots first if you have not.')) return;
+  }
+
+  var btn = document.getElementById('mi-save');
+  btn.disabled = true;
+  var res = await _sb.from('mock_interview_config').update({
+    price_paise: price, duration_minutes: mins,
+    headline: headline, blurb: blurb, is_enabled: enabled,
+    updated_at: new Date().toISOString(), updated_by: _myId || null
+  }).eq('id', true);
+  btn.disabled = false;
+
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction('mock_config_save', null, { price_paise: price, enabled: enabled });
+  toast('Saved' + (enabled ? '' : ', still off'));
+  loadMockConfig();
+}
+
+async function addMockSlot() {
+  var iso = miToUtcIso(document.getElementById('mi-date').value,
+                       document.getElementById('mi-time').value);
+  if (!iso) { toast('Pick a date and a time', 'err'); return; }
+  if (new Date(iso) <= new Date()) { toast('That time has already passed', 'err'); return; }
+
+  var note = document.getElementById('mi-note').value.trim() || null;
+  var mins = _miConfig ? _miConfig.duration_minutes : 30;
+
+  var res = await _sb.from('mock_interview_slots')
+    .insert({ starts_at: iso, duration_minutes: mins, note: note });
+
+  if (res.error) {
+    // starts_at is UNIQUE, so this is the common case and deserves plain words.
+    toast(/duplicate|unique/i.test(res.error.message)
+      ? 'There is already a slot at that time'
+      : 'Failed: ' + res.error.message, 'err');
+    return;
+  }
+  logAdminAction('mock_slot_add', null, { starts_at: iso });
+  document.getElementById('mi-time').value = '';
+  document.getElementById('mi-note').value = '';
+  toast('Slot added');
+  loadMockSlots();
+}
+
+async function bulkAddMockSlots() {
+  var from = document.getElementById('mi-bulk-from').value;
+  var to   = document.getElementById('mi-bulk-to').value;
+  var times = document.getElementById('mi-bulk-times').value
+    .split(',').map(function (t) { return t.trim(); }).filter(Boolean);
+
+  if (!from || !to || !times.length) { toast('Pick a range and at least one time', 'err'); return; }
+  if (to < from) { toast('The end date is before the start date', 'err'); return; }
+
+  var rows = [], skipped = 0;
+  var mins = _miConfig ? _miConfig.duration_minutes : 30;
+  var cur = new Date(from + 'T00:00:00Z'), end = new Date(to + 'T00:00:00Z');
+  var guard = 0;
+
+  while (cur <= end && guard++ < 400) {
+    var dateStr = cur.toISOString().slice(0, 10);
+    for (var i = 0; i < times.length; i++) {
+      var iso = miToUtcIso(dateStr, times[i]);
+      // A malformed time is skipped and counted, not silently dropped and not
+      // fatal to the other 20 slots in the batch.
+      if (!iso || new Date(iso) <= new Date()) { skipped++; continue; }
+      rows.push({ starts_at: iso, duration_minutes: mins });
+    }
+    cur.setUTCDate(cur.getUTCDate() + 1);
+  }
+
+  if (!rows.length) { toast('Nothing to add: every time was invalid or in the past', 'err'); return; }
+  if (!confirm('Add ' + rows.length + ' slots?' + (skipped ? '\n\n' + skipped + ' skipped as invalid or past.' : ''))) return;
+
+  // Existing times collide on the UNIQUE index. Ignoring the conflict is the
+  // right behaviour for a bulk add: re-running a week with one extra time
+  // should add the one, not fail on the twenty already there.
+  var res = await _sb.from('mock_interview_slots')
+    .upsert(rows, { onConflict: 'starts_at', ignoreDuplicates: true });
+
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction('mock_slot_bulk_add', null, { from: from, to: to, count: rows.length });
+  toast('Added, existing times left alone');
+  loadMockSlots();
+}
+
+async function loadMockSlots() {
+  var body = document.getElementById('mi-slot-tbody');
+  if (!body) return;
+
+  var sres = await _sb.from('mock_interview_slots')
+    .select('*').order('starts_at', { ascending: true });
+  if (sres.error) {
+    body.innerHTML = '<tr><td colspan="5" class="empty">Could not load slots: ' + esc(sres.error.message) + '</td></tr>';
+    return;
+  }
+  // Live bookings only. A cancelled booking must not make its slot look taken,
+  // because the slot genuinely is available again.
+  var bres = await _sb.from('mock_interview_bookings')
+    .select('slot_id, full_name, status')
+    .in('status', ['reserved', 'paid', 'completed']);
+  var held = {};
+  (bres.data || []).forEach(function (b) { held[b.slot_id] = b; });
+
+  _miSlots = sres.data || [];
+  if (!_miSlots.length) {
+    body.innerHTML = '<tr><td colspan="5" class="empty">No slots yet. Add the first one above.</td></tr>';
+    return;
+  }
+
+  var now = Date.now();
+  body.innerHTML = _miSlots.map(function (sl) {
+    var past = new Date(sl.starts_at).getTime() <= now;
+    var b = held[sl.id];
+    var cls, label;
+    if (b)             { cls = 'nt-upcoming'; label = b.status === 'reserved' ? 'Holding' : 'Booked'; }
+    else if (past)     { cls = 'nt-closed';   label = 'Past'; }
+    else if (!sl.is_active) { cls = 'nt-draft'; label = 'Off'; }
+    else               { cls = 'nt-open';     label = 'Open'; }
+
+    return '<tr' + ((past && !b) ? ' class="nt-row-dead"' : '') + '>'
+      + '<td>' + esc(miWhen(sl.starts_at)) + '</td>'
+      + '<td><span class="' + cls + '">' + label + '</span></td>'
+      + '<td>' + (b ? esc(b.full_name) : '<span style="color:var(--text3)">-</span>') + '</td>'
+      + '<td>' + esc(sl.note || '') + '</td>'
+      + '<td style="text-align:right;white-space:nowrap">'
+      + (b ? ''
+           : '<button class="ad-btn" onclick="toggleMockSlot(\'' + sl.id + '\',' + (!sl.is_active) + ')">'
+             + (sl.is_active ? 'Turn off' : 'Turn on') + '</button>')
+      + '</td></tr>';
+  }).join('');
+}
+
+async function toggleMockSlot(id, makeActive) {
+  var res = await _sb.from('mock_interview_slots')
+    .update({ is_active: makeActive }).eq('id', id);
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction(makeActive ? 'mock_slot_on' : 'mock_slot_off', null, { slot_id: id });
+  loadMockSlots();
+}
+
+async function loadMockBookings() {
+  var body = document.getElementById('mi-book-tbody');
+  if (!body) return;
+
+  var res = await _sb.from('mock_interview_bookings')
+    .select('*, slot:mock_interview_slots(starts_at)')
+    .order('created_at', { ascending: false })
+    .limit(300);
+
+  if (res.error) {
+    body.innerHTML = '<tr><td colspan="7" class="empty">Could not load bookings: ' + esc(res.error.message) + '</td></tr>';
+    return;
+  }
+  _miBookings = res.data || [];
+  if (!_miBookings.length) {
+    body.innerHTML = '<tr><td colspan="7" class="empty">No bookings yet.</td></tr>';
+    return;
+  }
+
+  var CLS = { reserved: 'nt-draft', paid: 'nt-open', completed: 'nt-upcoming',
+              cancelled: 'nt-closed', expired: 'nt-closed' };
+  // 'reserved' is spelled out. It means a cadet is mid-checkout, or was and
+  // vanished; it is not a sale, and reading it as one is how a slot gets
+  // held open for somebody who never paid.
+  var WORD = { reserved: 'In checkout', paid: 'Paid', completed: 'Done',
+               cancelled: 'Cancelled', expired: 'Abandoned' };
+
+  body.innerHTML = _miBookings.map(function (b) {
+    var live = b.status === 'paid';
+    return '<tr' + (/cancelled|expired/.test(b.status) ? ' class="nt-row-dead"' : '') + '>'
+      + '<td>' + esc(b.full_name) + '</td>'
+      + '<td style="font-size:12px">' + esc(b.email) + '<br>' + esc(b.phone) + '</td>'
+      + '<td style="font-size:12px">' + esc(b.degree) + ' · ' + esc(b.stream)
+        + (b.college ? '<br>' + esc(b.college) : '') + '</td>'
+      + '<td>' + esc(b.slot ? miWhen(b.slot.starts_at) : '-') + '</td>'
+      + '<td style="text-align:right;font-variant-numeric:tabular-nums">' + esc(miRupees(b.amount_paise)) + '</td>'
+      + '<td><span class="' + (CLS[b.status] || 'nt-closed') + '">' + (WORD[b.status] || b.status) + '</span></td>'
+      + '<td style="text-align:right;white-space:nowrap">'
+      + (live ? '<button class="ad-btn" onclick="markMockDone(\'' + b.id + '\')">Mark done</button> ' : '')
+      + (live ? '<button class="ad-btn" onclick="cancelMockBooking(\'' + b.id + '\')">Cancel</button>' : '')
+      + '</td></tr>';
+  }).join('');
+}
+
+async function markMockDone(id) {
+  var res = await _sb.from('mock_interview_bookings')
+    .update({ status: 'completed' }).eq('id', id).eq('status', 'paid');
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction('mock_booking_done', null, { booking_id: id });
+  toast('Marked done');
+  loadMockBookings(); loadMockSlots();
+}
+
+async function cancelMockBooking(id) {
+  // Says the quiet part out loud. Cancelling here frees the slot and tells
+  // nobody: the refund is a separate, deliberate act in the Payments tab.
+  if (!confirm('Cancel this booking?\n\nThe slot goes back on sale immediately. This does NOT refund the cadet, and it does NOT email them; both are on you.')) return;
+  var res = await _sb.from('mock_interview_bookings')
+    .update({ status: 'cancelled', cancelled_at: new Date().toISOString() })
+    .eq('id', id).in('status', ['paid', 'completed']);
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction('mock_booking_cancel', null, { booking_id: id });
+  toast('Cancelled, slot is back on sale');
+  loadMockBookings(); loadMockSlots();
+}
+
+function exportMockBookings() {
+  if (!_miBookings.length) { toast('Nothing to export', 'err'); return; }
+  var headers = ['Name', 'Email', 'Phone', 'Degree', 'Stream', 'College',
+                 'Graduation', 'Slot (IST)', 'Amount', 'Status', 'Booked'];
+  var rows = [];
+  _miBookings.forEach(function (b) {
+    rows.push([b.full_name, b.email, b.phone, b.degree, b.stream, b.college || '',
+               b.graduation_year || '', b.slot ? miWhen(b.slot.starts_at) : '',
+               (b.amount_paise / 100).toFixed(2), b.status, fmtDate(b.created_at)]);
+  });
+  csvDownload('mock-interview-bookings', headers, rows);
+}
+
 /* ── TEAM ADMINS ─────────────────────────────────────────────────── */
 var _allAdmins = [];
 
@@ -8222,7 +8654,7 @@ function setAdminCourse(course) {
    would start hiding tabs the day a query returned nothing, which is exactly
    when you most want to look at them. */
 var COURSE_TABS = {
-  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notices', 'status'],
+  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notices', 'mock', 'status'],
   coc:         ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications',
                 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity'],
 };

@@ -259,6 +259,128 @@
   }
   .nt-apply:hover { filter:brightness(1.12) }
   @media (max-width:768px) { .nt-company { margin-right:0;width:100% } }
+  /* ── MOCK INTERVIEW: floating button and booking modal ──────────────
+     --blue on this page is the amber brand accent (see the palette override
+     at the top of this file), so it is the primary-action colour here and
+     carries no status meaning. Status is green/red/amber, as on the notices
+     list. */
+  #mi-fab {
+    position:fixed; right:30px; bottom:92px; z-index:998;
+    display:none; align-items:center; gap:9px;
+    padding:13px 20px; border:none; border-radius:999px;
+    background:var(--blue); color:var(--on-accent);
+    font-size:13.5px; font-weight:800; font-family:inherit; cursor:pointer;
+    box-shadow:0 6px 22px rgba(0,0,0,.34);
+    overflow:hidden; white-space:nowrap;
+    transition:transform .18s, box-shadow .18s, padding .35s ease, gap .35s ease;
+  }
+  #mi-fab:hover { transform:translateY(-2px); box-shadow:0 10px 26px rgba(0,0,0,.42) }
+  #mi-fab .mi-fab-ic { font-size:16px; line-height:1; flex-shrink:0 }
+  #mi-fab .mi-fab-label {
+    max-width:220px; opacity:1; overflow:hidden;
+    transition:max-width .35s ease, opacity .22s ease;
+  }
+
+  /* Says what it is, then gets out of the way. A permanent pill sits over the
+     notes of somebody who is reading, and this page is for reading; a button
+     that was never legible in the first place is not an offer. So it arrives
+     wide, holds long enough to be read, and settles to the same 48px circle
+     as the back-to-top arrow it stacks above. Hover brings the words back, so
+     the meaning is recoverable without clicking. */
+  #mi-fab.mi-collapsed { padding:0; width:48px; height:48px; justify-content:center; gap:0 }
+  #mi-fab.mi-collapsed .mi-fab-label { max-width:0; opacity:0 }
+  #mi-fab.mi-collapsed .mi-fab-ic { font-size:20px }
+  @media (hover:hover) {
+    #mi-fab.mi-collapsed:hover { padding:13px 20px; width:auto; height:auto; gap:9px }
+    #mi-fab.mi-collapsed:hover .mi-fab-label { max-width:220px; opacity:1 }
+    #mi-fab.mi-collapsed:hover .mi-fab-ic { font-size:16px }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    #mi-fab, #mi-fab .mi-fab-label { transition:none }
+  }
+  /* right and bottom match #back-to-top, which has no mobile override of its
+     own (bottom:30px, right:30px, 48px square, at every width). The two are a
+     stacked column, so sharing the right edge is what makes them read as one
+     control group rather than two things that happen to be in the corner.
+     92px clears the arrow's 78px top edge by 14. */
+  @media (max-width:768px) {
+    #mi-fab .mi-fab-label { max-width:180px }
+  }
+
+  .mi-panel {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:min(560px, 94vw); max-height:88vh; overflow-y:auto;
+    background:var(--surface); border:1px solid var(--border2);
+    border-radius:16px; padding:26px 26px 22px;
+    box-shadow:0 24px 60px rgba(0,0,0,.45);
+  }
+  .mi-close {
+    position:absolute; top:14px; right:16px; background:none; border:none;
+    color:var(--text3); font-size:22px; line-height:1; cursor:pointer; padding:4px;
+  }
+  .mi-close:hover { color:var(--text) }
+  .mi-h { font-size:21px; font-weight:800; color:var(--text); margin:0 0 8px; padding-right:28px }
+  .mi-sub { font-size:13.5px; color:var(--text2); line-height:1.7; margin:0 0 18px }
+  .mi-price-row { display:flex; align-items:baseline; gap:10px; margin-bottom:18px; flex-wrap:wrap }
+  .mi-price { font-size:26px; font-weight:800; color:var(--blue); font-variant-numeric:tabular-nums }
+  .mi-dur { font-size:12.5px; color:var(--text3) }
+  .mi-list { list-style:none; padding:0; margin:0 0 20px; display:flex; flex-direction:column; gap:10px }
+  .mi-list li { display:flex; gap:10px; font-size:13.5px; color:var(--text2); line-height:1.6 }
+  .mi-list .mi-tick { color:var(--green); flex-shrink:0; font-weight:800 }
+  .mi-btn {
+    width:100%; padding:13px; border-radius:10px; border:none;
+    background:var(--blue); color:var(--on-accent);
+    font-size:14px; font-weight:800; font-family:inherit; cursor:pointer;
+    transition:filter .15s;
+  }
+  .mi-btn:hover:not(:disabled) { filter:brightness(1.08) }
+  .mi-btn:disabled { opacity:.55; cursor:default }
+  /* In the two-button rows the ghost must keep its own width and the primary
+     take the rest. Without flex:0 0 auto the ghost is squeezed by the 100%
+     width it inherits from .mi-btn and "← Back" breaks onto two lines. */
+  .mi-btn-ghost {
+    width:auto; flex:0 0 auto; white-space:nowrap;
+    padding:9px 16px; background:none; color:var(--text2);
+    border:1px solid var(--border2); font-weight:700; font-size:12.5px;
+  }
+  .mi-btn-row { display:flex; gap:10px; align-items:stretch }
+  .mi-btn-row .mi-btn:not(.mi-btn-ghost) { flex:1 }
+  .mi-btn-ghost:hover { color:var(--text); border-color:var(--text3) }
+  .mi-day { font-size:11.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+            color:var(--text3); margin:16px 0 8px }
+  .mi-day:first-of-type { margin-top:0 }
+  .mi-slots { display:flex; flex-wrap:wrap; gap:8px }
+  .mi-slot {
+    padding:9px 14px; border-radius:9px; border:1px solid var(--border2);
+    background:var(--surface2); color:var(--text); font-size:13px; font-weight:700;
+    font-family:inherit; cursor:pointer; font-variant-numeric:tabular-nums;
+    transition:border-color .15s, background .15s;
+  }
+  .mi-slot:hover { border-color:var(--blue) }
+  .mi-slot[aria-pressed="true"] { background:var(--blue-dim); border-color:var(--blue); color:var(--blue) }
+  .mi-field { margin-bottom:13px }
+  .mi-field label { display:block; font-size:11.5px; font-weight:700; letter-spacing:.3px;
+                    text-transform:uppercase; color:var(--text3); margin-bottom:5px }
+  .mi-input {
+    width:100%; box-sizing:border-box; padding:10px 12px; border-radius:9px;
+    border:1px solid var(--border2); background:var(--surface2); color:var(--text);
+    font-size:13.5px; font-family:inherit; outline:none; transition:border-color .15s;
+  }
+  .mi-input:focus { border-color:var(--blue) }
+  .mi-two { display:flex; gap:10px }
+  .mi-two > * { flex:1; min-width:0 }
+  .mi-note {
+    font-size:12.5px; color:var(--text2); line-height:1.65;
+    background:var(--blue-dim); border:1px solid var(--blue-border);
+    border-radius:9px; padding:11px 13px; margin-bottom:16px;
+  }
+  .mi-err { font-size:13px; color:var(--red); margin-bottom:12px; line-height:1.6 }
+  .mi-empty { font-size:13.5px; color:var(--text2); line-height:1.7; text-align:center; padding:22px 6px }
+  .mi-done-ic { font-size:40px; text-align:center; margin-bottom:10px }
+  .mi-chosen { font-size:13px; color:var(--text2); margin-bottom:14px }
+  .mi-chosen b { color:var(--text) }
+  @media (max-width:768px) { .mi-two { flex-direction:column; gap:0 } }
+
   .coming-soon-banner { text-align:center;padding:60px 20px;color:var(--text3) }
   .coming-soon-banner .cs-icon { font-size:40px;margin-bottom:12px }
   .coming-soon-banner h3 { font-size:16px;font-weight:700;color:var(--text2);margin-bottom:8px }
@@ -782,6 +904,99 @@ window._authReady = (async () => {
 </div>
 
 <!-- ═══ PROFILE ═══ -->
+
+<!-- MOCK INTERVIEW: floating entry point, present on every view.
+     Hidden until loadMockConfig finds is_enabled true, so the whole feature
+     is invisible while it is switched off in the admin console. -->
+<button id="mi-fab" onclick="openMockModal()" aria-label="Book a mock interview">
+  <span class="mi-fab-ic">🎤</span><span class="mi-fab-label">Book a Mock Interview</span>
+</button>
+
+<div id="mi-modal" onclick="closeMockModal(event)" style="display:none;position:fixed;inset:0;z-index:10002;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)">
+  <div class="mi-panel" onclick="event.stopPropagation()">
+    <button class="mi-close" onclick="closeMockModal()" aria-label="Close">&times;</button>
+
+    <!-- Step 1: what this is -->
+    <div id="mi-step-pitch">
+      <h2 class="mi-h" id="mi-headline">Test your interview prep</h2>
+      <p class="mi-sub" id="mi-blurb"></p>
+      <div class="mi-price-row">
+        <span class="mi-price" id="mi-price"></span>
+        <span class="mi-dur" id="mi-dur"></span>
+      </div>
+      <ul class="mi-list">
+        <li><span class="mi-tick">&#10003;</span><span>A live interview run the way a company runs it, not a quiz.</span></li>
+        <li><span class="mi-tick">&#10003;</span><span>An honest read on where you stand today.</span></li>
+        <li><span class="mi-tick">&#10003;</span><span>The weak areas costing you marks, named specifically.</span></li>
+        <li><span class="mi-tick">&#10003;</span><span>What to work on next, and how, before the real thing.</span></li>
+      </ul>
+      <button class="mi-btn" onclick="mockStep('slots')">Choose a time &rarr;</button>
+    </div>
+
+    <!-- Step 2: pick a slot -->
+    <div id="mi-step-slots" style="display:none">
+      <h2 class="mi-h">Pick a time</h2>
+      <p class="mi-sub">All times are IST. One cadet per slot, so a time you can see is a time that is free.</p>
+      <div id="mi-slot-box"><div class="mi-empty">Loading times&hellip;</div></div>
+      <div class="mi-btn-row" style="margin-top:18px">
+        <button class="mi-btn mi-btn-ghost" onclick="mockStep('pitch')">&larr; Back</button>
+        <button class="mi-btn" id="mi-to-details" onclick="mockStep('details')" disabled>Continue</button>
+      </div>
+    </div>
+
+    <!-- Step 3: who you are -->
+    <div id="mi-step-details" style="display:none">
+      <h2 class="mi-h">Your details</h2>
+      <p class="mi-sub">This is what the interviewer reads before the session, so it is worth being accurate.</p>
+      <div class="mi-chosen" id="mi-chosen"></div>
+      <div id="mi-form-err" class="mi-err" style="display:none"></div>
+
+      <div class="mi-field">
+        <label for="mi-name">Full name</label>
+        <input class="mi-input" id="mi-name" autocomplete="name">
+      </div>
+      <div class="mi-field">
+        <label for="mi-phone">Phone</label>
+        <input class="mi-input" id="mi-phone" inputmode="tel" autocomplete="tel" placeholder="+91 ">
+      </div>
+      <div class="mi-two">
+        <div class="mi-field">
+          <label for="mi-degree">Degree</label>
+          <input class="mi-input" id="mi-degree" placeholder="B.Tech, B.E, Diploma">
+        </div>
+        <div class="mi-field">
+          <label for="mi-stream">Stream</label>
+          <input class="mi-input" id="mi-stream" placeholder="EEE, ECE, Marine">
+        </div>
+      </div>
+      <div class="mi-two">
+        <div class="mi-field">
+          <label for="mi-college">College (optional)</label>
+          <input class="mi-input" id="mi-college">
+        </div>
+        <div class="mi-field">
+          <label for="mi-year">Graduating (optional)</label>
+          <input class="mi-input" id="mi-year" inputmode="numeric" placeholder="2027">
+        </div>
+      </div>
+
+      <div class="mi-note" id="mi-email-note"></div>
+      <div class="mi-btn-row">
+        <button class="mi-btn mi-btn-ghost" onclick="mockStep('slots')">&larr; Back</button>
+        <button class="mi-btn" id="mi-pay" onclick="startMockPayment()">Pay and book</button>
+      </div>
+    </div>
+
+    <!-- Step 4: done -->
+    <div id="mi-step-done" style="display:none">
+      <div class="mi-done-ic">🎉</div>
+      <h2 class="mi-h" style="text-align:center">You are booked</h2>
+      <p class="mi-sub" id="mi-done-text" style="text-align:center"></p>
+      <button class="mi-btn" onclick="closeMockModal()">Done</button>
+    </div>
+  </div>
+</div>
+
 <div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)">
   <div id="profile-panel">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
@@ -1187,6 +1402,319 @@ function showStudyHub() {
    sets, so they keep separate SECTIONS entries and separate quizzes. They sit
    behind one card on Study Materials because a cadet thinks of them as one
    subject, and the grid there was drifting past the point where it scans. */
+
+/* ── MOCK INTERVIEW BOOKING ───────────────────────────────────────────
+   The floating button is the only entry point and it is present on every
+   view, so nothing here may assume which section is open.
+
+   Two things this deliberately does not do. It never sends a price: the
+   amount is read from mock_interview_config inside create-mock-interview-order
+   and the client's opinion is not consulted. And it never writes a booking
+   row: there is no INSERT policy on the table at all, so every write goes
+   through an edge function running as the service role. */
+
+/* Hardcoded, matching get-sponsorship-key above rather than reading
+   _sbClient.supabaseUrl, which is an internal of the client library. */
+var MI_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
+
+var _miCfg = null, _miSlots = [], _miPicked = null, _miPaying = false;
+
+function _miEsc(v) {
+  return String(v == null ? '' : v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+function _miRupees(paise) {
+  var n = Math.round(Number(paise) || 0);
+  return '₹' + Math.floor(n / 100).toLocaleString('en-IN')
+       + (n % 100 ? '.' + String(n % 100).padStart(2, '0') : '');
+}
+/* IST, pinned. A cadet in India and a slot stored as TIMESTAMPTZ must agree
+   whatever timezone the browser thinks it is in. */
+function _miTime(iso) {
+  return new Date(iso).toLocaleTimeString('en-IN', {
+    hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' });
+}
+function _miDay(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Asia/Kolkata' });
+}
+
+/* Called once after auth. A failure here leaves the button hidden, which is
+   the right way to fail: no button is a feature that is not offered, a broken
+   button is a feature that is offered and does not work. */
+async function loadMockConfig() {
+  if (!window._sbClient) return;
+  try {
+    var res = await window._sbClient
+      .from('mock_interview_config')
+      .select('price_paise, is_enabled, duration_minutes, headline, blurb')
+      .eq('id', true).maybeSingle();
+    if (res.error || !res.data || !res.data.is_enabled) return;
+    _miCfg = res.data;
+    var fab = document.getElementById('mi-fab');
+    if (!fab) return;
+    fab.style.display = 'flex';
+    _miCollapseLater();
+  } catch (e) { /* stays hidden */ }
+}
+
+/* 15 seconds. Long enough to catch the eye and be read, short enough that it
+   is gone before anyone settles into a page. Once collapsed it stays
+   collapsed for the rest of the visit, including after the modal closes,
+   because the reader has already seen it and re-expanding would be the app
+   tapping them on the shoulder twice. */
+var _miCollapseTimer = null;
+function _miCollapseLater() {
+  var fab = document.getElementById('mi-fab');
+  if (!fab || fab.classList.contains('mi-collapsed')) return;
+  clearTimeout(_miCollapseTimer);
+  _miCollapseTimer = setTimeout(function () {
+    var el = document.getElementById('mi-fab');
+    if (el) el.classList.add('mi-collapsed');
+  }, 15000);
+}
+
+function mockStep(name) {
+  ['pitch', 'slots', 'details', 'done'].forEach(function (k) {
+    var el = document.getElementById('mi-step-' + k);
+    if (el) el.style.display = (k === name) ? '' : 'none';
+  });
+  if (name === 'slots') loadMockSlots();
+  if (name === 'details') {
+    var c = document.getElementById('mi-chosen');
+    if (c && _miPicked) {
+      c.innerHTML = 'Booking <b>' + _miEsc(_miDay(_miPicked.starts_at)) + ', '
+                  + _miEsc(_miTime(_miPicked.starts_at)) + ' IST</b>';
+    }
+    // Named plainly rather than buried in small print. The assessment goes to
+    // the account address, and a cadet who expected it somewhere else finds
+    // out a week later.
+    var note = document.getElementById('mi-email-note');
+    var email = (window._sbUser && window._sbUser.email) || 'your account email';
+    if (note) {
+      note.innerHTML = 'Your feedback and assessment go to <b>' + _miEsc(email)
+        + '</b>, the address on your account. We will also use it to confirm the session.';
+    }
+  }
+}
+
+function openMockModal() {
+  if (!_miCfg) return;
+  document.getElementById('mi-headline').textContent = _miCfg.headline || 'Test your interview prep';
+  document.getElementById('mi-blurb').textContent    = _miCfg.blurb || '';
+  document.getElementById('mi-price').textContent    = _miRupees(_miCfg.price_paise);
+  document.getElementById('mi-dur').textContent      = 'for a ' + _miCfg.duration_minutes + ' minute session';
+
+  var u = window._sbUser;
+  var nameEl = document.getElementById('mi-name');
+  if (nameEl && !nameEl.value && u) {
+    nameEl.value = (u.user_metadata && u.user_metadata.full_name) || '';
+  }
+
+  _miPicked = null;
+  document.getElementById('mi-to-details').disabled = true;
+  mockStep('pitch');
+  document.getElementById('mi-modal').style.display = 'block';
+  var fab = document.getElementById('mi-fab');
+  fab.style.display = 'none';
+  // Opening it settles the question of whether they have read the words, so
+  // the pill has no more work to do and comes back as the circle.
+  clearTimeout(_miCollapseTimer);
+  fab.classList.add('mi-collapsed');
+}
+
+function closeMockModal(ev) {
+  /* The backdrop closes it, a click inside must not. Only the backdrop passes
+     an event; the close and done buttons call this with nothing. Reading the
+     global `event` instead would work in Chrome and silently not in Safari. */
+  if (ev && ev.target && ev.target.id !== 'mi-modal') return;
+  if (_miPaying) return;   // never yank the panel out from under a checkout
+  document.getElementById('mi-modal').style.display = 'none';
+  if (_miCfg) document.getElementById('mi-fab').style.display = 'flex';
+}
+
+async function loadMockSlots() {
+  var box = document.getElementById('mi-slot-box');
+  if (!box || !window._sbClient) return;
+  box.innerHTML = '<div class="mi-empty">Loading times&hellip;</div>';
+
+  var res, taken = {};
+  try {
+    // RLS already limits this to active, future slots, so the query says what
+    // it wants rather than repeating the policy and drifting from it.
+    res = await window._sbClient
+      .from('mock_interview_slots')
+      .select('id, starts_at, duration_minutes')
+      .order('starts_at', { ascending: true })
+      .limit(60);
+  } catch (e) { res = { error: e }; }
+
+  if (res.error) {
+    box.innerHTML = '<div class="mi-empty">Could not load the times just now. Check your connection and try again.</div>';
+    return;
+  }
+
+  _miSlots = res.data || [];
+  if (!_miSlots.length) {
+    // Honest, and says what to do next. An empty box reads as broken.
+    box.innerHTML = '<div class="mi-empty">No times are open at the moment.<br>New slots usually go up at the start of the week, so it is worth checking back.</div>';
+    return;
+  }
+
+  var byDay = {}, order = [];
+  _miSlots.forEach(function (sl) {
+    var d = _miDay(sl.starts_at);
+    if (!byDay[d]) { byDay[d] = []; order.push(d); }
+    byDay[d].push(sl);
+  });
+
+  box.innerHTML = order.map(function (d) {
+    return '<div class="mi-day">' + _miEsc(d) + '</div><div class="mi-slots">'
+      + byDay[d].map(function (sl) {
+          return '<button type="button" class="mi-slot" aria-pressed="false" data-slot="'
+            + _miEsc(sl.id) + '" onclick="pickMockSlot(\'' + sl.id + '\')">'
+            + _miEsc(_miTime(sl.starts_at)) + '</button>';
+        }).join('')
+      + '</div>';
+  }).join('');
+}
+
+function pickMockSlot(id) {
+  _miPicked = _miSlots.filter(function (s) { return s.id === id; })[0] || null;
+  document.querySelectorAll('#mi-slot-box .mi-slot').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(b.getAttribute('data-slot') === id));
+  });
+  document.getElementById('mi-to-details').disabled = !_miPicked;
+}
+
+/* Razorpay's checkout.js on demand, ported from app/index.html rather than
+   duplicated by accident: loading it on every page view costs every reader
+   a CDN round trip for a script almost none of them will use. */
+function _miEnsureRazorpay() {
+  if (window.Razorpay) return Promise.resolve(true);
+  return new Promise(function (resolve) {
+    var sc = document.createElement('script');
+    sc.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    sc.onload  = function () { resolve(!!window.Razorpay); };
+    sc.onerror = function () { resolve(false); };
+    document.head.appendChild(sc);
+  });
+}
+
+function _miErr(msg) {
+  var el = document.getElementById('mi-form-err');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.style.display = msg ? '' : 'none';
+}
+
+async function startMockPayment() {
+  if (_miPaying) return;
+  _miErr('');
+
+  if (!_miPicked) { mockStep('slots'); return; }
+
+  var payload = {
+    slot_id:   _miPicked.id,
+    full_name: document.getElementById('mi-name').value.trim(),
+    phone:     document.getElementById('mi-phone').value.trim(),
+    degree:    document.getElementById('mi-degree').value.trim(),
+    stream:    document.getElementById('mi-stream').value.trim(),
+    college:   document.getElementById('mi-college').value.trim(),
+    graduation_year: document.getElementById('mi-year').value.trim(),
+  };
+
+  if (!payload.full_name || !payload.phone || !payload.degree || !payload.stream) {
+    _miErr('Name, phone, degree and stream are all needed.');
+    return;
+  }
+
+  var btn = document.getElementById('mi-pay');
+  _miPaying = true; btn.disabled = true; btn.textContent = 'Starting…';
+
+  function stop(msg) {
+    _miPaying = false; btn.disabled = false; btn.textContent = 'Pay and book';
+    if (msg) _miErr(msg);
+  }
+
+  try {
+    var ok = await _miEnsureRazorpay();
+    if (!ok) { stop('Could not reach the payment provider. Check your connection and try again.'); return; }
+
+    var session = await window._sbClient.auth.getSession();
+    var token = session && session.data && session.data.session
+      ? session.data.session.access_token : null;
+    if (!token) { stop('Your session has expired. Sign in again and retry.'); return; }
+
+    var r = await fetch(MI_FN_URL + '/create-mock-interview-order', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    var order = await r.json();
+    if (!r.ok) {
+      // A taken slot is the common case and needs the list refreshed, not a
+      // retry against a slot that is gone.
+      stop(order.error || 'Could not start the payment.');
+      if (r.status === 409) { _miPicked = null; mockStep('slots'); }
+      return;
+    }
+
+    var rzp = new window.Razorpay({
+      key: order.key_id,
+      amount: order.amount,
+      currency: order.currency,
+      order_id: order.order_id,
+      name: 'Elec-Buddy',
+      description: 'Mock interview, ' + _miCfg.duration_minutes + ' minutes',
+      prefill: {
+        name:    payload.full_name,
+        email:   (window._sbUser && window._sbUser.email) || '',
+        contact: payload.phone,
+      },
+      theme: { color: '#f59e0b' },
+      modal: {
+        ondismiss: function () {
+          // Their hold stays for 15 minutes, so say so rather than letting
+          // them wonder whether the slot is still theirs.
+          stop('Payment cancelled. Your slot is held for 15 minutes if you want to try again.');
+        },
+      },
+      handler: async function (resp) {
+        try {
+          var v = await fetch(MI_FN_URL + '/verify-mock-interview-payment', {
+            method: 'POST',
+            headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              order_id:   resp.razorpay_order_id,
+              payment_id: resp.razorpay_payment_id,
+              signature:  resp.razorpay_signature,
+            }),
+          });
+          var out = await v.json();
+          _miPaying = false;
+          if (!v.ok) { stop(out.error || 'Payment taken but the booking could not be confirmed. Do not pay again, we will email you.'); return; }
+
+          var when = out.starts_at
+            ? _miDay(out.starts_at) + ', ' + _miTime(out.starts_at) + ' IST'
+            : 'your chosen time';
+          document.getElementById('mi-done-text').innerHTML =
+            'Your mock interview is confirmed for <b>' + _miEsc(when) + '</b>.<br><br>'
+            + 'We will email <b>' + _miEsc(out.email || '') + '</b> to confirm, and your '
+            + 'assessment and feedback come to the same address afterwards.';
+          mockStep('done');
+          btn.disabled = false; btn.textContent = 'Pay and book';
+        } catch (e) {
+          stop('Payment taken but the booking could not be confirmed. Do not pay again, we will email you.');
+        }
+      },
+    });
+    rzp.open();
+  } catch (e) {
+    stop('Something went wrong. Nothing was charged.');
+  }
+}
+
 function showAptitudeHub() {
   if (window.innerWidth <= 768) closeMobileMenu();
   setAllViewsInactive();
@@ -2079,6 +2607,15 @@ function startBackgroundIndexing() {
   setTimeout(next, 2500);
 }
 
+/* Waits for the auth block in <head> rather than for DOMContentLoaded: the
+   config read needs a session, and the button must not flash in for a signed
+   out visitor on their way to the login page. */
+if (window._authReady && window._authReady.then) {
+  window._authReady.then(function () { loadMockConfig(); }).catch(function () {});
+} else {
+  window.addEventListener('load', function () { loadMockConfig(); });
+}
+
 // ── Routing ──
 window.addEventListener('DOMContentLoaded', function(){
   var hash = location.hash.substring(1);
@@ -2323,7 +2860,8 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   // the same trap. back-to-top is position:fixed inside #content, which on
   // iOS positions it against the scroller rather than the viewport, so it
   // drifts while scrolling instead of staying pinned.
-  ['profile-modal', 'settings-modal', 'nf-overlay', 'tx-modal', 'back-to-top'].forEach(function(id) {
+  ['profile-modal', 'settings-modal', 'nf-overlay', 'tx-modal', 'back-to-top',
+   'mi-fab', 'mi-modal'].forEach(function(id) {
     var el = document.getElementById(id);
     if (el && el.parentNode !== document.body) document.body.appendChild(el);
   });
