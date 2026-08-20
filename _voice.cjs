@@ -36,7 +36,7 @@ const TELLS = [
 ];
 
 const only = process.argv[2];
-const DIRS = ['overview', 'fundamentals', 'aptitude', 'datainterp', 'interview', 'CompanyQA']
+const DIRS = ['overview', 'fundamentals', 'aptitude', 'datainterp', 'entrancetest', 'interview', 'CompanyQA']
   .filter(d => !only || d === only);
 
 let rows = [];

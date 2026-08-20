@@ -734,8 +734,9 @@
       /* Signup domains: captions come from the cell's own data-label rather
          than nth-child rules, so inserting a column cannot silently shift every
          label out of step, which is what happened to the coupons table. */
-      #dom-panel .ad-table td::before,
+      #apr-pane-domains .ad-table td::before,
       #apr-tbody td::before,
+      #apr-done-tbody td::before,
       #nt-tbody td::before,
       #nfr-tbody td::before { content: attr(data-label); }
 
@@ -761,7 +762,7 @@
       .nfr-back { padding: 0; align-items: stretch; }
       .nfr { width: 100%; max-height: 100%; border-radius: 0; border: none; }
       .nfr-wrap { padding: 0 14px 14px; }
-      #dom-panel .ad-table-wrap { padding: 0 12px 12px; }
+      #apr-pane-domains .ad-table-wrap { padding: 0 12px 12px; }
       .dom-note { margin-left: 12px; margin-right: 12px; }
       .dom-add { padding-left: 12px; padding-right: 12px; }
       .dom-add .ad-input { max-width: none; }
@@ -993,6 +994,24 @@
       color: var(--text3); text-transform: uppercase;
       letter-spacing: .6px; margin-bottom: 6px; padding-left: 2px;
     }
+    .dvc-controls { display:flex; gap:14px; align-items:center; flex-wrap:wrap;
+      margin: 0 0 14px; }
+    .dvc-ctl { display:flex; align-items:center; gap:7px; font-size:12px;
+      color:var(--text3); font-weight:600; }
+    .dvc-ctl .ad-select { font-size:12.5px; padding:5px 8px; }
+    .dvc-ctl-check { cursor:pointer; }
+    .dvc-ctl-note { font-size:12px; color:var(--text3); margin-left:auto; }
+    /* A cluster already dealt with, shown only when the box is ticked. */
+    .dvc-done { opacity:.62; }
+    .dvc-done:hover { opacity:1; }
+    .dvc-tag-done { background:var(--green-dim); color:var(--green);
+      border:1px solid var(--green-border); }
+    /* Grew after it was marked, so it is unread again and says why. */
+    .dvc-tag-grew { background:var(--amber-dim); color:var(--amber);
+      border:1px solid var(--amber-border); }
+    #apr-switch { flex-wrap: wrap; }
+    #apr-switch .acs-btn { flex: 1 1 auto; min-width: 96px; }
+    .apr-pane[hidden] { display: none; }
     .ad-course-switch {
       display: flex; gap: 4px; padding: 3px;
       background: var(--surface2); border: 1px solid var(--border2);
@@ -1542,6 +1561,17 @@
       <p>Accounts on unrecognised mail providers, held until you look at them.</p>
     </div>
 
+    <!-- Counts live on the labels so you can see where the work is without
+         switching panes, which is the one thing the old stacked layout did
+         give you. -->
+    <div class="ad-course-switch" id="apr-switch" style="max-width:620px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="queue"   onclick="showApprovalPane('queue')">Queue <span id="apr-c-queue"></span></button>
+      <button class="acs-btn"        data-pane="devices" onclick="showApprovalPane('devices')">Devices <span id="apr-c-devices"></span></button>
+      <button class="acs-btn"        data-pane="domains" onclick="showApprovalPane('domains')">Domains <span id="apr-c-domains"></span></button>
+      <button class="acs-btn"        data-pane="decided" onclick="showApprovalPane('decided')">Decided <span id="apr-c-decided"></span></button>
+    </div>
+
+    <div class="apr-pane" id="apr-pane-queue">
     <p class="dom-note" style="margin-left:0;margin-right:0;">
       Mainstream providers (Gmail, Yahoo, Outlook, Hotmail, iCloud, Proton,
       Rediffmail, Zoho) sign up normally and never appear here. Anything else
@@ -1558,7 +1588,9 @@
         <tbody id="apr-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
+    </div><!-- /queue pane -->
 
+    <div class="apr-pane" id="apr-pane-devices" hidden>
     <!-- SHARED DEVICES ─────────────────────────────────────────────
          Higher signal than the domain queue, and it sits above the collapsed
          providers panel for that reason. The email guard cannot see a person
@@ -1574,15 +1606,37 @@
       here, and clearing browser storage sheds the fingerprint entirely. So
       nothing here is blocked or acted on automatically. Read it and decide.
     </p>
+    <div class="dvc-controls">
+      <label class="dvc-ctl">
+        <span>Sort</span>
+        <select class="ad-select" id="dvc-sort" onchange="renderDeviceClusters()">
+          <option value="recent">Latest activity first</option>
+          <option value="size">Most accounts first</option>
+          <option value="risk">Highest risk first</option>
+        </select>
+      </label>
+      <label class="dvc-ctl">
+        <span>Accounts</span>
+        <select class="ad-select" id="dvc-size" onchange="renderDeviceClusters()">
+          <option value="0">Any</option>
+          <option value="2">Exactly 2</option>
+          <option value="3">Exactly 3</option>
+          <option value="4">Exactly 4</option>
+          <option value="5">5 or more</option>
+        </select>
+      </label>
+      <label class="dvc-ctl dvc-ctl-check">
+        <input type="checkbox" id="dvc-show-done" onchange="renderDeviceClusters()">
+        <span>Show ones I have actioned</span>
+      </label>
+      <span class="dvc-ctl-note" id="dvc-summary"></span>
+    </div>
     <div id="dev-clusters"><div class="ad-loading">Loading...</div></div>
+    </div><!-- /devices pane -->
 
-    <!-- Approved providers. Secondary to the queue, so it is collapsed. -->
-    <details class="dom-panel" id="dom-panel">
-      <summary class="dom-summary" onclick="loadSignupDomains()">
-        <span>Approved providers &amp; signup domains</span>
-        <span class="dom-badge" id="dom-badge" hidden></span>
-      </summary>
-      <p class="dom-note">
+    <div class="apr-pane" id="apr-pane-domains" hidden>
+      <div class="ad-section-head">Approved providers &amp; signup domains</div>
+      <p class="dom-note" style="margin-left:0;margin-right:0">
         Every domain that has ever signed up here. Approving one lets future
         signups from it through without review; removing one sends them back to
         the queue. Neither ever touches accounts that already exist.
@@ -1599,7 +1653,26 @@
           <tbody id="dom-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
         </table>
       </div>
-    </details>
+    </div><!-- /domains pane -->
+
+    <!-- DECIDED. History stays reachable rather than being deleted or piled
+         on top of the work. Approve is still offered on a rejected row,
+         because reversing a wrong rejection is the whole reason to keep it. -->
+    <div class="apr-pane" id="apr-pane-decided" hidden>
+      <div class="ad-section-head">Already decided</div>
+      <p class="dom-note" style="margin-left:0;margin-right:0">
+        Signups you have already approved or rejected. Kept for the record, and
+        so a rejection made in haste can be undone.
+      </p>
+      <div class="ad-table-wrap">
+        <table class="ad-table">
+          <thead><tr>
+            <th>Email</th><th>Name</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
+          </tr></thead>
+          <tbody id="apr-done-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div><!-- /decided pane -->
   </div>
 
   <!-- GRANT ACCESS ───────────────────────────────────────────── -->
@@ -2212,6 +2285,33 @@
     </div>
     <div id="pay-load-more" style="display:none;text-align:center;margin-top:14px;">
       <button onclick="loadMorePayments()" style="padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">Load more</button>
+    </div>
+
+    <!-- Mock interview money. Sponsorship-only, and a separate table rather
+         than merged into the one above, because a booking has no plan, no
+         scope and no expiry: it would be four empty columns and a row that
+         cannot be refunded by the button next to it. The stat cards above
+         count public.payments only, so this panel carries its own total and
+         says so. -->
+    <div id="pay-mock-wrap" style="display:none">
+      <div class="ad-section-head" style="margin-top:28px">Mock Interview Bookings</div>
+      <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px">
+        Booked sessions, counted separately from course sales. The revenue
+        figure at the top of this tab does not include these.
+      </p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+        <span id="pay-mock-total" style="font-size:13px;font-weight:700;color:var(--text)"></span>
+        <button class="ad-btn btn-ghost btn-sm" onclick="loadMockPayments()">Refresh</button>
+      </div>
+      <div class="ad-table-wrap">
+        <table class="ad-table">
+          <thead><tr>
+            <th>Booked</th><th>Cadet</th><th>Session (IST)</th>
+            <th style="text-align:right">Amount</th><th>Status</th><th>Payment ID</th>
+          </tr></thead>
+          <tbody id="pay-mock-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
     </div>
 
     <div class="ad-section-head" style="margin-top:28px">Webhook Events</div>
@@ -3078,11 +3178,12 @@ function showTab(name) {
   // Refetched every visit: someone may have signed up since the page loaded,
   // and a stale empty queue is exactly the thing that leaves a cadet waiting.
   if (name === 'approvals' && typeof loadApprovals === 'function') loadApprovals();
-  // Separate call, not chained onto loadApprovals: the two read different
-  // tables, and a failure in one must not leave the other blank. The domain
-  // queue going quiet because the devices read failed would hide the very
-  // thing this tab exists for.
-  if (name === 'approvals' && typeof loadDeviceClusters === 'function') loadDeviceClusters();
+  // The device clusters used to load here alongside the queue. They are their
+  // own pane now and load when that pane is first opened, which saves pulling
+  // 5,000 devices and 5,000 profiles for an admin who came to clear the queue.
+  // The separation the old comment argued for is stronger this way, not
+  // weaker: a devices failure cannot blank the queue if it has not run yet.
+  if (name === 'approvals' && typeof restoreApprovalPane === 'function') restoreApprovalPane();
   // Loaded here rather than at startup: this tab only exists on the
   // Sponsorship side, so a COC admin should never pay for the query. Every
   // status shown is computed against today's date, which is another reason
@@ -5533,6 +5634,36 @@ function scoreDeviceCluster(members, allowed) {
            score: odd * 5 + (members.length - 1) - (team ? 10 : 0) - (paid ? 4 : 0) };
 }
 
+/* Records that a cluster has been dealt with. Stores the member count at the
+   time, so the console can tell a settled cluster from one that has since
+   grown. Nothing about the accounts themselves changes: this is a note to
+   yourself, not an enforcement action. */
+async function markDeviceCluster(fp, memberCount, alreadyMarked) {
+  if (alreadyMarked) {
+    var { error: delErr } = await _sb.from('device_cluster_reviews').delete().eq('fingerprint', fp);
+    if (delErr) { toast('Could not undo: ' + delErr.message, 'error'); return; }
+    logAdminAction('device_cluster_unmark', null, { fingerprint: fp });
+    toast('Mark removed. It is back in the list.');
+  } else {
+    var { error } = await _sb.from('device_cluster_reviews').upsert({
+      fingerprint: fp,
+      members_at_review: memberCount,
+      reviewed_at: new Date().toISOString(),
+      reviewed_by: _myId || null,
+      reviewed_by_email: _myEmail || null
+    }, { onConflict: 'fingerprint' });
+    if (error) {
+      toast(/relation .* does not exist/i.test(error.message)
+        ? 'Run device_reviews_setup.sql to enable this.'
+        : 'Could not save: ' + error.message, 'error');
+      return;
+    }
+    logAdminAction('device_cluster_mark', null, { fingerprint: fp, members: memberCount });
+    toast('Marked as actioned.');
+  }
+  loadDeviceClusters();
+}
+
 async function loadDeviceClusters() {
   var host = document.getElementById('dev-clusters');
   if (!host) return;
@@ -5540,9 +5671,12 @@ async function loadDeviceClusters() {
   var res = await Promise.all([
     _sb.from('devices').select('user_id, fingerprint, device_label, created_at, last_seen').limit(5000),
     _sb.from('profiles').select('id, email, full_name, is_admin, subscription_plan, trial_started_at, written_expires_at, oral_expires_at, signup_status, created_at').limit(5000),
-    _devAllowedDomains()
+    _devAllowedDomains(),
+    // Fourth read, and a failure here must not blank the panel: without the
+    // marks the list is still correct, just unmarked.
+    _sb.from('device_cluster_reviews').select('*')
   ]);
-  var devs = res[0], profs = res[1], allowed = res[2];
+  var devs = res[0], profs = res[1], allowed = res[2], revRes = res[3];
 
   if (devs.error) {
     host.innerHTML = '<div class="ad-loading">Could not read devices: ' + esc(devs.error.message) + '</div>';
@@ -5568,30 +5702,97 @@ async function loadDeviceClusters() {
     if (!g.label && d.device_label) g.label = d.device_label;
   });
 
-  var clusters = Object.keys(groups).map(function (fp) {
+  var reviews = {};
+  (revRes && revRes.data ? revRes.data : []).forEach(function (r) { reviews[r.fingerprint] = r; });
+
+  _dvcClusters = Object.keys(groups).map(function (fp) {
     var g = groups[fp];
     var members = Object.keys(g.users).map(function (id) { return byId[id]; })
       .sort(function (a, b) { return (a.created_at || '') < (b.created_at || '') ? -1 : 1; });
 
     var s = scoreDeviceCluster(members, allowed);
+    var rev = reviews[fp];
+    /* A mark covers the cluster as it was. If accounts have joined since, it
+       is unread again: that is exactly the case the panel exists to catch, a
+       spent trial returning on the same laptop. */
+    var grew = !!(rev && members.length > rev.members_at_review);
     return { fp: fp, members: members, label: g.label, first: g.first, last: g.last,
-             odd: s.odd, team: s.team, paid: s.paid, score: s.score };
-  }).filter(function (c) { return c.members.length > 1; })
-    .sort(function (a, b) { return b.score - a.score; });
+             odd: s.odd, team: s.team, paid: s.paid, score: s.score,
+             rev: rev || null, done: !!rev && !grew, grew: grew };
+  }).filter(function (c) { return c.members.length > 1; });
 
-  if (!clusters.length) {
+  renderDeviceClusters();
+}
+
+/* Rendering is separate from loading so changing the sort or the filter is
+   instant. Re-reading 5,000 devices to reorder eight cards would be absurd. */
+var _dvcClusters = [];
+
+function renderDeviceClusters() {
+  var host = document.getElementById('dev-clusters');
+  if (!host) return;
+
+  var sortBy  = (document.getElementById('dvc-sort')  || {}).value || 'recent';
+  var sizeStr = (document.getElementById('dvc-size')  || {}).value || '0';
+  var showDone = !!(document.getElementById('dvc-show-done') || {}).checked;
+  var size = parseInt(sizeStr, 10) || 0;
+
+  var all = _dvcClusters.slice();
+  var doneCount = all.filter(function (c) { return c.done; }).length;
+
+  var list = all.filter(function (c) {
+    if (!showDone && c.done) return false;
+    if (size === 5) return c.members.length >= 5;
+    if (size >= 2)  return c.members.length === size;
+    return true;
+  });
+
+  list.sort(function (a, b) {
+    // A cluster that grew since it was marked outranks everything, whatever
+    // the sort: it is the one thing here that is genuinely new information.
+    if (a.grew !== b.grew) return a.grew ? -1 : 1;
+    if (sortBy === 'size') {
+      if (b.members.length !== a.members.length) return b.members.length - a.members.length;
+      return (b.last || '') < (a.last || '') ? -1 : 1;
+    }
+    if (sortBy === 'risk') return b.score - a.score;
+    return (b.last || '') < (a.last || '') ? -1 : 1;   // recent
+  });
+
+  var sum = document.getElementById('dvc-summary');
+  if (sum) {
+    sum.textContent = list.length + ' of ' + all.length + ' shown'
+      + (doneCount && !showDone ? ', ' + doneCount + ' actioned and hidden' : '');
+  }
+  aprCount('apr-c-devices', all.filter(function (c) { return !c.done; }).length);
+
+  if (!all.length) {
     host.innerHTML = '<div class="ad-loading">No device has been used by more than one account.</div>';
     return;
   }
+  if (!list.length) {
+    host.innerHTML = '<div class="ad-loading">Nothing matches that filter.'
+      + (doneCount && !showDone ? ' ' + doneCount + ' actioned cluster'
+          + (doneCount > 1 ? 's are' : ' is') + ' hidden.' : '') + '</div>';
+    return;
+  }
 
-  host.innerHTML = clusters.map(function (c) {
-    var quiet = c.team > 0;
+  host.innerHTML = list.map(function (c) {
+    var quiet = c.team > 0 && !c.grew;
+    var when = c.rev ? fmtDate(c.rev.reviewed_at) : '';
     var head = '<div class="dvc-hd">'
       + '<span class="dvc-n">' + c.members.length + ' accounts on one device</span>'
       + (c.odd  ? '<span class="dvc-tag dvc-odd">' + c.odd + ' unrecognised domain' + (c.odd > 1 ? 's' : '') + '</span>' : '')
       + (c.team ? '<span class="dvc-tag dvc-team">your team</span>' : '')
       + (c.paid ? '<span class="dvc-tag dvc-paid">has a paying account</span>' : '')
+      + (c.done ? '<span class="dvc-tag dvc-tag-done">actioned ' + esc(when)
+                    + (c.rev && c.rev.reviewed_by_email ? ' by ' + esc(c.rev.reviewed_by_email.split('@')[0]) : '')
+                    + '</span>' : '')
+      + (c.grew ? '<span class="dvc-tag dvc-tag-grew">grew since you marked it: '
+                    + c.rev.members_at_review + ' to ' + c.members.length + '</span>' : '')
       + '<span class="dvc-fp" style="margin-left:auto">' + esc(String(c.fp).slice(0, 8)) + '</span>'
+      + '<button class="ad-btn btn-sm btn-ghost" onclick="markDeviceCluster(' + attrJs(c.fp) + ',' + c.members.length + ',' + (c.rev ? 'true' : 'false') + ')">'
+      + (c.rev ? (c.grew ? 'Mark again' : 'Undo') : 'Action taken') + '</button>'
       + '</div>';
 
     var rows = c.members.map(function (m) {
@@ -5884,9 +6085,37 @@ function miToUtcIso(dateStr, timeStr) {
 var _miSlots = [], _miBookings = [], _miConfig = null;
 
 async function loadMockTab() {
+  await sweepMockHolds();
   await loadMockConfig();
   await loadMockSlots();
   await loadMockBookings();
+}
+
+/* Expire holds that lapsed while nobody was booking.
+
+   mock_expire_stale_bookings only runs inside mock_slot_reserve, so with no
+   booking traffic a hold that ran out hours ago still reads 'reserved'. The
+   slot was never really stuck, the next reserve sweeps before it checks, but
+   this tab reported a cadet as being in checkout who had long since left.
+   Opening the tab is the moment somebody wants the truth, so it sweeps first.
+
+   Failure is ignored on purpose: a sweep that did not run leaves stale rows,
+   which the render below already handles by reading reserved_until rather
+   than trusting status. */
+async function sweepMockHolds() {
+  try { await _sb.rpc('mock_sweep_holds'); } catch (e) {}
+}
+
+/* True when a booking says 'reserved' but its hold has run out.
+
+   The render never trusts status alone, because status only becomes accurate
+   once something sweeps, and 'In checkout' next to a name is a claim about
+   what a person is doing right now. Getting that wrong sends you chasing a
+   cadet who closed the tab this morning. */
+function miHoldLapsed(b) {
+  return b.status === 'reserved'
+    && b.reserved_until
+    && new Date(b.reserved_until).getTime() < Date.now();
 }
 
 async function loadMockConfig() {
@@ -6017,12 +6246,16 @@ async function loadMockSlots() {
     return;
   }
   // Live bookings only. A cancelled booking must not make its slot look taken,
-  // because the slot genuinely is available again.
+  // because the slot genuinely is available again. A lapsed hold is the same
+  // case: the database will free it on the next reserve, so showing the slot
+  // as held would be reporting a state that no longer applies.
   var bres = await _sb.from('mock_interview_bookings')
-    .select('slot_id, full_name, status')
+    .select('slot_id, full_name, status, reserved_until')
     .in('status', ['reserved', 'paid', 'completed']);
   var held = {};
-  (bres.data || []).forEach(function (b) { held[b.slot_id] = b; });
+  (bres.data || []).forEach(function (b) {
+    if (!miHoldLapsed(b)) held[b.slot_id] = b;
+  });
 
   _miSlots = sres.data || [];
   if (!_miSlots.length) {
@@ -6090,14 +6323,31 @@ async function loadMockBookings() {
 
   body.innerHTML = _miBookings.map(function (b) {
     var live = b.status === 'paid';
-    return '<tr' + (/cancelled|expired/.test(b.status) ? ' class="nt-row-dead"' : '') + '>'
+    // A row whose hold ran out reads as abandoned here even if nothing has
+    // swept it yet, so the tab never claims somebody is in checkout hours
+    // after they closed the tab.
+    var shown = miHoldLapsed(b) ? 'expired' : b.status;
+    return '<tr' + (/cancelled|expired/.test(shown) ? ' class="nt-row-dead"' : '') + '>'
       + '<td>' + esc(b.full_name) + '</td>'
       + '<td style="font-size:12px">' + esc(b.email) + '<br>' + esc(b.phone) + '</td>'
       + '<td style="font-size:12px">' + esc(b.degree) + ' · ' + esc(b.stream)
         + (b.college ? '<br>' + esc(b.college) : '') + '</td>'
       + '<td>' + esc(b.slot ? miWhen(b.slot.starts_at) : '-') + '</td>'
       + '<td style="text-align:right;font-variant-numeric:tabular-nums">' + esc(miRupees(b.amount_paise)) + '</td>'
-      + '<td><span class="' + (CLS[b.status] || 'nt-closed') + '">' + (WORD[b.status] || b.status) + '</span></td>'
+      + '<td><span class="' + (CLS[shown] || 'nt-closed') + '">' + (WORD[shown] || shown) + '</span>'
+        /* An abandoned booking that got as far as a Razorpay order is the one
+           case worth a second look. Almost always the cadet closed the tab and
+           nothing was charged, but if the payment succeeded and the verify call
+           never came back, the row would look exactly like this and the money
+           would be real. Nothing is destroyed either way, the order id is kept,
+           but the slot has gone back on sale so it needs a human eye.
+           A reconciliation job against Razorpay is the actual fix and is not
+           built yet. */
+        + (shown === 'expired' && b.razorpay_order_id
+            ? '<br><span style="font-size:10.5px;color:var(--text3)" title="Order ' + esc(b.razorpay_order_id)
+              + '">reached checkout, verify in Razorpay</span>'
+            : '')
+      + '</td>'
       + '<td style="text-align:right;white-space:nowrap">'
       + (live ? '<button class="ad-btn" onclick="markMockDone(\'' + b.id + '\')">Mark done</button> ' : '')
       + (live ? '<button class="ad-btn" onclick="cancelMockBooking(\'' + b.id + '\')">Cancel</button>' : '')
@@ -6125,6 +6375,71 @@ async function cancelMockBooking(id) {
   logAdminAction('mock_booking_cancel', null, { booking_id: id });
   toast('Cancelled, slot is back on sale');
   loadMockBookings(); loadMockSlots();
+}
+
+/* The Payments tab's mock interview panel.
+
+   Sponsorship-only: mock interviews are a Sponsorship product, and showing
+   them under COC would put money in a view that does not own it.
+
+   Reads the same table the Mock Interviews tab does, filtered to rows where
+   money actually moved. 'reserved' is excluded on purpose: it means somebody
+   is mid-checkout or walked away, and counting it as revenue is the same
+   mistake the 22 abandoned public.payments rows exist to warn about. */
+async function loadMockPayments() {
+  var wrap = document.getElementById('pay-mock-wrap');
+  if (!wrap) return;
+
+  if (_adminCourse !== 'sponsorship') { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+
+  var body  = document.getElementById('pay-mock-tbody');
+  var total = document.getElementById('pay-mock-total');
+
+  var res = await _sb.from('mock_interview_bookings')
+    .select('id, full_name, email, amount_paise, status, paid_at, created_at, razorpay_payment_id, slot:mock_interview_slots(starts_at)')
+    .in('status', ['paid', 'completed', 'cancelled'])
+    .order('created_at', { ascending: false })
+    .limit(200);
+
+  if (res.error) {
+    body.innerHTML = '<tr><td colspan="6" class="empty">Could not load bookings: ' + esc(res.error.message) + '</td></tr>';
+    total.textContent = '';
+    return;
+  }
+
+  var rows = res.data || [];
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="6" class="empty">No mock interview bookings yet.</td></tr>';
+    total.textContent = '';
+    return;
+  }
+
+  // Cancelled rows stay in the list, because the money was taken and a
+  // refund is a separate act, but they are excluded from the total.
+  var earned = rows.reduce(function (s, b) {
+    return s + (b.status === 'cancelled' ? 0 : (b.amount_paise || 0));
+  }, 0);
+  total.textContent = 'Booked revenue: ' + miRupees(earned)
+    + '  ·  ' + rows.filter(function (b) { return b.status !== 'cancelled'; }).length + ' sessions';
+
+  var CLS = { paid: 'nt-open', completed: 'nt-upcoming', cancelled: 'nt-closed' };
+  var WORD = { paid: 'Paid', completed: 'Done', cancelled: 'Cancelled' };
+
+  body.innerHTML = rows.map(function (b) {
+    var pid = b.razorpay_payment_id
+      ? '<span style="font-size:11px;font-family:monospace;color:var(--text2)" title="' + esc(b.razorpay_payment_id) + '">'
+        + esc(b.razorpay_payment_id.slice(0, 18)) + '…</span>'
+      : '<span style="color:var(--muted)">-</span>';
+    return '<tr' + (b.status === 'cancelled' ? ' class="nt-row-dead"' : '') + '>'
+      + '<td style="white-space:nowrap;font-size:12px;color:var(--text2)">' + esc(fmtDate(b.paid_at || b.created_at)) + '</td>'
+      + '<td style="font-size:12px">' + esc(b.full_name) + '<br>' + esc(b.email) + '</td>'
+      + '<td style="font-size:12px">' + esc(b.slot ? miWhen(b.slot.starts_at) : '-') + '</td>'
+      + '<td style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums">' + esc(miRupees(b.amount_paise)) + '</td>'
+      + '<td><span class="' + (CLS[b.status] || 'nt-closed') + '">' + (WORD[b.status] || b.status) + '</span></td>'
+      + '<td>' + pid + '</td>'
+      + '</tr>';
+  }).join('');
 }
 
 function exportMockBookings() {
@@ -6387,9 +6702,30 @@ function payFilters() {
 function applyPayFilters(query, f) {
   if (f.status) query = query.eq('status', f.status);
   if (f.plan)   query = query.eq('plan', f.plan);
-  if (f.scope)  query = query.eq('scope', f.scope);
   if (f.from)   query = query.gte('created_at', f.from + 'T00:00:00Z');
   if (f.to)     query = query.lte('created_at', f.to + 'T23:59:59Z');
+
+  /* Course scope. Every payments query on this tab, the table and all four
+     stat cards, goes through here, so this is the single place that decides
+     it and they cannot disagree.
+
+     An explicit scope from the dropdown wins; it can only ever name a scope
+     the current course owns, because pay-filter-scope is in SCOPE_SELECTS and
+     applyScopeOptionFilter hides every option outside scopesForCourse() and
+     moves the select off one that has just been hidden.
+
+     NULL is deliberately grouped with COC and not dropped. Four production
+     payments predate the scope column, and razorpay-webhook reads a missing
+     scope as 'both', so they are COC rows. Filtering with a bare .in() would
+     have made them vanish from BOTH views: not visibly broken, just quietly
+     absent from the only page that lists payments. */
+  if (f.scope) {
+    query = query.eq('scope', f.scope);
+  } else if (_adminCourse === 'sponsorship') {
+    query = query.eq('scope', 'sponsorship');
+  } else {
+    query = query.or('scope.in.(written,oral,both),scope.is.null');
+  }
   return query;
 }
 
@@ -6413,6 +6749,13 @@ async function loadPayments(reset) {
   if (_payLoading) return;
   if (reset !== false) { _payOffset = 0; }
   _payLoading = true;
+
+  /* The mock interview panel rides along with the table it sits under rather
+     than hanging off showTab. It was on showTab first and did not paint on a
+     hash-driven first load, and hooking it here removes the ordering question
+     entirely: every path that refreshes this tab, opening it, changing a
+     filter, hitting Refresh, switching course, goes through loadPayments. */
+  if (reset !== false) { try { loadMockPayments(); } catch (e) {} }
 
   var f = payFilters();
 
@@ -7023,6 +7366,51 @@ async function createCoupon() {
 // Classification happens in handle_new_user; approving calls eb_review_signup,
 // which re-checks is_admin() itself rather than trusting this page.
 // See app/admin/signup_guard_setup.sql.
+/* Which sub-pane of the Approvals tab is showing.
+
+   Panes load on first open rather than all at once: the device clusters pull
+   5,000 devices and 5,000 profiles to find a handful of shared fingerprints,
+   and there is no reason to pay that when you came to look at domains.
+
+   The choice is remembered, like the course switcher, so a refresh in the
+   middle of a review does not drop you back on Queue. */
+var APR_PANES = ['queue', 'devices', 'domains', 'decided'];
+var _aprLoaded = {};
+var APR_PANE_KEY = 'eb_admin_approvals_pane';
+
+function showApprovalPane(name) {
+  if (APR_PANES.indexOf(name) === -1) name = 'queue';
+  try { localStorage.setItem(APR_PANE_KEY, name); } catch (e) {}
+
+  APR_PANES.forEach(function (p) {
+    var el = document.getElementById('apr-pane-' + p);
+    if (el) el.hidden = (p !== name);
+  });
+  document.querySelectorAll('#apr-switch .acs-btn').forEach(function (b) {
+    b.classList.toggle('active', b.dataset.pane === name);
+  });
+
+  if (name === 'devices' && !_aprLoaded.devices) {
+    _aprLoaded.devices = true;
+    try { loadDeviceClusters(); } catch (e) { console.error(e); }
+  }
+  if (name === 'domains' && !_aprLoaded.domains) {
+    _aprLoaded.domains = true;
+    try { loadSignupDomains(); } catch (e) { console.error(e); }
+  }
+}
+
+function restoreApprovalPane() {
+  var saved = 'queue';
+  try { saved = localStorage.getItem(APR_PANE_KEY) || 'queue'; } catch (e) {}
+  showApprovalPane(saved);
+}
+
+function aprCount(id, n) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = n ? '(' + n + ')' : '';
+}
+
 async function loadApprovals() {
   var tbody = document.getElementById('apr-tbody');
   var { data, error } = await _sb.from('pending_signups')
@@ -7034,16 +7422,41 @@ async function loadApprovals() {
     return;
   }
 
-  var waiting = (data || []).filter(function(r) { return r.signup_status === 'pending'; });
+  var rows = data || [];
+  var waiting = rows.filter(function(r) { return r.signup_status === 'pending'; });
+  var decided = rows.filter(function(r) { return r.signup_status !== 'pending'; });
+
   var badge = document.getElementById('apr-nav-badge');
   if (badge) { badge.hidden = !waiting.length; badge.textContent = waiting.length || ''; }
+  aprCount('apr-c-queue', waiting.length);
+  aprCount('apr-c-decided', decided.length);
 
-  if (!data || !data.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">Nothing waiting. Every signup so far used a recognised provider.</td></tr>';
-    return;
+  /* An empty queue is the normal state, not a fault, so it says so rather
+     than showing an empty table that reads as broken. */
+  if (!waiting.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">Nothing waiting. '
+      + (decided.length ? 'Everything held so far has been dealt with.'
+                        : 'Every signup so far used a recognised provider.') + '</td></tr>';
+  } else {
+    tbody.innerHTML = waiting.map(aprRow).join('');
   }
 
-  tbody.innerHTML = data.map(function(r) {
+  var doneBody = document.getElementById('apr-done-tbody');
+  if (doneBody) {
+    doneBody.innerHTML = decided.length
+      ? decided.map(aprRow).join('')
+      : '<tr><td colspan="6" class="empty">Nothing decided yet.</td></tr>';
+  }
+
+  // Not awaited. The queue paints from our own database immediately and the
+  // third-party labels fill in behind it, so disify being slow costs a label
+  // rather than the whole table.
+  annotateDisify();
+}
+
+/* One row renderer for both panes: a decided row is the same row with its
+   actions reduced to the single reversal. Two copies would drift. */
+function aprRow(r) {
     var pending = r.signup_status === 'pending';
     // How many accounts share the domain. One is a throwaway's signature;
     // several suggests a real institution, so it is worth showing before the
@@ -7056,23 +7469,27 @@ async function loadApprovals() {
       + '<td data-label="Domain"><code>' + esc(r.domain) + '</code> ' + shared
         + ' <span class="dfy" data-disify="' + esc(r.domain) + '"></span></td>'
       + '<td data-label="Signed up">' + new Date(r.created_at).toLocaleDateString() + '</td>'
+      /* signup_status is approved / pending / rejected. This read
+         "pending ? pending : rejected", so an APPROVED account was labelled
+         rejected. Production held only rejections, so nothing surfaced it
+         until these rows got a pane of their own. */
       + '<td data-label="Status">' + (pending
           ? '<span class="dom-tag dom-tag-new">pending</span>'
-          : '<span class="dom-tag dom-tag-blocked">rejected</span>') + '</td>'
+          : (r.signup_status === 'approved'
+              ? '<span class="dom-tag dom-tag-ok">approved</span>'
+              : '<span class="dom-tag dom-tag-blocked">rejected</span>')) + '</td>'
       + '<td data-label="">' + (pending
           ? '<div class="row-actions">'
             + '<button class="ad-btn btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>'
             + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,true)" title="Approve and stop queueing future signups from this domain">Approve + domain</button>'
             + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',false,false)">Reject</button>'
             + '</div>'
-          : '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>')
+          // Only a rejection is worth reversing. An Approve button on an
+          // already-approved row does nothing and invites a pointless click.
+          : (r.signup_status === 'rejected'
+              ? '<button class="ad-btn btn-ghost btn-sm" title="Reverse this rejection" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve after all</button>'
+              : ''))
       + '</td></tr>';
-  }).join('');
-
-  // Not awaited. The queue paints from our own database immediately and the
-  // third-party labels fill in behind it, so disify being slow costs a label
-  // rather than the whole table.
-  annotateDisify();
 }
 
 async function reviewSignup(id, approve, allowDomainToo) {
@@ -7085,7 +7502,9 @@ async function reviewSignup(id, approve, allowDomainToo) {
     ? (allowDomainToo ? 'Approved, and future signups from that domain will skip review.' : 'Approved. Their trial starts now.')
     : 'Rejected.', 'success');
   loadApprovals();
-  if (document.getElementById('dom-panel').open) loadSignupDomains();
+  // The domains panel is a pane now, not a <details>. Refresh it only if it
+  // has actually been opened, since approving a domain changes that list.
+  if (_aprLoaded.domains) loadSignupDomains();
 }
 
 // ── Signup domains ────────────────────────────────────────────────────────
@@ -7094,6 +7513,7 @@ async function loadSignupDomains() {
   var { data, error } = await _sb.from('signup_domains')
     .select('*')
     .order('last_seen', { ascending: false });
+  aprCount('apr-c-domains', (data || []).length);
 
   if (error) {
     tbody.innerHTML = '<tr><td colspan="6" class="empty">Run signup_guard_setup.sql to enable the signup guard.</td></tr>';
@@ -8615,6 +9035,12 @@ function setAdminCourse(course) {
   // have to be redrawn for the switch to take effect.
   try { if (typeof loadPlansTab === 'function') loadPlansTab(); } catch (e) {}
   try { if (typeof renderOfferGrid === 'function') renderOfferGrid(); } catch (e) {}
+  // Payments became course-scoped when applyPayFilters learned about
+  // _adminCourse. Without this the table and the stat cards keep showing the
+  // course you just switched away from, which reads as a filter that did
+  // nothing rather than one that has not run yet.
+  try { if (typeof loadPayments === 'function') loadPayments(); } catch (e) {}
+  try { if (typeof loadMockPayments === 'function') loadMockPayments(); } catch (e) {}
 
   applyCourseScope();
 }
@@ -8671,6 +9097,21 @@ function applyCourseScope() {
   // which is precisely the failure that made this look broken.
   try { applyScopeOptionFilter(); }
   catch (e) { console.error('applyScopeOptionFilter failed:', e); }
+
+  /* The mock interview panel on the Payments tab is shown or hidden purely by
+     which course is selected, so it belongs here with the other per-course
+     re-renders rather than on a tab hook.
+
+     It was on showTab first and did not paint on a hash-driven load. The
+     reason is worth writing down because it is not obvious and it is not
+     mine: init() calls showTab(hashTab) after awaiting getSession(), and the
+     window.showTab override lives in a LATER <script> block. When that await
+     resolves quickly the continuation runs before the later block has been
+     parsed, so the original showTab is called and none of the override's
+     loaders fire. Opening #payments directly can therefore leave the whole
+     payments table on "Loading...". applyCourseScope runs after all of it. */
+  try { if (typeof loadMockPayments === 'function') loadMockPayments(); }
+  catch (e) { console.error('loadMockPayments failed:', e); }
 
   var allowed = tabsForCourse();
   var strandedOn = null;

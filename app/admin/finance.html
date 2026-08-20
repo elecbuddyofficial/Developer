@@ -815,7 +815,7 @@ var _partners = [], _shares = [];
 var _editingShareId = null;
 var _categories = [], _expenses = [], _editingExpenseId = null;
 var _revenue = [];
-var _config = null, _pnl = [], _totals = null, _stmt = [];
+var _config = null, _pnl = [], _totals = null, _stmt = [], _mock = [];
 var _recurring = [], _manual = [], _pendingRecurringId = null;
 
 /* ══ MONEY AND PERCENTAGE ═══════════════════════════════════════════════
@@ -1594,11 +1594,18 @@ async function deleteExpense(id) {
 /* ══ DASHBOARD, P&L AND THE PARTNER STATEMENT ══════════════════════════ */
 
 async function loadDashboard() {
-  var [cfgRes, pnlRes, totRes, stmtRes] = await Promise.all([
+  var [cfgRes, pnlRes, totRes, stmtRes, mockRes] = await Promise.all([
     _sb.from('finance_config').select('fy_start_month, report_timezone, company_name').maybeSingle(),
     _sb.from('v_finance_pnl_monthly').select('*').order('month', { ascending: false }),
     _sb.from('v_finance_totals').select('*').maybeSingle(),
     _sb.from('v_partner_statement').select('*').order('display_name'),
+    /* Mock interview income, read from its own view. It is NOT in
+       v_finance_pnl_monthly and that is deliberate: the P&L is built on
+       public.payments, whose all-time total is the reconciled figure
+       finance_verify.sql asserts. Folding a second product into it would
+       move that number silently. Shown as its own stat instead, so the
+       course figures stay comparable with every earlier screenshot. */
+    _sb.from('v_mock_interview_revenue').select('gross_paise, gateway_fee_paise, status, paid_at, fee_unknown'),
   ]);
   if (pnlRes.error) { toast('Could not load the P&L: ' + pnlRes.error.message, 'err'); return; }
 
@@ -1606,6 +1613,10 @@ async function loadDashboard() {
   _pnl    = pnlRes.data || [];
   _totals = totRes.data || null;
   _stmt   = stmtRes.data || [];
+  // A missing view is not fatal here. The finance page predates mock
+  // interviews and must keep working on a database where that migration has
+  // not been applied.
+  _mock   = (mockRes && !mockRes.error && mockRes.data) ? mockRes.data : [];
 
   renderDashStats();
   renderPnl();
@@ -1645,6 +1656,21 @@ function renderDashStats() {
 
   var mine = _stmt.filter(function (s) { return _me && s.partner_id === _me.id; })[0];
 
+  /* Mock interview income for the same financial year. Cancelled bookings are
+     excluded from the money but the row is kept in the view, because the
+     charge was real and a refund is a separate act.
+
+     Sliced on paid_at as a string, like everything else on this page: a Date
+     turns the 1st of a month into the previous month west of Greenwich. */
+  var mockFy = (_mock || []).reduce(function (acc, r) {
+    if (r.status === 'cancelled') return acc;
+    if (!r.paid_at || String(r.paid_at).slice(0, 10) < fy.from) return acc;
+    acc.gross += Number(r.gross_paise || 0);
+    acc.count += 1;
+    if (r.fee_unknown) acc.feeUnknown += 1;
+    return acc;
+  }, { gross: 0, count: 0, feeUnknown: 0 });
+
   document.getElementById('fn-dash-period').textContent =
     'Financial year ' + fy.label + ', from ' + fmtDate(fy.from)
     + '. The figures below cover that year; the tables underneath cover everything.';
@@ -1655,6 +1681,10 @@ function renderDashStats() {
     stat('Costs', rupees(costs), 'operating, excluding capital', ''),
     stat('Profit', rupees(profit), profit < 0 ? 'a loss so far' : 'before tax',
          profit < 0 ? 'red' : 'green'),
+    mockFy.count ? stat('Mock interviews', rupees(mockFy.gross),
+                        mockFy.count + (mockFy.count === 1 ? ' session' : ' sessions')
+                          + ', not in the figures above', 'blue')
+                 : '',
     mine ? stat('You are owed', rupees(mine.owed_paise),
                 bpToPct(mine.share_bp) + ' share, all time',
                 Number(mine.owed_paise) < 0 ? 'amber' : 'blue')
@@ -1663,11 +1693,22 @@ function renderDashStats() {
 
   // The one figure that must never be quietly wrong. An unrecorded fee is not
   // a fee of zero, so while any are missing the profit above is overstated.
-  document.getElementById('fn-dash-warn').innerHTML = unknown
-    ? banner('warn', '⚠️', '<strong>' + unknown + ' payments this year have no gateway fee recorded.</strong> '
+  var warn = '';
+  if (unknown) {
+    warn += banner('warn', '⚠️', '<strong>' + unknown + ' payments this year have no gateway fee recorded.</strong> '
         + 'The profit figure below is high by roughly 2% of those sales until they are synced. '
-        + 'The Revenue tab has the button.')
-    : '';
+        + 'The Revenue tab has the button.');
+  }
+  // Same rule, different table. A mock booking whose fee never came back is
+  // overstating profit exactly as a payment would, and it has no sync button
+  // yet, so it says what to do instead of pointing at one.
+  if (mockFy.feeUnknown) {
+    warn += banner('warn', '⚠️', '<strong>' + mockFy.feeUnknown + ' mock interview '
+        + (mockFy.feeUnknown === 1 ? 'booking has' : 'bookings have') + ' no gateway fee recorded.</strong> '
+        + 'Razorpay sometimes only settles the fee a day later. Check the payment in the '
+        + 'Razorpay dashboard if it stays missing.');
+  }
+  document.getElementById('fn-dash-warn').innerHTML = warn;
 }
 
 function stat(label, value, sub, tone) {

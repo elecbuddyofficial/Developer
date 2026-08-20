@@ -348,6 +348,75 @@ COMMENT ON TABLE public.mock_interview_bookings IS
   'from public.payments so the course entitlement path is never involved.';
 
 
+-- ── 9b. Let an admin sweep lapsed holds ───────────────────────────────────
+-- mock_expire_stale_bookings runs at the top of every mock_slot_reserve, and
+-- the note above says that makes the pool tidy itself under exactly the
+-- traffic that dirties it. That is true only when there IS traffic. With none,
+-- which is the state a new product is in, a hold that lapsed hours ago still
+-- reads 'reserved' and the admin console reports a cadet as being in checkout
+-- who left before breakfast. Observed on 19 Aug 2026: a hold that expired at
+-- 04:50 UTC was still 'reserved' at 08:37.
+--
+-- Nothing was actually lost, because the next reserve sweeps before it checks
+-- and the slot was always rebookable. The damage was to the console telling
+-- the truth, which is its whole job.
+--
+-- A separate wrapper rather than granting the underlying function: that one is
+-- called by mock_slot_reserve under the service role, where auth.uid() is NULL
+-- and an is_admin() check inside it would fail every real booking.
+CREATE OR REPLACE FUNCTION public.mock_sweep_holds()
+RETURNS INTEGER AS $$
+BEGIN
+  IF NOT public.is_admin() THEN
+    RAISE EXCEPTION 'not_authorised' USING ERRCODE = '42501';
+  END IF;
+  RETURN public.mock_expire_stale_bookings();
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+REVOKE ALL ON FUNCTION public.mock_sweep_holds() FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.mock_sweep_holds() TO authenticated;
+
+
+-- ── 10. Finance visibility ────────────────────────────────────────────────
+-- A SEPARATE view, deliberately not folded into v_finance_revenue.
+--
+-- v_finance_revenue reads public.payments and its all-time total is a
+-- reconciled number that finance_verify.sql asserts (310,214 paise as of
+-- 17 Aug 2026). Merging bookings into it would silently move that figure and
+-- break the one check standing between the ERP and the 6x-overstatement bug
+-- it was built to prevent. Mock interview income is real income, but it is a
+-- different product and it gets its own line.
+--
+-- security_invoker so it cannot become a route around the RLS above. Without
+-- it the view runs as its owner and any signed-in user reads every booking.
+DROP VIEW IF EXISTS public.v_mock_interview_revenue;
+CREATE VIEW public.v_mock_interview_revenue
+  WITH (security_invoker = true) AS
+SELECT
+  b.id                AS booking_id,
+  b.paid_at,
+  b.created_at,
+  b.status,
+  b.amount_paise      AS gross_paise,
+  b.gateway_fee_paise,
+  b.gateway_tax_paise,
+  -- NULL fee means not yet known, never zero. Same rule as payments: a
+  -- coalesce here would quietly overstate profit on every booking.
+  (b.gateway_fee_paise IS NULL) AS fee_unknown,
+  s.starts_at         AS session_at
+FROM public.mock_interview_bookings b
+LEFT JOIN public.mock_interview_slots s ON s.id = b.slot_id
+-- Money that actually moved. 'reserved' is somebody mid-checkout and
+-- 'expired' is somebody who walked away; counting either as revenue is the
+-- abandoned-checkout mistake in a new table.
+WHERE b.status IN ('paid', 'completed', 'cancelled');
+
+COMMENT ON VIEW public.v_mock_interview_revenue IS
+  'Mock interview income, kept separate from v_finance_revenue so the '
+  'reconciled course-revenue total is not silently moved.';
+
+
 -- ── VERIFY ────────────────────────────────────────────────────────────────
 -- Run app/admin/mock_interview_verify.sql after this. It includes a
 -- deliberate double-book attempt, which must fail.

@@ -800,6 +800,11 @@ window._authReady = (async () => {
       <h1><span>Notifications</span></h1>
       <p>Registration deadlines, new content drops, and sponsorship alerts for ETO cadets.</p>
     </div>
+    <!-- The cadet's own bookings, above the company notices. Something they
+         have paid for and have to turn up to outranks a window that is open
+         to everyone. Empty and hidden when they have none. -->
+    <div class="nt-list" id="mi-mine" style="display:none;margin-bottom:18px"></div>
+
     <div class="nt-list" id="nt-list">
       <div class="coming-soon-banner">
         <div class="cs-icon">🔔</div>
@@ -1474,6 +1479,69 @@ function _miCollapseLater() {
   }, 15000);
 }
 
+/* The cadet's own bookings on the Notifications page.
+
+   Runs whether or not the product is currently on sale: switching
+   is_enabled off must not hide a session somebody has already paid for.
+   That is why this does not check _miCfg.
+
+   RLS returns only their own rows, so there is no user_id filter here; the
+   policy is the guarantee and repeating it in the query would just be a
+   second place to get it wrong. */
+async function loadMyMockBookings() {
+  var box = document.getElementById('mi-mine');
+  if (!box || !window._sbClient) return;
+
+  var res;
+  try {
+    res = await window._sbClient
+      .from('mock_interview_bookings')
+      .select('id, status, amount_paise, email, slot:mock_interview_slots(starts_at, duration_minutes)')
+      .in('status', ['paid', 'completed'])
+      .order('created_at', { ascending: false })
+      .limit(10);
+  } catch (e) { res = { error: e }; }
+
+  // A failure here stays silent. This panel is an extra on a page that works
+  // without it, and an error box about a feature the reader may never have
+  // used would be noise.
+  if (res.error || !res.data || !res.data.length) { box.style.display = 'none'; return; }
+
+  var now = Date.now();
+  var rows = res.data.filter(function (b) { return b.slot && b.slot.starts_at; })
+    .sort(function (a, b) { return a.slot.starts_at < b.slot.starts_at ? -1 : 1; });
+
+  // Sessions that finished more than a day ago drop off. The feedback arrives
+  // by email, so a card that sits there forever saying "done" is clutter.
+  var live = rows.filter(function (b) {
+    return new Date(b.slot.starts_at).getTime() > now - 86400000;
+  });
+  if (!live.length) { box.style.display = 'none'; return; }
+
+  box.style.display = '';
+  box.innerHTML = live.map(function (b) {
+    var startsAt = new Date(b.slot.starts_at).getTime();
+    var upcoming = startsAt > now;
+    var tone = upcoming ? 'green' : 'amber';
+    var style = '--nt-accent:var(--' + tone + ');--nt-dim:var(--' + tone + '-dim);--nt-border:var(--' + tone + '-border)';
+    var label = !upcoming ? 'In progress'
+      : (startsAt - now < 86400000) ? 'Today' : 'Booked';
+
+    return '<div class="nt-card" style="' + style + '">'
+      + '<div class="nt-top">'
+      +   '<span class="nt-company">🎤 Your mock interview</span>'
+      +   '<span class="nt-pill">' + label + '</span>'
+      + '</div>'
+      + '<div class="nt-window">' + _ntEsc(_miDay(b.slot.starts_at)) + ', '
+      +   _ntEsc(_miTime(b.slot.starts_at)) + ' IST'
+      +   (b.slot.duration_minutes ? ' · ' + b.slot.duration_minutes + ' minutes' : '') + '</div>'
+      + '<div class="nt-note">We will email <b>' + _ntEsc(b.email) + '</b> to confirm, and your '
+      +   'assessment and feedback come to the same address afterwards. '
+      +   'Need to change the time? Reply to that email.</div>'
+      + '</div>';
+  }).join('');
+}
+
 function mockStep(name) {
   ['pitch', 'slots', 'details', 'done'].forEach(function (k) {
     var el = document.getElementById('mi-step-' + k);
@@ -1845,6 +1913,7 @@ function showNotifications() {
   document.getElementById('content').scrollTo({top:0, behavior:'instant'});
   try { if (location.protocol !== 'file:') history.pushState(null,'','#notifications'); } catch(e){}
   loadSponsorshipNotices();
+  loadMyMockBookings();
 }
 
 function openSection(sectionId) {

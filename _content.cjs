@@ -29,7 +29,7 @@ function decrypt(json) {
   return Buffer.concat([d.update(Buffer.from(data, 'base64')), d.final()]).toString('utf8');
 }
 
-const DIRS = ['overview', 'fundamentals', 'aptitude', 'datainterp', 'interview', 'CompanyQA'];
+const DIRS = ['overview', 'fundamentals', 'aptitude', 'datainterp', 'entrancetest', 'interview', 'CompanyQA'];
 let files = [];
 for (const d of DIRS) {
   const full = path.join(__dirname, 'data/Sponsorship', d);
