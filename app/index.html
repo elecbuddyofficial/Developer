@@ -19,6 +19,29 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Content figures, generated from the content itself by _counts.cjs. Loaded
+     here rather than at the bottom so EB_COUNTS exists before anything reads
+     it. Regenerate after adding content, or the numbers below start drifting
+     again, which is what this replaced. -->
+<script src="counts.js?v=1"></script>
+<script>
+  /* Fills every [data-count] from EB_COUNTS.
+
+     Each of these elements carries the last generated figure as its own text,
+     so if counts.js ever fails to load the badge shows a real number instead
+     of going blank on the first screen a paying cadet sees. The script only
+     ever overwrites, never empties. */
+  function applyCounts() {
+    var c = window.EB_COUNTS;
+    if (!c) return;
+    var els = document.querySelectorAll('[data-count]');
+    for (var i = 0; i < els.length; i++) {
+      var v = c[els[i].getAttribute('data-count')];
+      if (typeof v === 'number' && v > 0) els[i].textContent = v.toLocaleString('en-IN');
+    }
+  }
+  document.addEventListener('DOMContentLoaded', applyCounts);
+</script>
 <script>
   // Exposed as a promise so the content gate below can chain off it. The
   // access check needs window._sbUser, which is only set after the await
@@ -168,26 +191,26 @@
     <div style="text-align:center;padding:32px 0 28px">
       <div style="font-size:36px;margin-bottom:12px"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg></div>
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Oral Exam Section</h1>
-      <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · 23 Topics</p>
+      <p style="font-size:14px;color:var(--text2)">ETO CoC · STCW Reg. III/6 · <span data-count="oralTopics">23</span> Topics</p>
     </div>
     <div class="welcome-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
       <div class="welcome-card" onclick="showView('notes-picker')">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></g></svg></div>
         <h3>Study Notes</h3>
         <p>Beautifully formatted notes for each topic - tables, diagrams, colour-coded alerts and procedures.</p>
-        <div class="wc-badge">23 topics ready</div>
+        <div class="wc-badge"><span data-count="oralTopics">23</span> topics ready</div>
       </div>
       <div class="welcome-card" onclick="showView('quiz-picker')">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
         <h3>Quiz Practice</h3>
         <p>Drill questions by topic and category. Instant feedback with explanations after each answer.</p>
-        <div class="wc-badge" style="background:var(--green-dim);border-color:var(--green-border);color:var(--green)">5,643 questions</div>
+        <div class="wc-badge" style="background:var(--green-dim);border-color:var(--green-border);color:var(--green)"><span data-count="quizQuestions">5,861</span> questions</div>
       </div>
       <div class="welcome-card sq-oral-card" onclick="openSurveyorQA()">
         <div class="wc-icon">🎓</div>
         <h3>Surveyor Q&A</h3>
         <p>Actual questions asked by MMD Surveyors, paired with AI-generated ideal answers.</p>
-        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)">281 questions</div>
+        <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)"><span data-count="surveyorQuestions">1,193</span> questions</div>
       </div>
     </div>
   </div>
@@ -206,13 +229,13 @@
         <div class="wc-icon">📄</div>
         <h3>Study Notes</h3>
         <p>Structured answers, key theory, and numerical worked examples for written exam topics.</p>
-        <div class="wc-badge">8 topics ready</div>
+        <div class="wc-badge"><span data-count="writtenTopics">8</span> topics ready</div>
       </div>
       <div class="welcome-card" onclick="showView('num-landing')">
         <div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2m10-6V2m0 20v-4"/></g></svg></div>
         <h3>Numericals</h3>
         <p>Past paper questions, numerical drills, and step-by-step calculated solutions.</p>
-        <div class="wc-badge" style="background:var(--blue-dim);color:var(--blue);border:none">39 Questions</div>
+        <div class="wc-badge" style="background:var(--blue-dim);color:var(--blue);border:none"><span data-count="numericals">39</span> Questions</div>
       </div>
     </div>
   </div>
@@ -1192,21 +1215,21 @@
 
       <div style="display:flex;gap:10px;margin:20px 0 0;flex-wrap:wrap;">
         <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
-          <div style="font-size:19px;font-weight:800;color:var(--amber);">23</div>
+          <div style="font-size:19px;font-weight:800;color:var(--amber);" data-count="oralTopics">23</div>
           <div style="font-size:10.5px;color:var(--text3);margin-top:2px;line-height:1.4;">Oral topics with full notes and diagrams</div>
         </div>
         <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
-          <div style="font-size:19px;font-weight:800;color:var(--amber);">5,643</div>
+          <div style="font-size:19px;font-weight:800;color:var(--amber);" data-count="quizQuestions">5,861</div>
           <div style="font-size:10.5px;color:var(--text3);margin-top:2px;line-height:1.4;">Practice questions with explanations</div>
         </div>
         <div style="flex:1 1 130px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:12px 10px;">
-          <div style="font-size:19px;font-weight:800;color:var(--amber);">1,196</div>
+          <div style="font-size:19px;font-weight:800;color:var(--amber);" data-count="surveyorQuestions">1,193</div>
           <div style="font-size:10.5px;color:var(--text3);margin-top:2px;line-height:1.4;">Real surveyor questions and answers</div>
         </div>
       </div>
 
       <p style="font-size:13px;color:var(--text3);line-height:1.65;margin:18px 0 0;">
-        The written section adds theory notes and 39 numericals worked out line by line. Everything is searchable, and the app remembers where you stopped.
+        The written section adds theory notes and <span data-count="numericals">39</span> numericals worked out line by line. Everything is searchable, and the app remembers where you stopped.
       </p>
 
       <div style="margin:20px 0 0;padding:14px;background:rgba(200,164,74,0.06);border:1px solid rgba(200,164,74,0.2);border-radius:10px;">

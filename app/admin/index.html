@@ -7965,20 +7965,80 @@ function offerToggleAll() {
   renderOfferGrid(); offerPreview();
 }
 
+/* Which of its three states an offer row is actually in, or null if the row
+   carries no offer at all.
+
+   A row keeps its percentage and its name after the end date passes. That is
+   deliberate: a finished sale stays readable, and nothing charges from it,
+   because effectivePrice() on the buyer side and isSaleActive() in
+   _shared/coupons.ts both refuse a discount outside its dates.
+
+   The banner below used to ignore the dates and call any row carrying a name
+   "live". On 21 August that read as the 20 August sale never having stopped,
+   which is alarming and untrue, and the same bug in the other direction would
+   have announced a sale scheduled for next week as already running. This is
+   the same test the price uses. */
+function offerPhase(r) {
+  if (!((r.discount_percent || 0) > 0)) return r.label ? 'ended' : null;
+  var now = new Date();
+  if (r.discount_starts_at && new Date(r.discount_starts_at) > now) return 'scheduled';
+  if (r.discount_ends_at   && new Date(r.discount_ends_at)   < now) return 'ended';
+  return 'live';
+}
+
+function offerDay(ts) {
+  if (!ts) return '';
+  var d = new Date(ts);
+  return isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+}
+
+function offerRowsConfigured() {
+  return (window._plansRows || []).filter(function (r) { return offerPhase(r); });
+}
+
+function offerBannerHtml() {
+  var rows = offerRowsConfigured();
+  if (!rows.length) return '';
+
+  var phase = offerPhase(rows[0]);
+  var name  = rows[0].label ? '<strong>' + esc(rows[0].label) + '</strong>' : '<strong>An unnamed sale</strong>';
+  var n     = rows.length + ' plan' + (rows.length === 1 ? '' : 's');
+  var tone, says, action, hint = '';
+
+  if (phase === 'live') {
+    var until = offerDay(rows[0].discount_ends_at);
+    tone   = 'green';
+    says   = name + ' is live on ' + n + (until ? ', until the end of ' + esc(until) : ', with no end date') + '.';
+    action = 'End it now';
+  } else if (phase === 'scheduled') {
+    tone   = 'blue';
+    says   = name + ' is set up on ' + n + ' and has not started yet. '
+           + 'It begins on ' + esc(offerDay(rows[0].discount_starts_at)) + '.';
+    action = 'Cancel it';
+  } else {
+    var ended = offerDay(rows[0].discount_ends_at);
+    tone   = 'orange';
+    says   = name + ' ended' + (ended ? ' on ' + esc(ended) : '') + '. Buyers are paying full price again.';
+    hint   = 'The discount and the name are still sitting on ' + n + '. Nothing charges from them, '
+           + 'but clearing them keeps the next sale from inheriting this one.';
+    action = 'Clear it';
+  }
+
+  return '<div style="border:1px solid var(--' + tone + '-border);background:var(--' + tone + '-dim);'
+    + 'border-radius:var(--r8);padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:var(--text)">'
+    + says
+    + ' <button class="ad-btn btn-ghost btn-sm" style="margin-left:6px;color:var(--' + tone + ')" '
+    +   'onclick="endOffer()">' + action + '</button>'
+    + (hint ? '<div style="margin-top:5px;font-size:11.5px;color:var(--text2)">' + hint + '</div>' : '')
+    + '</div>';
+}
+
 function renderOfferControls() {
   var el = document.getElementById('bulk-controls');
   if (!el) return;
-  var live = (window._plansRows || []).filter(function (r) { return (r.discount_percent || 0) > 0 || r.label; });
 
   el.innerHTML =
-      (live.length
-        ? '<div style="border:1px solid var(--orange-border);background:var(--orange-dim);border-radius:var(--r8);'
-          + 'padding:10px 12px;margin-bottom:14px;font-size:12.5px;color:var(--text)">'
-          + '<strong>' + (live[0].label ? esc(live[0].label) : 'An unnamed sale') + '</strong> is live on '
-          + live.length + ' plan' + (live.length === 1 ? '' : 's') + '.'
-          + ' <button class="ad-btn btn-ghost btn-sm" style="margin-left:6px;color:var(--orange)" onclick="endOffer()">End it</button>'
-          + '</div>'
-        : '')
+      offerBannerHtml()
 
     + '<div class="of-grid2" style="margin-bottom:12px">'
     +   '<div><label class="ad-label">Offer name</label>'
@@ -8204,15 +8264,26 @@ async function applyOffer() {
    "Independence Day Offer" ribbon on a plan that is back to full price is
    worse than having no ribbon at all. */
 async function endOffer() {
-  var live = (window._plansRows || []).filter(function (r) { return (r.discount_percent || 0) > 0 || r.label; });
-  if (!live.length) { toast('No offer is running', 'err'); return; }
-  if (!confirm('End the offer on ' + live.length + ' plan' + (live.length === 1 ? '' : 's') + '?\n\n'
-    + 'They go back to full price immediately and the offer name disappears. Base prices are not changed.')) return;
+  var rows = offerRowsConfigured();
+  if (!rows.length) { toast('No offer is configured', 'err'); return; }
 
-  await writeOffer(live, {
+  // The wording follows the state. Telling someone a finished sale is about to
+  // "go back to full price immediately" implies it was still charging, which
+  // is exactly the confusion the banner above was fixed to stop causing.
+  var phase = offerPhase(rows[0]);
+  var plans = rows.length + ' plan' + (rows.length === 1 ? '' : 's');
+  var what = phase === 'live'
+      ? 'End the offer on ' + plans + '?\n\nThey go back to full price immediately and the offer name disappears.'
+    : phase === 'scheduled'
+      ? 'Cancel the offer on ' + plans + '?\n\nIt never starts, and the name disappears.'
+      : 'Clear the finished offer from ' + plans + '?\n\nBuyers are already on full price, so nothing they see changes. '
+        + 'This only removes the leftover discount and name.';
+  if (!confirm(what + '\n\nBase prices are not changed.')) return;
+
+  await writeOffer(rows, {
     discount_percent: 0, discount_starts_at: null, discount_ends_at: null,
     label: null, description: null,
-  }, 'Offer ended');
+  }, phase === 'live' ? 'Offer ended' : 'Offer cleared');
 }
 
 // Kept so any older call site still resolves to the new composer.
