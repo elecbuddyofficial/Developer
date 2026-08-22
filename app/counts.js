@@ -8,6 +8,6 @@ window.EB_COUNTS = {
   numericals: 39,
   quizQuestions: 5861,
   surveyorQuestions: 1193,
-  surveyors: 54,
+  surveyors: 51,
   generatedOn: '2026-08-22'
 };
