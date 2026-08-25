@@ -869,6 +869,30 @@
   .lxf-topic { cursor:pointer; }
   @media (max-width:560px) { .lxf-flabel { min-width:0; width:100%; } }
   .lxf-card { border-color:var(--red); background:var(--red-dim); position:relative; }
+  /* Not yet opened on this browser. A coloured shadow rather than a heavier
+     border, so it reads as depth and not as a warning box. */
+  .lxf-fresh { position:relative; box-shadow:0 0 0 1px var(--blue-border), 0 6px 26px var(--blue-dim); }
+  .lxf-fresh.lxf-card { box-shadow:0 0 0 1px var(--red-border), 0 6px 26px var(--red-dim); }
+  .lxf-fresh.lxf-wip  { box-shadow:0 0 0 1px var(--purple-border), 0 6px 26px var(--purple-dim); }
+  .lxf-fresh:hover { box-shadow:0 0 0 1px var(--blue), 0 10px 34px var(--blue-dim); }
+  .lxf-new { position:absolute; top:-8px; right:14px; z-index:1;
+    background:var(--blue); color:var(--on-accent);
+    font-size:9.5px; font-weight:900; letter-spacing:.12em;
+    padding:3px 9px; border-radius:999px;
+    animation:lxfNew 2.2s ease-in-out infinite; }
+  .lxf-card .lxf-new { background:var(--red); }
+  .lxf-wip  .lxf-new { background:var(--purple); }
+  @keyframes lxfNew {
+    0%,100% { opacity:1;   transform:translateY(0)     scale(1);    }
+    50%     { opacity:.55; transform:translateY(-1px)  scale(1.06); }
+  }
+  /* A card that will not sit still is an accessibility problem, not a style
+     choice, so the pulse and the glow both go. The badge stays: it is the
+     information, the movement was only ever the emphasis. */
+  @media (prefers-reduced-motion:reduce) {
+    .lxf-new { animation:none; }
+    .lxf-fresh, .lxf-fresh:hover { box-shadow:none; }
+  }
   .lxf-card:hover { border-color:var(--red); }
   .lxf-card h3 { color:var(--text); }
   .lxf-card-top { display:flex; align-items:center; gap:9px; margin-bottom:12px; flex-wrap:wrap; }
@@ -1766,6 +1790,7 @@ async function loadLiveExamFeed() {
    It is painted before any query runs, so a slow or failed lookup still
    leaves a card on the page rather than a gap. */
 var LX_HINT = 'eb_lxf_hint';
+var LX_SEEN = 'eb_lxf_seen';   // has this browser opened the feed yet
 
 /* The card markup, given a sitting and its counts. Shared by the real render
    and by the cached-hint render so the two can never drift apart. */
@@ -1778,7 +1803,14 @@ function lxCardHtml(st, n, answered, todayN) {
     + '<rect x="3" y="4" width="18" height="18" rx="2"/>'
     + '<path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>';
 
-  return '<div class="welcome-card ' + (running ? 'lxf-card' : 'lxf-month') + '" onclick="openLiveExam()">'
+  /* Shown until they have opened it once. Never seen means new; seen once
+     means it is just another card and the flag becomes noise. */
+  var seen = false;
+  try { seen = localStorage.getItem(LX_SEEN) === '1'; } catch (e) {}
+
+  return '<div class="welcome-card ' + (running ? 'lxf-card' : 'lxf-month')
+    + (seen ? '' : ' lxf-fresh') + '" onclick="openLiveExam()">'
+    + (seen ? '' : '<span class="lxf-new">NEW</span>')
     + '<div class="wc-icon">' + ICON + '</div>'
     + '<h3>' + (running ? 'Today&rsquo;s Exam Questions' : 'This Month&rsquo;s Questions') + '</h3>'
     + '<p>' + (running
@@ -1835,6 +1867,12 @@ function lxRenderHomeCard() {
 function openLiveExam() {
   showView('live-exam');
   _lxFeedOpen = true;
+  // Opened once, so it is no longer new. Repaint so the flag goes on the way
+  // back rather than lingering until the next reload.
+  try {
+    localStorage.setItem(LX_SEEN, '1');
+    lxRenderHomeCard();
+  } catch (e) {}
   /* Recorded so the admin console can see who is reading the feed, the same
      way Surveyor Q&A and the Quiz Bank are tracked. _touchTopic de-duplicates
      within five minutes, so opening and closing the page repeatedly counts
@@ -1886,7 +1924,11 @@ function lxRemember() {
 function lxChips(items, active, fn) {
   return items.map(function (it) {
     return '<button class="lxf-chip' + (active === it.key ? ' on' : '') + '" '
-      + 'onclick="' + fn + '(' + JSON.stringify(it.key).replace(/"/g, '&quot;') + ')">'
+      // JSON.stringify(undefined) is undefined, not a string, so a chip built
+      // from a row with a missing key would throw and take the whole feed with
+      // it. asked_on is NOT NULL so it should not happen, but one bad row must
+      // not blank the page.
+      + 'onclick="' + fn + '(' + JSON.stringify(String(it.key == null ? '' : it.key)).replace(/"/g, '&quot;') + ')">'
       + escUpSafe(it.label)
       + (it.n != null ? '<span class="lxf-chip-n">' + it.n + '</span>' : '')
       + '</button>';
