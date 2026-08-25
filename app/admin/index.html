@@ -1009,6 +1009,34 @@
     /* Grew after it was marked, so it is unread again and says why. */
     .dvc-tag-grew { background:var(--amber-dim); color:var(--amber);
       border:1px solid var(--amber-border); }
+    .lx-form { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:12px; }
+    .lx-q { border:1px solid var(--border); border-radius:var(--r8); padding:10px 12px; margin-bottom:8px;
+      background:var(--surface2); }
+    .lx-q-open  { border-left:3px solid var(--orange); }
+    .lx-q-check { border-left:3px solid var(--amber); }
+    .lx-conf-high   { background:var(--green-dim); color:var(--green); border-color:var(--green-border); }
+    .lx-conf-medium { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+    .lx-conf-low    { background:var(--red-dim);   color:var(--red);   border-color:var(--red-border); }
+    .lx-chip-done   { background:var(--surface3);  color:var(--text3); border-color:var(--border); }
+    .lx-flag { background:var(--amber-dim); border:1px solid var(--amber-border); color:var(--text);
+      border-radius:var(--r8); padding:7px 10px; margin:7px 0; font-size:12.5px; line-height:1.5; }
+    .lx-q-head { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:7px; }
+    .lx-q-text { font-size:13.5px; font-weight:600; color:var(--text); flex:1 1 240px; }
+    .lx-chip { font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px;
+      background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); white-space:nowrap; }
+    .lx-chip-dim { background:var(--surface3); color:var(--text3); border-color:var(--border); }
+    .lx-chip-open { background:var(--orange-dim); color:var(--orange); border-color:var(--orange-border); }
+    .lx-chip-warn { background:var(--amber-dim); color:var(--amber); border-color:var(--amber-border); }
+    .lx-ans { font-size:13px; line-height:1.55; }
+    /* Confidence, shown as a left edge on the topic picker. High is filled and
+       left alone; low is blank and asks for you. */
+    .lx-t-high { border-left:3px solid var(--green); }
+    .lx-t-mid  { border-left:3px solid var(--orange); }
+    .lx-t-low  { border-left:3px solid var(--red); }
+    .lx-clash { background:var(--orange-dim); border:1px solid var(--orange-border);
+      color:var(--text); border-radius:var(--r8); padding:9px 11px; margin:8px 0;
+      font-size:12.5px; line-height:1.55; }
+    @media (max-width:640px) { .lx-form { grid-template-columns:1fr; } }
     #apr-switch { flex-wrap: wrap; }
     #apr-switch .acs-btn { flex: 1 1 auto; min-width: 96px; }
     .apr-pane[hidden] { display: none; }
@@ -1334,6 +1362,10 @@
     <button class="ad-nav-btn" onclick="showTab('notices');closeMobNav()" data-tab="notices" title="Sponsorship Notices">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h3l5 4V6L7 10H4a1 1 0 0 0-1 1Z"/><path d="M16.5 8.5a4 4 0 0 1 0 7"/><path d="M19.5 5.5a8 8 0 0 1 0 13"/></svg>
       <span>Sponsorship Notices</span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('liveexam');closeMobNav()" data-tab="liveexam" title="Live Exam Feed">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8M2.8 2.8a13 13 0 0 0 0 18.4M21.2 2.8a13 13 0 0 1 0 18.4"/></svg>
+      <span>Live Exam Feed</span>
     </button>
     <button class="ad-nav-btn" onclick="showTab('mock');closeMobNav()" data-tab="mock" title="Mock Interviews">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="18" x2="12" y2="22"/></svg>
@@ -2064,6 +2096,79 @@
        Three panels because they are three jobs on three rhythms: the price is
        set once, slots are added weekly, bookings are read before each
        session. -->
+  <div class="ad-tab" id="tab-liveexam">
+    <div class="ad-ph">
+      <h1>Live Exam Feed</h1>
+      <p>Questions from the sitting running right now. They appear on the Oral section home page for as long as the sitting is open, then stop on their own. Nothing here needs a deploy.</p>
+    </div>
+
+    <div class="ad-card" style="margin-bottom:16px">
+      <div class="ad-card-head">Sittings</div>
+      <div class="ad-card-sub">A sitting is one exam window: usually 3 to 7 days. The feed is live only while today falls inside it, so you never have to remember to switch it off.</div>
+      <div class="lx-form">
+        <div><label class="ad-label">Title</label>
+          <input class="ad-input" id="lx-title" maxlength="60" placeholder="August 2026"></div>
+        <div><label class="ad-label">Centre</label>
+          <input class="ad-input" id="lx-centre" maxlength="40" placeholder="Mumbai"></div>
+        <div><label class="ad-label">First day</label>
+          <input class="ad-input" type="date" id="lx-from"></div>
+        <div><label class="ad-label">Last day</label>
+          <input class="ad-input" type="date" id="lx-to"></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+        <label class="dvc-ctl dvc-ctl-check"><input type="checkbox" id="lx-pub"><span>Publish it now</span></label>
+        <button class="ad-btn btn-primary" onclick="saveSitting()">Add sitting</button>
+        <button class="ad-btn btn-ghost btn-sm" onclick="resetSittingForm()">Clear</button>
+        <span class="ad-hint" id="lx-form-note" style="margin-left:auto"></span>
+      </div>
+      <div id="lx-sittings" style="margin-top:14px"><div class="ad-loading">Loading...</div></div>
+    </div>
+
+    <div class="ad-card">
+      <div class="ad-card-head">Questions</div>
+      <div class="ad-card-sub" id="lx-q-sub">Pick a sitting above to add questions to it.</div>
+
+      <div id="lx-q-panel" hidden>
+        <div class="lx-form">
+          <div><label class="ad-label">Day asked</label>
+            <input class="ad-input" type="date" id="lx-day"></div>
+          <div><label class="ad-label">Surveyor <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+            <input class="ad-input" id="lx-surveyor" maxlength="60" placeholder="Arvind Choudhary"></div>
+          <div><label class="ad-label">Topic <span style="font-weight:400;color:var(--text3)">(optional)</span></label>
+            <select class="ad-select" id="lx-topic"><option value="">Not sure</option></select></div>
+        </div>
+
+        <!-- Bulk paste is the whole point of this panel. Recollections arrive
+             as a list of one-line questions, and typing 75 of them one at a
+             time is the thing that would stop this feature being used. -->
+        <label class="ad-label" style="margin-top:12px;display:block">Paste the recollection</label>
+        <textarea class="ad-input" id="lx-bulk" rows="8" style="font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;line-height:1.6"
+          placeholder="HRC fuse&#10;Polarisation index and its value&#10;Difference between rescue boat and fast rescue boat&#10;Class K fire"></textarea>
+        <div class="ad-hint">Paste it raw, exactly as it came. Surveyor headers, the date, numbering and commentary lines are all read and handled. Then check the table before saving.</div>
+
+        <div style="display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap">
+          <button class="ad-btn btn-primary" onclick="parsePaste()">Read it</button>
+          <button class="ad-btn btn-ghost btn-sm" onclick="document.getElementById('lx-bulk').value='';document.getElementById('lx-preview').innerHTML='';">Clear</button>
+          <span class="ad-hint" id="lx-bulk-note"></span>
+        </div>
+
+        <div id="lx-preview" style="margin-top:14px"></div>
+
+        <div style="margin-top:18px">
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+            <strong style="font-size:13px">Questions in this sitting</strong>
+            <button class="ad-btn btn-primary btn-sm" id="lx-draft-btn" onclick="draftAnswers()">Draft the missing answers</button>
+            <span class="ad-hint" id="lx-draft-note"></span>
+            <label class="dvc-ctl dvc-ctl-check" style="margin-left:auto">
+              <input type="checkbox" id="lx-only-unanswered" onchange="renderQuestions()">
+              <span>Only ones that need me</span></label>
+          </div>
+          <div id="lx-questions"><div class="ad-loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="ad-tab" id="tab-mock">
     <div class="ad-ph">
       <h1>Mock Interviews</h1>
@@ -2986,7 +3091,7 @@ var _dashProfiles = [];
 /* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
    deep-linking and the hashchange handler, so #approvals silently did
    nothing and the tab could only be reached by clicking. */
-var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'mock', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'mock', 'liveexam', 'status'];
 
 /* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
    Elec-Buddy sells two separate courses: COC (Oral + Written) and
@@ -3167,6 +3272,7 @@ function showTab(name) {
   // an admin adding a slot that was taken a minute ago is the one mistake
   // this tab can make that a cadet notices.
   if (name === 'mock' && typeof loadMockTab === 'function') loadMockTab();
+  if (name === 'liveexam' && typeof loadLiveExamTab === 'function') loadLiveExamTab();
   // Refetched on every visit: "online now" is a live figure, and showing one
   // cached from an hour ago would be worse than showing nothing.
   if (name === 'online' && typeof loadUserActivity === 'function') loadUserActivity();
@@ -8289,6 +8395,846 @@ async function endOffer() {
 // Kept so any older call site still resolves to the new composer.
 function renderBulkControls() { renderOfferControls(); }
 
+/* ── LIVE EXAM FEED ────────────────────────────────────────────────────────
+   Questions from the MMD sitting running right now, added daily from here and
+   read by the Oral section home page without any deploy.
+
+   Why not sq_data.js: that file is AES-encrypted in the repo, so adding a
+   question to it is a decrypt/edit/encrypt/commit/push/Pages/service-worker
+   cycle. This feature adds questions every evening for 3 to 7 days, often
+   from a phone. A deploy per day is not a workflow that survives an exam
+   week, and a missed evening kills the feed during the only period it is for.
+
+   The window does the work. A sitting is live when today falls between its
+   dates, so nothing has to be switched off by hand: the same reasoning as
+   sponsorship notices, and the same failure it avoids. */
+
+var _lxSittings = [];
+var _lxQuestions = [];
+var _lxActiveSitting = null;
+
+function lxToday() {
+  var d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function lxDay(s) {
+  if (!s) return '';
+  var d = new Date(s + 'T00:00:00');
+  return isNaN(d.getTime()) ? s : d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+/* Live, scheduled or finished, decided from the dates alone. Mirrors
+   offerPhase() on the Plans tab, for the same reason: a banner that ignores
+   its own dates lies the day after it should have stopped. */
+function lxPhase(s) {
+  var t = lxToday();
+  if (!s.is_published) return { key: 'draft', label: 'Draft', cls: 'nt-draft', rank: 2 };
+  if (s.ends_on < t) return { key: 'ended', label: 'Finished', cls: 'nt-closed', rank: 3 };
+  if (s.starts_on > t) return { key: 'soon', label: 'Starts ' + lxDay(s.starts_on), cls: 'nt-upcoming', rank: 1 };
+  var left = Math.round((new Date(s.ends_on) - new Date(t)) / 86400000);
+  return {
+    key: 'live',
+    label: left === 0 ? 'LIVE, last day' : 'LIVE, ' + left + ' day' + (left === 1 ? '' : 's') + ' left',
+    cls: 'nt-open', rank: 0,
+  };
+}
+
+async function loadLiveExamTab() {
+  var host = document.getElementById('lx-sittings');
+  if (!host) return;
+
+  var res = await _sb.from('exam_sittings').select('*').order('starts_on', { ascending: false });
+  if (res.error) {
+    host.innerHTML = '<div class="ad-loading">Could not load sittings: ' + esc(res.error.message)
+      + '<br><br>If this says the relation does not exist, run <code>app/admin/live_exam_setup.sql</code>.</div>';
+    return;
+  }
+  _lxSittings = res.data || [];
+
+  // Question counts per sitting, so the list says what is in each one.
+  var counts = {};
+  if (_lxSittings.length) {
+    var qr = await _sb.from('exam_questions').select('sitting_id,answer_text');
+    (qr.data || []).forEach(function (q) {
+      var c = counts[q.sitting_id] || (counts[q.sitting_id] = { n: 0, unanswered: 0 });
+      c.n++;
+      if (!q.answer_text || !q.answer_text.trim()) c.unanswered++;
+    });
+  }
+
+  if (!_lxSittings.length) {
+    host.innerHTML = '<div class="ad-loading">No sittings yet. Add one above, then paste the day\'s questions into it.</div>';
+    return;
+  }
+
+  var rows = _lxSittings.map(function (s) { return { s: s, p: lxPhase(s) }; })
+    .sort(function (a, b) { return a.p.rank - b.p.rank || (a.s.starts_on < b.s.starts_on ? 1 : -1); });
+
+  host.innerHTML = '<div class="ad-table-wrap"><table class="ad-table"><thead><tr>'
+    + '<th>Sitting</th><th>Dates</th><th>State</th><th>Questions</th><th></th>'
+    + '</tr></thead><tbody>'
+    + rows.map(function (r) {
+        var c = counts[r.s.id] || { n: 0, unanswered: 0 };
+        var sel = _lxActiveSitting === r.s.id;
+        return '<tr' + (sel ? ' style="background:var(--surface2)"' : '') + '>'
+          + '<td><strong>' + esc(r.s.title) + '</strong><div style="font-size:11.5px;color:var(--text3)">' + esc(r.s.centre) + '</div></td>'
+          + '<td style="white-space:nowrap">' + esc(lxDay(r.s.starts_on)) + '<br><span style="color:var(--text3)">to ' + esc(lxDay(r.s.ends_on)) + '</span></td>'
+          + '<td><span class="nt-badge ' + r.p.cls + '">' + esc(r.p.label) + '</span></td>'
+          + '<td>' + c.n + (c.unanswered ? '<div style="font-size:11.5px;color:var(--orange)">' + c.unanswered + ' need answers</div>' : '') + '</td>'
+          + '<td style="white-space:nowrap">'
+          + '<button class="ad-btn btn-sm ' + (sel ? 'btn-primary' : 'btn-ghost') + '" onclick="pickSitting(' + attrJs(r.s.id) + ')">' + (sel ? 'Editing' : 'Add questions') + '</button> '
+          + '<button class="ad-btn btn-sm btn-ghost" onclick="toggleSittingPub(' + attrJs(r.s.id) + ')">' + (r.s.is_published ? 'Unpublish' : 'Publish') + '</button> '
+          + '<button class="ad-btn btn-sm btn-ghost" style="color:var(--red)" onclick="delSitting(' + attrJs(r.s.id) + ')">Delete</button>'
+          + '</td></tr>';
+      }).join('')
+    + '</tbody></table></div>';
+
+  if (_lxActiveSitting && !_lxSittings.some(function (s) { return s.id === _lxActiveSitting; })) {
+    _lxActiveSitting = null;
+  }
+  if (_lxActiveSitting) pickSitting(_lxActiveSitting);
+}
+
+function resetSittingForm() {
+  ['lx-title', 'lx-centre', 'lx-from', 'lx-to'].forEach(function (id) {
+    var e = document.getElementById(id); if (e) e.value = '';
+  });
+  var p = document.getElementById('lx-pub'); if (p) p.checked = false;
+}
+
+async function saveSitting() {
+  var g = function (id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  var title = g('lx-title'), centre = g('lx-centre') || 'Mumbai', from = g('lx-from'), to = g('lx-to');
+  if (!title) { toast('Give the sitting a title, e.g. "August 2026"', 'err'); return; }
+  if (!from || !to) { toast('Both dates are needed', 'err'); return; }
+  if (to < from) { toast('The last day is before the first day', 'err'); return; }
+
+  var days = Math.round((new Date(to) - new Date(from)) / 86400000) + 1;
+  if (days > 31) { toast('That window is ' + days + ' days. Check the year.', 'err'); return; }
+
+  var pub = !!(document.getElementById('lx-pub') || {}).checked;
+  var res = await _sb.from('exam_sittings').insert({
+    title: title, centre: centre, starts_on: from, ends_on: to,
+    is_published: pub, created_by: (window._sbUser || {}).id || null,
+  }).select().single();
+
+  if (res.error) { toast('Could not save: ' + res.error.message, 'err'); return; }
+  logAdminAction('live_exam_sitting_add', null, { title: title, from: from, to: to, days: days, published: pub });
+  toast(days + '-day sitting added' + (pub ? ' and published' : ' as a draft'));
+  resetSittingForm();
+  _lxActiveSitting = res.data.id;
+  loadLiveExamTab();
+}
+
+async function toggleSittingPub(id) {
+  var s = _lxSittings.filter(function (x) { return x.id === id; })[0];
+  if (!s) return;
+  var res = await _sb.from('exam_sittings').update({ is_published: !s.is_published }).eq('id', id);
+  if (res.error) { toast(res.error.message, 'err'); return; }
+  logAdminAction('live_exam_sitting_publish', null, { title: s.title, published: !s.is_published });
+  toast(s.is_published ? 'Hidden from cadets' : 'Published');
+  loadLiveExamTab();
+}
+
+async function delSitting(id) {
+  var s = _lxSittings.filter(function (x) { return x.id === id; })[0];
+  if (!s) return;
+  var qr = await _sb.from('exam_questions').select('id').eq('sitting_id', id);
+  var n = (qr.data || []).length;
+  // The cascade is real, so it is spelled out rather than implied.
+  if (!confirm('Delete "' + s.title + '"?\n\n'
+    + (n ? 'Its ' + n + ' question' + (n === 1 ? '' : 's') + ' will be deleted too. This cannot be undone.'
+         : 'It has no questions.'))) return;
+  var res = await _sb.from('exam_sittings').delete().eq('id', id);
+  if (res.error) { toast(res.error.message, 'err'); return; }
+  logAdminAction('live_exam_sitting_delete', null, { title: s.title, questions: n });
+  toast('Sitting deleted');
+  if (_lxActiveSitting === id) _lxActiveSitting = null;
+  loadLiveExamTab();
+}
+
+async function pickSitting(id) {
+  _lxActiveSitting = id;
+  var s = _lxSittings.filter(function (x) { return x.id === id; })[0];
+  if (!s) return;
+
+  var panel = document.getElementById('lx-q-panel');
+  var sub = document.getElementById('lx-q-sub');
+  if (panel) panel.hidden = false;
+  if (sub) {
+    var p = lxPhase(s);
+    sub.innerHTML = 'Adding to <strong>' + esc(s.title) + '</strong>, ' + esc(s.centre)
+      + ' &middot; <span class="nt-badge ' + p.cls + '">' + esc(p.label) + '</span>';
+  }
+
+  // Default the day to today when today is inside the window, otherwise to
+  // the first day. Saves the most common interaction on the busiest evening.
+  var day = document.getElementById('lx-day');
+  if (day && !day.value) {
+    var t = lxToday();
+    day.value = (t >= s.starts_on && t <= s.ends_on) ? t : s.starts_on;
+  }
+
+  var topic = document.getElementById('lx-topic');
+  if (topic && topic.options.length <= 1) {
+    var opts = '<option value="">Not sure</option>';
+    for (var i = 1; i <= 23; i++) {
+      var code = 'T' + String(i).padStart(2, '0');
+      opts += '<option value="' + code + '">' + code + '</option>';
+    }
+    topic.innerHTML = opts;
+  }
+
+  var qr = await _sb.from('exam_questions').select('*').eq('sitting_id', id)
+    .order('asked_on', { ascending: false }).order('sort_order', { ascending: true });
+  _lxQuestions = qr.data || [];
+  renderQuestions();
+
+}
+
+/* ── RAW RECOLLECTION PARSER ───────────────────────────────────────────────
+   Turns a pasted recollection into structured rows, so the only thing left to
+   do by hand is check them.
+
+   Written against the two real documents from 20 and 21 August 2026. Those are
+   what the input actually looks like: a title, a date, one or more surveyor
+   headers partway down, questions as bare lines, some duplicates, and a few
+   lines that are commentary rather than questions.
+
+   Everything here is deterministic. Structure does not need a model, and
+   spending an API call on splitting lines would be slower, cost money, and be
+   less predictable than a regex that can be read and fixed. */
+
+var LX_KNOWN_SURVEYORS = [];   // filled from sq_data + past sittings
+
+/* Lines that are scaffolding, not questions. */
+function lxIsTitle(l) {
+  return /^oral\s+(exam|examination)/i.test(l)
+      || /^questions?\s*$/i.test(l)
+      || /^[-=_*\s]+$/.test(l);
+}
+
+/* Commentary a candidate wrote about the exam rather than a question asked in
+   it. These came out of the real documents: "And cross questioning",
+   "Some questions related to motor", "Mostly related to container fire". */
+function lxIsNoise(l) {
+  var s = l.toLowerCase().replace(/[.\s]+$/, '');
+  return /^(and|also)?\s*cross[- ]?question/i.test(s)
+      || /^(some|mostly|mainly|many|few|lot of|lots of|all)\s+(questions?\s+)?(related|about|on|from)\b/i.test(s)
+      || /^(and|also|etc|thats it|that\x27s it|all the best|thank you|thanks)$/i.test(s)
+      || s.length < 3;
+}
+
+/* A surveyor header. Handles every shape in the two documents:
+     External Surveyor: Arvind Choudhary | Internal Surveyor: Somesh Prakash
+     Surveyor: Brijesh Srivastava and Kiran
+     Asked by Pravin and Sanjib Chaudhary - 20/08/2026
+   Returns an array of names, or null if the line is not a header. */
+function lxParseSurveyorLine(line) {
+  var l = line.trim();
+
+  // "Asked by X and Y - date"
+  var m = l.match(/^asked\s+by\s+(.+)$/i);
+  if (m) return lxSplitNames(lxStripTrailingDate(m[1]));
+
+  // Any line containing "surveyor" followed by a colon.
+  if (/surveyor/i.test(l) && l.indexOf(':') !== -1) {
+    var names = [];
+    // Split on | or ; first, so "External: A | Internal: B" gives both.
+    l.split(/[|;]/).forEach(function (part) {
+      var c = part.indexOf(':');
+      if (c === -1) return;
+      var after = lxStripTrailingDate(part.slice(c + 1));
+      lxSplitNames(after).forEach(function (n) { if (n) names.push(n); });
+    });
+    return names.length ? names : null;
+  }
+  return null;
+}
+
+function lxStripTrailingDate(s) {
+  return String(s).replace(/[-–—,]?\s*\d{1,2}[\/.\-]\d{1,2}[\/.\-]\d{2,4}\s*$/, '').trim();
+}
+
+function lxSplitNames(s) {
+  return String(s).split(/\s+and\s+|\s*&\s*|\s*,\s*/i)
+    .map(function (n) { return n.replace(/\b(sir|sr|mr|shri)\b\.?/gi, '').replace(/\s+/g, ' ').trim(); })
+    .filter(function (n) { return n.length > 1 && n.length < 60; });
+}
+
+/* Pull the date out of a title or header line. Recollections are written
+   dd/mm/yyyy, which Date() would read as mm/dd, so it is parsed by hand. */
+function lxFindDate(text) {
+  var m = String(text).match(/(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4})/);
+  if (!m) return null;
+  var d = +m[1], mo = +m[2], y = +m[3];
+  if (y < 100) y += 2000;
+  if (d > 31 || mo > 12) return null;
+  return y + '-' + String(mo).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+}
+
+/* Match a pasted name against names already in use.
+
+   Returns { name, how } where `how` is:
+     'exact'   the same name, normalised. Use it.
+     'variant' same surname AND compatible first names (one side has none, or
+               they are near-identical). Safe to apply, worth showing.
+     'clash'   same surname, DIFFERENT first names. NOT applied. Surfaced so a
+               human decides, because this is two people far more often than
+               it is one.
+     null      no relation.
+
+   The first version of this matched on surname alone and folded
+   "Arvind Choudhary" onto "Sanjib Chowdhary" and "Somesh Prakash" onto
+   "Pakrasi (Prakrashi)" in the real 21 August document. Both wrong, and the
+   same error the Srivastava merge was deliberately held back from. A surname
+   is not an identity. */
+function lxNormName(s) {
+  return String(s).toLowerCase()
+    .replace(/\((.*?)\)/g, ' ')                 // drop parenthetical spellings
+    .replace(/\b(sir|sr|mr|shri|capt|chief)\b\.?/g, ' ')
+    .replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function lxMatchKnown(name, known) {
+  if (!name) return null;
+  var n = lxNormName(name);
+  if (!n) return null;
+
+  for (var i = 0; i < known.length; i++) {
+    if (lxNormName(known[i]) === n) return { name: known[i], how: 'exact' };
+  }
+
+  var parts = n.split(' ');
+  var last = parts[parts.length - 1];
+  var first = parts.length > 1 ? parts[0] : null;
+  if (last.length < 5) return null;             // too short to be distinctive
+
+  /* Score EVERY surname match and take the best, rather than returning on the
+     first one seen. Returning early folded "Arvind Choudhary" into a clash
+     against "Sanjib Chowdhary" and never reached "Arbind Choudhary", who is
+     the same person one edit away. First hit is not best hit. */
+  var best = null;
+  for (var k = 0; k < known.length; k++) {
+    var kn = lxNormName(known[k]);
+    var kp = kn.split(' ');
+    var klast = kp[kp.length - 1];
+    var kfirst = kp.length > 1 ? kp[0] : null;
+    if (klast !== last && !lxClose(klast, last)) continue;
+
+    var how, rank;
+    if (first && kfirst && (first === kfirst || lxClose(first, kfirst))) { how = 'variant'; rank = 3; }
+    else if (first && kfirst && (first.length === 1 || kfirst.length === 1)
+             && first[0] === kfirst[0]) { how = 'variant'; rank = 3; }
+    else if (!first || !kfirst) { how = 'variant'; rank = 2; }
+    else { how = 'clash'; rank = 1; }
+
+    // A surname that matches exactly beats one that merely matches closely.
+    if (klast === last) rank += 0.5;
+    if (!best || rank > best.rank) best = { name: known[k], how: how, rank: rank };
+  }
+  return best ? { name: best.name, how: best.how } : null;
+}
+
+/* Edit distance of at most two. Used on single name parts only. */
+function lxClose(a, b) {
+  if (a === b) return true;
+  var m = a.length, n = b.length;
+  if (Math.abs(m - n) > 2) return false;
+  var prev = [], cur = [];
+  for (var j = 0; j <= n; j++) prev[j] = j;
+  for (var i = 1; i <= m; i++) {
+    cur[0] = i;
+    for (var k = 1; k <= n; k++) {
+      cur[k] = Math.min(prev[k] + 1, cur[k - 1] + 1, prev[k - 1] + (a[i - 1] === b[k - 1] ? 0 : 1));
+    }
+    prev = cur.slice();
+  }
+  return prev[n] <= 2;
+}
+
+/* The parser proper. Returns { date, rows, dropped } where each row is
+   { question, surveyor, dup }. */
+function lxParseRaw(raw, known) {
+  known = known || LX_KNOWN_SURVEYORS;
+  var lines = String(raw).split(/\r?\n/);
+  var date = null, current = [], rows = [], dropped = [], clashes = [];
+  var seen = {};
+
+  lines.forEach(function (rawLine) {
+    var l = rawLine.replace(/^\s*(?:\d+[.)]|[-*•·▪])\s*/, '').trim();
+    if (!l) return;
+
+    if (!date) date = lxFindDate(l);
+
+    var names = lxParseSurveyorLine(l);
+    if (names) {
+      current = [];
+      names.forEach(function (n) {
+        var m = lxMatchKnown(n, known);
+        if (m && (m.how === 'exact' || m.how === 'variant')) {
+          current.push(m.name);
+        } else {
+          // A clash keeps the NEW name. Two examiners sharing a surname is
+          // common, and inventing one person out of two is the worse error.
+          current.push(n);
+          if (m && m.how === 'clash') clashes.push({ pasted: n, existing: m.name });
+        }
+      });
+      return;
+    }
+    if (lxIsTitle(l)) return;
+    if (lxIsNoise(l)) { dropped.push(l); return; }
+
+    // Within one paste the same question often appears twice, because the
+    // candidate wrote it down again later. Flag rather than silently drop, so
+    // the count on screen matches what was pasted.
+    var key = l.toLowerCase().replace(/[^a-z0-9]/g, '');
+    var dup = !!seen[key];
+    seen[key] = true;
+
+    rows.push({
+      question: l,
+      // Two examiners in one block: attribute to neither rather than guess.
+      surveyor: current.length === 1 ? current[0] : null,
+      candidates: current.length > 1 ? current.slice() : null,
+      dup: dup,
+    });
+  });
+
+  return { date: date, rows: rows, dropped: dropped, clashes: clashes };
+}
+
+
+/* ── NEAR-DUPLICATE DETECTION ──────────────────────────────────────────────
+   Jaccard overlap on content words, plus a containment test so a short line
+   inside a longer one is caught ("HRC" within "HRC fuse").
+
+   Two thresholds, because the same score band holds both real duplicates and
+   real distinct questions. Measured on the 21 August document:
+
+     1.00  HRC fuse / HRC fuse                     same
+     1.00  Lifeboat charging and battery types /
+           Lifeboat battery charging               same, different wording
+     0.67  Container fire safety / Container fire  same
+     0.50  PID controller / PID                    same
+     0.50  ISPS / Levels of ISPS                   DIFFERENT questions
+     0.43  bearing designation / ball vs roller    DIFFERENT questions
+
+   So: at or above 0.95 it is unticked as a repeat. Between 0.5 and 0.95 it
+   stays ticked and is flagged with what it resembles, because "Levels of
+   ISPS" must not be thrown away to save a click. */
+var LX_DUP_STOP = {};
+('a an the is are was were be been of in on at to for from with by and or if it its this that these those '
+ + 'you your we our do does did done how what which when where why will would can could shall should may '
+ + 'might must i he she they them his her their as not no yes about into out up down over under than then '
+ + 'so such there here have has had type types kind sir').split(' ').forEach(function (x) { LX_DUP_STOP[x] = 1; });
+
+function lxTokenSet(text) {
+  var out = {}, n = 0;
+  String(text).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).forEach(function (t) {
+    if (t.length > 1 && !LX_DUP_STOP[t] && !out[t]) { out[t] = 1; n++; }
+  });
+  return { set: out, size: n };
+}
+
+function lxSimilar(a, b) {
+  var A = lxTokenSet(a), B = lxTokenSet(b);
+  if (!A.size || !B.size) return 0;
+  var inter = 0;
+  for (var t in A.set) if (B.set[t]) inter++;
+  var jac = inter / (A.size + B.size - inter);
+  // Containment: every word of the shorter appears in the longer. "PID" is
+  // inside "PID controller" but Jaccard only scores that 0.5.
+  var small = A.size <= B.size ? A : B;
+  var contained = inter === small.size;
+  return contained ? Math.max(jac, 0.75) : jac;
+}
+
+/* Returns the best match for `text` among `others`, or null. */
+function lxFindSimilar(text, others) {
+  var best = null;
+  for (var i = 0; i < others.length; i++) {
+    var o = others[i];
+    var t = typeof o === 'string' ? o : o.question_text || o.question;
+    if (!t || t === text) continue;
+    var sim = lxSimilar(text, t);
+    if (sim >= 0.5 && (!best || sim > best.sim)) best = { sim: sim, text: t, where: o.asked_on || null };
+  }
+  return best;
+}
+
+/* ── TOPIC CLASSIFIER ──────────────────────────────────────────────────────
+   Naive Bayes over word and bigram features, trained on the questions this
+   app has already labelled by hand. Built by build_topic_model.cjs; retrain
+   it whenever a batch of new questions is filed into the Surveyor bank.
+
+   The MARGIN between the top two topics is the confidence, and it is a real
+   signal rather than a decoration. On a held-out fifth of the training set:
+
+       margin > 3.0    50% of questions,  97% correct
+       1.5 to 3.0      25%,               73%
+       0.8 to 1.5       8%,               74%
+       under 0.8       18%,               43%
+
+   So above 3.0 the topic is filled in, between 0.8 and 3.0 it is filled but
+   marked for a look, and below 0.8 it is left blank with the top three
+   offered. A wrong topic that looks confident costs more than a blank one. */
+var LX_TOPIC_MODEL = {"priors":{"T01":-2.133,"T02":-2.722,"T03":-1.884,"T04":-2.408,"T05":-3.336,"T06":-2.903,"T07":-2.966,"T08":-3.204,"T09":-3.267,"T10":-3.667,"T11":-3.604,"T12":-3.051,"T13":-6.68,"T15":-6.68,"T17":-5.07,"T18":-5.832,"T19":-3.516,"T20":-2.516,"T21":-4.643,"T22":-4.167,"T23":-2.176},"terms":{"50":{"T02":2.252,"T11":2.623},"60":{"T02":2.252,"T11":2.623},"100":{"T06":2.433,"T20":1.535},"200":{"T01":1.44,"T20":1.822},"220":{"T04":2.051,"T05":2.132},"thermocouple":{"T06":2.846},"routine":{"T01":1.776,"T04":1.204},"alternator":{"T01":2.059},"air":{"T01":1.611},"gap":{"T01":1.745},"measured":{"T01":1.95},"distance":{"T01":1.95},"reduced":{"T01":1.663,"T23":1.195},"carry alternator":{"T01":1.95},"air gap":{"T01":1.745},"gap measured":{"T01":1.95},"distance reduced":{"T01":1.95},"use":{"T06":2.328,"T03":0.721},"rtd":{"T06":2.838},"use thermocouple":{"T06":2.721},"thermocouple use":{"T06":2.721},"use rtd":{"T06":2.721},"vfd":{"T05":2.391,"T03":1.391},"onboard ship":{"T05":2.642,"T06":2.21},"pt100":{"T06":2.816},"pt":{"T06":2.21,"T04":1.714},"signify":{"T06":2.721},"thermocouple rtd":{"T06":2.721},"pt 100":{"T06":2.721},"100 signify":{"T06":2.721},"alkaline":{"T23":1.013,"T20":2.141},"battery":{"T20":2.266},"alkaline battery":{"T23":1.301,"T20":1.977},"panel":{"T07":1.685,"T04":1.714},"boiler alarms":{"T20":1.822,"T09":2.574},"boiler panel":{"T20":1.822,"T09":2.574},"low":{"T23":0.944,"T02":2.109},"water":{"T23":1.706,"T03":0.903},"level":{"T23":2.071},"test boiler":{"T23":1.483,"T09":2.574},"boiler low":{"T23":2.043},"calibrate":{"T23":1.483,"T06":2.21},"pressure":{"T06":2.74},"transducer":{"T23":0.972,"T06":2.21,"T21":3.439},"adjust":{"T23":1.483,"T06":2.21},"error":{"T23":1.483,"T06":2.21},"calibrate pressure":{"T23":1.483,"T06":2.21},"pressure transducer":{"T23":1.483,"T06":2.21},"started":{"T01":1.594,"T07":2.091},"but":{"T01":1.892},"any":{"T01":0.929,"T23":1.483,"T10":2.463},"faults":{"T01":1.44,"T03":0.68,"T04":1.204},"high":{"T07":2.44},"high voltage":{"T07":2.591,"T02":1.559},"voltage system":{"T07":2.496,"T02":1.741},"system rating":{"T07":2.273,"T02":2.029},"calculate":{"T07":2.609,"T08":2},"ner":{"T07":2.139,"T02":2.147},"continuity":{"T03":1.191,"T04":1.714},"continuity test":{"T03":1.191,"T04":1.714},"motor":{"T03":1.507},"bus":{"T23":2.043},"bar":{"T23":1.819,"T06":1.699},"bus bar":{"T23":2.043},"plc":{"T06":1.671,"T07":2.621},"ir":{"T12":2.843},"tanker":{"T18":5.65},"starter":{"T05":2.055,"T03":1.45},"soft":{"T05":2.642,"T03":1.191},"advantage":{"T05":3.202},"disadvantage":{"T05":3.153},"types starter":{"T05":2.642,"T23":1.483},"soft starter":{"T05":2.843,"T03":0.939},"starter advantage":{"T05":3.202},"advantage disadvantage":{"T05":3.153},"transformer":{"T08":1.923,"T05":2.781},"losses":{"T05":2.642},"transformer types":{"T08":2.51,"T05":2.642},"types losses":{"T08":2.51,"T05":2.642},"type ship":{"T23":1.994},"aur":{"T23":1.994},"btao":{"T23":1.994},"increase":{"T08":2.51,"T20":1.822},"through":{"T08":2.51,"T12":2.358},"said":{"T01":1.44,"T23":1.483},"relay":{"T04":1.84},"reverse":{"T01":1.557,"T03":0.721},"differential relay":{"T01":1.152,"T04":1.938},"reverse power":{"T01":1.557,"T03":0.721},"fuse":{"T23":1.115,"T04":1.983},"exd":{"T17":4.937},"exi":{"T17":4.937},"exd exi":{"T17":4.937},"answer":{"T01":1.152,"T10":3.197},"bole":{"T01":1.44,"T23":1.483},"avr":{"T01":1.992},"setting":{"T01":0.97,"T06":2.328},"generator voltage":{"T01":1.663,"T07":1.985},"turning":{"T03":1.676},"gear":{"T09":2.615,"T03":0.578},"reversing":{"T23":1.483,"T03":1.191},"turning gear":{"T03":1.676},"gear motor":{"T09":2.574,"T03":0.823},"power requirements":{"T23":1.483,"T02":2.029},"supply":{"T02":2.029},"synchroscope":{"T01":1.892},"synchroscope working":{"T02":1.741,"T01":1.663},"many":{"T23":1.706,"T01":1.152},"lamps":{"T23":1.483,"T01":1.44},"gate":{"T23":1.483,"T08":2.51},"lifeboat":{"T21":3.662,"T20":2.046},"lifeboat battery":{"T21":3.662,"T20":2.046},"overspeed":{"T09":2.98},"overspeed trip":{"T09":2.98},"trip test":{"T03":1.701},"auto":{"T22":3.985},"tensioning":{"T22":3.697,"T03":0.903},"winch":{"T03":1.626},"auto tensioning":{"T22":3.985},"tensioning winch":{"T22":3.985},"capacity":{"T20":2.085},"battery load":{"T23":0.972,"T20":2.159},"load test":{"T23":1.301,"T20":1.977},"proof":{"T23":1.483,"T01":1.44},"blackout":{"T20":2.282},"per":{"T23":1.706,"T01":1.152},"manual":{"T23":1.994},"blackout test":{"T23":1.146,"T20":2.074},"test per":{"T23":1.994},"per manual":{"T23":1.994},"speed":{"T03":1.737},"proximity":{"T06":2.615},"switch":{"T23":1.483,"T06":2.21},"delta":{"T05":2.76,"T03":1.057},"star delta":{"T05":3.048},"delta starter":{"T05":3.153},"winch working":{"T22":2.963,"T03":1.527},"emergency":{"T20":2.298},"emergency generator":{"T07":1.685,"T20":2.19},"battery capacity":{"T23":0.972,"T20":2.159},"try":{"T01":1.44,"T23":1.483},"while":{"T23":1.706,"T01":1.152},"standby":{"T23":1.483,"T03":1.191},"working synchroscope":{"T02":1.518,"T01":1.776},"check":{"T23":1.734},"tank":{"T23":1.994},"levels":{"T23":1.483,"T02":2.029},"3e":{"T07":2.784},"start":{"T07":2.273,"T22":2.963,"T03":0.68},"developing":{"T07":1.803,"T01":1.758},"reasons":{"T01":1.535,"T03":0.834},"start generator":{"T07":2.784},"developing voltage":{"T07":2.273,"T01":1.44},"voltage reasons":{"T07":2.273,"T01":1.44},"disadvantages":{"T02":2.183},"advantages disadvantages":{"T07":2.273,"T02":2.029},"conditions":{"T22":3.474,"T01":1.44},"humming":{"T08":2.223,"T05":2.866},"noise":{"T08":2.51,"T05":2.642},"humming noise":{"T08":2.51,"T05":2.642},"generator developing":{"T07":2.273,"T01":1.44},"synchroscope construction":{"T02":2.029,"T01":1.44},"construction working":{"T02":1.741,"T01":1.663},"box":{"T05":2.132,"T02":2.365},"rms":{"T20":1.535,"T11":3.134},"mgps":{"T10":3.485},"anodes":{"T10":3.534},"voltage ship":{"T07":2.784},"calculate value":{"T07":2.784},"value ner":{"T07":2.784},"electrical system":{"T18":5.139,"T02":2.029},"works":{"T23":1.706,"T05":2.355},"dc":{"T23":1.851},"survey":{"T22":3.641},"solas":{"T01":0.988,"T20":1.822},"chapter":{"T13":5.986,"T22":3.474},"electrical survey":{"T22":3.842},"solas chapter":{"T13":5.986,"T22":3.474},"regulation":{"T01":1.44,"T05":2.132,"T02":1.518},"avr regulation":{"T01":1.95},"fire":{"T23":1.195,"T04":1.938},"detector":{"T23":1.195,"T04":1.938},"ionization":{"T23":1.195,"T04":1.938},"material":{"T10":3.226},"dc motor":{"T23":1.483,"T03":1.191},"series":{"T23":1.994},"dc series":{"T23":1.994},"series motor":{"T23":1.994},"surveyor":{"T23":2.071},"cable":{"T12":2.906},"busbar":{"T04":1.915,"T12":1.77},"cable used":{"T01":0.929,"T12":2.694},"used between":{"T01":1.152,"T12":2.581},"ni":{"T23":1.994},"cd":{"T23":1.994},"components":{"T03":1.308},"ni cd":{"T23":1.994},"cd battery":{"T23":1.994},"battery working":{"T23":1.483,"T20":1.822},"neutral":{"T02":2.196},"connected":{"T23":1.706,"T02":1.741},"methods":{"T03":1.191},"starting methods":{"T23":1.483,"T20":1.822},"cold":{"T23":0.972,"T02":2.029,"T20":1.312},"ironing":{"T23":1.195,"T02":2.252},"question":{"T23":1.819,"T20":1.312},"cold ironing":{"T23":1.195,"T02":2.252},"called cold":{"T23":1.483,"T02":2.029},"cross question":{"T23":1.483,"T20":1.822},"steering":{"T09":3.037},"steering gear":{"T09":3.02},"gear trip":{"T20":1.822,"T23":1.483},"reference":{"T10":3.545},"electrode":{"T10":3.616},"reference electrode":{"T10":3.603},"electrode material":{"T10":3.562},"overcurrent trip":{"T23":1.483,"T04":1.714},"trip procedure":{"T23":1.483,"T04":1.714},"brushless":{"T01":2.027},"excitation":{"T01":2.076},"brushless excitation":{"T01":1.95},"flashing":{"T23":1.301,"T01":1.594},"bonding":{"T10":2.974,"T12":2.358},"intermediate":{"T10":3.485},"shaft":{"T10":3.128,"T09":2.392},"earth":{"T04":2.082},"rudder":{"T10":3.197,"T09":2.287},"stock":{"T10":3.485},"hull":{"T10":3.485},"intermediate shaft":{"T10":3.485},"rudder stock":{"T10":3.485},"star connection":{"T23":1.195,"T03":1.414},"iccp":{"T10":3.639},"iccp reference":{"T10":3.603},"starts":{"T03":1.191,"T07":2.273},"parallel":{"T01":1.776,"T02":1.518},"one":{"T01":1.95},"one generator":{"T01":1.95},"electrolyte":{"T20":2.274},"ceiling":{"T23":1.483,"T03":1.191},"capacitor":{"T03":1.501},"ceiling fan":{"T23":1.483,"T03":1.191},"fan capacitor":{"T23":1.483,"T03":1.191},"timer":{"T23":1.483,"T07":2.273},"dp":{"T06":2.615},"transmitter":{"T15":5.699,"T06":2.433},"dp transmitter":{"T15":5.699,"T06":2.433},"hazardous":{"T23":1.994},"rooms":{"T23":1.483,"T20":1.822},"type motor":{"T23":1.483,"T03":1.191},"starters":{"T03":1.701},"improve":{"T08":2.51,"T03":1.191},"related electrical":{"T20":1.822,"T22":3.474},"construction synchroscope":{"T02":2.029,"T01":1.44},"coming":{"T07":2.273,"T23":1.483},"2e":{"T07":2.784},"voltage coming":{"T07":2.273,"T23":1.483},"actions 2e":{"T07":2.784},"after":{"T03":1.334,"T01":0.821},"dry":{"T02":2.434},"dock":{"T02":2.434},"generator starting":{"T07":2.496,"T20":1.535},"dry dock":{"T02":2.434},"test procedure":{"T23":1.195,"T12":2.581},"expansion":{"T23":0.972,"T07":2.273,"T09":2.063},"armature":{"T23":1.195,"T01":1.663},"information":{"T23":1.706,"T12":2.07},"showing":{"T07":2.273,"T01":1.44},"name":{"T05":2.642,"T12":2.358},"stator":{"T05":2.642,"T03":1.191},"ni-cd":{"T20":2.333},"batteries":{"T20":2.417},"ni-cd batteries":{"T23":1.483,"T20":1.822},"application":{"T03":1.191,"T23":1.483},"droop":{"T01":2.068},"characteristics":{"T03":1.308},"governor":{"T01":1.607,"T09":2.374},"preferential":{"T04":2.12},"preferential trip":{"T04":2.12},"purpose working":{"T02":2.029,"T01":1.44},"index":{"T23":1.483,"T12":2.358},"timers":{"T23":0.972,"T07":2.609},"brushless alternator":{"T01":1.95},"alternator working":{"T01":1.95},"fuse types":{"T23":1.483,"T04":1.714},"hrc":{"T23":1.195,"T04":1.938},"hrc fuse":{"T23":1.195,"T04":1.938},"ip":{"T23":1.706,"T03":0.903},"deck":{"T03":1.345},"engine room":{"T23":1.819,"T03":0.68},"ex":{"T19":3.417},"cooling":{"T03":1.596},"number":{"T03":1.442},"number motor":{"T23":1.483,"T03":1.191},"current transformer":{"T08":2.223,"T04":1.938},"ships":{"T20":1.822,"T23":1.483},"factor":{"T11":3.316},"know":{"T20":1.822,"T23":1.483},"power factor":{"T11":3.316},"power trip":{"T03":1.701},"vfd working":{"T05":2.642,"T03":1.191},"synchronization":{"T01":1.845},"sequence":{"T23":0.972,"T02":2.029,"T01":0.929},"phase sequence":{"T23":0.972,"T02":2.029,"T01":0.929},"starter used":{"T23":0.972,"T03":1.527},"hv":{"T02":2.365},"earthed":{"T02":2.183},"hv system":{"T07":2.496,"T02":1.741},"shore":{"T02":2.406},"workshop":{"T23":1.195,"T03":1.414},"shore workshop":{"T23":1.483,"T03":1.191},"emcy":{"T23":1.483,"T07":2.273},"crane":{"T23":1.788},"er crane":{"T18":5.139,"T23":1.483},"fail":{"T23":1.994},"safe":{"T23":1.301,"T19":2.977},"arrangements":{"T23":1.195,"T20":2.046},"fail safe":{"T23":1.994},"parts":{"T01":1.44,"T23":1.483},"pid":{"T07":2.524},"pid working":{"T23":1.483,"T07":2.273},"im":{"T23":1.994},"short":{"T23":0.972,"T01":0.929,"T04":1.714},"overhaul":{"T03":1.596},"motor checks":{"T23":1.483,"T03":1.191},"checks after":{"T23":1.195,"T03":1.414},"uvt":{"T23":0.972,"T04":2.051},"coil":{"T23":1.195,"T04":1.938},"uvt coil":{"T23":1.195,"T04":1.938},"overcurrent relay":{"T03":1.191,"T04":1.714},"capacitor ceiling":{"T23":1.483,"T03":1.191},"generator started":{"T07":2.273,"T01":1.44},"rated":{"T23":0.972,"T01":1.776},"systems":{"T02":2.029},"precautions":{"T02":2.183},"hv systems":{"T02":2.029,"T11":2.911},"hysteresis":{"T05":3.153},"loss":{"T05":3.153},"ignition":{"T09":3.085},"ignition transformer":{"T09":3.085},"dielectric":{"T12":2.358,"T02":2.029},"strength":{"T12":2.358,"T02":2.029},"dielectric strength":{"T12":2.358,"T02":2.029},"vacuum":{"T02":2.54},"selection":{"T10":2.974,"T04":1.714},"cell":{"T10":3.128,"T20":1.64},"reference cell":{"T10":3.534},"iccp anodes":{"T10":3.485},"calculation":{"T02":2.029,"T20":1.822},"earthing":{"T02":2.109,"T03":0.652},"ward":{"T03":1.797},"leonard":{"T03":1.797},"ward leonard":{"T03":1.797},"control":{"T03":1.191,"T07":2.273},"speed control":{"T03":1.81},"ratio":{"T03":1.191,"T07":2.273},"ratio control":{"T03":1.191,"T07":2.273},"single":{"T03":1.527,"T11":2.4},"phasing":{"T03":1.75},"induction":{"T03":1.743},"single phasing":{"T03":1.75},"induction motor":{"T03":1.845},"ocr":{"T04":2.225},"testing methods":{"T04":2.225},"overload protection":{"T04":1.714,"T23":1.483},"undervoltage":{"T04":2.166},"undervoltage trip":{"T04":2.225},"arrangement":{"T20":1.977},"undervoltage protection":{"T04":2.225},"fails":{"T04":1.714,"T01":1.44},"main":{"T09":2.574,"T07":1.762,"T22":2.963},"main engine":{"T09":2.574,"T07":1.762,"T22":2.963},"law":{"T01":1.999},"synchronizing":{"T01":2.068},"without":{"T01":1.594},"synchronizing without":{"T01":1.999},"without synchroscope":{"T01":1.95},"vs motor":{"T01":1.44,"T03":1.191},"questions":{"T01":1.44,"T23":1.483},"thyristor":{"T08":3.116},"igbt":{"T08":3.07},"piezoelectric":{"T06":2.769},"crystal":{"T06":2.721},"magnetron":{"T21":4.46},"doppler":{"T21":4.509},"pi":{"T12":2.358,"T02":1.441},"readings":{"T12":2.07,"T10":3.197},"taken":{"T12":2.358,"T03":1.191},"megger":{"T12":2.668},"clamp":{"T12":2.917},"meter":{"T12":2.917},"clamp meter":{"T12":2.917},"shore power":{"T02":2.671},"shore supply":{"T02":2.617},"during dry":{"T02":2.54},"taking":{"T02":2.588},"taking shore":{"T02":2.588},"power low":{"T02":2.54},"low voltage":{"T02":2.54},"frequency":{"T02":2.124},"effects":{"T01":1.607},"regulations":{"T20":2.429},"solas regulations":{"T20":2.333},"motor type":{"T09":2.323,"T03":1.191},"motors":{"T03":1.711},"trips":{"T09":2.323,"T01":1.44},"gear trips":{"T09":3.085},"winch motor":{"T03":1.75},"windlass":{"T03":1.701},"governor motor":{"T09":3.085},"auxiliary":{"T09":2.574,"T04":1.714},"auxiliary engine":{"T09":2.574,"T04":1.714},"auto-transformer":{"T03":1.701},"motor applications":{"T03":1.75},"ordering":{"T03":0.68,"T12":2.694},"ordering cable":{"T12":2.869},"motor specifications":{"T03":1.414,"T09":2.287},"room crane":{"T23":1.994},"crane safety":{"T23":1.994},"dead":{"T20":1.822,"T02":2.029},"ship power":{"T20":1.822,"T04":1.714},"alarm actions":{"T17":4.377,"T04":1.714},"charging":{"T20":2.41},"bimetallic":{"T06":2.721},"strip":{"T06":2.721},"bimetallic strip":{"T06":2.721},"viscotherm":{"T09":2.574,"T06":2.21},"transferred":{"T07":2.784},"electronic":{"T07":2.725},"power transferred":{"T07":2.784},"electronic panel":{"T07":2.784},"poles":{"T03":1.701},"definition":{"T01":1.44,"T11":2.911},"scr":{"T08":3.07},"rectifier":{"T08":2.762,"T01":1.103},"optocoupler":{"T08":3.021},"mutual":{"T05":3.153},"mutual induction":{"T05":3.153},"derivative":{"T07":2.784},"derivative control":{"T07":2.784},"signal":{"T07":2.784},"selector":{"T07":2.784},"signal selector":{"T07":2.784},"ni-cd battery":{"T20":2.429},"battery electrolyte":{"T20":2.382},"acb":{"T04":2.361},"vcb":{"T04":1.832,"T02":1.895},"sf6":{"T04":1.204,"T02":2.365},"types circuit":{"T04":2.225},"circuit breakers":{"T04":1.938,"T02":1.741},"acb vcb":{"T04":2.225},"acb maintenance":{"T04":2.225},"step-by-step":{"T04":1.714,"T03":1.191},"interlocks":{"T04":1.427,"T09":2.797},"solas requirements":{"T01":1.257,"T20":1.977},"prime":{"T01":1.95},"mover":{"T01":1.95},"rpm":{"T01":1.999},"generator prime":{"T01":1.95},"prime mover":{"T01":1.95},"mover rated":{"T01":1.95},"rated rpm":{"T01":1.999},"rpm but":{"T01":1.95},"but voltage":{"T01":2.027},"voltage developing":{"T01":1.999},"developing reasons":{"T01":1.95},"reasons actions":{"T01":1.95},"alternator maintenance":{"T01":1.95},"measurement effects":{"T01":1.95},"sharing":{"T01":2.059},"generator load":{"T01":1.95},"load sharing":{"T01":2.046},"unequal":{"T01":2.046},"kw":{"T01":1.95},"operating":{"T01":1.152,"T23":1.706},"440v":{"T04":2.225},"fault":{"T04":1.977},"earth fault":{"T04":2.166},"fault alarm":{"T04":2.225},"synchronous":{"T11":2.4,"T03":1.527},"emf":{"T03":1.191,"T11":2.911},"controller":{"T07":2.861},"synchronous motor":{"T03":1.701},"principle applications":{"T03":1.191,"T09":2.574},"motor working":{"T03":1.701},"mosfet":{"T08":3.021},"seawater":{"T03":1.509},"temperature":{"T03":1.509},"relationship":{"T10":2.974,"T03":1.191},"off":{"T10":3.485},"port":{"T10":3.485},"3-phase":{"T11":3.134,"T04":1.427},"battery room":{"T20":2.382},"ventilation":{"T20":2.382},"carrying":{"T20":2.382},"procedure carrying":{"T20":2.382},"carrying battery":{"T20":2.333},"battery voltage":{"T20":2.382},"exhaust":{"T20":1.535,"T06":2.433},"documents":{"T22":3.985},"survey documents":{"T22":3.985},"requirements emergency":{"T20":2.333},"received":{"T03":1.701},"single-phase":{"T03":1.819},"function capacitor":{"T03":1.701},"capacitor single-phase":{"T03":1.75},"single-phase induction":{"T03":1.75},"routine maintenance":{"T01":1.663,"T04":1.427},"alternator air":{"T01":1.776,"T23":0.972},"normal":{"T01":1.44,"T12":2.358},"air-gap":{"T01":2.027},"lead-acid":{"T20":2.451},"alkaline batteries":{"T20":2.333},"low-water-level":{"T09":3.085},"boiler low-water-level":{"T09":3.085},"low-water-level alarm":{"T09":3.085},"supplied":{"T20":2.046,"T07":1.985},"supplied emergency":{"T20":2.333},"significance working":{"T10":3.485},"principle iccp":{"T10":3.485},"drill":{"T20":1.822,"T03":1.191},"blackout drill":{"T20":2.333},"plc working":{"T07":2.832},"paralleling":{"T01":1.95},"star-delta":{"T03":1.837},"star-delta starter":{"T03":1.833},"starter components":{"T03":1.75},"intrinsically":{"T19":3.382},"intrinsically safe":{"T19":3.382},"safe equipment":{"T19":3.333},"started but":{"T01":1.95},"checks before":{"T02":2.029,"T19":2.822},"frequency low":{"T02":2.54},"engine-room":{"T23":1.637,"T03":1.008},"engine-room crane":{"T23":1.819,"T03":0.68},"each":{"T03":1.191,"T20":1.822},"rms value":{"T11":3.422},"value significance":{"T11":3.422},"detailed":{"T03":1.191,"T19":2.822},"ingress":{"T03":1.527,"T23":0.972},"after seawater":{"T03":1.701},"seawater ingress":{"T03":1.191,"T23":1.483},"voltage frequency":{"T02":2.029,"T01":1.44},"bearing":{"T09":3.134},"speed-control":{"T03":1.701},"speed-control methods":{"T03":1.701},"after motor":{"T03":1.701},"intrinsic":{"T19":2.822,"T02":2.029},"intrinsic safety":{"T19":2.822,"T02":2.029},"provided":{"T19":2.822,"T03":1.191},"types excitation":{"T01":1.95},"functions":{"T23":1.483,"T20":1.822},"insulated-neutral":{"T02":2.617},"insulated-neutral system":{"T02":2.54},"specific":{"T12":1.847,"T20":1.822,"T02":1.518},"motor starter":{"T03":1.75},"dol":{"T03":1.701},"changing":{"T03":1.701},"no-voltage":{"T01":1.999},"finding":{"T01":1.95},"alternator no-voltage":{"T01":1.999},"no-voltage fault":{"T01":1.95},"fault finding":{"T01":1.95},"torque-speed":{"T03":1.75},"torque-speed characteristics":{"T03":1.75},"battery replacement":{"T07":2.273,"T20":1.822},"shore-power":{"T20":1.312,"T23":0.972,"T02":2.029},"single-phase motor":{"T03":1.75},"overcurrent-trip":{"T04":1.714,"T22":3.474},"unequal generator":{"T01":1.95},"backup":{"T07":2.784},"plc backup":{"T07":2.784},"backup power":{"T07":2.784},"returned":{"T03":1.797},"repair":{"T03":1.191,"T01":1.44},"motor returned":{"T03":1.75},"returned after":{"T03":1.701},"after shore":{"T03":1.414,"T01":1.152},"shore repair":{"T03":1.191,"T01":1.44},"fail-safe":{"T09":2.728,"T23":1.301},"fail-safe operation":{"T09":3.085},"protections":{"T01":1.845},"alternative":{"T01":1.44,"T20":1.822},"overcurrent protection":{"T01":1.44,"T04":1.714},"emergency batteries":{"T20":2.41},"transformers":{"T11":2.4,"T05":2.979},"hv insulation":{"T02":2.029,"T12":2.358},"insulation pi":{"T02":2.54},"shore connection":{"T02":2.588},"preparation":{"T22":3.985},"high-voltage":{"T02":2.54},"replace":{"T01":1.663,"T06":1.922},"independent":{"T23":1.994},"candidate":{"T23":1.994},"independent candidate":{"T23":1.994},"candidate reports":{"T23":1.994},"motor capacitor":{"T03":1.701},"ex ex":{"T19":3.382},"rewound":{"T03":1.701},"rewound motor":{"T03":1.701},"returned shore":{"T03":1.701},"protection rating":{"T03":1.701},"avr purpose":{"T01":1.95},"nomenclature":{"T09":3.134},"diameter":{"T09":3.085},"bearing nomenclature":{"T09":3.085},"shaft diameter":{"T09":3.085},"limits":{"T03":1.345,"T23":1.301},"motor temperature":{"T03":1.701},"temperature limits":{"T03":1.75},"nameplate":{"T03":1.701},"contents":{"T03":1.191,"T02":2.029},"motor nameplate":{"T03":1.701},"nameplate contents":{"T03":1.701},"temperature rating":{"T03":1.701},"positions":{"T23":1.994},"crane limits":{"T23":1.994},"operating positions":{"T23":1.994},"drum":{"T03":1.701},"turns":{"T03":1.701},"sensors":{"T06":2.829},"calibration":{"T06":2.829},"lv":{"T02":2.54},"hv lv":{"T02":2.54},"cable types":{"T12":2.917},"flame-resistant":{"T12":2.869},"flame-retardant":{"T12":2.917},"flame-retardant cable":{"T12":2.869},"lenz":{"T01":1.95},"lenz law":{"T01":1.95},"alternator safeties":{"T01":1.999},"alarms trips":{"T01":1.95},"motor safeties":{"T09":2.911,"T03":0.68},"explosimeter":{"T19":3.382},"hv precautions":{"T02":2.54},"complete":{"T23":1.994},"original":{"T23":1.994},"text":{"T23":1.994},"txt":{"T23":1.994},"complete original":{"T23":1.994},"original text":{"T23":1.994},"blocks":{"T23":1.994},"repeated":{"T01":1.44,"T03":1.191},"across":{"T01":1.44,"T03":1.191},"repeated across":{"T01":1.44,"T03":1.191},"across both":{"T01":1.44,"T03":1.191},"both reports":{"T01":1.44,"T03":1.191},"troubleshooting":{"T01":1.44,"T06":2.21},"slip":{"T03":1.778},"seawater-contaminated":{"T03":1.75},"seawater-contaminated motor":{"T03":1.701},"motor overhaul":{"T03":1.701},"graph":{"T01":1.95},"governor droop":{"T01":2.046},"droop graph":{"T01":1.95},"sensor":{"T06":2.816},"semiconductor":{"T08":3.116},"doping":{"T08":3.116},"semiconductor doping":{"T08":3.021},"megger testing":{"T08":2.51,"T12":2.358},"hydrophore":{"T06":2.798},"pressure-switch":{"T06":2.798},"hydrophore pressure-switch":{"T06":2.721},"alternators":{"T23":1.195,"T01":1.663},"internal":{"T23":1.483,"T20":1.822},"block":{"T23":1.994},"named-surveyor":{"T23":2.043},"confidence":{"T23":2.043},"unknown":{"T23":2.071},"named-surveyor confidence":{"T23":2.043},"confidence unknown":{"T23":2.043},"motor starting":{"T03":1.75},"squirrel-cage":{"T03":1.75},"rotor":{"T03":1.701},"star-to-delta":{"T03":1.701},"recovery":{"T03":1.191,"T09":2.574},"rewinding":{"T03":1.701},"overhaul rewinding":{"T03":1.701},"rotating":{"T01":1.999},"short-circuit":{"T05":2.738},"earthed-neutral":{"T02":2.54},"insulated-neutral earthed-neutral":{"T02":2.54},"earthed-neutral systems":{"T02":2.54},"pt200":{"T06":2.769},"thermistor":{"T06":2.721},"p-to-d":{"T07":2.784},"i-to-p":{"T07":2.784},"conversion":{"T07":2.609,"T03":0.68},"i-to-p conversion":{"T07":2.784},"analog":{"T08":3.021},"digital":{"T08":3.021},"devices":{"T08":2.847,"T03":0.68},"digital devices":{"T08":3.021},"salinometer":{"T06":2.721},"pwm":{"T08":3.021},"peak":{"T08":3.021},"peak rectifier":{"T08":3.021},"layers":{"T12":2.869},"standards":{"T12":2.609,"T22":3.138},"watertight":{"T12":2.869},"penetration":{"T12":2.869},"shore-power checks":{"T02":2.54},"msb":{"T04":1.966,"T20":1.486},"dead-front":{"T04":2.321},"safeties dead-front":{"T04":2.225},"dead-front panel":{"T04":2.302},"braking":{"T03":1.596},"crane safeties":{"T23":1.994},"tanker-deck":{"T19":3.333},"hazardous-area":{"T19":3.382},"battery-room":{"T20":2.451},"lighting":{"T20":2.382},"battery-room ventilation":{"T20":2.333},"gmdss":{"T20":1.312,"T21":4.286},"blackout testing":{"T20":2.333},"motors returned":{"T03":1.701},"msb safeties":{"T04":2.274},"low-insulation":{"T04":2.274},"low-insulation alarm":{"T04":2.274},"phase-sequence":{"T02":2.54},"connection box":{"T02":2.54},"circuits":{"T04":1.714,"T11":2.911},"busbar short":{"T04":2.225},"motor earthing":{"T03":1.701},"ingress protection":{"T03":1.701},"identification":{"T03":1.527,"T08":2},"markings":{"T03":1.596},"erased":{"T03":1.701},"markings erased":{"T03":1.701},"motor speed":{"T03":1.778},"open-circuit":{"T05":3.048},"tests":{"T05":2.642,"T01":1.44},"ct":{"T04":2.343},"behavior":{"T04":1.714,"T20":1.822},"active":{"T11":3.422},"reactive":{"T11":3.47},"apparent":{"T11":3.422},"apparent power":{"T11":3.422},"impedance":{"T11":3.422},"pi testing":{"T02":2.029,"T12":2.358},"ia":{"T19":3.333},"ib":{"T19":3.333},"ic":{"T19":3.333},"ex ia":{"T19":3.333},"earth-fault":{"T04":2.274},"static":{"T19":3.333},"electricity":{"T19":3.333},"static electricity":{"T19":3.333},"deck-equipment":{"T19":2.822,"T03":1.191},"emergency battery":{"T20":2.382},"battery specifications":{"T20":2.333},"msb-to-esb":{"T20":2.333},"msb-to-esb connection":{"T20":2.333},"ups":{"T04":2.35},"ups types":{"T04":2.225},"uncontrolled":{"T08":3.021},"thermostatic":{"T07":2.784},"valves":{"T07":2.273,"T09":2.574},"electronic thermostatic":{"T07":2.784},"thermostatic expansion":{"T07":2.784},"expansion valves":{"T07":2.273,"T09":2.574},"certificates":{"T22":3.985},"reefer":{"T12":2.869},"power-cable":{"T12":2.869},"power-cable maintenance":{"T12":2.869},"inmarsat":{"T21":4.46},"inmarsat equipment":{"T21":4.46},"smoke":{"T04":2.274},"detectors":{"T04":2.302},"smoke detectors":{"T04":2.225},"lead-acid battery":{"T20":2.382},"gravity":{"T20":2.333},"specific gravity":{"T20":2.333},"cell voltage":{"T20":2.333},"types batteries":{"T20":2.333},"accepted":{"T02":2.54},"power accepted":{"T02":2.54},"voltage low":{"T02":2.54},"hz":{"T02":2.252,"T11":2.623},"50 hz":{"T02":2.252,"T11":2.623},"60 hz":{"T02":2.252,"T11":2.623},"alternator protections":{"T01":1.999},"testing alternator":{"T01":1.95},"induction motors":{"T03":1.701},"winding":{"T03":1.527,"T05":2.132},"deck motor":{"T03":1.701},"insulation resistance":{"T03":0.903,"T12":2.581},"earthed neutral":{"T02":2.54},"differences":{"T04":1.714,"T20":1.822},"differences between":{"T04":1.714,"T20":1.822},"fleming":{"T03":1.191,"T01":1.44},"rule":{"T03":1.191,"T01":1.44},"cables":{"T12":2.964},"types cables":{"T12":2.869},"nitrogen":{"T06":2.721},"plant":{"T06":2.721},"nitrogen plant":{"T06":2.721},"theory":{"T11":2.911,"T07":2.273},"seawater actions":{"T03":1.701},"overhauled":{"T03":1.701},"megger test":{"T03":1.191,"T12":2.358},"overhauled motor":{"T03":1.701},"locations":{"T20":2.046,"T04":1.427},"emergency power":{"T20":2.333},"megger construction":{"T12":2.917},"breakers used":{"T04":1.714,"T02":2.029},"adjustment":{"T06":2.769},"sipart":{"T07":2.784},"framo":{"T06":2.21,"T09":2.574},"framo system":{"T06":2.21,"T09":2.574},"torque":{"T03":1.701},"starting torque":{"T03":1.701},"factors":{"T03":1.701},"form":{"T11":3.47},"form factor":{"T11":3.47},"gas":{"T06":2.721},"deviation":{"T06":2.721},"exhaust gas":{"T06":2.721},"gas deviation":{"T06":2.721},"deviation alarm":{"T06":2.721},"unavailable":{"T06":2.21,"T20":1.822},"lead-acid batteries":{"T20":2.333},"detail":{"T02":2.029,"T04":1.714},"proximity sensors":{"T06":2.769},"service":{"T03":1.191,"T20":1.822},"identify":{"T03":1.596},"terminals":{"T03":1.778},"identify star":{"T03":1.701},"delta connection":{"T03":1.701},"motor terminals":{"T03":1.701},"short-circuit test":{"T05":3.23},"step-down":{"T05":2.642,"T04":1.714},"online":{"T04":2.274},"online ups":{"T04":2.225},"offline":{"T04":2.225},"offline ups":{"T04":2.225},"tie":{"T20":2.382},"esb":{"T20":2.333},"tie breakers":{"T20":2.333},"between msb":{"T20":2.333},"msb esb":{"T20":2.333},"battery charging":{"T20":2.333},"performed":{"T12":2.869},"ir testing":{"T12":2.945},"testing performed":{"T12":2.869},"types starters":{"T03":1.75},"magnetic":{"T03":1.596},"circuit breaker":{"T02":2.54},"pressure adjustment":{"T06":2.721},"indicated":{"T04":2.225},"fault indicated":{"T04":2.225},"measuring":{"T03":1.191,"T11":2.911},"open-circuit test":{"T05":3.202},"megger used":{"T12":2.358,"T19":2.822},"pump-room":{"T19":3.333},"light":{"T19":3.333},"magnetic braking":{"T03":1.778},"test transformer":{"T05":3.153},"condition":{"T01":1.95},"rotating rectifier":{"T01":1.95},"rectifier diode":{"T01":1.95},"materials":{"T08":2.51,"T06":2.21},"boron":{"T08":3.021},"phosphorus":{"T08":3.021},"idmt":{"T04":2.225},"idmt relay":{"T04":2.225},"tankscope":{"T19":3.333},"system onboard":{"T02":2.54},"insulated":{"T02":2.54},"surge":{"T02":2.54},"self-synchronous":{"T01":1.44,"T03":1.191},"between alternator":{"T12":2.869},"alternator busbar":{"T12":2.869},"double-cage":{"T03":1.778},"double-cage motor":{"T03":1.701},"commutator":{"T03":1.75},"lithium":{"T20":2.333},"battery-room safeties":{"T20":2.333},"electrical equipment":{"T22":4.034},"cranes":{"T23":1.994},"brake":{"T03":1.701},"power failure":{"T03":1.191,"T23":1.483},"immediately":{"T01":1.95},"alternator trips":{"T01":1.95},"trips immediately":{"T01":1.95},"immediately after":{"T01":1.95},"undervoltage relay":{"T01":1.44,"T04":1.714},"emergency battery-room":{"T20":2.333},"sequential":{"T04":2.225},"sequential starting":{"T04":2.225},"relays":{"T04":2.225},"winches":{"T03":1.701}},"trained":1193,"built":"2026-08-23"};
+
+var LX_STOP = {};
+('a an the is are was were be been of in on at to for from with by and or if it its this that these those '
+ + 'you your we our do does did done how what which when where why will would can could shall should may '
+ + 'might must i he she they them his her their as not no yes about into out up down over under than then '
+ + 'so such there here have has had').split(' ').forEach(function (x) { LX_STOP[x] = 1; });
+
+function lxTerms(text) {
+  var words = String(text).toLowerCase().replace(/[^a-z0-9\s-]/g, ' ').split(/\s+/)
+    .filter(function (t) { return t.length > 1 && !LX_STOP[t]; });
+  var out = words.slice();
+  for (var i = 0; i < words.length - 1; i++) out.push(words[i] + ' ' + words[i + 1]);
+  return out;
+}
+
+function lxClassify(text) {
+  var M = LX_TOPIC_MODEL, scores = {};
+  for (var t in M.priors) scores[t] = M.priors[t];
+  var seen = {};
+  lxTerms(text).forEach(function (term) {
+    if (seen[term]) return;
+    seen[term] = 1;
+    var wts = M.terms[term];
+    if (!wts) return;
+    for (var tp in wts) scores[tp] = (scores[tp] === undefined ? (M.priors[tp] || -9) : scores[tp]) + wts[tp];
+  });
+  var ranked = Object.keys(scores).sort(function (a, b) { return scores[b] - scores[a]; });
+  var margin = ranked.length > 1 ? scores[ranked[0]] - scores[ranked[1]] : 0;
+  return { top: ranked[0], three: ranked.slice(0, 3), margin: margin,
+           conf: margin >= 3 ? 'high' : margin >= 0.8 ? 'mid' : 'low' };
+}
+
+/* ── PREVIEW ───────────────────────────────────────────────────────────────
+   Named lxRenderPreview, not renderPreview. A renderPreview(body, coupon)
+   already exists further down for coupon emails, and because function
+   declarations hoist, the later one silently won and this table never
+   rendered. Everything in this feature is lx-prefixed for that reason. */
+var _lxParsed = null;
+
+function lxKnownSurveyors() {
+  var names = {};
+  (_lxQuestions || []).forEach(function (q) { if (q.surveyor) names[q.surveyor] = 1; });
+  (window.LX_BANK_SURVEYORS || []).forEach(function (n) { names[n] = 1; });
+  return Object.keys(names);
+}
+
+function parsePaste() {
+  var raw = (document.getElementById('lx-bulk') || {}).value || '';
+  if (!raw.trim()) { toast('Nothing pasted', 'err'); return; }
+
+  var known = lxKnownSurveyors();
+  var p = lxParseRaw(raw, known);
+  if (!p.rows.length) { toast('No questions found in that', 'err'); return; }
+
+  /* Compare against what is already saved in this sitting as well as the rest
+     of the paste, so a repeat on day 3 of a question asked on day 1 is caught. */
+  var already = (_lxQuestions || []).slice();
+  p.rows.forEach(function (r, idx) {
+    var c = lxClassify(r.question);
+    r.topic = c.conf === 'low' ? '' : c.top;
+    r.conf = c.conf;
+    r.three = c.three;
+
+    var pool = p.rows.slice(0, idx).map(function (x) { return x.question; }).concat(already);
+    var m = lxFindSimilar(r.question, pool);
+    r.similar = m;
+    // Near-identical is unticked. Merely similar stays ticked and is flagged,
+    // because "Levels of ISPS" is not "ISPS".
+    r.skip = r.dup || (m && m.sim >= 0.95);
+  });
+  _lxParsed = p;
+
+  // The date the recollection names beats whatever is in the picker.
+  if (p.date) {
+    var day = document.getElementById('lx-day');
+    if (day) day.value = p.date;
+  }
+  lxRenderPreview();
+}
+
+function lxRenderPreview() {
+  var host = document.getElementById('lx-preview');
+  if (!host || !_lxParsed) return;
+  var p = _lxParsed;
+  var keep = p.rows.filter(function (r) { return !r.skip; }).length;
+
+  var notes = '';
+  if (p.dropped.length) {
+    notes += '<div class="ad-hint">Dropped ' + p.dropped.length + ' line'
+      + (p.dropped.length === 1 ? '' : 's') + ' that read as commentary rather than questions: '
+      + p.dropped.map(function (d) { return '<em>' + esc(d) + '</em>'; }).join(', ') + '</div>';
+  }
+  if (p.clashes.length) {
+    notes += p.clashes.map(function (c) {
+      return '<div class="lx-clash">Kept <strong>' + esc(c.pasted) + '</strong> as a new name. '
+        + 'The bank already has <strong>' + esc(c.existing) + '</strong>, same surname but a different first name. '
+        + 'Two people share a surname more often than one person is written two ways, so this was not merged. '
+        + 'Edit the name below if they are the same.</div>';
+    }).join('');
+  }
+
+  host.innerHTML = notes
+    + '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0">'
+    +   '<strong style="font-size:13px">' + keep + ' of ' + p.rows.length + ' will be saved</strong>'
+    +   (function () {
+          var sim = p.rows.filter(function (r) { return r.similar && !r.skip; }).length;
+          return sim ? '<span class="lx-chip lx-chip-warn">' + sim + ' look similar to something else, check them</span>' : '';
+        })()
+    +   (p.date ? '<span class="lx-chip">' + esc(p.date) + '</span>' : '')
+    +   '<button class="ad-btn btn-primary btn-sm" style="margin-left:auto" onclick="saveQuestions()">Save these</button>'
+    + '</div>'
+    + '<div class="ad-table-wrap"><table class="ad-table"><thead><tr>'
+    +   '<th style="width:34px"></th><th>Question</th><th style="width:150px">Surveyor</th><th style="width:140px">Topic</th>'
+    + '</tr></thead><tbody>'
+    + p.rows.map(function (r, i) {
+        var opts = '<option value="">not sure</option>';
+        for (var t = 1; t <= 23; t++) {
+          var code = 'T' + (t < 10 ? '0' : '') + t;
+          opts += '<option value="' + code + '"' + (r.topic === code ? ' selected' : '') + '>' + code + '</option>';
+        }
+        var names = r.candidates || (r.surveyor ? [r.surveyor] : []);
+        var sOpts = '<option value="">not attributed</option>'
+          + names.map(function (n) {
+              return '<option value="' + esc(n) + '"' + (r.surveyor === n ? ' selected' : '') + '>' + esc(n) + '</option>';
+            }).join('');
+        return '<tr' + (r.skip ? ' style="opacity:.45"' : '') + '>'
+          + '<td><input type="checkbox" ' + (r.skip ? '' : 'checked') + ' onchange="_lxParsed.rows[' + i + '].skip=!this.checked;lxRenderPreview()"></td>'
+          + '<td><span style="font-size:13px">' + esc(r.question) + '</span>'
+          +   (r.dup ? ' <span class="lx-chip lx-chip-open">repeat</span>'
+                : r.similar && r.similar.sim >= 0.95 ? ' <span class="lx-chip lx-chip-open">same as below</span>'
+                : r.similar ? ' <span class="lx-chip lx-chip-warn">similar</span>' : '')
+          +   (r.similar && !r.dup
+                ? '<div class="ad-hint" style="font-size:10.5px;margin-top:2px">'
+                  + Math.round(r.similar.sim * 100) + '% like &ldquo;' + esc(r.similar.text.slice(0, 60)) + '&rdquo;'
+                  + (r.similar.where ? ' (' + esc(lxDay(r.similar.where)) + ')' : '') + '</div>'
+                : '')
+          + '</td>'
+          + '<td><select class="ad-select" style="font-size:12px;width:100%" onchange="_lxParsed.rows[' + i + '].surveyor=this.value">' + sOpts + '</select></td>'
+          + '<td><select class="ad-select lx-t-' + r.conf + '" style="font-size:12px;width:100%" onchange="_lxParsed.rows[' + i + '].topic=this.value">' + opts + '</select>'
+          +   (r.conf === 'low' ? '<div class="ad-hint" style="font-size:10.5px;margin-top:2px">maybe ' + r.three.join(', ') + '</div>' : '')
+          + '</td></tr>';
+      }).join('')
+    + '</tbody></table></div>';
+}
+
+async function saveQuestions() {
+  if (!_lxActiveSitting) { toast('Pick a sitting first', 'err'); return; }
+  if (!_lxParsed) { toast('Press "Read it" first so you can check what will be saved', 'err'); return; }
+
+  var day = (document.getElementById('lx-day') || {}).value;
+  if (!day) { toast('Which day were these asked?', 'err'); return; }
+
+  var keep = _lxParsed.rows.filter(function (r) { return !r.skip; });
+  if (!keep.length) { toast('Every row is unticked', 'err'); return; }
+
+  // Continue the run for that day rather than restarting at zero, so a second
+  // paste lands after the first instead of interleaving with it.
+  var base = _lxQuestions.filter(function (q) { return q.asked_on === day; })
+    .reduce(function (m, q) { return Math.max(m, q.sort_order || 0); }, 0);
+
+  var rows = keep.map(function (r, i) {
+    return {
+      sitting_id: _lxActiveSitting, asked_on: day, question_text: r.question,
+      surveyor: r.surveyor || null, topic: r.topic || null,
+      sort_order: base + i + 1, created_by: (window._sbUser || {}).id || null,
+    };
+  });
+
+  var res = await _sb.from('exam_questions').insert(rows);
+  if (res.error) { toast('Could not save: ' + res.error.message, 'err'); return; }
+  logAdminAction('live_exam_questions_add', null,
+    { sitting: _lxActiveSitting, day: day, count: rows.length, skipped: _lxParsed.rows.length - keep.length });
+  toast(rows.length + ' question' + (rows.length === 1 ? '' : 's') + ' added for ' + lxDay(day));
+  document.getElementById('lx-bulk').value = '';
+  document.getElementById('lx-preview').innerHTML = '';
+  _lxParsed = null;
+  pickSitting(_lxActiveSitting);
+  loadLiveExamTab();
+}
+
+/* ── DRAFTING ──────────────────────────────────────────────────────────────
+   Sends every unanswered question in the sitting to draft-exam-answers, which
+   writes them in the house format and records how sure it is about each one.
+
+   Batched at 25. A single request for 70 questions runs long enough to risk
+   the gateway timeout, and a failure would lose the whole lot rather than a
+   quarter of it. */
+var LX_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
+var _lxDrafting = false;
+
+async function draftAnswers() {
+  if (_lxDrafting) return;
+  if (!_lxActiveSitting) { toast('Pick a sitting first', 'err'); return; }
+
+  var missing = _lxQuestions.filter(function (q) { return !q.answer_text || !q.answer_text.trim(); });
+  if (!missing.length) { toast('Every question here already has an answer'); return; }
+
+  if (!confirm('Draft answers for ' + missing.length + ' question'
+    + (missing.length === 1 ? '' : 's') + '?\n\n'
+    + 'They go straight into the feed. Anything the model is unsure of is flagged '
+    + 'and sorted to the top for you.\n\n'
+    + 'About $' + (missing.length * 0.012).toFixed(2) + ' of API usage.')) return;
+
+  _lxDrafting = true;
+  var btn = document.getElementById('lx-draft-btn');
+  var note = document.getElementById('lx-draft-note');
+  if (btn) { btn.disabled = true; btn.textContent = 'Drafting...'; }
+
+  var done = 0, failed = 0, flagged = 0;
+  try {
+    var sess = await _sb.auth.getSession();
+    var token = sess && sess.data && sess.data.session && sess.data.session.access_token;
+
+    for (var i = 0; i < missing.length; i += 25) {
+      var slice = missing.slice(i, i + 25);
+      if (note) note.textContent = 'Writing ' + (i + 1) + ' to '
+        + Math.min(i + 25, missing.length) + ' of ' + missing.length + '...';
+
+      var res = await fetch(LX_FN_URL + '/draft-exam-answers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+        body: JSON.stringify({ ids: slice.map(function (q) { return q.id; }) }),
+      });
+      var out = await res.json().catch(function () { return {}; });
+
+      if (!res.ok) {
+        failed += slice.length;
+        // Named, not swallowed. A missing API key and a 429 both look exactly
+        // like "the button did nothing" unless the reason reaches the screen.
+        toast('Batch failed: ' + (out.error || res.status) + (out.detail ? ' - ' + out.detail : ''), 'err');
+        break;
+      }
+      done += out.drafted || 0;
+      (out.results || []).forEach(function (r) { if (r.flags || r.confidence !== 'high') flagged++; });
+    }
+    logAdminAction('live_exam_draft_answers', null,
+      { sitting: _lxActiveSitting, asked: missing.length, drafted: done, flagged: flagged });
+  } catch (e) {
+    toast('Drafting failed: ' + e.message, 'err');
+  } finally {
+    _lxDrafting = false;
+    if (btn) { btn.disabled = false; btn.textContent = 'Draft the missing answers'; }
+    if (note) note.textContent = done ? done + ' written, ' + flagged + ' want a look'
+                                      : (failed ? 'nothing written' : '');
+    await pickSitting(_lxActiveSitting);
+    loadLiveExamTab();
+  }
+}
+
+/* How much a question wants your attention. Lower sorts first. */
+function lxNeedsMe(q) {
+  if (!q.answer_text || !q.answer_text.trim()) return 0;
+  if (q.ai_flags) return 1;
+  if (q.ai_confidence === 'low') return 2;
+  if (q.ai_confidence === 'medium') return 3;
+  if (q.ai_confidence === 'high' && !q.reviewed_at) return 4;
+  return 5;
+}
+
+async function markReviewed(id) {
+  var res = await _sb.from('exam_questions')
+    .update({ reviewed_at: new Date().toISOString() }).eq('id', id);
+  if (res.error) { toast(res.error.message, 'err'); return; }
+  var q = _lxQuestions.filter(function (x) { return x.id === id; })[0];
+  if (q) q.reviewed_at = new Date().toISOString();
+  renderQuestions();
+}
+
+function renderQuestions() {
+  var host = document.getElementById('lx-questions');
+  if (!host) return;
+  var onlyUn = !!(document.getElementById('lx-only-unanswered') || {}).checked;
+
+  var list = _lxQuestions.filter(function (q) {
+    return !onlyUn || lxNeedsMe(q) <= 2;
+  });
+  // Whatever wants a person comes first; settled rows sink.
+  list = list.slice().sort(function (a, b) {
+    var d = lxNeedsMe(a) - lxNeedsMe(b);
+    if (d) return d;
+    return a.asked_on < b.asked_on ? 1 : a.asked_on > b.asked_on ? -1 : (a.sort_order || 0) - (b.sort_order || 0);
+  });
+
+  if (!_lxQuestions.length) {
+    host.innerHTML = '<div class="ad-loading">No questions in this sitting yet.</div>';
+    return;
+  }
+  if (!list.length) {
+    host.innerHTML = '<div class="ad-loading">Nothing here needs you. Every answer is written, and either read or high confidence.</div>';
+    return;
+  }
+
+  // Grouped by day, newest first, which is how the cadet-facing feed reads too.
+  var days = [];
+  list.forEach(function (q) { if (days.indexOf(q.asked_on) === -1) days.push(q.asked_on); });
+
+  host.innerHTML = days.map(function (d) {
+    var qs = list.filter(function (q) { return q.asked_on === d; });
+    return '<div style="margin-bottom:14px">'
+      + '<div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:6px">'
+      +   esc(lxDay(d)) + ' &middot; ' + qs.length + ' question' + (qs.length === 1 ? '' : 's') + '</div>'
+      + qs.map(function (q) {
+          var answered = q.answer_text && q.answer_text.trim();
+          var need = lxNeedsMe(q);
+          var cls = need === 0 ? ' lx-q-open' : need <= 2 ? ' lx-q-check' : '';
+          return '<div class="lx-q' + cls + '">'
+            + '<div class="lx-q-head">'
+            +   '<span class="lx-q-text">' + esc(q.question_text) + '</span>'
+            +   (q.topic ? '<span class="lx-chip">' + esc(q.topic) + '</span>' : '')
+            +   (q.surveyor ? '<span class="lx-chip lx-chip-dim">' + esc(q.surveyor) + '</span>' : '')
+            +   (answered ? '' : '<span class="lx-chip lx-chip-open">needs answer</span>')
+            +   (q.ai_confidence
+                  ? '<span class="lx-chip lx-conf-' + esc(q.ai_confidence) + '">' + esc(q.ai_confidence) + ' confidence</span>'
+                  : '')
+            +   (q.reviewed_at ? '<span class="lx-chip lx-chip-done">read</span>' : '')
+            + '</div>'
+            + (q.ai_flags ? '<div class="lx-flag">' + esc(q.ai_flags) + '</div>' : '')
+            + '<textarea class="ad-input lx-ans" id="lx-a-' + q.id + '" rows="2" placeholder="Model answer. Leave blank for now if you are still writing it.">' + esc(q.answer_text || '') + '</textarea>'
+            + '<div style="display:flex;gap:8px;margin-top:6px">'
+            +   '<button class="ad-btn btn-sm btn-primary" onclick="saveAnswer(' + attrJs(q.id) + ')">Save answer</button>'
+            +   (answered && !q.reviewed_at
+                  ? '<button class="ad-btn btn-sm btn-ghost" onclick="markReviewed(' + attrJs(q.id) + ')">I have read this</button>' : '')
+            +   '<button class="ad-btn btn-sm btn-ghost" style="color:var(--red)" onclick="delQuestion(' + attrJs(q.id) + ')">Remove</button>'
+            + '</div></div>';
+        }).join('')
+      + '</div>';
+  }).join('');
+}
+
+async function saveAnswer(id) {
+  var el = document.getElementById('lx-a-' + id);
+  if (!el) return;
+  var text = el.value.trim();
+  var res = await _sb.from('exam_questions').update({ answer_text: text || null }).eq('id', id);
+  if (res.error) { toast(res.error.message, 'err'); return; }
+  var q = _lxQuestions.filter(function (x) { return x.id === id; })[0];
+  if (q) q.answer_text = text || null;
+  toast(text ? 'Answer saved, it is live now' : 'Answer cleared');
+  renderQuestions();
+  loadLiveExamTab();
+}
+
+async function delQuestion(id) {
+  var q = _lxQuestions.filter(function (x) { return x.id === id; })[0];
+  if (!q) return;
+  if (!confirm('Remove this question?\n\n' + q.question_text)) return;
+  var res = await _sb.from('exam_questions').delete().eq('id', id);
+  if (res.error) { toast(res.error.message, 'err'); return; }
+  _lxQuestions = _lxQuestions.filter(function (x) { return x.id !== id; });
+  renderQuestions();
+  loadLiveExamTab();
+}
+
 var TIER_ORDER_ADMIN  = ['3mo', '6mo', '12mo'];
 // Rows the price grid shows, for the course being viewed. This used to be a
 // hardcoded [written,oral,both], which silently hid the Sponsorship
@@ -9153,7 +10099,7 @@ function setAdminCourse(course) {
 var COURSE_TABS = {
   sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notices', 'mock', 'status'],
   coc:         ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications',
-                'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity'],
+                'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'liveexam'],
 };
 
 function tabsForCourse() { return COURSE_TABS[_adminCourse] || COURSE_TABS.coc; }

@@ -180,6 +180,9 @@
         <p>Past papers, numerical solutions, and long-form answers for the written exam.</p>
         <div class="wc-badge" style="background:var(--blue-dim);color:var(--blue);border:none">8 Topics Ready</div>
       </div>
+      <!-- Third card, present only while an MMD sitting is actually running.
+           lxRenderHomeCard fills it; empty and invisible the rest of the month. -->
+      <div id="live-exam-card"></div>
     </div>
   </div>
 </div>
@@ -213,6 +216,18 @@
         <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)"><span data-count="surveyorQuestions">1,193</span> questions</div>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- ═══════════════ LIVE EXAM FEED ═══════════════ -->
+<div class="view" id="view-live-exam">
+  <div style="max-width:760px;margin:0 auto">
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
+      <button class="anc-btn" onclick="showView('welcome')">&larr; Home</button>
+      <h2 id="lxf-view-title" style="font-size:18px;font-weight:800;color:var(--text)">Exam running now</h2>
+    </div>
+    <p id="lxf-view-sub" style="font-size:13px;color:var(--text2);margin-bottom:18px"></p>
+    <div id="live-exam-slot"></div>
   </div>
 </div>
 
@@ -764,6 +779,103 @@
   }
 </style>
 <style>
+  /* ── Live exam feed ─────────────────────────────────────────────────
+     Present only while an MMD sitting is running. Every colour is a token,
+     so the pulse and the panel move together in all four themes. */
+  /* Home card. It deliberately does NOT look like its two neighbours: it is
+     present a few days a month and it is the one thing here that goes stale,
+     so it carries a tinted ground rather than the plain surface the permanent
+     cards use. All tokens, so it moves with the theme. */
+  /* Work in progress state. Purple, matching the notice already on the
+     Surveyor Q&A landing, so the two read as the same kind of message. */
+  .lxf-wip { border-color:var(--purple); background:var(--purple-dim); }
+  .lxf-wip:hover { border-color:var(--purple); }
+  .lxf-wip h3 { color:var(--text); }
+  .lxf-wip-tag { display:inline-flex; align-items:center; background:var(--purple);
+    color:var(--on-accent); font-size:10.5px; font-weight:800; letter-spacing:.09em;
+    text-transform:uppercase; padding:3px 9px; border-radius:999px; }
+  /* Scoped to .welcome-card because style.css has `.welcome-card .wc-badge`
+     at specificity 0,2,0, which beat a bare class and rendered this blue. */
+  .welcome-card .lxf-wip-badge { background:var(--purple-dim); color:var(--purple);
+    border:1px solid var(--purple-border); }
+  .lxf-wip-panel { border:1px solid var(--purple-border); background:var(--purple-dim);
+    border-radius:var(--r12); padding:18px 20px; }
+  .lxf-wip-p { font-size:13.5px; color:var(--text2); line-height:1.65; margin:0 0 12px; }
+  .lxf-wip-p:last-child { margin-bottom:0; }
+  .lxf-link { color:var(--purple); font-weight:700; text-decoration:underline; }
+  /* Finished sitting: same shape as the live card, calmer colour, because it
+     is worth reading but not urgent. */
+  .lxf-month { border-color:var(--blue); background:var(--blue-dim); }
+  .lxf-month:hover { border-color:var(--blue); }
+  .lxf-month h3 { color:var(--text); }
+  .lxf-month-tag { display:inline-flex; background:var(--blue); color:var(--on-accent);
+    font-size:10.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase;
+    padding:3px 9px; border-radius:999px; }
+  .lxf-month-where { font-size:11.5px; font-weight:700; color:var(--blue);
+    text-transform:uppercase; letter-spacing:.05em; }
+  /* Sort bar */
+  .lxf-note { background:var(--blue-dim); border:1px solid var(--blue-border);
+    color:var(--text2); border-radius:var(--r8); padding:11px 14px; margin-bottom:16px;
+    font-size:13px; line-height:1.6; }
+  .lxf-note strong { color:var(--text); }
+  .lxf-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
+  .lxf-sort { font:inherit; font-size:12.5px; font-weight:700; padding:5px 12px;
+    border-radius:999px; cursor:pointer; background:var(--surface2);
+    border:1px solid var(--border); color:var(--text2); }
+  .lxf-sort:hover { color:var(--text); }
+  .lxf-sort.on { background:var(--blue-dim); border-color:var(--blue-border); color:var(--blue); }
+  .lxf-bar-note { margin-left:auto; font-size:12px; color:var(--text3); }
+  .lxf-card { border-color:var(--red); background:var(--red-dim); position:relative; }
+  .lxf-card:hover { border-color:var(--red); }
+  .lxf-card h3 { color:var(--text); }
+  .lxf-card-top { display:flex; align-items:center; gap:9px; margin-bottom:12px; flex-wrap:wrap; }
+  .lxf-live { display:inline-flex; align-items:center; gap:6px; background:var(--red);
+    color:var(--on-accent); font-size:10.5px; font-weight:800; letter-spacing:.1em;
+    padding:3px 9px; border-radius:999px; }
+  .lxf-live .lxf-dot { background:var(--on-accent); width:6px; height:6px; }
+  .lxf-card-where { font-size:11.5px; font-weight:700; color:var(--red);
+    text-transform:uppercase; letter-spacing:.05em; }
+  .lxf-card-stats { display:flex; gap:14px; flex-wrap:wrap; margin-top:14px; }
+  .lxf-stat { font-size:12px; color:var(--text2); }
+  .lxf-stat b { font-size:15px; font-weight:800; color:var(--text); margin-right:3px; }
+  .lxf-stat.is-now b { color:var(--red); }
+  .lxf { border:1px solid var(--red); border-radius:var(--r12); background:var(--red-dim);
+    margin:0 0 20px; overflow:hidden; }
+  .lxf-head { display:flex; align-items:center; gap:10px; padding:12px 14px; cursor:pointer;
+    flex-wrap:wrap; }
+  /* Token, not an rgba overlay: black at 3%% is invisible on the dark themes,
+     so the hover affordance would exist in half the palettes only. */
+  .lxf-head:hover { background:var(--surface2); }
+  .lxf-dot { width:9px; height:9px; border-radius:50%; background:var(--red); flex:0 0 auto;
+    animation:lxfPulse 1.9s ease-in-out infinite; }
+  @keyframes lxfPulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.35;transform:scale(.8)} }
+  @media (prefers-reduced-motion:reduce) { .lxf-dot { animation:none; } }
+  .lxf-title { font-size:13px; font-weight:800; color:var(--red); text-transform:uppercase;
+    letter-spacing:.06em; }
+  .lxf-meta { font-size:12.5px; color:var(--text2); }
+  .lxf-count { font-size:12.5px; color:var(--text2); margin-left:auto; }
+  .lxf-chev { font-size:10px; color:var(--text3); }
+  .lxf-body { border-top:1px solid var(--border); background:var(--surface); padding:14px; }
+  .lxf-empty { font-size:13px; color:var(--text2); line-height:1.6; }
+  .lxf-day { margin-bottom:16px; }
+  .lxf-day-h { display:flex; align-items:center; gap:8px; font-size:11.5px; font-weight:800;
+    text-transform:uppercase; letter-spacing:.07em; color:var(--text3); margin-bottom:8px; }
+  .lxf-day-h span { background:var(--surface3); color:var(--text2); border-radius:999px;
+    padding:0 7px; font-size:11px; letter-spacing:0; }
+  .lxf-q { border-left:2px solid var(--border); padding:0 0 0 11px; margin-bottom:12px; }
+  .lxf-qt { font-size:14px; font-weight:650; color:var(--text); line-height:1.5; }
+  .lxf-tags { display:flex; gap:6px; flex-wrap:wrap; margin:5px 0 0; }
+  .lxf-tag { font-size:11px; font-weight:700; padding:1px 8px; border-radius:999px;
+    background:var(--blue-dim); color:var(--blue); border:1px solid var(--blue-border); cursor:pointer; }
+  .lxf-tag-dim { background:var(--surface3); color:var(--text3); border-color:var(--border); cursor:default; }
+  .lxf-a { font-size:13.5px; color:var(--text2); line-height:1.65; margin-top:7px; }
+  .lxf-pending { font-size:12.5px; color:var(--text3); font-style:italic; margin-top:6px; }
+  .lxf-foot { border-top:1px solid var(--border); padding-top:10px; margin-top:4px;
+    font-size:12px; color:var(--text3); line-height:1.55; }
+  @media (max-width:560px) {
+    .lxf-count { margin-left:0; width:100%; }
+    .lxf-meta { width:100%; }
+  }
   .notif-bell-btn{position:relative;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:var(--r8);color:var(--text2);cursor:pointer;flex-shrink:0;transition:background .12s,color .12s}
   .notif-bell-btn:hover{background:var(--surface2);color:var(--text)}
 
@@ -1528,6 +1640,303 @@
      page load, for every user, whether or not they ever opened the upgrade
      screen. On ship satellite data that is pure waste: the overwhelming
      majority of sessions never touch payment at all. -->
+<script>
+/* ── LIVE EXAM FEED, cadet side ────────────────────────────────────────────
+   A banner on the Oral section home page carrying questions from the MMD
+   sitting running right now, grouped by day, newest day first.
+
+   It exists only while a sitting is open. v_live_exam_sitting returns the
+   sitting whose window contains today, and returns nothing the rest of the
+   month, which is the normal state. So the banner appears and disappears on
+   its own: there is no switch anybody has to remember.
+
+   Read live from Postgres rather than from sq_data.js. That file is encrypted
+   in the repo, so adding a question to it is a full deploy, and this feature
+   adds them daily during exam week. */
+
+var _lxFeed = null;
+var _lxFeedOpen = false;
+
+function lxFeedDayLabel(iso, todayIso) {
+  if (iso === todayIso) return 'Today';
+  var d = new Date(iso + 'T00:00:00');
+  var t = new Date(todayIso + 'T00:00:00');
+  if (Math.round((t - d) / 86400000) === 1) return 'Yesterday';
+  return isNaN(d.getTime()) ? iso : d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+}
+
+async function loadLiveExamFeed() {
+  /* Paint the card FIRST, before any query. With no sitting running it is the
+     work-in-progress card, and that is the only state until this is finished,
+     so it must not depend on a lookup succeeding. The earlier version returned
+     before painting whenever there was no sitting, which meant the card never
+     appeared at all. */
+  _lxFeed = null;
+  lxRenderHomeCard();
+
+  var host = document.getElementById('live-exam-slot');
+  if (!window._sbClient || !window._sbUser) return;
+
+  var sres = await window._sbClient.from('v_current_exam_sitting').select('*').limit(1);
+  // No sitting running is the ordinary state for most of the month, and the
+  // work-in-progress card is already up, so there is nothing more to do.
+  if (sres.error || !sres.data || !sres.data.length) return;
+
+  var s = sres.data[0];
+  var qres = await window._sbClient.from('exam_questions')
+    .select('id,asked_on,question_text,answer_text,surveyor,topic')
+    .eq('sitting_id', s.id).eq('is_published', true)
+    .order('asked_on', { ascending: false })
+    .order('sort_order', { ascending: true });
+
+  if (qres.error) return;
+  _lxFeed = { sitting: s, questions: qres.data || [] };
+  lxRenderHomeCard();
+  renderLiveExamFeed();
+  subscribeLiveExamFeed(s.id);
+}
+
+/* The home card. Three states, all off the one row v_current_exam_sitting
+   returns:
+
+     no sitting   work in progress, because nothing is set up yet
+     is_running   red, LIVE, today's count
+     finished     blue, the month, still worth reading
+
+   It is painted before any query runs, so a slow or failed lookup still
+   leaves a card on the page rather than a gap. */
+function lxRenderHomeCard() {
+  var host = document.getElementById('live-exam-card');
+  if (!host) return;
+
+  if (!_lxFeed || !_lxFeed.sitting) {
+    host.innerHTML = '<div class="welcome-card lxf-wip" onclick="openLiveExam()">'
+      + '<div class="lxf-card-top"><span class="lxf-wip-tag">Work in progress</span></div>'
+      + '<h3>Live Exam Feed</h3>'
+      + '<p>During an MMD sitting this will carry the questions candidates report that '
+      +   'day, with model answers, so you can see what was asked this morning before you '
+      +   'walk in. We are building it now.</p>'
+      + '<div class="wc-badge lxf-wip-badge">Coming for the next sitting</div>'
+      + '</div>';
+    return;
+  }
+
+  var st = _lxFeed.sitting, qs = _lxFeed.questions || [];
+  var running = !!st.is_running;
+  var answered = qs.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
+  var now = new Date();
+  var todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0')
+    + '-' + String(now.getDate()).padStart(2, '0');
+  var todayN = qs.filter(function (q) { return q.asked_on === todayIso; }).length;
+
+  host.innerHTML = '<div class="welcome-card ' + (running ? 'lxf-card' : 'lxf-month') + '" onclick="openLiveExam()">'
+    + '<div class="lxf-card-top">'
+    +   (running
+          ? '<span class="lxf-live"><span class="lxf-dot"></span>LIVE</span>'
+          : '<span class="lxf-month-tag">' + escUpSafe(st.title) + '</span>')
+    +   '<span class="' + (running ? 'lxf-card-where' : 'lxf-month-where') + '">'
+    +     escUpSafe(st.centre) + '</span>'
+    + '</div>'
+    + '<h3>' + (running ? 'Today&rsquo;s Exam Questions' : 'This Month&rsquo;s Questions') + '</h3>'
+    + '<p>' + (running
+        ? 'The MMD orals are running <strong>right now</strong>. Every question candidates report '
+          + 'is here within hours, with a model answer.'
+        : 'Everything asked at the ' + escUpSafe(st.title) + ' orals, as candidates reported it, '
+          + 'with a model answer against each one.')
+    + '</p>'
+    + '<div class="lxf-card-stats">'
+    +   '<span class="lxf-stat"><b>' + qs.length + '</b> questions</span>'
+    +   (running && todayN ? '<span class="lxf-stat is-now"><b>' + todayN + '</b> today</span>' : '')
+    +   '<span class="lxf-stat"><b>' + answered + '</b> answered</span>'
+    + '</div>'
+    + '</div>';
+}
+
+function openLiveExam() {
+  showView('live-exam');
+  _lxFeedOpen = true;
+  var st = _lxFeed && _lxFeed.sitting;
+
+  var t = document.getElementById('lxf-view-title');
+  var sub = document.getElementById('lxf-view-sub');
+
+  if (!st) {
+    if (t) t.textContent = 'Live Exam Feed';
+    if (sub) sub.textContent = '';
+    var slot = document.getElementById('live-exam-slot');
+    if (slot) {
+      slot.innerHTML = '<div class="lxf-wip-panel">'
+        + '<div class="lxf-wip-tag" style="margin-bottom:10px;display:inline-block">Work in progress</div>'
+        + '<p class="lxf-wip-p">MMD orals run for three to seven days each month. While a sitting '
+        +   'is on, this page will list what was asked each day, with a model answer against every '
+        +   'question.</p>'
+        + '<p class="lxf-wip-p" style="color:var(--text3)">In the meantime, the '
+        +   '<a href="#" onclick="openSurveyorQA();return false;" class="lxf-link">Surveyor Q&amp;A</a> '
+        +   'bank holds 1,193 questions from past sittings, with answers.</p>'
+        + '</div>';
+    }
+    return;
+  }
+
+  if (t) t.textContent = st.title + ' sitting, ' + st.centre;
+  if (sub) sub.textContent = '';
+  renderLiveExamFeed();
+}
+
+var _lxSort = 'day';
+
+function setLxSort(k) {
+  _lxSort = k;
+  try { localStorage.setItem('eb_lxf_sort', k); } catch (e) {}
+  renderLiveExamFeed();
+}
+
+/* Groups the questions under the heading the current sort implies. Returns an
+   array of { label, rows } so the renderer does not care which sort is on. */
+function lxGrouped(qs, todayIso) {
+  var keyOf, labelOf, order;
+  if (_lxSort === 'surveyor') {
+    keyOf = function (q) { return q.surveyor || 'Not attributed'; };
+    labelOf = function (k) { return k; };
+    order = function (a, b) { return a.localeCompare(b); };
+  } else {
+    keyOf = function (q) { return q.asked_on; };
+    labelOf = function (k) { return lxFeedDayLabel(k, todayIso); };
+    order = function (a, b) { return a < b ? 1 : a > b ? -1 : 0; };   // newest day first
+  }
+
+  var buckets = {};
+  qs.forEach(function (q) { var k = keyOf(q); (buckets[k] = buckets[k] || []).push(q); });
+  return Object.keys(buckets).sort(order).map(function (k) {
+    return { label: labelOf(k), rows: buckets[k] };
+  });
+}
+
+function renderLiveExamFeed() {
+  var host = document.getElementById('live-exam-slot');
+  if (!host || !_lxFeed) return;
+  var s = _lxFeed.sitting, qs = _lxFeed.questions || [];
+
+  var now = new Date();
+  var todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0')
+    + '-' + String(now.getDate()).padStart(2, '0');
+  var answered = qs.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
+
+  if (!qs.length) {
+    host.innerHTML = '<div class="lxf-empty">Nothing has been added for this sitting yet.</div>';
+    return;
+  }
+
+  var tabs = [['day', 'By day'], ['surveyor', 'By surveyor']]
+    .map(function (t) {
+      return '<button class="lxf-sort' + (_lxSort === t[0] ? ' on' : '') + '" '
+        + 'onclick="setLxSort(\'' + t[0] + '\')">' + t[1] + '</button>';
+    }).join('');
+
+  var body = lxGrouped(qs, todayIso).map(function (g) {
+    return '<div class="lxf-day">'
+      + '<div class="lxf-day-h">' + escUpSafe(g.label) + '<span>' + g.rows.length + '</span></div>'
+      + g.rows.map(function (q) {
+          var a = q.answer_text && q.answer_text.trim();
+          return '<div class="lxf-q">'
+            + '<div class="lxf-qt">' + escUpSafe(q.question_text) + '</div>'
+            + '<div class="lxf-tags">'
+            +   (q.topic
+                  ? '<span class="lxf-tag" onclick="event.stopPropagation();lxJumpTopic(\'' + escUpSafe(q.topic) + '\')">'
+                    + escUpSafe(q.topic) + '</span>' : '')
+            +   (q.surveyor && _lxSort !== 'surveyor'
+                  ? '<span class="lxf-tag lxf-tag-dim">' + escUpSafe(q.surveyor) + '</span>' : '')
+            +   (_lxSort !== 'day' ? '<span class="lxf-tag lxf-tag-dim">'
+                  + escUpSafe(lxFeedDayLabel(q.asked_on, todayIso)) + '</span>' : '')
+            + '</div>'
+            + (a ? '<div class="lxf-a">' + escUpSafe(a).replace(/\n/g, '<br>') + '</div>'
+                 : '<div class="lxf-pending">Model answer being written</div>')
+            + '</div>';
+        }).join('')
+      + '</div>';
+  }).join('');
+
+  var note = '<div class="lxf-note">'
+    + (s.is_running
+        ? '<strong>These orals are running now.</strong> Questions are added the same day '
+          + 'candidates report them, so check back through the sitting.'
+        : '<strong>' + escUpSafe(s.title) + ' is the most recent sitting.</strong> '
+          + 'It stays here until the next one begins. Every month&rsquo;s MMD sitting is added '
+          + 'to this page as it happens, with model answers written against each question.')
+    + '</div>';
+
+  host.innerHTML = note
+    + '<div class="lxf-bar">' + tabs
+    + '<span class="lxf-bar-note">' + answered + ' of ' + qs.length + ' answered</span></div>'
+    + body
+    + '<div class="lxf-foot">Questions are recollections written by candidates on the day, so the '
+    + 'wording is approximate. Answers are AI-generated model answers, checked against SOLAS, MARPOL, '
+    + 'the FSS and LSA Codes and IEC 60092 rather than shore standards. Where a figure could not be '
+    + 'verified it has been left out rather than guessed, so check any number you intend to quote '
+    + 'against your own ship and the source document.</div>';
+}
+
+function toggleLiveExamFeed() {
+  _lxFeedOpen = !_lxFeedOpen;
+  try { localStorage.setItem('eb_lxf_open', _lxFeedOpen ? '1' : '0'); } catch (e) {}
+  renderLiveExamFeed();
+}
+
+function lxJumpTopic(code) {
+  if (!window.TOPICS || !window.fetchTopicData) return;
+  var t = window.TOPICS.filter(function (x) { return x.id === code; })[0];
+  if (t) window.fetchTopicData(t.id, t.key);
+}
+
+/* A question posted at 9pm reaches someone already in the app, rather than
+   waiting for their next reload. RLS applies to realtime exactly as it does
+   to a query, so only rows this cadet could have selected are delivered. */
+function subscribeLiveExamFeed(sittingId) {
+  if (window._lxChannel || !window._sbClient) return;
+  try {
+    window._sbClient.auth.getSession().then(function (r) {
+      var tok = r && r.data && r.data.session && r.data.session.access_token;
+      if (tok && window._sbClient.realtime && window._sbClient.realtime.setAuth) {
+        window._sbClient.realtime.setAuth(tok);
+      }
+      window._lxChannel = window._sbClient
+        .channel('eb-liveexam-' + Math.random().toString(36).slice(2, 8))
+        .on('postgres_changes',
+            { event: '*', schema: 'public', table: 'exam_questions', filter: 'sitting_id=eq.' + sittingId },
+            function () { loadLiveExamFeed(); })
+        .subscribe();
+    });
+  } catch (e) {
+    // The feed still works without it; it just updates on reload instead.
+    console.warn('live exam stream unavailable:', e);
+  }
+}
+
+// index.html defines escUp for the upgrade panel; this page may load this
+// block before that one, so fall back rather than throw.
+function escUpSafe(v) {
+  if (typeof escUp === 'function') return escUp(v);
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
+}
+
+/* Kick it off once auth has settled. Failures are swallowed on purpose: the
+   feed is an addition to the page, and no error in it should stop the Oral
+   section rendering. */
+(function () {
+  try {
+    _lxFeedOpen = localStorage.getItem('eb_lxf_open') !== '0';
+    // The chosen sort was being written and never read back, so it reset to
+    // 'by day' on every reload.
+    var sv = localStorage.getItem('eb_lxf_sort');
+    if (sv === 'day' || sv === 'surveyor') _lxSort = sv;
+  } catch (e) { _lxFeedOpen = true; }
+  (window._authReady || Promise.resolve()).then(function () {
+    try { loadLiveExamFeed(); } catch (e) { console.warn('live exam feed:', e); }
+  });
+})();
+</script>
 <script src="account.js?v=1"></script>
 <script src="table-hints.js?v=1"></script>
 <script src="app.js?v=2"></script>

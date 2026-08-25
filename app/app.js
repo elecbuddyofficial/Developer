@@ -820,7 +820,7 @@ function showView(n){
   var btt=document.getElementById('back-to-top');
   if(btt){btt.style.opacity='0';btt.style.visibility='hidden';}
   if(window.innerWidth <= 768) closeMobileMenu();
-  if(n==='welcome' || n==='oral' || n==='written' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker' || n==='num-landing') {
+  if(n==='welcome' || n==='oral' || n==='written' || n==='live-exam' || n==='notes-picker' || n==='quiz-picker' || n==='quiz' || n==='quiz-bank' || n==='written-notes-picker' || n==='num-landing') {
      // Hide topic sidebar list when leaving notes (num-landing is a picker
      // page like written-notes-picker, not a content page - no sidebar there)
      var tsl = document.getElementById('topic-side-list');
