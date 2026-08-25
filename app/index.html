@@ -221,7 +221,9 @@
 
 <!-- ═══════════════ LIVE EXAM FEED ═══════════════ -->
 <div class="view" id="view-live-exam">
-  <div style="max-width:760px;margin:0 auto">
+  <!-- .note-doc, the same wrapper the topic notes use, so this page lines up
+       with them rather than sitting in its own narrower column. -->
+  <div class="note-doc">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap">
       <button class="anc-btn" onclick="showView('welcome')">&larr; Home</button>
       <h2 id="lxf-view-title" style="font-size:18px;font-weight:800;color:var(--text)">Exam running now</h2>
@@ -796,6 +798,11 @@
     text-transform:uppercase; padding:3px 9px; border-radius:999px; }
   /* Scoped to .welcome-card because style.css has `.welcome-card .wc-badge`
      at specificity 0,2,0, which beat a bare class and rendered this blue. */
+  .welcome-card .lxf-card-badge { display:inline-flex; align-items:center; gap:6px;
+    background:var(--red-dim); color:var(--red); border:1px solid var(--red-border); }
+  .welcome-card .lxf-card-badge .lxf-dot { width:7px; height:7px; background:var(--red); }
+  .welcome-card .lxf-month-badge { background:var(--blue-dim); color:var(--blue);
+    border:1px solid var(--blue-border); }
   .welcome-card .lxf-wip-badge { background:var(--purple-dim); color:var(--purple);
     border:1px solid var(--purple-border); }
   .lxf-wip-panel { border:1px solid var(--purple-border); background:var(--purple-dim);
@@ -1726,47 +1733,42 @@ function lxRenderHomeCard() {
   var host = document.getElementById('live-exam-card');
   if (!host) return;
 
-  if (!_lxFeed || !_lxFeed.sitting) {
-    host.innerHTML = '<div class="welcome-card lxf-wip" onclick="openLiveExam()">'
-      + '<div class="lxf-card-top"><span class="lxf-wip-tag">Work in progress</span></div>'
-      + '<h3>Live Exam Feed</h3>'
-      + '<p>During an MMD sitting this will carry the questions candidates report that '
-      +   'day, with model answers, so you can see what was asked this morning before you '
-      +   'walk in. We are building it now.</p>'
-      + '<div class="wc-badge lxf-wip-badge">Coming for the next sitting</div>'
+  /* Same skeleton as the two cards beside it: icon, heading, one sentence,
+     badge. Only the colour and the badge text change with the state. */
+  var ICON = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" '
+    + 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
+    + 'stroke-linecap="round" stroke-linejoin="round">'
+    + '<path d="M8 2v4M16 2v4M3 10h18"/>'
+    + '<rect x="3" y="4" width="18" height="18" rx="2"/>'
+    + '<path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>';
+
+  function card(cls, badge, badgeCls, title, text) {
+    return '<div class="welcome-card ' + cls + '" onclick="openLiveExam()">'
+      + '<div class="wc-icon">' + ICON + '</div>'
+      + '<h3>' + title + '</h3>'
+      + '<p>' + text + '</p>'
+      + '<div class="wc-badge ' + badgeCls + '">' + badge + '</div>'
       + '</div>';
-    return;
+  }
+
+  if (!_lxFeed || !_lxFeed.sitting) {
+    return void (host.innerHTML = card(
+      'lxf-wip', 'Work in progress', 'lxf-wip-badge',
+      'Live Exam Feed',
+      'Questions from each month&rsquo;s MMD sitting, with model answers. Being built now.'));
   }
 
   var st = _lxFeed.sitting, qs = _lxFeed.questions || [];
   var running = !!st.is_running;
   var answered = qs.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
-  var now = new Date();
-  var todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0')
-    + '-' + String(now.getDate()).padStart(2, '0');
-  var todayN = qs.filter(function (q) { return q.asked_on === todayIso; }).length;
 
-  host.innerHTML = '<div class="welcome-card ' + (running ? 'lxf-card' : 'lxf-month') + '" onclick="openLiveExam()">'
-    + '<div class="lxf-card-top">'
-    +   (running
-          ? '<span class="lxf-live"><span class="lxf-dot"></span>LIVE</span>'
-          : '<span class="lxf-month-tag">' + escUpSafe(st.title) + '</span>')
-    +   '<span class="' + (running ? 'lxf-card-where' : 'lxf-month-where') + '">'
-    +     escUpSafe(st.centre) + '</span>'
-    + '</div>'
-    + '<h3>' + (running ? 'Today&rsquo;s Exam Questions' : 'This Month&rsquo;s Questions') + '</h3>'
-    + '<p>' + (running
-        ? 'The MMD orals are running <strong>right now</strong>. Every question candidates report '
-          + 'is here within hours, with a model answer.'
-        : 'Everything asked at the ' + escUpSafe(st.title) + ' orals, as candidates reported it, '
-          + 'with a model answer against each one.')
-    + '</p>'
-    + '<div class="lxf-card-stats">'
-    +   '<span class="lxf-stat"><b>' + qs.length + '</b> questions</span>'
-    +   (running && todayN ? '<span class="lxf-stat is-now"><b>' + todayN + '</b> today</span>' : '')
-    +   '<span class="lxf-stat"><b>' + answered + '</b> answered</span>'
-    + '</div>'
-    + '</div>';
+  host.innerHTML = running
+    ? card('lxf-card', '<span class="lxf-dot"></span>LIVE NOW &middot; ' + qs.length + ' questions',
+           'lxf-card-badge', 'Today&rsquo;s Exam Questions',
+           'The MMD orals are running now. Questions appear the same day candidates report them.')
+    : card('lxf-month', escUpSafe(st.title) + ' &middot; ' + qs.length + ' questions',
+           'lxf-month-badge', 'This Month&rsquo;s Questions',
+           'Everything asked at the ' + escUpSafe(st.centre) + ' orals, with a model answer for each.');
 }
 
 function openLiveExam() {
