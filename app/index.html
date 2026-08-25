@@ -844,7 +844,26 @@
   /* The card is .sq-card, shared with Surveyor Q&A, so a question and its
      answer are already distinct: bold question, then the answer on a raised
      panel behind a coloured edge. Only the edge colour differs here. */
-  .lxf-sq { margin-bottom:14px; }
+  /* Disclosure. The question is the button; the answer is shut until asked
+     for, so 67 questions read as a list rather than 15 screens of prose. */
+  .lxf-sq { margin-bottom:10px; padding:0; overflow:hidden; }
+  .lxf-qbtn { display:flex; width:100%; gap:12px; align-items:flex-start; justify-content:space-between;
+    background:none; border:0; padding:15px 18px; text-align:left; cursor:pointer; font:inherit; }
+  .lxf-qtext { font-size:15px; font-weight:700; color:var(--text); line-height:1.5; }
+  .lxf-qmeta { display:flex; gap:7px; align-items:center; flex-shrink:0; }
+  .lxf-chev { width:8px; height:8px; border-right:2px solid var(--text3);
+    border-bottom:2px solid var(--text3); transform:rotate(45deg); transition:transform .18s;
+    margin-left:2px; }
+  .lxf-sq.is-open .lxf-chev { transform:rotate(-135deg); }
+  .lxf-ans { display:none; padding:0 18px 16px; }
+  .lxf-sq.is-open .lxf-ans { display:block; }
+  .lxf-sq .sq-a { margin:0; }
+  .lxf-all { font:inherit; font-size:12px; font-weight:700; margin-left:12px; padding:0;
+    background:none; border:0; color:var(--blue); cursor:pointer; text-decoration:underline; }
+  @media (max-width:560px) {
+    .lxf-qbtn { flex-direction:column; gap:8px; }
+    .lxf-qmeta { align-self:flex-end; }
+  }
   .lxf-sq .sq-a { border-left-color:var(--blue); }
   .lxf-sq .sq-label { color:var(--blue); }
   .lxf-topic { cursor:pointer; }
@@ -1889,10 +1908,14 @@ function renderLiveExamFeed() {
     + (whoChips ? '<div class="lxf-frow"><span class="lxf-flabel">Surveyor</span>' + whoChips + '</div>' : '')
     + '</div>';
 
+  var anyOpen = shown.some(function (q) { return _lxOpen[q.id]; });
   var count = '<div class="lxf-count">' + shown.length
     + (shown.length === all.length ? ' question' + (shown.length === 1 ? '' : 's')
                                    : ' of ' + all.length + ' shown')
-    + ' &middot; ' + answered + ' answered</div>';
+    + ' &middot; ' + answered + ' answered'
+    + '<button class="lxf-all" onclick="lxOpenAll(' + (anyOpen ? 'false' : 'true') + ')">'
+    +   (anyOpen ? 'Close all answers' : 'Open all answers') + '</button>'
+    + '</div>';
 
   if (!shown.length) {
     host.innerHTML = note + filters + '<div class="lxf-empty">Nothing matches that combination.</div>';
@@ -1928,25 +1951,50 @@ function renderLiveExamFeed() {
    "Label: sentence" lines rendered as labelled bullets by the formatter the
    bank already uses. Reusing it means this reads as part of the app rather
    than as a second, differently-styled feature. */
+/* Which answers are open. Held here rather than read off the DOM, because the
+   list is re-rendered on every filter change and the DOM state would go with
+   it. Not persisted: a fresh visit starts with everything shut, which is the
+   useful default for scanning. */
+var _lxOpen = {};
+
+function lxToggleQ(id) {
+  if (_lxOpen[id]) delete _lxOpen[id]; else _lxOpen[id] = 1;
+  var card = document.getElementById('lxq-' + id);
+  if (card) card.classList.toggle('is-open', !!_lxOpen[id]);
+}
+
+function lxOpenAll(open) {
+  (_lxFeed && _lxFeed.questions ? _lxFeed.questions : []).forEach(function (q) {
+    if (open) _lxOpen[q.id] = 1; else delete _lxOpen[q.id];
+  });
+  renderLiveExamFeed();
+}
+
+/* One question, as a disclosure. Same .sq-card skeleton Surveyor Q&A uses, so
+   an opened answer looks identical to one in the bank: bold question, answer
+   on a raised panel behind a coloured edge, "Label: sentence" lines rendered
+   as labelled bullets by the formatter the bank already uses. */
 function lxCard(q) {
   var a = q.answer_text && q.answer_text.trim();
+  var open = !!_lxOpen[q.id];
   var body = a
     ? (typeof formatSqAnswer === 'function'
         ? formatSqAnswer(a)
         : '<div class="sq-para">' + escUpSafe(a).replace(/\n/g, '<br>') + '</div>')
     : '';
 
-  return '<div class="sq-card lxf-sq">'
-    + '<div class="sq-header"><div class="sq-badges">'
-    +   (q.surveyor && _lxWho === 'all'
+  return '<div class="sq-card lxf-sq' + (open ? ' is-open' : '') + '" id="lxq-' + escUpSafe(q.id) + '">'
+    + '<button class="lxf-qbtn" onclick="lxToggleQ(' + JSON.stringify(String(q.id)).replace(/"/g, '&quot;') + ')">'
+    +   '<span class="lxf-qtext">' + escUpSafe(q.question_text) + '</span>'
+    +   '<span class="lxf-qmeta">'
+    +     (q.topic ? '<span class="sq-badge-topic">' + escUpSafe(q.topic) + '</span>' : '')
+    +     (q.surveyor && _lxWho === 'all'
           ? '<span class="sq-badge-surveyor">' + escUpSafe(q.surveyor) + '</span>' : '')
-    +   (q.topic
-          ? '<span class="sq-badge-topic lxf-topic" onclick="event.stopPropagation();lxJumpTopic('
-            + JSON.stringify(q.topic).replace(/"/g, '&quot;') + ')">' + escUpSafe(q.topic) + '</span>' : '')
-    + '</div></div>'
-    + '<div class="sq-q">' + escUpSafe(q.question_text) + '</div>'
-    + (a ? '<div class="sq-a">' + body + '</div>'
-         : '<div class="lxf-pending">Model answer being written</div>')
+    +     '<span class="lxf-chev" aria-hidden="true"></span>'
+    +   '</span>'
+    + '</button>'
+    + (a ? '<div class="lxf-ans"><div class="sq-a">' + body + '</div></div>'
+         : '<div class="lxf-ans"><div class="lxf-pending">Model answer being written</div></div>')
     + '</div>';
 }
 
