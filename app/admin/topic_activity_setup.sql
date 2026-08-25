@@ -76,3 +76,39 @@ $$;
 
 REVOKE ALL ON FUNCTION public.touch_topic(TEXT, TEXT) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.touch_topic(TEXT, TEXT) TO authenticated;
+
+-- ── Added 25 Aug 2026: the live exam feed ────────────────────────────────
+--  Two kinds, matching how surveyor/surveyor_blocked already work:
+--    liveexam          a cadet opened the feed
+--    liveexam_blocked  reserved for if the feed is ever put behind the paywall
+--
+--  BOTH the CHECK and the guard inside touch_topic have to know a new kind.
+--  The function silently RETURNs on an unknown kind, so forgetting the second
+--  one loses every row without raising anything: the tracker would just look
+--  as though nobody had opened it.
+ALTER TABLE public.topic_activity DROP CONSTRAINT IF EXISTS topic_activity_kind_check;
+ALTER TABLE public.topic_activity ADD CONSTRAINT topic_activity_kind_check
+  CHECK (kind IN ('notes', 'quiz', 'surveyor', 'qbank',
+                  'surveyor_blocked', 'qbank_blocked',
+                  'liveexam', 'liveexam_blocked'));
+
+CREATE OR REPLACE FUNCTION public.touch_topic(p_topic TEXT, p_kind TEXT DEFAULT 'notes')
+RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path = public
+AS $$
+BEGIN
+  IF auth.uid() IS NULL THEN RETURN; END IF;
+  IF p_topic !~ '^([TW][0-9]{2}|ALL)$' THEN RETURN; END IF;
+  IF p_kind NOT IN ('notes', 'quiz', 'surveyor', 'qbank',
+                    'surveyor_blocked', 'qbank_blocked',
+                    'liveexam', 'liveexam_blocked') THEN RETURN; END IF;
+
+  INSERT INTO public.topic_activity (user_id, topic_id, kind, opens)
+  VALUES (auth.uid(), p_topic, p_kind, 1)
+  ON CONFLICT (user_id, topic_id, kind) DO UPDATE
+    SET opens          = public.topic_activity.opens + 1,
+        last_opened_at = NOW();
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.touch_topic(TEXT, TEXT) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.touch_topic(TEXT, TEXT) TO authenticated;

@@ -1793,6 +1793,11 @@ function lxRenderHomeCard() {
 function openLiveExam() {
   showView('live-exam');
   _lxFeedOpen = true;
+  /* Recorded so the admin console can see who is reading the feed, the same
+     way Surveyor Q&A and the Quiz Bank are tracked. _touchTopic de-duplicates
+     within five minutes, so opening and closing the page repeatedly counts
+     once. It never throws: measurement must not break studying. */
+  try { if (typeof _touchTopic === 'function') _touchTopic('ALL', 'liveexam'); } catch (e) {}
   var st = _lxFeed && _lxFeed.sitting;
 
   var t = document.getElementById('lxf-view-title');
