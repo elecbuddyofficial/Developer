@@ -1944,8 +1944,9 @@ function renderLiveExamFeed() {
   }).join('');
 
   host.innerHTML = note + filters + count + body
-    + '<div class="lxf-foot">Questions are recollections written by candidates on the day, so the '
-    + 'wording is approximate. Answers are AI-drafted and cross-referenced against the standard ETO '
+    + '<div class="lxf-foot">Questions come from candidates reporting them the same day, tidied for '
+    + 'spelling and readability but not changed in meaning. Answers are written and cross-referenced '
+    + 'against the standard ETO '
     + 'references, Dennis T. Hall and Elstan A. Fernandez, and against SOLAS, MARPOL, the FSS and '
     + 'LSA Codes and IEC 60092 rather than shore standards. Where a figure could not be '
     + 'verified it has been left out rather than guessed, so check any number you intend to quote '
@@ -2367,35 +2368,66 @@ function setTheme(t) {
 
   // Determine access from Supabase profile - deny until confirmed
   async function determineAccess() {
-    window._access = { oral: false, written: false }; // default deny; only grant after Supabase confirms
+    // Default deny. Access is only granted once Supabase has actually
+    // confirmed it, so a failure can never open a section by accident.
+    window._access = { oral: false, written: false };
     if (!window._sbClient || !window._sbUser) return;
-    try {
-      var res = await window._sbClient.from('profiles').select('*').eq('id', window._sbUser.id).single();
-      var profile = res.data;
-      if (!profile) return;
 
-      // Cache the whole row, not just the derived booleans. The upgrade-modal
-      // purchase preview needs the per-scope expiry dates to say what a plan
-      // will do, and it must not depend on the buyer having opened the profile
-      // panel first - otherwise an existing subscriber would be told a plan
-      // "unlocks" a section they already hold.
-      window._profileData = profile;
-      var derived = window._deriveAccess(profile);
-      window._access = derived.access;
-      _saveAccessCache(window._access, derived.expiresAt);
+    /* Two attempts, then the cache.
 
-      if (!window._access.oral && !window._access.written) {
-        var sub = document.getElementById('gate-sub');
-        if (sub && profile.subscription_plan === 'trial') {
-          sub.innerHTML = 'Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.';
+       A SELECT on your own profile can come back with no row even for a
+       perfectly valid account, most often while the access token is being
+       refreshed and the request goes out with a stale one so RLS matches
+       nothing. The old code treated that empty result as proof of no
+       entitlement and returned, leaving access denied with no retry and no
+       fallback. Between 13 and 24 Aug 2026 that showed the paywall to six
+       users whose access was live, four of them on paid plans.
+
+       "No row came back" is not the same fact as "this user has no access".
+       Only the second may deny. */
+    for (var attempt = 0; attempt < 2; attempt++) {
+      try {
+        var res = await window._sbClient.from('profiles').select('*')
+          .eq('id', window._sbUser.id).single();
+
+        if (res && res.data) {
+          var profile = res.data;
+          // Cache the whole row, not just the derived booleans. The upgrade
+          // modal's purchase preview needs the per-scope expiry dates to say
+          // what a plan will do, and it must not depend on the buyer having
+          // opened the profile panel first, or an existing subscriber would be
+          // told a plan "unlocks" a section they already hold.
+          window._profileData = profile;
+          var derived = window._deriveAccess(profile);
+          window._access = derived.access;
+          _saveAccessCache(window._access, derived.expiresAt);
+
+          if (!window._access.oral && !window._access.written) {
+            var sub = document.getElementById('gate-sub');
+            if (sub && profile.subscription_plan === 'trial') {
+              sub.innerHTML = 'Your 3-day free trial has ended.<br>Upgrade to unlock all 23 oral topics, 7 written topics, 5,600+ quiz questions, and the full Surveyor Q&A bank.';
+            }
+          }
+          if (!window._access.oral || !window._access.written) applyLockUI();
+          return;
         }
+      } catch (e) { /* fall through to the retry, then to the cache */ }
+
+      // Short pause before the second try. A token refresh settles in well
+      // under this, and it is short enough not to be felt on a page load.
+      if (attempt === 0) {
+        await new Promise(function (r) { setTimeout(r, 700); });
       }
-      if (!window._access.oral || !window._access.written) applyLockUI();
-    } catch(e) {
-      // Network unreachable - use the cached access status from last online session
-      var cached = _loadAccessCache();
-      window._access = cached !== null ? cached : { oral: false, written: false };
     }
+
+    /* Both attempts failed to get an answer. Trust the last answer the server
+       did give rather than denying someone already confirmed entitled. The
+       cache carries its own expiry, so it cannot keep a lapsed subscription
+       alive: _loadAccessCache returns null once that passes, and null still
+       means denied. */
+    var cached = _loadAccessCache();
+    window._access = cached !== null ? cached : { oral: false, written: false };
+    if (!window._access.oral || !window._access.written) applyLockUI();
   }
 
   // Add lock icon to topic grid cards the viewer doesn't have scope access to
