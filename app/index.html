@@ -818,13 +818,30 @@
     color:var(--text2); border-radius:var(--r8); padding:11px 14px; margin-bottom:16px;
     font-size:13px; line-height:1.6; }
   .lxf-note strong { color:var(--text); }
-  .lxf-bar { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
-  .lxf-sort { font:inherit; font-size:12.5px; font-weight:700; padding:5px 12px;
+  /* Filter rows. Every day and every surveyor in the sitting, each with its
+     count, so a cadet can reach one day directly instead of scrolling past
+     the others. A sitting is three to seven days, so this is a short row. */
+  .lxf-filters { display:flex; flex-direction:column; gap:9px; margin-bottom:14px; }
+  .lxf-frow { display:flex; gap:7px; align-items:center; flex-wrap:wrap; }
+  .lxf-flabel { font-size:10.5px; font-weight:800; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--text3); min-width:62px; }
+  .lxf-chip { font:inherit; font-size:12.5px; font-weight:650; padding:5px 11px;
     border-radius:999px; cursor:pointer; background:var(--surface2);
-    border:1px solid var(--border); color:var(--text2); }
-  .lxf-sort:hover { color:var(--text); }
-  .lxf-sort.on { background:var(--blue-dim); border-color:var(--blue-border); color:var(--blue); }
-  .lxf-bar-note { margin-left:auto; font-size:12px; color:var(--text3); }
+    border:1px solid var(--border); color:var(--text2);
+    display:inline-flex; align-items:center; gap:6px; }
+  .lxf-chip:hover { color:var(--text); border-color:var(--text3); }
+  .lxf-chip.on { background:var(--blue-dim); border-color:var(--blue); color:var(--blue); }
+  .lxf-chip-n { font-size:11px; font-weight:800; opacity:.7; }
+  .lxf-chip.on .lxf-chip-n { opacity:1; }
+  .lxf-count { font-size:12px; color:var(--text3); margin:0 0 14px; }
+  /* The card is .sq-card, shared with Surveyor Q&A, so a question and its
+     answer are already distinct: bold question, then the answer on a raised
+     panel behind a coloured edge. Only the edge colour differs here. */
+  .lxf-sq { margin-bottom:14px; }
+  .lxf-sq .sq-a { border-left-color:var(--blue); }
+  .lxf-sq .sq-label { color:var(--blue); }
+  .lxf-topic { cursor:pointer; }
+  @media (max-width:560px) { .lxf-flabel { min-width:0; width:100%; } }
   .lxf-card { border-color:var(--red); background:var(--red-dim); position:relative; }
   .lxf-card:hover { border-color:var(--red); }
   .lxf-card h3 { color:var(--text); }
@@ -1783,97 +1800,152 @@ function openLiveExam() {
   renderLiveExamFeed();
 }
 
-var _lxSort = 'day';
+var _lxDay = 'all';        // which day is showing, or all of them
+var _lxWho = 'all';        // which surveyor, or all of them
 
-function setLxSort(k) {
-  _lxSort = k;
-  try { localStorage.setItem('eb_lxf_sort', k); } catch (e) {}
-  renderLiveExamFeed();
+function setLxDay(v) { _lxDay = v; lxRemember(); renderLiveExamFeed(); }
+function setLxWho(v) { _lxWho = v; lxRemember(); renderLiveExamFeed(); }
+
+function lxRemember() {
+  try {
+    localStorage.setItem('eb_lxf_day', _lxDay);
+    localStorage.setItem('eb_lxf_who', _lxWho);
+  } catch (e) {}
 }
 
-/* Groups the questions under the heading the current sort implies. Returns an
-   array of { label, rows } so the renderer does not care which sort is on. */
-function lxGrouped(qs, todayIso) {
-  var keyOf, labelOf, order;
-  if (_lxSort === 'surveyor') {
-    keyOf = function (q) { return q.surveyor || 'Not attributed'; };
-    labelOf = function (k) { return k; };
-    order = function (a, b) { return a.localeCompare(b); };
-  } else {
-    keyOf = function (q) { return q.asked_on; };
-    labelOf = function (k) { return lxFeedDayLabel(k, todayIso); };
-    order = function (a, b) { return a < b ? 1 : a > b ? -1 : 0; };   // newest day first
-  }
-
-  var buckets = {};
-  qs.forEach(function (q) { var k = keyOf(q); (buckets[k] = buckets[k] || []).push(q); });
-  return Object.keys(buckets).sort(order).map(function (k) {
-    return { label: labelOf(k), rows: buckets[k] };
-  });
+/* A chip row. Every value present in the data gets one, with its count, so a
+   cadet can see at a glance which day was busy before choosing it. */
+function lxChips(items, active, fn) {
+  return items.map(function (it) {
+    return '<button class="lxf-chip' + (active === it.key ? ' on' : '') + '" '
+      + 'onclick="' + fn + '(' + JSON.stringify(it.key).replace(/"/g, '&quot;') + ')">'
+      + escUpSafe(it.label)
+      + (it.n != null ? '<span class="lxf-chip-n">' + it.n + '</span>' : '')
+      + '</button>';
+  }).join('');
 }
 
 function renderLiveExamFeed() {
   var host = document.getElementById('live-exam-slot');
   if (!host || !_lxFeed) return;
-  var s = _lxFeed.sitting, qs = _lxFeed.questions || [];
+  var st = _lxFeed.sitting, all = _lxFeed.questions || [];
 
   var now = new Date();
   var todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0')
     + '-' + String(now.getDate()).padStart(2, '0');
-  var answered = qs.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
 
-  if (!qs.length) {
+  if (!all.length) {
     host.innerHTML = '<div class="lxf-empty">Nothing has been added for this sitting yet.</div>';
     return;
   }
 
-  var tabs = [['day', 'By day'], ['surveyor', 'By surveyor']]
-    .map(function (t) {
-      return '<button class="lxf-sort' + (_lxSort === t[0] ? ' on' : '') + '" '
-        + 'onclick="setLxSort(\'' + t[0] + '\')">' + t[1] + '</button>';
-    }).join('');
+  // Days and surveyors actually present, newest day first.
+  var days = [], dayN = {};
+  all.forEach(function (q) { if (!dayN[q.asked_on]) days.push(q.asked_on); dayN[q.asked_on] = (dayN[q.asked_on] || 0) + 1; });
+  days.sort(function (a, b) { return a < b ? 1 : -1; });
 
-  var body = lxGrouped(qs, todayIso).map(function (g) {
-    return '<div class="lxf-day">'
-      + '<div class="lxf-day-h">' + escUpSafe(g.label) + '<span>' + g.rows.length + '</span></div>'
-      + g.rows.map(function (q) {
-          var a = q.answer_text && q.answer_text.trim();
-          return '<div class="lxf-q">'
-            + '<div class="lxf-qt">' + escUpSafe(q.question_text) + '</div>'
-            + '<div class="lxf-tags">'
-            +   (q.topic
-                  ? '<span class="lxf-tag" onclick="event.stopPropagation();lxJumpTopic(\'' + escUpSafe(q.topic) + '\')">'
-                    + escUpSafe(q.topic) + '</span>' : '')
-            +   (q.surveyor && _lxSort !== 'surveyor'
-                  ? '<span class="lxf-tag lxf-tag-dim">' + escUpSafe(q.surveyor) + '</span>' : '')
-            +   (_lxSort !== 'day' ? '<span class="lxf-tag lxf-tag-dim">'
-                  + escUpSafe(lxFeedDayLabel(q.asked_on, todayIso)) + '</span>' : '')
-            + '</div>'
-            + (a ? '<div class="lxf-a">' + escUpSafe(a).replace(/\n/g, '<br>') + '</div>'
-                 : '<div class="lxf-pending">Model answer being written</div>')
-            + '</div>';
-        }).join('')
-      + '</div>';
-  }).join('');
+  var who = [], whoN = {};
+  all.forEach(function (q) {
+    var k = q.surveyor || 'Not attributed';
+    if (!whoN[k]) who.push(k);
+    whoN[k] = (whoN[k] || 0) + 1;
+  });
+  who.sort();
+
+  // A saved filter can point at a day or a surveyor the current sitting does
+  // not have, once the month rolls over. Fall back rather than show nothing.
+  if (_lxDay !== 'all' && days.indexOf(_lxDay) === -1) _lxDay = 'all';
+  if (_lxWho !== 'all' && who.indexOf(_lxWho) === -1) _lxWho = 'all';
+
+  var shown = all.filter(function (q) {
+    return (_lxDay === 'all' || q.asked_on === _lxDay)
+        && (_lxWho === 'all' || (q.surveyor || 'Not attributed') === _lxWho);
+  });
+  var answered = shown.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
+
+  var dayChips = lxChips(
+    [{ key: 'all', label: 'All days', n: all.length }].concat(days.map(function (d) {
+      return { key: d, label: lxFeedDayLabel(d, todayIso), n: dayN[d] };
+    })), _lxDay, 'setLxDay');
+
+  var whoChips = who.length > 1 ? lxChips(
+    [{ key: 'all', label: 'All surveyors', n: null }].concat(who.map(function (w) {
+      return { key: w, label: w, n: whoN[w] };
+    })), _lxWho, 'setLxWho') : '';
 
   var note = '<div class="lxf-note">'
-    + (s.is_running
+    + (st.is_running
         ? '<strong>These orals are running now.</strong> Questions are added the same day '
           + 'candidates report them, so check back through the sitting.'
-        : '<strong>' + escUpSafe(s.title) + ' is the most recent sitting.</strong> '
+        : '<strong>' + escUpSafe(st.title) + ' is the most recent sitting.</strong> '
           + 'It stays here until the next one begins. Every month&rsquo;s MMD sitting is added '
           + 'to this page as it happens, with model answers written against each question.')
     + '</div>';
 
-  host.innerHTML = note
-    + '<div class="lxf-bar">' + tabs
-    + '<span class="lxf-bar-note">' + answered + ' of ' + qs.length + ' answered</span></div>'
-    + body
+  var filters = '<div class="lxf-filters">'
+    + '<div class="lxf-frow"><span class="lxf-flabel">Day</span>' + dayChips + '</div>'
+    + (whoChips ? '<div class="lxf-frow"><span class="lxf-flabel">Surveyor</span>' + whoChips + '</div>' : '')
+    + '</div>';
+
+  var count = '<div class="lxf-count">' + shown.length
+    + (shown.length === all.length ? ' question' + (shown.length === 1 ? '' : 's')
+                                   : ' of ' + all.length + ' shown')
+    + ' &middot; ' + answered + ' answered</div>';
+
+  if (!shown.length) {
+    host.innerHTML = note + filters + '<div class="lxf-empty">Nothing matches that combination.</div>';
+    return;
+  }
+
+  /* Grouped by day unless a single day is already chosen, in which case the
+     heading would repeat itself on every card. */
+  var groups = _lxDay === 'all'
+    ? days.filter(function (d) { return shown.some(function (q) { return q.asked_on === d; }); })
+        .map(function (d) {
+          return { label: lxFeedDayLabel(d, todayIso), rows: shown.filter(function (q) { return q.asked_on === d; }) };
+        })
+    : [{ label: null, rows: shown }];
+
+  var body = groups.map(function (g) {
+    return '<div class="lxf-day">'
+      + (g.label ? '<div class="lxf-day-h">' + escUpSafe(g.label) + '<span>' + g.rows.length + '</span></div>' : '')
+      + g.rows.map(lxCard).join('')
+      + '</div>';
+  }).join('');
+
+  host.innerHTML = note + filters + count + body
     + '<div class="lxf-foot">Questions are recollections written by candidates on the day, so the '
     + 'wording is approximate. Answers are AI-generated model answers, checked against SOLAS, MARPOL, '
     + 'the FSS and LSA Codes and IEC 60092 rather than shore standards. Where a figure could not be '
     + 'verified it has been left out rather than guessed, so check any number you intend to quote '
     + 'against your own ship and the source document.</div>';
+}
+
+/* One question. Deliberately the same shape as a Surveyor Q&A card: bold
+   question, then the answer on a raised panel with a coloured edge, with
+   "Label: sentence" lines rendered as labelled bullets by the formatter the
+   bank already uses. Reusing it means this reads as part of the app rather
+   than as a second, differently-styled feature. */
+function lxCard(q) {
+  var a = q.answer_text && q.answer_text.trim();
+  var body = a
+    ? (typeof formatSqAnswer === 'function'
+        ? formatSqAnswer(a)
+        : '<div class="sq-para">' + escUpSafe(a).replace(/\n/g, '<br>') + '</div>')
+    : '';
+
+  return '<div class="sq-card lxf-sq">'
+    + '<div class="sq-header"><div class="sq-badges">'
+    +   (q.surveyor && _lxWho === 'all'
+          ? '<span class="sq-badge-surveyor">' + escUpSafe(q.surveyor) + '</span>' : '')
+    +   (q.topic
+          ? '<span class="sq-badge-topic lxf-topic" onclick="event.stopPropagation();lxJumpTopic('
+            + JSON.stringify(q.topic).replace(/"/g, '&quot;') + ')">' + escUpSafe(q.topic) + '</span>' : '')
+    + '</div></div>'
+    + '<div class="sq-q">' + escUpSafe(q.question_text) + '</div>'
+    + (a ? '<div class="sq-a">' + body + '</div>'
+         : '<div class="lxf-pending">Model answer being written</div>')
+    + '</div>';
 }
 
 function toggleLiveExamFeed() {
@@ -1929,8 +2001,8 @@ function escUpSafe(v) {
     _lxFeedOpen = localStorage.getItem('eb_lxf_open') !== '0';
     // The chosen sort was being written and never read back, so it reset to
     // 'by day' on every reload.
-    var sv = localStorage.getItem('eb_lxf_sort');
-    if (sv === 'day' || sv === 'surveyor') _lxSort = sv;
+    _lxDay = localStorage.getItem('eb_lxf_day') || 'all';
+    _lxWho = localStorage.getItem('eb_lxf_who') || 'all';
   } catch (e) { _lxFeedOpen = true; }
   (window._authReady || Promise.resolve()).then(function () {
     try { loadLiveExamFeed(); } catch (e) { console.warn('live exam feed:', e); }
