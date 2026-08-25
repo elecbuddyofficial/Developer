@@ -212,7 +212,7 @@
       <div class="welcome-card sq-oral-card" onclick="openSurveyorQA()">
         <div class="wc-icon">🎓</div>
         <h3>Surveyor Q&A</h3>
-        <p>Actual questions asked by MMD Surveyors, paired with AI-generated ideal answers.</p>
+        <p>Real MMD surveyor questions, answered and cross-checked against the standard texts.</p>
         <div class="wc-badge" style="background:var(--purple-dim);border-color:rgba(168,85,247,.35);color:var(--purple)"><span data-count="surveyorQuestions">1,193</span> questions</div>
       </div>
     </div>
@@ -517,7 +517,7 @@
     <div style="text-align:center;padding:32px 0 28px">
       <div style="font-size:36px;margin-bottom:12px">🎓</div>
       <h1 style="font-size:24px;font-weight:800;color:var(--text);margin-bottom:8px">Surveyor Q&A</h1>
-      <p style="font-size:14px;color:var(--text2)">Actual questions asked by MMD Surveyors, paired with AI-generated ideal answers.</p>
+      <p style="font-size:14px;color:var(--text2)">Actual questions asked by MMD Surveyors. Answers are AI-drafted and then cross-referenced against the standard ETO references, including Dennis T. Hall and Elstan A. Fernandez, alongside SOLAS, MARPOL and the FSS and LSA Codes.</p>
     </div>
     <div class="welcome-grid" style="grid-template-columns: repeat(3, 1fr);">
       <div class="welcome-card sq-landing-card" onclick="renderSqAll()">
@@ -1940,8 +1940,9 @@ function renderLiveExamFeed() {
 
   host.innerHTML = note + filters + count + body
     + '<div class="lxf-foot">Questions are recollections written by candidates on the day, so the '
-    + 'wording is approximate. Answers are AI-generated model answers, checked against SOLAS, MARPOL, '
-    + 'the FSS and LSA Codes and IEC 60092 rather than shore standards. Where a figure could not be '
+    + 'wording is approximate. Answers are AI-drafted and cross-referenced against the standard ETO '
+    + 'references, Dennis T. Hall and Elstan A. Fernandez, and against SOLAS, MARPOL, the FSS and '
+    + 'LSA Codes and IEC 60092 rather than shore standards. Where a figure could not be '
     + 'verified it has been left out rather than guessed, so check any number you intend to quote '
     + 'against your own ship and the source document.</div>';
 }
