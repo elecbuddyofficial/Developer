@@ -1697,7 +1697,10 @@
    in the repo, so adding a question to it is a full deploy, and this feature
    adds them daily during exam week. */
 
-var _lxFeed = null;
+/* undefined until the lookup answers. null then means "asked, and there is
+   no sitting"; the two are different facts and drawing the second before
+   asking is what flashed the work-in-progress card on every load. */
+var _lxFeed;
 var _lxFeedOpen = false;
 
 function lxFeedDayLabel(iso, todayIso) {
@@ -1709,21 +1712,27 @@ function lxFeedDayLabel(iso, todayIso) {
 }
 
 async function loadLiveExamFeed() {
-  /* Paint the card FIRST, before any query. With no sitting running it is the
-     work-in-progress card, and that is the only state until this is finished,
-     so it must not depend on a lookup succeeding. The earlier version returned
-     before painting whenever there was no sitting, which meant the card never
-     appeared at all. */
-  _lxFeed = null;
+  /* Paint from the last known state before asking, so a reload shows the right
+     card at once. NOT null: null is the answer "there is no sitting", and
+     asserting it before the query is what made every load flash the
+     work-in-progress card for the length of a round trip. */
+  _lxFeed = undefined;
   lxRenderHomeCard();
 
-  var host = document.getElementById('live-exam-slot');
   if (!window._sbClient || !window._sbUser) return;
 
   var sres = await window._sbClient.from('v_current_exam_sitting').select('*').limit(1);
-  // No sitting running is the ordinary state for most of the month, and the
-  // work-in-progress card is already up, so there is nothing more to do.
-  if (sres.error || !sres.data || !sres.data.length) return;
+
+  // Could not find out. Leave whatever is on screen rather than claiming there
+  // is nothing, which is the same mistake in a different place.
+  if (sres.error) return;
+
+  if (!sres.data || !sres.data.length) {
+    _lxFeed = null;
+    try { localStorage.removeItem(LX_HINT); } catch (e) {}
+    lxRenderHomeCard();
+    return;
+  }
 
   var s = sres.data[0];
   var qres = await window._sbClient.from('exam_questions')
@@ -1734,6 +1743,14 @@ async function loadLiveExamFeed() {
 
   if (qres.error) return;
   _lxFeed = { sitting: s, questions: qres.data || [] };
+  // Counts and a title only. No question or answer text is written to storage.
+  try {
+    localStorage.setItem(LX_HINT, JSON.stringify({
+      title: s.title, centre: s.centre, is_running: !!s.is_running,
+      n: _lxFeed.questions.length,
+      answered: _lxFeed.questions.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length,
+    }));
+  } catch (e) {}
   lxRenderHomeCard();
   renderLiveExamFeed();
   subscribeLiveExamFeed(s.id);
@@ -1748,12 +1765,12 @@ async function loadLiveExamFeed() {
 
    It is painted before any query runs, so a slow or failed lookup still
    leaves a card on the page rather than a gap. */
-function lxRenderHomeCard() {
-  var host = document.getElementById('live-exam-card');
-  if (!host) return;
+var LX_HINT = 'eb_lxf_hint';
 
-  /* Same skeleton as the two cards beside it: icon, heading, one sentence,
-     badge. Only the colour and the badge text change with the state. */
+/* The card markup, given a sitting and its counts. Shared by the real render
+   and by the cached-hint render so the two can never drift apart. */
+function lxCardHtml(st, n, answered, todayN) {
+  var running = !!st.is_running;
   var ICON = '<svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" '
     + 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
     + 'stroke-linecap="round" stroke-linejoin="round">'
@@ -1761,33 +1778,58 @@ function lxRenderHomeCard() {
     + '<rect x="3" y="4" width="18" height="18" rx="2"/>'
     + '<path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>';
 
-  function card(cls, badge, badgeCls, title, text) {
-    return '<div class="welcome-card ' + cls + '" onclick="openLiveExam()">'
-      + '<div class="wc-icon">' + ICON + '</div>'
-      + '<h3>' + title + '</h3>'
-      + '<p>' + text + '</p>'
-      + '<div class="wc-badge ' + badgeCls + '">' + badge + '</div>'
-      + '</div>';
+  return '<div class="welcome-card ' + (running ? 'lxf-card' : 'lxf-month') + '" onclick="openLiveExam()">'
+    + '<div class="wc-icon">' + ICON + '</div>'
+    + '<h3>' + (running ? 'Today&rsquo;s Exam Questions' : 'This Month&rsquo;s Questions') + '</h3>'
+    + '<p>' + (running
+        ? 'The MMD orals are running now. Questions appear the same day candidates report them.'
+        : 'Everything asked at the ' + escUpSafe(st.centre) + ' orals, with a model answer for each.')
+    + '</p>'
+    + '<div class="wc-badge ' + (running ? 'lxf-card-badge' : 'lxf-month-badge') + '">'
+    +   (running ? '<span class="lxf-dot"></span>LIVE NOW' : escUpSafe(st.title))
+    +   ' &middot; ' + n + ' question' + (n === 1 ? '' : 's')
+    +   (running && todayN ? ', ' + todayN + ' today' : '')
+    + '</div>'
+    + '</div>';
+}
+
+function lxWipHtml() {
+  return '<div class="welcome-card lxf-wip" onclick="openLiveExam()">'
+    + '<div class="wc-icon"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" '
+    +   'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
+    +   'stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/>'
+    +   '<path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg></div>'
+    + '<h3>Live Exam Feed</h3>'
+    + '<p>Questions from each month&rsquo;s MMD sitting, with model answers. Being built now.</p>'
+    + '<div class="wc-badge lxf-wip-badge">Work in progress</div>'
+    + '</div>';
+}
+
+function lxRenderHomeCard() {
+  var host = document.getElementById('live-exam-card');
+  if (!host) return;
+
+  /* Nothing has been asked yet. Draw the last known card, or nothing at all.
+     Drawing work-in-progress here is what caused the flash: it is an answer,
+     and at this point there is no answer. */
+  if (typeof _lxFeed === 'undefined' || _lxFeed === undefined) {
+    var hint = null;
+    try { hint = JSON.parse(localStorage.getItem(LX_HINT) || 'null'); } catch (e) {}
+    host.innerHTML = hint ? lxCardHtml(hint, hint.n || 0, hint.answered || 0, 0) : '';
+    return;
   }
 
-  if (!_lxFeed || !_lxFeed.sitting) {
-    return void (host.innerHTML = card(
-      'lxf-wip', 'Work in progress', 'lxf-wip-badge',
-      'Live Exam Feed',
-      'Questions from each month&rsquo;s MMD sitting, with model answers. Being built now.'));
-  }
+  // Asked, and there genuinely is no sitting.
+  if (!_lxFeed || !_lxFeed.sitting) { host.innerHTML = lxWipHtml(); return; }
 
   var st = _lxFeed.sitting, qs = _lxFeed.questions || [];
-  var running = !!st.is_running;
   var answered = qs.filter(function (q) { return q.answer_text && q.answer_text.trim(); }).length;
+  var now = new Date();
+  var todayIso = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0')
+    + '-' + String(now.getDate()).padStart(2, '0');
+  var todayN = qs.filter(function (q) { return q.asked_on === todayIso; }).length;
 
-  host.innerHTML = running
-    ? card('lxf-card', '<span class="lxf-dot"></span>LIVE NOW &middot; ' + qs.length + ' questions',
-           'lxf-card-badge', 'Today&rsquo;s Exam Questions',
-           'The MMD orals are running now. Questions appear the same day candidates report them.')
-    : card('lxf-month', escUpSafe(st.title) + ' &middot; ' + qs.length + ' questions',
-           'lxf-month-badge', 'This Month&rsquo;s Questions',
-           'Everything asked at the ' + escUpSafe(st.centre) + ' orals, with a model answer for each.');
+  host.innerHTML = lxCardHtml(st, qs.length, answered, todayN);
 }
 
 function openLiveExam() {
