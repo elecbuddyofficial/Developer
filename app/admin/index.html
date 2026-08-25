@@ -1191,6 +1191,15 @@
     .prof-list-wrap { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r8); max-height: 260px; overflow-y: auto; }
     #prof-progress, #prof-activity { max-height: 380px; }
     .prof-empty { padding: 16px; text-align: center; color: var(--text3); font-size: 12.5px; }
+    /* A surface opened with no entitlement. Red because if it is real it is
+       a bypass, and if it is not it is a bug in the access check. Either
+       way it wants looking at. */
+    .prof-leak { background: var(--red-dim); border: 1px solid var(--red-border);
+      color: var(--text); border-radius: var(--r8); padding: 8px 10px; margin: 6px 0;
+      font-size: 12px; line-height: 1.5; }
+    .prof-leak-tag { background: var(--red-dim); color: var(--red);
+      border: 1px solid var(--red-border); border-radius: 999px; padding: 0 7px;
+      font-size: 10.5px; font-weight: 700; white-space: nowrap; }
 
     .prof-mail-item { flex-direction: column; align-items: stretch; gap: 3px; }
     .prof-mail-subject { font-weight: 700; color: var(--text); font-size: 12.5px; }
@@ -3006,7 +3015,7 @@
 
       <!-- What they actually did -->
       <div>
-        <div class="prof-section-title">Study Progress</div>
+        <div class="prof-section-title">Activity &amp; Progress</div>
         <div class="prof-list-wrap" id="prof-progress">
           <div class="prof-empty">Loading&hellip;</div>
         </div>
@@ -3857,7 +3866,7 @@ async function loadFunnel() {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name, topic_progress, sponsorship_progress')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, granted_oral_expires_at, granted_written_expires_at, is_admin, trial_started_at, created_at, email, full_name, topic_progress, sponsorship_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, scope, created_at, paid_at, user_id, razorpay_payment_id')
@@ -4479,6 +4488,22 @@ async function renderProfProgress(u) {
   });
 
   if (!rows.length) {
+    /* No study notes opened. That is NOT the same as inactive, and saying so
+       sent the wrong signal: a 6-month subscriber who reads only the Surveyor
+       bank showed here as "Nothing read yet". Report what they have used. */
+    var used = extras.filter(function (r) { return !/_blocked$/.test(r.kind); });
+    if (used.length) {
+      var total = used.reduce(function (a, r) { return a + (r.opens || 1); }, 0);
+      var newest = used.slice().sort(function (a, b) {
+        return new Date(b.last_opened_at) - new Date(a.last_opened_at); })[0];
+      el.innerHTML = '<div class="prof-empty" style="text-align:left">'
+        + 'No study notes opened, but this account is active: <strong>' + total
+        + '</strong> open' + (total === 1 ? '' : 's') + ' across '
+        + used.length + ' other surface' + (used.length === 1 ? '' : 's')
+        + ', last ' + esc(fmtAgo(newest.last_opened_at)) + '.</div>'
+        + renderProfExtras(extras, u);
+      return;
+    }
     // Distinguishes "opened the app and read nothing" from "never came back",
     // which need completely different follow-ups.
     el.innerHTML = '<div class="prof-empty">Nothing read yet'
@@ -4522,13 +4547,74 @@ async function renderProfProgress(u) {
           + '</div>'
           + '</div>';
       }).join('')
-    + (extras.length ? renderProfExtras(extras) : '');
+    + (extras.length ? renderProfExtras(extras, u) : '');
 }
 
 // The *_blocked kinds mean the paywall turned them away at that surface. They
 // are shown in red and worded as an attempt, because reading a plain "Surveyor
 // Q&A bank" line against an expired account implied the paywall had failed
 // when it had actually worked.
+/* Could this account open that surface at that moment?
+
+   Mirrors _deriveAccess in the app: lifetime, or inside the 3-day trial, or
+   before the scope's own expiry, counting admin grants. Kept deliberately in
+   step with it, because a check that is more generous than the app invents
+   leaks and one that is stricter hides them.
+
+   Returns null when the answer cannot be worked out, so "unknown" is never
+   drawn as "leak". */
+function _hadAccessAt(u, iso, scope) {
+  if (!u || !iso || !scope) return null;
+  var t = new Date(iso).getTime();
+  if (isNaN(t)) return null;
+  if (u.subscription_plan === 'lifetime') return true;
+  if (u.is_admin) return true;
+
+  if (u.trial_started_at) {
+    var trialEnd = new Date(u.trial_started_at).getTime() + 3 * 24 * 60 * 60 * 1000;
+    if (t < trialEnd) return true;
+  }
+
+  var cols = scope === 'written'
+    ? ['written_expires_at', 'granted_written_expires_at']
+    : ['oral_expires_at', 'granted_oral_expires_at'];
+  for (var i = 0; i < cols.length; i++) {
+    var v = u[cols[i]];
+    if (v && new Date(v).getTime() > t) return true;
+  }
+  return false;
+}
+
+/* Which section a recorded surface belongs to. The Surveyor bank, the quiz
+   bank and the live exam feed are all Oral surfaces. */
+function _scopeOfActivity(row) {
+  if (/^W\d\d$/.test(row.topic_id || '')) return 'written';
+  if (/^T\d\d$/.test(row.topic_id || '')) return 'oral';
+  if (row.kind === 'surveyor' || row.kind === 'qbank' || row.kind === 'liveexam') return 'oral';
+  return null;
+}
+
+/* Surfaces anyone may open, so opening them proves nothing.
+
+   T01 (notes, quiz, videos) and W01 (notes) ship unencrypted as the free
+   preview, and the live exam feed is read from Postgres with no content key at
+   all. Flagging these produced 18 false positives out of 20 on the first run,
+   which is worse than no check: a warning that cries wolf gets ignored on the
+   day it is right. */
+function _isFreeSurface(row) {
+  if (row.kind === 'liveexam') return true;
+  return row.topic_id === 'T01' || row.topic_id === 'W01';
+}
+
+/* A *_blocked row is the paywall working, not a leak, so it is never flagged. */
+function _isLeak(u, row) {
+  if (/_blocked$/.test(row.kind || '')) return false;
+  if (_isFreeSurface(row)) return false;
+  var scope = _scopeOfActivity(row);
+  if (!scope) return false;
+  return _hadAccessAt(u, row.last_opened_at, scope) === false;
+}
+
 var KIND_LABEL = {
   quiz:             ['Quiz',                            'var(--orange)'],
   surveyor:         ['Surveyor Q&A bank',               'var(--purple, #A855F7)'],
@@ -4539,15 +4625,22 @@ var KIND_LABEL = {
   liveexam_blocked: ['Live exam feed &middot; blocked, wanted access',      'var(--red)'],
 };
 
-function renderProfExtras(rows) {
+function renderProfExtras(rows, u) {
+  var leaks = u ? rows.filter(function (r) { return _isLeak(u, r); }).length : 0;
   return '<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border)">'
     + '<div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);margin-bottom:4px">Other surfaces</div>'
+    + (leaks
+        ? '<div class="prof-leak">' + leaks + ' surface' + (leaks === 1 ? '' : 's')
+          + ' opened while this account had no entitlement. Check for a bypass before assuming it is a reporting error.</div>'
+        : '')
     + rows.map(function (r) {
         var k = KIND_LABEL[r.kind] || [r.kind, 'var(--text3)'];
         var where = r.topic_id === 'ALL' ? '' : ' &middot; ' + esc(r.topic_id);
+        var leak = u ? _isLeak(u, r) : false;
         return '<div style="display:flex;align-items:center;gap:9px;padding:5px 0">'
-          + '<span style="width:6px;height:6px;border-radius:99px;background:' + k[1] + ';flex-shrink:0"></span>'
-          + '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text)">' + k[0] + where + '</span>'
+          + '<span style="width:6px;height:6px;border-radius:99px;background:' + (leak ? 'var(--red)' : k[1]) + ';flex-shrink:0"></span>'
+          + '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text)">' + k[0] + where
+          +   (leak ? ' <span class="prof-leak-tag">no access at the time</span>' : '') + '</span>'
           + '<span style="font-size:10.5px;color:var(--text3);white-space:nowrap">'
           +   fmtAgo(r.last_opened_at) + (r.opens > 1 ? ' &middot; ' + r.opens + '&times;' : '') + '</span>'
           + '</div>';
