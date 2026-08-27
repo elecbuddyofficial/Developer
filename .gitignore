@@ -96,3 +96,11 @@ node_modules/
 /_dicharts.json
 /_di_pies.html
 /_di_pies_frame.html
+
+# Screenshots from _visual.py. Regenerated on every run, never reviewed
+# in a diff, and about 1 MB a pass.
+_visual-shots/
+
+# ...but the harness itself has to be committed, or the next session does not
+# have it. *.py above is for scratch scripts; this one is a checked-in tool.
+!_visual.py

@@ -27,25 +27,43 @@ catch (e) { console.error('needs jsdom:  npm i --no-save jsdom'); process.exit(2
 
 process.chdir(path.join(__dirname));
 
-/* The four palettes, as defined in style.css. Only the tokens that can appear
-   as a text colour or a surface are needed. */
-const THEMES = {
-  'default/dark': { '--text': '#F8FAFC', '--text2': '#CBD5E1', '--text3': '#94A3B8',
-                    '--surface': '#141C2F', '--surface2': '#1C2740', '--surface3': '#252F45',
-                    '--bg': '#0B1220', '--blue': '#5D98F8', '--green': '#22c55e',
-                    '--orange': '#f59e0b', '--red': '#F36E6E', '--amber': '#C8A44A',
-                    '--on-accent': '#0B1220' },
-  'amoled':       { '--text': '#FFFFFF', '--text2': '#E2E8F0', '--text3': '#94A3B8',
-                    '--surface': '#0E0E0E', '--surface2': '#171717', '--surface3': '#1F1F1F',
-                    '--bg': '#000000', '--blue': '#5D98F8', '--green': '#22c55e',
-                    '--orange': '#f59e0b', '--red': '#F36E6E', '--amber': '#C8A44A',
-                    '--on-accent': '#000000' },
-  'light':        { '--text': '#0F172A', '--text2': '#475569', '--text3': '#5C708A',
-                    '--surface': '#FFFFFF', '--surface2': '#F8FAFC', '--surface3': '#F1F5F9',
-                    '--bg': '#F8FAFC', '--blue': '#2563EB', '--green': '#117F3A',
-                    '--orange': '#A25905', '--red': '#D52222', '--amber': '#846C31',
-                    '--on-accent': '#FFFFFF' },
-};
+/* The palettes, READ FROM style.css rather than copied into this file.
+
+   They used to be a hand-kept table here, and it had already drifted: light
+   --amber was #846C31 while style.css said #75601E, and --purple, --teal and
+   --cyan were missing outright. A missing token makes resolve() return null,
+   and a null pair is skipped in silence, so every purple element in the app
+   was exempt from this audit with nothing saying so. The content counts failed
+   the same way and were fixed the same way, by generating rather than typing. */
+function readPalettes() {
+  const css = fs.readFileSync('app/style.css', 'utf8');
+  const block = sel => {
+    const i = css.indexOf(sel + '{');
+    if (i < 0) return null;
+    const open = i + sel.length + 1;
+    const end = css.indexOf('}', open);
+    return end < 0 ? null : css.slice(open, end);
+  };
+  const vars = text => {
+    const out = {};
+    if (text) for (const m of text.matchAll(/(--[\w-]+)\s*:\s*([^;]+)/g)) out[m[1]] = m[2].trim();
+    return out;
+  };
+  // :root is the dark default; each [data-theme] block overrides only what it
+  // redefines, which is how the cascade applies them.
+  const base = vars(block(':root'));
+  if (Object.keys(base).length < 10) {
+    console.error('ERROR: could not read the palette from app/style.css :root.');
+    console.error('Refusing to audit against an empty palette: it would report clean.');
+    process.exit(2);
+  }
+  return {
+    'default/dark': base,
+    'amoled': Object.assign({}, base, vars(block('[data-theme="amoled"]'))),
+    'light':  Object.assign({}, base, vars(block('[data-theme="light"]'))),
+  };
+}
+const THEMES = readPalettes();
 
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
@@ -93,6 +111,14 @@ function flatten(layers, base) {
   return out;
 }
 
+/* style.css applies only to pages that actually link it. auth.html is written
+   entirely in literal colours and loads no stylesheet, so folding style.css
+   into its cascade invented a var(--text) on a #070D1A ground and reported the
+   sign-in page unreadable when it renders identically in every theme. */
+const linksGlobalCss = src => /href\s*=\s*["'][^"']*style\.css/.test(src);
+const globalCss = src => (linksGlobalCss(src) && fs.existsSync('app/style.css'))
+  ? fs.readFileSync('app/style.css', 'utf8') : '';
+
 const isVar = v => /var\(/.test(v || '');
 const isFixed = v => {
   if (!v || isVar(v)) return false;
@@ -109,7 +135,12 @@ const isFixed = v => {
 const PAGES = process.env.THEME_AUDIT_PAGES
   ? process.env.THEME_AUDIT_PAGES.split(',')
   : ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html',
-     'app/admin/finance.html'];
+     'app/admin/finance.html',
+     // courses.html and auth.html were missing from this list, so neither was
+     // ever audited. courses.html is the page a cadet sees first, and it held
+     // white text on a filled --blue at 2.87:1, the exact pair named in
+     // CLAUDE.md, for as long as the rule has been written down.
+     'app/courses.html', 'app/auth.html'];
 const findings = [];
 
 /* Scoped palettes. #gate-overlay redefines --text, --surface and the rest
@@ -206,7 +237,7 @@ function stripPrintCss(css) {
 
 function collectScopes(src) {
   const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
-            + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+            + '\n' + globalCss(src);
   const scopes = [];
   for (const m of css.matchAll(/([^{}@\n]+)\{([^}]*--[\w-]+\s*:[^}]*)\}/g)) {
     const selector = m[1].trim();
@@ -273,7 +304,7 @@ function elementsWithFixedBackground(doc, src) {
 function ruleTextColours(doc, src) {
   const map = new Map();
   const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
-            + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+            + '\n' + globalCss(src);
   for (const m of css.matchAll(/([^{}@]+)\{([^}]*)\}/g)) {
     // (?:^|;) so background-color and border-color are not read as color.
     const c = m[2].match(/(?:^|;)\s*color\s*:\s*([^;}]+)/);
@@ -301,7 +332,7 @@ for (const page of PAGES) {
   }
   {
     const allCss = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
-      + '\n' + (fs.existsSync('app/style.css') ? fs.readFileSync('app/style.css', 'utf8') : '');
+      + '\n' + globalCss(src);
     for (const m of allCss.matchAll(/([^{}@]+)\{([^}]*background(?:-color)?\s*:\s*([^;}]+))/g)) {
       if (/none|transparent|inherit/.test(m[3])) continue;
       const sel = m[1].trim().split('\n').pop().trim();
@@ -361,6 +392,35 @@ for (const page of PAGES) {
   }
 }
 
+/* Every element's background, from a style attribute or from any rule, with a
+   style attribute winning over a rule.
+
+   This is the mirror of ruleTextColours, and the piece PASS TWO was missing.
+   It walked style attributes only, so a pair written entirely in CSS, such as
+   `.btn-blue { background: var(--blue); color: #fff }` in a <style> block, was
+   invisible to it. That is the same blind spot documented twice at the top of
+   this file, left unfixed on the reverse direction, and it is why white text
+   on a filled accent kept shipping while this audit printed "no collisions". */
+function allBackgrounds(doc, src) {
+  const map = new Map();
+  const css = stripPrintCss((src.match(/<style[^>]*>([\s\S]*?)<\/style>/g) || []).join('\n'))
+            + '\n' + globalCss(src);
+  for (const m of css.matchAll(/([^{}@]+)\{([^}]*)\}/g)) {
+    const b = m[2].match(/(?:^|;)\s*background(?:-color)?\s*:\s*([^;}]+)/);
+    if (!b) continue;
+    const sel = m[1].trim().split('\n').pop().trim();
+    if (!sel || /[%]/.test(sel)) continue;             // skip keyframe stops
+    const val = b[1].trim();
+    if (/^(none|transparent)$/i.test(val)) continue;
+    try { doc.querySelectorAll(sel).forEach(e => map.set(e, val)); } catch (e) {}
+  }
+  for (const el of doc.querySelectorAll('[style*="background"]')) {
+    const m = (el.getAttribute('style') || '').match(/background(?:-color)?\s*:\s*([^;]+)/);
+    if (m && !/none|transparent/.test(m[1])) map.set(el, m[1].trim());
+  }
+  return map;
+}
+
 /* PASS TWO: the mirror image, and the one this audit itself caused.
    Converting a hardcoded dark panel to var(--surface) fixes the background but
    leaves any hardcoded pale text still tuned for a dark ground. On the light
@@ -372,16 +432,29 @@ for (const page of PAGES) {
   const doc = dom.window.document;
   const scopes = collectScopes(src);
 
-  for (const kid of doc.querySelectorAll('[style*="color"]')) {
-    const col = (kid.getAttribute('style').match(/(?:^|;)\s*color\s*:\s*([^;]+)/) || [])[1];
+  const ruleColours = ruleTextColours(doc, src);
+  const backgrounds = allBackgrounds(doc, src);
+
+  const textColourOf = el => {
+    const s = el.getAttribute && el.getAttribute('style');
+    const m = s && s.match(/(?:^|;)\s*color\s*:\s*([^;]+)/);
+    return m ? m[1].trim() : (ruleColours.get(el) || null);
+  };
+
+  // Both sources. Reading style attributes alone is what let
+  // `.btn-blue { background: var(--blue); color: #fff }` through.
+  const candidates = new Set([...doc.querySelectorAll('[style*="color"]'),
+                              ...ruleColours.keys()]);
+
+  for (const kid of candidates) {
+    const col = textColourOf(kid);
     if (!isFixed(col)) continue;                       // only fixed text
 
     // Nearest ancestor (or self) that actually paints a background.
     let a = kid, bg = null;
     while (a) {
-      const s = a.getAttribute && a.getAttribute('style');
-      const m = s && s.match(/background(?:-color)?\s*:\s*([^;]+)/);
-      if (m && !/none|transparent/.test(m[1])) { bg = m[1].trim(); break; }
+      const v = backgrounds.get(a);
+      if (v) { bg = v; break; }
       a = a.parentElement;
     }
     if (!bg || !isVar(bg)) continue;                   // only themed grounds

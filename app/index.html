@@ -798,10 +798,17 @@
     text-transform:uppercase; padding:3px 9px; border-radius:999px; }
   /* Scoped to .welcome-card because style.css has `.welcome-card .wc-badge`
      at specificity 0,2,0, which beat a bare class and rendered this blue. */
+  /* Opaque for the same reason as the month badge below: the running card
+     already carries --red-dim, and stacking a second one measured 3.66:1 in
+     the light theme. */
   .welcome-card .lxf-card-badge { display:inline-flex; align-items:center; gap:6px;
-    background:var(--red-dim); color:var(--red); border:1px solid var(--red-border); }
+    background:var(--surface); color:var(--red); border:1px solid var(--red-border); }
   .welcome-card .lxf-card-badge .lxf-dot { width:7px; height:7px; background:var(--red); }
-  .welcome-card .lxf-month-badge { background:var(--blue-dim); color:var(--blue);
+  /* Opaque, not another --blue-dim. The card underneath is already tinted
+     with it, and two 14% tints of the same hue stack: the badge measured
+     4.21:1 in the light theme while the identical badge on a plain card
+     cleared the floor. */
+  .welcome-card .lxf-month-badge { background:var(--surface); color:var(--blue);
     border:1px solid var(--blue-border); }
   .welcome-card .lxf-wip-badge { background:var(--purple-dim); color:var(--purple);
     border:1px solid var(--purple-border); }
