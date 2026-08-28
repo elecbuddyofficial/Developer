@@ -235,7 +235,14 @@ console.log(`\nDone: ${count} file(s) ${DECRYPT ? 'decrypted' : 'encrypted'} in 
 if (!DECRYPT && count > 0) {
     console.log('\nNext steps:');
     console.log('  1. Make sure get-content-key is deployed with the matching secret set:');
-    console.log(`     supabase secrets set ${group.keyEnv}=${KEY_HEX}`);
+    // The VALUE is deliberately not printed. This reminder used to interpolate
+    // KEY_HEX, so every successful encrypt wrote the live content key to stdout:
+    // into terminal scrollback, into any CI log, into any screenshot of the
+    // window, and into the transcript of any agent session that ran it. The
+    // repo's own rule is that these values never reach anywhere user-facing,
+    // and this line was the one place breaking it. The command is still useful
+    // without the secret in it.
+    console.log(`     supabase secrets set ${group.keyEnv}=<value of ${group.keyEnv} in DecryptEncrypt/Decrypt.txt>`);
     console.log('  2. Bump sw.js VERSION so the re-encrypted files aren\'t served stale from cache.');
     console.log(`  3. Run --status to confirm nothing else in the group was left plaintext:`);
     console.log(`     node encrypt-content.js --group=${groupName} --status`);

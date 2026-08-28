@@ -104,3 +104,4 @@ _visual-shots/
 # ...but the harness itself has to be committed, or the next session does not
 # have it. *.py above is for scratch scripts; this one is a checked-in tool.
 !_visual.py
+!_notes_visual.py
