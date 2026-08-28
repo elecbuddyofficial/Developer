@@ -980,6 +980,8 @@
   .nf-chip-deadline{background:var(--red-dim);color:var(--red)}
   .nf-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);font-size:14px;gap:12px;padding:40px 0;}
   .nf-loading{padding:20px;text-align:center;color:var(--text2);font-size:13px}
+  .nf-retry{margin-top:4px;background:var(--blue);color:var(--on-accent);border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
+  .nf-retry:hover{filter:brightness(.94)}
   .nf-item{cursor:pointer;transition:border-color .14s,transform .14s}
   .nf-item:hover{border-color:var(--blue)}
   .nf-item:active{transform:scale(.995)}
@@ -3145,21 +3147,6 @@ function setTheme(t) {
     // moment an admin published something. On opening the app, and nowhere else.
     var _updRan = false;
 
-  /* COC and Sponsorship share the notifications table, so without a filter each
-     app shows the other's notices. Falls back to the unfiltered query while the
-     course column is not yet applied: shipping the filter first would otherwise
-     leave every user with an empty bell. */
-  async function nfQuery(cols, limit) {
-    var sb = window._sbClient;
-    var q = sb.from('notifications').select(cols + ',course')
-      .in('course', ['coc','both']).order('created_at', { ascending: false });
-    if (limit) q = q.limit(limit);
-    var r = await q;
-    if (!r.error) return r;
-    var q2 = sb.from('notifications').select(cols).order('created_at', { ascending: false });
-    if (limit) q2 = q2.limit(limit);
-    return await q2;
-  }
 
     window.maybeShowUpdates = async function() {
       if (_updRan) return;
@@ -3590,7 +3577,9 @@ function setTheme(t) {
   function openNotifs() {
     document.getElementById('pm-main-view').style.display = 'none';
     document.getElementById('pm-notif-view').style.display = 'flex';
-    loadNotifs();
+    // Caught here as well: an unhandled rejection in an async call is
+    // invisible, and this one presented as a panel stuck on 'Loading'.
+    Promise.resolve(loadNotifs()).catch(function (e) { console.warn('loadNotifs:', e); });
     // Opening the menu is the ONLY thing that clears the count. Seeing a
     // toast is not reading a notice, so the toast deliberately leaves it.
     if (window.EBNotify) EBNotify.markRead();
@@ -3656,11 +3645,62 @@ function setTheme(t) {
     return !n.target_plan || n.target_plan === nfAudience();
   }
 
+  /* COC and Sponsorship share the notifications table, so without a filter each
+     app shows the other's notices. Falls back to the unfiltered query while the
+     course column is not yet applied: shipping the filter first would otherwise
+     leave every user with an empty bell.
+
+     THIS SITS OUTSIDE THE IIFE ABOVE ON PURPOSE. It was declared inside it,
+     which put it out of scope for loadNotifs and checkNotifsUnread, both of
+     which live out here. Every call from those two threw
+     "nfQuery is not defined", so the bell list stayed on "Loading" for good
+     and the unread badge never appeared at all. Only maybeShowUpdates, which
+     is inside the IIFE, could ever reach it. Reported from the live site on
+     28 Aug 2026 and confirmed from the console trace.
+
+     Moving it OUT rather than duplicating it keeps one definition: the inner
+     function still reaches it down the scope chain. It closes over nothing,
+     only window._sbClient and its own arguments, so the move is safe. */
+  async function nfQuery(cols, limit) {
+    var sb = window._sbClient;
+    var q = sb.from('notifications').select(cols + ',course')
+      .in('course', ['coc','both']).order('created_at', { ascending: false });
+    if (limit) q = q.limit(limit);
+    var r = await q;
+    if (!r.error) return r;
+    var q2 = sb.from('notifications').select(cols).order('created_at', { ascending: false });
+    if (limit) q2 = q2.limit(limit);
+    return await q2;
+  }
+
   async function loadNotifs() {
     var list = document.getElementById('nf-list');
     if (!window._sbClient) { list.innerHTML = '<div class="nf-empty">Not connected</div>'; return; }
     list.innerHTML = '<div class="nf-loading">Loading…</div>';
-    var res = await nfQuery('id,title,body,type,created_at,target_plan');
+
+    /* This await used to stand bare, and loadNotifs() is called without a
+       catch, so ANY rejection left the panel reading "Loading…" for good:
+       a dropped connection, a failed token refresh, a CORS hiccup. Nothing
+       told the reader, and nothing retried. Reported from the live site on
+       28 Aug 2026.
+
+       template and meta are selected here because openNotifDetail needs them.
+       They were missing, so _nfById held rows without either, and the coupon
+       code block and the CTA button could never render however the notice was
+       authored. maybeShowUpdates already selected both; the bell did not. */
+    var res;
+    try {
+      res = await Promise.race([
+        nfQuery('id,title,body,type,created_at,target_plan,template,meta'),
+        new Promise(function (_, rej) {
+          setTimeout(function () { rej(new Error('notifications timed out')); }, 12000);
+        })
+      ]);
+    } catch (e) {
+      list.innerHTML = '<div class="nf-empty">Could not load notifications.'
+        + '<button class="nf-retry" onclick="loadNotifs()">Try again</button></div>';
+      return;
+    }
     var error = res.error;
     var data  = res.data ? res.data.filter(nfVisible) : null;
     if (error || !data) { list.innerHTML = '<div class="nf-empty">Failed to load</div>'; return; }
