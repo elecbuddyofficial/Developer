@@ -70,6 +70,61 @@ SCREENS = {
     # invisible to a check that only looks at the page underneath them.
     'feedback': {'file': 'index.html',   'view': 'view-welcome',
                  'open': 'openFeedback()'},
+    # The "What's new" modal, which is the app's startup notice. It was in
+    # OVERLAYS below (dismissed, never looked at) while being one of the very
+    # modals this file exists to check. Seeded with markup matching what
+    # maybeShowUpdates builds, so the layout under test is the real one.
+    'whatsnew': {'file': 'index.html',   'view': 'view-welcome', 'open': """
+        (() => {
+          const card = (t, chip, title, body) =>
+            '<div style="background:var(--surface2);border:1px solid var(--border);'
+            + 'border-radius:9px;padding:13px 15px;margin-bottom:10px;">'
+            + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+            + '<span class="nf-chip nf-chip-' + chip + '">' + chip + '</span>'
+            + '<span style="font-size:11px;color:var(--text3);">' + t + '</span></div>'
+            + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">'
+            + title + '</div>'
+            + '<div style="font-size:13px;color:var(--text3);line-height:1.6;">' + body + '</div></div>';
+          document.getElementById('upd-list').innerHTML =
+            card('2 h ago','update','Join our update channel',
+                 'Running MMD oral questions the same day candidates report them.')
+          + card('1 d ago','info','SUPER100',
+                 'A hundred rupees off any plan, for readers who reported a question.');
+          document.getElementById('upd-modal').style.display = 'block';
+        })()"""},
+    # The notification toast. Two bugs have shipped in it unseen: a hardcoded
+    # navy background under themed text, and a top offset that put it across
+    # the topbar. Neither was visible to any check, because nothing rendered it.
+    'toast':    {'file': 'index.html',   'view': 'view-welcome', 'open': """
+        EBNotify.showToast({ type:'update', title:'Feature Update' })"""},
+    # The notification DETAIL dialog, with a coupon. Its markup is built in JS
+    # by openNotifDetail, so it never exists in the parsed DOM and theme-audit
+    # cannot reach it: that is how .nfd-copy shipped at 3.00:1 in light. Seeded
+    # through _nfById, which is the same path the real bell uses.
+    'nfdetail': {'file': 'index.html',   'view': 'view-welcome', 'open': """
+        (() => {
+          // openNotifDetail records the read. There is no session here, so the
+          // real call returns 401 and that noise would read as a page error.
+          // Stubbed rather than skipped, so the code path still runs.
+          if (window._sbClient) window._sbClient.rpc = () => Promise.resolve({});
+          window._nfById = { d1: { id:'d1', type:'info', title:'SUPER100',
+            created_at: new Date(Date.now()-86400e3).toISOString(),
+            body:'Flat 100 rupees off, just for you. Use the code on any subscription.',
+            template:'coupon',
+            meta:{ code:'SUPER100', detail:'One use per account.', expires:'30 Sep 2026' } } };
+          openNotifDetail('d1');
+        })()"""},
+    # The PLAIN detail, which is what both live notices actually are. It has no
+    # coupon block and no CTA under it, so it is the variant most likely to
+    # look unfinished, and the one worth keeping an eye on.
+    'nfplain':  {'file': 'index.html',   'view': 'view-welcome', 'open': """
+        (() => {
+          if (window._sbClient) window._sbClient.rpc = () => Promise.resolve({});
+          window._nfById = { p1: { id:'p1', type:'update', title:'Feature Update',
+            created_at: new Date().toISOString(), template:'plain', meta:{},
+            body:'New live exam feed. Please go to Orals to access it.\\n\\nQuestions asked in ongoing oral examinations are updated the same day candidates report them.' } };
+          openNotifDetail('p1');
+        })()"""},
     'courses':  {'file': 'courses.html', 'view': None},
     'auth':     {'file': 'auth.html',    'view': None},
 }
@@ -85,8 +140,11 @@ FIRST_RUN = "try { localStorage.setItem('guide_seen', '1'); } catch (e) {}"
 
 # Anything still covering the page after that is dismissed and NAMED in the
 # output, so a modal can never be hidden without it showing up in the report.
+# upd-modal is NOT dismissed here any more: the 'whatsnew' screen above opens
+# it deliberately, and a screen that dismisses the thing it is meant to check
+# reports clean over ground it never looked at.
 OVERLAYS = ['guide-overlay', 'guide-tooltip', 'tx-modal', 'wel-modal',
-            'upd-modal', 'profile-modal', 'notif-modal']
+            'profile-modal', 'notif-modal']
 
 # Sample rows for screens that would otherwise lay out nothing. None of this is
 # real content; it exists so the layout has something to lay out.

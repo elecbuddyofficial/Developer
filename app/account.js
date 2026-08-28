@@ -259,9 +259,17 @@
     var s = document.createElement('style');
     s.id = 'eb-notify-css';
     s.textContent = [
-      '#nf-toast{position:fixed;z-index:10007;left:50%;top:14px;transform:translate(-50%,-140%);',
+      // Clears #topbar rather than sitting on it. The bar is 60px plus a 1px
+      // border on desktop and 56px under 768px (style.css), and this used to
+      // start at 14px, so the toast landed across the logo. All three pages
+      // that load this file share that bar, so one offset covers them.
+      '#nf-toast{position:fixed;z-index:10007;left:50%;top:72px;transform:translate(-50%,-160%);',
       'display:flex;align-items:stretch;width:calc(100% - 28px);max-width:400px;',
-      'background:rgba(13,30,51,0.97);border:1px solid #24466E;border-radius:12px;overflow:hidden;',
+      // Tokens, not a fixed navy. This panel held var(--text) over a
+      // hardcoded rgba(13,30,51,.97): correct in the dark themes, dark text
+      // on a dark panel in the light one. theme-audit misses it because its
+      // JS scan pairs hex background/color, and this is rgba on one side.
+      'background:var(--surface);border:1px solid var(--border2);border-radius:12px;overflow:hidden;',
       'box-shadow:0 10px 30px rgba(0,0,0,0.45);opacity:0;pointer-events:none;',
       'transition:transform .34s cubic-bezier(.2,.9,.3,1.2),opacity .28s ease}',
       '#nf-toast.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}',
@@ -286,7 +294,7 @@
       'padding:0 4px;display:none;align-items:center;justify-content:center;font-size:10px;',
       'font-weight:800;color:var(--on-accent);line-height:1;font-family:inherit}',
       '.nb-dot.nb-count.show{display:inline-flex!important}',
-      '@media (max-width:600px){#nf-toast{top:10px;width:calc(100% - 20px);border-radius:11px}',
+      '@media (max-width:600px){#nf-toast{top:68px;width:calc(100% - 20px);border-radius:11px}',
       '#nf-toast-open{padding:12px 4px 12px 12px;min-height:52px}#nf-toast-x{padding:0 15px}}',
       '@media (prefers-reduced-motion:reduce){#nf-toast{transition:opacity .2s ease;transform:translate(-50%,0)}}',
     ].join('');

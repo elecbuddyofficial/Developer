@@ -973,11 +973,16 @@
   .nf-item-title{font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35}
   .nf-item-body{font-size:12.5px;color:var(--text2);margin-top:3px;line-height:1.55}
   .nf-item-meta{font-size:11px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:6px}
-  .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px}
-  .nf-chip-info{background:var(--blue-dim);color:var(--blue)}
-  .nf-chip-update{background:var(--green-dim);color:var(--green)}
-  .nf-chip-warning{background:var(--orange-dim);color:var(--orange)}
-  .nf-chip-deadline{background:var(--red-dim);color:var(--red)}
+  /* Outlined rather than tinted. These carried a *-dim background under *-text,
+     and on --surface2 that tint closes the gap enough to drop under the floor:
+     measured 4.31:1 for info in dark and 4.37:1 for update in light, both
+     against a 4.5 requirement at 9.5px. Dropping the fill puts the label on the
+     card's own surface and the border keeps it reading as a chip. */
+  .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px;background:transparent;border:1px solid currentColor}
+  .nf-chip-info{color:var(--blue)}
+  .nf-chip-update{color:var(--green)}
+  .nf-chip-warning{color:var(--orange)}
+  .nf-chip-deadline{color:var(--red)}
   .nf-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text3);font-size:14px;gap:12px;padding:40px 0;}
   .nf-loading{padding:20px;text-align:center;color:var(--text2);font-size:13px}
   .nf-retry{margin-top:4px;background:var(--blue);color:var(--on-accent);border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}
@@ -1034,21 +1039,31 @@
   .nfd-back[hidden]{display:none}
   .nfd{background:var(--surface);border:1px solid var(--border2);border-radius:14px;
     width:min(460px,100%);max-height:88vh;overflow-y:auto;overscroll-behavior:contain;
+    padding-bottom:16px;
     box-shadow:0 24px 70px rgba(0,0,0,.55)}
-  .nfd-head{display:flex;align-items:flex-start;gap:10px;padding:18px 18px 0}
-  .nfd-title{flex:1;font-size:17px;font-weight:800;color:var(--text);line-height:1.3}
+  .nfd-head{display:flex;align-items:center;gap:10px;padding:16px 18px 0}
+  .nfd-title{font-size:17px;font-weight:800;color:var(--text);line-height:1.3;padding:9px 18px 0}
   .nfd-x{background:none;border:none;color:var(--text3);cursor:pointer;padding:2px;
     border-radius:6px;flex-shrink:0;line-height:0}
   .nfd-x:hover{color:var(--text);background:var(--surface2)}
-  .nfd-meta{display:flex;align-items:center;gap:7px;padding:9px 18px 0;font-size:11px;color:var(--text3)}
-  .nfd-body{padding:14px 18px 4px;font-size:14px;line-height:1.75;color:var(--text2);
+  .nfd-meta{flex:1;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--text3)}
+  /* Contained, the way the What's New cards are. A plain notice has no coupon
+     block and no CTA under it, so the body used to sit as loose text on the
+     dialog's own surface with nothing holding it: the same notice looked
+     designed in the What's New list and unfinished here. The margin matches
+     .nfd-coupon below, so a coupon notice reads as two stacked blocks rather
+     than one floating paragraph and one card. */
+  .nfd-body{margin:12px 18px 0;padding:13px 15px;background:var(--surface2);
+    border:1px solid var(--border);border-radius:10px;
+    font-size:14px;line-height:1.75;color:var(--text2);
     white-space:pre-wrap;overflow-wrap:anywhere}
+  .nfd-body:empty{display:none}
   .nfd-body a{color:var(--blue)}
-  .nfd-foot{padding:14px 18px 18px}
+  .nfd-foot{padding:12px 18px 0}
 
   /* Coupon template */
-  .nfd-coupon{margin:14px 18px 4px;border:1px dashed var(--amber,#C8A44A);border-radius:12px;
-    background:linear-gradient(135deg,rgba(200,164,74,.14),rgba(200,164,74,.04));padding:14px}
+  .nfd-coupon{margin:12px 18px 0;border:1px dashed var(--amber,#C8A44A);border-radius:10px;
+    background:linear-gradient(135deg,rgba(200,164,74,.14),rgba(200,164,74,.04));padding:13px 15px}
   .nfd-coupon-label{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
     color:var(--amber,#C8A44A);margin-bottom:8px}
   .nfd-code-row{display:flex;gap:8px;align-items:stretch}
@@ -1056,7 +1071,13 @@
     font-size:19px;font-weight:700;letter-spacing:.09em;color:var(--text);background:rgba(0,0,0,.28);
     border:1px solid rgba(200,164,74,.34);border-radius:9px;padding:11px 12px;text-align:center;
     overflow-x:auto;white-space:nowrap}
-  .nfd-copy{flex-shrink:0;background:var(--amber,#C8A44A);color:#0A1526;border:none;border-radius:9px;
+  /* --on-accent, not a fixed near-black. --amber inverts between palettes:
+     #C8A44A in the dark themes and #75601E in the light one, so #0A1526 on it
+     measured 3.00:1 in light, on the button people press to take their coupon
+     code. theme-audit cannot see this pair because .nfd-copy only exists in a
+     JS string until openNotifDetail injects it, so it is never in the DOM the
+     audit parses. */
+  .nfd-copy{flex-shrink:0;background:var(--amber,#C8A44A);color:var(--on-accent);border:none;border-radius:9px;
     padding:0 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .14s}
   .nfd-copy:hover{opacity:.9}
   .nfd-copy.ok{background:var(--green,#22C55E);color:var(--on-accent)}
@@ -1201,13 +1222,17 @@
 
 <div class="nfd-back" id="nfd-back" hidden onclick="if(event.target===this)closeNotifDetail()">
   <div class="nfd" role="dialog" aria-modal="true" aria-labelledby="nfd-title">
+    <!-- Type chip and time sit ABOVE the title here, which is the order the
+         What's New cards and the notification list already use. This dialog
+         had them underneath, so the same notice was laid out three different
+         ways depending on where you met it. -->
     <div class="nfd-head">
-      <div class="nfd-title" id="nfd-title"></div>
+      <div class="nfd-meta" id="nfd-meta"></div>
       <button class="nfd-x" onclick="closeNotifDetail()" aria-label="Close">
         <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
-    <div class="nfd-meta" id="nfd-meta"></div>
+    <div class="nfd-title" id="nfd-title"></div>
     <div class="nfd-body" id="nfd-body"></div>
     <div id="nfd-extra"></div>
   </div>
@@ -1375,16 +1400,21 @@
      someone out of a device they are still using. -->
 <!-- ── What's new ──────────────────────────────────────────── -->
 <div id="upd-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
-  <div style="min-height:100%;display:flex;align-items:flex-start;justify-content:center;padding:24px 16px 48px;">
-    <div style="width:100%;max-width:480px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+  <div style="min-height:100%;display:flex;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:480px;margin:auto 0;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
       <div style="font-size:18px;font-weight:700;color:var(--text);">What&rsquo;s new</div>
-      <div style="font-size:12.5px;color:var(--text3);margin-top:5px;line-height:1.55;">Since you were last here. You will only see these once.</div>
+      <div style="font-size:12.5px;color:var(--text3);margin-top:5px;line-height:1.55;">Since you were last here. You can read these again any time from <strong style="color:var(--text2);font-weight:600;">Notifications</strong> in your profile menu.</div>
       <!-- Deliberately not a scrolling pane with the button pinned below it.
            The whole card scrolls, so the button sits after the notices and has
            to be scrolled to, rather than the last notice being clipped by a
            box the reader has no reason to notice. -->
       <div id="upd-list" style="margin-top:18px;"></div>
-      <button onclick="dismissUpdates()" style="width:100%;min-height:46px;margin-top:18px;background:#C8A44A;color:#070D1A;border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
+      <!-- Blue, because this dialog only ever appears in the CoC app and blue is
+           its colour; the Sponsorship app is orange. --on-accent rather than a
+           fixed near-black, since --blue inverts between the palettes: it is
+           light in the dark themes and dark in the light one, so a hardcoded
+           dark label would vanish on one of them. -->
+      <button onclick="dismissUpdates()" style="width:100%;min-height:46px;margin-top:18px;background:var(--blue);color:var(--on-accent);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
     </div>
   </div>
 </div>
@@ -3166,11 +3196,16 @@ function setTheme(t) {
       var all = (res.data || []).filter(nfVisible);
       if (!all.length) return;
 
-      // First run of this build on an existing account: mark everything read
-      // rather than dumping months of history on them at once.
+      /* First run on this device. This used to stamp "now" and return, so an
+         existing account saw nothing at all and every new device started the
+         same way. That is why the two notices sent on 4 and 10 Aug 2026 were
+         never put in front of anyone: the bell was broken from the 15th, and
+         this modal had already written them off as history.
+
+         A bounded look-back instead. Far enough to catch anything still
+         relevant, short enough that nobody is handed months of backlog. */
       if (!since) {
-        try { localStorage.setItem(_updKey(), new Date().toISOString()); } catch (e) {}
-        return;
+        since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
       }
 
       var fresh = all.filter(function(n) { return new Date(n.created_at) > new Date(since); });
@@ -3188,6 +3223,12 @@ function setTheme(t) {
           + '</div>';
       }).join('');
 
+      // Held so dismissUpdates can record these as read. Without it the only
+      // writers of notification_reads were the bell's detail view, so anyone
+      // who read a notice HERE was never counted and every read figure was
+      // an undercount by an unknown amount.
+      window._updShown = fresh.map(function(n) { return n.id; });
+
       document.getElementById('upd-modal').style.display = 'block';
       document.documentElement.classList.add('_modal-open');
     };
@@ -3196,6 +3237,21 @@ function setTheme(t) {
       // Stamped only on dismissal, never on display, so closing the tab
       // mid-read leaves them to be shown again rather than lost.
       try { localStorage.setItem(_updKey(), new Date().toISOString()); } catch (e) {}
+
+      /* Dismissing this modal IS reading the notice: the full title and body
+         were on screen, not just a badge. Recorded server side, per reader per
+         notice, so it survives a new device and so notification_stats reflects
+         what people actually saw. Fire and forget: a failed write must never
+         stop the modal closing. */
+      var shown = window._updShown || [];
+      window._updShown = [];
+      if (window._sbClient) {
+        shown.forEach(function(id) {
+          window._sbClient.rpc('mark_notification_read', { p_id: id })
+            .then(function(){}, function(){});
+        });
+      }
+
       document.getElementById('upd-modal').style.display = 'none';
       document.documentElement.classList.remove('_modal-open');
     };
