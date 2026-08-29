@@ -125,6 +125,14 @@ SCREENS = {
             body:'New live exam feed. Please go to Orals to access it.\\n\\nQuestions asked in ongoing oral examinations are updated the same day candidates report them.' } };
           openNotifDetail('p1');
         })()"""},
+    # The profile panel's two tabs. It used to be Account with a Notifications
+    # screen stacked behind a Back button, so neither pane was ever rendered by
+    # any check. Both are now, because a tab strip that looks wrong in one
+    # palette is exactly the bug this file exists to catch.
+    'profile':  {'file': 'index.html',   'view': 'view-welcome',
+                 'open': "openProfile(); showProfilePane('main')"},
+    'profnotif':{'file': 'index.html',   'view': 'view-welcome',
+                 'open': "openProfile(); showProfilePane('notif')"},
     'courses':  {'file': 'courses.html', 'view': None},
     'auth':     {'file': 'auth.html',    'view': None},
 }
@@ -143,8 +151,7 @@ FIRST_RUN = "try { localStorage.setItem('guide_seen', '1'); } catch (e) {}"
 # upd-modal is NOT dismissed here any more: the 'whatsnew' screen above opens
 # it deliberately, and a screen that dismisses the thing it is meant to check
 # reports clean over ground it never looked at.
-OVERLAYS = ['guide-overlay', 'guide-tooltip', 'tx-modal', 'wel-modal',
-            'profile-modal', 'notif-modal']
+OVERLAYS = ['guide-overlay', 'guide-tooltip', 'tx-modal', 'wel-modal', 'notif-modal']
 
 # Sample rows for screens that would otherwise lay out nothing. None of this is
 # real content; it exists so the layout has something to lay out.

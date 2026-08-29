@@ -2062,8 +2062,11 @@
           <input class="ad-input" id="nt-opens" type="date">
         </div>
         <div class="ad-field" style="flex:1">
-          <label class="ad-label">Closes on</label>
+          <label class="ad-label">Closes on <span class="ad-hint">optional</span></label>
           <input class="ad-input" id="nt-closes" type="date">
+          <div class="ad-hint" style="margin-top:4px">Leave empty if the closing
+            date has not been announced. A guessed date is worse than none:
+            readers plan around it.</div>
         </div>
         <div class="ad-field" style="flex:2">
           <label class="ad-label">Note <span style="color:var(--text3);font-weight:400">(optional)</span></label>
@@ -6065,8 +6068,13 @@ function ntDate(s) {
    first, then what is coming, then drafts, then what has finished. */
 function noticeState(n) {
   var today = ntToday();
-  if (n.closes_on < today) return { rank: 3, cls: 'nt-closed', label: 'Closed', dead: true };
+  if (n.closes_on && n.closes_on < today) return { rank: 3, cls: 'nt-closed', label: 'Closed', dead: true };
   if (!n.is_published)     return { rank: 2, cls: 'nt-draft',  label: 'Draft' };
+  // Open with no announced end. ntDays would return NaN and the badge would
+  // read "NaN days left", so this returns before the countdown.
+  if (!n.closes_on && n.opens_on <= today) {
+    return { rank: 0, cls: 'nt-open', label: 'Open, no closing date' };
+  }
   if (n.opens_on > today) {
     var d = ntDays(today, n.opens_on);
     return { rank: 1, cls: 'nt-upcoming', label: d === 1 ? 'Opens tomorrow' : 'Opens in ' + d + ' days' };
@@ -6115,7 +6123,8 @@ async function loadNotices() {
       + '</div></td>'
       + '<td data-label="Course">' + esc(n.course || 'ETO') + '</td>'
       + '<td data-label="Window"><span class="nt-win">' + ntDate(n.opens_on)
-        + '<i> to </i>' + ntDate(n.closes_on) + '</span></td>'
+        + (n.closes_on ? '<i> to </i>' + ntDate(n.closes_on)
+                        : '<i> onwards</i>') + '</span></td>'
       + '<td data-label="Status"><span class="pbadge ' + s.cls + '">' + esc(s.label) + '</span></td>'
       + '<td data-label="Note" style="color:var(--text2)">' + esc(n.note || '-') + '</td>'
       + '<td style="white-space:nowrap">'
@@ -6141,7 +6150,9 @@ function noticeForm() {
     company:      v('nt-company'),
     link:         v('nt-link'),
     opens_on:     v('nt-opens'),
-    closes_on:    v('nt-closes'),
+    // '' would be rejected by the date column; null is what "not announced"
+    // has to become on the way in.
+    closes_on:    v('nt-closes') || null,
     course:       document.getElementById('nt-course').value,
     note:         v('nt-note') || null,
     is_published: document.getElementById('nt-published').checked,
@@ -6159,8 +6170,8 @@ async function saveNotice() {
   if (!f.link)      { toast('Link required', 'err'); return; }
   if (!/^https?:\/\//i.test(f.link)) { toast('Link must start with http:// or https://', 'err'); return; }
   if (!f.opens_on)  { toast('Opening date required', 'err'); return; }
-  if (!f.closes_on) { toast('Closing date required', 'err'); return; }
-  if (f.closes_on < f.opens_on) { toast('The window closes before it opens', 'err'); return; }
+  // No closing date is a legitimate state, so only the ordering is checked.
+  if (f.closes_on && f.closes_on < f.opens_on) { toast('The window closes before it opens', 'err'); return; }
 
   var btn = document.getElementById('nt-save');
   btn.disabled = true;
@@ -6172,7 +6183,8 @@ async function saveNotice() {
   if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
 
   logAdminAction(_editingNoticeId ? 'notice_update' : 'notice_add', f.company,
-                 { window: f.opens_on + ' to ' + f.closes_on, course: f.course });
+                 { window: f.opens_on + (f.closes_on ? ' to ' + f.closes_on : ' onwards, no closing date'),
+                   course: f.course });
   // Says "draft" out loud. An unpublished notice looks saved and reaches
   // nobody, and that is a quiet enough failure to be worth naming here.
   var what = _editingNoticeId ? 'Notice updated' : 'Notice added';

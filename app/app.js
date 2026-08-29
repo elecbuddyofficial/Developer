@@ -3264,7 +3264,12 @@ function vidOpenFloat(topicId, startIdx) {
         if (ytid) {
             return '<div class="vid-float-iframe-wrap"><iframe src="https://www.youtube.com/embed/' + ytid + '?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
         }
-        return '<div style="padding:40px;text-align:center;"><a href="' + v.url.replace(/"/g, '&quot;') + '" target="_blank" style="color:var(--blue);font-weight:700;font-size:15px;">🔗 Open Link</a></div>';
+        // rel=noopener noreferrer: without it the opened page can reach back
+        // through window.opener and navigate this tab, which is the standard
+        // reverse-tabnabbing route to a fake sign-in screen. Current browsers
+        // imply noopener on target=_blank, but this is the only link in the app
+        // that was relying on that default. Every other one sets it explicitly.
+        return '<div style="padding:40px;text-align:center;"><a href="' + v.url.replace(/"/g, '&quot;') + '" target="_blank" rel="noopener noreferrer" style="color:var(--blue);font-weight:700;font-size:15px;">🔗 Open Link</a></div>';
     }
 
     function render(idx) {

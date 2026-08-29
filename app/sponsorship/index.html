@@ -1824,6 +1824,15 @@ function _ntDate(v) {
 }
 function _ntState(n) {
   var today = _ntToday();
+  // No closing date at all: open until the company says otherwise. Ranked
+  // below the dated ones, which carry a real deadline a reader can miss.
+  if (!n.closes_on) {
+    if (n.opens_on > today) {
+      var od = _ntDays(today, n.opens_on);
+      return { rank: 1, tone: 'amber', label: od === 1 ? 'Opens tomorrow' : 'Opens in ' + od + ' days' };
+    }
+    return { rank: 2, tone: 'green', label: 'Open' };
+  }
   if (n.closes_on < today) return null;                       // finished, drops off
   if (n.opens_on > today) {
     var d = _ntDays(today, n.opens_on);
@@ -1860,8 +1869,11 @@ async function loadSponsorshipNotices() {
       .from('sponsorship_notices')
       .select('company, link, opens_on, closes_on, course, note')
       .eq('is_published', true)
-      .gte('closes_on', _ntToday())
-      .order('closes_on', { ascending: true })
+      /* Open ended notices have closes_on NULL, and `gte` against NULL is NULL,
+         which PostgREST drops. Without the is.null branch a notice with no
+         closing date would be posted successfully and shown to nobody. */
+      .or('closes_on.is.null,closes_on.gte.' + _ntToday())
+      .order('closes_on', { ascending: true, nullsFirst: false })
       .limit(50);
   } catch (e) { res = { error: e }; }
 
@@ -1896,7 +1908,8 @@ async function loadSponsorshipNotices() {
       +   '<span class="nt-course">' + _ntEsc(n.course || 'ETO') + '</span>'
       +   '<span class="nt-pill">' + _ntEsc(st.label) + '</span>'
       + '</div>'
-      + '<div class="nt-window">' + _ntDate(n.opens_on) + ' to ' + _ntDate(n.closes_on) + '</div>'
+      + '<div class="nt-window">' + _ntDate(n.opens_on)
+      +   (n.closes_on ? ' to ' + _ntDate(n.closes_on) : ' onwards, closing date not announced') + '</div>'
       + (n.note ? '<div class="nt-note">' + _ntEsc(n.note) + '</div>' : '')
       + '<a class="nt-apply" href="' + _ntEsc(n.link) + '" target="_blank" rel="noopener noreferrer">Apply on the company site →</a>'
       + '</div>';
@@ -3142,6 +3155,8 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       var till = spDays(today, n.opens_on);
       return { rank:1, cls:'nf-sp-next', label: till === 1 ? 'Opens tomorrow' : 'Opens in ' + till + ' days' };
     }
+    // Open ended: spDays would return NaN and the label would read "NaN days".
+    if (!n.closes_on) return { rank:2, cls:'nf-sp-open', label:'Open' };
     var left = spDays(today, n.closes_on);
     if (left === 0) return { rank:0, cls:'nf-sp-last', label:'Closes today' };
     if (left === 1) return { rank:0, cls:'nf-sp-last', label:'Closes tomorrow' };
@@ -3157,8 +3172,9 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       var r = await sb.from('sponsorship_notices')
         .select('id,company,link,opens_on,closes_on,course,note,created_at')
         .eq('is_published', true)
-        .gte('closes_on', spToday())
-        .order('closes_on', { ascending: true });
+        // Same reason as the notices query above: gte drops NULLs.
+        .or('closes_on.is.null,closes_on.gte.' + spToday())
+        .order('closes_on', { ascending: true, nullsFirst: false });
       return (r.error || !r.data) ? [] : r.data;
     } catch (e) { return []; }
   }
@@ -3173,7 +3189,8 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       + (n.note ? '<div class="nf-sp-note">' + escNf(n.note) + '</div>' : '')
       + '<div class="nf-sp-meta">'
         + '<span class="nf-sp-state ' + s.cls + '">' + escNf(s.label) + '</span>'
-        + '<span class="nf-sp-dates">' + spDate(n.opens_on) + ' to ' + spDate(n.closes_on) + '</span>'
+        + '<span class="nf-sp-dates">' + spDate(n.opens_on)
+        +   (n.closes_on ? ' to ' + spDate(n.closes_on) : ' onwards') + '</span>'
         + '<span class="nf-sp-go">Apply →</span>'
       + '</div></a>';
   }
