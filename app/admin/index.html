@@ -2062,17 +2062,23 @@
           <input class="ad-input" id="nt-opens" type="date">
         </div>
         <div class="ad-field" style="flex:1">
-          <label class="ad-label">Closes on <span class="ad-hint">optional</span></label>
+          <label class="ad-label">Closes on <span style="color:var(--text3);font-weight:400">(optional)</span></label>
           <input class="ad-input" id="nt-closes" type="date">
-          <div class="ad-hint" style="margin-top:4px">Leave empty if the closing
-            date has not been announced. A guessed date is worse than none:
-            readers plan around it.</div>
         </div>
         <div class="ad-field" style="flex:2">
           <label class="ad-label">Note <span style="color:var(--text3);font-weight:400">(optional)</span></label>
           <input class="ad-input" id="nt-note" placeholder="e.g. 60% aggregate, sponsored 3-year cadetship">
         </div>
       </div>
+      <!-- Under the row, not inside a field. .ad-row is align-items:flex-end so
+           the inputs sit on one line however tall the labels are; a hint inside
+           one field makes that field taller, and bottom alignment then pushes
+           its label up while its neighbours stay put. The row visibly
+           staggered. The marker on the label is inline text and costs no
+           height, so that stays where it is. -->
+      <div class="ad-hint" style="margin:-6px 0 14px">Leave <strong>Closes on</strong>
+        empty if the closing date has not been announced. A guessed date is worse
+        than none: readers plan around it.</div>
       <div class="ad-field">
         <label class="ad-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
           <input type="checkbox" id="nt-published" checked>

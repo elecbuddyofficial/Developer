@@ -47,6 +47,15 @@ import sys
 import time
 import urllib.request
 
+# The Windows console is cp1252, and page text is not. A finding whose snippet
+# contained an emoji crashed the whole report with UnicodeEncodeError, so the
+# run failed at the moment it had something to say. Replace what cannot be
+# encoded rather than lose the finding.
+try:
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+except Exception:
+    pass
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SHOTS = os.path.join(ROOT, '_visual-shots')
 PORT = 8123
@@ -133,11 +142,33 @@ SCREENS = {
                  'open': "openProfile(); showProfilePane('main')"},
     'profnotif':{'file': 'index.html',   'view': 'view-welcome',
                  'open': "openProfile(); showProfilePane('notif')"},
+    # The forced sponsorship notice. Hard blocking, so if it renders wrong in a
+    # palette a reader is stuck looking at it with no way past.
+    'spforced': {'file': 'sponsorship/index.html', 'view': None, 'open': """
+        (() => {
+          _spShowForced([
+            { id:'a', company:'Synergy Marine Group', course:'ETO',
+              opens_on:'2026-08-01', closes_on:'2026-09-30',
+              link:'https://example.com/apply',
+              note:'Sponsorship for ETO cadets, 2027 intake. Written test followed by an interview.' },
+            { id:'b', company:'Anglo Eastern', course:'GME',
+              opens_on:'2026-08-15', closes_on:null,
+              link:'https://example.com/apply2',
+              note:'Rolling intake, closing date not announced.' }
+          ]);
+        })()"""},
     'courses':  {'file': 'courses.html', 'view': None},
     'auth':     {'file': 'auth.html',    'view': None},
 }
 
-REDIRECT = "window.location.replace('./auth.html');"
+# Both spellings. index.html and courses.html sit beside auth.html and use
+# './auth.html'; sponsorship/index.html is a directory deeper and uses
+# '../auth.html'. Matching only the first sent every sponsorship run to the
+# sign-in page, and the screen then reported "function is not defined" for a
+# function that was never loaded, which reads like a code fault rather than a
+# harness one.
+REDIRECTS = ["window.location.replace('./auth.html');",
+             "window.location.replace('../auth.html');"]
 SUPPRESS = "console.warn('[visual] auth redirect suppressed');"
 
 # app.js runs startGuide() on a first visit, and the onboarding modal then sits
@@ -280,7 +311,11 @@ def patched_html(fname):
     html = open(os.path.join(ROOT, 'app', fname), encoding='utf-8').read()
     if fname == 'auth.html':
         return html, 0
-    return html.replace(REDIRECT, SUPPRESS), html.count(REDIRECT)
+    n = 0
+    for r in REDIRECTS:
+        n += html.count(r)
+        html = html.replace(r, SUPPRESS)
+    return html, n
 
 
 def make_server(body):

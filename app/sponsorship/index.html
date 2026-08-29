@@ -16,9 +16,16 @@
     --blue-dim:rgba(245,158,11,.14);
     --blue-border:rgba(245,158,11,.40);
   }
-  /* Light theme: keep amber accent on white */
+  /* Light theme: keep the amber accent on white.
+
+     #D97706 was too light to carry text on its own dim background: the active
+     sidebar label and the selected theme button both measured 2.80:1 against a
+     4.5 floor. #A25905 is the same hue and is what style.css already uses for
+     --orange in the light palette, so this now matches the CoC app's light
+     amber rather than inventing a second one. The dim and border keep the
+     lighter tint, because those are backgrounds and never carry text. */
   [data-theme="light"] {
-    --blue:#D97706;
+    --blue:#A25905;
     --blue-dim:rgba(217,119,6,.12);
     --blue-border:rgba(217,119,6,.35);
   }
@@ -238,6 +245,41 @@
     .tnav-btn.is-next { text-align:left;align-items:flex-start }
   }
   .nt-list { display:flex;flex-direction:column;gap:12px;margin-top:4px }
+
+  /* Forced sponsorship notice. Orange is the Sponsorship colour; the CoC app
+     is blue. --on-accent on the button because --orange inverts between the
+     palettes and a fixed dark label would vanish in one of them. */
+  #spf-back { position:fixed; inset:0; z-index:10060; display:flex;
+    align-items:center; justify-content:center; padding:20px;
+    background:rgba(0,0,0,.66); backdrop-filter:blur(3px); overflow-y:auto; }
+  #spf-back[hidden] { display:none; }
+  .spf-card { width:100%; max-width:460px; max-height:88vh; margin:auto 0;
+    display:flex; flex-direction:column; background:var(--surface);
+    border:1px solid var(--border2); border-radius:14px; overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.55); }
+  .spf-head { padding:18px 20px 0; }
+  .spf-title { font-size:17px; font-weight:800; color:var(--text); }
+  .spf-sub { font-size:12.5px; color:var(--text3); margin-top:5px; line-height:1.55; }
+  .spf-list { padding:14px 20px 4px; overflow-y:auto; }
+  .spf-item { border:1px solid var(--border); background:var(--surface2);
+    border-radius:10px; padding:13px 15px; margin-bottom:10px; }
+  .spf-top { display:flex; align-items:center; gap:8px; }
+  .spf-co { flex:1; min-width:0; font-size:14px; font-weight:700; color:var(--text); }
+  .spf-course { flex-shrink:0; font-size:9.5px; font-weight:700; letter-spacing:.4px;
+    padding:1.5px 6px; border-radius:100px; background:var(--surface3); color:var(--text2); }
+  .spf-pill { display:inline-block; margin-top:7px; font-size:9.5px; font-weight:800;
+    letter-spacing:.4px; text-transform:uppercase; padding:2px 7px; border-radius:100px;
+    background:transparent; border:1px solid currentColor; }
+  .spf-green { color:var(--green); } .spf-amber { color:var(--orange); } .spf-red { color:var(--red); }
+  .spf-window { font-size:11.5px; color:var(--text3); margin-top:7px; }
+  .spf-note { font-size:12.5px; color:var(--text2); margin-top:7px; line-height:1.55; }
+  .spf-apply { display:inline-block; margin-top:10px; font-size:12.5px; font-weight:700;
+    color:var(--orange); text-decoration:underline; text-underline-offset:2px; }
+  .spf-foot { padding:12px 20px 18px; margin-top:auto; }
+  .spf-btn { width:100%; min-height:46px; background:var(--orange); color:var(--on-accent);
+    border:none; border-radius:9px; font-size:14px; font-weight:700; cursor:pointer;
+    font-family:inherit; }
+  .spf-btn:hover { filter:brightness(.94); }
   .nt-card {
     background:var(--surface);border:1px solid var(--border2);border-left:4px solid var(--nt-accent,var(--green));
     border-radius:var(--r12,12px);padding:16px 18px;display:flex;flex-direction:column;gap:8px
@@ -655,13 +697,21 @@ window._authReady = (async () => {
         </div>
       </div>
 
-      <div class="section-card" onclick="showNotifications()" style="--sc-color:#38bdf8;--sc-dim:rgba(56,189,248,.12);--sc-border:rgba(56,189,248,.35);--sc-glow:rgba(56,189,248,.18);--sc-drop:rgba(56,189,248,.6)">
+      <!-- --cyan rather than a fixed #38bdf8. A literal cannot follow the
+           theme, and that sky blue on its own 12% tint measured 1.95:1 in the
+           light palette, the worst pair on this page. --cyan is #06b6d4 dark
+           and #06758F light, so the badge stays legible in both. The glow and
+           drop stay literal: they are shadows, not text. -->
+      <div class="section-card" onclick="showNotifications()" style="--sc-color:var(--cyan);--sc-dim:var(--cyan-dim);--sc-border:rgba(56,189,248,.35);--sc-glow:rgba(56,189,248,.18);--sc-drop:rgba(56,189,248,.6)">
         <div class="sc-stripe" style="background:#38bdf8"></div>
         <div class="sc-icon"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg></div>
         <h3>Notifications</h3>
         <p>Registration deadlines, new company Q&amp;A drops, exam date reminders, and sponsorship alerts for ETO cadets.</p>
         <div class="sc-meta">
-          <span class="sc-badge" style="background:rgba(56,189,248,.12);border-color:rgba(56,189,248,.35);color:#38bdf8">Stay Updated</span>
+          <!-- Was a literal #38bdf8 on its own 12% tint: 1.95:1 in the light
+               palette, the worst pair on this page and unreadable. --cyan is
+               themed (#06b6d4 dark, #06758F light) so it follows. -->
+          <span class="sc-badge" style="background:var(--cyan-dim);border-color:rgba(56,189,248,.35);color:var(--cyan)">Stay Updated</span>
           <span class="sc-arrow">→</span>
         </div>
       </div>
@@ -1853,6 +1903,132 @@ function _ntEmpty(head, body) {
        + '<h3>' + head + '</h3><p>' + body + '</p></div>';
 }
 
+
+/* ── Forced sponsorship notice ──────────────────────────────────────────────
+   A sponsorship window is time critical: miss it and the cadet waits for the
+   next intake. The notices list can be scrolled past, so anything a reader has
+   not acknowledged is put in front of them when they open this app.
+
+   HARD BLOCK, and deliberately so. No close cross, no backdrop click, no Esc.
+   The one button is the only way out, and pressing it is what records the
+   read. This is the only modal in either app that does not accept Esc, because
+   a missed intake is not recoverable the way a missed feature notice is.
+
+   Acknowledgement is per reader per notice in sponsorship_notice_reads, so it
+   survives a new device. Where that table has not been applied yet the code
+   falls back to localStorage, which is per device: the reader is asked once
+   per browser rather than once, which is worse but not broken. Same shape as
+   nfQuery's fallback in the CoC app, and for the same reason: the client has
+   to be safe to ship before or after the SQL.
+   ───────────────────────────────────────────────────────────────────────── */
+var SP_FORCED_KEY = 'eb_sp_notice_seen';
+var _spForcedQueue = [];
+
+function _spSeenLocal() {
+  try { return JSON.parse(localStorage.getItem(SP_FORCED_KEY) || '[]'); } catch (e) { return []; }
+}
+function _spSeenLocalAdd(ids) {
+  try {
+    var have = _spSeenLocal();
+    ids.forEach(function (id) { if (have.indexOf(id) === -1) have.push(id); });
+    // Keep it bounded. A reader who has been here two years does not need
+    // every notice id they ever dismissed.
+    localStorage.setItem(SP_FORCED_KEY, JSON.stringify(have.slice(-200)));
+  } catch (e) {}
+}
+
+/* Which open notices has this reader not acknowledged. */
+async function _spUnacknowledged(sb) {
+  var today = _ntToday();
+  var res = await sb.from('sponsorship_notices')
+    .select('id, company, link, opens_on, closes_on, course, note')
+    .eq('is_published', true)
+    .or('closes_on.is.null,closes_on.gte.' + today)
+    .order('closes_on', { ascending: true, nullsFirst: false })
+    .limit(20);
+  if (res.error || !res.data) return [];
+
+  // Only what is live now. A notice that opens next month is news, not an
+  // interruption, and it will be forced when it actually opens.
+  var live = res.data.filter(function (n) { return n.opens_on <= today; });
+  if (!live.length) return [];
+
+  var seen = {};
+  var rd = await sb.from('sponsorship_notice_reads').select('notice_id');
+  if (rd.error) {
+    // Table not applied yet. Per device, until it is.
+    _spSeenLocal().forEach(function (id) { seen[id] = 1; });
+  } else {
+    (rd.data || []).forEach(function (r) { seen[r.notice_id] = 1; });
+  }
+  return live.filter(function (n) { return !seen[n.id]; });
+}
+
+function _spForcedHtml(n) {
+  var st = _ntState(n) || { tone: 'green', label: 'Open' };
+  return '<div class="spf-item">'
+    + '<div class="spf-top">'
+    +   '<span class="spf-co">' + _ntEsc(n.company) + '</span>'
+    +   '<span class="spf-course">' + _ntEsc(n.course || 'ETO') + '</span>'
+    + '</div>'
+    + '<div class="spf-pill spf-' + st.tone + '">' + _ntEsc(st.label) + '</div>'
+    + '<div class="spf-window">' + _ntDate(n.opens_on)
+    +   (n.closes_on ? ' to ' + _ntDate(n.closes_on) : ' onwards, closing date not announced')
+    + '</div>'
+    + (n.note ? '<div class="spf-note">' + _ntEsc(n.note) + '</div>' : '')
+    + '<a class="spf-apply" href="' + _ntEsc(n.link) + '" target="_blank" rel="noopener noreferrer">'
+    +   'Open the company page</a>'
+    + '</div>';
+}
+
+function _spShowForced(list) {
+  if (!list || !list.length) return;
+  _spForcedQueue = list;
+  var back = document.getElementById('spf-back');
+  if (!back) return;
+  document.getElementById('spf-sub').textContent = list.length === 1
+    ? 'One sponsorship window is open.'
+    : list.length + ' sponsorship windows are open.';
+  document.getElementById('spf-list').innerHTML = list.map(_spForcedHtml).join('');
+  back.hidden = false;
+  document.documentElement.classList.add('_modal-open');
+}
+
+/* The only way out. Records every notice that was on screen. */
+function spAckForced() {
+  var ids = _spForcedQueue.map(function (n) { return n.id; });
+  _spForcedQueue = [];
+  var sb = window._sbClient;
+  if (sb) {
+    ids.forEach(function (id) {
+      // Fire and forget: a failed write must never trap a reader in a modal
+      // that has no other exit.
+      sb.rpc('mark_sponsorship_notice_read', { p_id: id }).then(function () {}, function () {});
+    });
+  }
+  // Always write the local copy too, so a reader is not asked twice while the
+  // table is still unapplied or if the RPC quietly fails.
+  _spSeenLocalAdd(ids);
+  var back = document.getElementById('spf-back');
+  if (back) back.hidden = true;
+  document.documentElement.classList.remove('_modal-open');
+}
+window.spAckForced = spAckForced;
+
+async function spMaybeForceNotices() {
+  var sb = window._sbClient;
+  if (!sb || !window._sbUser) return;
+  try {
+    var list = await _spUnacknowledged(sb);
+    if (list.length) _spShowForced(list);
+  } catch (e) {
+    // Never let this stop the app loading. A sponsorship notice is an
+    // addition to the page, not a precondition for it.
+    console.warn('sponsorship notice check failed:', e);
+  }
+}
+window.spMaybeForceNotices = spMaybeForceNotices;
+
 async function loadSponsorshipNotices() {
   var box = document.getElementById('nt-list');
   if (!box) return;
@@ -2709,6 +2885,10 @@ window.addEventListener('DOMContentLoaded', function(){
   else if (hash === 'aptitude-hub')      { showAptitudeHub(); }
   else if (hash === 'study-hub')         { showStudyHub(); }
   else { showHome(); }
+  /* After routing, so the modal lands on top of whatever view the hash chose.
+     Delayed a little because the auth block in <head> resolves _sbUser
+     asynchronously, and this needs a session to know who has seen what. */
+  setTimeout(function () { if (window.spMaybeForceNotices) spMaybeForceNotices(); }, 1200);
 });
 window.addEventListener('popstate', function(){
   var hash = location.hash.substring(1);
@@ -3260,5 +3440,20 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotifs(); });
   checkNotifsUnread();
 </script>
+<!-- Forced sponsorship notice. No close cross and no backdrop handler on
+     purpose: the button is the only exit. See spAckForced(). -->
+<div id="spf-back" hidden role="dialog" aria-modal="true" aria-labelledby="spf-title">
+  <div class="spf-card">
+    <div class="spf-head">
+      <div class="spf-title" id="spf-title">Sponsorship is open</div>
+      <div class="spf-sub" id="spf-sub"></div>
+    </div>
+    <div class="spf-list" id="spf-list"></div>
+    <div class="spf-foot">
+      <button type="button" class="spf-btn" onclick="spAckForced()">Got it</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
