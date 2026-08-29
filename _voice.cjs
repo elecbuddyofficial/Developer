@@ -36,15 +36,37 @@ const TELLS = [
 ];
 
 const only = process.argv[2];
-const DIRS = ['overview', 'fundamentals', 'aptitude', 'datainterp', 'entrancetest', 'interview', 'CompanyQA']
-  .filter(d => !only || d === only);
+/* Every content group, not just Sponsorship.
+
+   This scanned data/Sponsorship and nothing else, with the path hardcoded on
+   the line that used to be here. So the Oral course, which is 23 topics and
+   the largest thing this app sells, and the whole Written course had never
+   been checked for voice at all. Worse, a clean run looked like proof: work
+   added to a T-topic came back "not flagged" because the file was never in
+   scope, and that was read as evidence it was clean. Found 29 Aug 2026.
+
+   Backup/ is skipped: it is a plaintext working copy of the Oral notes, so
+   scanning it would double every finding. */
+const GROUPS = [
+  ['data/Sponsorship', ['overview', 'fundamentals', 'aptitude', 'datainterp',
+                        'entrancetest', 'interview', 'CompanyQA']],
+  ['data/Orals',       ['notes', 'SurveyorQA']],
+  ['data/Written',     ['notes', '']],
+];
 
 let rows = [];
-for (const d of DIRS) {
-  const full = path.join(__dirname, 'data/Sponsorship', d);
-  if (!fs.existsSync(full)) continue;
-  for (const f of fs.readdirSync(full).filter(x => x.endsWith('.js'))) {
-    const rel = 'data/Sponsorship/' + d + '/' + f;
+const targets = [];
+for (const [base, subs] of GROUPS) {
+  for (const d of subs) {
+    if (only && d !== only && base.split('/').pop() !== only) continue;
+    const rel = d ? base + '/' + d : base;
+    const full = path.join(__dirname, rel);
+    if (!fs.existsSync(full)) continue;
+    for (const f of fs.readdirSync(full).filter(x => x.endsWith('.js'))) targets.push(rel + '/' + f);
+  }
+}
+{
+  for (const rel of targets) {
     const raw = fs.readFileSync(path.join(__dirname, rel), 'utf8').trim();
     let src;
     try { src = /^\{"v":1,/.test(raw) ? decrypt(raw) : raw; } catch (e) { continue; }
@@ -62,7 +84,7 @@ rows.sort((a, b) => b.per1k - a.per1k);
 console.log('\nfile'.padEnd(50) + 'words   tells  per 1k words');
 console.log('-'.repeat(86));
 for (const r of rows) {
-  console.log(r.rel.replace('data/Sponsorship/', '').padEnd(50) +
+  console.log(r.rel.replace('data/', '').padEnd(50) +
     String(r.words).padStart(5) + String(r.total).padStart(7) + r.per1k.toFixed(1).padStart(9) +
     '   ' + r.hits.map(h => h[0] + ' ' + h[1]).join(', '));
 }
