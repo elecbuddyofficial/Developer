@@ -3308,7 +3308,10 @@ function _section(id) {
   if (/^T\d/.test(id)) return 'oral';
   if (/^W\d/.test(id)) return 'written';
   if (id === 'ALL') return 'oral';               // Surveyor Q&A, question bank
-  if (/^(F\d|A\d|IP\d|S00|APT|CA)/.test(id)) return 'sponsorship';
+  // DI (Data Interpretation) and ET (Entrance Test) were missing here, so 13
+  // of the 77 Sponsorship modules classified as 'other' and were filtered out
+  // of every course-scoped view, the dashboard engagement panel included.
+  if (/^(F\d|A\d|IP\d|DI\d|ET\d|S00|APT|CA)/.test(id)) return 'sponsorship';
   return 'other';
 }
 
@@ -4385,7 +4388,7 @@ var _userFilter = 'all';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, last_active_at')
+    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at')
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -4644,7 +4647,19 @@ async function renderProfProgress(u) {
     if (r.kind === 'notes') times[r.topic_id] = r;
     else extras.push(r);
   });
-  var tp = u.topic_progress || {};
+  /* BOTH columns. The two courses write progress to two different columns
+     because each is saved as a whole object and they would otherwise clobber
+     each other. This read only the COC one, so a reader who had worked
+     through Sponsorship showed here as having read nothing: the data was in
+     profiles the whole time, one column across. Keys cannot collide (T/W
+     against F, A, IP, DI, ET, S00, APT, CA), so a plain merge is safe. */
+  var tp = {};
+  [u.topic_progress, u.sponsorship_progress].forEach(function (src) {
+    if (src && typeof src === 'object') {
+      Object.keys(src).forEach(function (k) { tp[k] = src[k]; });
+    }
+  });
+  var names = topicNameMap();
   var keys = {};
   Object.keys(tp).forEach(function (k) { if (typeof tp[k] === 'number' && tp[k] > 0) keys[k] = 1; });
   Object.keys(times).forEach(function (k) { keys[k] = 1; });
@@ -4705,9 +4720,9 @@ async function renderProfProgress(u) {
         // own time, so the time read as belonging to the next row down.
         return '<div class="prof-topic-row">'
           + '<div style="display:flex;align-items:center;gap:9px">'
-          +   '<span style="font-size:11px;font-weight:700;color:var(--text3);width:32px;flex-shrink:0">' + esc(k) + '</span>'
+          +   '<span style="font-size:11px;font-weight:700;color:var(--text3);min-width:32px;flex-shrink:0">' + esc(k) + '</span>'
           +   '<span style="flex:1;min-width:0;font-size:12.5px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'
-          +     esc(TOPIC_NAMES[k] || k) + '</span>'
+          +     esc(names[k] || TOPIC_NAMES[k] || k) + '</span>'
           +   '<span style="width:58px;height:5px;background:var(--border2);border-radius:99px;overflow:hidden;flex-shrink:0">'
           +     '<span style="display:block;height:100%;width:' + Math.max(pct, 2) + '%;background:' + col + '"></span></span>'
           +   '<span style="width:36px;text-align:right;font-size:11.5px;font-variant-numeric:tabular-nums;color:' + col + ';font-weight:700;flex-shrink:0">' + pct + '%</span>'
@@ -6958,35 +6973,114 @@ async function removeAdmin(id, email) {
 /* ── CONTENT STATUS BOARD ────────────────────────────────────────── */
 function buildStatusBoard() {
   // Exposed so the engagement panel can resolve topic ids to readable names.
+  /* GENERATED FROM app/sponsorship/index.html — the SECTIONS object there is
+     the source of truth for what the course actually contains.
+
+     This was a hand-kept second copy and it had drifted badly. It listed 20
+     modules against the app's 77, and 18 of those 20 carried the WRONG NAME:
+     the ids were reassigned when the course was restructured and this copy
+     was never moved with them, so F08 read "Switchgear & Control" here while
+     the module a reader actually opens is "Three-Phase System". It also had
+     F03-F12 as notesReady:false when all 25 Fundamentals modules are written,
+     so the Content Status board reported the course as barely started.
+
+     Nothing was checking it. It feeds the Content Status board, the dashboard
+     engagement panel and now the reader drawer, and all three were confidently
+     wrong rather than blank, which is worse. If the course changes, regenerate
+     this from that file rather than editing it by hand.
+     Regenerated 30 Aug 2026: 77 modules across 7 sections. */
   var SECTIONS = window._SECTIONS = [
-    { label: 'Overview', topics: [
-      { id:'S00', name:'Overview', notesReady:true, free:true }
+    { label: "Overview", topics: [
+      { id:'S00', name:"ETO Cadetship Overview", notesReady:true, free:true }
     ]},
-    { label: 'Fundamentals', topics: [
-      { id:'F01', name:'Basic Electrical Theory', notesReady:true, free:true },
-      { id:'F02', name:'Electrical Safety & Earthing', notesReady:true, free:false },
-      { id:'F03', name:'Wiring Systems', notesReady:false, free:false },
-      { id:'F04', name:'Protection Devices', notesReady:false, free:false },
-      { id:'F05', name:'Power & Energy', notesReady:false, free:false },
-      { id:'F06', name:'Transformers', notesReady:false, free:false },
-      { id:'F07', name:'Motors & Starters', notesReady:false, free:false },
-      { id:'F08', name:'Switchgear & Control', notesReady:false, free:false },
-      { id:'F09', name:'Cables & Conductors', notesReady:false, free:false },
-      { id:'F10', name:'Lighting & Illumination', notesReady:false, free:false },
-      { id:'F11', name:'Power Factor Correction', notesReady:false, free:false },
-      { id:'F12', name:'Earthing Systems', notesReady:false, free:false },
+    { label: "Fundamentals", topics: [
+      { id:'F01', name:"Basic Electrical Fundamentals", notesReady:true, free:true },
+      { id:'F02', name:"Electrical Safety & Earthing", notesReady:true, free:false },
+      { id:'F03', name:"Components & Materials", notesReady:true, free:false },
+      { id:'F04', name:"Electrical Power", notesReady:true, free:false },
+      { id:'F05', name:"Electromagnetism & Generation", notesReady:true, free:false },
+      { id:'F06', name:"Transformers", notesReady:true, free:false },
+      { id:'F07', name:"Electrical Machines", notesReady:true, free:false },
+      { id:'F08', name:"Three-Phase System", notesReady:true, free:false },
+      { id:'F09', name:"Induction Motors", notesReady:true, free:false },
+      { id:'F10', name:"DC Motors", notesReady:true, free:false },
+      { id:'F11', name:"Motor Starting", notesReady:true, free:false },
+      { id:'F12', name:"Motor Protection", notesReady:true, free:false },
+      { id:'F13', name:"Electrical Protection", notesReady:true, free:false },
+      { id:'F14', name:"Measuring Instruments", notesReady:true, free:false },
+      { id:'F15', name:"Insulation Testing", notesReady:true, free:false },
+      { id:'F16', name:"Power Electronics", notesReady:true, free:false },
+      { id:'F17', name:"Basic Electronics", notesReady:true, free:false },
+      { id:'F18', name:"Sensors & Transducers", notesReady:true, free:false },
+      { id:'F19', name:"Batteries, UPS & Lighting", notesReady:true, free:false },
+      { id:'F20', name:"Cables, Wiring & Drawings", notesReady:true, free:false },
+      { id:'F21', name:"Marine Automation Basics", notesReady:true, free:false },
+      { id:'F22', name:"Refrigeration", notesReady:true, free:false },
+      { id:'F23', name:"Electrical Losses", notesReady:true, free:false },
+      { id:'F24', name:"Marine Electrical Systems", notesReady:true, free:false },
+      { id:'F25', name:"Practical Engineering Questions", notesReady:true, free:false }
     ]},
-    { label: 'Aptitude', topics: [
-      { id:'A01', name:'Number Systems', notesReady:false, free:false },
-      { id:'A02', name:'Algebra', notesReady:false, free:false },
-      { id:'A03', name:'Time & Work', notesReady:false, free:false },
-      { id:'A04', name:'Ratio & Proportion', notesReady:false, free:false },
+    { label: "Aptitude", topics: [
+      { id:'APT', name:"Aptitude Test Strategy", notesReady:true, free:true },
+      { id:'A01', name:"Problems on Trains", notesReady:true, free:true },
+      { id:'A02', name:"Time and Distance", notesReady:true, free:false },
+      { id:'A03', name:"Height and Distance", notesReady:true, free:false },
+      { id:'A04', name:"Time and Work", notesReady:true, free:false },
+      { id:'A05', name:"Simple Interest", notesReady:true, free:false },
+      { id:'A06', name:"Compound Interest", notesReady:true, free:false },
+      { id:'A07', name:"Profit and Loss", notesReady:true, free:false },
+      { id:'A08', name:"Partnership", notesReady:true, free:false },
+      { id:'A09', name:"Percentage", notesReady:true, free:false },
+      { id:'A10', name:"Problems on Ages", notesReady:true, free:false },
+      { id:'A11', name:"Calendar", notesReady:true, free:false },
+      { id:'A12', name:"Clock", notesReady:true, free:false },
+      { id:'A13', name:"Average", notesReady:true, free:false },
+      { id:'A14', name:"Area", notesReady:true, free:false },
+      { id:'A15', name:"Volume and Surface Area", notesReady:true, free:false },
+      { id:'A16', name:"Permutation and Combination", notesReady:true, free:false },
+      { id:'A17', name:"Numbers", notesReady:true, free:false },
+      { id:'A18', name:"Problems on Numbers", notesReady:true, free:false },
+      { id:'A19', name:"Problems on H.C.F and L.C.M", notesReady:true, free:false },
+      { id:'A20', name:"Decimal Fraction", notesReady:true, free:false },
+      { id:'A21', name:"Simplification", notesReady:true, free:false },
+      { id:'A22', name:"Square Root and Cube Root", notesReady:true, free:false },
+      { id:'A23', name:"Surds and Indices", notesReady:true, free:false },
+      { id:'A24', name:"Ratio and Proportion", notesReady:true, free:false },
+      { id:'A25', name:"Chain Rule", notesReady:true, free:false },
+      { id:'A26', name:"Pipes and Cistern", notesReady:true, free:false },
+      { id:'A27', name:"Boats and Streams", notesReady:true, free:false },
+      { id:'A28', name:"Alligation or Mixture", notesReady:true, free:false },
+      { id:'A29', name:"Logarithm", notesReady:true, free:false },
+      { id:'A30', name:"Races and Games", notesReady:true, free:false },
+      { id:'A31', name:"Stocks and Shares", notesReady:true, free:false },
+      { id:'A32', name:"Probability", notesReady:true, free:false }
     ]},
-    { label: 'Interview Prep', topics: [
-      { id:'IP01', name:'HR Questions', notesReady:false, free:false },
-      { id:'IP02', name:'Technical Questions', notesReady:false, free:false },
-      { id:'IP03', name:'Group Discussion', notesReady:false, free:false },
+    { label: "Data Interpretation", topics: [
+      { id:'DI01', name:"Table Charts", notesReady:true, free:true },
+      { id:'DI02', name:"Bar Charts", notesReady:true, free:false },
+      { id:'DI03', name:"Pie Charts", notesReady:true, free:false },
+      { id:'DI04', name:"Line Graphs", notesReady:true, free:false }
     ]},
+    { label: "Entrance Test", topics: [
+      { id:'ET01', name:"Circuit Theorems & AC Analysis", notesReady:true, free:true },
+      { id:'ET02', name:"Electromagnetic Field Theory", notesReady:true, free:false },
+      { id:'ET03', name:"Signals & Systems", notesReady:true, free:false },
+      { id:'ET04', name:"Power Systems Analysis", notesReady:true, free:false },
+      { id:'ET05', name:"Control Systems", notesReady:true, free:false },
+      { id:'ET06', name:"English & Verbal Ability", notesReady:true, free:false },
+      { id:'ET07', name:"Reasoning: Abstract, Spatial & Logical", notesReady:true, free:false },
+      { id:'ET08', name:"Digital Electronics", notesReady:true, free:false },
+      { id:'ET09', name:"Analog Electronics & Microprocessors", notesReady:true, free:false }
+    ]},
+    { label: "Maritime News", topics: [
+      { id:'CA', name:"Maritime News", notesReady:true, free:false }
+    ]},
+    { label: "Interview Prep", topics: [
+      { id:'IP01', name:"The Selection Process", notesReady:true, free:true },
+      { id:'IP02', name:"HR Interview", notesReady:true, free:false },
+      { id:'IP03', name:"Body Language & Presentation", notesReady:true, free:false },
+      { id:'IP04', name:"Common Mistakes", notesReady:true, free:false }
+    ]}
   ];
 
   var html = '';
