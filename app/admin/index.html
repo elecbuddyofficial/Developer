@@ -1037,8 +1037,9 @@
       color:var(--text); border-radius:var(--r8); padding:9px 11px; margin:8px 0;
       font-size:12.5px; line-height:1.55; }
     @media (max-width:640px) { .lx-form { grid-template-columns:1fr; } }
-    #apr-switch { flex-wrap: wrap; }
-    #apr-switch .acs-btn { flex: 1 1 auto; min-width: 96px; }
+    #apr-switch, .ad-pane-switch { flex-wrap: wrap; }
+    #apr-switch .acs-btn,
+    .ad-pane-switch .acs-btn { flex: 1 1 auto; min-width: 96px; }
     .apr-pane[hidden] { display: none; }
     .ad-course-switch {
       display: flex; gap: 4px; padding: 3px;
@@ -1074,6 +1075,17 @@
       .acs-btn { padding: 7px 2px; font-size: 10.5px; letter-spacing: .3px; }
       .acs-long { display: none; }
       .acs-short { display: inline; }
+
+      /* The column rule above exists for the COURSE switch, which is stacked
+         into the 58px rail. Pane switches wear the same clothes but live in
+         the content column, where stacking spends about 130px of vertical
+         space on four buttons before a phone shows any content. They wrap
+         into rows instead. Approvals is included: it is the switch all the
+         others were copied from, and it has been stacking the same way. */
+      #apr-switch,
+      .ad-pane-switch { flex-direction: row; flex-wrap: wrap; gap: 4px; padding: 3px; }
+      #apr-switch .acs-btn,
+      .ad-pane-switch .acs-btn { padding: 8px 6px; font-size: 11px; letter-spacing: 0; }
       /* Stacked in the 58px rail, a transparent inactive button sits under a
          filled active one and reads as its caption rather than as the other
          half of a switch. Side by side the group's own border carries that
@@ -1723,6 +1735,16 @@
       <p>Where people stop on the way to paying, and who stopped there.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="funnel-switch" style="max-width:520px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="upgrade" onclick="showAdminPane('funnel','upgrade')">Upgrade funnel <span id="funnel-c-upgrade"></span></button>
+      <button class="acs-btn" data-pane="why" onclick="showAdminPane('funnel','why')">Why not buy <span id="funnel-c-why"></span></button>
+      <button class="acs-btn" data-pane="where" onclick="showAdminPane('funnel','where')">Who is where <span id="funnel-c-where"></span></button>
+    </div>
+
+    <div class="adp" id="funnel-pane-upgrade">
     <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Upgrade funnel</div>
       <div class="ad-card-sub">
@@ -1737,7 +1759,9 @@
       <div id="funnel-body"><div class="ad-loading">Loading...</div></div>
       <div id="funnel-problems" style="margin-top:12px"></div>
     </div>
+    </div>
 
+    <div class="adp" id="funnel-pane-why" hidden>
     <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Why they did not buy</div>
       <div class="ad-card-sub">
@@ -1750,7 +1774,9 @@
       <div id="pwf-body"><div class="ad-loading">Loading...</div></div>
       <div id="pwf-notes" style="margin-top:14px"></div>
     </div>
+    </div>
 
+    <div class="adp" id="funnel-pane-where" hidden>
     <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Who is where</div>
       <div class="ad-card-sub">
@@ -1791,7 +1817,8 @@
       </div>
       <div id="fbu-list"><div class="ad-loading">Loading...</div></div>
     </div>
-  </div>
+    </div>
+</div>
 
   <div class="ad-tab" id="tab-online">
     <div class="ad-ph">
@@ -1883,6 +1910,16 @@
       <p>Broadcast messages visible to all users inside the app.</p>
     </div>
 
+    <!-- Same switch as #apr-switch on the Approvals tab. The composer and the
+         sent list were stacked, so reading what went out meant scrolling past
+         the whole form every time. The count rides the label, which is the one
+         thing the stacked layout did give you for free. -->
+    <div class="ad-course-switch ad-pane-switch" id="notifications-switch" style="max-width:420px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="compose" onclick="showAdminPane('notifications','compose')">Compose <span id="notifications-c-compose"></span></button>
+      <button class="acs-btn"        data-pane="sent"    onclick="showAdminPane('notifications','sent')">Sent <span id="notifications-c-sent"></span></button>
+    </div>
+
+    <div class="adp" id="notifications-pane-compose">
     <div class="ad-card">
       <div class="ad-card-head">New Notification</div>
       <div class="ad-card-sub">Appears immediately in the Notifications section for every logged-in user.</div>
@@ -1979,10 +2016,13 @@
         Send to All Users
       </button>
     </div>
+    </div>
 
-    <div class="ad-section-head">Sent Notifications</div>
-    <div class="ad-table-wrap" id="notif-list">
-      <div class="ad-loading">Loading...</div>
+    <div class="adp" id="notifications-pane-sent" hidden>
+      <div class="ad-section-head">Sent Notifications</div>
+      <div class="ad-table-wrap" id="notif-list">
+        <div class="ad-loading">Loading...</div>
+      </div>
     </div>
   </div>
 
@@ -1993,6 +2033,15 @@
       <p>Manage who has access to this admin panel.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="admins-switch" style="max-width:520px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('admins','add')">Add Admin<span id="admins-c-add"></span></button>
+      <button class="acs-btn" data-pane="current" onclick="showAdminPane('admins','current')">Current Admins<span id="admins-c-current"></span></button>
+    </div>
+
+    <div class="adp" id="admins-pane-add">
     <div class="ad-card">
       <div class="ad-card-head">Add Admin</div>
       <div class="ad-card-sub">The person must already have an account in the app before you can grant them admin access.</div>
@@ -2008,7 +2057,9 @@
       </div>
       <div id="add-admin-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
     </div>
+    </div>
 
+    <div class="adp" id="admins-pane-current" hidden>
     <div class="ad-section-head">Current Admins</div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -2017,6 +2068,7 @@
         </tr></thead>
         <tbody id="admins-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
       </table>
+    </div>
     </div>
   </div>
 
@@ -2032,6 +2084,15 @@
       <p>Application windows shown to cadets in the Sponsorship app. Open ones come first, expired ones drop off on their own.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="notices-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('notices','add')">Add Notice <span id="notices-c-add"></span></button>
+      <button class="acs-btn" data-pane="all" onclick="showAdminPane('notices','all')">All Notices <span id="notices-c-all"></span></button>
+    </div>
+
+    <div class="adp" id="notices-pane-add">
     <div class="ad-card">
       <div class="ad-card-head" id="nt-form-head">Add Notice</div>
       <div class="ad-card-sub" id="nt-form-sub">The link is what a cadet actually applies through, so point it at the company's own page rather than a summary of it.</div>
@@ -2094,7 +2155,9 @@
         <button class="ad-btn" id="nt-cancel" onclick="cancelNoticeEdit()" style="display:none">Cancel</button>
       </div>
     </div>
+    </div>
 
+    <div class="adp" id="notices-pane-all" hidden>
     <div class="ad-section-head">All Notices</div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -2104,7 +2167,8 @@
         <tbody id="nt-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
-  </div>
+    </div>
+</div>
 
   <!-- MOCK INTERVIEWS ─────────────────────────────────────────
        The first thing sold here that is not course access, so it has its own
@@ -2120,6 +2184,15 @@
       <p>Questions from the sitting running right now. They appear on the Oral section home page for as long as the sitting is open, then stop on their own. Nothing here needs a deploy.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="liveexam-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="sittings" onclick="showAdminPane('liveexam','sittings')">Sittings <span id="liveexam-c-sittings"></span></button>
+      <button class="acs-btn" data-pane="questions" onclick="showAdminPane('liveexam','questions')">Questions <span id="liveexam-c-questions"></span></button>
+    </div>
+
+    <div class="adp" id="liveexam-pane-sittings">
     <div class="ad-card" style="margin-bottom:16px">
       <div class="ad-card-head">Sittings</div>
       <div class="ad-card-sub">A sitting is one exam window: usually 3 to 7 days. The feed is live only while today falls inside it, so you never have to remember to switch it off.</div>
@@ -2141,7 +2214,9 @@
       </div>
       <div id="lx-sittings" style="margin-top:14px"><div class="ad-loading">Loading...</div></div>
     </div>
+    </div>
 
+    <div class="adp" id="liveexam-pane-questions" hidden>
     <div class="ad-card">
       <div class="ad-card-head">Questions</div>
       <div class="ad-card-sub" id="lx-q-sub">Pick a sitting above to add questions to it.</div>
@@ -2185,7 +2260,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+</div>
 
   <div class="ad-tab" id="tab-mock">
     <div class="ad-ph">
@@ -2193,6 +2269,17 @@
       <p>One cadet per slot. A booked slot disappears from the app on its own, and the assessment goes to the email the cadet signed up with.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="mock-switch" style="max-width:560px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="settings" onclick="showAdminPane('mock','settings')">Settings <span id="mock-c-settings"></span></button>
+      <button class="acs-btn" data-pane="add" onclick="showAdminPane('mock','add')">Add Slots <span id="mock-c-add"></span></button>
+      <button class="acs-btn" data-pane="slots" onclick="showAdminPane('mock','slots')">Slots <span id="mock-c-slots"></span></button>
+      <button class="acs-btn" data-pane="bookings" onclick="showAdminPane('mock','bookings')">Bookings <span id="mock-c-bookings"></span></button>
+    </div>
+
+    <div class="adp" id="mock-pane-settings">
     <div class="ad-card">
       <div class="ad-card-head">Settings</div>
       <div class="ad-card-sub">Price and wording are read live by the Sponsorship app, so a change here takes effect without a deploy.</div>
@@ -2224,7 +2311,9 @@
         <button class="ad-btn btn-primary" id="mi-save" onclick="saveMockConfig()">Save Settings</button>
       </div>
     </div>
+    </div>
 
+    <div class="adp" id="mock-pane-add" hidden>
     <div class="ad-card">
       <div class="ad-card-head">Add Slots</div>
       <div class="ad-card-sub">Times are IST. Adding a week at a time is the point of the second row: one slot at a time is how this stops getting used.</div>
@@ -2265,7 +2354,9 @@
         <button class="ad-btn" onclick="bulkAddMockSlots()">Add For Every Day In Range</button>
       </div>
     </div>
+    </div>
 
+    <div class="adp" id="mock-pane-slots" hidden>
     <div class="ad-section-head">Slots</div>
     <div class="ad-table-wrap">
       <table class="ad-table">
@@ -2275,7 +2366,9 @@
         <tbody id="mi-slot-tbody"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
+    </div>
 
+    <div class="adp" id="mock-pane-bookings" hidden>
     <div class="ad-section-head" style="margin-top:22px">Bookings</div>
     <div class="ad-card-sub" style="margin-bottom:10px">The candidate sheet. Everything the cadet gave you at booking, so you can run the interview from this row.</div>
     <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px">
@@ -2290,7 +2383,8 @@
         <tbody id="mi-book-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
-  </div>
+    </div>
+</div>
 
   <!-- CONTENT STATUS ─────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-status">
@@ -2308,6 +2402,16 @@
       <p>All Razorpay transactions. Service role reads bypass RLS.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="payments-switch" style="max-width:520px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="transactions" onclick="showAdminPane('payments','transactions')">Transactions <span id="payments-c-transactions"></span></button>
+      <button class="acs-btn" data-pane="bookings" data-course="sponsorship" onclick="showAdminPane('payments','bookings')">Mock Bookings <span id="payments-c-bookings"></span></button>
+      <button class="acs-btn" data-pane="webhooks" onclick="showAdminPane('payments','webhooks')">Webhooks <span id="payments-c-webhooks"></span></button>
+    </div>
+
+    <div class="adp" id="payments-pane-transactions">
     <!-- Revenue summary -->
     <div id="pay-stats" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:24px;">
       <div class="pay-stat-card" id="psc-total">
@@ -2409,7 +2513,9 @@
     <div id="pay-load-more" style="display:none;text-align:center;margin-top:14px;">
       <button onclick="loadMorePayments()" style="padding:8px 20px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:13px;cursor:pointer;">Load more</button>
     </div>
+    </div>
 
+    <div class="adp" id="payments-pane-bookings" data-course="sponsorship" hidden>
     <!-- Mock interview money. Sponsorship-only, and a separate table rather
          than merged into the one above, because a booking has no plan, no
          scope and no expiry: it would be four empty columns and a row that
@@ -2436,7 +2542,9 @@
         </table>
       </div>
     </div>
+    </div>
 
+    <div class="adp" id="payments-pane-webhooks" hidden>
     <div class="ad-section-head" style="margin-top:28px">Webhook Events</div>
     <p style="font-size:12.5px;color:var(--text2);margin-bottom:10px">
       Razorpay's own record of what happened, independent of the checkout flow.
@@ -2448,7 +2556,8 @@
         <tbody id="wh-tbody"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
-  </div>
+    </div>
+</div>
 
   <!-- COUPONS ────────────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-coupons">
@@ -2457,6 +2566,15 @@
       <p>Comp codes for friends, family, and reviewers. A user redeems one in the app instead of paying.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="coupons-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('coupons','add')">New Coupon <span id="coupons-c-add"></span></button>
+      <button class="acs-btn" data-pane="existing" onclick="showAdminPane('coupons','existing')">Existing Coupons <span id="coupons-c-existing"></span></button>
+    </div>
+
+    <div class="adp" id="coupons-pane-add">
     <div class="ad-card">
       <div class="ad-card-head">New Coupon</div>
       <div class="ad-card-sub">Codes are case-insensitive and stored uppercase. A buyer types one into "Have a code?" in the upgrade window.</div>
@@ -2563,7 +2681,9 @@
       <button class="ad-btn btn-primary" onclick="createCoupon()">Create Coupon</button>
       <div id="cp-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
     </div>
+    </div>
 
+    <div class="adp" id="coupons-pane-existing" hidden>
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div class="ad-section-head" style="margin-bottom:0">Existing Coupons</div>
       <button class="ad-btn btn-ghost btn-sm" onclick="exportCouponsCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
@@ -2611,7 +2731,8 @@
         <tbody id="cp-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
-  </div>
+    </div>
+</div>
 
   <!-- PLANS ──────────────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-plans">
@@ -2624,6 +2745,15 @@
          tab and deliberately blunt: it is the single control that decides
          whether a whole course costs money, and it should not be findable by
          accident or flipped without reading the sentence next to it. -->
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="plans-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="access" onclick="showAdminPane('plans','access')">Sponsorship access <span id="plans-c-access"></span></button>
+      <button class="acs-btn" data-pane="offer" onclick="showAdminPane('plans','offer')">Run an offer <span id="plans-c-offer"></span></button>
+    </div>
+
+    <div class="adp" id="plans-pane-access">
     <div class="ad-card" style="margin-bottom:18px">
       <div class="ad-card-head">Sponsorship access</div>
       <div class="ad-card-sub" id="spaid-sub">Loading...</div>
@@ -2634,7 +2764,9 @@
         <div id="spaid-warn" style="font-size:12.5px;color:var(--text2);flex:1;min-width:220px"></div>
       </div>
     </div>
+    </div>
 
+    <div class="adp" id="plans-pane-offer" hidden>
     <div class="ad-card" style="margin-bottom:18px">
       <div class="ad-card-head">Run an offer</div>
       <div class="ad-card-sub">
@@ -2646,7 +2778,8 @@
     </div>
 
     <div id="plans-groups"><div class="ad-loading">Loading…</div></div>
-  </div>
+    </div>
+</div>
 
   <!-- VIDEOS ─────────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-videos">
@@ -2655,6 +2788,15 @@
       <p>YouTube links shown inside the oral notes. Paste a link against a section and it appears there immediately, with no deploy.</p>
     </div>
 
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="videos-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('videos','add')">Add a video <span id="videos-c-add"></span></button>
+      <button class="acs-btn" data-pane="existing" onclick="showAdminPane('videos','existing')">Existing Videos <span id="videos-c-existing"></span></button>
+    </div>
+
+    <div class="adp" id="videos-pane-add">
     <div class="ad-card">
       <div class="ad-card-head">How this works</div>
       <div class="ad-card-sub" style="margin-bottom:0">
@@ -2702,7 +2844,9 @@
       <button class="ad-btn btn-primary" onclick="addVideo()">Add Video</button>
       <div id="nv-msg" style="display:none;margin-top:12px;font-size:13px;padding:9px 12px;border-radius:var(--r8)"></div>
     </div>
+    </div>
 
+    <div class="adp" id="videos-pane-existing" hidden>
     <div class="ad-section-head">Existing Videos</div>
     <div class="ad-row" style="align-items:flex-end">
       <div class="ad-field" style="max-width:260px">
@@ -2723,7 +2867,8 @@
     </div>
 
     <div id="vid-list"><div class="ad-loading">Loading…</div></div>
-  </div>
+    </div>
+</div>
 
   <!-- ACTIVITY LOG ───────────────────────────────────────────── -->
   <div class="ad-tab" id="tab-mail">
@@ -2733,6 +2878,15 @@
     </div>
 
     <!-- ── Templates ─────────────────────────────────────── -->
+
+    <!-- These sections were stacked, so reaching the last one meant scrolling
+         past every one above it. Same switch as #apr-switch on Approvals. -->
+    <div class="ad-course-switch ad-pane-switch" id="mail-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="wording" onclick="showAdminPane('mail','wording')">Email wording <span id="mail-c-wording"></span></button>
+      <button class="acs-btn" data-pane="group" onclick="showAdminPane('mail','group')">Send to a group <span id="mail-c-group"></span></button>
+    </div>
+
+    <div class="adp" id="mail-pane-wording">
     <div class="ad-card" style="margin-bottom:18px">
       <div class="ad-card-head">Automatic email wording</div>
 
@@ -2801,6 +2955,9 @@
     </div>
 
     <!-- ── Group send ────────────────────────────────────── -->
+    </div>
+
+    <div class="adp" id="mail-pane-group" hidden>
     <div class="ad-card">
       <div class="ad-card-head">Send to a group</div>
 
@@ -2869,7 +3026,8 @@
       <div class="ad-section-head" style="margin-top:22px">Recent group sends</div>
       <div id="bulk-history"><div class="ad-loading">Loading...</div></div>
     </div>
-  </div>
+    </div>
+</div>
 
   <div class="ad-tab" id="tab-activity">
     <div class="ad-ph">
@@ -3317,6 +3475,10 @@ function showTab(name) {
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
   document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+  // Every tab that carries a pane switch restores the pane this admin last
+  // used. Approvals is not in the registry: it has its own switcher because
+  // it also lazy loads per pane.
+  if (typeof ADMIN_PANES !== 'undefined' && ADMIN_PANES[name]) restoreAdminPane(name);
   if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
 }
 
@@ -5550,8 +5712,15 @@ async function loadNotifications() {
 
   var { data } = await _sb.from('notifications').select('*').order('created_at', { ascending: false });
   var container = document.getElementById('notif-list');
+
+  /* Count on the Sent label, so the switch says how many went out without
+     anyone having to open the pane. Mirrors the counts on #apr-switch. */
+  var cEl = document.getElementById('notifications-c-sent');
+  if (cEl) cEl.textContent = (data && data.length) ? data.length : '';
+
   if (!data || !data.length) {
     container.innerHTML = '<div class="ad-loading">No notifications sent yet.</div>';
+    restoreAdminPane('notifications');
     return;
   }
   container.innerHTML = data.map(function(n) {
@@ -5584,6 +5753,8 @@ async function loadNotifications() {
       + '</button>'
       + '</div>';
   }).join('');
+
+  restoreAdminPane('notifications');
 }
 
 // Who opened a given notice. Deliberately a plain list rather than a chart:
@@ -7593,6 +7764,82 @@ async function createCoupon() {
 
    The choice is remembered, like the course switcher, so a refresh in the
    middle of a review does not drop you back on Queue. */
+/* ── Admin pane switches ────────────────────────────────────────────────────
+   Most tabs in this console were a form card with a list stacked underneath,
+   so reading the list meant scrolling past the whole form every time. They now
+   carry the same segmented switch the Approvals tab has.
+
+   ONE function for all of them rather than one per tab. showApprovalPane below
+   stays separate because it also lazy loads per pane; everything else is this.
+
+   Registered as tab key -> ordered pane keys. The markup convention is fixed
+   and the function depends on it: a switch at #<tab>-switch holding .acs-btn
+   with data-pane, and a pane per key at #<tab>-pane-<key>.
+
+   The chosen pane is remembered per tab, so an admin who lives in Existing
+   Coupons is not returned to the create form on every visit. */
+var ADMIN_PANES = {
+  notifications: ['compose', 'sent'],
+  admins:   ['add', 'current'],
+  notices:  ['add', 'all'],
+  coupons:  ['add', 'existing'],
+  videos:   ['add', 'existing'],
+  plans:    ['access', 'offer'],
+  liveexam: ['sittings', 'questions'],
+  payments: ['transactions', 'bookings', 'webhooks'],
+  mail:     ['wording', 'group'],
+  funnel:   ['upgrade', 'why', 'where'],
+  mock:     ['settings', 'add', 'slots', 'bookings'],
+};
+
+/* A pane can carry data-course, the same ownership idea COURSE_TABS applies to
+   whole tabs. Payments appears under both courses but its Mock Bookings panel
+   is Sponsorship-only, so without this a COC admin gets a button that opens an
+   empty pane. Unscoped panes show under both. */
+function paneInCourse(el) {
+  var c = el && el.dataset ? el.dataset.course : '';
+  return !c || c === _adminCourse;
+}
+
+function showAdminPane(tab, name) {
+  var panes = ADMIN_PANES[tab];
+  if (!panes) return;
+
+  var avail = panes.filter(function (k) {
+    return paneInCourse(document.getElementById(tab + '-pane-' + k));
+  });
+  if (!avail.length) avail = panes.slice();
+  if (avail.indexOf(name) === -1) name = avail[0];
+
+  // Remember the request, not the fallback, so a Sponsorship admin who lives
+  // in Mock Bookings still lands there after a trip through the COC console.
+  try { localStorage.setItem('eb_admin_pane_' + tab, name); } catch (e) {}
+
+  panes.forEach(function (k) {
+    var el = document.getElementById(tab + '-pane-' + k);
+    if (el) el.hidden = (k !== name);
+  });
+  document.querySelectorAll('#' + tab + '-switch .acs-btn').forEach(function (b) {
+    var ok = avail.indexOf(b.dataset.pane) !== -1;
+    // display, not hidden: .acs-btn sets display:flex, which wins over [hidden]
+    b.style.display = ok ? '' : 'none';
+    b.classList.toggle('active', ok && b.dataset.pane === name);
+  });
+}
+window.showAdminPane = showAdminPane;
+
+/* Called after a tab's data has rendered, so any count on a label is already
+   in place before the remembered pane is restored. */
+function restoreAdminPane(tab) {
+  var panes = ADMIN_PANES[tab];
+  if (!panes) return;
+  var want = panes[0];
+  try { want = localStorage.getItem('eb_admin_pane_' + tab) || panes[0]; } catch (e) {}
+  showAdminPane(tab, want);
+}
+window.restoreAdminPane = restoreAdminPane;
+
+
 var APR_PANES = ['queue', 'devices', 'domains', 'decided'];
 var _aprLoaded = {};
 var APR_PANE_KEY = 'eb_admin_approvals_pane';
@@ -10262,6 +10509,13 @@ function applyCourseScope() {
     applyCourseScope._moving = true;     // showTab calls back into here
     try { showTab('dashboard'); } finally { applyCourseScope._moving = false; }
   }
+
+  // Panes carry the same ownership rule as tabs, so re-run the filter for
+  // whatever is open. Without this, switching to COC while Payments is showing
+  // Mock Bookings leaves a Sponsorship-only panel on screen.
+  var open = document.querySelector('.ad-tab.active');
+  var key = open ? open.id.replace('tab-', '') : '';
+  if (typeof ADMIN_PANES !== 'undefined' && ADMIN_PANES[key]) restoreAdminPane(key);
 }
 
 // Theme Toggler
