@@ -487,6 +487,14 @@
       outline:none; transition:border-color .15s;
       font-family:inherit;
     }
+    /* An <input> and a <select> do not render the same height from the same
+       padding: the select's intrinsic line box differs. That 2px was enough to
+       knock every mixed row out of line, because .ad-row aligns on flex-end, so
+       the taller control's top sat higher than its neighbour's. Pinned here
+       rather than per row. Textareas opt out, they size themselves. */
+    .ad-input:not(.ad-textarea), .ad-select {
+      height:39px; line-height:1.35;
+    }
     .ad-input:focus, .ad-select:focus { border-color:var(--blue); }
     .ad-select { cursor:pointer; }
     .ad-select option { background:var(--surface); }
@@ -494,6 +502,58 @@
 
     .ad-row { display:flex; gap:12px; align-items:flex-end; }
     .ad-row .ad-field { flex:1; }
+
+
+    /* ── FIELD HELP AS AN INFO ICON ──────────────────────────────────────────
+       Field help used to sit under the input as a paragraph. Two problems, and
+       they were the same problem: a form row is align-items:flex-end, so hints
+       of different lengths pushed their inputs to different heights and the
+       whole row went ragged. Moving the text out of flow fixes the alignment
+       as a side effect of tidying the help.
+
+       The text is not deleted, only folded away: it opens on hover, on focus
+       and on click. Click matters because hover does not exist on a phone. */
+    /* min-height so a label WITH an icon and one WITHOUT are the same height.
+       The icon is 16px including its border and a bare label is ~14px, and
+       that 2px was enough to knock every row it appeared in out of line. */
+    .ad-label-row {
+      display:flex; align-items:center; gap:5px; margin-bottom:6px;
+      min-height:16px;
+    }
+    .ad-label-row .ad-label { margin-bottom:0; }
+    .ad-info {
+      position:relative; flex-shrink:0; width:14px; height:14px; padding:0;
+      border:1px solid var(--border2); border-radius:50%;
+      background:transparent; color:var(--text3);
+      font-family:inherit; font-size:9.5px; font-weight:800; line-height:1;
+      display:inline-flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:color .15s, border-color .15s;
+    }
+    .ad-info:hover, .ad-info:focus-visible { color:var(--blue); border-color:var(--blue); }
+    /* nothing to say yet, so nothing to click. The label row keeps its
+       min-height, so hiding this never moves the row. */
+    .ad-info.is-empty { display:none; }
+    .ad-info-pop {
+      position:absolute; left:50%; bottom:calc(100% + 7px); transform:translateX(-50%);
+      width:max-content; max-width:250px; padding:9px 11px; z-index:60;
+      background:var(--surface); border:1px solid var(--border2);
+      border-radius:var(--r8); box-shadow:0 6px 20px rgba(0,0,0,.22);
+      font-size:11.5px; font-weight:500; line-height:1.5; color:var(--text2);
+      text-align:left; text-transform:none; letter-spacing:0;
+      opacity:0; visibility:hidden; transition:opacity .12s;
+      white-space:normal;
+    }
+    .ad-info-pop strong { color:var(--text); }
+    /* the hint element itself lives in here now, so neutralise its own spacing */
+    .ad-info-pop .ad-hint { margin:0; font-size:inherit; color:inherit; line-height:inherit; }
+    .ad-info:hover .ad-info-pop,
+    .ad-info:focus-visible .ad-info-pop,
+    .ad-info.open .ad-info-pop { opacity:1; visibility:visible; }
+    /* Near the right edge the popover would run off the card. */
+    .ad-info.flip-l .ad-info-pop { left:auto; right:-6px; transform:none; }
+    @media (max-width:620px) {
+      .ad-info-pop { max-width:min(250px, 70vw); }
+    }
 
     /* ── BUTTONS ── */
     .ad-btn {
@@ -3449,6 +3509,9 @@ function logAdminAction(action, target, details) {
     // tell you someone is waiting without you going looking for them.
     loadApprovals();
     buildStatusBoard();
+    // Every labelled field in the console, in one pass. The panes are hidden
+    // rather than removed, so they are all in the DOM and all get folded.
+    hintsToInfoIcons();
   } catch (e) {
     console.error('Admin dashboard init error:', e);
   }
@@ -3523,6 +3586,7 @@ function showTab(name) {
   // used. Approvals is not in the registry: it has its own switcher because
   // it also lazy loads per pane.
   if (typeof ADMIN_PANES !== 'undefined' && ADMIN_PANES[name]) restoreAdminPane(name);
+  if (typeof hintsToInfoIcons === 'function') hintsToInfoIcons();
   if (location.hash !== '#' + name) history.replaceState(null, '', '#' + name);
 }
 
@@ -8059,6 +8123,111 @@ async function createCoupon() {
 
    The choice is remembered, like the course switcher, so a refresh in the
    middle of a review does not drop you back on Queue. */
+
+/* ── FIELD HELP -> INFO ICON ────────────────────────────────────────────────
+   Field help used to sit under the input as a paragraph of its own. Because a
+   form row is align-items:flex-end, hints of different lengths pushed their
+   inputs to different heights and every row came out ragged. Folding the text
+   into an icon beside the label fixes the alignment as a side effect.
+
+   EVERY label is wrapped, not only the ones that have help. A row containing
+   one wrapped label and one bare one is two different heights, which is the
+   ragged look again by another route. The wrapper is the same height either
+   way; the icon is the only thing that varies.
+
+   A hint with no label to hang off is left exactly where it is: several sit
+   under a whole card rather than a field, and those still read as prose. */
+function hintsToInfoIcons(root) {
+  var scope = root || document;
+
+  // 1. every label gets the same wrapper, so every label is the same height.
+  //    A row holding one wrapped label and one bare one is two heights, which
+  //    is the ragged look again by another route.
+  scope.querySelectorAll('.ad-label').forEach(function (label) {
+    if (label.parentElement && label.parentElement.classList.contains('ad-label-row')) return;
+    var row = document.createElement('div');
+    row.className = 'ad-label-row';
+    label.parentNode.insertBefore(row, label);
+    row.appendChild(label);
+  });
+
+  // 2. help folds into the label of ITS OWN field.
+  scope.querySelectorAll('.ad-hint').forEach(function (hint) {
+    if (hint.dataset.folded) return;
+
+    // Only a hint sitting in a field, next to that field's own label. Several
+    // sit under a whole card instead and describe the card, not one input;
+    // attaching those to whichever label happened to be first would put the
+    // wrong help on the wrong control.
+    var field = hint.closest('.ad-field');
+    if (!field || !field.contains(hint)) return;
+    var label = field.querySelector('.ad-label');
+    if (!label) return;
+    var row = label.parentElement;
+    if (!row || !row.classList.contains('ad-label-row')) return;
+    if (row.querySelector('.ad-info')) return;   // one icon per label
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ad-info';
+    btn.setAttribute('aria-label', 'What this means');
+    btn.appendChild(document.createTextNode('i'));
+
+    var pop = document.createElement('span');
+    pop.className = 'ad-info-pop';
+    pop.setAttribute('role', 'tooltip');
+
+    // THE HINT ELEMENT ITSELF MOVES IN, rather than its HTML being copied and
+    // the original deleted. Three hints carry ids that other code writes to
+    // (cp-value-hint, nv-hint, prof-intent-hint) and one is filled in later
+    // (tpl-placeholders). Copying and deleting broke the first three with
+    // "Cannot set properties of null" and left the fourth permanently empty.
+    // Moving the node keeps every id alive and lets the popover update itself.
+    pop.appendChild(hint);
+    btn.appendChild(pop);
+
+    btn.onclick = function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var open = btn.classList.contains('open');
+      document.querySelectorAll('.ad-info.open').forEach(function (o) { o.classList.remove('open'); });
+      btn.classList.remove('flip-l');
+      btn.classList.toggle('open', !open);
+      var p = btn.querySelector('.ad-info-pop');
+      if (btn.classList.contains('open') && p &&
+          p.getBoundingClientRect().right > window.innerWidth - 8) {
+        btn.classList.add('flip-l');
+      }
+    };
+    row.appendChild(btn);
+
+    /* Some help is written by JS after the fact (nv-hint fills once a video
+       type is chosen), so at rest the popover has nothing in it. An icon that
+       opens onto nothing is worse than no icon, so it hides itself until the
+       hint has something to say and reappears when it does. Cheap: a handful
+       of icons, and the observer only fires when that text actually changes. */
+    var sync = function () {
+      btn.classList.toggle('is-empty', hint.textContent.trim().length === 0);
+    };
+    sync();
+    try { new MutationObserver(sync).observe(hint, { childList: true, subtree: true, characterData: true }); }
+    catch (e) { /* observation is a nicety; the icon still works without it */ }
+
+    hint.dataset.folded = '1';
+  });
+}
+window.hintsToInfoIcons = hintsToInfoIcons;
+
+// Tapping elsewhere closes an open one. Hover does not exist on a phone, so
+// click is the only way in and out there.
+document.addEventListener('click', function () {
+  document.querySelectorAll('.ad-info.open').forEach(function (o) { o.classList.remove('open'); });
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.ad-info.open').forEach(function (o) { o.classList.remove('open'); });
+  }
+});
+
 /* ── Admin pane switches ────────────────────────────────────────────────────
    Most tabs in this console were a form card with a list stacked underneath,
    so reading the list meant scrolling past the whole form every time. They now
