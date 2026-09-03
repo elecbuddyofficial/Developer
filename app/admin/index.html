@@ -2693,6 +2693,25 @@
         <div class="ad-field"></div>
       </div>
 
+      <!-- Sits with Max Redemptions because it is meaningless without one: the
+           database refuses a disposable code with no limit, since it could
+           never reach the limit that deletes it. -->
+      <div class="ad-field" id="cp-disp-wrap">
+        <label style="display:flex;align-items:flex-start;gap:9px;cursor:pointer">
+          <input type="checkbox" id="cp-disposable" onchange="cpDisposableChanged()"
+                 style="margin-top:2px;cursor:pointer;flex-shrink:0">
+          <span>
+            <span style="font-size:13px;font-weight:700;color:var(--text)">Disposable</span>
+            <span class="ad-hint" style="margin-top:3px" id="cp-disp-hint">
+              Deletes itself once it has been fully used and paid for, so the code cannot
+              linger or be reused. The sale keeps its own record of the code and the
+              discount, so nothing is lost from the accounts. <strong>Not reversible:</strong>
+              a refund afterwards cannot bring the code back.
+            </span>
+          </span>
+        </label>
+      </div>
+
       <!-- What this code will actually charge, on every live plan. The single
            best guard against a 90 that was meant to be a 9. -->
       <div id="cp-preview" style="display:none;margin-top:4px;margin-bottom:14px;padding:12px 14px;border:1px solid var(--border2);border-radius:var(--r8);background:var(--surface2)"></div>
@@ -7821,8 +7840,39 @@ function cpKindChanged() {
       ? 'Type <strong>25</strong> to mean 25% off. Not 0.25, and not 75.'
       : 'In rupees. Type <strong>200</strong> to take &#8377;200 off.';
   }
+  cpDisposableChanged();
   cpPreview();
 }
+
+/* Keeps the checkbox honest about what the database will accept, so an admin
+   never ticks a box that is going to be rejected on save. A grant can never be
+   disposable: it creates no payment, so the redemption row is the only record
+   that the access was given. */
+function cpDisposableChanged() {
+  var box  = document.getElementById('cp-disposable');
+  var hint = document.getElementById('cp-disp-hint');
+  var wrap = document.getElementById('cp-disp-wrap');
+  if (!box || !hint || !wrap) return;
+
+  var isGrant = document.getElementById('cp-kind').value === 'grant';
+  box.disabled = isGrant;
+  if (isGrant) box.checked = false;
+  wrap.style.opacity = isGrant ? '.5' : '';
+
+  hint.innerHTML = isGrant
+    ? 'Not available for a grant. A grant creates no payment, so deleting it '
+    + 'would erase the only record that the access was ever given.'
+    : 'Deletes itself once it has been fully used and paid for, so the code cannot '
+    + 'linger or be reused. The sale keeps its own record of the code and the '
+    + 'discount, so nothing is lost from the accounts. <strong>Not reversible:</strong> '
+    + 'a refund afterwards cannot bring the code back.';
+
+  // The limit is what eventually deletes it, so say so where it is set.
+  var max = document.getElementById('cp-max');
+  if (max) max.style.borderColor = (box.checked && !(parseInt(max.value, 10) >= 1))
+    ? 'var(--red)' : '';
+}
+window.cpDisposableChanged = cpDisposableChanged;
 
 // Mirrors the server rule in _shared/coupons.ts: best-of, never compounded,
 // then clamped to Razorpay's floor. Display only - create-razorpay-order
@@ -7933,8 +7983,24 @@ async function createCoupon() {
     return;
   }
 
+  var disposable = document.getElementById('cp-disposable').checked;
+
+  /* The database enforces both of these, but an admin should be told what is
+     wrong in words rather than shown a constraint name from Postgres. */
+  if (disposable && kind === 'grant') {
+    cpMsg('A grant cannot be disposable. It creates no payment, so deleting it '
+        + 'would erase the only record that the access was ever given.', false);
+    return;
+  }
+  if (disposable && !(max >= 1)) {
+    cpMsg('A disposable code needs a redemption limit. Without one it can never '
+        + 'reach the limit that deletes it.', false);
+    return;
+  }
+
   var row = {
     code: code, kind: kind, max_redemptions: max,
+    disposable: disposable,
     expires_at: exp ? new Date(exp).toISOString() : null,
     note: note || null,
     created_by: _myId,
@@ -7973,6 +8039,8 @@ async function createCoupon() {
   cpMsg(code + ' created.', true);
   logAdminAction('create_coupon', null, row);
   document.getElementById('cp-code').value = '';
+  document.getElementById('cp-disposable').checked = false;
+  cpDisposableChanged();
   document.getElementById('cp-note').value = '';
   document.getElementById('cp-value').value = '';
   cpPreview();
@@ -8392,7 +8460,17 @@ function renderCoupons() {
     if (c.over_redeemed) used += ' <span style="font-size:10px;color:var(--red);font-weight:700">over-redeemed</span>';
 
     return '<tr' + (dead && !c.over_redeemed ? ' style="opacity:.55"' : '') + '>'
-      + '<td style="font-family:monospace;font-weight:700">' + esc(c.code) + '</td>'
+      + '<td style="font-family:monospace;font-weight:700">' + esc(c.code)
+      // A disposable code is about to disappear on its last sale, so say so
+      // where the codes are listed rather than only on the form that made it.
+      +   (c.disposable
+            ? ' <span title="Deletes itself once fully used and paid for" '
+              + 'style="font-family:inherit;font-size:9.5px;font-weight:800;letter-spacing:.4px;'
+              + 'text-transform:uppercase;padding:1.5px 6px;border-radius:100px;'
+              + 'border:1px solid var(--orange-border);color:var(--orange);white-space:nowrap">'
+              + 'Disposable</span>'
+            : '')
+      + '</td>'
       + '<td style="font-size:12px;text-transform:capitalize;color:var(--text2)">' + esc(c.kind) + '</td>'
       + '<td>' + what + target + '</td>'
       + '<td>' + used + '</td>'
