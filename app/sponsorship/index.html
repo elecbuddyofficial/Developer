@@ -388,10 +388,45 @@
   .mi-btn-row { display:flex; gap:10px; align-items:stretch }
   .mi-btn-row .mi-btn:not(.mi-btn-ghost) { flex:1 }
   .mi-btn-ghost:hover { color:var(--text); border-color:var(--text3) }
-  .mi-day { font-size:11.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
-            color:var(--text3); margin:16px 0 8px }
-  .mi-day:first-of-type { margin-top:0 }
+  /* The picker used to be one long scroll: a heading per day, times underneath,
+     for as many days as had slots. Two weeks of availability meant scrolling
+     past fourteen headings to see what a Friday looked like, and the modal grew
+     a scrollbar of its own inside the page's.
+     It reads as a date rail now, days across the top and the times for the day
+     you chose underneath, so the whole thing fits without scrolling and picking
+     a day costs one click instead of a hunt. Only days that actually have times
+     appear, which is why this is a rail rather than a month grid: slots are put
+     up a week or two at a time, so a real calendar would be mostly empty
+     squares. */
+  .mi-daybar {
+    display:flex; gap:8px; overflow-x:auto; padding:2px 2px 10px;
+    scrollbar-width:thin; -webkit-overflow-scrolling:touch;
+  }
+  .mi-daycard {
+    flex:0 0 auto; min-width:74px; padding:9px 12px 8px; border-radius:11px;
+    border:1px solid var(--border2); background:var(--surface2); color:var(--text);
+    font-family:inherit; cursor:pointer; text-align:center; line-height:1.25;
+    transition:border-color .15s, background .15s;
+  }
+  .mi-daycard:hover { border-color:var(--blue) }
+  .mi-daycard[aria-pressed="true"] {
+    background:var(--blue); border-color:var(--blue); color:var(--on-accent);
+  }
+  .mi-dc-dow { font-size:10.5px; font-weight:800; letter-spacing:.5px; text-transform:uppercase;
+               color:var(--text3) }
+  .mi-daycard[aria-pressed="true"] .mi-dc-dow,
+  .mi-daycard[aria-pressed="true"] .mi-dc-n { color:var(--on-accent) }
+  .mi-dc-num { font-size:19px; font-weight:800; font-variant-numeric:tabular-nums; margin:1px 0 }
+  .mi-dc-n { font-size:10.5px; font-weight:700; color:var(--text3) }
+  .mi-daysel {
+    font-size:11.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase;
+    color:var(--text3); margin:4px 0 9px;
+  }
   .mi-slots { display:flex; flex-wrap:wrap; gap:8px }
+  @media (max-width:520px) {
+    .mi-slots { display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)) }
+    .mi-slot { width:100% }
+  }
   .mi-slot {
     padding:9px 14px; border-radius:9px; border:1px solid var(--border2);
     background:var(--surface2); color:var(--text); font-size:13px; font-weight:700;
@@ -488,6 +523,10 @@
   .nb-dot.show{display:block}
   .nf-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:600;opacity:0;pointer-events:none;transition:opacity .22s}
   .nf-overlay.open{opacity:1;pointer-events:all}
+  /* Hidden rather than dimmed: a floating action button showing through a
+     slide-over panel reads as part of the panel, and it is tall enough to
+     cover a whole announcement heading. */
+  html._modal-open #mi-fab{display:none !important}
   .nf-panel{position:fixed;top:0;right:0;bottom:0;width:340px;max-width:92vw;background:var(--surface);border-left:1px solid var(--border2);display:flex;flex-direction:column;overflow:hidden;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0.2,1);z-index:601}
   .nf-overlay.open .nf-panel{transform:translateX(0)}
   .nf-head{display:flex;align-items:center;gap:10px;padding:16px 18px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
@@ -497,9 +536,16 @@
   .nf-list{flex:1;overflow-y:auto}
   .nf-loading.nf-empty{padding:48px 20px;text-align:center;font-size:13px;color:var(--text3)}
   .nf-empty svg{display:block;margin:0 auto 12px;opacity:.35}
-  .nf-item{display:flex;gap:11px;padding:13px 18px;border-bottom:1px solid var(--border);transition:background .1s}
+  .nf-item{display:flex;gap:11px;margin:9px 12px;padding:12px 13px;
+           border:1px solid var(--border2);border-radius:12px;background:var(--surface2);
+           transition:border-color .15s}
   .nf-item:last-child{border-bottom:none}
-  .nf-item.unread{background:rgba(200,164,74,.08)}
+  .nf-item{position:relative}
+  .nf-item.unread{border-color:var(--blue-border)}
+  .nf-item.unread::before{
+    content:''; position:absolute; left:-1px; top:11px; bottom:11px; width:3px;
+    border-radius:0 3px 3px 0; background:var(--blue);
+  }
   .nf-type-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
   .nf-dot-info{background:var(--blue)}.nf-dot-update{background:var(--green)}.nf-dot-warning{background:var(--orange)}.nf-dot-deadline{background:var(--red)}
   .nf-content{flex:1;min-width:0}
@@ -507,26 +553,68 @@
   .nf-item-body{font-size:12.5px;color:var(--text2);margin-top:3px;line-height:1.55}
   .nf-item-meta{font-size:11px;color:var(--text3);margin-top:5px;display:flex;align-items:center;gap:6px}
   .nf-chip{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 5px;border-radius:100px}
-  .nf-chip-info{background:var(--blue-dim);color:var(--blue)}.nf-chip-update{background:var(--green-dim);color:var(--green)}.nf-chip-warning{background:var(--orange-dim);color:var(--orange)}.nf-chip-deadline{background:var(--red-dim);color:var(--red)}
+  .nf-chip-info{background:transparent;border:1px solid var(--blue-border);color:var(--blue)}
+  .nf-chip-update{background:transparent;border:1px solid var(--green-border);color:var(--green)}
+  .nf-chip-warning{background:transparent;border:1px solid var(--orange-border);color:var(--orange)}
+  .nf-chip-deadline{background:transparent;border:1px solid var(--red-border);color:var(--red)}
   /* Sponsorship windows. Every colour pair here is a *-dim token with its
      matching foreground, which is what keeps them readable in all four
      themes: a fixed background under themed text is the bug that has shipped
      four times. */
-  .nf-group{padding:11px 18px 7px;font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
-  .nf-sp{display:block;padding:13px 18px;border-bottom:1px solid var(--border);text-decoration:none;transition:background .1s}
-  .nf-sp:hover{background:var(--surface2)}
-  .nf-sp-top{display:flex;align-items:center;gap:8px}
-  .nf-sp-co{flex:1;min-width:0;font-size:13.5px;font-weight:700;color:var(--text);line-height:1.35;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .nf-sp-course{font-size:9.5px;font-weight:700;letter-spacing:.4px;padding:1.5px 5px;border-radius:100px;background:var(--surface3);color:var(--text2);flex-shrink:0}
-  .nf-sp-note{font-size:12.5px;color:var(--text2);margin-top:4px;line-height:1.55}
-  .nf-sp-meta{display:flex;align-items:center;gap:7px;margin-top:6px;flex-wrap:wrap}
-  .nf-sp-dates{font-size:11px;color:var(--text3)}
-  .nf-sp-state{font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1.5px 6px;border-radius:100px}
-  .nf-sp-open{background:var(--green-dim);color:var(--green)}
-  .nf-sp-soon{background:var(--orange-dim);color:var(--orange)}
-  .nf-sp-last{background:var(--red-dim);color:var(--red)}
-  .nf-sp-next{background:var(--blue-dim);color:var(--blue)}
-  .nf-sp-go{font-size:11px;font-weight:600;color:var(--blue);margin-left:auto;flex-shrink:0}
+  .nf-group{padding:14px 18px 6px;font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border)}
+  /* Cards, not flush rows. Three notices of hand-typed eligibility criteria
+     used to run together into one grey wall with the deadlines lost in it. */
+  .nf-sp{
+    position:relative; display:block; margin:9px 12px; padding:12px 13px 11px 15px;
+    border:1px solid var(--border2); border-radius:12px; background:var(--surface2);
+    text-decoration:none; transition:border-color .15s, box-shadow .15s;
+  }
+  .nf-sp:hover{border-color:var(--border3, var(--text3)); box-shadow:0 2px 10px rgba(0,0,0,.10)}
+  /* Urgency as a stripe, so the state is readable before a word is. */
+  .nf-sp::before{
+    content:''; position:absolute; left:0; top:11px; bottom:11px; width:3px;
+    border-radius:0 3px 3px 0; background:var(--text3);
+  }
+  .nf-sp.is-last::before{background:var(--red)}
+  .nf-sp.is-soon::before{background:var(--orange)}
+  .nf-sp.is-open::before{background:var(--green)}
+  .nf-sp.is-next::before{background:var(--blue)}
+
+  .nf-sp-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .nf-sp-co{flex:1;min-width:0;font-size:13.5px;font-weight:800;color:var(--text);line-height:1.3;
+            overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .nf-sp-course{font-size:9.5px;font-weight:700;letter-spacing:.4px;padding:1.5px 6px;border-radius:100px;
+                background:var(--surface3);color:var(--text2);flex-shrink:0}
+  .nf-sp-state{font-size:9.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+               padding:2px 7px;border-radius:100px;flex-shrink:0}
+  /* Outlined, not filled. The -dim tokens are translucent and calibrated
+     against the panel's own surface; on a card they stack with the card tint
+     and the label drops under the contrast floor in light theme. An outline
+     carries the same meaning and composites against whatever is behind it. */
+  .nf-sp-open{background:transparent;border:1px solid var(--green-border);color:var(--green)}
+  .nf-sp-soon{background:transparent;border:1px solid var(--orange-border);color:var(--orange)}
+  .nf-sp-last{background:transparent;border:1px solid var(--red-border);color:var(--red)}
+  .nf-sp-next{background:transparent;border:1px solid var(--blue-border);color:var(--blue)}
+
+  /* Three lines, then More. The body is typed by hand in the admin console, so
+     there is no format to parse; clamping is the honest way to tame it. */
+  .nf-sp-note{font-size:12.5px;color:var(--text2);margin-top:7px;line-height:1.55;white-space:pre-line}
+  .nf-sp-note.clamp{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .nf-more{
+    margin-top:4px;padding:0;border:none;background:none;font-family:inherit;
+    font-size:11.5px;font-weight:700;color:var(--blue);cursor:pointer;
+  }
+  .nf-more:hover{text-decoration:underline}
+
+  .nf-sp-meta{display:flex;align-items:center;gap:8px;margin-top:10px;
+              padding-top:9px;border-top:1px solid var(--border)}
+  .nf-sp-dates{flex:1;min-width:0;font-size:11px;color:var(--text3);
+               font-variant-numeric:tabular-nums}
+  .nf-sp-go{
+    flex-shrink:0;font-size:11.5px;font-weight:800;color:var(--on-accent);
+    background:var(--blue);padding:5px 12px;border-radius:100px;text-decoration:none;
+  }
+  .nf-sp-go:hover{opacity:.9}
   /* Maritime News cards. Every colour is a token and the card paints its own
      surface, so the pair moves together in all four themes. */
   .news-card{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);
@@ -1473,6 +1561,7 @@ function showStudyHub() {
 var MI_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
 
 var _miCfg = null, _miSlots = [], _miPicked = null, _miPaying = false;
+var _miByDay = {}, _miDayOrder = [];
 
 function _miEsc(v) {
   return String(v == null ? '' : v)
@@ -1492,6 +1581,16 @@ function _miTime(iso) {
 function _miDay(iso) {
   return new Date(iso).toLocaleDateString('en-IN', {
     weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Asia/Kolkata' });
+}
+/* For the day rail. IST like everything else on this screen, so a cadet
+   reading it in Manila is not shown a different day from the one they book. */
+function _miDowShort(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', {
+    weekday: 'short', timeZone: 'Asia/Kolkata' });
+}
+function _miDayNum(iso) {
+  return new Date(iso).toLocaleDateString('en-IN', {
+    day: 'numeric', timeZone: 'Asia/Kolkata' });
 }
 
 /* Called once after auth. A failure here leaves the button hidden, which is
@@ -1662,7 +1761,7 @@ async function loadMockSlots() {
     // it wants rather than repeating the policy and drifting from it.
     res = await window._sbClient
       .from('mock_interview_slots')
-      .select('id, starts_at, duration_minutes')
+      .select('id, starts_at, duration_minutes, time_tbc')
       .order('starts_at', { ascending: true })
       .limit(60);
   } catch (e) { res = { error: e }; }
@@ -1672,7 +1771,19 @@ async function loadMockSlots() {
     return;
   }
 
-  _miSlots = res.data || [];
+  /* A slot with time_tbc set is a day an admin has held while the hour is still
+     being decided. It carries a placeholder time, so offering it here would
+     promise a cadet an hour that was never real.
+
+     ORDER MATTERS: app/admin/mock_slots_time_tbc.sql must be applied BEFORE
+     this page deploys. The column is named in the select above, and PostgREST
+     fails the whole query on an unknown column, which would empty the picker.
+     Selecting * instead would survive both orders but would also ship the
+     admin-only note field to every cadet, so the column is named on purpose
+     and the migration goes first.
+
+     Filtered here rather than with .eq() so the reason travels with the code. */
+  _miSlots = (res.data || []).filter(function (sl) { return !sl.time_tbc; });
   if (!_miSlots.length) {
     // Honest, and says what to do next. An empty box reads as broken.
     box.innerHTML = '<div class="mi-empty">No times are open at the moment.<br>New slots usually go up at the start of the week, so it is worth checking back.</div>';
@@ -1685,17 +1796,50 @@ async function loadMockSlots() {
     if (!byDay[d]) { byDay[d] = []; order.push(d); }
     byDay[d].push(sl);
   });
+  _miByDay = byDay;
+  _miDayOrder = order;
 
-  box.innerHTML = order.map(function (d) {
-    return '<div class="mi-day">' + _miEsc(d) + '</div><div class="mi-slots">'
-      + byDay[d].map(function (sl) {
-          return '<button type="button" class="mi-slot" aria-pressed="false" data-slot="'
-            + _miEsc(sl.id) + '" onclick="pickMockSlot(\'' + sl.id + '\')">'
-            + _miEsc(_miTime(sl.starts_at)) + '</button>';
-        }).join('')
-      + '</div>';
-  }).join('');
+  box.innerHTML =
+      '<div class="mi-daybar" role="tablist" aria-label="Days with times available">'
+    + order.map(function (d, i) {
+        var first = byDay[d][0].starts_at;
+        var n = byDay[d].length;
+        return '<button type="button" class="mi-daycard" role="tab" data-day="' + i + '"'
+          + ' aria-pressed="' + (i === 0) + '" onclick="pickMockDay(' + i + ')">'
+          + '<div class="mi-dc-dow">' + _miEsc(_miDowShort(first)) + '</div>'
+          + '<div class="mi-dc-num">' + _miEsc(_miDayNum(first)) + '</div>'
+          + '<div class="mi-dc-n">' + n + (n === 1 ? ' time' : ' times') + '</div>'
+          + '</button>';
+      }).join('')
+    + '</div>'
+    + '<div class="mi-daysel" id="mi-daysel"></div>'
+    + '<div class="mi-slots" id="mi-times"></div>';
+
+  pickMockDay(0);
 }
+
+/* Paints the times for one day.
+
+   Choosing a day deliberately clears any time already picked and disables
+   Continue. Leaving Tuesday 3pm selected while Thursday's times are on screen
+   is exactly how somebody books the wrong slot and turns up on the wrong day. */
+function pickMockDay(i) {
+  var d = _miDayOrder[i];
+  if (!d) return;
+  document.querySelectorAll('#mi-slot-box .mi-daycard').forEach(function (b) {
+    b.setAttribute('aria-pressed', String(+b.getAttribute('data-day') === i));
+  });
+  document.getElementById('mi-daysel').textContent = d;
+  document.getElementById('mi-times').innerHTML = _miByDay[d].map(function (sl) {
+    return '<button type="button" class="mi-slot" aria-pressed="false" data-slot="'
+      + _miEsc(sl.id) + '" onclick="pickMockSlot(\'' + sl.id + '\')">'
+      + _miEsc(_miTime(sl.starts_at)) + '</button>';
+  }).join('');
+  _miPicked = null;
+  var go = document.getElementById('mi-to-details');
+  if (go) go.disabled = true;
+}
+window.pickMockDay = pickMockDay;
 
 function pickMockSlot(id) {
   _miPicked = _miSlots.filter(function (s) { return s.id === id; })[0] || null;
@@ -3266,11 +3410,19 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   function openNotifs() {
     document.getElementById('profile-modal').style.display = 'none';
     document.getElementById('nf-overlay').classList.add('open');
+    // The mock interview button is fixed at z-index 998 and the panel is 601,
+    // so without this it floats over the panel and lands on whichever notice
+    // happens to be at that height. Raising the panel instead would put it
+    // above the topbar too, which _modal-open exists to handle.
+    document.documentElement.classList.add('_modal-open');
     loadNotifs();
     localStorage.setItem('eb_notif_seen', new Date().toISOString());
     document.getElementById('nb-dot').classList.remove('show');
   }
-  function closeNotifs() { document.getElementById('nf-overlay').classList.remove('open'); }
+  function closeNotifs() {
+    document.getElementById('nf-overlay').classList.remove('open');
+    document.documentElement.classList.remove('_modal-open');
+  }
   function closeNotifsIfBg(e) { if (e.target === document.getElementById('nf-overlay')) closeNotifs(); }
   function nfTimeAgo(iso) {
     var diff = Date.now() - new Date(iso).getTime(), m = Math.floor(diff/60000);
@@ -3359,20 +3511,46 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
     } catch (e) { return []; }
   }
 
+  /* Expands a clamped notice. Kept tiny and inline: the panel is rebuilt from
+     scratch on every open, so there is no state worth holding anywhere else. */
+  function nfMore(btn) {
+    var note = btn.previousElementSibling;
+    var open = note.classList.toggle('clamp') === false;
+    btn.textContent = open ? 'Less' : 'More';
+  }
+  window.nfMore = nfMore;
+
+  /* Roughly how many lines the note will take at the panel's width. Only used
+     to decide whether a More button is worth showing, so an approximation is
+     the right tool: measuring would mean rendering, reading back and
+     rendering again for every notice in the list. */
+  function spNeedsMore(text) {
+    var lines = String(text).split(REAL_NL).length - 1;
+    return (String(text).length > 170) || lines >= 3;
+  }
+
+  var REAL_NL = String.fromCharCode(10);
+
   function spCard(n) {
     var s = spState(n);
-    return '<a class="nf-sp" href="' + escAttr(n.link) + '" target="_blank" rel="noopener noreferrer">'
+    var stripe = { 'nf-sp-last':'is-last', 'nf-sp-soon':'is-soon',
+                   'nf-sp-open':'is-open', 'nf-sp-next':'is-next' }[s.cls] || '';
+    var more = n.note && spNeedsMore(n.note);
+    return '<div class="nf-sp ' + stripe + '">'
       + '<div class="nf-sp-top">'
         + '<span class="nf-sp-co">' + escNf(n.company) + '</span>'
         + '<span class="nf-sp-course">' + escNf(n.course || 'ETO') + '</span>'
-      + '</div>'
-      + (n.note ? '<div class="nf-sp-note">' + escNf(n.note) + '</div>' : '')
-      + '<div class="nf-sp-meta">'
         + '<span class="nf-sp-state ' + s.cls + '">' + escNf(s.label) + '</span>'
+      + '</div>'
+      + (n.note
+          ? '<div class="nf-sp-note' + (more ? ' clamp' : '') + '">' + escNf(n.note) + '</div>'
+            + (more ? '<button type="button" class="nf-more" onclick="nfMore(this)">More</button>' : '')
+          : '')
+      + '<div class="nf-sp-meta">'
         + '<span class="nf-sp-dates">' + spDate(n.opens_on)
         +   (n.closes_on ? ' to ' + spDate(n.closes_on) : ' onwards') + '</span>'
-        + '<span class="nf-sp-go">Apply →</span>'
-      + '</div></a>';
+        + '<a class="nf-sp-go" href="' + escAttr(n.link) + '" target="_blank" rel="noopener noreferrer">Apply</a>'
+      + '</div></div>';
   }
 
   async function loadNotifs() {

@@ -193,6 +193,25 @@ if (!newOnly) {
     console.log('        best window: ' + o.covAt.slice(0, 66));
   }
 }
+/* --all prints every question with both scores.
+ *
+ * The buckets alone hide the questions most worth a human eye: the ones that
+ * scored just over a threshold. "probably in bank" was counted and never
+ * listed, so five questions could sit in it unread. Short questions are the
+ * other reason: a two-word recollection scores high against almost anything,
+ * so a high number there means nothing and you have to look at the text. */
+if (process.argv.includes('--all')) {
+  console.log('\n── EVERY QUESTION, both scores ' + '─'.repeat(40));
+  console.log('  bank  notes  question');
+  for (const o of out.slice().sort((a, b) => a.bank - b.bank)) {
+    const flag = o.bank >= BANK_HIT ? '   ' : (o.bank >= BANK_MAYBE ? ' ? ' : ' ! ');
+    console.log(flag + o.bank.toFixed(2) + '  ' + o.cov.toFixed(2) + '   ' + o.q.slice(0, 66));
+    if (o.bankQ) console.log('              closest in bank: ' + o.bankQ.slice(0, 62));
+  }
+  console.log('\n  ! not in the bank   ? probably in it   blank means in it');
+  console.log('  A short question scores high against anything. Read, do not trust.');
+}
+
 /* --emit writes the not-in-bank rows as bank-ready entries, deduplicated on
    the question text, so the same recollection posted twice from two candidates
    does not become two Q&A entries. Nothing is written into the bank here: the

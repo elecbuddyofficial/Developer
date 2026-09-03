@@ -510,6 +510,17 @@
     .btn-ghost   { background:var(--surface2); color:var(--text2); border:1.5px solid var(--border2); }
     .btn-sm { padding:5px 12px; font-size:12px; border-radius:var(--r6); }
 
+    /* Mock interview slots are added a week at a time, so this table is long by
+       design and every pixel of row height is paid dozens of times over. Tighter
+       padding and a small ghost button take a row from about 73px to 44px, which
+       is roughly seven more slots on screen. Tabular figures so the dates and
+       times line up in a column instead of drifting against each other. */
+    .mi-slot-table td { padding:7px 14px; }
+    .mi-slot-table td:first-child {
+      white-space:nowrap; font-variant-numeric:tabular-nums;
+    }
+    .mi-slot-table td:last-child { padding-top:5px; padding-bottom:5px; }
+
     /* ── GRANT SEARCH DROPDOWN ── */
     .grant-search-wrap { position:relative; flex:1; }
     .grant-dropdown {
@@ -2331,6 +2342,13 @@
           <input class="ad-input" id="mi-note" placeholder="e.g. evening batch">
         </div>
       </div>
+      <!-- The day is often settled before the hour is. A slot held this way is a
+           planning row: admins see it, cadets never do, and it becomes bookable
+           the moment a time is set on it in the Slots list. -->
+      <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12.5px;color:var(--text2);cursor:pointer">
+        <input type="checkbox" id="mi-tbc" onchange="miTbcChanged()" style="cursor:pointer">
+        Time not decided yet. Hold the day only.
+      </label>
       <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px">
         <button class="ad-btn btn-primary" onclick="addMockSlot()">Add Slot</button>
       </div>
@@ -2359,7 +2377,11 @@
     <div class="adp" id="mock-pane-slots" hidden>
     <div class="ad-section-head">Slots</div>
     <div class="ad-table-wrap">
-      <table class="ad-table">
+      <table class="ad-table mi-slot-table">
+        <colgroup>
+          <col style="width:200px"><col style="width:88px"><col style="width:170px">
+          <col><col style="width:96px">
+        </colgroup>
         <thead><tr>
           <th>When (IST)</th><th>Status</th><th>Booked by</th><th>Note</th><th></th>
         </tr></thead>
@@ -5328,7 +5350,17 @@ function renderSponsorshipPaid() {
     sub.textContent  = 'Sponsorship is free to any signed-in user. This is how it shipped.';
     lbl.textContent  = 'Free';
     btn.classList.remove('active');
-    warn.textContent = 'Do not switch to Paid until the course is finished. Aptitude and Interview Prep are still largely stubs, and the Content Status tab shows what is ready.';
+    // Was: "Aptitude and Interview Prep are still largely stubs". That stopped
+    // being true and nothing updated it, so this panel was arguing against a
+    // pricing decision on evidence that no longer existed. Measured 2 Sep 2026
+    // on the decrypted files: all 77 modules written, Aptitude median 956 words
+    // over 34 topics and Interview Prep median 1,538 over 4. Check the Content
+    // Status tab rather than trusting this line, and correct it when it drifts.
+    warn.textContent = 'All 77 modules are written. Aptitude and Interview Prep '
+                     + 'run shorter than Fundamentals because they are drill topics, '
+                     + 'not because they are unfinished. Check the Content Status tab '
+                     + 'before switching, and remember this reopens or closes the whole '
+                     + 'course to every signed-in user.';
   }
 }
 
@@ -6465,13 +6497,40 @@ function miRupees(paise) {
 /* IST everywhere, and it says so on screen. The database holds TIMESTAMPTZ;
    an admin in any timezone and a cadet in India must read the same time, so
    the zone is pinned here rather than left to the browser. */
-function miWhen(iso) {
+function miWhen(iso, tbc) {
   if (!iso) return '-';
+  // An undecided slot stores midnight IST purely so it sorts onto the right
+  // day. Printing that as "12:00 am" would be inventing a time, which is the
+  // whole thing this feature exists to avoid.
+  if (tbc) {
+    return new Date(iso).toLocaleString('en-IN', {
+      weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata'
+    });
+  }
   return new Date(iso).toLocaleString('en-IN', {
     weekday: 'short', day: 'numeric', month: 'short',
     hour: 'numeric', minute: '2-digit', hour12: true,
     timeZone: 'Asia/Kolkata'
   });
+}
+
+/* Greys the time box out rather than hiding it, so it is obvious the field is
+   still there and why it is not being asked for. */
+function miTbcChanged() {
+  var on = document.getElementById('mi-tbc').checked;
+  var t  = document.getElementById('mi-time');
+  t.disabled = on;
+  t.style.opacity = on ? '.45' : '';
+  if (on) t.value = '';
+}
+window.miTbcChanged = miTbcChanged;
+
+/* Midnight IST on the given day. The date is real, the time is a placeholder
+   and is never shown. */
+function miDateOnlyIso(dateStr) {
+  var d = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr || '');
+  if (!d) return null;
+  return new Date(Date.UTC(+d[1], +d[2] - 1, +d[3], 0, 0) - (5.5 * 3600 * 1000)).toISOString();
 }
 /* A local date+time typed by an admin is IST. Built by hand rather than with
    new Date(str), which reads a bare "2026-08-22T18:00" as the BROWSER's zone:
@@ -6574,16 +6633,27 @@ async function saveMockConfig() {
 }
 
 async function addMockSlot() {
-  var iso = miToUtcIso(document.getElementById('mi-date').value,
-                       document.getElementById('mi-time').value);
-  if (!iso) { toast('Pick a date and a time', 'err'); return; }
-  if (new Date(iso) <= new Date()) { toast('That time has already passed', 'err'); return; }
+  var tbc  = document.getElementById('mi-tbc').checked;
+  var date = document.getElementById('mi-date').value;
+  var iso  = tbc ? miDateOnlyIso(date)
+                 : miToUtcIso(date, document.getElementById('mi-time').value);
+  if (!iso) { toast(tbc ? 'Pick a date' : 'Pick a date and a time', 'err'); return; }
+
+  // A held day is not past until the day itself is over. Comparing the stored
+  // midnight against now would refuse a day being blocked out this morning.
+  if (tbc) {
+    if (new Date(iso).getTime() + 86400000 <= Date.now()) {
+      toast('That day has already passed', 'err'); return;
+    }
+  } else if (new Date(iso) <= new Date()) {
+    toast('That time has already passed', 'err'); return;
+  }
 
   var note = document.getElementById('mi-note').value.trim() || null;
   var mins = _miConfig ? _miConfig.duration_minutes : 30;
 
   var res = await _sb.from('mock_interview_slots')
-    .insert({ starts_at: iso, duration_minutes: mins, note: note });
+    .insert({ starts_at: iso, duration_minutes: mins, note: note, time_tbc: tbc });
 
   if (res.error) {
     // starts_at is UNIQUE, so this is the common case and deserves plain words.
@@ -6670,26 +6740,68 @@ async function loadMockSlots() {
 
   var now = Date.now();
   body.innerHTML = _miSlots.map(function (sl) {
-    var past = new Date(sl.starts_at).getTime() <= now;
+    // A held day stays current until the day ends; a timed slot until its time.
+    var past = sl.time_tbc
+      ? new Date(sl.starts_at).getTime() + 86400000 <= now
+      : new Date(sl.starts_at).getTime() <= now;
     var b = held[sl.id];
     var cls, label;
     if (b)             { cls = 'nt-upcoming'; label = b.status === 'reserved' ? 'Holding' : 'Booked'; }
     else if (past)     { cls = 'nt-closed';   label = 'Past'; }
     else if (!sl.is_active) { cls = 'nt-draft'; label = 'Off'; }
+    // Not "Open": cadets are not offered this one until it has a time.
+    else if (sl.time_tbc) { cls = 'nt-draft'; label = 'Time TBC'; }
     else               { cls = 'nt-open';     label = 'Open'; }
 
     return '<tr' + ((past && !b) ? ' class="nt-row-dead"' : '') + '>'
-      + '<td>' + esc(miWhen(sl.starts_at)) + '</td>'
+      + '<td>' + esc(miWhen(sl.starts_at, sl.time_tbc)) + '</td>'
       + '<td><span class="' + cls + '">' + label + '</span></td>'
       + '<td>' + (b ? esc(b.full_name) : '<span style="color:var(--text3)">-</span>') + '</td>'
       + '<td>' + esc(sl.note || '') + '</td>'
       + '<td style="text-align:right;white-space:nowrap">'
       + (b ? ''
-           : '<button class="ad-btn" onclick="toggleMockSlot(\'' + sl.id + '\',' + (!sl.is_active) + ')">'
+           : sl.time_tbc && !past
+             ? '<input type="time" class="ad-input mi-settime" id="mi-t-' + sl.id + '" '
+               + 'style="width:104px;display:inline-block;margin-right:6px">'
+               + '<button class="ad-btn btn-primary btn-sm" onclick="miSetSlotTime(\'' + sl.id + '\')">Set</button>'
+           : '<button class="ad-btn btn-ghost btn-sm" onclick="toggleMockSlot(\'' + sl.id + '\',' + (!sl.is_active) + ')">'
              + (sl.is_active ? 'Turn off' : 'Turn on') + '</button>')
       + '</td></tr>';
   }).join('');
 }
+
+/* Puts a real time on a held day, which is what makes it bookable: the
+   Sponsorship app filters on time_tbc, so nothing is offered to a cadet until
+   this has run. The date is kept and only the time is supplied, so a slot
+   cannot quietly move to another day. */
+async function miSetSlotTime(id) {
+  var sl = _miSlots.filter(function (x) { return x.id === id; })[0];
+  var el = document.getElementById('mi-t-' + id);
+  if (!sl || !el) return;
+  if (!el.value) { toast('Pick a time first', 'err'); return; }
+
+  // The stored instant is midnight IST of the held day, so read the date back
+  // in IST rather than in the browser's zone, or a slot held late in the
+  // evening west of India lands on the day before.
+  var ist = new Date(new Date(sl.starts_at).getTime() + (5.5 * 3600 * 1000));
+  var date = ist.toISOString().slice(0, 10);
+  var iso = miToUtcIso(date, el.value);
+  if (!iso) { toast('That time is not valid', 'err'); return; }
+  if (new Date(iso) <= new Date()) { toast('That time has already passed', 'err'); return; }
+
+  var res = await _sb.from('mock_interview_slots')
+    .update({ starts_at: iso, time_tbc: false }).eq('id', id);
+  if (res.error) {
+    toast(/duplicate|unique/i.test(res.error.message)
+      ? 'There is already a slot at that time'
+      : 'Failed: ' + res.error.message, 'err');
+    return;
+  }
+  logAdminAction('mock_slot_set_time', null, { slot_id: id, starts_at: iso });
+  toast('Time set. Cadets can book it now.');
+  loadMockSlots();
+}
+window.miSetSlotTime = miSetSlotTime;
 
 async function toggleMockSlot(id, makeActive) {
   var res = await _sb.from('mock_interview_slots')

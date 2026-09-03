@@ -144,6 +144,78 @@ SCREENS = {
                  'open': "openProfile(); showProfilePane('notif')"},
     # The forced sponsorship notice. Hard blocking, so if it renders wrong in a
     # palette a reader is stuck looking at it with no way past.
+    # The Sponsorship notifications panel. Real notice bodies are long runs of
+    # hand-typed eligibility criteria, which is the case the layout has to
+    # survive, so the stub uses one.
+    'notifpanel': {'file': 'sponsorship/index.html', 'view': None, 'open': """
+        (() => {
+          const N = [
+            { company:'Anglo Eastern', course:'ETO', link:'https://example.com/a',
+              opens_on:'2026-08-21', closes_on:'2026-09-03',
+              note:'Examination Schedule for September 2026 : 5th September 2026 - Kolkata, 6th September 2026 - Delhi, 12th September 2026 - Mumbai & Chennai' },
+            { company:'MSC', course:'ETO', link:'https://example.com/b',
+              opens_on:'2026-08-18', closes_on:'2026-09-16',
+              note:'Age below 27 years on 1st Nov 2026. More than 65% in BE/B.Tech from AICTE approved college. Score more than 50% in English in 10th or 12th. Score more than 65% in 12th PCM.' },
+            { company:'Maersk', course:'ETO', link:'https://example.com/c',
+              opens_on:'2026-08-28', closes_on:null,
+              note:'Admission Open: Electro Technical Officer (ETO) Batch: January 2027. Institution: AMET University. Eligibility: 4-year degree in Electrical, Electronics, or equivalent. Course Duration: 17 weeks.' }
+          ];
+          document.getElementById('nf-overlay').classList.add('open');
+          document.documentElement.classList.add('_modal-open');
+          document.getElementById('nf-list').innerHTML =
+            '<div class="nf-group">Sponsorship windows</div>'
+            + N.map(spCard).join('')
+            + '<div class="nf-group">Announcements</div>'
+            + '<div class="nf-item unread"><div class="nf-type-dot nf-dot-info"></div>'
+            + '<div class="nf-content"><div class="nf-item-title">Sponsorship Guidance &amp; Interview Prep</div>'
+            + '<div class="nf-item-body">Need help with your ETO sponsorship and interview preparation? '
+            + 'Get one-to-one guidance from a working ETO to understand your current preparation level.</div>'
+            + '<div class="nf-item-meta"><span class="nf-chip nf-chip-info">info</span>2 days ago</div>'
+            + '</div></div>';
+        })();
+    """},
+
+    # The mock interview slot picker. It was a long scroll of day headings and
+    # is a day rail now, so it is exactly the kind of screen that regresses
+    # silently: the modal is only reachable behind auth and a live slot query.
+    'mockpick': {'file': 'sponsorship/index.html', 'view': None, 'open': """
+        (() => {
+          const mk = (d, h) => ({ id: 'x' + d + h, duration_minutes: 30,
+            starts_at: new Date(Date.UTC(2026, 8, d, h - 5, 30)).toISOString() });
+          _miSlots = [mk(3,12), mk(3,15), mk(3,17), mk(3,19),
+                      mk(4,12), mk(4,15), mk(4,17),
+                      mk(5,12), mk(5,15),
+                      mk(6,19), mk(7,12), mk(8,15)];
+          document.getElementById('mi-modal').style.display = 'block';
+          // Step shown directly rather than via mockStep('slots'), which would
+          // fire the real Supabase query. There is no session here, and until
+          // mock_slots_time_tbc.sql is applied the time_tbc column does not
+          // exist, so that query 400s. The slots are stubbed below anyway.
+          ['pitch','slots','details','done'].forEach(k => {
+            const el = document.getElementById('mi-step-' + k);
+            if (el) el.style.display = (k === 'slots') ? '' : 'none';
+          });
+          const byDay = {}, order = [];
+          _miSlots.forEach(sl => { const d = _miDay(sl.starts_at);
+            if (!byDay[d]) { byDay[d] = []; order.push(d); } byDay[d].push(sl); });
+          _miByDay = byDay; _miDayOrder = order;
+          const box = document.getElementById('mi-slot-box');
+          box.innerHTML =
+            '<div class="mi-daybar" role="tablist">' + order.map((d, i) => {
+              const f = byDay[d][0].starts_at, n = byDay[d].length;
+              return '<button type="button" class="mi-daycard" role="tab" data-day="' + i +
+                '" aria-pressed="' + (i === 0) + '" onclick="pickMockDay(' + i + ')">' +
+                '<div class="mi-dc-dow">' + _miDowShort(f) + '</div>' +
+                '<div class="mi-dc-num">' + _miDayNum(f) + '</div>' +
+                '<div class="mi-dc-n">' + n + (n === 1 ? ' time' : ' times') + '</div></button>';
+            }).join('') + '</div>' +
+            '<div class="mi-daysel" id="mi-daysel"></div>' +
+            '<div class="mi-slots" id="mi-times"></div>';
+          pickMockDay(0);
+          pickMockSlot(_miByDay[_miDayOrder[0]][1].id);
+        })();
+    """},
+
     'spforced': {'file': 'sponsorship/index.html', 'view': None, 'open': """
         (() => {
           _spShowForced([
