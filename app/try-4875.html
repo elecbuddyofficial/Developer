@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <!-- UNLISTED, NOT SECRET. The repository is public, so this filename is
+       visible to anyone reading it on GitHub. Nothing links here, and it is
+       kept out of sw.js PRECACHE so it is never served stale, but assume a
+       stranger can arrive: this page must always be left in a working
+       state, never half-finished. It talks to the REAL database. -->
+  <title>Elec-Buddy</title>
+  <!-- Same source of truth the app uses. The inline numbers in the markup
+       are the last generated values, kept as fallback so a failed load
+       shows a real figure rather than an empty box. -->
+  <script src="counts.js?v=1"></script>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: #070D1A;
+      color: #DDE5EF;
+      font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .card {
+      background: #0D1E33;
+      border: 1px solid #1A3050;
+      border-radius: 6px;
+      width: 100%; max-width: 400px;
+      padding: 36px 32px;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .brand-name {
+      font-family: Georgia, serif;
+      font-size: 1.4rem;
+      font-weight: normal;
+      color: #C8A44A;
+      letter-spacing: 0.04em;
+    }
+    .brand-sub {
+      font-size: 12px;
+      color: #6E8AA6;
+      margin-top: 4px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #1A3050;
+      margin-bottom: 24px;
+    }
+    .tab {
+      flex: 1; padding: 10px;
+      background: none; border: none;
+      font-size: 13.5px; color: #6E8AA6;
+      cursor: pointer; text-align: center;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab.active { color: #C8A44A; border-bottom-color: #C8A44A; }
+
+    .form { display: none; flex-direction: column; gap: 14px; }
+    .form.active { display: flex; }
+
+    label { font-size: 12px; color: #8FA3B8; display: block; margin-bottom: 5px; letter-spacing: 0.04em; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      background: #0A1828;
+      border: 1px solid #1A3050;
+      border-radius: 4px;
+      color: #DDE5EF;
+      font-size: 14px;
+      padding: 10px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+    input:focus { border-color: #3A6898; }
+    input::placeholder { color: #6E8AA6; }
+
+    .btn {
+      width: 100%;
+      background: #C8A44A;
+      color: #070D1A;
+      border: none;
+      border-radius: 4px;
+      padding: 11px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      transition: opacity 0.15s;
+      margin-top: 4px;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .link-btn {
+      background: none; border: none;
+      color: #7AB8E0; font-size: 12.5px;
+      cursor: pointer; padding: 0;
+      text-align: center; width: 100%;
+      margin-top: 4px;
+    }
+    .link-btn:hover { text-decoration: underline; }
+
+    .consent-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      cursor: pointer;
+      margin-top: -2px;
+    }
+    .consent-row input[type="checkbox"] {
+      width: 15px; height: 15px;
+      margin-top: 2px;
+      flex-shrink: 0;
+      accent-color: #C8A44A;
+      cursor: pointer;
+    }
+    .consent-row span {
+      font-size: 12.5px;
+      color: #8FA3B8;
+      line-height: 1.5;
+    }
+    .consent-row a { color: #7AB8E0; }
+    .consent-row a:hover { text-decoration: underline; }
+
+    .msg {
+      font-size: 13px;
+      padding: 10px 12px;
+      border-radius: 4px;
+      display: none;
+      line-height: 1.5;
+    }
+    .msg.error   { background: #1A0A0A; border: 1px solid #CC4444; color: #E07070; display: block; }
+    .msg.success { background: #0A1F12; border: 1px solid #3A9E5F; color: #5DC87A; display: block; }
+    .msg.info    { background: #0A1828; border: 1px solid #3A6898; color: #7AB8E0; display: block; }
+
+    /* "Did you mean gmail.com?" under a mistyped address.
+       Every colour here is a literal, like the rest of this page. auth.html
+       carries no theme tokens and does not load style.css, so a var(--text)
+       here would resolve to nothing and the text would vanish. */
+    .mailfix { display: none; margin-top: 6px; font-size: 12px; line-height: 1.55; color: #8FA3B8; }
+    /* Flex with a gap rather than a margin on the dismiss button. On a phone
+       the two parts do not fit on one line, and a left margin on the wrapped
+       item left it hanging indented under the question as though it had been
+       positioned by accident. The question is one span so it stays whole. */
+    .mailfix.show { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; }
+    .mailfix-q { min-width: 0; }
+    .mailfix button {
+      background: none; border: none; padding: 0;
+      font: inherit; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+    .mailfix .mailfix-yes { color: #C8A44A; font-weight: 600; }
+    .mailfix .mailfix-yes:hover { color: #DFC069; }
+    .mailfix .mailfix-no { color: #6E8AA6; }
+    .mailfix .mailfix-no:hover { color: #8FA3B8; }
+    .mailfix button:focus-visible { outline: 1px solid #3A6898; outline-offset: 2px; border-radius: 2px; }
+
+    .divider { height: 1px; background: #1A3050; }
+
+    .footer-note {
+      font-size: 11.5px; color: #6E8AA6;
+      text-align: center; margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    /* ── Mobile ───────────────────────────────────────────────── */
+
+    /* iOS zooms the page when a focused input is under 16px and never
+       restores scale, so bump inputs on small screens. */
+    @media (max-width: 768px) {
+      input[type="text"], input[type="email"], input[type="password"] {
+        font-size: 16px;
+        padding: 12px;
+      }
+      .btn { padding: 14px; font-size: 15px; min-height: 48px; }
+      .tab { padding: 13px 8px; min-height: 46px; font-size: 14px; }
+      .link-btn { padding: 8px 0; min-height: 40px; font-size: 13px; }
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 16px; align-items: flex-start; padding-top: 32px; }
+      .card { padding: 28px 20px; border-radius: 8px; }
+      .brand { margin-bottom: 22px; }
+      .brand-name { font-size: 1.3rem; }
+    }
+
+    /* Small phones ≈320px: reclaim every pixel of width */
+    @media (max-width: 360px) {
+      body { padding: 10px; padding-top: 24px; }
+      .card { padding: 22px 15px; }
+      .tabs { margin-bottom: 18px; }
+      .footer-note { font-size: 11px; }
+    }
+
+    /* Landscape phones are vertically cramped - let the card scroll */
+    @media (max-height: 520px) and (orientation: landscape) {
+      body { align-items: flex-start; padding: 16px; }
+      .card { padding: 20px 24px; }
+      .brand { margin-bottom: 14px; }
+      .form { gap: 10px; }
+    }
+
+    /* Notch / home indicator */
+    @supports (padding: max(0px)) {
+      body {
+        padding-left: max(24px, env(safe-area-inset-left));
+        padding-right: max(24px, env(safe-area-inset-right));
+        padding-bottom: max(24px, env(safe-area-inset-bottom));
+      }
+    }
+
+    /* ── PREVIEW LAYOUT ──────────────────────────────────────────────────────
+       The sign-in card is unchanged and still max-width 400px. It is simply no
+       longer alone on the page: it sits in the right column of a split, with
+       the pitch on the left. Below 900px the split collapses and the CARD GOES
+       FIRST, because a returning cadet on a phone came to sign in, not to read
+       marketing they have already been sold by. */
+    body.split-page { display: block; padding: 0; }
+
+    .split {
+      min-height: 100vh; min-height: 100dvh;
+      display: grid; grid-template-columns: 1fr 460px;
+      gap: 48px; align-items: start;
+      max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px;
+    }
+
+    .pitch { padding-top: 8px; }
+    .pitch-eyebrow {
+      font-size: 11.5px; font-weight: 700; letter-spacing: 1.2px;
+      text-transform: uppercase; color: #C8A44A; margin-bottom: 14px;
+    }
+    .pitch h1 {
+      font-size: 40px; line-height: 1.12; font-weight: 800; color: #DDE5EF;
+      letter-spacing: -0.5px; margin-bottom: 16px; text-wrap: balance;
+    }
+    .pitch h1 span { color: #C8A44A; }
+    .pitch-lead {
+      font-size: 15.5px; line-height: 1.62; color: #8FA3B8; max-width: 46ch;
+      margin-bottom: 30px;
+    }
+
+    /* Numbers, not adjectives. Every one is generated from the encrypted
+       content by _counts.cjs, so none of it can quietly become a lie. */
+    .pitch-stats {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px; margin-bottom: 30px; max-width: 460px;
+    }
+    .pstat {
+      background: #0A1828; border: 1px solid #1A3050;
+      border-radius: 8px; padding: 13px 14px;
+    }
+    .pstat-n {
+      font-size: 22px; font-weight: 800; color: #DDE5EF;
+      font-variant-numeric: tabular-nums; line-height: 1.1;
+    }
+    .pstat-l {
+      font-size: 11px; color: #6E8AA6; margin-top: 3px; line-height: 1.35;
+    }
+
+    .pitch-points { list-style: none; display: grid; gap: 13px; max-width: 48ch; }
+    .pitch-points li {
+      display: flex; gap: 11px; font-size: 13.8px; line-height: 1.55; color: #8FA3B8;
+    }
+    .pitch-points b { color: #DDE5EF; font-weight: 700; }
+    .pp-ic {
+      flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
+      background: #12283F; color: #C8A44A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; margin-top: 1px;
+    }
+
+    /* Deliberately empty until there is something true to put in it. */
+    .pitch-proof {
+      margin-top: 30px; padding: 16px 18px; border-radius: 8px;
+      background: #0A1828; border: 1px dashed #1A3050; max-width: 48ch;
+    }
+    .pitch-proof-l {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: #6E8AA6; margin-bottom: 7px;
+    }
+    .pitch-proof-t { font-size: 13px; line-height: 1.6; color: #8FA3B8; }
+
+    /* ── COURSE SWITCH ───────────────────────────────────────────────────────
+       This is what removes the course-selector page: the choice is made here,
+       before signing in, and is saved to the account rather than the browser,
+       so it survives changing device. */
+    .course-sw {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      background: #0A1828; border: 1px solid #1A3050;
+      border-radius: 8px; padding: 4px; margin-bottom: 18px;
+    }
+    .course-b {
+      border: 1px solid transparent; border-radius: 6px; background: transparent;
+      padding: 9px 6px 8px; cursor: pointer; font-family: inherit;
+      color: #6E8AA6; text-align: center; transition: background .15s, color .15s;
+    }
+    .course-b:hover { color: #DDE5EF; }
+    .course-b .cb-t { font-size: 12.5px; font-weight: 800; letter-spacing: .2px; }
+    .course-b .cb-s { font-size: 10.5px; margin-top: 2px; opacity: .85; }
+    .course-b[aria-pressed="true"] {
+      background: #12283F; border-color: #3A6898; color: #DDE5EF;
+    }
+    .course-b[aria-pressed="true"] .cb-t { color: #C8A44A; }
+
+    @media (max-width: 900px) {
+      .split {
+        grid-template-columns: 1fr; gap: 34px; padding: 26px 20px 34px;
+        max-width: 520px;
+      }
+      .split .card { order: -1; margin: 0 auto; }
+      .pitch h1 { font-size: 30px; }
+      .pitch-stats { max-width: none; }
+    }
+    @media (max-width: 380px) {
+      .pitch h1 { font-size: 26px; }
+      .pitch-stats { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── TOP NAV ─────────────────────────────────────────────────────────────
+       The marketing page is unchanged and still lives at the site root. This is
+       the way back to it from the sign-in page.
+
+       The ?stay=1 is not decoration. index.html sends anyone who has previously
+       been inside the app straight back to sign-in, and ?stay=1 is the flag
+       that suppresses it. Without it this link is a loop: About us bounces you
+       back to the page you just left, which looks like a broken button. */
+    .topnav {
+      display: flex; align-items: center; gap: 18px;
+      max-width: 1240px; margin: 0 auto; padding: 18px 32px 0;
+    }
+    .tn-brand {
+      font-size: 15px; font-weight: 800; color: #DDE5EF; letter-spacing: -.2px;
+      margin-right: auto; text-decoration: none;
+    }
+    .tn-brand span { color: #C8A44A; }
+    .tn-link {
+      font-size: 13px; font-weight: 600; color: #8FA3B8; text-decoration: none;
+      padding: 7px 12px; border-radius: 7px; transition: color .15s, background .15s;
+    }
+    .tn-link:hover { color: #DDE5EF; background: #0D1E33; }
+    @media (max-width: 900px) { .topnav { padding: 14px 20px 0; } }
+    @media (max-width: 380px) { .tn-link { padding: 6px 8px; font-size: 12.5px; } }
+
+    /* Nav links wrap onto their own row on a phone rather than shrinking to
+       nothing beside the brand. The tap targets stay full size. */
+    .tn-links { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+    @media (max-width: 620px) {
+      .topnav { flex-wrap: wrap; gap: 8px; }
+      .tn-brand { margin-right: 0; width: 100%; }
+      .tn-links { gap: 0; margin-left: -12px; }
+    }
+
+    /* Legal, kept out of the nav because nobody arrives looking for it. */
+    .page-foot {
+      max-width: 1240px; margin: 0 auto; padding: 8px 32px 34px;
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .page-foot a {
+      font-size: 11.5px; color: #6E8AA6; text-decoration: none;
+    }
+    .page-foot a:hover { color: #8FA3B8; text-decoration: underline; }
+    @media (max-width: 900px) { .page-foot { padding: 4px 20px 28px; } }
+  </style>
+</head>
+<body class="split-page">
+
+<nav class="topnav">
+  <a class="tn-brand" href="../index.html?stay=1">Elec-<span>Buddy</span></a>
+  <div class="tn-links">
+    <a class="tn-link" href="../index.html?stay=1#story">About us</a>
+    <a class="tn-link" href="../index.html?stay=1#features">What's inside</a>
+    <a class="tn-link" href="../index.html?stay=1#topics">Coverage</a>
+    <a class="tn-link" href="mailto:support@elec-buddy.com">Contact</a>
+  </div>
+</nav>
+
+<div class="split">
+
+  <!-- Left: the pitch. Every number here comes from app/counts.js, which is
+       generated from the encrypted content itself, so it cannot drift from what
+       the app actually contains. Do not hand-type a figure into this page. -->
+  <aside class="pitch">
+    <div class="pitch-eyebrow">ETO CoC &middot; STCW Reg. III/6</div>
+    <h1>Built by a cadet,<br>for <span>every cadet</span></h1>
+    <p class="pitch-lead">
+      MMD oral and written preparation, and sponsorship interview prep, in one
+      place. Written by someone who sat the same exam, not assembled from a
+      syllabus.
+    </p>
+
+    <div class="pitch-stats">
+      <div class="pstat">
+        <div class="pstat-n" data-count="surveyorQuestions">1,224</div>
+        <div class="pstat-l">Real surveyor questions</div>
+      </div>
+      <div class="pstat">
+        <div class="pstat-n" data-count="quizQuestions">5,861</div>
+        <div class="pstat-l">Practice questions</div>
+      </div>
+      <div class="pstat">
+        <div class="pstat-n" data-count="oralTopics">23</div>
+        <div class="pstat-l">Oral topics, fully written</div>
+      </div>
+    </div>
+
+    <ul class="pitch-points">
+      <li><span class="pp-ic">&#10003;</span>
+        <span><b>Questions surveyors actually asked.</b> Recollections from real
+        sittings at Mumbai and other MMDs, with model answers, not a guess at
+        what might come up.</span></li>
+      <li><span class="pp-ic">&#9875;</span>
+        <span><b>Study at sea.</b> The app works with no signal once it has
+        loaded, so a bad connection mid-ocean does not stop a watch-keeper
+        revising.</span></li>
+      <li><span class="pp-ic">&#8599;</span>
+        <span><b>Two courses, one account.</b> CoC preparation and sponsorship
+        interview prep, switched from the same sign in.</span></li>
+    </ul>
+
+    <!-- INTENTIONALLY A PLACEHOLDER. Replace the text below with real words
+         from real cadets, or delete the block. Do not invent a testimonial. -->
+    <div class="pitch-proof">
+      <div class="pitch-proof-l">Placeholder &middot; not live copy</div>
+      <div class="pitch-proof-t">
+        A cadet's own words about their result belong here. Left empty on
+        purpose until there is something true to put in it.
+      </div>
+    </div>
+  </aside>
+
+<div class="card">
+  <div class="brand">
+    <div class="brand-name">Elec-Buddy</div>
+    <div class="brand-sub">ETO CoC · STCW Reg. III/6</div>
+  </div>
+
+  <!-- Which course, chosen before signing in rather than on a page afterwards.
+       Saved to profiles.default_track, a column that has existed since the
+       course_track work and has never been written to by anything. -->
+  <div class="course-sw" id="course-sw" role="group" aria-label="Choose your course">
+    <button type="button" class="course-b" data-track="coc" aria-pressed="true"
+            onclick="pickTrack('coc')">
+      <div class="cb-t">CoC Preparation</div>
+      <div class="cb-s">MMD oral &amp; written</div>
+    </button>
+    <button type="button" class="course-b" data-track="sponsorship" aria-pressed="false"
+            onclick="pickTrack('sponsorship')">
+      <div class="cb-t">Sponsorship</div>
+      <div class="cb-s">Company exam &amp; interview</div>
+    </button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab" onclick="switchTab('register')">Create Account</button>
+  </div>
+
+  <!-- Message -->
+  <div class="msg" id="msg"></div>
+
+  <!-- Sign In -->
+  <form class="form active" id="form-login" onsubmit="handleLogin(event)">
+    <div>
+      <label>Email address</label>
+      <input type="email" id="login-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-login-email" aria-live="polite"></div>
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+    </div>
+    <button class="btn" type="submit" id="login-btn">Sign In</button>
+    <button type="button" class="link-btn" onclick="switchTab('reset')">Forgot password?</button>
+  </form>
+
+  <!-- Create Account -->
+  <form class="form" id="form-register" onsubmit="handleRegister(event)">
+    <div>
+      <label>Full name</label>
+      <input type="text" id="reg-name" placeholder="Your name" required autocomplete="name">
+    </div>
+    <div>
+      <label>Email address</label>
+      <input type="email" id="reg-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-reg-email" aria-live="polite"></div>
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" id="reg-password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+    </div>
+    <div>
+      <label>Confirm password</label>
+      <input type="password" id="reg-confirm" placeholder="Repeat password" required autocomplete="new-password">
+    </div>
+    <label class="consent-row">
+      <input type="checkbox" id="reg-consent" required>
+      <span>I agree to the <a href="./terms.html" target="_blank" rel="noopener">Terms and Conditions</a> and <a href="./privacy.html" target="_blank" rel="noopener">Privacy Policy</a>.</span>
+    </label>
+    <button class="btn" type="submit" id="reg-btn">Create Account &amp; Start Free Trial</button>
+  </form>
+
+  <!-- Reset Password -->
+  <form class="form" id="form-reset" onsubmit="handleReset(event)">
+    <div>
+      <label>Enter your email address</label>
+      <input type="email" id="reset-email" placeholder="you@example.com" required autocomplete="email">
+      <div class="mailfix" id="mailfix-reset-email" aria-live="polite"></div>
+    </div>
+    <button class="btn" type="submit" id="reset-btn">Send Reset Link</button>
+    <button type="button" class="link-btn" onclick="switchTab('login')">Back to Sign In</button>
+  </form>
+
+  <!-- Set New Password (recovery link flow) -->
+  <form class="form" id="form-newpassword" onsubmit="handleNewPassword(event)">
+    <p style="font-size:13px;color:#8FA3B8;margin-bottom:4px">Enter a new password for your account.</p>
+    <div>
+      <label>New password</label>
+      <input type="password" id="new-password" placeholder="Min. 8 characters" required minlength="8" autocomplete="new-password">
+    </div>
+    <div>
+      <label>Confirm new password</label>
+      <input type="password" id="new-confirm" placeholder="Repeat password" required autocomplete="new-password">
+    </div>
+    <button class="btn" type="submit" id="newpass-btn">Set New Password</button>
+  </form>
+
+  <div class="footer-note" id="footer-note">
+    New accounts get a 3-day free trial, no payment required.
+  </div>
+</div>
+
+</div><!-- /.split -->
+
+<footer class="page-foot">
+  <a href="./privacy.html">Privacy Policy</a>
+  <a href="./terms.html">Terms of Use</a>
+  <a href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>
+</footer>
+
+<script>
+  const SUPABASE_URL  = 'https://vcofgjuwprylojgyfbtr.supabase.co';
+  const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+  const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
+  // The edge function itself is a one-shot compare-and-swap, so it's safe to
+  // call from here even though the tab could close before this resolves, and
+  // safe to call more than once for the same user.
+  //
+  // `keepalive` is what makes this actually work. Every caller below redirects
+  // with location.replace on the very next line, which tears the page down and
+  // CANCELS an ordinary in-flight fetch before it leaves the browser. That is
+  // a race the request usually loses: on production only 2 of 12 signups ever
+  // reached this endpoint. keepalive lets the request outlive the navigation,
+  // which is precisely what it exists for.
+  function sendWelcomeEmail(userId) {
+    if (!userId || _welcomeSentFor === userId) return;
+    _welcomeSentFor = userId;
+    fetch(SUPABASE_FN_URL + '/send-welcome-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: userId }),
+      keepalive: true,
+    }).catch(function() {});
+  }
+  // Both the SIGNED_IN handler and the getSession fallback can fire for the
+  // same confirmation, and either may win. Calling twice is harmless server
+  // side, but there is no reason to send two requests.
+  var _welcomeSentFor = null;
+
+  // Whether this sign-in belongs to a brand-new account.
+  //
+  // This used to be decided by looking for `type=signup` in the URL hash, and
+  // that was wrong. Confirmation tokens are single use, and mail providers
+  // routinely PREFETCH links to scan them, which spends the token before the
+  // human ever clicks. The account is confirmed, but the person lands on
+  // `#error=access_denied&error_code=otp_expired` instead of `type=signup`,
+  // sees "link expired", signs in normally, and is never welcomed. Real case
+  // on production: confirmed 35 seconds after signup, no welcome email.
+  //
+  // Account age is the honest test, and the server checks it again anyway:
+  // send-welcome-email only claims a send when the trial started in the last
+  // 10 minutes and no welcome has been stamped. So an existing user signing in
+  // can never be welcomed twice, whatever this returns.
+  function isBrandNew(user) {
+    if (!user || !user.created_at) return false;
+    return (Date.now() - new Date(user.created_at).getTime()) < 10 * 60 * 1000;
+  }
+
+  /* ── COURSE TRACK ────────────────────────────────────────────────────────
+     The old flow signed you in and then asked which course you wanted, on a
+     separate page, and remembered the answer in localStorage. That meant the
+     answer was per browser: the same cadet on a phone and a laptop was asked
+     twice. Here the question is answered before signing in, and the answer is
+     written to the account.
+
+     Still mirrored into localStorage, because the redirect happens immediately
+     and must not wait on a network write that may fail. The account copy is
+     the durable one; the local copy is what makes the next load instant. */
+  /* Fills every [data-count] from app/counts.js, which is generated from the
+     encrypted content itself. Typing a content figure into a page by hand is
+     how the Surveyor Q&A badge said 281 for months while the file held 1,193. */
+  (function applyCounts() {
+    var c = window.EB_COUNTS;
+    if (!c) return;
+    document.querySelectorAll('[data-count]').forEach(function (el) {
+      var v = c[el.getAttribute('data-count')];
+      if (typeof v === 'number' && v > 0) el.textContent = v.toLocaleString('en-IN');
+    });
+  })();
+
+  var _track = 'coc';
+  try { _track = localStorage.getItem('eb_track') || 'coc'; } catch (e) {}
+
+  function pickTrack(t) {
+    if (t !== 'coc' && t !== 'sponsorship') return;
+    _track = t;
+    try { localStorage.setItem('eb_track', t); } catch (e) {}
+    document.querySelectorAll('#course-sw .course-b').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.track === t));
+    });
+  }
+  window.pickTrack = pickTrack;
+  pickTrack(_track);
+
+  /* Fire and forget. A failed write must never block someone getting into the
+     app they have paid for; the worst case is they land on their chosen course
+     anyway and the account simply does not remember it yet. */
+  function saveTrack(userId) {
+    if (!userId) return;
+    try {
+      sb.from('profiles').update({ default_track: _track }).eq('id', userId)
+        .then(function () {}, function () {});
+    } catch (e) {}
+  }
+
+  function redirectAfterLogin() {
+    if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
+    else                          window.location.replace('./index.html');
+  }
+
+  // Detect error in URL hash (e.g. expired confirmation link)
+  var _initError = null;
+  (function() {
+    var hash = window.location.hash;
+    if (hash.includes('error=')) {
+      var params = new URLSearchParams(hash.slice(1));
+      var code = params.get('error_code') || '';
+      // "Expired" here usually does NOT mean the account is unconfirmed. These
+      // tokens are single use and mail providers prefetch links to scan them,
+      // which spends the token before the person clicks it. Their account is
+      // already confirmed and signing in just works. Telling them to sign up
+      // again sends them to a dead end, because the address is now registered.
+      _initError = code === 'otp_expired'
+        ? 'That confirmation link has already been used. This is usually harmless: your email provider often opens the link to scan it. Try signing in below, your account is most likely ready. If sign in says your email is not confirmed, sign up again to get a fresh link.'
+        : (params.get('error_description') || 'Something went wrong. Please try again.').replace(/\+/g, ' ');
+      history.replaceState(null, '', window.location.pathname);
+    }
+  })();
+
+  // Detect password recovery link immediately from URL hash
+  var _recoveryMode = window.location.hash.includes('type=recovery');
+  if (_recoveryMode) showRecoveryForm();
+
+  // Supabase fires PASSWORD_RECOVERY or SIGNED_IN when the hash token is processed
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'PASSWORD_RECOVERY') {
+      _recoveryMode = true;
+      showRecoveryForm();
+    } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
+      if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
+      redirectAfterLogin();
+    }
+  });
+
+  // If already logged in, skip auth page - but NOT during password recovery.
+  // This can resolve BEFORE onAuthStateChange fires SIGNED_IN, so it has to
+  // send the welcome email too. Otherwise whichever path wins the race decides
+  // whether a new account is ever welcomed.
+  sb.auth.getSession().then(({ data: { session } }) => {
+    if (session && !_recoveryMode) {
+      if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
+      redirectAfterLogin();
+    }
+  });
+
+  function showRecoveryForm() {
+    document.getElementById('tabs').style.display = 'none';
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.getElementById('form-newpassword').classList.add('active');
+    document.getElementById('footer-note').style.display = 'none';
+  }
+
+  function showMsg(text, type) {
+    const el = document.getElementById('msg');
+    el.textContent = text;
+    el.className = 'msg ' + type;
+  }
+  function clearMsg() {
+    const el = document.getElementById('msg');
+    el.className = 'msg';
+    el.textContent = '';
+  }
+
+  if (_initError) showMsg(_initError, 'error');
+
+  function switchTab(tab) {
+    clearMsg();
+    document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('form-' + tab).classList.add('active');
+    const note = document.getElementById('footer-note');
+    if (tab === 'login') {
+      document.querySelectorAll('.tab')[0].classList.add('active');
+      note.style.display = '';
+    } else if (tab === 'register') {
+      document.querySelectorAll('.tab')[1].classList.add('active');
+      note.style.display = '';
+    } else {
+      note.style.display = 'none';
+    }
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    clearMsg();
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true; btn.textContent = 'Signing in...';
+    const email    = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    const { error } = await sb.auth.signInWithPassword({ email, password });
+    if (error) {
+      var msg = error.message === 'Invalid login credentials'
+        ? 'Incorrect email or password.'
+        : error.message.toLowerCase().includes('email not confirmed')
+          ? 'Please confirm your email first. Check your inbox for the confirmation link.'
+          : error.message;
+      showMsg(msg, 'error');
+      btn.disabled = false; btn.textContent = 'Sign In';
+    } else {
+      redirectAfterLogin();
+    }
+  }
+
+  /* ── "Did you mean gmail.com?" ─────────────────────────────────────────
+     A real cadet signed up on gmail.CON at 01:33 on 16 Aug, got no
+     confirmation mail because that domain has no mail server, and retyped it
+     correctly two minutes later. He recovered on his own. Most would not:
+     they wait for an email that cannot arrive, and the only trace is a row
+     in the review queue nobody can explain.
+
+     type="email" does not catch this. It validates shape, and gmail.con is a
+     perfectly well formed address. Nor does the signup guard, which sees an
+     unknown domain and correctly queues it for review rather than calling it
+     a mistake.
+
+     IT SUGGESTS, IT NEVER REFUSES. There are live accounts on tulas.edu.in
+     and miet.ac.in, and the next one might be a shipping company nobody has
+     seen before. Guessing wrong and blocking would be worse than the typo.
+     The same reasoning is written into signup_guard_setup.sql about why a
+     pure allowlist is the wrong shape. */
+
+  // Consumer providers only, and deliberately hardcoded rather than read from
+  // allowed_email_domains: that table is REVOKEd from anon, the signup page
+  // has no session yet, and a stale list here can only ever mean a missed
+  // suggestion, never a wrong block. These names do not change.
+  var MAIL_PROVIDERS = [
+    'gmail.com', 'googlemail.com',
+    'yahoo.com', 'yahoo.in', 'yahoo.co.in', 'ymail.com', 'rediffmail.com',
+    'outlook.com', 'hotmail.com', 'live.com', 'msn.com',
+    'icloud.com', 'me.com',
+    'protonmail.com', 'proton.me', 'zoho.com', 'zohomail.com', 'aol.com'
+  ];
+
+  /* Optimal string alignment: Levenshtein plus transposition. Transposition
+     matters because swapping two letters is the most common typing mistake
+     there is, and plain Levenshtein scores gmial.com against gmail.com as 2,
+     the same as a domain that genuinely differs. With transposition it scores
+     1, alongside gmail.con and gnail.com, which is what it actually is. */
+  function mailDistance(a, b) {
+    var m = a.length, n = b.length, i, j;
+    var d = [];
+    for (i = 0; i <= m; i++) { d[i] = [i]; }
+    for (j = 0; j <= n; j++) { d[0][j] = j; }
+    for (i = 1; i <= m; i++) {
+      for (j = 1; j <= n; j++) {
+        var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+        d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + cost);
+        if (i > 1 && j > 1 &&
+            a.charAt(i - 1) === b.charAt(j - 2) &&
+            a.charAt(i - 2) === b.charAt(j - 1)) {
+          d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+        }
+      }
+    }
+    return d[m][n];
+  }
+
+  // The corrected address, or null when there is nothing worth saying.
+  function mailSuggest(email) {
+    var at = email.lastIndexOf('@');
+    if (at < 1 || at === email.length - 1) return null;
+    var local  = email.slice(0, at);
+    var domain = email.slice(at + 1).toLowerCase();
+
+    // Already a provider we know: nothing to fix.
+    if (MAIL_PROVIDERS.indexOf(domain) !== -1) return null;
+
+    /* No dot at all. HTML email validation permits it, so "sam@gmail" reaches
+       here as a valid address, and its distance from gmail.com is 4, far
+       outside the threshold below. Matching the first label catches it. */
+    if (domain.indexOf('.') === -1) {
+      for (var k = 0; k < MAIL_PROVIDERS.length; k++) {
+        if (MAIL_PROVIDERS[k].split('.')[0] === domain) return local + '@' + MAIL_PROVIDERS[k];
+      }
+      return null;
+    }
+
+    /* How far off we are willing to call a typo, scaled to how long the
+       domain is. One edit away from gmail.com is strong evidence, because
+       there are very few real nine-character domains that close to it. One
+       edit away from me.com is weak evidence: we.com and he.com are equally
+       plausible real domains, and suggesting against them is noise.
+
+       So short domains get no suggestion at all rather than a bad one. The
+       cost is missing me.con, which is a provider almost nobody here uses
+       against gmail's 90% share. */
+    var limit = domain.length <= 6 ? 0
+              : domain.length <= 9 ? 1
+              : 2;
+    if (limit === 0) return null;
+
+    var best = null, bestD = limit + 1;
+    for (var i = 0; i < MAIL_PROVIDERS.length; i++) {
+      var dist = mailDistance(domain, MAIL_PROVIDERS[i]);
+      if (dist > 0 && dist < bestD) { bestD = dist; best = MAIL_PROVIDERS[i]; }
+    }
+    if (!best) return null;
+
+    return local + '@' + best;
+  }
+
+  function escMail(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function wireMailFix(inputId) {
+    var input = document.getElementById(inputId);
+    var box   = document.getElementById('mailfix-' + inputId);
+    if (!input || !box) return;
+    var dismissed = '';
+
+    function hide() { box.className = 'mailfix'; box.innerHTML = ''; }
+
+    function check() {
+      var suggestion = mailSuggest(input.value.trim());
+      if (!suggestion || suggestion.toLowerCase() === dismissed) { hide(); return; }
+
+      box.innerHTML = '<span class="mailfix-q">Did you mean '
+        + '<button type="button" class="mailfix-yes">' + escMail(suggestion) + '</button>?</span>'
+        + '<button type="button" class="mailfix-no">No, it is right</button>';
+      box.className = 'mailfix show';
+
+      box.querySelector('.mailfix-yes').addEventListener('click', function () {
+        input.value = suggestion;
+        hide();
+        // Focus goes back to the field rather than nowhere. The button that
+        // was just clicked is about to be removed from the page, and leaving
+        // focus on a removed element strands anyone using a keyboard.
+        input.focus();
+      });
+      box.querySelector('.mailfix-no').addEventListener('click', function () {
+        dismissed = suggestion.toLowerCase();
+        hide();
+        input.focus();
+      });
+    }
+
+    // Checked when they leave the field, not while they type: half a typed
+    // address is nearly always wrong, and correcting someone mid-word is
+    // how a helpful hint turns into a nuisance.
+    input.addEventListener('blur', check);
+    input.addEventListener('input', function () {
+      if (box.className.indexOf('show') !== -1) hide();
+    });
+  }
+
+  ['reg-email', 'login-email', 'reset-email'].forEach(wireMailFix);
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    clearMsg();
+    const name     = document.getElementById('reg-name').value.trim();
+    const email    = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+    const confirm  = document.getElementById('reg-confirm').value;
+    if (password !== confirm) { showMsg('Passwords do not match.', 'error'); return; }
+    const btn = document.getElementById('reg-btn');
+    btn.disabled = true; btn.textContent = 'Creating account...';
+
+    // Whether this provider is pre-approved. Not a gate: an unrecognised
+    // domain still creates an account, it just lands in the review queue
+    // (app/admin/signup_guard_setup.sql). Knowing it up front only changes
+    // which confirmation sentence we show afterwards, so a network blip here
+    // must never stop a signup.
+    var willNeedReview = false;
+    try {
+      const { data: ok, error: chkErr } = await sb.rpc('eb_signup_domain_allowed', { p_email: email });
+      if (!chkErr && ok === false) willNeedReview = true;
+    } catch (_) { /* assume normal signup */ }
+
+    const { data, error } = await sb.auth.signUp({
+      email, password,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: authReturnUrl()
+      }
+    });
+    if (error) {
+      showMsg(signupErrorMessage(error), 'error');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+    } else if (data.session) {
+      // Email confirmation disabled - user is logged in immediately
+      if (data.user) sendWelcomeEmail(data.user.id);
+      redirectAfterLogin();
+    } else if (willNeedReview) {
+      // Account exists and is real; it is simply held until an admin looks at
+      // it. Say so plainly, because "check your email then sign in" would be a
+      // lie that ends at a wall they cannot explain.
+      showMsg('Account created. Because you used a company or college address, we check it by hand before opening access. Confirm your email now, and we will approve you shortly.', 'success');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+      document.getElementById('form-register').reset();
+    } else {
+      // Email confirmation enabled - ask them to verify. The welcome email
+      // fires later, off the SIGNED_IN event once they actually hold a
+      // session, not here, before they've proven they own the address.
+      showMsg('Account created! Check your email to verify your address, then sign in.', 'success');
+      btn.disabled = false; btn.textContent = 'Create Account & Start Free Trial';
+      document.getElementById('form-register').reset();
+    }
+  }
+
+  // The duplicate-inbox refusal is raised inside a database trigger, so
+  // Supabase returns it as a 500 carrying our raw message. Nobody should be
+  // shown "eb_duplicate_inbox: blesson@gmail.com", so translate what we raise
+  // ourselves and pass anything else through untouched.
+  function signupErrorMessage(error) {
+    var raw = (error && error.message) || 'Something went wrong. Please try again.';
+    if (/eb_duplicate_inbox/i.test(raw)) {
+      return 'An account already exists for this email address. Sign in instead, or use Forgot password if you cannot get in.';
+    }
+    // Any other trigger failure surfaces as this generic Supabase string, which
+    // tells the reader nothing and looks like our bug rather than their input.
+    if (/database error saving new user/i.test(raw)) {
+      return 'We could not create that account. Please check the email address and try again, or contact support if it keeps happening.';
+    }
+    return raw;
+  }
+
+  // Where a confirmation or reset link should drop the reader.
+  //
+  // Derived from wherever they actually are, never hardcoded. This used to name
+  // the GitHub Pages URL outright, so once the site moved to elec-buddy.com a
+  // confirmation link landed people back on the old origin. Their new session
+  // was then created in THAT origin's storage and did not carry across, so they
+  // returned to elec-buddy.com still signed out and it looked broken.
+  //
+  // Every origin the app is served from has to be in Supabase's redirect
+  // allowlist, or Supabase rejects the redirect and the email link dies.
+  function authReturnUrl() {
+    var path = window.location.pathname;
+    // Served as a directory index rather than the explicit file: normalise, so
+    // the returned URL is always the page that can actually handle the token.
+    if (!/auth\.html$/.test(path)) path = path.replace(/[^/]*$/, '') + 'auth.html';
+    return window.location.origin + path;
+  }
+
+  async function handleReset(e) {
+    e.preventDefault();
+    clearMsg();
+    const email = document.getElementById('reset-email').value.trim();
+    const btn   = document.getElementById('reset-btn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+    const { error } = await sb.auth.resetPasswordForEmail(email, {
+      redirectTo: authReturnUrl()
+    });
+    if (error) {
+      showMsg(error.message, 'error');
+    } else {
+      showMsg('Reset link sent. Check your inbox.', 'success');
+    }
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+  }
+
+  async function handleNewPassword(e) {
+    e.preventDefault();
+    clearMsg();
+    const p1  = document.getElementById('new-password').value;
+    const p2  = document.getElementById('new-confirm').value;
+    if (p1 !== p2) { showMsg('Passwords do not match.', 'error'); return; }
+    const btn = document.getElementById('newpass-btn');
+    btn.disabled = true; btn.textContent = 'Updating...';
+    const { error } = await sb.auth.updateUser({ password: p1 });
+    if (error) {
+      showMsg(error.message, 'error');
+      btn.disabled = false; btn.textContent = 'Set New Password';
+    } else {
+      showMsg('Password updated. Taking you in...', 'success');
+      setTimeout(redirectAfterLogin, 1500);
+    }
+  }
+</script>
+</body>
+</html>
