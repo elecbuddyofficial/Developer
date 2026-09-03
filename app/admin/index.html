@@ -4408,9 +4408,14 @@ function drawPlanDist(all, now) {
 /* ── USERS ───────────────────────────────────────────────────────── */
 var _userFilter = 'all';
 
+/* Shared so loadUsers and the single-row fallback in openUserProfile cannot
+   drift apart. They did once already: sponsorship_progress was added to one
+   and the drawer read a column the other never fetched. */
+var USER_COLS = 'id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at';
+
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
-    .select('id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at')
+    .select(USER_COLS)
     .order('created_at', { ascending: false });
   if (error) {
     document.getElementById('users-tbody').innerHTML =
@@ -4575,7 +4580,23 @@ async function toggleProfDevices() {
 
 async function openUserProfile(userId) {
   var u = _allUsers.find(function(x) { return x.id === userId; });
-  if (!u) { toast('User not found', 'err'); return; }
+
+  /* _allUsers is a snapshot taken at page load and refreshed only after an
+     admin action. Several lists that link here are refetched on every visit:
+     Online status, the funnel, mock bookings, the audit log. So anyone who
+     signed up since the console was opened appears in those lists and is
+     absent from the snapshot, and clicking them used to report "User not
+     found" for an account that plainly exists. Fetch the one row instead.
+
+     Not pushed through updatePillCounts on purpose: the tiles describe the
+     snapshot, and moving one number without re-rendering the table would make
+     the two disagree. The next loadUsers() squares them up. */
+  if (!u) {
+    var res = await _sb.from('profiles').select(USER_COLS).eq('id', userId).maybeSingle();
+    if (res.error || !res.data) { toast('User not found', 'err'); return; }
+    u = res.data;
+    _allUsers.push(u);
+  }
   _profUser = u;
 
   document.getElementById('prof-overlay').classList.add('open');
