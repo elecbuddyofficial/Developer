@@ -54,6 +54,13 @@
       border-radius: 6px;
       width: 100%; max-width: 400px;
       padding: 36px 32px;
+      /* The grid column is 460px so the pitch side has breathing room, but
+         the card itself caps at 400px and was left sitting at the column's
+         start, 60px short of the topnav's right edge. justify-self:end
+         closes that gap so the two line up. Overridden back to centred by
+         the mobile rule below (margin:auto beats justify-self on a grid
+         item, so no conflict once .split collapses to one column). */
+      justify-self: end;
     }
 
     .brand {
