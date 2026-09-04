@@ -211,6 +211,30 @@
       line-height: 1.5;
     }
 
+    /* Mobile-only "there is more below" cue. Hidden entirely above the
+       900px breakpoint, where .split runs two columns side by side and
+       the question this exists to answer does not come up. */
+    .scroll-cue {
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .scroll-cue {
+        display: flex; align-items: center; justify-content: center; gap: 6px;
+        width: 100%; margin-top: 18px; padding: 12px 10px 2px;
+        background: transparent; border: none; border-top: 1px dashed #1A3050;
+        color: var(--acc); font-size: 12px; font-weight: 700; letter-spacing: .3px;
+        cursor: pointer; font-family: inherit;
+      }
+      .scroll-cue svg { width: 15px; height: 15px; animation: scrollCueBounce 1.6s ease-in-out infinite; }
+    }
+    @keyframes scrollCueBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-cue svg { animation: none; }
+    }
+
     /* ── Mobile ───────────────────────────────────────────────── */
 
     /* iOS zooms the page when a focused input is under 16px and never
@@ -470,28 +494,89 @@
        back to the page you just left, which looks like a broken button. */
     .topnav {
       display: flex; align-items: center; gap: 18px;
-      max-width: 1240px; margin: 0 auto; padding: 18px 32px 0;
+      max-width: 1240px; margin: 0 auto; padding: 16px 32px 17px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
     }
     .tn-brand {
+      display: flex; align-items: center; gap: 9px;
       font-size: 15px; font-weight: 800; color: #DDE5EF; letter-spacing: -.2px;
       margin-right: auto; text-decoration: none;
     }
-    .tn-brand span { color: #C8A44A; }
+    /* The wordmark's accent now tracks the course tab, same --acc used
+       everywhere else on the page - a small confirmation, on load, of
+       which course this whole page is currently set to, before a visitor
+       has even looked at the tabs themselves. */
+    .tn-brand span { color: var(--acc); transition: color .15s ease; }
+    .tn-mark {
+      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+      background: rgba(93,152,248,.14); color: var(--acc);
+      transition: background-color .15s ease, color .15s ease;
+    }
+    :root[data-track="sponsorship"] .tn-mark { background: rgba(245,158,11,.14); }
+    .tn-mark svg { width: 15px; height: 15px; }
     .tn-link {
       font-size: 13px; font-weight: 600; color: #8FA3B8; text-decoration: none;
       padding: 7px 12px; border-radius: 7px; transition: color .15s, background .15s;
     }
-    .tn-link:hover { color: #DDE5EF; background: #0D1E33; }
-    @media (max-width: 900px) { .topnav { padding: 14px 20px 0; } }
-    @media (max-width: 380px) { .tn-link { padding: 6px 8px; font-size: 12.5px; } }
+    .tn-link:hover { color: var(--acc); background: #0D1E33; }
+    @media (max-width: 900px) { .topnav { padding: 14px 20px 15px; } }
 
-    /* Nav links wrap onto their own row on a phone rather than shrinking to
-       nothing beside the brand. The tap targets stay full size. */
-    .tn-links { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+    /* ── MOBILE MENU: a side panel, not a wrapped second row ────────────────
+       Under 620px .tn-links itself is hidden (see the query below) and
+       .tn-burger opens .tn-panel instead - the same four links, but full
+       tap-height, in a panel that slides in from the right rather than
+       pushing the brand onto its own line and making the bar two rows tall
+       before anyone has done anything. */
+    .tn-burger {
+      display: none; width: 38px; height: 38px; align-items: center; justify-content: center;
+      background: transparent; border: 1px solid #1A3050; border-radius: 8px;
+      color: #DDE5EF; cursor: pointer; flex-shrink: 0;
+    }
+    .tn-burger svg { width: 18px; height: 18px; }
+    .tn-burger:hover { border-color: #2A4568; }
+
+    .tn-overlay {
+      position: fixed; inset: 0; background: rgba(3,7,15,.6);
+      opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 190;
+    }
+    .tn-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .tn-panel {
+      position: fixed; top: 0; right: 0; height: 100dvh;
+      width: min(78vw, 300px); background: #0A1828; border-left: 1px solid #1A3050;
+      display: flex; flex-direction: column; padding: 6px 8px;
+      transform: translateX(100%); transition: transform .25s cubic-bezier(.4,0,.2,1);
+      z-index: 200;
+    }
+    .tn-panel.open { transform: translateX(0); }
+    .tn-panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 10px 14px;
+    }
+    .tn-panel-title { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #6E8AA6; }
+    .tn-panel-close {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; background: transparent; border: none; border-radius: 8px;
+      color: #8FA3B8; cursor: pointer;
+    }
+    .tn-panel-close:hover { color: #DDE5EF; background: #0D1E33; }
+    .tn-panel-close svg { width: 16px; height: 16px; }
+    .tn-panel-link {
+      font-size: 14.5px; font-weight: 600; color: #DDE5EF; text-decoration: none;
+      padding: 14px 12px; border-radius: 8px; border-bottom: 1px solid #12213A;
+    }
+    .tn-panel-link:last-child { border-bottom: none; }
+    .tn-panel-link:hover { background: #0D1E33; }
+    @media (prefers-reduced-motion: reduce) {
+      .tn-panel { transition: none; }
+      .tn-overlay { transition: none; }
+    }
+
+    .tn-links { display: flex; align-items: center; gap: 2px; }
     @media (max-width: 620px) {
-      .topnav { flex-wrap: wrap; gap: 8px; }
-      .tn-brand { margin-right: 0; width: 100%; }
-      .tn-links { gap: 0; margin-left: -12px; }
+      .tn-links { display: none; }
+      .tn-burger { display: flex; }
     }
 
     /* Legal, kept out of the nav because nobody arrives looking for it. */
@@ -509,14 +594,41 @@
 <body class="split-page">
 
 <nav class="topnav">
-  <a class="tn-brand" href="../index.html?stay=1">Elec-<span>Buddy</span></a>
+  <a class="tn-brand" href="../index.html?stay=1">
+    <span class="tn-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6l1-8Z"/></svg>
+    </span>
+    Elec-<span>Buddy</span>
+  </a>
   <div class="tn-links">
     <a class="tn-link" href="../index.html?stay=1#story">About us</a>
     <a class="tn-link" href="../index.html?stay=1#features">What's inside</a>
     <a class="tn-link" href="../index.html?stay=1#topics">Coverage</a>
     <a class="tn-link" href="mailto:support@elec-buddy.com">Contact</a>
   </div>
+  <!-- Mobile only (see the 620px query below). Opens .tn-panel rather than
+       the old behaviour of the links wrapping onto a second row, which
+       worked but looked like the page had run out of space rather than
+       having a menu. -->
+  <button type="button" class="tn-burger" id="tn-burger" aria-label="Open menu"
+          aria-expanded="false" aria-controls="tn-panel" onclick="openNavPanel()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
 </nav>
+
+<div class="tn-overlay" id="tn-overlay" onclick="closeNavPanel()"></div>
+<div class="tn-panel" id="tn-panel" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="tn-panel-head">
+    <span class="tn-panel-title">Menu</span>
+    <button type="button" class="tn-panel-close" aria-label="Close menu" onclick="closeNavPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+  </div>
+  <a class="tn-panel-link" href="../index.html?stay=1#story">About us</a>
+  <a class="tn-panel-link" href="../index.html?stay=1#features">What's inside</a>
+  <a class="tn-panel-link" href="../index.html?stay=1#topics">Coverage</a>
+  <a class="tn-panel-link" href="mailto:support@elec-buddy.com">Contact</a>
+</div>
 
 <div class="split">
 
@@ -665,6 +777,15 @@
   <div class="footer-note" id="footer-note">
     New accounts get a 3-day free trial, no payment required.
   </div>
+
+  <!-- Mobile only. .split just stacks to one column below 900px with
+       nothing telling anyone the updates/events content still exists
+       under this card - this is the "there is more below" cue. -->
+  <button type="button" class="scroll-cue" id="scroll-cue"
+          onclick="document.getElementById('feat-ticker').scrollIntoView({behavior:'smooth', block:'start'})">
+    <span>What's new</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </button>
 </div>
 
 </div><!-- /.split -->
@@ -680,6 +801,27 @@
   const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
   const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  /* ── MOBILE NAV PANEL ─────────────────────────────────────────────────── */
+  function openNavPanel() {
+    document.getElementById('tn-panel').classList.add('open');
+    document.getElementById('tn-overlay').classList.add('open');
+    document.getElementById('tn-burger').setAttribute('aria-expanded', 'true');
+    // Locks the page behind the panel rather than letting it scroll under a
+    // finger that meant to scroll the panel's own (currently short) content.
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNavPanel() {
+    document.getElementById('tn-panel').classList.remove('open');
+    document.getElementById('tn-overlay').classList.remove('open');
+    document.getElementById('tn-burger').setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  window.openNavPanel = openNavPanel;
+  window.closeNavPanel = closeNavPanel;
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNavPanel();
+  });
 
   // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
   // The edge function itself is a one-shot compare-and-swap, so it's safe to
