@@ -147,7 +147,17 @@ serve(async (req) => {
     // a crashed isolate never runs its own cleanup.
     const releaseReservation = async () => {
       if (couponCode) {
-        await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+        // NOT .rpc(...).catch(...). supabase-js@2's PostgrestBuilder is a
+        // thenable, not a real Promise, and does not reliably expose .catch
+        // as a chainable method for a floating "@2" import resolved by
+        // esm.sh. Chaining it here threw an uncaught TypeError on this exact
+        // failure path, turning what should be a clean release-and-error into
+        // a bare 500 while leaving the coupon held in 'reserved' state until
+        // its TTL expired on its own. Found live, in this function, by fully
+        // exercising the equivalent path on the mock interview side.
+        // try/await/catch works on any awaited value regardless of what
+        // methods it exposes.
+        try { await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }); } catch (e) {}
       }
     };
 

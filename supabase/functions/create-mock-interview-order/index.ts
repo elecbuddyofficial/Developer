@@ -180,7 +180,15 @@ serve(async (req) => {
       // it plainly rather than charging the 1 rupee floor to somebody who was
       // told it was free.
       if (price.isFullGrant) {
-        await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+        // NOT .rpc(...).catch(...). supabase-js@2's PostgrestBuilder is a
+        // thenable, not a real Promise, and does not reliably expose .catch
+        // as a chainable method on every version esm.sh resolves for a
+        // floating @2 import. Chaining it here threw
+        // "sb.rpc(...).catch is not a function", an uncaught TypeError that
+        // turned a clean 400 refusal into a bare 500 and skipped the release
+        // entirely, leaving the code held in 'reserved' state. try/await/catch
+        // works on any awaited value regardless of what methods it exposes.
+        try { await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }); } catch (e) {}
         return json({
           error: 'That code covers the whole booking, which is not supported yet. '
                + 'Ask for a code that takes an amount off instead.',
@@ -193,7 +201,7 @@ serve(async (req) => {
 
     const releaseCoupon = async () => {
       if (!couponReserved || !couponCode) return;
-      await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+      try { await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }); } catch (e) {}
     };
 
     // ── 5. Hold the slot ──────────────────────────────────────────────────
@@ -220,8 +228,8 @@ serve(async (req) => {
     // only: reserved_until is the actual guarantee, because a crashed isolate
     // never runs its own cleanup.
     const release = async () => {
-      await sb.rpc('mock_slot_release', { p_booking: bookingId, p_user: user.id })
-        .catch(() => {});
+      // Same fix as above: try/catch, not .catch() chained on the rpc() call.
+      try { await sb.rpc('mock_slot_release', { p_booking: bookingId, p_user: user.id }); } catch (e) {}
       // The code goes back with the slot. Without this a Razorpay outage would
       // spend somebody's single-use code on a booking that never happened.
       await releaseCoupon();
