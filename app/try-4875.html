@@ -367,11 +367,14 @@
     }
     .upd-badge-notes   { background: rgba(93,200,122,.14); color: #5DC87A; }
     .upd-badge-product { background: rgba(200,164,74,.16); color: #C8A44A; }
+    .upd-badge-event   { background: rgba(155,135,245,.16); color: #9B87F5; }
     .upd-text { font-size: 13.5px; line-height: 1.5; color: #DDE5EF; }
     .upd-meta {
       font-size: 11px; color: #6E8AA6; margin-top: 4px;
       font-variant-numeric: tabular-nums;
     }
+    .upd-reg { color: var(--acc); font-weight: 700; text-decoration: none; transition: color .15s ease; }
+    .upd-reg:hover { text-decoration: underline; }
 
     /* ── COURSE SWITCH ───────────────────────────────────────────────────────
        This is what removes the course-selector page: the choice is made here,
@@ -721,22 +724,71 @@
   // sprite, matching this page's existing icon choices (the old pitch
   // checklist used the same HTML-entity approach). Add a line here before
   // a new type shows up anywhere, or it renders blank.
-  var UPD_GLYPH = { notes: '&#9998;', product: '&#9889;' };
+  var UPD_GLYPH = { notes: '&#9998;', product: '&#9889;', event: '&#10022;' };
 
-  function renderUpdates() {
-    var list = document.getElementById('updates-list');
-    if (!list) return;
-    var items = (window.EB_UPDATES || [])
-      .filter(function (u) { return !u.track || u.track === _track; })
+  // Absolute date/time, not "X days ago" - an event is upcoming, not
+  // something that already happened, so the relative-past phrasing
+  // _updAgo() uses for the other two types would read backwards here.
+  // Register is the whole point of an event row, so it's part of the
+  // meta line rather than a separate element.
+  function _evMeta(u) {
+    var when = new Date(u.date).toLocaleString('en-IN', {
+      weekday: 'short', day: 'numeric', month: 'short',
+      hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
+    });
+    return _updEsc(when) + ' &middot; <a class="upd-reg" href="' + _updEsc(u.link)
+      + '" target="_blank" rel="noopener noreferrer">Register</a>';
+  }
+
+  // public_events is read live (see app/admin/public_events_setup.sql),
+  // unlike the hand-curated app/updates.js entries, because an admin can
+  // add or publish one at any time and this page should not need a deploy
+  // to show it. Fetched once and cached: a track switch re-filters the
+  // same rows rather than hitting the network again.
+  var _evCache = null;
+  function fetchPublicEvents() {
+    if (_evCache) return Promise.resolve(_evCache);
+    return sb.from('public_events')
+      .select('title, blurb, event_at, register_link, track')
+      .order('event_at', { ascending: true })
+      .then(function (res) {
+        var rows = (!res.error && res.data) ? res.data : [];
+        // Keep events from the last day onward, so one does not vanish
+        // mid-morning of the day it happens. Anything older is done.
+        var cutoff = Date.now() - 24 * 3600 * 1000;
+        _evCache = rows.filter(function (e) { return new Date(e.event_at).getTime() >= cutoff; });
+        return _evCache;
+      }, function () { _evCache = []; return _evCache; });
+  }
+
+  function paintUpdates(list, events) {
+    var evItems = events
+      .filter(function (e) { return !e.track || e.track === _track; })
+      .map(function (e) { return { type: 'event', date: e.event_at, text: e.title, link: e.register_link }; });
+    var curated = (window.EB_UPDATES || [])
+      .filter(function (u) { return !u.track || u.track === _track; });
+    var items = evItems.concat(curated)
       .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; })
       .slice(0, 5);
     list.innerHTML = items.map(function (u) {
       var type = _updEsc(u.type);
+      var meta = u.type === 'event' ? _evMeta(u) : _updEsc(_updAgo(u.date));
       return '<div class="upd-item"><span class="upd-badge upd-badge-' + type + '">'
         + (UPD_GLYPH[u.type] || '') + '</span>'
         + '<div><div class="upd-text">' + _updEsc(u.text) + '</div>'
-        + '<div class="upd-meta">' + _updEsc(_updAgo(u.date)) + '</div></div></div>';
+        + '<div class="upd-meta">' + meta + '</div></div></div>';
     }).join('');
+  }
+
+  function renderUpdates() {
+    var list = document.getElementById('updates-list');
+    if (!list) return;
+    // Paint the curated entries immediately - no reason to make the whole
+    // panel wait on a network round trip that only ever adds to the list.
+    // The live query then repaints once, merged, whether it lands in 80ms
+    // or fails outright (fetchPublicEvents() never rejects).
+    paintUpdates(list, _evCache || []);
+    if (!_evCache) fetchPublicEvents().then(function (events) { paintUpdates(list, events); });
   }
 
   /* ── COURSE SWITCH ────────────────────────────────────────────────────── */
