@@ -14,10 +14,27 @@
        are the last generated values, kept as fallback so a failed load
        shows a real figure rather than an empty box. -->
   <script src="counts.js?v=1"></script>
+  <!-- Hand-maintained, like a testimonial: real dates and one-line
+       descriptions of what actually shipped, added as content/product work
+       lands. See the Updates panel further down. -->
+  <script src="updates.js?v=1"></script>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* The one CSS custom property on an otherwise all-literal page. Flips
+       with the course tab (see pickTrack() in the script below) so the same
+       elements read blue for CoC and orange for Sponsorship without a
+       second copy of every rule. Matches style.css's own dark-theme
+       --blue/--orange exactly; this page has no light theme to also match,
+       being deliberately self-contained (see the .mailfix comment further
+       down for why). */
+    :root { --acc: #5D98F8; }
+    :root[data-track="sponsorship"] { --acc: #f59e0b; }
+    @media (prefers-reduced-motion: reduce) {
+      .updates, .course-b, .pitch-eyebrow { transition: none !important; }
+    }
 
     body {
       min-height: 100vh;
@@ -249,17 +266,14 @@
     .pitch { padding-top: 8px; }
     .pitch-eyebrow {
       font-size: 11.5px; font-weight: 700; letter-spacing: 1.2px;
-      text-transform: uppercase; color: #C8A44A; margin-bottom: 14px;
+      text-transform: uppercase; color: var(--acc); margin-bottom: 14px;
+      transition: color .15s ease;
     }
     .pitch h1 {
       font-size: 40px; line-height: 1.12; font-weight: 800; color: #DDE5EF;
       letter-spacing: -0.5px; margin-bottom: 16px; text-wrap: balance;
     }
     .pitch h1 span { color: #C8A44A; }
-    .pitch-lead {
-      font-size: 15.5px; line-height: 1.62; color: #8FA3B8; max-width: 46ch;
-      margin-bottom: 30px;
-    }
 
     /* Numbers, not adjectives. Every one is generated from the encrypted
        content by _counts.cjs, so none of it can quietly become a lie. */
@@ -279,28 +293,36 @@
       font-size: 11px; color: #6E8AA6; margin-top: 3px; line-height: 1.35;
     }
 
-    .pitch-points { list-style: none; display: grid; gap: 13px; max-width: 48ch; }
-    .pitch-points li {
-      display: flex; gap: 11px; font-size: 13.8px; line-height: 1.55; color: #8FA3B8;
+    /* ── UPDATES ──────────────────────────────────────────────────────────
+       Replaces the old pitch (a paragraph, a checklist, a placeholder
+       testimonial box) with proof the product is alive: content that
+       actually changed recently. Entries come from app/updates.js, hand
+       maintained the same way testimonials would be - real dates, real
+       one-line descriptions, nothing invented to fill space. Filtered to
+       the selected course tab in renderUpdates(); a short true list beats
+       a padded fake one, so an empty type renders nothing rather than a
+       placeholder. */
+    .updates {
+      max-width: 48ch; border-left: 3px solid var(--acc);
+      padding-left: 16px; transition: border-color .15s ease, opacity .13s ease;
     }
-    .pitch-points b { color: #DDE5EF; font-weight: 700; }
-    .pp-ic {
-      flex-shrink: 0; width: 19px; height: 19px; border-radius: 5px;
-      background: #12283F; color: #C8A44A;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800; margin-top: 1px;
-    }
-
-    /* Deliberately empty until there is something true to put in it. */
-    .pitch-proof {
-      margin-top: 30px; padding: 16px 18px; border-radius: 8px;
-      background: #0A1828; border: 1px dashed #1A3050; max-width: 48ch;
-    }
-    .pitch-proof-l {
+    .updates-h {
       font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
-      text-transform: uppercase; color: #6E8AA6; margin-bottom: 7px;
+      text-transform: uppercase; color: #6E8AA6; margin-bottom: 12px;
     }
-    .pitch-proof-t { font-size: 13px; line-height: 1.6; color: #8FA3B8; }
+    .updates-list { display: grid; gap: 14px; }
+    .upd-item { display: flex; gap: 10px; }
+    .upd-dot {
+      flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%;
+      margin-top: 5px;
+    }
+    .upd-dot-notes   { background: #5DC87A; }
+    .upd-dot-product { background: #C8A44A; }
+    .upd-text { font-size: 13.5px; line-height: 1.55; color: #DDE5EF; }
+    .upd-meta {
+      font-size: 11px; color: #6E8AA6; margin-top: 3px;
+      font-variant-numeric: tabular-nums;
+    }
 
     /* ── COURSE SWITCH ───────────────────────────────────────────────────────
        This is what removes the course-selector page: the choice is made here,
@@ -314,15 +336,16 @@
     .course-b {
       border: 1px solid transparent; border-radius: 6px; background: transparent;
       padding: 9px 6px 8px; cursor: pointer; font-family: inherit;
-      color: #6E8AA6; text-align: center; transition: background .15s, color .15s;
+      color: #6E8AA6; text-align: center;
+      transition: background .15s, color .15s, border-color .15s;
     }
     .course-b:hover { color: #DDE5EF; }
     .course-b .cb-t { font-size: 12.5px; font-weight: 800; letter-spacing: .2px; }
     .course-b .cb-s { font-size: 10.5px; margin-top: 2px; opacity: .85; }
     .course-b[aria-pressed="true"] {
-      background: #12283F; border-color: #3A6898; color: #DDE5EF;
+      background: #12283F; border-color: var(--acc); color: #DDE5EF;
     }
-    .course-b[aria-pressed="true"] .cb-t { color: #C8A44A; }
+    .course-b[aria-pressed="true"] .cb-t { color: var(--acc); transition: color .15s ease; }
 
     @media (max-width: 900px) {
       .split {
@@ -402,13 +425,8 @@
        generated from the encrypted content itself, so it cannot drift from what
        the app actually contains. Do not hand-type a figure into this page. -->
   <aside class="pitch">
-    <div class="pitch-eyebrow">ETO CoC &middot; STCW Reg. III/6</div>
+    <div class="pitch-eyebrow" id="pitch-eyebrow">ETO CoC &middot; STCW Reg. III/6</div>
     <h1>Built by a cadet,<br>for <span>every cadet</span></h1>
-    <p class="pitch-lead">
-      MMD oral and written preparation, and sponsorship interview prep, in one
-      place. Written by someone who sat the same exam, not assembled from a
-      syllabus.
-    </p>
 
     <div class="pitch-stats">
       <div class="pstat">
@@ -425,28 +443,15 @@
       </div>
     </div>
 
-    <ul class="pitch-points">
-      <li><span class="pp-ic">&#10003;</span>
-        <span><b>Questions surveyors actually asked.</b> Recollections from real
-        sittings at Mumbai and other MMDs, with model answers, not a guess at
-        what might come up.</span></li>
-      <li><span class="pp-ic">&#9875;</span>
-        <span><b>Study at sea.</b> The app works with no signal once it has
-        loaded, so a bad connection mid-ocean does not stop a watch-keeper
-        revising.</span></li>
-      <li><span class="pp-ic">&#8599;</span>
-        <span><b>Two courses, one account.</b> CoC preparation and sponsorship
-        interview prep, switched from the same sign in.</span></li>
-    </ul>
-
-    <!-- INTENTIONALLY A PLACEHOLDER. Replace the text below with real words
-         from real cadets, or delete the block. Do not invent a testimonial. -->
-    <div class="pitch-proof">
-      <div class="pitch-proof-l">Placeholder &middot; not live copy</div>
-      <div class="pitch-proof-t">
-        A cadet's own words about their result belong here. Left empty on
-        purpose until there is something true to put in it.
-      </div>
+    <!-- Real activity, not marketing copy. Entries come from
+         app/updates.js and are filtered to the selected course tab by
+         renderUpdates() below. Two kinds live here today (content updates,
+         product updates); testimonials and public events are left out
+         entirely until there is real material for them, rather than
+         filled with a placeholder that looks real. -->
+    <div class="updates" id="updates-panel">
+      <div class="updates-h">Recently</div>
+      <div class="updates-list" id="updates-list"></div>
     </div>
   </aside>
 
@@ -457,8 +462,9 @@
   </div>
 
   <!-- Which course, chosen before signing in rather than on a page afterwards.
-       Saved to profiles.default_track, a column that has existed since the
-       course_track work and has never been written to by anything. -->
+       Saved to profiles.default_track via saveTrack(), fired from every path
+       that ends in a real session (login, registration, SIGNED_IN, the
+       already-logged-in fallback), right before redirectAfterLogin(). -->
   <div class="course-sw" id="course-sw" role="group" aria-label="Choose your course">
     <button type="button" class="course-b" data-track="coc" aria-pressed="true"
             onclick="pickTrack('coc')">
@@ -636,16 +642,71 @@
   var _track = 'coc';
   try { _track = localStorage.getItem('eb_track') || 'coc'; } catch (e) {}
 
-  function pickTrack(t) {
+  /* ── UPDATES PANEL ───────────────────────────────────────────────────────
+     Renders app/updates.js, filtered to the selected course. track:null
+     entries show for both; a track-scoped entry only shows under its own
+     tab. Capped at 5 so the panel stays a glance, not a scroll. */
+  function _updEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function _updAgo(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    var days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (days <= 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 30) return days + ' days ago';
+    var months = Math.floor(days / 30);
+    if (months < 12) return months === 1 ? '1 month ago' : months + ' months ago';
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  function renderUpdates() {
+    var list = document.getElementById('updates-list');
+    if (!list) return;
+    var items = (window.EB_UPDATES || [])
+      .filter(function (u) { return !u.track || u.track === _track; })
+      .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; })
+      .slice(0, 5);
+    list.innerHTML = items.map(function (u) {
+      return '<div class="upd-item"><span class="upd-dot upd-dot-' + _updEsc(u.type) + '"></span>'
+        + '<div><div class="upd-text">' + _updEsc(u.text) + '</div>'
+        + '<div class="upd-meta">' + _updEsc(_updAgo(u.date)) + '</div></div></div>';
+    }).join('');
+  }
+
+  /* ── COURSE SWITCH ────────────────────────────────────────────────────── */
+  function pickTrack(t, opts) {
     if (t !== 'coc' && t !== 'sponsorship') return;
+    var isInit = !!(opts && opts.init);
     _track = t;
     try { localStorage.setItem('eb_track', t); } catch (e) {}
     document.querySelectorAll('#course-sw .course-b').forEach(function (b) {
       b.setAttribute('aria-pressed', String(b.dataset.track === t));
     });
+
+    var applyTrack = function () {
+      document.documentElement.setAttribute('data-track', t);
+      var eyebrow = document.getElementById('pitch-eyebrow');
+      if (eyebrow) eyebrow.textContent = t === 'sponsorship'
+        ? 'Sponsorship · Company exam & interview'
+        : 'ETO CoC · STCW Reg. III/6';
+      renderUpdates();
+    };
+
+    // On first load, just paint - no fade over an empty page. On a real
+    // switch, a brief fade covers both the colour change and the fact the
+    // feed itself re-filters, so it reads as one transition, not two.
+    var panel = document.getElementById('updates-panel');
+    if (isInit || !panel) { applyTrack(); return; }
+    panel.style.opacity = '0';
+    window.setTimeout(function () {
+      applyTrack();
+      panel.style.opacity = '1';
+    }, 130);
   }
   window.pickTrack = pickTrack;
-  pickTrack(_track);
+  pickTrack(_track, { init: true });
 
   /* Fire and forget. A failed write must never block someone getting into the
      app they have paid for; the worst case is they land on their chosen course
@@ -658,7 +719,8 @@
     } catch (e) {}
   }
 
-  function redirectAfterLogin() {
+  function redirectAfterLogin(userId) {
+    saveTrack(userId);
     if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
     else                          window.location.replace('./index.html');
   }
@@ -693,7 +755,7 @@
       showRecoveryForm();
     } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
       if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
-      redirectAfterLogin();
+      redirectAfterLogin(session.user.id);
     }
   });
 
@@ -704,7 +766,7 @@
   sb.auth.getSession().then(({ data: { session } }) => {
     if (session && !_recoveryMode) {
       if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
-      redirectAfterLogin();
+      redirectAfterLogin(session.user.id);
     }
   });
 
@@ -752,7 +814,7 @@
     btn.disabled = true; btn.textContent = 'Signing in...';
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) {
       var msg = error.message === 'Invalid login credentials'
         ? 'Incorrect email or password.'
@@ -762,7 +824,7 @@
       showMsg(msg, 'error');
       btn.disabled = false; btn.textContent = 'Sign In';
     } else {
-      redirectAfterLogin();
+      redirectAfterLogin(data.user && data.user.id);
     }
   }
 
@@ -947,7 +1009,7 @@
     } else if (data.session) {
       // Email confirmation disabled - user is logged in immediately
       if (data.user) sendWelcomeEmail(data.user.id);
-      redirectAfterLogin();
+      redirectAfterLogin(data.user && data.user.id);
     } else if (willNeedReview) {
       // Account exists and is real; it is simply held until an admin looks at
       // it. Say so plainly, because "check your email then sign in" would be a
