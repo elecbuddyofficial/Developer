@@ -216,6 +216,35 @@ SCREENS = {
         })();
     """},
 
+    # The mock interview details step, with the "Have a code?" coupon box
+    # applied. Added alongside the interview-coupon feature, since a view
+    # nobody registers is a view nobody checks on the next change near it.
+    'mockdetails': {'file': 'sponsorship/index.html', 'view': None, 'open': """
+        (() => {
+          _miCfg = { headline:'Test your interview prep', blurb:'',
+                     price_paise: 49900, duration_minutes: 30 };
+          document.getElementById('mi-modal').style.display = 'block';
+          _miPicked = { id:'x', starts_at: new Date(Date.now()+86400000).toISOString() };
+          ['pitch','slots','details','done'].forEach(k => {
+            const el = document.getElementById('mi-step-' + k);
+            if (el) el.style.display = (k === 'details') ? '' : 'none';
+          });
+          document.getElementById('mi-chosen').innerHTML =
+            'Booking <b>' + _miDay(_miPicked.starts_at) + ', ' + _miTime(_miPicked.starts_at) + ' IST</b>';
+          toggleMockCouponBox();
+          document.getElementById('mi-coupon-input').value = 'SAVE20';
+          _miCoupon = { code: 'SAVE20' };
+          document.getElementById('mi-coupon-box').style.display = 'none';
+          const toggle = document.getElementById('mi-coupon-toggle');
+          toggle.textContent = 'SAVE20 applied · remove';
+          toggle.onclick = clearMockCoupon;
+          const status = document.getElementById('mi-coupon-status');
+          status.textContent = 'SAVE20 applied: ₹399 (was ₹499).';
+          status.className = 'mi-coupon-status ok';
+          status.style.display = '';
+        })();
+    """},
+
     'spforced': {'file': 'sponsorship/index.html', 'view': None, 'open': """
         (() => {
           _spShowForced([

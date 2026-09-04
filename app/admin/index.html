@@ -2676,6 +2676,20 @@
             <option value="fixed">Fixed amount off</option>
           </select>
         </div>
+        <!-- Which product the code can be spent on. Course and mock interviews
+             are separate payment paths, so a code has to say which one it is
+             for: without this a "50 per cent off" written for the course would
+             quietly halve the interview price too. -->
+        <div class="ad-field">
+          <label class="ad-label">Applies To</label>
+          <select class="ad-select" id="cp-product" onchange="cpProductChanged()">
+            <option value="course" selected>Course access</option>
+            <option value="interview">Mock interview</option>
+          </select>
+          <div class="ad-hint">Course codes and interview codes never cross over. A mock interview
+            takes an amount off only, never a full grant, because a free booking has no payment
+            to attach it to.</div>
+        </div>
         <div class="ad-field" id="cp-value-field" style="display:none">
           <label class="ad-label" id="cp-value-label">Percent Off</label>
           <input class="ad-input" id="cp-value" type="number" min="1" oninput="cpPreview()">
@@ -2711,7 +2725,11 @@
 
       <!-- DISCOUNT-only: which purchases the code is allowed on -->
       <div class="ad-row" id="cp-target-row" style="display:none">
-        <div class="ad-field">
+        <!-- Course-only. A booking has one price and no tiers, so these are
+             hidden rather than shown-and-ignored when Applies To is an
+             interview: an admin should never be able to set a restriction
+             that quietly does nothing. -->
+        <div class="ad-field" id="cp-target-duration-field">
           <label class="ad-label">Applies to Duration</label>
           <select class="ad-select" id="cp-applies-duration" onchange="cpPreview()">
             <option value="">Any duration</option>
@@ -2721,7 +2739,7 @@
           </select>
           <div class="ad-hint">Leave on "Any" unless the offer is meant for one tier. Stops a code aimed at the 12-month plan being spent on the cheapest one.</div>
         </div>
-        <div class="ad-field">
+        <div class="ad-field" id="cp-target-scope-field">
           <label class="ad-label">Applies to Scope</label>
           <select class="ad-select" id="cp-applies-scope" onchange="cpPreview()">
             <option value="">Any scope</option>
@@ -7904,6 +7922,11 @@ function cpKindChanged() {
       ? 'Type <strong>25</strong> to mean 25% off. Not 0.25, and not 75.'
       : 'In rupees. Type <strong>200</strong> to take &#8377;200 off.';
   }
+  // The other half of the pair. Choosing Grant means this is course access,
+  // so the product follows rather than being left contradicting it.
+  var prod = document.getElementById('cp-product');
+  if (prod && kind === 'grant' && prod.value === 'interview') prod.value = 'course';
+
   cpDisposableChanged();
   cpPreview();
 }
@@ -7912,6 +7935,40 @@ function cpKindChanged() {
    never ticks a box that is going to be rejected on save. A grant can never be
    disposable: it creates no payment, so the redemption row is the only record
    that the access was given. */
+/* Course and interview codes are mutually exclusive with a grant, and the
+   database enforces it (coupons_interview_not_grant). Reflected here so an
+   admin cannot build a combination that will be rejected on save. A grant
+   hands over course access; there is nothing for it to grant on a booking. */
+function cpProductChanged() {
+  var prod = document.getElementById('cp-product');
+  var kind = document.getElementById('cp-kind');
+  if (!prod || !kind) return;
+  var grantOpt = kind.querySelector('option[value="grant"]');
+  var isInterview = prod.value === 'interview';
+
+  if (isInterview) {
+    if (kind.value === 'grant') { kind.value = 'percent'; cpKindChanged(); }
+    if (grantOpt) grantOpt.disabled = true;
+  } else if (grantOpt) {
+    grantOpt.disabled = false;
+  }
+
+  // Duration and scope are course tiers; a booking has neither. Hidden rather
+  // than left visible-but-ignored, and cleared so a value picked before
+  // switching to Interview cannot survive into the saved row.
+  var durField = document.getElementById('cp-target-duration-field');
+  var scopeField = document.getElementById('cp-target-scope-field');
+  if (durField)   durField.style.display   = isInterview ? 'none' : '';
+  if (scopeField) scopeField.style.display = isInterview ? 'none' : '';
+  if (isInterview) {
+    document.getElementById('cp-applies-duration').value = '';
+    document.getElementById('cp-applies-scope').value = '';
+  }
+
+  cpPreview();
+}
+window.cpProductChanged = cpProductChanged;
+
 function cpDisposableChanged() {
   var box  = document.getElementById('cp-disposable');
   var hint = document.getElementById('cp-disp-hint');
@@ -8062,9 +8119,17 @@ async function createCoupon() {
     return;
   }
 
+  var product = document.getElementById('cp-product').value;
+  if (product === 'interview' && kind === 'grant') {
+    cpMsg('A mock interview code cannot be a grant. A grant hands over course '
+        + 'access and there is no payment on a booking to attach it to.', false);
+    return;
+  }
+
   var row = {
     code: code, kind: kind, max_redemptions: max,
     disposable: disposable,
+    applies_product: product,
     expires_at: exp ? new Date(exp).toISOString() : null,
     note: note || null,
     created_by: _myId,
@@ -8088,8 +8153,13 @@ async function createCoupon() {
 
     var minR = parseInt(document.getElementById('cp-min-amount').value, 10);
     row.discount_value   = kind === 'percent' ? value : value * 100; // rupees -> paise
-    row.applies_duration = document.getElementById('cp-applies-duration').value || null;
-    row.applies_scope    = document.getElementById('cp-applies-scope').value || null;
+    // Never sourced from the DOM for an interview code, even though the form
+    // already hides and clears these fields: a hidden field is still a field,
+    // and this is the boundary that decides what actually gets saved.
+    row.applies_duration = product === 'interview' ? null
+                          : (document.getElementById('cp-applies-duration').value || null);
+    row.applies_scope    = product === 'interview' ? null
+                          : (document.getElementById('cp-applies-scope').value || null);
     row.min_amount       = minR ? minR * 100 : null;
   }
 
@@ -8104,6 +8174,8 @@ async function createCoupon() {
   logAdminAction('create_coupon', null, row);
   document.getElementById('cp-code').value = '';
   document.getElementById('cp-disposable').checked = false;
+  document.getElementById('cp-product').value = 'course';
+  cpProductChanged();
   cpDisposableChanged();
   document.getElementById('cp-note').value = '';
   document.getElementById('cp-value').value = '';
@@ -8617,7 +8689,8 @@ function renderCoupons() {
       if (c.applies_duration) bits.push(tierLabel(c.applies_duration));
       if (c.applies_scope)    bits.push(TRACK_LABEL_ADMIN[c.applies_scope] || c.applies_scope);
       if (c.min_amount)       bits.push('min &#8377;' + (c.min_amount / 100).toFixed(0));
-      target = '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (bits.length ? bits.join(' &middot; ') : 'any plan') + '</div>';
+      var noneLabel = c.applies_product === 'interview' ? 'any booking' : 'any plan';
+      target = '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (bits.length ? bits.join(' &middot; ') : noneLabel) + '</div>';
     }
 
     var used = '<span style="font-variant-numeric:tabular-nums">' + c.live_used + ' / ' + limit + '</span>';
@@ -8632,6 +8705,15 @@ function renderCoupons() {
       + '<td style="font-family:monospace;font-weight:700">' + esc(c.code)
       // A disposable code is about to disappear on its last sale, so say so
       // where the codes are listed rather than only on the form that made it.
+      // Which product it is for, said plainly. Two codes with the same shape
+      // that cannot be spent in the same place need to look different here.
+      +   (c.applies_product === 'interview'
+            ? ' <span title="Spendable on a mock interview booking only" '
+              + 'style="font-family:inherit;font-size:9.5px;font-weight:800;letter-spacing:.4px;'
+              + 'text-transform:uppercase;padding:1.5px 6px;border-radius:100px;'
+              + 'border:1px solid var(--purple-border, var(--border2));color:var(--purple, var(--text2));'
+              + 'white-space:nowrap">Interview</span>'
+            : '')
       +   (c.disposable
             ? ' <span title="Deletes itself once fully used and paid for" '
               + 'style="font-family:inherit;font-size:9.5px;font-weight:800;letter-spacing:.4px;'

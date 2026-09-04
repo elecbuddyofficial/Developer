@@ -1,5 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { priceWithCoupon, type CouponRow } from '../_shared/coupons.ts';
 
 /**
  * Creates a Razorpay order for a mock interview booking.
@@ -16,8 +17,19 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
  *   1. authenticate      - anonymous callers never reach the database
  *   2. read config       - and refuse outright while is_enabled is false
  *   3. price from the DB - the client's idea of the price is never read
- *   4. reserve the slot  - under a row lock, before Razorpay is involved
- *   5. create the order  - and release the slot if this fails
+ *   4. the coupon        - reserved under a row lock, priced by the shared
+ *                          module, and released again if anything below fails
+ *   5. reserve the slot  - under a row lock, before Razorpay is involved
+ *   6. create the order  - and release the slot if this fails
+ *
+ * The coupon is reserved BEFORE the slot on purpose. A bad code is the more
+ * likely failure of the two and it costs nothing to undo, whereas a held slot
+ * is a booking nobody else can make. Failing on the cheap thing first means
+ * fewer slots held for people who were never going to get through checkout.
+ *
+ * p_product is 'interview'. That is what stops a general course code, one with
+ * no duration and no scope, being spent here: without it a "50 per cent off"
+ * written for the course would quietly halve the interview price too.
  *
  * Reserving before calling Razorpay is what stops two cadets reaching
  * checkout on one slot. Reserving after would mean both got a payment page
@@ -88,8 +100,8 @@ serve(async (req) => {
     // ── 3. The price, from the database ───────────────────────────────────
     // body.amount is never read. It is not even destructured, so it cannot be
     // reached for by a later edit that means well.
-    const amount = Number(cfg.price_paise);
-    if (!Number.isInteger(amount) || amount <= 0) {
+    const sticker = Number(cfg.price_paise);
+    if (!Number.isInteger(sticker) || sticker <= 0) {
       console.error('Bad price in mock_interview_config:', cfg.price_paise);
       return json({ error: 'Booking is temporarily unavailable' }, 500);
     }
@@ -126,6 +138,64 @@ serve(async (req) => {
     const email = user.email;
     if (!email) return json({ error: 'Your account has no email address.' }, 400);
 
+    // ── 4b. The coupon, if one was typed ──────────────────────────────────
+    // Reserved through coupon_reserve, which is the authority: it takes the row
+    // lock, counts live redemptions and enforces the product gate. Nothing here
+    // decides whether the code is allowed; it only asks and reports the answer.
+    const couponCode = field(body?.coupon_code, 32)?.toUpperCase() ?? null;
+    let amount   = sticker;
+    let discount = 0;
+    let couponReserved = false;
+
+    if (couponCode) {
+      const { data: cRow, error: cErr } = await sb.rpc('coupon_reserve', {
+        p_code: couponCode, p_user: user.id,
+        p_duration: null, p_scope: null,
+        p_amount: sticker, p_ttl_minutes: 15,
+        p_product: 'interview',
+      });
+
+      if (cErr || !cRow) {
+        // The vague messages are deliberate and come from the function itself:
+        // distinguishing "no such code" from "already spent" lets someone probe
+        // for codes that carry money. Only the two a buyer can act on are named.
+        const m = String(cErr?.message || '');
+        return json({
+          error: m.includes('coupon_below_minimum')
+            ? 'That code needs a larger order than this booking.'
+            : m.includes('coupon_already_used')
+              ? 'You have already used that code.'
+              : 'That code is not valid for a mock interview.',
+        }, 400);
+      }
+      couponReserved = true;
+
+      // Same module the course path prices with, so a percent means the same
+      // thing in both places. A booking has no site-wide sale, so base_amount
+      // is the whole plan and salePrice comes back equal to the sticker.
+      const price = priceWithCoupon({ base_amount: sticker }, cRow as CouponRow);
+
+      // A code that takes it to nothing is a giveaway, not a discount, and a
+      // free booking needs a path that never touches Razorpay at all. Refuse
+      // it plainly rather than charging the 1 rupee floor to somebody who was
+      // told it was free.
+      if (price.isFullGrant) {
+        await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+        return json({
+          error: 'That code covers the whole booking, which is not supported yet. '
+               + 'Ask for a code that takes an amount off instead.',
+        }, 400);
+      }
+
+      amount   = price.final;
+      discount = price.discount;
+    }
+
+    const releaseCoupon = async () => {
+      if (!couponReserved || !couponCode) return;
+      await sb.rpc('coupon_release', { p_code: couponCode, p_user: user.id }).catch(() => {});
+    };
+
     // ── 5. Hold the slot ──────────────────────────────────────────────────
     const { data: booking, error: reserveErr } = await sb.rpc('mock_slot_reserve', {
       p_slot: slotId, p_user: user.id, p_email: email,
@@ -135,6 +205,7 @@ serve(async (req) => {
     });
 
     if (reserveErr || !booking) {
+      await releaseCoupon();
       const m = String(reserveErr?.message || '');
       return json({
         error: m.includes('details_incomplete')
@@ -151,6 +222,9 @@ serve(async (req) => {
     const release = async () => {
       await sb.rpc('mock_slot_release', { p_booking: bookingId, p_user: user.id })
         .catch(() => {});
+      // The code goes back with the slot. Without this a Razorpay outage would
+      // spend somebody's single-use code on a booking that never happened.
+      await releaseCoupon();
     };
 
     // ── 6. Razorpay ───────────────────────────────────────────────────────
@@ -179,9 +253,22 @@ serve(async (req) => {
 
     const order = await rzpRes.json();
 
+    // The discount is written here rather than passed through mock_slot_reserve,
+    // for the same reason razorpay_order_id is: changing that function's
+    // signature means reproducing its whole body, and the settle trigger only
+    // reads these columns when the booking turns paid, which is long after.
+    //
+    // These three are what let a disposable code be deleted without making the
+    // booking unexplainable: the row says what it cost, what came off, and
+    // which code did it, with no coupons table needed to read it back.
     const { error: linkErr } = await sb
       .from('mock_interview_bookings')
-      .update({ razorpay_order_id: order.id })
+      .update({
+        razorpay_order_id: order.id,
+        coupon_code:     couponCode,
+        original_amount: sticker,
+        discount_amount: discount,
+      })
       .eq('id', bookingId);
 
     if (linkErr) {
@@ -198,6 +285,11 @@ serve(async (req) => {
       currency:   'INR',
       key_id:     RZP_KEY_ID,
       booking_id: bookingId,
+      // For the confirmation line. The client never computes a price; it is
+      // told one, and this is only so it can show what was taken off.
+      coupon_code:     couponCode,
+      original_amount: sticker,
+      discount_amount: discount,
     });
   } catch (e) {
     console.error('create-mock-interview-order failed:', e);

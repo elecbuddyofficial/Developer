@@ -42,6 +42,7 @@ export interface CouponRow {
   discount_value?: number | null;       // percent 1-100, or paise for 'fixed'
   applies_duration?: string | null;     // null = any
   applies_scope?: string | null;        // null = any
+  applies_product?: string | null;      // null or 'course' = course access, 'interview' = a booking
   min_amount?: number | null;           // paise, null = no minimum
   active?: boolean | null;
   expires_at?: string | null;
@@ -134,13 +135,19 @@ export function priceWithCoupon(
  */
 export function couponAppliesTo(
   coupon: CouponRow,
-  duration: string,
-  scope: string,
+  duration: string | null,
+  scope: string | null,
   priceBeforeCoupon: number,
   now: Date = new Date(),
+  product: 'course' | 'interview' = 'course',
 ): { ok: true } | { ok: false; reason: 'invalid' | 'below_minimum' } {
   if (!coupon.active) return { ok: false, reason: 'invalid' };
   if (coupon.expires_at && new Date(coupon.expires_at) < now) return { ok: false, reason: 'invalid' };
+  // Mirrors coupon_reserve's COALESCE(applies_product,'course') rule exactly.
+  // Two different languages checking the same gate is itself a risk, so this
+  // is the one place in TypeScript that does, and it exists only because this
+  // function quotes a price without ever calling the SQL authority.
+  if ((coupon.applies_product ?? 'course') !== product) return { ok: false, reason: 'invalid' };
   if (coupon.applies_duration && coupon.applies_duration !== duration) return { ok: false, reason: 'invalid' };
   if (coupon.applies_scope && coupon.applies_scope !== scope) return { ok: false, reason: 'invalid' };
   // Distinguished from 'invalid' on purpose: this one is worth telling the

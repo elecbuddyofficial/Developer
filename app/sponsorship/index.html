@@ -452,6 +452,27 @@
     border-radius:9px; padding:11px 13px; margin-bottom:16px;
   }
   .mi-err { font-size:13px; color:var(--red); margin-bottom:12px; line-height:1.6 }
+  .mi-coupon-row { display:flex; align-items:center; justify-content:flex-end; margin:-4px 0 10px; }
+  .mi-coupon-toggle {
+    background:none; border:none; color:var(--orange); font-size:12px; font-weight:600;
+    cursor:pointer; text-decoration:underline; text-underline-offset:3px; padding:2px 0;
+    font-family:inherit;
+  }
+  .mi-coupon-box { display:flex; gap:8px; margin-bottom:12px; }
+  .mi-coupon-box input {
+    flex:1; background:var(--surface2); border:1px solid var(--border2); border-radius:8px;
+    color:var(--text); font-size:13.5px; padding:10px 12px; outline:none;
+    font-family:inherit; text-transform:uppercase;
+  }
+  .mi-coupon-box input:focus { border-color:var(--orange); }
+  .mi-coupon-apply {
+    background:var(--orange-dim); border:1px solid var(--orange-border); border-radius:8px;
+    padding:10px 16px; font-size:13px; font-weight:700; color:var(--orange);
+    cursor:pointer; font-family:inherit;
+  }
+  .mi-coupon-status { font-size:12.5px; line-height:1.55; margin-bottom:12px; }
+  .mi-coupon-status.ok  { color:var(--green); }
+  .mi-coupon-status.bad { color:var(--red); }
   .mi-empty { font-size:13.5px; color:var(--text2); line-height:1.7; text-align:center; padding:22px 6px }
   .mi-done-ic { font-size:40px; text-align:center; margin-bottom:10px }
   .mi-chosen { font-size:13px; color:var(--text2); margin-bottom:14px }
@@ -1123,6 +1144,21 @@ window._authReady = (async () => {
         </div>
       </div>
 
+      <!-- One toggle reveals the code box, matching the course upgrade modal's
+           own "Have a code?" pattern. Kept minimal here: one price, one
+           product, so there is no "which plan does this cover" question to
+           answer, only whether the code works. -->
+      <div class="mi-coupon-row">
+        <button type="button" class="mi-coupon-toggle" id="mi-coupon-toggle"
+                onclick="toggleMockCouponBox()">Have a code?</button>
+      </div>
+      <div class="mi-coupon-box" id="mi-coupon-box" style="display:none">
+        <input id="mi-coupon-input" placeholder="Enter code" autocomplete="off" spellcheck="false">
+        <button type="button" class="mi-coupon-apply" id="mi-coupon-apply-btn"
+                onclick="applyMockCoupon()">Apply</button>
+      </div>
+      <div class="mi-coupon-status" id="mi-coupon-status" style="display:none"></div>
+
       <div class="mi-note" id="mi-email-note"></div>
       <div class="mi-btn-row">
         <button class="mi-btn mi-btn-ghost" onclick="mockStep('slots')">&larr; Back</button>
@@ -1560,7 +1596,7 @@ function showStudyHub() {
    _sbClient.supabaseUrl, which is an internal of the client library. */
 var MI_FN_URL = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1';
 
-var _miCfg = null, _miSlots = [], _miPicked = null, _miPaying = false;
+var _miCfg = null, _miSlots = [], _miPicked = null, _miPaying = false, _miCoupon = null;
 var _miByDay = {}, _miDayOrder = [];
 
 function _miEsc(v) {
@@ -1729,6 +1765,7 @@ function openMockModal() {
   }
 
   _miPicked = null;
+  clearMockCoupon();
   document.getElementById('mi-to-details').disabled = true;
   mockStep('pitch');
   document.getElementById('mi-modal').style.display = 'block';
@@ -1870,6 +1907,98 @@ function _miErr(msg) {
   el.style.display = msg ? '' : 'none';
 }
 
+function _miCouponStatus(msg, ok) {
+  var el = document.getElementById('mi-coupon-status');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.className = 'mi-coupon-status' + (msg ? (ok ? ' ok' : ' bad') : '');
+  el.style.display = msg ? '' : 'none';
+}
+
+function toggleMockCouponBox() {
+  var box = document.getElementById('mi-coupon-box');
+  if (!box) return;
+  var open = box.style.display !== 'none';
+  box.style.display = open ? 'none' : 'flex';
+  if (!open) document.getElementById('mi-coupon-input').focus();
+}
+window.toggleMockCouponBox = toggleMockCouponBox;
+
+/* Quotes through the same validate-coupon endpoint the course upgrade window
+   uses, with product:'interview' so a course-only code is refused here and an
+   interview code is refused there. This RESERVES NOTHING: startMockPayment is
+   what actually claims the code, and re-validates from scratch when it does,
+   because the answer may have changed by then. */
+async function applyMockCoupon() {
+  var input = document.getElementById('mi-coupon-input');
+  var btn   = document.getElementById('mi-coupon-apply-btn');
+  var code  = (input.value || '').trim().toUpperCase();
+  if (!code) { input.focus(); return; }
+  if (!window._sbClient || !window._sbUser) {
+    _miCouponStatus('You must be signed in to use a code.', false);
+    return;
+  }
+
+  btn.disabled = true;
+  _miCouponStatus('Checking code…', true);
+
+  try {
+    var session = await window._sbClient.auth.getSession();
+    var token = session.data.session && session.data.session.access_token;
+    if (!token) throw new Error('Not signed in');
+
+    var res = await fetch(MI_FN_URL + '/validate-coupon', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, product: 'interview' }),
+    });
+    var quote = await res.json();
+    if (!res.ok) throw new Error(quote.error || 'That code is not valid');
+
+    // A booking has one price, so unlike the course flow there is no
+    // "applies to other plans" case to explain: the code either covers this
+    // booking or it plainly does not.
+    if (!quote.applies_here) {
+      _miCoupon = null;
+      throw new Error(quote.min_amount_message
+        ? 'That code ' + quote.min_amount_message + '.'
+        : 'That code is not valid for a mock interview.');
+    }
+    if (quote.no_effect) {
+      _miCoupon = null;
+      _miCouponStatus('That code does not take anything off this booking.', false);
+      btn.disabled = false;
+      return;
+    }
+
+    _miCoupon = { code: quote.code };
+    document.getElementById('mi-coupon-box').style.display = 'none';
+    var toggle = document.getElementById('mi-coupon-toggle');
+    toggle.textContent = quote.code + ' applied · remove';
+    toggle.onclick = clearMockCoupon;
+    _miCouponStatus(quote.code + ' applied: ' + _miRupees(quote.now)
+      + ' (was ' + _miRupees(quote.sticker) + ').', true);
+  } catch (e) {
+    _miCoupon = null;
+    _miCouponStatus(e.message || 'That code is not valid', false);
+  } finally {
+    btn.disabled = false;
+  }
+}
+window.applyMockCoupon = applyMockCoupon;
+
+function clearMockCoupon() {
+  _miCoupon = null;
+  var toggle = document.getElementById('mi-coupon-toggle');
+  if (toggle) { toggle.textContent = 'Have a code?'; toggle.onclick = toggleMockCouponBox; }
+  var input = document.getElementById('mi-coupon-input');
+  if (input) input.value = '';
+  var box = document.getElementById('mi-coupon-box');
+  if (box) box.style.display = 'none';
+  _miCouponStatus('', true);
+}
+window.clearMockCoupon = clearMockCoupon;
+
 async function startMockPayment() {
   if (_miPaying) return;
   _miErr('');
@@ -1884,6 +2013,14 @@ async function startMockPayment() {
     stream:    document.getElementById('mi-stream').value.trim(),
     college:   document.getElementById('mi-college').value.trim(),
     graduation_year: document.getElementById('mi-year').value.trim(),
+    // The quote from applyMockCoupon reserved nothing, so this is re-checked
+    // and re-priced from scratch by create-mock-interview-order under a row
+    // lock, matching how create-razorpay-order treats a course code. If the
+    // code has been spent by somebody else since the quote, the WHOLE order
+    // is refused rather than silently falling back to the sticker price: a
+    // buyer who was told a code applied must never be charged full price
+    // without being told why.
+    coupon_code: _miCoupon ? _miCoupon.code : null,
   };
 
   if (!payload.full_name || !payload.phone || !payload.degree || !payload.stream) {

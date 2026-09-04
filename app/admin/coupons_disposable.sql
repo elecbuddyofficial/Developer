@@ -44,7 +44,18 @@
 -- payment still records what was applied, so the refund itself is unaffected.
 -- If a buyer needs another chance, issue a new code.
 --
--- SAFE TO RUN MORE THAN ONCE.
+-- SAFE TO RUN MORE THAN ONCE, WITH ONE EXCEPTION ADDED LATER:
+--
+-- once app/admin/coupons_for_interviews.sql has been applied, re-running THIS
+-- file fails with "cannot drop columns from view". Section 5 below recreates
+-- coupon_usage without applies_product, which the later file added, and
+-- CREATE OR REPLACE VIEW cannot remove a column. The failure is safe (the
+-- whole file is one transaction, so it rolls back and changes nothing) but it
+-- is a dead end.
+--
+-- If you need to re-run this file after that one, run coupons_for_interviews.sql
+-- again immediately afterwards: its view definition is the current one and
+-- carries both columns. Found by running them in sequence, not by reading them.
 
 begin;
 
