@@ -474,7 +474,12 @@
        bug. */
     .updates-list {
       max-height: 316px; overflow-y: auto; overflow-x: hidden;
+      /* Scrolls the same either way - just without a visible track, since
+         the fade above already signals "more below" on its own and a
+         scrollbar next to it was one cue too many for a 316px panel. */
+      scrollbar-width: none; -ms-overflow-style: none;
     }
+    .updates-list::-webkit-scrollbar { display: none; }
     .updates-scroll { position: relative; }
     .updates-fade {
       position: absolute; left: 0; right: 0; bottom: 0; height: 40px;
