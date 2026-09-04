@@ -460,16 +460,20 @@
 
     @media (max-width: 760px) {
       .pitch-lower { grid-template-columns: 1fr; gap: 22px; }
-      /* Three cards' worth of height, genuinely scrollable to reach the
-         rest rather than a hard cut. Tried a CSS mask-image for the fade
-         first: on this element specifically (display:grid, children with
-         an entrance animation) Chromium renders the whole list invisible
-         rather than faded, reproduced in isolation before this was found
-         to be the cause. The overlay div below is the standard fallback
-         for exactly this reason and does not share the bug. */
-      .updates-list {
-        max-height: 316px; overflow-y: auto; overflow-x: hidden;
-      }
+    }
+    /* Three cards' worth of height, genuinely scrollable to reach the
+       rest rather than growing the panel taller every time an entry gets
+       added - at every width, not just mobile, so it stays a fixed,
+       predictable size next to Upcoming Events instead of drifting out of
+       balance with it as the list grows over time. Tried a CSS mask-image
+       for the fade first: on this element specifically (display:grid,
+       children with an entrance animation) Chromium renders the whole
+       list invisible rather than faded, reproduced in isolation before
+       this was found to be the cause. The overlay div below is the
+       standard fallback for exactly this reason and does not share the
+       bug. */
+    .updates-list {
+      max-height: 316px; overflow-y: auto; overflow-x: hidden;
     }
     .updates-scroll { position: relative; }
     .updates-fade {
@@ -500,6 +504,15 @@
       background: #12283F; border-color: var(--acc); color: #DDE5EF;
     }
     .course-b[aria-pressed="true"] .cb-t { color: var(--acc); transition: color .15s ease; }
+    /* This is routing, not a commitment - CoC stays paid and Sponsorship
+       stays free to anyone signed in regardless of which tab is picked
+       here, so a wrong guess costs nothing. Said plainly rather than
+       assumed, since "choose your course" reads like a bigger decision
+       than it actually is. */
+    .course-sw-hint {
+      font-size: 11.5px; color: #6E8AA6; line-height: 1.5;
+      margin: -10px 0 18px; text-align: center;
+    }
 
     @media (max-width: 900px) {
       .split {
@@ -599,22 +612,24 @@
       .tn-burger { display: flex; }
     }
 
-    /* Legal, kept out of the nav because nobody arrives looking for it. */
+    /* Legal, kept out of the nav because nobody arrives looking for it.
+       Centred at every width: left-aligned under the ticker/cards read
+       fine while the page above it was tall enough to fill the screen,
+       but Recently and Upcoming Events are both capped now (see
+       .updates-list above), so most of the page below them is empty and
+       a footer stuck to the left edge of that empty space read as
+       misplaced rather than aligned with anything. */
     .page-foot {
       max-width: 1240px; margin: 0 auto; padding: 8px 32px 34px;
       display: flex; gap: 16px; flex-wrap: wrap;
+      justify-content: center; text-align: center;
     }
     .page-foot a {
       font-size: 11.5px; color: #6E8AA6; text-decoration: none;
     }
     .page-foot a:hover { color: #8FA3B8; text-decoration: underline; }
     @media (max-width: 900px) {
-      /* Left-aligned matches the ticker/cards above it on a wide screen,
-         where they share the same left edge. Below 900px the card becomes
-         centred on its own (.split .card { margin: 0 auto }) and the
-         footer sitting flush left under it read as misplaced rather than
-         aligned with anything. */
-      .page-foot { padding: 4px 20px 28px; justify-content: center; text-align: center; }
+      .page-foot { padding: 4px 20px 28px; }
     }
   </style>
 </head>
@@ -727,6 +742,7 @@
       <div class="cb-s">Company exam &amp; interview</div>
     </button>
   </div>
+  <div class="course-sw-hint">Not sure yet? You can switch anytime from your profile menu once signed in.</div>
 
   <!-- Tabs -->
   <div class="tabs" id="tabs">
