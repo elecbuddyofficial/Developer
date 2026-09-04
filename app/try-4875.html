@@ -33,7 +33,8 @@
     :root { --acc: #5D98F8; }
     :root[data-track="sponsorship"] { --acc: #f59e0b; }
     @media (prefers-reduced-motion: reduce) {
-      .updates, .course-b, .pitch-eyebrow { transition: none !important; }
+      .updates, .course-b, .feat-chip b { transition: none !important; }
+      .feat-track { animation: none !important; }
     }
 
     body {
@@ -263,34 +264,50 @@
       max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px;
     }
 
-    .pitch { padding-top: 8px; }
-    .pitch-eyebrow {
-      font-size: 11.5px; font-weight: 700; letter-spacing: 1.2px;
-      text-transform: uppercase; color: var(--acc); margin-bottom: 14px;
+    /* min-width:0 matters here: .feat-track below is width:max-content with
+       a dozen nowrap chips, and a grid item defaults to its content's
+       intrinsic (max-content) size no matter what its own width rule says.
+       Without this the 1fr column blew out to fit that, off-canvas, and
+       pushed the sign-in card 2000px to the right. */
+    .pitch { padding-top: 8px; min-width: 0; }
+
+    /* ── FEATURE TICKER ───────────────────────────────────────────────────
+       A continuously scrolling strip replacing the old static headline and
+       stat boxes. Numbers still come from app/counts.js via [data-count],
+       nothing hand-typed. The track's own content is duplicated once at
+       runtime (see initFeatTicker() in the script below) so a -50%
+       translateX loops seamlessly; the markup below lists the set once. */
+    .feat-ticker {
+      overflow: hidden; margin-bottom: 30px; padding: 4px 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .feat-track {
+      display: flex; gap: 10px; width: max-content;
+      animation: featScroll 32s linear infinite;
+    }
+    .feat-ticker:hover .feat-track { animation-play-state: paused; }
+    @keyframes featScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .feat-chip {
+      flex-shrink: 0; display: flex; align-items: center; gap: 7px;
+      background: #0A1828; border: 1px solid #1A3050; border-radius: 999px;
+      padding: 10px 16px; font-size: 12.5px; color: #8FA3B8; white-space: nowrap;
+    }
+    .feat-chip b {
+      color: var(--acc); font-weight: 800; font-variant-numeric: tabular-nums;
       transition: color .15s ease;
     }
-    .pitch h1 {
-      font-size: 40px; line-height: 1.12; font-weight: 800; color: #DDE5EF;
-      letter-spacing: -0.5px; margin-bottom: 16px; text-wrap: balance;
+    /* Reduced motion: initFeatTicker() skips the duplication and adds this
+       class instead of animating. A frozen mid-scroll strip would clip most
+       of the set behind overflow:hidden; wrapping it shows everything. */
+    .feat-ticker.feat-static {
+      -webkit-mask-image: none; mask-image: none; overflow: visible;
     }
-    .pitch h1 span { color: #C8A44A; }
-
-    /* Numbers, not adjectives. Every one is generated from the encrypted
-       content by _counts.cjs, so none of it can quietly become a lie. */
-    .pitch-stats {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px; margin-bottom: 30px; max-width: 460px;
-    }
-    .pstat {
-      background: #0A1828; border: 1px solid #1A3050;
-      border-radius: 8px; padding: 13px 14px;
-    }
-    .pstat-n {
-      font-size: 22px; font-weight: 800; color: #DDE5EF;
-      font-variant-numeric: tabular-nums; line-height: 1.1;
-    }
-    .pstat-l {
-      font-size: 11px; color: #6E8AA6; margin-top: 3px; line-height: 1.35;
+    .feat-ticker.feat-static .feat-track {
+      flex-wrap: wrap; width: auto; animation: none;
     }
 
     /* ── UPDATES ──────────────────────────────────────────────────────────
@@ -353,12 +370,6 @@
         max-width: 520px;
       }
       .split .card { order: -1; margin: 0 auto; }
-      .pitch h1 { font-size: 30px; }
-      .pitch-stats { max-width: none; }
-    }
-    @media (max-width: 380px) {
-      .pitch h1 { font-size: 26px; }
-      .pitch-stats { grid-template-columns: 1fr 1fr; }
     }
 
     /* ── TOP NAV ─────────────────────────────────────────────────────────────
@@ -425,21 +436,17 @@
        generated from the encrypted content itself, so it cannot drift from what
        the app actually contains. Do not hand-type a figure into this page. -->
   <aside class="pitch">
-    <div class="pitch-eyebrow" id="pitch-eyebrow">ETO CoC &middot; STCW Reg. III/6</div>
-    <h1>Built by a cadet,<br>for <span>every cadet</span></h1>
-
-    <div class="pitch-stats">
-      <div class="pstat">
-        <div class="pstat-n" data-count="surveyorQuestions">1,224</div>
-        <div class="pstat-l">Real surveyor questions</div>
-      </div>
-      <div class="pstat">
-        <div class="pstat-n" data-count="quizQuestions">5,861</div>
-        <div class="pstat-l">Practice questions</div>
-      </div>
-      <div class="pstat">
-        <div class="pstat-n" data-count="oralTopics">23</div>
-        <div class="pstat-l">Oral topics, fully written</div>
+    <!-- Scrolls sideways, forever, until initFeatTicker() below either
+         doubles the set for a seamless loop or, under reduced motion,
+         leaves it as a single static wrapped row. -->
+    <div class="feat-ticker" id="feat-ticker">
+      <div class="feat-track" id="feat-track">
+        <span class="feat-chip"><b data-count="surveyorQuestions">1,224</b> real surveyor questions</span>
+        <span class="feat-chip"><b data-count="quizQuestions">5,861</b> practice questions</span>
+        <span class="feat-chip"><b data-count="oralTopics">23</b> oral topics, fully written</span>
+        <span class="feat-chip">Recollected from real MMD sittings</span>
+        <span class="feat-chip">Works offline once loaded</span>
+        <span class="feat-chip">CoC and Sponsorship, one account</span>
       </div>
     </div>
 
@@ -627,6 +634,23 @@
      Still mirrored into localStorage, because the redirect happens immediately
      and must not wait on a network write that may fail. The account copy is
      the durable one; the local copy is what makes the next load instant. */
+  /* Doubles the feature-ticker set so a -50% translateX loops seamlessly,
+     without typing the chip list twice in markup. Skipped under reduced
+     motion: .feat-static (CSS above) wraps the single set as a static row
+     instead of leaving it frozen mid-scroll, half of it clipped. Runs before
+     applyCounts() below so the duplicated [data-count] chips get filled too. */
+  (function initFeatTicker() {
+    var track = document.getElementById('feat-track');
+    if (!track) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      var ticker = document.getElementById('feat-ticker');
+      if (ticker) ticker.classList.add('feat-static');
+      return;
+    }
+    track.insertAdjacentHTML('beforeend', track.innerHTML);
+  })();
+
   /* Fills every [data-count] from app/counts.js, which is generated from the
      encrypted content itself. Typing a content figure into a page by hand is
      how the Surveyor Q&A badge said 281 for months while the file held 1,193. */
@@ -687,10 +711,6 @@
 
     var applyTrack = function () {
       document.documentElement.setAttribute('data-track', t);
-      var eyebrow = document.getElementById('pitch-eyebrow');
-      if (eyebrow) eyebrow.textContent = t === 'sponsorship'
-        ? 'Sponsorship · Company exam & interview'
-        : 'ETO CoC · STCW Reg. III/6';
       renderUpdates();
     };
 
