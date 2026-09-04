@@ -1,8 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════
 //  Account: the profile menu's shared pieces.
 //
-//  Loaded by app/index.html, app/courses.html and app/sponsorship/index.html.
-//  Those three each grew their own profile panel, which is why they drifted
+//  Loaded by app/index.html and app/sponsorship/index.html (also by
+//  app/courses.html until it was retired 5 Sep 2026 in favour of choosing a
+//  course on auth.html itself, before signing in).
+//  Those two each grew their own profile panel, which is why they drifted
 //  into offering different things - one had a Settings screen, one had it in a
 //  footer link, one had neither. Anything the three panels must agree on lives
 //  here so it can only be written once.

@@ -258,16 +258,16 @@ SCREENS = {
               note:'Rolling intake, closing date not announced.' }
           ]);
         })()"""},
-    'courses':  {'file': 'courses.html', 'view': None},
     'auth':     {'file': 'auth.html',    'view': None},
 }
 
-# Both spellings. index.html and courses.html sit beside auth.html and use
-# './auth.html'; sponsorship/index.html is a directory deeper and uses
-# '../auth.html'. Matching only the first sent every sponsorship run to the
-# sign-in page, and the screen then reported "function is not defined" for a
-# function that was never loaded, which reads like a code fault rather than a
-# harness one.
+# Both spellings. index.html sits beside auth.html and uses './auth.html';
+# sponsorship/index.html is a directory deeper and uses '../auth.html'.
+# Matching only the first sent every sponsorship run to the sign-in page,
+# and the screen then reported "function is not defined" for a function
+# that was never loaded, which reads like a code fault rather than a
+# harness one. (courses.html retired 5 Sep 2026 - the course choice now
+# lives on auth.html itself, before signing in.)
 REDIRECTS = ["window.location.replace('./auth.html');",
              "window.location.replace('../auth.html');"]
 SUPPRESS = "console.warn('[visual] auth redirect suppressed');"

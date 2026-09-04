@@ -3,11 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- This is the real sign-in page (promoted from the app/try-4875.html
+       preview, 5 Sep 2026 - see project_signin_overhaul memory for the
+       full history of what was built and tested there first). Every real
+       user reaches this page. It talks to the REAL database. -->
   <title>Elec-Buddy: Sign In</title>
+  <!-- Same source of truth the app uses. The inline numbers in the markup
+       are the last generated values, kept as fallback so a failed load
+       shows a real figure rather than an empty box. -->
+  <script src="counts.js?v=1"></script>
+  <!-- Hand-maintained, like a testimonial: real dates and one-line
+       descriptions of what actually shipped, added as content/product work
+       lands. See the Updates panel further down. -->
+  <script src="updates.js?v=1"></script>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* The one CSS custom property on an otherwise all-literal page. Flips
+       with the course tab (see pickTrack() in the script below) so the same
+       elements read blue for CoC and orange for Sponsorship without a
+       second copy of every rule. Matches style.css's own dark-theme
+       --blue/--orange exactly; this page has no light theme to also match,
+       being deliberately self-contained (see the .mailfix comment further
+       down for why). */
+    :root { --acc: #5D98F8; --acc-glow: rgba(93,152,248,.5); }
+    :root[data-track="sponsorship"] { --acc: #f59e0b; --acc-glow: rgba(245,158,11,.5); }
+    @media (prefers-reduced-motion: reduce) {
+      .updates, .course-b, .feat-chip b { transition: none !important; }
+      .feat-track { animation: none !important; }
+      .upd-item, .evc { animation: none !important; opacity: 1 !important; transform: none !important; }
+    }
 
     body {
       min-height: 100vh;
@@ -26,6 +53,13 @@
       border-radius: 6px;
       width: 100%; max-width: 400px;
       padding: 36px 32px;
+      /* The grid column is 460px so the pitch side has breathing room, but
+         the card itself caps at 400px and was left sitting at the column's
+         start, 60px short of the topnav's right edge. justify-self:end
+         closes that gap so the two line up. Overridden back to centred by
+         the mobile rule below (margin:auto beats justify-self on a grid
+         item, so no conflict once .split collapses to one column). */
+      justify-self: end;
     }
 
     .brand {
@@ -175,6 +209,41 @@
       line-height: 1.5;
     }
 
+    /* Mobile-only "there is more below" cue. A quiet pill at the bottom of
+       the card was tried first and went unnoticed - this is the louder
+       replacement: a floating, glowing button, fixed to the viewport so it
+       stays visible regardless of scroll position rather than only at one
+       spot in the page flow, matching how the feature ticker above already
+       uses motion and colour to draw the eye. syncScrollFab() below hides
+       it once the ticker actually comes into view, so it does its job once
+       and then gets out of the way. */
+    .scroll-fab { display: none; }
+    @media (max-width: 900px) {
+      .scroll-fab {
+        display: flex; align-items: center; justify-content: center;
+        position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+        width: 36px; height: 36px; border-radius: 50%; z-index: 60;
+        background: #12283F; border: 1.5px solid var(--acc); color: var(--acc);
+        cursor: pointer; font-family: inherit;
+        animation: scrollFabGlow 1.8s ease-in-out infinite;
+        transition: opacity .25s ease, transform .25s ease, border-color .15s ease, color .15s ease;
+      }
+      .scroll-fab.hide { opacity: 0; transform: translateX(-50%) translateY(14px); pointer-events: none; }
+      .scroll-fab svg { width: 16px; height: 16px; animation: scrollFabBounce 1.6s ease-in-out infinite; }
+    }
+    @keyframes scrollFabGlow {
+      0%, 100% { box-shadow: 0 0 0 0 var(--acc-glow); }
+      50%      { box-shadow: 0 0 10px 4px var(--acc-glow); }
+    }
+    @keyframes scrollFabBounce {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(3px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-fab { animation: none; box-shadow: 0 0 8px 2px var(--acc-glow); }
+      .scroll-fab svg { animation: none; }
+    }
+
     /* ── Mobile ───────────────────────────────────────────────── */
 
     /* iOS zooms the page when a focused input is under 16px and never
@@ -220,14 +289,443 @@
         padding-bottom: max(24px, env(safe-area-inset-bottom));
       }
     }
+
+    /* ── PREVIEW LAYOUT ──────────────────────────────────────────────────────
+       The sign-in card is unchanged and still max-width 400px. It is simply no
+       longer alone on the page: it sits in the right column of a split, with
+       the pitch on the left. Below 900px the split collapses and the CARD GOES
+       FIRST, because a returning cadet on a phone came to sign in, not to read
+       marketing they have already been sold by. */
+    body.split-page { display: block; padding: 0; }
+
+    .split {
+      min-height: 100vh; min-height: 100dvh;
+      display: grid; grid-template-columns: 1fr 460px;
+      gap: 48px; align-items: start;
+      max-width: 1240px; margin: 0 auto; padding: 56px 32px 40px;
+    }
+
+    /* min-width:0 matters here: .feat-track below is width:max-content with
+       a dozen nowrap chips, and a grid item defaults to its content's
+       intrinsic (max-content) size no matter what its own width rule says.
+       Without this the 1fr column blew out to fit that, off-canvas, and
+       pushed the sign-in card 2000px to the right. */
+    .pitch { padding-top: 8px; min-width: 0; }
+
+    /* ── FEATURE TICKER ───────────────────────────────────────────────────
+       A continuously scrolling strip replacing the old static headline and
+       stat boxes. Numbers still come from app/counts.js via [data-count],
+       nothing hand-typed. The track's own content is duplicated once at
+       runtime (see initFeatTicker() in the script below) so a -50%
+       translateX loops seamlessly; the markup below lists the set once. */
+    .feat-ticker {
+      overflow: hidden; margin-bottom: 30px; padding: 4px 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    }
+    .feat-track {
+      display: flex; gap: 10px; width: max-content;
+      animation: featScroll 32s linear infinite;
+    }
+    .feat-ticker:hover .feat-track { animation-play-state: paused; }
+    @keyframes featScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .feat-chip {
+      flex-shrink: 0; display: flex; align-items: center; gap: 7px;
+      background: #0A1828; border: 1px solid #1A3050; border-radius: 999px;
+      padding: 10px 16px; font-size: 12.5px; color: #8FA3B8; white-space: nowrap;
+    }
+    .feat-chip b {
+      color: var(--acc); font-weight: 800; font-variant-numeric: tabular-nums;
+      transition: color .15s ease;
+    }
+    /* Reduced motion: initFeatTicker() skips the duplication and adds this
+       class instead of animating. A frozen mid-scroll strip would clip most
+       of the set behind overflow:hidden; wrapping it shows everything. */
+    .feat-ticker.feat-static {
+      -webkit-mask-image: none; mask-image: none; overflow: visible;
+    }
+    .feat-ticker.feat-static .feat-track {
+      flex-wrap: wrap; width: auto; animation: none;
+    }
+
+    /* ── UPDATES ──────────────────────────────────────────────────────────
+       Replaces the old pitch (a paragraph, a checklist, a placeholder
+       testimonial box) with proof the product is alive: content that
+       actually changed recently. Entries come from app/updates.js, hand
+       maintained the same way testimonials would be - real dates, real
+       one-line descriptions, nothing invented to fill space. Filtered to
+       the selected course tab in renderUpdates(); a short true list beats
+       a padded fake one, so an empty type renders nothing rather than a
+       placeholder.
+
+       Each entry is its own card rather than a line under a shared rule,
+       with a small type badge instead of a dot. The course accent moved
+       to a marker dot on the section label - a full-height border read as
+       heavier than four short lines needed. Cards step in on a stagger
+       when the list renders, on load and again on every track switch, so
+       the "constantly updating" feeling Blesson asked for shows up here
+       too, not just in the ticker above it. */
+    /* Recently (curated) beside Upcoming events (live). Two columns once
+       there is room for both; the gap between the cards and the sign-in
+       card on a wide screen was dead space before this existed. */
+    .pitch-lower {
+      display: grid; grid-template-columns: minmax(240px, 48ch) 1fr;
+      gap: 28px; align-items: start;
+    }
+    .updates, .events-panel { transition: opacity .13s ease; }
+    .updates-h {
+      font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; color: #6E8AA6; margin-bottom: 12px;
+      display: flex; align-items: center; gap: 7px;
+    }
+    .updates-h::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--acc); transition: background .15s ease;
+    }
+    .updates-list { display: grid; gap: 9px; max-width: 48ch; }
+    .upd-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: #0A1828; border: 1px solid #1A3050; border-radius: 10px;
+      padding: 12px 14px; transition: border-color .15s ease;
+      opacity: 0; transform: translateY(8px);
+      animation: updIn .4s cubic-bezier(.2,.7,.3,1) forwards;
+    }
+    .upd-item:hover { border-color: #2A4568; }
+    .upd-item:nth-child(1) { animation-delay: .02s; }
+    .upd-item:nth-child(2) { animation-delay: .08s; }
+    .upd-item:nth-child(3) { animation-delay: .14s; }
+    .upd-item:nth-child(4) { animation-delay: .20s; }
+    .upd-item:nth-child(5) { animation-delay: .26s; }
+    @keyframes updIn { to { opacity: 1; transform: translateY(0); } }
+    .upd-badge {
+      flex-shrink: 0; width: 26px; height: 26px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; line-height: 1; margin-top: 1px;
+    }
+    .upd-badge-notes   { background: rgba(93,200,122,.14); color: #5DC87A; }
+    .upd-badge-product { background: rgba(200,164,74,.16); color: #C8A44A; }
+    .upd-text { font-size: 13.5px; line-height: 1.5; color: #DDE5EF; }
+    .upd-meta {
+      font-size: 11px; color: #6E8AA6; margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── UPCOMING EVENTS ─────────────────────────────────────────────────
+       A showcase spot, not another list of lines: a date stub, a real
+       button, room for a blurb. Lavender stays fixed regardless of the
+       course accent - it is this panel's own identity, the same colour
+       an event badge would have carried in the merged feed before this
+       existed, not something that should flip blue/orange mid-scan. */
+    .events-list { display: grid; gap: 10px; max-width: 52ch; }
+    .evc {
+      display: flex; gap: 14px;
+      background: #0A1828; border: 1px solid #1A3050; border-radius: 10px;
+      padding: 14px 16px; transition: border-color .15s ease;
+      opacity: 0; transform: translateY(8px);
+      animation: updIn .4s cubic-bezier(.2,.7,.3,1) forwards;
+    }
+    .evc:hover { border-color: #2A4568; }
+    .evc:nth-child(1) { animation-delay: .06s; }
+    .evc:nth-child(2) { animation-delay: .14s; }
+    .evc:nth-child(3) { animation-delay: .22s; }
+    .evc-date {
+      flex-shrink: 0; width: 50px; text-align: center; align-self: flex-start;
+      background: rgba(155,135,245,.14); border: 1px solid rgba(155,135,245,.35);
+      border-radius: 8px; padding: 7px 4px 6px; color: #9B87F5;
+    }
+    .evc-date-d { font-size: 19px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+    .evc-date-m { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-top: 3px; }
+    .evc-body { min-width: 0; }
+    .evc-title { font-size: 14px; font-weight: 700; color: #DDE5EF; line-height: 1.4; }
+    .evc-blurb { font-size: 12.5px; color: #8FA3B8; margin-top: 4px; line-height: 1.5; }
+    .evc-when { font-size: 11px; color: #6E8AA6; margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .evc-reg {
+      display: inline-flex; align-items: center; gap: 5px; margin-top: 10px;
+      background: var(--acc); color: #0B1626; font-weight: 700; font-size: 12px;
+      padding: 7px 13px; border-radius: 7px; text-decoration: none;
+      transition: background .15s ease, filter .15s ease;
+    }
+    .evc-reg:hover { filter: brightness(1.08); }
+
+    /* An honest empty state: dashed, quiet, same idiom the old placeholder
+       testimonial box used, not hidden and not filled with a fake row. */
+    .events-empty {
+      border: 1px dashed #1A3050; border-radius: 10px; max-width: 52ch;
+      padding: 18px 16px; color: #6E8AA6; font-size: 12.5px; line-height: 1.6;
+    }
+    .events-empty b { display: block; color: #8FA3B8; font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .pitch-lower { grid-template-columns: 1fr; gap: 22px; }
+      /* Three cards' worth of height, genuinely scrollable to reach the
+         rest rather than a hard cut. Tried a CSS mask-image for the fade
+         first: on this element specifically (display:grid, children with
+         an entrance animation) Chromium renders the whole list invisible
+         rather than faded, reproduced in isolation before this was found
+         to be the cause. The overlay div below is the standard fallback
+         for exactly this reason and does not share the bug. */
+      .updates-list {
+        max-height: 316px; overflow-y: auto; overflow-x: hidden;
+      }
+    }
+    .updates-scroll { position: relative; }
+    .updates-fade {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 40px;
+      background: linear-gradient(180deg, transparent, #070D1A);
+      opacity: 0; transition: opacity .15s ease; pointer-events: none;
+    }
+
+    /* ── COURSE SWITCH ───────────────────────────────────────────────────────
+       This is what removes the course-selector page: the choice is made here,
+       before signing in, and is saved to the account rather than the browser,
+       so it survives changing device. */
+    .course-sw {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+      background: #0A1828; border: 1px solid #1A3050;
+      border-radius: 8px; padding: 4px; margin-bottom: 18px;
+    }
+    .course-b {
+      border: 1px solid transparent; border-radius: 6px; background: transparent;
+      padding: 9px 6px 8px; cursor: pointer; font-family: inherit;
+      color: #6E8AA6; text-align: center;
+      transition: background .15s, color .15s, border-color .15s;
+    }
+    .course-b:hover { color: #DDE5EF; }
+    .course-b .cb-t { font-size: 12.5px; font-weight: 800; letter-spacing: .2px; }
+    .course-b .cb-s { font-size: 10.5px; margin-top: 2px; opacity: .85; }
+    .course-b[aria-pressed="true"] {
+      background: #12283F; border-color: var(--acc); color: #DDE5EF;
+    }
+    .course-b[aria-pressed="true"] .cb-t { color: var(--acc); transition: color .15s ease; }
+
+    @media (max-width: 900px) {
+      .split {
+        grid-template-columns: 1fr; gap: 34px; padding: 26px 20px 34px;
+        max-width: 520px;
+      }
+      .split .card { order: -1; margin: 0 auto; }
+    }
+
+    /* ── TOP NAV ─────────────────────────────────────────────────────────────
+       The marketing page is unchanged and still lives at the site root. This is
+       the way back to it from the sign-in page.
+
+       The ?stay=1 is not decoration. index.html sends anyone who has previously
+       been inside the app straight back to sign-in, and ?stay=1 is the flag
+       that suppresses it. Without it this link is a loop: About us bounces you
+       back to the page you just left, which looks like a broken button. */
+    .topnav {
+      display: flex; align-items: center; gap: 18px;
+      max-width: 1240px; margin: 0 auto; padding: 16px 32px 17px;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .tn-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 800; color: #DDE5EF; letter-spacing: -.2px;
+      margin-right: auto; text-decoration: none;
+    }
+    /* The real mark, same file index.html and sponsorship/index.html use
+       (assets/logo-blue-dark.svg / logo-orange-dark.svg) - swapped by
+       pickTrack() below, not redrawn. "Elec" carries the accent there via
+       .logo-elec { color: var(--blue) }, which sponsorship/index.html
+       gets for free by overriding what --blue means at the page level;
+       this page already has its own --acc doing the identical job. */
+    .tn-brand .logo-mark { height: 24px; width: auto; flex-shrink: 0; }
+    .tn-brand .logo-elec { color: var(--acc); transition: color .15s ease; }
+    .tn-link {
+      font-size: 13px; font-weight: 600; color: #8FA3B8; text-decoration: none;
+      padding: 7px 12px; border-radius: 7px; transition: color .15s, background .15s;
+    }
+    .tn-link:hover { color: var(--acc); background: #0D1E33; }
+    @media (max-width: 900px) { .topnav { padding: 14px 20px 15px; } }
+
+    /* ── MOBILE MENU: a side panel, not a wrapped second row ────────────────
+       Under 620px .tn-links itself is hidden (see the query below) and
+       .tn-burger opens .tn-panel instead - the same four links, but full
+       tap-height, in a panel that slides in from the right rather than
+       pushing the brand onto its own line and making the bar two rows tall
+       before anyone has done anything. */
+    .tn-burger {
+      display: none; width: 38px; height: 38px; align-items: center; justify-content: center;
+      background: transparent; border: 1px solid #1A3050; border-radius: 8px;
+      color: #DDE5EF; cursor: pointer; flex-shrink: 0;
+    }
+    .tn-burger svg { width: 18px; height: 18px; }
+    .tn-burger:hover { border-color: #2A4568; }
+
+    .tn-overlay {
+      position: fixed; inset: 0; background: rgba(3,7,15,.6);
+      opacity: 0; pointer-events: none; transition: opacity .2s ease; z-index: 190;
+    }
+    .tn-overlay.open { opacity: 1; pointer-events: auto; }
+
+    .tn-panel {
+      position: fixed; top: 0; right: 0; height: 100dvh;
+      width: min(78vw, 300px); background: #0A1828; border-left: 1px solid #1A3050;
+      display: flex; flex-direction: column; padding: 6px 8px;
+      transform: translateX(100%); transition: transform .25s cubic-bezier(.4,0,.2,1);
+      z-index: 200;
+    }
+    .tn-panel.open { transform: translateX(0); }
+    .tn-panel-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 10px 14px;
+    }
+    .tn-panel-title { font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; color: #6E8AA6; }
+    .tn-panel-close {
+      display: flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; background: transparent; border: none; border-radius: 8px;
+      color: #8FA3B8; cursor: pointer;
+    }
+    .tn-panel-close:hover { color: #DDE5EF; background: #0D1E33; }
+    .tn-panel-close svg { width: 16px; height: 16px; }
+    .tn-panel-link {
+      font-size: 14.5px; font-weight: 600; color: #DDE5EF; text-decoration: none;
+      padding: 14px 12px; border-radius: 8px; border-bottom: 1px solid #12213A;
+    }
+    .tn-panel-link:last-child { border-bottom: none; }
+    .tn-panel-link:hover { background: #0D1E33; }
+    @media (prefers-reduced-motion: reduce) {
+      .tn-panel { transition: none; }
+      .tn-overlay { transition: none; }
+    }
+
+    .tn-links { display: flex; align-items: center; gap: 2px; }
+    @media (max-width: 620px) {
+      .tn-links { display: none; }
+      .tn-burger { display: flex; }
+    }
+
+    /* Legal, kept out of the nav because nobody arrives looking for it. */
+    .page-foot {
+      max-width: 1240px; margin: 0 auto; padding: 8px 32px 34px;
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+    .page-foot a {
+      font-size: 11.5px; color: #6E8AA6; text-decoration: none;
+    }
+    .page-foot a:hover { color: #8FA3B8; text-decoration: underline; }
+    @media (max-width: 900px) {
+      /* Left-aligned matches the ticker/cards above it on a wide screen,
+         where they share the same left edge. Below 900px the card becomes
+         centred on its own (.split .card { margin: 0 auto }) and the
+         footer sitting flush left under it read as misplaced rather than
+         aligned with anything. */
+      .page-foot { padding: 4px 20px 28px; justify-content: center; text-align: center; }
+    }
   </style>
 </head>
-<body>
+<body class="split-page">
+
+<nav class="topnav">
+  <a class="tn-brand" href="../index.html?stay=1">
+    <img class="logo-mark" id="tn-logo" src="assets/logo-blue-dark.svg" alt="Elec-Buddy">
+    <span class="logo-word"><span class="logo-elec">Elec</span>-Buddy</span>
+  </a>
+  <div class="tn-links">
+    <a class="tn-link" href="../index.html?stay=1#story">About us</a>
+    <a class="tn-link" href="../index.html?stay=1#features">What's inside</a>
+    <a class="tn-link" href="../index.html?stay=1#topics">Coverage</a>
+    <a class="tn-link" href="mailto:support@elec-buddy.com">Contact</a>
+  </div>
+  <!-- Mobile only (see the 620px query below). Opens .tn-panel rather than
+       the old behaviour of the links wrapping onto a second row, which
+       worked but looked like the page had run out of space rather than
+       having a menu. -->
+  <button type="button" class="tn-burger" id="tn-burger" aria-label="Open menu"
+          aria-expanded="false" aria-controls="tn-panel" onclick="openNavPanel()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+  </button>
+</nav>
+
+<div class="tn-overlay" id="tn-overlay" onclick="closeNavPanel()"></div>
+<div class="tn-panel" id="tn-panel" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="tn-panel-head">
+    <span class="tn-panel-title">Menu</span>
+    <button type="button" class="tn-panel-close" aria-label="Close menu" onclick="closeNavPanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg>
+    </button>
+  </div>
+  <a class="tn-panel-link" href="../index.html?stay=1#story">About us</a>
+  <a class="tn-panel-link" href="../index.html?stay=1#features">What's inside</a>
+  <a class="tn-panel-link" href="../index.html?stay=1#topics">Coverage</a>
+  <a class="tn-panel-link" href="mailto:support@elec-buddy.com">Contact</a>
+</div>
+
+<div class="split">
+
+  <!-- Left: the pitch. Every number here comes from app/counts.js, which is
+       generated from the encrypted content itself, so it cannot drift from what
+       the app actually contains. Do not hand-type a figure into this page. -->
+  <aside class="pitch">
+    <!-- Scrolls sideways, forever, until initFeatTicker() below either
+         doubles the set for a seamless loop or, under reduced motion,
+         leaves it as a single static wrapped row. -->
+    <div class="feat-ticker" id="feat-ticker">
+      <div class="feat-track" id="feat-track">
+        <span class="feat-chip"><b data-count="surveyorQuestions">1,224</b> real surveyor questions</span>
+        <span class="feat-chip"><b data-count="quizQuestions">5,861</b> practice questions</span>
+        <span class="feat-chip"><b data-count="oralTopics">23</b> oral topics, fully written</span>
+        <span class="feat-chip">Recollected from real MMD sittings</span>
+        <span class="feat-chip">Works offline once loaded</span>
+        <span class="feat-chip">CoC and Sponsorship, one account</span>
+      </div>
+    </div>
+
+    <div class="pitch-lower">
+      <!-- Real activity, not marketing copy. Entries come from
+           app/updates.js and are filtered to the selected course tab by
+           renderUpdates() below. Two kinds live here today (content
+           updates, product updates); testimonials are left out entirely
+           until there are real cadet words, rather than a placeholder
+           that looks real. -->
+      <div class="updates" id="updates-panel">
+        <div class="updates-h">Recently</div>
+        <div class="updates-scroll">
+          <div class="updates-list" id="updates-list"></div>
+          <!-- Sits outside the scrolling element on purpose, so it stays
+               put at the bottom of the visible area instead of scrolling
+               away with the content. syncUpdatesFade() below shows it only
+               while there is genuinely more to scroll to. -->
+          <div class="updates-fade" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <!-- Live query against public.public_events (see
+           app/admin/public_events_setup.sql), not curated: an admin can
+           publish one at any time and this should not need a deploy to
+           show it. An honest empty state, not hidden and not faked,
+           since the table starts at zero rows. -->
+      <div class="events-panel" id="events-panel">
+        <div class="updates-h">Upcoming events</div>
+        <div class="events-list" id="events-list"></div>
+      </div>
+    </div>
+  </aside>
 
 <div class="card">
   <div class="brand">
     <div class="brand-name">Elec-Buddy</div>
     <div class="brand-sub">ETO CoC · STCW Reg. III/6</div>
+  </div>
+
+  <!-- Which course, chosen before signing in rather than on a page
+       afterwards. Written to localStorage's eb_track, same flag every
+       other page already reads - see redirectAfterLogin() below. -->
+  <div class="course-sw" id="course-sw" role="group" aria-label="Choose your course">
+    <button type="button" class="course-b" data-track="coc" aria-pressed="true"
+            onclick="pickTrack('coc')">
+      <div class="cb-t">CoC Preparation</div>
+      <div class="cb-s">MMD oral &amp; written</div>
+    </button>
+    <button type="button" class="course-b" data-track="sponsorship" aria-pressed="false"
+            onclick="pickTrack('sponsorship')">
+      <div class="cb-t">Sponsorship</div>
+      <div class="cb-s">Company exam &amp; interview</div>
+    </button>
   </div>
 
   <!-- Tabs -->
@@ -310,11 +808,68 @@
   </div>
 </div>
 
+</div><!-- /.split -->
+
+<!-- Mobile only (see .scroll-fab's 900px query). Fixed to the viewport
+     rather than living in the card, so it stays visible regardless of
+     scroll position instead of only at one spot in the page. Hidden by
+     syncScrollFab() once the ticker is actually on screen. -->
+<button type="button" class="scroll-fab" id="scroll-fab" aria-label="Scroll down for updates and events"
+        onclick="document.getElementById('feat-ticker').scrollIntoView({behavior:'smooth', block:'start'})">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+</button>
+
+<footer class="page-foot">
+  <a href="./privacy.html">Privacy Policy</a>
+  <a href="./terms.html">Terms of Use</a>
+  <a href="mailto:support@elec-buddy.com">support@elec-buddy.com</a>
+</footer>
+
 <script>
   const SUPABASE_URL  = 'https://vcofgjuwprylojgyfbtr.supabase.co';
   const SUPABASE_KEY  = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
   const SUPABASE_FN_URL = SUPABASE_URL + '/functions/v1';
   const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  /* ── MOBILE NAV PANEL ─────────────────────────────────────────────────── */
+  function openNavPanel() {
+    document.getElementById('tn-panel').classList.add('open');
+    document.getElementById('tn-overlay').classList.add('open');
+    document.getElementById('tn-burger').setAttribute('aria-expanded', 'true');
+    // Locks the page behind the panel rather than letting it scroll under a
+    // finger that meant to scroll the panel's own (currently short) content.
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNavPanel() {
+    document.getElementById('tn-panel').classList.remove('open');
+    document.getElementById('tn-overlay').classList.remove('open');
+    document.getElementById('tn-burger').setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+  window.openNavPanel = openNavPanel;
+  window.closeNavPanel = closeNavPanel;
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeNavPanel();
+  });
+
+  /* ── SCROLL FAB ───────────────────────────────────────────────────────
+     Hides once the ticker it points at is actually on screen - it has
+     done its job at that point, and a glowing button with nothing left
+     to announce reads as broken rather than helpful. Shown again if
+     someone scrolls back up past the card, in case they came back to it. */
+  (function () {
+    var fab = document.getElementById('scroll-fab');
+    var target = document.getElementById('feat-ticker');
+    if (!fab || !target) return;
+    function sync() {
+      var r = target.getBoundingClientRect();
+      var targetVisible = r.top < window.innerHeight * 0.85;
+      fab.classList.toggle('hide', targetVisible);
+    }
+    window.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  })();
 
   // Fire-and-forget: never lets a slow/failed email hold up the signup flow.
   // The edge function itself is a one-shot compare-and-swap, so it's safe to
@@ -361,11 +916,220 @@
     return (Date.now() - new Date(user.created_at).getTime()) < 10 * 60 * 1000;
   }
 
+  /* ── COURSE TRACK ────────────────────────────────────────────────────────
+     The old flow signed you in and then asked which course you wanted, on a
+     separate page, and remembered the answer in localStorage. That meant the
+     answer was per browser: the same cadet on a phone and a laptop was asked
+     twice. Here the question is answered before signing in, and the answer is
+     written to the account.
+
+     Still mirrored into localStorage, because the redirect happens immediately
+     and must not wait on a network write that may fail. The account copy is
+     the durable one; the local copy is what makes the next load instant. */
+  /* Doubles the feature-ticker set so a -50% translateX loops seamlessly,
+     without typing the chip list twice in markup. Skipped under reduced
+     motion: .feat-static (CSS above) wraps the single set as a static row
+     instead of leaving it frozen mid-scroll, half of it clipped. Runs before
+     applyCounts() below so the duplicated [data-count] chips get filled too. */
+  (function initFeatTicker() {
+    var track = document.getElementById('feat-track');
+    if (!track) return;
+    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      var ticker = document.getElementById('feat-ticker');
+      if (ticker) ticker.classList.add('feat-static');
+      return;
+    }
+    track.insertAdjacentHTML('beforeend', track.innerHTML);
+  })();
+
+  /* Fills every [data-count] from app/counts.js, which is generated from the
+     encrypted content itself. Typing a content figure into a page by hand is
+     how the Surveyor Q&A badge said 281 for months while the file held 1,193. */
+  (function applyCounts() {
+    var c = window.EB_COUNTS;
+    if (!c) return;
+    document.querySelectorAll('[data-count]').forEach(function (el) {
+      var v = c[el.getAttribute('data-count')];
+      if (typeof v === 'number' && v > 0) el.textContent = v.toLocaleString('en-IN');
+    });
+  })();
+
+  var _track = 'coc';
+  try { _track = localStorage.getItem('eb_track') || 'coc'; } catch (e) {}
+
+  /* ── UPDATES PANEL ───────────────────────────────────────────────────────
+     Renders app/updates.js, filtered to the selected course. track:null
+     entries show for both; a track-scoped entry only shows under its own
+     tab. Capped at 5 so the panel stays a glance, not a scroll. */
+  function _updEsc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function _updAgo(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    var days = Math.floor((Date.now() - d.getTime()) / 86400000);
+    if (days <= 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 30) return days + ' days ago';
+    var months = Math.floor(days / 30);
+    if (months < 12) return months === 1 ? '1 month ago' : months + ' months ago';
+    return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+  // One glyph per type, plain characters rather than emoji or an SVG
+  // sprite, matching this page's existing icon choices (the old pitch
+  // checklist used the same HTML-entity approach).
+  var UPD_GLYPH = { notes: '&#9998;', product: '&#9889;' };
+
+  function paintUpdates(list) {
+    var items = (window.EB_UPDATES || [])
+      .filter(function (u) { return !u.track || u.track === _track; })
+      .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; })
+      .slice(0, 5);
+    list.innerHTML = items.map(function (u) {
+      var type = _updEsc(u.type);
+      return '<div class="upd-item"><span class="upd-badge upd-badge-' + type + '">'
+        + (UPD_GLYPH[u.type] || '') + '</span>'
+        + '<div><div class="upd-text">' + _updEsc(u.text) + '</div>'
+        + '<div class="upd-meta">' + _updEsc(_updAgo(u.date)) + '</div></div></div>';
+    }).join('');
+    syncUpdatesFade();
+  }
+
+  // Shows the bottom fade only while there is genuinely more to scroll to,
+  // on mobile where .updates-list gets a max-height (see the 760px query
+  // above) - on desktop scrollHeight never exceeds clientHeight, so this
+  // stays hidden there without needing a separate viewport check. Re-run
+  // after every paint, not just on scroll, since a track switch can change
+  // whether the list overflows at all.
+  function syncUpdatesFade() {
+    var list = document.getElementById('updates-list');
+    var fade = document.querySelector('.updates-fade');
+    if (!list || !fade) return;
+    var hasMore = list.scrollHeight - list.scrollTop - list.clientHeight > 4;
+    fade.style.opacity = hasMore ? '1' : '0';
+  }
+
+  function renderUpdates() {
+    var list = document.getElementById('updates-list');
+    if (list) paintUpdates(list);
+  }
+
+  /* ── UPCOMING EVENTS ──────────────────────────────────────────────────
+     public_events is read live (see app/admin/public_events_setup.sql),
+     unlike the hand-curated app/updates.js entries above, because an
+     admin can publish one at any time and this should not need a deploy
+     to show it. Fetched once and cached: a track switch re-filters the
+     same rows rather than hitting the network again. */
+  var _evCache = null;
+  function fetchPublicEvents() {
+    if (_evCache) return Promise.resolve(_evCache);
+    return sb.from('public_events')
+      .select('title, blurb, event_at, register_link, track')
+      .order('event_at', { ascending: true })
+      .then(function (res) {
+        var rows = (!res.error && res.data) ? res.data : [];
+        // Keep events from the last day onward, so one does not vanish
+        // mid-morning of the day it happens. Anything older is done.
+        var cutoff = Date.now() - 24 * 3600 * 1000;
+        _evCache = rows.filter(function (e) { return new Date(e.event_at).getTime() >= cutoff; });
+        return _evCache;
+      }, function () { _evCache = []; return _evCache; });
+  }
+
+  function _evDateBadge(iso) {
+    var d = new Date(iso);
+    return {
+      day: d.toLocaleString('en-IN', { day: 'numeric', timeZone: 'Asia/Kolkata' }),
+      mon: d.toLocaleString('en-IN', { month: 'short', timeZone: 'Asia/Kolkata' }),
+    };
+  }
+
+  function paintEvents(list, events) {
+    var items = events.filter(function (e) { return !e.track || e.track === _track; });
+    if (!items.length) {
+      // Honest, not hidden: the table starts at zero rows and an admin
+      // has not published one yet. A missing section reads as broken; a
+      // quiet, deliberate one does not.
+      list.innerHTML = '<div class="events-empty"><b>Nothing scheduled right now</b>'
+        + 'Check back soon, or watch this space for the next one.</div>';
+      return;
+    }
+    list.innerHTML = items.slice(0, 3).map(function (e) {
+      var badge = _evDateBadge(e.event_at);
+      var when = new Date(e.event_at).toLocaleString('en-IN', {
+        weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
+      });
+      return '<div class="evc"><div class="evc-date"><div class="evc-date-d">' + _updEsc(badge.day) + '</div>'
+        + '<div class="evc-date-m">' + _updEsc(badge.mon) + '</div></div>'
+        + '<div class="evc-body"><div class="evc-title">' + _updEsc(e.title) + '</div>'
+        + (e.blurb ? '<div class="evc-blurb">' + _updEsc(e.blurb) + '</div>' : '')
+        + '<div class="evc-when">' + _updEsc(when) + '</div>'
+        + '<a class="evc-reg" href="' + _updEsc(e.register_link) + '" target="_blank" rel="noopener noreferrer">Register &#8594;</a>'
+        + '</div></div>';
+    }).join('');
+  }
+
+  function renderEvents() {
+    var list = document.getElementById('events-list');
+    if (!list) return;
+    paintEvents(list, _evCache || []);
+    if (!_evCache) fetchPublicEvents().then(function (events) { paintEvents(list, events); });
+  }
+
+  /* ── COURSE SWITCH ────────────────────────────────────────────────────── */
+  function pickTrack(t, opts) {
+    if (t !== 'coc' && t !== 'sponsorship') return;
+    var isInit = !!(opts && opts.init);
+    _track = t;
+    try { localStorage.setItem('eb_track', t); } catch (e) {}
+    document.querySelectorAll('#course-sw .course-b').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.dataset.track === t));
+    });
+
+    var applyTrack = function () {
+      document.documentElement.setAttribute('data-track', t);
+      // The mark itself is a flat-coloured SVG (fill="#2563eb" / "#f59e0b"
+      // baked in), the same two files index.html and sponsorship/index.html
+      // already use - not something CSS can recolour, so the src swaps
+      // instead, same idea as those pages' own theme-driven logo.src swap.
+      var logo = document.getElementById('tn-logo');
+      if (logo) logo.src = t === 'sponsorship' ? 'assets/logo-orange-dark.svg' : 'assets/logo-blue-dark.svg';
+      renderUpdates();
+      renderEvents();
+    };
+
+    // On first load, just paint - no fade over an empty page. On a real
+    // switch, a brief fade covers both the colour change and the fact the
+    // two panels re-filter, so it reads as one transition, not two.
+    var panel = document.getElementById('updates-panel');
+    var evPanel = document.getElementById('events-panel');
+    if (isInit || !panel) { applyTrack(); return; }
+    panel.style.opacity = '0';
+    if (evPanel) evPanel.style.opacity = '0';
+    window.setTimeout(function () {
+      applyTrack();
+      panel.style.opacity = '1';
+      if (evPanel) evPanel.style.opacity = '1';
+    }, 130);
+  }
+  window.pickTrack = pickTrack;
+  pickTrack(_track, { init: true });
+  (function () {
+    var list = document.getElementById('updates-list');
+    if (list) list.addEventListener('scroll', syncUpdatesFade);
+  })();
+
+  /* Deliberately just localStorage, matching every other page's eb_track
+     read/write - an account-based version (write AND read back
+     profiles.default_track) was built and tested here first, then dropped:
+     "we can avoid that logic... just moved the course selector outside" is
+     simpler, needs no backfill for existing accounts, and nothing about an
+     existing customer's routing silently changes. */
   function redirectAfterLogin() {
-    var saved = localStorage.getItem('eb_track');
-    if (saved === 'coc')          window.location.replace('./index.html');
-    else if (saved === 'sponsorship') window.location.replace('./sponsorship/index.html');
-    else                          window.location.replace('./courses.html');
+    if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
+    else                          window.location.replace('./index.html');
   }
 
   // Detect error in URL hash (e.g. expired confirmation link)
@@ -457,7 +1221,7 @@
     btn.disabled = true; btn.textContent = 'Signing in...';
     const email    = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
-    const { error } = await sb.auth.signInWithPassword({ email, password });
+    const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) {
       var msg = error.message === 'Invalid login credentials'
         ? 'Incorrect email or password.'

@@ -137,10 +137,11 @@ const PAGES = process.env.THEME_AUDIT_PAGES
   : ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html',
      'app/admin/finance.html',
      // courses.html and auth.html were missing from this list, so neither was
-     // ever audited. courses.html is the page a cadet sees first, and it held
-     // white text on a filled --blue at 2.87:1, the exact pair named in
-     // CLAUDE.md, for as long as the rule has been written down.
-     'app/courses.html', 'app/auth.html'];
+     // ever audited. courses.html (retired 5 Sep 2026, replaced by the
+     // course choice moving onto auth.html itself) held white text on a
+     // filled --blue at 2.87:1, the exact pair named in CLAUDE.md, for as
+     // long as the rule has been written down.
+     'app/auth.html'];
 const findings = [];
 
 /* Scoped palettes. #gate-overlay redefines --text, --surface and the rest

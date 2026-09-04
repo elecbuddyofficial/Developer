@@ -88,7 +88,7 @@ if (!numOk) fail.push('receipt DURATION_LABELS no longer match the months they r
 console.log('   ' + (numOk ? 'ok  ' : 'FAIL') + ' DURATION_LABELS    receipts (' + Object.values(dl).join(', ') + ')');
 
 head('3. Stale names anywhere in the live app');
-const LIVE = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html', 'app/courses.html',
+const LIVE = ['app/index.html', 'app/admin/index.html', 'app/sponsorship/index.html', 'app/auth.html',
               'app/app.js', 'app/account.js', 'supabase/functions/_shared/payment-email.ts',
               'app/admin/pricing_v2_setup.sql'];
 const OLD = /Passage|Voyage|Expedition|Mariner|\bLaunch\b/;

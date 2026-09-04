@@ -1184,8 +1184,10 @@
     <!-- Admin Panel (admins only) -->
     <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:6px;padding:10px;font-size:13px;color:var(--amber);font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
-    <!-- Courses -->
-    <button onclick="window.location.href='./courses.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch Course</button>
+    <!-- Only two courses exist, so from here "switch" only ever means
+         Sponsorship - no picker page needed, just the flag auth.html
+         itself reads and the corresponding page. -->
+    <button onclick="localStorage.setItem('eb_track','sponsorship');window.location.href='./sponsorship/index.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch to Sponsorship</button>
 
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
