@@ -35,7 +35,7 @@
     @media (prefers-reduced-motion: reduce) {
       .updates, .course-b, .feat-chip b { transition: none !important; }
       .feat-track { animation: none !important; }
-      .upd-item { animation: none !important; opacity: 1 !important; transform: none !important; }
+      .upd-item, .evc { animation: none !important; opacity: 1 !important; transform: none !important; }
     }
 
     body {
@@ -335,7 +335,14 @@
        when the list renders, on load and again on every track switch, so
        the "constantly updating" feeling Blesson asked for shows up here
        too, not just in the ticker above it. */
-    .updates { transition: opacity .13s ease; }
+    /* Recently (curated) beside Upcoming events (live). Two columns once
+       there is room for both; the gap between the cards and the sign-in
+       card on a wide screen was dead space before this existed. */
+    .pitch-lower {
+      display: grid; grid-template-columns: minmax(240px, 48ch) 1fr;
+      gap: 28px; align-items: start;
+    }
+    .updates, .events-panel { transition: opacity .13s ease; }
     .updates-h {
       font-size: 10.5px; font-weight: 700; letter-spacing: .8px;
       text-transform: uppercase; color: #6E8AA6; margin-bottom: 12px;
@@ -367,14 +374,60 @@
     }
     .upd-badge-notes   { background: rgba(93,200,122,.14); color: #5DC87A; }
     .upd-badge-product { background: rgba(200,164,74,.16); color: #C8A44A; }
-    .upd-badge-event   { background: rgba(155,135,245,.16); color: #9B87F5; }
     .upd-text { font-size: 13.5px; line-height: 1.5; color: #DDE5EF; }
     .upd-meta {
       font-size: 11px; color: #6E8AA6; margin-top: 4px;
       font-variant-numeric: tabular-nums;
     }
-    .upd-reg { color: var(--acc); font-weight: 700; text-decoration: none; transition: color .15s ease; }
-    .upd-reg:hover { text-decoration: underline; }
+
+    /* ── UPCOMING EVENTS ─────────────────────────────────────────────────
+       A showcase spot, not another list of lines: a date stub, a real
+       button, room for a blurb. Lavender stays fixed regardless of the
+       course accent - it is this panel's own identity, the same colour
+       an event badge would have carried in the merged feed before this
+       existed, not something that should flip blue/orange mid-scan. */
+    .events-list { display: grid; gap: 10px; max-width: 52ch; }
+    .evc {
+      display: flex; gap: 14px;
+      background: #0A1828; border: 1px solid #1A3050; border-radius: 10px;
+      padding: 14px 16px; transition: border-color .15s ease;
+      opacity: 0; transform: translateY(8px);
+      animation: updIn .4s cubic-bezier(.2,.7,.3,1) forwards;
+    }
+    .evc:hover { border-color: #2A4568; }
+    .evc:nth-child(1) { animation-delay: .06s; }
+    .evc:nth-child(2) { animation-delay: .14s; }
+    .evc:nth-child(3) { animation-delay: .22s; }
+    .evc-date {
+      flex-shrink: 0; width: 50px; text-align: center; align-self: flex-start;
+      background: rgba(155,135,245,.14); border: 1px solid rgba(155,135,245,.35);
+      border-radius: 8px; padding: 7px 4px 6px; color: #9B87F5;
+    }
+    .evc-date-d { font-size: 19px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; }
+    .evc-date-m { font-size: 9.5px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; margin-top: 3px; }
+    .evc-body { min-width: 0; }
+    .evc-title { font-size: 14px; font-weight: 700; color: #DDE5EF; line-height: 1.4; }
+    .evc-blurb { font-size: 12.5px; color: #8FA3B8; margin-top: 4px; line-height: 1.5; }
+    .evc-when { font-size: 11px; color: #6E8AA6; margin-top: 6px; font-variant-numeric: tabular-nums; }
+    .evc-reg {
+      display: inline-flex; align-items: center; gap: 5px; margin-top: 10px;
+      background: var(--acc); color: #0B1626; font-weight: 700; font-size: 12px;
+      padding: 7px 13px; border-radius: 7px; text-decoration: none;
+      transition: background .15s ease, filter .15s ease;
+    }
+    .evc-reg:hover { filter: brightness(1.08); }
+
+    /* An honest empty state: dashed, quiet, same idiom the old placeholder
+       testimonial box used, not hidden and not filled with a fake row. */
+    .events-empty {
+      border: 1px dashed #1A3050; border-radius: 10px; max-width: 52ch;
+      padding: 18px 16px; color: #6E8AA6; font-size: 12.5px; line-height: 1.6;
+    }
+    .events-empty b { display: block; color: #8FA3B8; font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+
+    @media (max-width: 760px) {
+      .pitch-lower { grid-template-columns: 1fr; gap: 22px; }
+    }
 
     /* ── COURSE SWITCH ───────────────────────────────────────────────────────
        This is what removes the course-selector page: the choice is made here,
@@ -485,15 +538,27 @@
       </div>
     </div>
 
-    <!-- Real activity, not marketing copy. Entries come from
-         app/updates.js and are filtered to the selected course tab by
-         renderUpdates() below. Two kinds live here today (content updates,
-         product updates); testimonials and public events are left out
-         entirely until there is real material for them, rather than
-         filled with a placeholder that looks real. -->
-    <div class="updates" id="updates-panel">
-      <div class="updates-h">Recently</div>
-      <div class="updates-list" id="updates-list"></div>
+    <div class="pitch-lower">
+      <!-- Real activity, not marketing copy. Entries come from
+           app/updates.js and are filtered to the selected course tab by
+           renderUpdates() below. Two kinds live here today (content
+           updates, product updates); testimonials are left out entirely
+           until there are real cadet words, rather than a placeholder
+           that looks real. -->
+      <div class="updates" id="updates-panel">
+        <div class="updates-h">Recently</div>
+        <div class="updates-list" id="updates-list"></div>
+      </div>
+
+      <!-- Live query against public.public_events (see
+           app/admin/public_events_setup.sql), not curated: an admin can
+           publish one at any time and this should not need a deploy to
+           show it. An honest empty state, not hidden and not faked,
+           since the table starts at zero rows. -->
+      <div class="events-panel" id="events-panel">
+        <div class="updates-h">Upcoming events</div>
+        <div class="events-list" id="events-list"></div>
+      </div>
     </div>
   </aside>
 
@@ -504,9 +569,11 @@
   </div>
 
   <!-- Which course, chosen before signing in rather than on a page afterwards.
-       Saved to profiles.default_track via saveTrack(), fired from every path
-       that ends in a real session (login, registration, SIGNED_IN, the
-       already-logged-in fallback), right before redirectAfterLogin(). -->
+       This tab only decides anything the FIRST time an account signs in
+       through this page: redirectAfterLogin() reads profiles.default_track
+       back for every later sign-in and routes by that instead, so the
+       account is the source of truth and a returning user on a new device
+       is never asked again nor silently misrouted. -->
   <div class="course-sw" id="course-sw" role="group" aria-label="Choose your course">
     <button type="button" class="course-b" data-track="coc" aria-pressed="true"
             onclick="pickTrack('coc')">
@@ -722,29 +789,34 @@
   }
   // One glyph per type, plain characters rather than emoji or an SVG
   // sprite, matching this page's existing icon choices (the old pitch
-  // checklist used the same HTML-entity approach). Add a line here before
-  // a new type shows up anywhere, or it renders blank.
-  var UPD_GLYPH = { notes: '&#9998;', product: '&#9889;', event: '&#10022;' };
+  // checklist used the same HTML-entity approach).
+  var UPD_GLYPH = { notes: '&#9998;', product: '&#9889;' };
 
-  // Absolute date/time, not "X days ago" - an event is upcoming, not
-  // something that already happened, so the relative-past phrasing
-  // _updAgo() uses for the other two types would read backwards here.
-  // Register is the whole point of an event row, so it's part of the
-  // meta line rather than a separate element.
-  function _evMeta(u) {
-    var when = new Date(u.date).toLocaleString('en-IN', {
-      weekday: 'short', day: 'numeric', month: 'short',
-      hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
-    });
-    return _updEsc(when) + ' &middot; <a class="upd-reg" href="' + _updEsc(u.link)
-      + '" target="_blank" rel="noopener noreferrer">Register</a>';
+  function paintUpdates(list) {
+    var items = (window.EB_UPDATES || [])
+      .filter(function (u) { return !u.track || u.track === _track; })
+      .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; })
+      .slice(0, 5);
+    list.innerHTML = items.map(function (u) {
+      var type = _updEsc(u.type);
+      return '<div class="upd-item"><span class="upd-badge upd-badge-' + type + '">'
+        + (UPD_GLYPH[u.type] || '') + '</span>'
+        + '<div><div class="upd-text">' + _updEsc(u.text) + '</div>'
+        + '<div class="upd-meta">' + _updEsc(_updAgo(u.date)) + '</div></div></div>';
+    }).join('');
   }
 
-  // public_events is read live (see app/admin/public_events_setup.sql),
-  // unlike the hand-curated app/updates.js entries, because an admin can
-  // add or publish one at any time and this page should not need a deploy
-  // to show it. Fetched once and cached: a track switch re-filters the
-  // same rows rather than hitting the network again.
+  function renderUpdates() {
+    var list = document.getElementById('updates-list');
+    if (list) paintUpdates(list);
+  }
+
+  /* ── UPCOMING EVENTS ──────────────────────────────────────────────────
+     public_events is read live (see app/admin/public_events_setup.sql),
+     unlike the hand-curated app/updates.js entries above, because an
+     admin can publish one at any time and this should not need a deploy
+     to show it. Fetched once and cached: a track switch re-filters the
+     same rows rather than hitting the network again. */
   var _evCache = null;
   function fetchPublicEvents() {
     if (_evCache) return Promise.resolve(_evCache);
@@ -761,34 +833,44 @@
       }, function () { _evCache = []; return _evCache; });
   }
 
-  function paintUpdates(list, events) {
-    var evItems = events
-      .filter(function (e) { return !e.track || e.track === _track; })
-      .map(function (e) { return { type: 'event', date: e.event_at, text: e.title, link: e.register_link }; });
-    var curated = (window.EB_UPDATES || [])
-      .filter(function (u) { return !u.track || u.track === _track; });
-    var items = evItems.concat(curated)
-      .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; })
-      .slice(0, 5);
-    list.innerHTML = items.map(function (u) {
-      var type = _updEsc(u.type);
-      var meta = u.type === 'event' ? _evMeta(u) : _updEsc(_updAgo(u.date));
-      return '<div class="upd-item"><span class="upd-badge upd-badge-' + type + '">'
-        + (UPD_GLYPH[u.type] || '') + '</span>'
-        + '<div><div class="upd-text">' + _updEsc(u.text) + '</div>'
-        + '<div class="upd-meta">' + meta + '</div></div></div>';
+  function _evDateBadge(iso) {
+    var d = new Date(iso);
+    return {
+      day: d.toLocaleString('en-IN', { day: 'numeric', timeZone: 'Asia/Kolkata' }),
+      mon: d.toLocaleString('en-IN', { month: 'short', timeZone: 'Asia/Kolkata' }),
+    };
+  }
+
+  function paintEvents(list, events) {
+    var items = events.filter(function (e) { return !e.track || e.track === _track; });
+    if (!items.length) {
+      // Honest, not hidden: the table starts at zero rows and an admin
+      // has not published one yet. A missing section reads as broken; a
+      // quiet, deliberate one does not.
+      list.innerHTML = '<div class="events-empty"><b>Nothing scheduled right now</b>'
+        + 'Check back soon, or watch this space for the next one.</div>';
+      return;
+    }
+    list.innerHTML = items.slice(0, 3).map(function (e) {
+      var badge = _evDateBadge(e.event_at);
+      var when = new Date(e.event_at).toLocaleString('en-IN', {
+        weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata',
+      });
+      return '<div class="evc"><div class="evc-date"><div class="evc-date-d">' + _updEsc(badge.day) + '</div>'
+        + '<div class="evc-date-m">' + _updEsc(badge.mon) + '</div></div>'
+        + '<div class="evc-body"><div class="evc-title">' + _updEsc(e.title) + '</div>'
+        + (e.blurb ? '<div class="evc-blurb">' + _updEsc(e.blurb) + '</div>' : '')
+        + '<div class="evc-when">' + _updEsc(when) + '</div>'
+        + '<a class="evc-reg" href="' + _updEsc(e.register_link) + '" target="_blank" rel="noopener noreferrer">Register &#8594;</a>'
+        + '</div></div>';
     }).join('');
   }
 
-  function renderUpdates() {
-    var list = document.getElementById('updates-list');
+  function renderEvents() {
+    var list = document.getElementById('events-list');
     if (!list) return;
-    // Paint the curated entries immediately - no reason to make the whole
-    // panel wait on a network round trip that only ever adds to the list.
-    // The live query then repaints once, merged, whether it lands in 80ms
-    // or fails outright (fetchPublicEvents() never rejects).
-    paintUpdates(list, _evCache || []);
-    if (!_evCache) fetchPublicEvents().then(function (events) { paintUpdates(list, events); });
+    paintEvents(list, _evCache || []);
+    if (!_evCache) fetchPublicEvents().then(function (events) { paintEvents(list, events); });
   }
 
   /* ── COURSE SWITCH ────────────────────────────────────────────────────── */
@@ -804,37 +886,62 @@
     var applyTrack = function () {
       document.documentElement.setAttribute('data-track', t);
       renderUpdates();
+      renderEvents();
     };
 
     // On first load, just paint - no fade over an empty page. On a real
     // switch, a brief fade covers both the colour change and the fact the
-    // feed itself re-filters, so it reads as one transition, not two.
+    // two panels re-filter, so it reads as one transition, not two.
     var panel = document.getElementById('updates-panel');
+    var evPanel = document.getElementById('events-panel');
     if (isInit || !panel) { applyTrack(); return; }
     panel.style.opacity = '0';
+    if (evPanel) evPanel.style.opacity = '0';
     window.setTimeout(function () {
       applyTrack();
       panel.style.opacity = '1';
+      if (evPanel) evPanel.style.opacity = '1';
     }, 130);
   }
   window.pickTrack = pickTrack;
   pickTrack(_track, { init: true });
 
-  /* Fire and forget. A failed write must never block someone getting into the
-     app they have paid for; the worst case is they land on their chosen course
-     anyway and the account simply does not remember it yet. */
-  function saveTrack(userId) {
+  /* AWAITED, not fire-and-forget - see the keepalive comment on
+     sendWelcomeEmail() above for why that distinction is not theoretical
+     here. Every caller of redirectAfterLogin() calls
+     window.location.replace() on the very next line, which tears the page
+     down and cancels an ordinary in-flight fetch before it leaves the
+     browser: measured on this exact file, that race lost 10 of 12 times.
+     supabase-js's query builder has no keepalive option to reach for the
+     way sendWelcomeEmail did, so this is awaited before the redirect
+     instead. Only paid for once: a returning user whose account already
+     has a value never calls this at all. */
+  async function saveTrack(userId) {
     if (!userId) return;
-    try {
-      sb.from('profiles').update({ default_track: _track }).eq('id', userId)
-        .then(function () {}, function () {});
-    } catch (e) {}
+    try { await sb.from('profiles').update({ default_track: _track }).eq('id', userId); }
+    catch (e) {}
   }
 
-  function redirectAfterLogin(userId) {
-    saveTrack(userId);
-    if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
-    else                          window.location.replace('./index.html');
+  /* The account is the source of truth once it has one. Without this, a
+     returning Sponsorship user opening this page on a new device (or with
+     storage cleared) lands on CoC by default, silently, on the exact path
+     (getSession() finding an existing session, no interaction with the
+     tab UI at all) where they have no chance to notice or correct it
+     before the redirect fires. First-time-per-account is the only case
+     where the tab someone just clicked should decide anything; every
+     later sign-in should route by what saveTrack() already recorded. */
+  async function redirectAfterLogin(userId) {
+    var track = _track;
+    if (userId) {
+      try {
+        var res = await sb.from('profiles').select('default_track').eq('id', userId).single();
+        var stored = res.data && res.data.default_track;
+        if (stored === 'coc' || stored === 'sponsorship') track = stored;
+        else await saveTrack(userId); // nothing recorded yet: this session's pick becomes it
+      } catch (e) { await saveTrack(userId); }
+    }
+    if (track === 'sponsorship') window.location.replace('./sponsorship/index.html');
+    else                         window.location.replace('./index.html');
   }
 
   // Detect error in URL hash (e.g. expired confirmation link)
