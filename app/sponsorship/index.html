@@ -224,6 +224,22 @@
   .cqa-info-stat .cqa-info-label { font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px }
   .cqa-info-stat .cqa-info-value { font-size:12.5px;font-weight:600;color:var(--text);line-height:1.4 }
   .cqa-chip-green { background:var(--green-dim);border:1px solid var(--green-border);color:var(--green) }
+  /* One tab per stage (Company Info, then each interview stage) instead of
+     stacking everything down the page - a company with a multi-round
+     process was unreadable as one long scroll. */
+  .cqa-tabs { display:flex;gap:4px;margin:4px 0 16px;border-bottom:1px solid var(--border2);overflow-x:auto }
+  .cqa-tab { flex-shrink:0;padding:10px 16px;font-size:13px;font-weight:600;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s }
+  .cqa-tab:hover { color:var(--text) }
+  .cqa-tab.active { color:var(--blue);border-bottom-color:var(--blue) }
+  .cqa-qa-item { background:var(--surface);border:1px solid var(--border2);border-radius:var(--r6);overflow:hidden }
+  .cqa-qa-q { width:100%;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;background:none;border:none;text-align:left;font-size:13.5px;color:var(--text);font-weight:600;cursor:pointer;line-height:1.5;min-height:44px }
+  .cqa-qa-arrow { flex-shrink:0;color:var(--text3);font-size:18px;transition:transform .15s }
+  .cqa-qa-item.open .cqa-qa-arrow { transform:rotate(90deg);color:var(--blue) }
+  .cqa-qa-a { display:none;padding:0 16px 14px;font-size:13px;color:var(--text2);line-height:1.6 }
+  .cqa-qa-item.open .cqa-qa-a { display:block }
+  .cqa-pager { display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px }
+  .cqa-pager-info { font-size:12.5px;color:var(--text3);font-weight:600 }
+  .cqa-pager .anc-btn[disabled] { opacity:.4;cursor:default;pointer-events:none }
   @media(max-width:600px){
     .cqa-layout { flex-direction:column;height:auto }
     .cqa-list { width:100%;flex-direction:row;overflow-x:auto;overflow-y:visible;flex-wrap:nowrap }
@@ -2889,18 +2905,108 @@ function renderCQAList() {
 // Different companies run different processes - a technical interview
 // only, or an interview followed by a separate screening round - so a
 // company can carry either one flat list (favourite_questions, the
-// original shape) or several named stages (sections). sections existed
-// in the data shape from the start but nothing ever rendered it; every
-// company added before this had only one stage, so the gap was invisible
-// until one that actually needed two showed up.
-function renderCQADetail(name, co) {
-  var d = document.getElementById('cqa-detail');
-  var topicsHtml = (co.top_topics||[]).map(function(t){ return '<span class="cqa-chip">' + esc(t) + '</span>'; }).join('');
+// original shape) or several named stages (sections). A company with more
+// than one stage used to render as one long stacked scroll (profile, then
+// every stage, then every question); a tab per stage replaces that, and
+// each stage's questions are paginated rather than dumped on one screen -
+// Great Eastern alone runs to 55 questions across two stages.
+var CQA_PAGE_SIZE = 10;
+var _cqaView = null; // { tabs, activeTab, page } for whichever company is open
 
-  // Company background (founded, HQ, ownership, fleet, core values) is
-  // separate from the interview-question sections below: it describes the
-  // company itself, not what it asks. Absent on any company until it has
-  // been researched, so this renders nothing rather than a placeholder.
+function renderCQADetail(name, co) {
+  var tabs = [];
+  if (co.company_info) tabs.push({ id: 'info', label: 'Company Info', kind: 'info' });
+  if (co.sections && co.sections.length) {
+    co.sections.forEach(function(sec, i) { tabs.push({ id: 'sec' + i, label: sec.name, kind: 'section', section: sec }); });
+  } else if ((co.favourite_questions||[]).length) {
+    tabs.push({ id: 'faq', label: 'Interview Questions', kind: 'section', section: { note: '', questions: co.favourite_questions } });
+  }
+
+  var d = document.getElementById('cqa-detail');
+  if (!tabs.length) {
+    d.innerHTML = '<div class="cqa-company-header"><h2>' + esc(name) + '</h2></div>'
+      + '<p style="color:var(--text3);font-size:13px;padding:12px 0">No questions collected yet for this company.</p>';
+    _cqaView = null;
+    return;
+  }
+
+  _cqaView = { co: co, tabs: tabs, activeTab: tabs[0].id, page: 1 };
+
+  d.innerHTML = '<div class="cqa-company-header"><h2>' + esc(name) + '</h2></div>'
+    + '<div class="cqa-tabs">' + tabs.map(function(t) {
+        return '<button type="button" class="cqa-tab' + (t.id === tabs[0].id ? ' active' : '') + '" data-tab="' + t.id + '">' + esc(t.label) + '</button>';
+      }).join('') + '</div>'
+    + '<div id="cqa-tab-body"></div>';
+
+  d.querySelectorAll('.cqa-tab').forEach(function(btn) {
+    btn.onclick = function() { switchCQATab(btn.dataset.tab); };
+  });
+  renderCQATabBody();
+}
+
+function switchCQATab(tabId) {
+  if (!_cqaView || _cqaView.activeTab === tabId) return;
+  _cqaView.activeTab = tabId;
+  _cqaView.page = 1;
+  document.querySelectorAll('.cqa-tab').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.tab === tabId);
+  });
+  renderCQATabBody();
+}
+
+function cqaChangePage(delta) {
+  if (!_cqaView) return;
+  _cqaView.page += delta;
+  renderCQATabBody();
+}
+
+// Rebuilds only the tab body, not the whole detail pane or the tab bar -
+// switching tabs or pages should not re-render everything above them.
+function renderCQATabBody() {
+  var body = document.getElementById('cqa-tab-body');
+  if (!body || !_cqaView) return;
+  var tab = null;
+  for (var i = 0; i < _cqaView.tabs.length; i++) { if (_cqaView.tabs[i].id === _cqaView.activeTab) { tab = _cqaView.tabs[i]; break; } }
+  if (!tab) return;
+
+  if (tab.kind === 'info') { body.innerHTML = renderCQAInfoTab(_cqaView.co); return; }
+
+  var items = tab.section.questions || [];
+  var totalPages = Math.max(1, Math.ceil(items.length / CQA_PAGE_SIZE));
+  _cqaView.page = Math.min(Math.max(1, _cqaView.page), totalPages);
+  var start = (_cqaView.page - 1) * CQA_PAGE_SIZE;
+
+  // Only the current page's items ever become HTML - a 55-question section
+  // stays a 10-item DOM update per click, not a 55-item one.
+  var qHtml = items.slice(start, start + CQA_PAGE_SIZE).map(function(item, i) {
+    var q = (typeof item === 'string') ? item : item.q;
+    var a = (typeof item === 'string') ? '' : (item.a || '');
+    var idx = start + i;
+    return '<li class="cqa-qa-item" id="cqa-qa-' + idx + '">'
+      + '<button type="button" class="cqa-qa-q" onclick="toggleCQAAnswer(' + idx + ')"><span>' + esc(q) + '</span><span class="cqa-qa-arrow">&rsaquo;</span></button>'
+      + (a ? '<div class="cqa-qa-a">' + esc(a) + '</div>' : '')
+      + '</li>';
+  }).join('');
+
+  var pagerHtml = totalPages > 1
+    ? '<div class="cqa-pager">'
+      + '<button type="button" class="anc-btn" onclick="cqaChangePage(-1)"' + (_cqaView.page <= 1 ? ' disabled' : '') + '>&lsaquo; Prev</button>'
+      + '<span class="cqa-pager-info">Page ' + _cqaView.page + ' of ' + totalPages + '</span>'
+      + '<button type="button" class="anc-btn" onclick="cqaChangePage(1)"' + (_cqaView.page >= totalPages ? ' disabled' : '') + '>Next &rsaquo;</button>'
+      + '</div>'
+    : '';
+
+  body.innerHTML = (tab.section.note ? '<div class="cqa-style-note">' + esc(tab.section.note) + '</div>' : '')
+    + (items.length ? '<ul class="cqa-fav-list">' + qHtml + '</ul>' + pagerHtml
+                    : '<p style="color:var(--text3);font-size:13px;padding:8px 0">No questions collected yet for this stage.</p>');
+}
+
+function toggleCQAAnswer(idx) {
+  var el = document.getElementById('cqa-qa-' + idx);
+  if (el) el.classList.toggle('open');
+}
+
+function renderCQAInfoTab(co) {
   var infoHtml = '';
   if (co.company_info) {
     var ci = co.company_info;
@@ -2911,35 +3017,17 @@ function renderCQADetail(name, co) {
       return '<div class="cqa-info-stat"><div class="cqa-info-label">' + esc(s[0]) + '</div><div class="cqa-info-value">' + esc(s[1]) + '</div></div>';
     }).join('');
     var valuesHtml = (ci.core_values||[]).map(function(v){ return '<span class="cqa-chip cqa-chip-green">' + esc(v) + '</span>'; }).join('');
-    infoHtml = '<div class="cqa-section-label">Company Profile</div>'
-      + (stats ? '<div class="cqa-info-grid">' + stats + '</div>' : '')
+    infoHtml = (stats ? '<div class="cqa-info-grid">' + stats + '</div>' : '')
       + (valuesHtml ? '<div class="cqa-chips">' + valuesHtml + '</div>' : '')
       + (ci.about ? '<div class="cqa-style-note">' + esc(ci.about) + '</div>' : '');
   }
-
-  var bodyHtml;
-  if (co.sections && co.sections.length) {
-    bodyHtml = co.sections.map(function(sec) {
-      var qHtml = (sec.questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
-      return '<div class="cqa-section-label">' + esc(sec.name) + '</div>'
-        + (sec.note ? '<div class="cqa-style-note">' + esc(sec.note) + '</div>' : '')
-        + (qHtml ? '<ul class="cqa-fav-list">' + qHtml + '</ul>'
-                  : '<p style="color:var(--text3);font-size:13px;padding:8px 0">No questions collected yet for this stage.</p>');
-    }).join('');
-  } else {
-    var favsHtml = (co.favourite_questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
-    bodyHtml = favsHtml
-      ? '<div class="cqa-section-label">Frequently Asked Questions</div><ul class="cqa-fav-list">' + favsHtml + '</ul>'
-      : '<p style="color:var(--text3);font-size:13px;padding:12px 0">No questions collected yet for this company.</p>';
-  }
-
-  d.innerHTML = '<div class="cqa-company-header">'
-    + '<h2>' + esc(name) + '</h2>'
-    + infoHtml
-    + (topicsHtml ? '<div class="cqa-section-label">Top Topics Asked</div><div class="cqa-chips">' + topicsHtml + '</div>' : '')
-    + (co.style_notes ? '<div class="cqa-style-note">' + esc(co.style_notes) + '</div>' : '')
-    + '</div>'
-    + bodyHtml;
+  var topicsHtml = (co.top_topics||[]).map(function(t){ return '<span class="cqa-chip">' + esc(t) + '</span>'; }).join('');
+  var overviewHtml = (topicsHtml || co.style_notes)
+    ? '<div class="cqa-section-label">What The Interview Is Like</div>'
+      + (topicsHtml ? '<div class="cqa-chips">' + topicsHtml + '</div>' : '')
+      + (co.style_notes ? '<div class="cqa-style-note">' + esc(co.style_notes) + '</div>' : '')
+    : '';
+  return infoHtml + overviewHtml;
 }
 
 // ═══════════════════════════════════════════════
