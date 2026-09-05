@@ -200,8 +200,14 @@
   .sqz-btn:disabled { opacity:.4;cursor:default }
 
   /* ── COMPANY Q&A ── */
-  .cqa-layout { display:flex;gap:16px;height:calc(100vh - 130px);min-height:400px }
-  .cqa-list { width:220px;flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;gap:4px }
+  /* No fixed-height inner scrollbox: the panel used to be pinned to
+     calc(100vh - 130px) with its own overflow-y, so a company with more
+     than a screenful of content got a second, nested scrollbar next to
+     the app's own #content scrollbar. Letting it grow with its content
+     removes that; the whole page scrolls once, the normal way every
+     other view in this app already does. */
+  .cqa-layout { display:flex;gap:16px;align-items:flex-start;min-height:400px }
+  .cqa-list { width:220px;flex-shrink:0;display:flex;flex-direction:column;gap:4px }
   .cqa-list-item {
     padding:10px 14px;border-radius:var(--r6);border:1px solid transparent;
     cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;
@@ -209,20 +215,25 @@
   .cqa-list-item:hover { background:var(--surface2);color:var(--text) }
   .cqa-list-item.active { background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue);font-weight:700 }
   .cqa-list-item .cqa-count { font-size:10.5px;color:var(--text3);margin-top:2px }
-  .cqa-detail { flex:1;overflow-y:auto;padding-right:4px }
-  .cqa-empty { display:flex;align-items:center;justify-content:center;height:100%;color:var(--text3);font-size:14px }
+  .cqa-detail { flex:1;min-width:0 }
+  .cqa-empty { display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--text3);font-size:14px }
   .cqa-company-header { margin-bottom:20px }
   .cqa-company-header h2 { font-size:18px;font-weight:800;color:var(--text);margin:0 0 6px }
   .cqa-chips { display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px }
   .cqa-chip { font-size:11px;padding:3px 10px;border-radius:100px;background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-weight:600 }
-  .cqa-style-note { font-size:12.5px;color:var(--text2);line-height:1.6;padding:10px 14px;background:var(--surface2);border-radius:var(--r6);margin-bottom:18px }
+  .cqa-style-note { font-size:13px;color:var(--text2);line-height:1.65;padding:12px 16px;background:var(--surface2);border-radius:var(--r6);margin-bottom:18px }
   .cqa-fav-list { list-style:none;padding:0;display:flex;flex-direction:column;gap:8px }
   .cqa-fav-item { padding:12px 16px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r6);font-size:13.5px;color:var(--text);line-height:1.6 }
   .cqa-section-label { font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:18px 0 8px }
-  .cqa-info-grid { display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px }
-  .cqa-info-stat { padding:10px 12px;background:var(--surface2);border-radius:var(--r6) }
-  .cqa-info-stat .cqa-info-label { font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:4px }
-  .cqa-info-stat .cqa-info-value { font-size:12.5px;font-weight:600;color:var(--text);line-height:1.4 }
+  /* Facts here run from a two-word city name to a 300-character paragraph
+     (Maersk's fleet note explaining why it has no fixed ship count). A
+     narrow multi-column card grid crushed the long ones into a tall stack
+     of short, hard-to-scan lines; a full-width row per fact gives every
+     value real paragraph width no matter how long it runs. */
+  .cqa-info-list { display:flex;flex-direction:column;gap:8px;margin-bottom:14px }
+  .cqa-info-row { padding:12px 16px;background:var(--surface2);border-radius:var(--r6) }
+  .cqa-info-row .cqa-info-label { display:block;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px }
+  .cqa-info-row .cqa-info-value { font-size:13.5px;font-weight:500;color:var(--text);line-height:1.65;margin:0 }
   .cqa-chip-green { background:var(--green-dim);border:1px solid var(--green-border);color:var(--green) }
   /* One tab per stage (Company Info, then each interview stage) instead of
      stacking everything down the page - a company with a multi-round
@@ -241,7 +252,7 @@
   .cqa-pager-info { font-size:12.5px;color:var(--text3);font-weight:600 }
   .cqa-pager .anc-btn[disabled] { opacity:.4;cursor:default;pointer-events:none }
   @media(max-width:600px){
-    .cqa-layout { flex-direction:column;height:auto }
+    .cqa-layout { flex-direction:column }
     .cqa-list { width:100%;flex-direction:row;overflow-x:auto;overflow-y:visible;flex-wrap:nowrap }
     .cqa-list-item { white-space:nowrap;flex-shrink:0 }
   }
@@ -3014,10 +3025,10 @@ function renderCQAInfoTab(co) {
       ['Founded', ci.founded], ['Headquarters', ci.headquarters],
       ['Ownership', ci.ownership], ['Fleet', ci.fleet_size]
     ].filter(function(s){ return s[1]; }).map(function(s) {
-      return '<div class="cqa-info-stat"><div class="cqa-info-label">' + esc(s[0]) + '</div><div class="cqa-info-value">' + esc(s[1]) + '</div></div>';
+      return '<div class="cqa-info-row"><span class="cqa-info-label">' + esc(s[0]) + '</span><p class="cqa-info-value">' + esc(s[1]) + '</p></div>';
     }).join('');
     var valuesHtml = (ci.core_values||[]).map(function(v){ return '<span class="cqa-chip cqa-chip-green">' + esc(v) + '</span>'; }).join('');
-    infoHtml = (stats ? '<div class="cqa-info-grid">' + stats + '</div>' : '')
+    infoHtml = (stats ? '<div class="cqa-info-list">' + stats + '</div>' : '')
       + (valuesHtml ? '<div class="cqa-chips">' + valuesHtml + '</div>' : '')
       + (ci.about ? '<div class="cqa-style-note">' + esc(ci.about) + '</div>' : '');
   }
