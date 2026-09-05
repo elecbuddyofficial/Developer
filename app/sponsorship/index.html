@@ -2881,16 +2881,39 @@ function renderCQAList() {
   });
 }
 
+// Different companies run different processes - a technical interview
+// only, or an interview followed by a separate screening round - so a
+// company can carry either one flat list (favourite_questions, the
+// original shape) or several named stages (sections). sections existed
+// in the data shape from the start but nothing ever rendered it; every
+// company added before this had only one stage, so the gap was invisible
+// until one that actually needed two showed up.
 function renderCQADetail(name, co) {
   var d = document.getElementById('cqa-detail');
   var topicsHtml = (co.top_topics||[]).map(function(t){ return '<span class="cqa-chip">' + esc(t) + '</span>'; }).join('');
-  var favsHtml   = (co.favourite_questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
+
+  var bodyHtml;
+  if (co.sections && co.sections.length) {
+    bodyHtml = co.sections.map(function(sec) {
+      var qHtml = (sec.questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
+      return '<div class="cqa-section-label">' + esc(sec.name) + '</div>'
+        + (sec.note ? '<div class="cqa-style-note">' + esc(sec.note) + '</div>' : '')
+        + (qHtml ? '<ul class="cqa-fav-list">' + qHtml + '</ul>'
+                  : '<p style="color:var(--text3);font-size:13px;padding:8px 0">No questions collected yet for this stage.</p>');
+    }).join('');
+  } else {
+    var favsHtml = (co.favourite_questions||[]).map(function(q){ return '<li class="cqa-fav-item">' + esc(q) + '</li>'; }).join('');
+    bodyHtml = favsHtml
+      ? '<div class="cqa-section-label">Frequently Asked Questions</div><ul class="cqa-fav-list">' + favsHtml + '</ul>'
+      : '<p style="color:var(--text3);font-size:13px;padding:12px 0">No questions collected yet for this company.</p>';
+  }
+
   d.innerHTML = '<div class="cqa-company-header">'
     + '<h2>' + esc(name) + '</h2>'
     + (topicsHtml ? '<div class="cqa-section-label">Top Topics Asked</div><div class="cqa-chips">' + topicsHtml + '</div>' : '')
     + (co.style_notes ? '<div class="cqa-style-note">' + esc(co.style_notes) + '</div>' : '')
     + '</div>'
-    + (favsHtml ? '<div class="cqa-section-label">Frequently Asked Questions</div><ul class="cqa-fav-list">' + favsHtml + '</ul>' : '<p style="color:var(--text3);font-size:13px;padding:12px 0">No questions collected yet for this company.</p>');
+    + bodyHtml;
 }
 
 // ═══════════════════════════════════════════════
