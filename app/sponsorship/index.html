@@ -220,8 +220,13 @@
   .cqa-company-header { margin-bottom:20px }
   .cqa-company-header h2 { font-size:18px;font-weight:800;color:var(--text);margin:0 0 6px }
   .cqa-chips { display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px }
+  /* Sits directly between two padded boxes (the info rows above, the about
+     note below), both of which inset their text 16px from the edge chips
+     otherwise share. Without this the pills started flush left, visibly
+     further left than the paragraph text surrounding them. */
+  .cqa-chips-inset { padding-left:16px }
   .cqa-chip { font-size:11px;padding:3px 10px;border-radius:100px;background:var(--blue-dim);border:1px solid var(--blue-border);color:var(--blue);font-weight:600 }
-  .cqa-style-note { font-size:13px;color:var(--text2);line-height:1.65;padding:12px 16px;background:var(--surface2);border-radius:var(--r6);margin-bottom:18px }
+  .cqa-style-note { font-size:13px;color:var(--text2);line-height:1.65;padding:12px 16px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r6);margin-bottom:18px }
   .cqa-fav-list { list-style:none;padding:0;display:flex;flex-direction:column;gap:8px }
   .cqa-fav-item { padding:12px 16px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r6);font-size:13.5px;color:var(--text);line-height:1.6 }
   .cqa-section-label { font-size:10.5px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin:18px 0 8px }
@@ -231,7 +236,7 @@
      of short, hard-to-scan lines; a full-width row per fact gives every
      value real paragraph width no matter how long it runs. */
   .cqa-info-list { display:flex;flex-direction:column;gap:8px;margin-bottom:14px }
-  .cqa-info-row { padding:12px 16px;background:var(--surface2);border-radius:var(--r6) }
+  .cqa-info-row { padding:12px 16px;background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r6) }
   .cqa-info-row .cqa-info-label { display:block;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px }
   .cqa-info-row .cqa-info-value { font-size:13.5px;font-weight:500;color:var(--text);line-height:1.65;margin:0 }
   .cqa-chip-green { background:var(--green-dim);border:1px solid var(--green-border);color:var(--green) }
@@ -3029,7 +3034,7 @@ function renderCQAInfoTab(co) {
     }).join('');
     var valuesHtml = (ci.core_values||[]).map(function(v){ return '<span class="cqa-chip cqa-chip-green">' + esc(v) + '</span>'; }).join('');
     infoHtml = (stats ? '<div class="cqa-info-list">' + stats + '</div>' : '')
-      + (valuesHtml ? '<div class="cqa-chips">' + valuesHtml + '</div>' : '')
+      + (valuesHtml ? '<div class="cqa-chips cqa-chips-inset">' + valuesHtml + '</div>' : '')
       + (ci.about ? '<div class="cqa-style-note">' + esc(ci.about) + '</div>' : '');
   }
   var topicsHtml = (co.top_topics||[]).map(function(t){ return '<span class="cqa-chip">' + esc(t) + '</span>'; }).join('');
