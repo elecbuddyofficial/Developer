@@ -1285,6 +1285,21 @@ window._authReady = (async () => {
       <button onclick="closeSettings({target: this})" class="close-btn" title="Close" aria-label="Close" style="background:rgba(255,255,255,0.06);border:1px solid #1A3050;border-radius:50%;width:30px;height:30px;color:#6E8AA6;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">&times;</button>
     </div>
 
+    <!-- Data Saver: shares the eb_data_saver localStorage key with the CoC
+         app, since this is the same site, one setting, not two. Sponsorship
+         gets the same diagram-placeholder treatment CoC has, not a lesser
+         version of it. -->
+    <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:11px 15px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+      <div style="min-width:0">
+        <div style="font-size:12.5px;font-weight:600;color:#DDE5EF">Data Saver</div>
+        <div style="font-size:10.5px;color:#6E8AA6;margin-top:2px;line-height:1.4">Diagrams load only when tapped</div>
+      </div>
+      <label class="ds-switch">
+        <input type="checkbox" id="sp-data-saver-toggle" onchange="toggleDataSaver(this.checked)">
+        <span class="ds-switch-track"></span>
+      </label>
+    </div>
+
     <!-- Reset Statistics -->
     <div style="background:#0A1828;border:1px solid #1A3050;border-radius:7px;padding:13px 15px">
       <div style="font-size:12.5px;font-weight:600;color:#DDE5EF">Reset Statistics</div>
@@ -1352,6 +1367,186 @@ window.NOTE_HTML = {};
 var BASE = '../../data/Sponsorship/';
 var ACTIVE_SECTION_ID = null;
 var ACTIVE_TOPIC_ID   = null;
+
+// ═══════════════════════════════════════════════
+// DATA SAVER - ported from app.js so Sponsorship's diagrams get the same
+// tap-to-load treatment CoC's do, not a lesser version of it. Shares the
+// eb_data_saver localStorage key with the CoC app: one setting, same site,
+// toggling it in either app changes both. The .dgm-* CSS this renders into
+// already lives in the shared style.css, nothing new to add there.
+// ═══════════════════════════════════════════════
+window._dataSaver = localStorage.getItem('eb_data_saver') === '1';
+
+var _DGM_IMG_RE = /<img src="([^"]+)" alt="([^"]*)" loading="lazy" decoding="async" data-blur="([^"]*)">/g;
+var _DGM_ICON = '<span class="dgm-dl-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg></span>';
+
+function _dgmPlaceholderHtml(src, alt, blur) {
+    return '<div class="dgm-placeholder" data-src="' + src + '" data-alt="' + alt + '" role="button" tabindex="0" aria-label="Tap to download diagram">'
+        + '<img class="dgm-blur-bg" src="' + blur + '" alt="" aria-hidden="true">'
+        + '<div class="dgm-overlay">' + _DGM_ICON + '<span class="dgm-dl-label">Tap to download</span></div>'
+        + '</div>';
+}
+
+function _applyDataSaver(html) {
+    if (!window._dataSaver) return html;
+    return html.replace(_DGM_IMG_RE, function(_m, src, alt, blur) {
+        return _dgmPlaceholderHtml(src, alt, blur);
+    });
+}
+
+function _dgmLoad(ph) {
+    var img = document.createElement('img');
+    img.src = ph.getAttribute('data-src');
+    img.alt = ph.getAttribute('data-alt') || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    var blur = ph.querySelector('.dgm-blur-bg');
+    if (blur && blur.getAttribute('src')) img.setAttribute('data-blur', blur.getAttribute('src'));
+    ph.replaceWith(img);
+}
+
+document.addEventListener('click', function(e) {
+    var ph = e.target.closest('.dgm-placeholder');
+    if (ph) _dgmLoad(ph);
+});
+document.addEventListener('keydown', function(e) {
+    if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('dgm-placeholder')) {
+        e.preventDefault();
+        _dgmLoad(e.target);
+    }
+});
+
+// ── DIAGRAM LIGHTBOX ─────────────────────────────
+// Ported verbatim from the CoC app (app/app.js): tapping a diagram opens it
+// full-screen in an overlay appended to <body>, same as the CoC course. This
+// is unrelated to Data Saver above, it is why the image is tappable at all,
+// on or off. A real overlay, not a class on the image in place, for the same
+// reason as CoC: the image lives inside scrolling/clipping ancestors here too.
+var _dgmLb = null;
+
+function _dgmLightbox() {
+    if (_dgmLb) return _dgmLb;
+    var o = document.createElement('div');
+    o.className = 'dgm-lightbox';
+    o.hidden = true;
+    o.innerHTML = '<img class="dgm-lightbox-img" alt="">';
+    o.addEventListener('click', _dgmClose);
+    document.body.appendChild(o);
+    _dgmLb = o;
+    return o;
+}
+
+function _dgmOpen(src, alt) {
+    var o = _dgmLightbox();
+    var img = o.querySelector('.dgm-lightbox-img');
+    img.src = src;
+    img.alt = alt || '';
+    o.classList.remove('is-plate', 'is-zoomed');
+    o.scrollTop = 0;
+    o.scrollLeft = 0;
+    o.hidden = false;
+    document.documentElement.classList.add('_modal-open');
+}
+
+function _dgmClose() {
+    if (!_dgmLb || _dgmLb.hidden) return;
+    _dgmLb.hidden = true;
+    _dgmLb.querySelector('.dgm-lightbox-img').removeAttribute('src');
+    document.documentElement.classList.remove('_modal-open');
+}
+
+document.addEventListener('click', function(e) {
+    var open = e.target.closest('.dgm-lightbox');
+    if (open) { _dgmClose(); return; }
+
+    var img = e.target.closest('.note-diagram-wrap img');
+    // .dgm-blur-bg is the Data Saver placeholder's 28px preview; tapping that
+    // loads the real diagram via the handler above, not a lightbox of a blur.
+    if (img && !img.classList.contains('dgm-blur-bg')) {
+        _dgmOpen(img.currentSrc || img.src, img.alt);
+    }
+});
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') _dgmClose();
+});
+
+window.toggleDataSaver = function(on) {
+    window._dataSaver = on;
+    localStorage.setItem('eb_data_saver', on ? '1' : '0');
+    var container = document.getElementById('notes-container');
+    if (!container) return;
+    if (on) {
+        container.querySelectorAll('.note-diagram-wrap img[loading="lazy"]').forEach(function(img) {
+            var wrap = document.createElement('div');
+            wrap.innerHTML = _dgmPlaceholderHtml(
+                img.getAttribute('src'),
+                img.getAttribute('alt') || '',
+                img.getAttribute('data-blur') || ''
+            );
+            img.replaceWith(wrap.firstElementChild);
+        });
+    } else {
+        container.querySelectorAll('.dgm-placeholder').forEach(_dgmLoad);
+    }
+};
+
+// ── CONTINUE WHERE YOU LEFT OFF ─────────────────────────────
+// Ported verbatim from the CoC app (app/app.js): scroll position inside
+// #content is saved per topic id, debounced, and offered back the next time
+// that same topic is opened. #content is the same element id in both apps,
+// and topic ids don't collide across courses (F01-F25/ET01-ET09 here versus
+// plain 01-23 there), so this reuses the exact same eb_scroll_ key shape.
+function _dismissContinueDlg() {
+    var dlg = document.getElementById('_continue-dlg');
+    if (!dlg) return;
+    clearTimeout(dlg._timer);
+    dlg.style.opacity = '0';
+    dlg.style.transform = 'translateX(-50%) translateY(16px)';
+    setTimeout(function() { if (dlg.parentNode) dlg.parentNode.removeChild(dlg); }, 280);
+}
+
+window._doContinue = function(scroll) {
+    _dismissContinueDlg();
+    var el = document.getElementById('content');
+    if (el) el.scrollTop = scroll;
+};
+
+function _restoreScroll(topicId) {
+    if (window._pendingScroll) return;
+    var saved = parseInt(localStorage.getItem('eb_scroll_' + topicId), 10);
+    if (!saved || saved < 100) return;
+
+    _dismissContinueDlg();
+    var dlg = document.createElement('div');
+    dlg.id = '_continue-dlg';
+    dlg.style.cssText = 'position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(0);background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:99990;box-shadow:0 8px 28px rgba(0,0,0,.28);font-size:13px;color:var(--text);white-space:nowrap;opacity:0;transition:opacity .25s,transform .25s;pointer-events:auto;';
+    dlg.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;color:var(--blue)"><path d="M12 7v14m-9-3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4a4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3a3 3 0 0 0-3-3z"/></svg>'
+        + '<span>Continue where you left off?</span>'
+        + '<button onclick="window._doContinue(' + saved + ')" style="background:var(--blue);color:var(--on-accent);border:none;border-radius:8px;padding:5px 13px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;">Continue</button>'
+        + '<button onclick="_dismissContinueDlg()" style="background:transparent;color:var(--text2);border:none;font-size:12px;cursor:pointer;flex-shrink:0;padding:4px 6px;">Dismiss</button>';
+    document.body.appendChild(dlg);
+    requestAnimationFrame(function() {
+        dlg.style.opacity = '1';
+    });
+    dlg._timer = setTimeout(_dismissContinueDlg, 7000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var _scrollTimer;
+    var contentEl = document.getElementById('content');
+    if (!contentEl) return;
+    contentEl.addEventListener('scroll', function() {
+        if (!ACTIVE_TOPIC_ID) return;
+        // Capture the topic AND position at scroll time, not when the debounce
+        // fires 600ms later - see CoC's app.js for why that ordering matters.
+        var tid = ACTIVE_TOPIC_ID;
+        var pos = contentEl.scrollTop;
+        clearTimeout(_scrollTimer);
+        _scrollTimer = setTimeout(function() {
+            try { localStorage.setItem('eb_scroll_' + tid, pos); } catch (e) {}
+        }, 600);
+    }, { passive: true });
+});
 
 var CAT_NAMES = {
   ELEC:'Electrical Circuits', ELECTRON:'Electronics', MARINE:'Marine Systems', SAFETY:'Electrical Safety',
@@ -1534,7 +1729,7 @@ window.loadNotes   = function(id, html) {
 };
 
 function renderNotesView(id) {
-  document.getElementById('notes-container').innerHTML = window.NOTE_HTML[id];
+  document.getElementById('notes-container').innerHTML = _applyDataSaver(window.NOTE_HTML[id]);
   setAllViewsInactive();
   var inj = document.getElementById('notes-container').querySelector('.view');
   if (inj) inj.classList.add('active');
@@ -1566,6 +1761,8 @@ function renderNotesView(id) {
   if (window._pendingScroll) {
     var s = window._pendingScroll; window._pendingScroll = null;
     setTimeout(function(){ var el=document.getElementById(s); if(el){document.getElementById('content').scrollTo({top:Math.max(0,el.offsetTop-70),behavior:'smooth'});} }, 200);
+  } else {
+    _restoreScroll(id);
   }
 }
 
@@ -3631,6 +3828,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
     document.getElementById('profile-panel').classList.remove('open');
     setTimeout(function(){
       document.getElementById('profile-modal').style.display='none';
+      document.getElementById('sp-data-saver-toggle').checked=!!window._dataSaver;
       var resetBtn=document.getElementById('settings-reset-btn');
       resetBtn.textContent='Reset Statistics';
       resetBtn.dataset.armed='';
