@@ -10,6 +10,10 @@
    redirect stub). Only the 5 most recent per track ever show, so add an
    entry for what a cadet would actually notice, not one per commit. */
 window.EB_UPDATES = [
+  { type: 'product', track: 'sponsorship', date: '2026-09-07',
+    text: 'Diagrams now load only when you tap them to save mobile data, open full-screen with a tap, and reopening a topic offers to take you back to where you left off.' },
+  { type: 'notes', track: 'sponsorship', date: '2026-09-07',
+    text: '73 new diagrams added across Fundamentals and the Entrance Test modules, from circuit theory and control systems to digital electronics.' },
   { type: 'product', track: 'sponsorship', date: '2026-09-05',
     text: 'Company Q&A now shows company background (founded, fleet, core values) and splits interview questions into stages you can page through, with answers you reveal.' },
   { type: 'notes', track: 'sponsorship', date: '2026-09-05',

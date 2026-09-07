@@ -1108,6 +1108,23 @@ window._authReady = (async () => {
   </div>
 </div>
 
+<!-- ═══ WHAT'S NEW, SHOWN ONCE ═══
+     Ported from the CoC app (app/index.html): whatever an admin publishes is
+     put in front of the reader the next time they open the app, rather than
+     waiting behind a dot on the bell that most people never press. Orange
+     accent rather than CoC's blue, matching this app's own colour, per the
+     comment already left in app/index.html anticipating this port. -->
+<div id="upd-modal" style="display:none;position:fixed;inset:0;z-index:10004;background:rgba(4,9,20,0.93);backdrop-filter:blur(6px);overflow-y:auto;">
+  <div style="min-height:100%;display:flex;justify-content:center;padding:24px 16px 48px;">
+    <div style="width:100%;max-width:480px;margin:auto 0;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;">
+      <div style="font-size:18px;font-weight:700;color:var(--text);">What&rsquo;s new</div>
+      <div style="font-size:12.5px;color:var(--text3);margin-top:5px;line-height:1.55;">Since you were last here. You can read these again any time from <strong style="color:var(--text2);font-weight:600;">Notifications</strong>.</div>
+      <div id="upd-list" style="margin-top:18px;"></div>
+      <button onclick="dismissUpdates()" style="width:100%;min-height:46px;margin-top:18px;background:var(--orange);color:var(--on-accent);border:none;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;">Got it</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ PROFILE ═══ -->
 
 <!-- MOCK INTERVIEW: floating entry point, present on every view.
@@ -3547,6 +3564,10 @@ window.addEventListener('DOMContentLoaded', function(){
      Delayed a little because the auth block in <head> resolves _sbUser
      asynchronously, and this needs a session to know who has seen what. */
   setTimeout(function () { if (window.spMaybeForceNotices) spMaybeForceNotices(); }, 1200);
+  // Staggered after the forced sponsorship-notice check above, so that check
+  // has already set spf-back's hidden state one way or the other by the time
+  // maybeShowUpdates looks at it.
+  setTimeout(function () { if (window.maybeShowUpdates) maybeShowUpdates(); }, 1700);
 });
 window.addEventListener('popstate', function(){
   var hash = location.hash.substring(1);
@@ -3767,6 +3788,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
     try{
       var s=await window._sbClient.auth.getSession(); if(!s.data.session){kick();return;}
     }catch(e){ try{var raw=localStorage.getItem('sb-vcofgjuwprylojgyfbtr-auth-token'); if(raw){var tok=JSON.parse(raw);var parts=((tok&&tok.access_token)||'').split('.');if(parts.length===3){var pay=JSON.parse(atob(parts[1]));if(pay.exp&&Math.floor(Date.now()/1000)>=pay.exp)kick();}}}catch(e2){} }
+    if (typeof window.maybeShowUpdates === 'function') window.maybeShowUpdates();
   }
   setInterval(checkSession,10*60*1000);
   document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')checkSession();});
@@ -4130,6 +4152,90 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
     var seen = localStorage.getItem('eb_notif_seen');
     if (!seen || new Date(newest) > new Date(seen)) document.getElementById('nb-dot').classList.add('show');
   }
+
+  // ── What's new, shown once ─────────────────────────────
+  // Ported from the CoC app. Tracked separately from eb_notif_seen, which the
+  // bell already uses: if they shared a key, opening the notifications panel
+  // would silently mark this modal's notices as read without the reader ever
+  // having seen the modal itself, and it would never appear again. Keyed per
+  // user id so a shared device gives each account its own history.
+  function _updKey() {
+    return 'eb_sp_updates_seen_' + (window._sbUser ? window._sbUser.id : 'anon');
+  }
+
+  // Runs from checkSession(), which also fires every ten minutes and on every
+  // tab focus. This flag keeps it to once per page load, so it never
+  // interrupts someone mid-read the moment an admin publishes something.
+  var _updRan = false;
+
+  window.maybeShowUpdates = async function() {
+    if (_updRan) return;
+    // Never stack on top of the forced sponsorship-notice modal (spf-back):
+    // that one is a hard block with no Esc and no backdrop close because a
+    // missed application window is unrecoverable, and it must be the only
+    // thing on screen. This modal is dismissible and can simply wait for the
+    // next checkSession tick, which fires again in well under ten minutes.
+    var forced = document.getElementById('spf-back');
+    if (forced && !forced.hidden) return;
+    _updRan = true;
+    if (!window._sbClient) return;
+
+    var since;
+    try { since = localStorage.getItem(_updKey()); } catch (e) { return; }
+
+    var res = await nfQuery(window._sbClient, 'id,title,body,type,created_at', ['sponsorship','both']);
+    var all = res.error ? [] : (res.data || []);
+    if (!all.length) return;
+
+    // First run on this device: a bounded 30-day look-back rather than
+    // silently marking everything read, so a notice posted just before a
+    // cadet's first visit still reaches them. Same reasoning as CoC's own
+    // version, which was found to have missed two real notices this way.
+    if (!since) {
+      since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+    }
+
+    var fresh = all.filter(function(n) { return new Date(n.created_at) > new Date(since); });
+    if (!fresh.length) return;
+
+    document.getElementById('upd-list').innerHTML = fresh.map(function(n) {
+      var t = n.type || 'info';
+      return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:13px 15px;margin-bottom:10px;">'
+        + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
+        +   '<span class="nf-chip nf-chip-' + t + '">' + t + '</span>'
+        +   '<span style="font-size:11px;color:var(--text3);">' + nfTimeAgo(n.created_at) + '</span>'
+        + '</div>'
+        + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">' + escNf(n.title) + '</div>'
+        + '<div style="font-size:13px;color:var(--text3);line-height:1.6;white-space:pre-wrap;">' + escNf(n.body) + '</div>'
+        + '</div>';
+    }).join('');
+
+    // Held so dismissUpdates can record these as read server-side, the same
+    // way the bell's own detail view does, so a reader who only ever sees
+    // this modal is not undercounted in notification_stats.
+    window._spUpdShown = fresh.map(function(n) { return n.id; });
+
+    document.getElementById('upd-modal').style.display = 'block';
+    document.documentElement.classList.add('_modal-open');
+  };
+
+  window.dismissUpdates = function() {
+    // Stamped only on dismissal, never on display, so closing the tab
+    // mid-read leaves them to be shown again rather than lost.
+    try { localStorage.setItem(_updKey(), new Date().toISOString()); } catch (e) {}
+
+    var shown = window._spUpdShown || [];
+    window._spUpdShown = [];
+    if (window._sbClient) {
+      shown.forEach(function(id) {
+        window._sbClient.rpc('mark_notification_read', { p_id: id }).then(function(){}, function(){});
+      });
+    }
+
+    document.getElementById('upd-modal').style.display = 'none';
+    document.documentElement.classList.remove('_modal-open');
+  };
+
   document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeNotifs(); });
   checkNotifsUnread();
 </script>
