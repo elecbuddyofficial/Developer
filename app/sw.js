@@ -1,6 +1,6 @@
 // ─── Elec-Buddy — Service Worker ──────────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v267';
+const VERSION = 'v268';
 const CACHE = 'elec-buddy-' + VERSION;
 
 // App shell — always cached at install time

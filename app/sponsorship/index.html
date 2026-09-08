@@ -253,6 +253,7 @@
   .cqa-qa-item.open .cqa-qa-arrow { transform:rotate(90deg);color:var(--blue) }
   .cqa-qa-a { display:none;padding:0 16px 14px;font-size:13px;color:var(--text2);line-height:1.6 }
   .cqa-qa-item.open .cqa-qa-a { display:block }
+  .cqa-topic-link { display:inline-flex;margin-top:10px;font-size:12px }
   .cqa-pager { display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px }
   .cqa-pager-info { font-size:12.5px;color:var(--text3);font-weight:600 }
   .cqa-pager .anc-btn[disabled] { opacity:.4;cursor:default;pointer-events:none }
@@ -3186,12 +3187,39 @@ function showCompanyQA() {
 }
 
 // Company Q&A answers used to carry a "Study this in T04..." button that
-// jumped straight into the CoC app for a matching topic. Removed: the two
-// courses are sold and used as separate products, and silently dropping a
-// Sponsorship user into CoC's paywalled content was a real overlap bug,
-// not a feature. The `topic` field still sits on each question in
-// data/Sponsorship/CompanyQA/company_data.js, unused now - harmless data,
-// not a link.
+// jumped straight into the CoC app for a matching topic - removed (see the
+// commit that pulled it) because the two courses are sold separately and
+// dropping a Sponsorship user into CoC's paywalled content was a real
+// overlap bug. Each question still carries a `topic` field with a CoC id
+// (e.g. "T04"), tagged before Sponsorship had its own Fundamentals module.
+// This maps those same CoC ids onto Sponsorship's own F01-F25 topics so the
+// "study this" link stays inside the course the reader is actually in.
+// Picked per tag by reading the real questions under it, not by reusing the
+// old CoC topic label - e.g. T13 "Bridge Equipment I" carries piezoelectric-
+// effect and magnetron questions here, which sit under F18 Sensors &
+// Transducers, not anything bridge-equipment-shaped in this course.
+var CQA_TO_FUNDAMENTALS = {
+  T01: 'F05', // electricity generation, AVR, alternator, Faraday's law -> Electromagnetism & Generation
+  T02: 'F14', // earth-fault measurement equipment, multimeter -> Measuring Instruments
+  T03: 'F09', // induction motor theory, slip, squirrel cage, starters -> Induction Motors
+  T04: 'F13', // earth fault, air circuit breaker -> Electrical Protection
+  T05: 'F06', // transformer insulation, losses -> Transformers
+  T06: 'F18', // insulation megger, sensors, transducers -> Sensors & Transducers
+  T07: 'F21', // open/closed loop, PID, PLC, SCADA -> Marine Automation Basics
+  T08: 'F17', // diode, rectifier, transistor, zener, capacitor -> Basic Electronics
+  T09: 'F24', // earthing vs grounding, VCRS, governor -> Marine Electrical Systems
+  T13: 'F18', // wavelength, piezoelectric effect, magnetron -> Sensors & Transducers
+  T20: 'F24', // blackout -> Marine Electrical Systems
+  T22: 'F05', // Lenz's law -> Electromagnetism & Generation
+  T23: 'F19'  // batteries, servo/stepper motors -> Batteries, UPS & Lighting
+};
+function cqaGoToFundamentals(fId) {
+  var t = SECTIONS.fundamentals.topics.find(function(x){ return x.id === fId; });
+  if (!t) return;
+  if (!t.free && isLocked(fId)) { showGate(); return; }
+  ACTIVE_SECTION_ID = 'fundamentals';
+  fetchTopicData(fId, t);
+}
 
 function renderCQAList() {
   var list = document.getElementById('cqa-list'); list.innerHTML = '';
@@ -3294,10 +3322,16 @@ function renderCQATabBody() {
   var qHtml = items.slice(start, start + CQA_PAGE_SIZE).map(function(item, i) {
     var q = (typeof item === 'string') ? item : item.q;
     var a = (typeof item === 'string') ? '' : (item.a || '');
+    var coTopicId = (typeof item === 'string') ? null : item.topic;
+    var fId = coTopicId ? CQA_TO_FUNDAMENTALS[coTopicId] : null;
+    var fTopic = fId ? SECTIONS.fundamentals.topics.find(function(x){ return x.id === fId; }) : null;
     var idx = start + i;
+    var topicHtml = fTopic
+      ? '<button type="button" class="anc-btn cqa-topic-link" onclick="cqaGoToFundamentals(\'' + fId + '\')">Study this in ' + fId + ' &middot; ' + esc(fTopic.name) + ' &rarr;</button>'
+      : '';
     return '<li class="cqa-qa-item" id="cqa-qa-' + idx + '">'
       + '<button type="button" class="cqa-qa-q" onclick="toggleCQAAnswer(' + idx + ')"><span>' + esc(q) + '</span><span class="cqa-qa-arrow">&rsaquo;</span></button>'
-      + (a ? '<div class="cqa-qa-a">' + esc(a) + '</div>' : '')
+      + (a ? '<div class="cqa-qa-a">' + esc(a) + topicHtml + '</div>' : '')
       + '</li>';
   }).join('');
 
