@@ -253,7 +253,6 @@
   .cqa-qa-item.open .cqa-qa-arrow { transform:rotate(90deg);color:var(--blue) }
   .cqa-qa-a { display:none;padding:0 16px 14px;font-size:13px;color:var(--text2);line-height:1.6 }
   .cqa-qa-item.open .cqa-qa-a { display:block }
-  .cqa-topic-link { display:inline-flex;margin-top:10px;font-size:12px }
   .cqa-pager { display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px }
   .cqa-pager-info { font-size:12.5px;color:var(--text3);font-weight:600 }
   .cqa-pager .anc-btn[disabled] { opacity:.4;cursor:default;pointer-events:none }
@@ -3186,24 +3185,13 @@ function showCompanyQA() {
   });
 }
 
-// Real T-topic ids and names from app.js's own TOPICS array, not
-// re-derived here - kept to the ones this bank's questions actually cite,
-// not a copy of all 23, so a renamed topic still only needs fixing here.
-var CQA_TOPIC_NAMES = {
-  T01: 'Alternator & Generator', T03: 'Motors & Starters',
-  T04: 'Switchboard & Circuit Breakers', T05: 'Transformers',
-  T06: 'Sensors & Instrumentation', T07: 'Control Systems & PLC',
-  T08: 'Electronics & Semiconductors', T09: 'Ship Machinery',
-  T13: 'Bridge Equipment I', T22: 'ETO Practical & Miscellaneous',
-  T23: 'Batteries & DC Systems'
-};
-// The CoC app's own #notes=T05 hash router already exists and is gated
-// (session + entitlement) there; this just hands it the topic id, the
-// same as the "Switch to CoC" sidebar link already does for eb_track.
-function cqaGoToTopic(topicId) {
-  try { localStorage.setItem('eb_track', 'coc'); } catch (e) {}
-  window.location.href = '../index.html#notes=' + topicId;
-}
+// Company Q&A answers used to carry a "Study this in T04..." button that
+// jumped straight into the CoC app for a matching topic. Removed: the two
+// courses are sold and used as separate products, and silently dropping a
+// Sponsorship user into CoC's paywalled content was a real overlap bug,
+// not a feature. The `topic` field still sits on each question in
+// data/Sponsorship/CompanyQA/company_data.js, unused now - harmless data,
+// not a link.
 
 function renderCQAList() {
   var list = document.getElementById('cqa-list'); list.innerHTML = '';
@@ -3306,14 +3294,10 @@ function renderCQATabBody() {
   var qHtml = items.slice(start, start + CQA_PAGE_SIZE).map(function(item, i) {
     var q = (typeof item === 'string') ? item : item.q;
     var a = (typeof item === 'string') ? '' : (item.a || '');
-    var topicId = (typeof item === 'string') ? null : item.topic;
     var idx = start + i;
-    var topicHtml = (topicId && CQA_TOPIC_NAMES[topicId])
-      ? '<button type="button" class="anc-btn cqa-topic-link" onclick="cqaGoToTopic(\'' + topicId + '\')">Study this in ' + topicId + ' &middot; ' + esc(CQA_TOPIC_NAMES[topicId]) + ' &rarr;</button>'
-      : '';
     return '<li class="cqa-qa-item" id="cqa-qa-' + idx + '">'
       + '<button type="button" class="cqa-qa-q" onclick="toggleCQAAnswer(' + idx + ')"><span>' + esc(q) + '</span><span class="cqa-qa-arrow">&rsaquo;</span></button>'
-      + (a ? '<div class="cqa-qa-a">' + esc(a) + topicHtml + '</div>' : '')
+      + (a ? '<div class="cqa-qa-a">' + esc(a) + '</div>' : '')
       + '</li>';
   }).join('');
 
