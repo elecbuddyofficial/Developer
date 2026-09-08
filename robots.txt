@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /app/auth.html
+Disallow: /app/index.html
+Disallow: /app/try-4875.html
+Disallow: /app/admin/
+
+Sitemap: https://elec-buddy.com/sitemap.xml
