@@ -688,6 +688,42 @@
              color:var(--blue);text-decoration:none}
   .news-link:hover{text-decoration:underline}
   @media (max-width:600px){ .news-card{padding:12px 13px} .news-title{font-size:14.5px} }
+
+  /* Overview page tab rail. Blesson's own framing: there is empty margin to
+     the left of the centered Overview card, and the rail belongs in exactly
+     that space without moving the card itself. First version widened the
+     whole row and re-centered it, which visibly shifted the content right,
+     wrong per Blesson catching it against the before/after. ov-shell is now
+     the SAME 800px, margin:0 auto box the page always used, position:relative
+     only so the rail can hang off its left edge; the card's own centering is
+     untouched. The rail is absolutely positioned, not fixed-position math
+     against the sidebar's width, so it never depends on a magic number that
+     breaks if the sidebar changes width, it only cares where its own content
+     box already sits. */
+  .ov-shell{position:relative;max-width:800px;margin:0 auto;padding-bottom:60px}
+  .ov-tabrail{position:absolute;top:0;right:calc(100% + 22px);width:172px;display:flex;flex-direction:column;gap:4px}
+  .ov-tab-btn{display:flex;align-items:center;gap:9px;text-align:left;background:none;border:1px solid transparent;
+              border-radius:9px;padding:9px 12px;font-size:13px;font-weight:600;color:var(--text2);cursor:pointer;
+              font-family:inherit;transition:background .12s,color .12s,border-color .12s;width:100%}
+  .ov-tab-btn:hover{background:var(--surface2);color:var(--text)}
+  .ov-tab-btn.active{background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue)}
+  .ov-tab-ic{flex-shrink:0;font-size:15px}
+  .ov-pane{display:none}
+  .ov-pane.active{display:block;animation:slideUp .2s ease}
+  /* Absolute positioning does not wrap or shrink on its own, so the rail
+     needs a floor: enough room for sidebar + 800px content + 172px rail +
+     gaps before it's safe. Below that, same jump-to-section pattern every
+     notes page already uses (.note-anchors/.anc-btn) as a wrapping pill row
+     at the top, Blesson's own suggested comparison, rather than a rail that
+     would otherwise clip under the sidebar on a merely medium-width window. */
+  @media (max-width:1300px){
+    .ov-tabrail{position:static;flex-direction:row;flex-wrap:wrap;width:100%;top:auto;right:auto;
+                gap:7px;padding:14px 16px;margin-bottom:20px;
+                background:var(--surface2);border:1px solid var(--border);border-radius:var(--r12)}
+    .ov-tab-btn{flex-shrink:0;width:auto;justify-content:center;min-height:44px;padding:5px 13px;
+                border-radius:20px;border:1px solid var(--border2);background:var(--surface3);color:var(--text2)}
+    .ov-tab-btn.active{background:var(--blue-dim);border-color:var(--blue-border);color:var(--blue)}
+  }
 </style>
 <script>
   (function(){
@@ -1750,6 +1786,11 @@ function renderNotesView(id) {
   setAllViewsInactive();
   var inj = document.getElementById('notes-container').querySelector('.view');
   if (inj) inj.classList.add('active');
+  // Overview's tab rail defaults to the Overview pane already marked active
+  // in its own static markup, no ovShowTab call happens on first render, so
+  // it needs this same alignment call once here too, after the browser has
+  // actually laid the pane out (rAF, not immediately) so offsetHeight is real.
+  if (id === 'S00' && typeof _ovAlignRail === 'function') requestAnimationFrame(_ovAlignRail);
   buildTopicSideList(id);
   ensureBackButton(id);
   injectTopicNav(id);
@@ -1790,6 +1831,40 @@ function setAllViewsInactive() {
   document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
   document.querySelectorAll('.sb-item').forEach(function(b){ b.classList.remove('active'); });
 }
+
+// ── Overview page tabs ───────────────────────────────
+// The content file (overview/s00_overview.js) only ever emits markup: the
+// six .ov-pane divs and the .ov-tab-btn buttons calling this. It cannot
+// define its own script, since HTML set via innerHTML never executes a
+// <script> tag, so the switcher itself has to live here.
+window.ovShowTab = function(name) {
+  document.querySelectorAll('.ov-pane').forEach(function(p) { p.classList.remove('active'); p.hidden = true; });
+  document.querySelectorAll('.ov-tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.tab === name); });
+  var pane = document.getElementById('ov-pane-' + name);
+  if (pane) { pane.hidden = false; pane.classList.add('active'); }
+  var content = document.getElementById('content');
+  if (content) content.scrollTo({ top: 0, behavior: 'instant' });
+  _ovAlignRail();
+};
+
+// The rail used to start flush with the top of the pane, which on Overview
+// meant it ran alongside the centred emoji/heading/subtitle rather than the
+// first real card ("What is an ETO?"), looking disconnected from the content
+// it's meant to navigate. Every pane's first child is its own intro block
+// (Overview's is just taller: emoji + h1 + subtitle vs. the other five's
+// plain h1 + p), so aligning the rail to sit right after THAT, whatever its
+// height turns out to be, lines it up with the first content box on every
+// tab rather than hardcoding a number that would only fit Overview's case.
+function _ovAlignRail() {
+  var rail = document.querySelector('.ov-tabrail');
+  if (!rail || getComputedStyle(rail).position !== 'absolute') return; // wrapped-pill layout doesn't need this
+  var pane = document.querySelector('.ov-pane.active');
+  var head = pane && pane.firstElementChild;
+  rail.style.top = head ? head.offsetHeight + 'px' : '0';
+}
+window.addEventListener('resize', function() {
+  if (document.querySelector('.ov-pane.active')) _ovAlignRail();
+});
 
 function toggleMobileMenu() {
   document.getElementById('sidebar').classList.toggle('open');
