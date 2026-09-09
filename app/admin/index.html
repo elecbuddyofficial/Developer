@@ -135,6 +135,26 @@
     /* ── TABLE ── */
     .ad-section-head { font-size:13px; font-weight:700; color:var(--text); margin-bottom:10px; }
     .ad-table-wrap { background:var(--surface); border:1px solid var(--border); border-radius:var(--r12); overflow:auto; }
+    /* Long lists scroll inside their own card instead of growing the page, so
+       whatever sits above them - search, filter dropdowns, status pills, the
+       result count - stays put and stays usable rather than scrolling away
+       above 160 rows. One class rather than a rule per tab, because every one
+       of these panes is the same shape: controls, then a long list.
+       overscroll-behavior stops a flick at the end of the list carrying on
+       into the page behind it. */
+    .ad-scrollcap { max-height:56vh; overflow-y:auto; overscroll-behavior:contain; }
+    @media (max-width:900px) { .ad-scrollcap { max-height:64vh; } }
+    /* Column headers stay with the rows they label. The background is set here
+       rather than relied upon: .ad-table th carries its own, but the payments
+       table is inline-styled with the background on the <tr>, and a sticky th
+       without one lets rows show through as they pass underneath. Same token
+       either way, so both look identical and stay theme-correct. Under 600px
+       the table becomes stacked cards and thead is display:none, so this
+       simply stops applying, which is right. */
+    .ad-scrollcap table thead th { position:sticky; top:0; z-index:2; background:var(--surface2); }
+    /* A loading or empty state must not sit in a box sized for a list that is
+       not there. Lists render .ad-loading, tables render td.empty. */
+    .ad-scrollcap:has(.ad-loading), .ad-scrollcap:has(td.empty) { max-height:none; }
     .ad-table { width:100%; border-collapse:collapse; font-size:13px; }
     .ad-table th {
       padding:10px 14px; text-align:left;
@@ -163,6 +183,10 @@
       padding:10px 2px; border-bottom:1px solid var(--border2); cursor:pointer; }
     .fbu-row:last-child { border-bottom:none; }
     .fbu-row:hover { background:var(--surface2); }
+    /* Uses .ad-scrollcap (see above) for the cap itself; only the rule that
+       separates the rows from the filters above them is local. */
+    #fbu-list { border-top:1px solid var(--border2); margin-top:2px; }
+    #fbu-list:has(.ad-loading) { border-top:none; }
     .fbu-main { min-width:0; }
     .fbu-email { font-size:13px; color:var(--text); word-break:break-word; }
     .fbu-meta { font-size:11.5px; color:var(--text3); margin-top:2px; }
@@ -1383,6 +1407,42 @@
     </div>
   </div>
 
+  <!-- Account-wide tabs first: none of these change with which course is
+       selected below, so they sit above the switcher rather than being
+       hidden by it. Users included as of 9 Sep 2026 - loadUsers() has
+       never filtered by course, it was just gated behind the CoC tab list
+       by accident, so this is the one place a combined, both-courses count
+       was already sitting the whole time. flex:none keeps this block its
+       own natural height rather than splitting the flex:1 space .ad-nav
+       normally claims - the course-scoped nav below still owns that, same
+       as the single nav did before this was split in two. -->
+  <nav class="ad-nav" style="flex:none" aria-label="Account-wide">
+    <button class="ad-nav-btn active" onclick="showTab('dashboard');closeMobNav()" data-tab="dashboard" title="Dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Dashboard</span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('users');closeMobNav()" data-tab="users" title="Users (all courses)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Users</span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('approvals');closeMobNav()" data-tab="approvals" title="Signup Approvals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+      <span>Approvals</span><span class="ad-nav-badge" id="apr-nav-badge" hidden></span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('admins');closeMobNav()" data-tab="admins" title="Team Admins">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 3v1h16v-1c0-1-3-3-8-3z"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 13c-1-.5-2.5-.8-4-.9"/></svg>
+      <span>Team Admins</span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('mail');closeMobNav()" data-tab="mail" title="Mail">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+      <span>Mail</span>
+    </button>
+    <button class="ad-nav-btn" onclick="showTab('activity');closeMobNav()" data-tab="activity" title="Activity Log (all courses)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+      <span>Activity Log</span>
+    </button>
+  </nav>
+
   <div class="ad-course">
     <span class="ad-course-label">Course</span>
     <div class="ad-course-switch" role="group" aria-label="Which course to show">
@@ -1393,19 +1453,7 @@
     </div>
   </div>
 
-  <nav class="ad-nav">
-    <button class="ad-nav-btn active" onclick="showTab('dashboard');closeMobNav()" data-tab="dashboard" title="Dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-      <span>Dashboard</span>
-    </button>
-    <button class="ad-nav-btn" onclick="showTab('users');closeMobNav()" data-tab="users" title="Users">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      <span>Users</span>
-    </button>
-    <button class="ad-nav-btn" onclick="showTab('approvals');closeMobNav()" data-tab="approvals" title="Signup Approvals">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
-      <span>Approvals</span><span class="ad-nav-badge" id="apr-nav-badge" hidden></span>
-    </button>
+  <nav class="ad-nav" aria-label="Course-specific">
     <button class="ad-nav-btn" onclick="showTab('funnel');closeMobNav()" data-tab="funnel" title="Upgrade Funnel">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>
       <span>Funnel</span>
@@ -1422,10 +1470,6 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3H4a4 4 0 0 0 2-3V11a7 7 0 0 1 4-6"/><path d="M9 17v1a3 3 0 0 0 6 0v-1"/></svg>
       <span>Notifications</span>
     </button>
-    <button class="ad-nav-btn" onclick="showTab('admins');closeMobNav()" data-tab="admins" title="Team Admins">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2-8 3v1h16v-1c0-1-3-3-8-3z"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 13c-1-.5-2.5-.8-4-.9"/></svg>
-      <span>Team Admins</span>
-    </button>
     <button class="ad-nav-btn" onclick="showTab('payments');closeMobNav()" data-tab="payments" title="Payments">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
       <span>Payments</span>
@@ -1441,14 +1485,6 @@
     <button class="ad-nav-btn" onclick="showTab('videos');closeMobNav()" data-tab="videos" title="Videos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>
       <span>Videos</span>
-    </button>
-    <button class="ad-nav-btn" onclick="showTab('mail');closeMobNav()" data-tab="mail" title="Mail">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-      <span>Mail</span>
-    </button>
-    <button class="ad-nav-btn" onclick="showTab('activity');closeMobNav()" data-tab="activity" title="Activity Log">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="9"/></svg>
-      <span>Activity Log</span>
     </button>
     <div class="ad-nav-divider"></div>
     <button class="ad-nav-btn" onclick="showTab('notices');closeMobNav()" data-tab="notices" title="Sponsorship Notices">
@@ -1649,7 +1685,7 @@
       <input class="ad-input" style="max-width:240px;flex-shrink:0" id="user-search" placeholder="Search email or name…" oninput="applyUserFilters()">
       <button class="ad-btn btn-ghost btn-sm" onclick="exportUsersCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
     </div>
-    <div class="ad-table-wrap">
+    <div class="ad-table-wrap ad-scrollcap">
       <table class="ad-table">
         <thead><tr>
           <th>Email</th><th>Name</th><th>Plan</th><th>Expires</th><th>Joined</th><th></th>
@@ -1708,7 +1744,7 @@
       not run while they wait, so there is no rush and no cost to them.
     </p>
 
-    <div class="ad-table-wrap">
+    <div class="ad-table-wrap ad-scrollcap">
       <table class="ad-table">
         <thead><tr>
           <th>Email</th><th>Name</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
@@ -1763,7 +1799,15 @@
     </div><!-- /devices pane -->
 
     <div class="apr-pane" id="apr-pane-domains" hidden>
-      <div class="ad-section-head">Approved providers &amp; signup domains</div>
+      <!-- The "N new" count of throwaway-looking domains. Restored 9 Sep
+           2026: 559d070 (20 Aug) turned this section from a <details>
+           panel into a flat header and deleted the <summary> this span
+           lived in, but left loadSignupDomains() still writing to it. That
+           function dereferenced the missing element before assigning
+           dom-tbody, so from 20 Aug the table itself never rendered
+           whenever there was any domain data to show. -->
+      <div class="ad-section-head">Approved providers &amp; signup domains
+        <span class="dom-badge" id="dom-badge" hidden></span></div>
       <p class="dom-note" style="margin-left:0;margin-right:0">
         Every domain that has ever signed up here. Approving one lets future
         signups from it through without review; removing one sends them back to
@@ -1773,7 +1817,7 @@
         <input class="ad-input" id="dom-input" placeholder="domain to approve, e.g. tulas.edu.in">
         <button class="ad-btn btn-sm" onclick="allowDomain()">Approve domain</button>
       </div>
-      <div class="ad-table-wrap">
+      <div class="ad-table-wrap ad-scrollcap">
         <table class="ad-table">
           <thead><tr>
             <th>Domain</th><th>Accounts</th><th>Paid</th><th>First seen</th><th>Last seen</th><th></th>
@@ -1890,7 +1934,7 @@
           <div id="fbu-count" style="font-size:12.5px;color:var(--text3);padding-bottom:10px"></div>
         </div>
       </div>
-      <div id="fbu-list"><div class="ad-loading">Loading...</div></div>
+      <div id="fbu-list" class="ad-scrollcap"><div class="ad-loading">Loading...</div></div>
     </div>
     </div>
 </div>
@@ -1902,8 +1946,8 @@
     </div>
 
     <div class="ad-card">
-      <div class="ad-card-head">Who is using the app</div>
-      <div class="ad-card-sub">
+      <div class="ad-card-head" id="act-head">Who is using the app</div>
+      <div class="ad-card-sub" id="act-sub">
         Last activity per account, so "signed up and never came back" stops looking
         identical to "studying every evening". Only a rolling timestamp is kept, never a
         history of what anyone read. Counted while the app is actually in front of
@@ -1911,7 +1955,7 @@
         excluded, otherwise time spent in this console would inflate the very numbers it
         is here to report. Tap a tile to filter, and anyone to open their profile.
       </div>
-      <div id="act-body"><div class="ad-loading">Loading...</div></div>
+      <div id="act-body" class="ad-scrollcap"><div class="ad-loading">Loading...</div></div>
     </div>
   </div>
 
@@ -2095,7 +2139,7 @@
 
     <div class="adp" id="notifications-pane-sent" hidden>
       <div class="ad-section-head">Sent Notifications</div>
-      <div class="ad-table-wrap" id="notif-list">
+      <div class="ad-table-wrap ad-scrollcap" id="notif-list">
         <div class="ad-loading">Loading...</div>
       </div>
     </div>
@@ -2659,7 +2703,7 @@
       </button>
     </div>
 
-    <div id="pay-table-wrap" style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);">
+    <div id="pay-table-wrap" class="ad-scrollcap" style="overflow-x:auto;border-radius:10px;border:1px solid var(--border);">
       <table style="width:100%;border-collapse:collapse;font-size:13px;">
         <thead>
           <tr style="background:var(--surface2);text-align:left;">
@@ -2969,6 +3013,25 @@
         <div id="spaid-warn" style="font-size:12.5px;color:var(--text2);flex:1;min-width:220px"></div>
       </div>
     </div>
+
+    <!-- Grace is separate from the switch on purpose. Granting time changes
+         nothing on its own while the course is free, so it can be set safely
+         in advance and the switch flipped later; and flipping with no grace
+         is a real choice (a sudden switch), not a mistake, so the toggle says
+         out loud which one it is about to do. -->
+    <div class="ad-card" style="margin-bottom:18px">
+      <div class="ad-card-head">Grace period</div>
+      <div class="ad-card-sub" id="spgrace-sub">Loading...</div>
+      <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:12px">
+        <div class="ad-field" style="max-width:190px">
+          <label class="ad-label">Keep access until end of</label>
+          <input type="date" class="ad-input" id="spgrace-date">
+        </div>
+        <button type="button" class="ad-btn btn-sm" onclick="applySponsorshipGrace()">Give everyone until this date</button>
+        <button type="button" class="ad-btn btn-ghost btn-sm" onclick="clearSponsorshipGrace()">Clear all grace</button>
+      </div>
+      <div id="spgrace-warn" style="font-size:12.5px;color:var(--text2);margin-top:10px;line-height:1.6"></div>
+    </div>
     </div>
 
     <div class="adp" id="plans-pane-offer" hidden>
@@ -3252,7 +3315,7 @@
       <button class="ad-btn btn-ghost btn-sm" onclick="loadActivity()">Refresh</button>
       <button class="ad-btn btn-ghost btn-sm" onclick="exportActivityCsv()" style="margin-left:auto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Export CSV</button>
     </div>
-    <div class="ad-table-wrap">
+    <div class="ad-table-wrap ad-scrollcap">
       <table class="ad-table">
         <thead><tr>
           <th>When</th><th>Admin</th><th>Action</th><th>Target</th><th>Details</th>
@@ -3885,6 +3948,33 @@ function startAdminHeartbeat() {
 /* ── Who is using the app ────────────────────────────────────────── */
 var _activity = [];
 
+/* The same boundaries the user_activity view uses (5 min / 1 hour / 1 day /
+   7 days), copied deliberately rather than re-invented: the Sponsorship
+   overlay below feeds the same tiles, and two different definitions of
+   "today" behind one set of labels would be worse than not splitting at
+   all. If the view's CASE ever changes, change this with it. */
+function _actBucket(ts) {
+  if (!ts) return 'never';
+  var age = Date.now() - new Date(ts).getTime();
+  if (age <      5 * 60000) return 'online';
+  if (age <     60 * 60000) return 'recent';
+  if (age <   24 * 3600000) return 'today';
+  if (age < 7 * 24 * 3600000) return 'this_week';
+  return 'lapsed';
+}
+
+var ACT_SUB_SPONSORSHIP =
+  'Last Sponsorship module actually opened, per account. This is NOT the '
+  + 'account-level heartbeat the COC view shows: last_active_at is one '
+  + 'timestamp per person, touched by opening either app, so reusing it here '
+  + 'would put the identical list under both courses. This reads '
+  + 'topic_activity instead, which records a module id and therefore knows '
+  + 'which course it belongs to. One caveat worth holding: Sponsorship opens '
+  + 'were silently discarded until touch_topic was fixed on 30 Aug 2026, so '
+  + '"never opened" here means never since that date, not never at all. '
+  + 'Admin accounts are excluded. Tap a tile to filter, and anyone to open '
+  + 'their profile.';
+
 async function loadUserActivity() {
   var box = document.getElementById('act-body');
   if (!box) return;
@@ -3894,8 +3984,43 @@ async function loadUserActivity() {
     return;
   }
   _activity = res.data || [];
+
+  var sub = document.getElementById('act-sub');
+  var head = document.getElementById('act-head');
+  if (sub && _actSubDefault === null) _actSubDefault = sub.textContent;
+
+  if (_adminCourse === 'sponsorship') {
+    // Course-scoped last-seen, overlaid onto the same account rows so email,
+    // plan and the is_admin exclusion all keep working unchanged.
+    var ta = await _sb.from('topic_activity').select('user_id,topic_id,last_opened_at');
+    if (!ta.error) {
+      var seen = {};
+      (ta.data || []).forEach(function (r) {
+        if (_courseOf(r.topic_id) !== 'sponsorship') return;
+        if (!seen[r.user_id] || r.last_opened_at > seen[r.user_id]) seen[r.user_id] = r.last_opened_at;
+      });
+      _activity = _activity.map(function (u) {
+        var c = {};
+        for (var k in u) c[k] = u[k];
+        c.last_active_at = seen[u.user_id] || null;
+        c.activity  = _actBucket(c.last_active_at);
+        c.never_used = !c.last_active_at;
+        return c;
+      }).sort(function (a, b) {
+        var x = a.last_active_at || '', y = b.last_active_at || '';
+        return x < y ? 1 : x > y ? -1 : 0;      // newest first, never-opened last
+      });
+    }
+    if (head) head.textContent = 'Who is using Sponsorship';
+    if (sub) sub.textContent = ACT_SUB_SPONSORSHIP;
+  } else {
+    if (head) head.textContent = 'Who is using the app';
+    if (sub && _actSubDefault !== null) sub.textContent = _actSubDefault;
+  }
+
   renderActivity();
 }
+var _actSubDefault = null;
 
 function renderActivity() {
   var box = document.getElementById('act-body');
@@ -5569,14 +5694,141 @@ function renderSponsorshipPaid() {
                      + 'run shorter than Fundamentals because they are drill topics, '
                      + 'not because they are unfinished. Check the Content Status tab '
                      + 'before switching, and remember this reopens or closes the whole '
-                     + 'course to every signed-in user.';
+                     + 'course to every signed-in user.'
+                     // Said here as well as on the switch itself, so the state is
+                     // visible before the decision rather than only inside the
+                     // confirm box that follows it.
+                     + (_spGrace
+                         ? (_spGrace.live > 0
+                             ? ' ' + _spGrace.live + ' accounts currently hold a grace grant.'
+                             : ' No grace grant is set, so switching now would cut everyone off at once.')
+                         : '');
   }
+}
+
+/* ── Grace period ─────────────────────────────────────────────────────────
+   Writes profiles.granted_sponsorship_expires_at, which is exactly what that
+   column is for: "Sponsorship time given rather than bought (comp coupon or
+   admin grant)", per sponsorship_pricing_setup.sql. deriveAccess reads it
+   alongside the paid column, so a grant and a purchase behave identically to
+   the reader and to get-sponsorship-key.
+
+   No migration needed: profiles already carries an "Admin can update all
+   profiles" policy (qual is_admin()), and protect_privileged_fields skips
+   admins entirely, so these writes land rather than being silently reverted.
+   That last part is worth stating, because a write that looks like it worked
+   and did nothing is this table's speciality. */
+var _spGrace = null;   // { live, until, total }
+
+async function loadSponsorshipGrace() {
+  var sub = document.getElementById('spgrace-sub');
+  if (!sub) return;
+  try {
+    var nowIso = new Date().toISOString();
+    var live = await _sb.from('profiles')
+      .select('granted_sponsorship_expires_at', { count: 'exact' })
+      .gt('granted_sponsorship_expires_at', nowIso)
+      .order('granted_sponsorship_expires_at', { ascending: false })
+      .limit(1);
+    if (live.error) throw live.error;
+    var total = await _sb.from('profiles').select('id', { count: 'exact', head: true });
+    _spGrace = {
+      live:  live.count || 0,
+      until: (live.data && live.data[0]) ? live.data[0].granted_sponsorship_expires_at : null,
+      total: (total && total.count) || 0
+    };
+  } catch (e) {
+    sub.textContent = 'Could not read the grace state: ' + (e.message || e);
+    return;
+  }
+  var d = document.getElementById('spgrace-date');
+  if (d && !d.value) {
+    var t = new Date(Date.now() + 7 * 864e5);       // a week out, as a starting point
+    d.value = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0')
+            + '-' + String(t.getDate()).padStart(2, '0');
+  }
+  renderSponsorshipGrace();
+  renderSponsorshipPaid();      // its warning depends on the grace state
+}
+
+function renderSponsorshipGrace() {
+  var sub  = document.getElementById('spgrace-sub');
+  var warn = document.getElementById('spgrace-warn');
+  if (!sub || !_spGrace) return;
+
+  if (_spGrace.live > 0) {
+    sub.textContent = _spGrace.live + ' of ' + _spGrace.total + ' accounts hold free '
+      + 'Sponsorship access until ' + fmtDateTime(_spGrace.until)
+      + ', whether or not the course is paid.';
+  } else {
+    sub.textContent = 'No account holds a grace grant. Switching to Paid right now '
+      + 'is a sudden switch: all ' + _spGrace.total + ' accounts lose the course '
+      + 'immediately, except the free preview topics.';
+  }
+  warn.textContent = 'Granting time changes nothing while the course is Free, so it is '
+    + 'safe to set in advance. Accounts that already hold a longer grant keep theirs: '
+    + 'this only ever extends, never shortens. Purchases are untouched either way.';
+}
+
+async function applySponsorshipGrace() {
+  var d = document.getElementById('spgrace-date');
+  if (!d || !d.value) { alert('Pick a date first.'); return; }
+  // End of the chosen day in local time: "until Friday" means through Friday,
+  // not from its first second.
+  var until = new Date(d.value + 'T23:59:59');
+  if (isNaN(until.getTime())) { alert('That date is not valid.'); return; }
+  if (until.getTime() < Date.now()) { alert('That date has already passed.'); return; }
+  var iso = until.toISOString();
+
+  if (!confirm('Give every account free Sponsorship access until ' + until.toLocaleString()
+      + '?\n\nAccounts already holding a longer grant keep theirs. This does not change '
+      + 'whether the course is paid, and it does not touch anyone\'s purchase.')) return;
+
+  /* Two statements rather than one .or() filter: the value is an ISO
+     timestamp full of characters PostgREST's or= grammar treats specially,
+     and a filter that silently fails to match would look exactly like a
+     successful no-op. Same reason the count is re-read afterwards rather
+     than assumed. */
+  var a = await _sb.from('profiles').update({ granted_sponsorship_expires_at: iso })
+            .is('granted_sponsorship_expires_at', null);
+  if (a.error) { alert('Failed: ' + a.error.message); return; }
+  var b = await _sb.from('profiles').update({ granted_sponsorship_expires_at: iso })
+            .lt('granted_sponsorship_expires_at', iso);
+  if (b.error) { alert('Failed: ' + b.error.message); return; }
+
+  logAdminAction('sponsorship_grace_set', null, { until: iso });
+  await loadSponsorshipGrace();
+  toast('Grace period set to ' + fmtDateTime(iso));
+}
+
+async function clearSponsorshipGrace() {
+  if (!confirm('Clear the grace grant from every account?\n\nAnyone relying on it loses '
+      + 'Sponsorship the moment the course is paid. Purchases are not affected.')) return;
+  var res = await _sb.from('profiles').update({ granted_sponsorship_expires_at: null })
+              .not('granted_sponsorship_expires_at', 'is', null);
+  if (res.error) { alert('Failed: ' + res.error.message); return; }
+  logAdminAction('sponsorship_grace_cleared', null, null);
+  await loadSponsorshipGrace();
+  toast('Grace cleared');
 }
 
 async function toggleSponsorshipPaid() {
   var next = !_spaidState;
+  // Says which of the two it is about to do. A sudden switch is a legitimate
+  // choice; being unable to tell which one you picked is not.
+  var graceLine = '';
+  if (next) {
+    if (_spGrace && _spGrace.live > 0) {
+      graceLine = '\n\n' + _spGrace.live + ' of ' + _spGrace.total + ' accounts hold a grace '
+        + 'grant and keep the course until ' + fmtDateTime(_spGrace.until) + '. Everyone else '
+        + 'is cut off now.';
+    } else {
+      graceLine = '\n\nSUDDEN SWITCH: no account holds a grace grant, so every reader loses '
+        + 'the course immediately. Set a grace period below first if that is not what you want.';
+    }
+  }
   var msg = next
-    ? 'Make Sponsorship a paid course?\n\nEveryone without a purchase loses access to everything except the free preview topics. Accounts reading it right now are included.\n\nThe three Sponsorship price rows must also be set active on this page before anyone can actually buy it.'
+    ? 'Make Sponsorship a paid course?\n\nEveryone without a purchase loses access to everything except the free preview topics. Accounts reading it right now are included.' + graceLine + '\n\nThe three Sponsorship price rows must also be set active on this page before anyone can actually buy it.'
     : 'Make Sponsorship free again?\n\nEvery signed-in user immediately regains the whole course, whether or not they paid.';
   if (!confirm(msg)) return;
 
@@ -5969,8 +6221,16 @@ async function loadNotifications() {
   var { data } = await _sb.from('notifications').select('*').order('created_at', { ascending: false });
   var container = document.getElementById('notif-list');
 
+  // Notifications is a genuinely per-course tab, unlike Users/Activity - it
+  // writes a real course column. Shows this course's own notices plus any
+  // 'both' notice, matching exactly what a cadet in that app actually sees,
+  // rather than every notice ever sent regardless of which app it targets.
+  data = (data || []).filter(function (n) { return n.course === _adminCourse || n.course === 'both'; });
+
   /* Count on the Sent label, so the switch says how many went out without
-     anyone having to open the pane. Mirrors the counts on #apr-switch. */
+     anyone having to open the pane. Mirrors the counts on #apr-switch.
+     Counts the filtered set, not the whole table, so it never disagrees
+     with what the list below actually shows. */
   var cEl = document.getElementById('notifications-c-sent');
   if (cEl) cEl.textContent = (data && data.length) ? data.length : '';
 
@@ -6001,7 +6261,11 @@ async function loadNotifications() {
       + '<div class="notif-text">' + esc(n.body) + '</div>'
       + '<div class="notif-meta">' + (n.type || 'info').toUpperCase()
         + (n.target_plan ? ' · ' + esc(n.target_plan).toUpperCase() + ' ONLY' : ' · EVERYONE')
-        + tmpl + ' · ' + fmtDate(n.created_at) + '</div>'
+        + tmpl
+        // Only called out for 'both' - a plain course-matching row needs no
+        // label, it is simply why it is in this list at all.
+        + (n.course === 'both' ? ' · BOTH APPS' : '')
+        + ' · ' + fmtDate(n.created_at) + '</div>'
       + reads
       + '</div>'
       + '<button class="notif-del" onclick="deleteNotification(' + attrJs(n.id) + ')" title="Delete">'
@@ -8795,9 +9059,17 @@ async function loadSignupDomains() {
     return !d.allowed && !d.paid_accounts && new Date(d.first_seen).getTime() > cutoff;
   });
 
+  // Guarded on purpose, not defensively-by-habit: this exact line threw for
+  // 20 days because the element was removed in a layout change while this
+  // was left writing to it, and because it runs BEFORE the tbody assignment
+  // below, a missing decoration took the whole table down with it. A badge
+  // is worth nothing next to the data it sits on; it must never be able to
+  // stop the table rendering again.
   var badge = document.getElementById('dom-badge');
-  badge.hidden = !fresh.length;
-  badge.textContent = fresh.length ? fresh.length + ' new' : '';
+  if (badge) {
+    badge.hidden = !fresh.length;
+    badge.textContent = fresh.length ? fresh.length + ' new' : '';
+  }
 
   tbody.innerHTML = data.map(function(d) {
     var isNew = fresh.indexOf(d) !== -1;
@@ -11184,6 +11456,7 @@ window.showTab = function(name) {
     _tabLoaded.plans = true;
     loadPlansTab();
     loadSponsorshipPaid();
+    loadSponsorshipGrace();
   }
   if (name === 'videos' && !_tabLoaded.videos) {
     _tabLoaded.videos = true;
@@ -11235,6 +11508,18 @@ function setAdminCourse(course) {
   // nothing rather than one that has not run yet.
   try { if (typeof loadPayments === 'function') loadPayments(); } catch (e) {}
   try { if (typeof loadMockPayments === 'function') loadMockPayments(); } catch (e) {}
+  // Notifications became course-scoped the same way Payments did - reload so
+  // the list shows this course's own notices instead of the previous
+  // course's filtered view, and reset the compose form's "Show in" default
+  // to match, so posting right after a switch cannot silently target the
+  // course just left behind.
+  try { if (typeof loadNotifications === 'function') loadNotifications(); } catch (e) {}
+  var notifCourseSel = document.getElementById('notif-course');
+  if (notifCourseSel) notifCourseSel.value = course;
+  // Online Status now means different things per course (account heartbeat
+  // for COC, Sponsorship module opens for Sponsorship), so it has to be
+  // rebuilt on a switch or it keeps showing the course you just left.
+  try { if (typeof loadUserActivity === 'function') loadUserActivity(); } catch (e) {}
 
   applyCourseScope();
 }
@@ -11264,19 +11549,49 @@ function setAdminCourse(course) {
        its own money; they show different rows, not the same rows twice.
      - A tab that is ONE THING FOR THE WHOLE SITE lives in one place only.
        There is a single user list, a single admin team, a single approvals
-       queue. None of them has a Sponsorship version, so none appears twice.
+       queue, a single mail setup. None of them has a Sponsorship version,
+       so none appears twice.
      - A tab whose data belongs to exactly one course appears only there:
-       Funnel is COC-only (Sponsorship records no funnel events), Content
-       Status is Sponsorship-only (it is built from the Sponsorship module
-       list and has no COC equivalent).
+       Funnel is COC-only (Sponsorship records no funnel events until the
+       paywall goes live, see below), Content Status is Sponsorship-only
+       (it is built from the Sponsorship module list and has no COC
+       equivalent).
+
+   9 Sep 2026: the "one thing for the whole site" tabs (Users, Approvals,
+   Team Admins, Mail, and Dashboard, which was already listed under both
+   courses for exactly this reason) had been in this comment's stated
+   philosophy from the start but never actually implemented that way -
+   COURSE_TABS.coc held them, which meant "visible while viewing COC", not
+   "always visible", so opening the console straight into Sponsorship hid
+   the entire user base with no menu entry to get back to it. GLOBAL_TABS
+   is the real fix: listed once, shown regardless of _adminCourse, no
+   longer duplicated into either course's array.
+
+   Activity Log joins that list too, though for a different reason than a
+   first read suggests. Three similarly-named things live near each other,
+   so to save the next person the detour: the Activity Log tab is
+   loadActivity(), which reads `admin_actions`, the audit trail of what
+   ADMINS did - not user reading at all, and about as whole-site as a table
+   gets. `loadUserActivity()`/`user_activity` is a different function
+   feeding the Online Status tab (account heartbeat, and now a
+   Sponsorship-scoped variant). `topic_activity` is a third thing again,
+   the per-module reading history.
+
+   Notifications is the one that actually moved from COC-only to genuinely
+   both: it writes a real notifications.course column and the compose form
+   already had a course dropdown, it was just never reachable from the
+   Sponsorship side of the switch.
 
    Listed explicitly rather than derived. A rule like "hide anything empty"
    would start hiding tabs the day a query returned nothing, which is exactly
    when you most want to look at them. */
+var GLOBAL_TABS = ['dashboard', 'users', 'approvals', 'admins', 'mail', 'activity'];
+
 var COURSE_TABS = {
-  sponsorship: ['dashboard', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notices', 'events', 'mock', 'status'],
-  coc:         ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications',
-                'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'liveexam'],
+  sponsorship: ['online', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notifications',
+                'notices', 'events', 'mock', 'status'],
+  coc:         ['funnel', 'online', 'grant', 'notifications', 'payments', 'coupons', 'plans',
+                'videos', 'liveexam'],
 };
 
 function tabsForCourse() { return COURSE_TABS[_adminCourse] || COURSE_TABS.coc; }
@@ -11313,7 +11628,7 @@ function applyCourseScope() {
   TAB_NAMES.forEach(function (name) {
     var btn = document.querySelector('.ad-nav-btn[data-tab="' + name + '"]');
     if (!btn) return;
-    var show = allowed.indexOf(name) !== -1;
+    var show = GLOBAL_TABS.indexOf(name) !== -1 || allowed.indexOf(name) !== -1;
     btn.style.display = show ? '' : 'none';
     // Remember if the tab currently OPEN is one we are hiding, or the switch
     // leaves the console showing a panel with no menu entry to return to.
