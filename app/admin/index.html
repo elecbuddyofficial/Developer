@@ -212,6 +212,17 @@
     .dom-summary { display:flex; align-items:center; gap:9px; cursor:pointer;
       padding:13px 16px; font-size:13px; font-weight:600; color:var(--text2);
       list-style:none; user-select:none; }
+    /* Any .ad-card that is a <details> gets a chevron. Without one the
+       summary strips the native marker (list-style:none) and reads as a card
+       header with nothing under it - which is exactly how the Plans tab's
+       "Names and availability" was read, while it held the only control for
+       whether a plan is sold at all. Same treatment .dom-summary already had;
+       generalised rather than copied a third time. */
+    details.ad-card > summary { position:relative; padding-left:16px; }
+    details.ad-card > summary::-webkit-details-marker { display:none; }
+    details.ad-card > summary::before { content:'▸'; position:absolute; left:0;
+      color:var(--text3); font-size:11px; transition:transform .15s; display:inline-block; }
+    details.ad-card[open] > summary::before { transform:rotate(90deg); }
     .dom-summary::-webkit-details-marker { display:none; }
     .dom-summary::before { content:'▸'; color:var(--text3); font-size:11px;
       transition:transform .15s ease; }
@@ -5679,7 +5690,10 @@ function renderSponsorshipPaid() {
     sub.textContent  = 'Sponsorship requires a purchase. Only the free preview topics are readable without one.';
     lbl.textContent  = 'Paid';
     btn.classList.add('active');
-    warn.textContent = 'Switch back to Free to reopen the whole course to every signed-in user.';
+    warn.textContent = 'The three tiers are on sale at the prices set below, and can be '
+                     + 'repriced at any time without touching this switch. Switch back to '
+                     + 'Free to reopen the whole course to every signed-in user and stop '
+                     + 'offering them.';
   } else {
     sub.textContent  = 'Sponsorship is free to any signed-in user. This is how it shipped.';
     lbl.textContent  = 'Free';
@@ -5827,9 +5841,14 @@ async function toggleSponsorshipPaid() {
         + 'the course immediately. Set a grace period below first if that is not what you want.';
     }
   }
+  var priceLine = next
+    ? '\n\nThe three Sponsorship tiers go on sale at their current prices: '
+      + _spPriceSummary() + '. Change them any time in Prices above.'
+    : '\n\nThe three Sponsorship tiers stop being offered. Their prices are kept.';
+
   var msg = next
-    ? 'Make Sponsorship a paid course?\n\nEveryone without a purchase loses access to everything except the free preview topics. Accounts reading it right now are included.' + graceLine + '\n\nThe three Sponsorship price rows must also be set active on this page before anyone can actually buy it.'
-    : 'Make Sponsorship free again?\n\nEvery signed-in user immediately regains the whole course, whether or not they paid.';
+    ? 'Make Sponsorship a paid course?\n\nEveryone without a purchase loses access to everything except the free preview topics. Accounts reading it right now are included.' + graceLine + priceLine
+    : 'Make Sponsorship free again?\n\nEvery signed-in user immediately regains the whole course, whether or not they paid.' + priceLine;
   if (!confirm(msg)) return;
 
   var res = await _sb.from('course_config')
@@ -5837,9 +5856,42 @@ async function toggleSponsorshipPaid() {
     .eq('id', true);
   if (res.error) { alert('Failed: ' + res.error.message); return; }
 
+  /* The price rows follow the switch. Two independent locks - this flag and a
+     per-row `active` - is one lock too many for a course with a single
+     product, and it produced the state it was meant to prevent: the paywall
+     on, and the gate with nothing to offer, because the second lock was still
+     closed. One switch decides whether Sponsorship is sold; the Prices grid
+     decides for how much, at any time, independently of this.
+
+     Not fatal if it fails: the course_config write above has already
+     succeeded, so say which half did not, rather than silently leaving the
+     two out of step. */
+  var pr = await _sb.from('pricing_plans').update({ active: next }).eq('scope', 'sponsorship');
+  if (pr.error) {
+    alert('Sponsorship is now ' + (next ? 'paid' : 'free')
+        + ', but the price rows could not be updated: ' + pr.error.message
+        + '\n\nSet "Shown to buyers" by hand under Names and availability.');
+  }
+
   _spaidState = next;
   renderSponsorshipPaid();
-  logAdminAction(next ? 'sponsorship_paid_on' : 'sponsorship_paid_off', null, { sponsorship_paid: next });
+  logAdminAction(next ? 'sponsorship_paid_on' : 'sponsorship_paid_off', null,
+                 { sponsorship_paid: next, plans_active: !pr.error ? next : 'FAILED' });
+  // Repaint the price grid so HIDDEN / on-sale matches what just happened.
+  try { if (typeof loadPlansTab === 'function') loadPlansTab(); } catch (e) {}
+}
+
+/* Reads the grid the admin is looking at, not a separate query, so the
+   confirm can never quote a price different from the one on screen. */
+function _spPriceSummary() {
+  var out = [];
+  ['3mo', '6mo', '12mo'].forEach(function (d) {
+    var r = (window._plansRows || []).filter(function (x) {
+      return x.duration === d && x.scope === 'sponsorship';
+    })[0];
+    if (r) out.push(tierLabel(d) + ' ₹' + Math.round(r.base_amount / 100).toLocaleString('en-IN'));
+  });
+  return out.length ? out.join(', ') : 'the prices set above';
 }
 
 /* The admin-side mirror of scopesCovered() in _shared/entitlements.ts.
