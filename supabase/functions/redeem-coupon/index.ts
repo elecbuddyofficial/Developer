@@ -1,6 +1,9 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { applyPurchase, applyGrant } from '../_shared/entitlements.ts';
+import {
+  applyPurchase, applyGrant, expiryUpdate,
+  ENTITLEMENT_COLUMNS, GRANT_COLUMNS, clearedExpiries, clearedGrants,
+} from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Redeems a comp code for the calling user.
@@ -128,15 +131,14 @@ serve(async (req) => {
       // Lifetime is not date-based; clearing the per-scope columns keeps them
       // from later contradicting the lifetime flag.
       grant.subscription_expires_at = null;
-      grant.written_expires_at = null;
-      grant.oral_expires_at = null;
-      grant.granted_written_expires_at = null;
-      grant.granted_oral_expires_at = null;
+      // Every scope, not the two COC ones: a leftover sponsorship expiry would
+      // outlive the lifetime flag and later contradict it.
+      Object.assign(grant, clearedExpiries(), clearedGrants());
     } else {
       const months = coupon.months || 1;
       const { data: profile } = await sb
         .from('profiles')
-        .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at, granted_written_expires_at, granted_oral_expires_at')
+        .select(ENTITLEMENT_COLUMNS + ', ' + GRANT_COLUMNS)
         .eq('id', user.id)
         .maybeSingle();
 
@@ -148,15 +150,15 @@ serve(async (req) => {
       ).toISOString();
 
       grant.subscription_expires_at = expiresAt;
-      grant.written_expires_at = effect.written_expires_at;
-      grant.oral_expires_at = effect.oral_expires_at;
+      // All scopes. A sponsorship comp coupon used to compute the right date
+      // and then write only the COC columns, granting the redeemer nothing.
+      Object.assign(grant, expiryUpdate(effect));
 
       // Also recorded on the grant-only ledger. This is what a later refund
       // rebuilds from: without it, refunding an unrelated purchase would wipe
       // the comped time, because a replay of `payments` cannot see a coupon.
       const granted = applyGrant(profile ?? {}, coupon.scope, months, new Date());
-      grant.granted_written_expires_at = granted.granted_written_expires_at;
-      grant.granted_oral_expires_at    = granted.granted_oral_expires_at;
+      Object.assign(grant, granted);
     }
 
     await sb.from('profiles').update(grant).eq('id', user.id);

@@ -2889,7 +2889,7 @@
             <option value="both">Full COC Preparation</option>
               <option value="sponsorship">Sponsorship</option>
           </select>
-          <div class="ad-hint">Which section the offer covers. "Any" lets the buyer choose.</div>
+          <div class="ad-hint" id="cp-applies-scope-hint">Which section the offer covers. "Any" lets the buyer choose.</div>
         </div>
         <div class="ad-field">
           <label class="ad-label">Minimum Order (&#8377;, optional)</label>
@@ -5723,9 +5723,17 @@ function renderSponsorshipPaid() {
 /* ── Grace period ─────────────────────────────────────────────────────────
    Writes profiles.granted_sponsorship_expires_at, which is exactly what that
    column is for: "Sponsorship time given rather than bought (comp coupon or
-   admin grant)", per sponsorship_pricing_setup.sql. deriveAccess reads it
-   alongside the paid column, so a grant and a purchase behave identically to
-   the reader and to get-sponsorship-key.
+   admin grant)", per sponsorship_pricing_setup.sql.
+
+   It also writes profiles.sponsorship_expires_at, and MUST. An earlier version
+   of this comment claimed "deriveAccess reads it alongside the paid column, so
+   a grant and a purchase behave identically". That was simply wrong, and it is
+   the reason this was broken: deriveAccess consults SCOPE_COLUMN only, never
+   GRANT_COLUMN. The ledger records where access came from; it does not confer
+   access. Writing it alone gave 163 accounts a grace grant that this console
+   displayed as live and the server did not honour. The only reason nobody
+   noticed is that the deployed get-sponsorship-key had no paywall in it at
+   all, so it was handing out the key regardless.
 
    No migration needed: profiles already carries an "Admin can update all
    profiles" policy (qual is_admin()), and protect_privileged_fields skips
@@ -5803,10 +5811,18 @@ async function applySponsorshipGrace() {
      and a filter that silently fails to match would look exactly like a
      successful no-op. Same reason the count is re-read afterwards rather
      than assumed. */
-  var a = await _sb.from('profiles').update({ granted_sponsorship_expires_at: iso })
+  /* BOTH columns, always. granted_* is the ledger a refund rebuilds from;
+     sponsorship_expires_at is the column that actually grants access, and it
+     is the ONLY one deriveAccess consults. Writing the ledger alone produced a
+     grace grant that the admin console reported as live, the client gate
+     believed (it reads both), and the server refused, because
+     get-sponsorship-key asks deriveAccess. redeem-coupon has always written
+     both for exactly this reason; this now matches it. */
+  var grant = { granted_sponsorship_expires_at: iso, sponsorship_expires_at: iso };
+  var a = await _sb.from('profiles').update(grant)
             .is('granted_sponsorship_expires_at', null);
   if (a.error) { alert('Failed: ' + a.error.message); return; }
-  var b = await _sb.from('profiles').update({ granted_sponsorship_expires_at: iso })
+  var b = await _sb.from('profiles').update(grant)
             .lt('granted_sponsorship_expires_at', iso);
   if (b.error) { alert('Failed: ' + b.error.message); return; }
 
@@ -5818,9 +5834,37 @@ async function applySponsorshipGrace() {
 async function clearSponsorshipGrace() {
   if (!confirm('Clear the grace grant from every account?\n\nAnyone relying on it loses '
       + 'Sponsorship the moment the course is paid. Purchases are not affected.')) return;
-  var res = await _sb.from('profiles').update({ granted_sponsorship_expires_at: null })
-              .not('granted_sponsorship_expires_at', 'is', null);
-  if (res.error) { alert('Failed: ' + res.error.message); return; }
+  /* Clearing grace must not revoke a PURCHASE. Both columns hold the same
+     value while the only sponsorship access someone has is the grant, so those
+     rows get both cleared; a row where the two differ has bought something on
+     top, and only the ledger is cleared there. PostgREST cannot compare one
+     column to another in a filter, so the split is done here on the ids.
+
+     The naive version of this - clearing sponsorship_expires_at for everyone
+     with a grant - would refund nobody and revoke everybody. */
+  var rows = await _sb.from('profiles')
+      .select('id, sponsorship_expires_at, granted_sponsorship_expires_at')
+      .not('granted_sponsorship_expires_at', 'is', null);
+  if (rows.error) { alert('Failed: ' + rows.error.message); return; }
+
+  var graceOnly = [], alsoBought = [];
+  (rows.data || []).forEach(function (r) {
+    (r.sponsorship_expires_at === r.granted_sponsorship_expires_at ? graceOnly : alsoBought)
+      .push(r.id);
+  });
+
+  if (graceOnly.length) {
+    var g = await _sb.from('profiles')
+        .update({ granted_sponsorship_expires_at: null, sponsorship_expires_at: null })
+        .in('id', graceOnly);
+    if (g.error) { alert('Failed: ' + g.error.message); return; }
+  }
+  if (alsoBought.length) {
+    var k = await _sb.from('profiles')
+        .update({ granted_sponsorship_expires_at: null })
+        .in('id', alsoBought);
+    if (k.error) { alert('Failed: ' + k.error.message); return; }
+  }
   logAdminAction('sponsorship_grace_cleared', null, null);
   await loadSponsorshipGrace();
   toast('Grace cleared');
@@ -9223,11 +9267,39 @@ var CP_SORTS = {
   },
 };
 
+/* Which course's view a code belongs in.
+
+   The New Coupon form was already course-filtered, but this list was not, so
+   the Sponsorship view showed "3 Months - Written Paper" and "Full COC
+   Preparation" codes sitting among the sponsorship ones with nothing to say
+   they were unrelated.
+
+   A grant is defined by what it GRANTS (scope); a discount by what it is
+   allowed ON (applies_scope). Mock interviews are a Sponsorship product, so an
+   interview code belongs there whatever its scope says.
+
+   An unscoped discount belongs in BOTH, and that is not a fudge: applies_scope
+   null means "any scope", and validate-coupon really does accept such a code
+   against a sponsorship purchase - verified live on 9 Sep 2026, where a code
+   with applies_scope null quoted a discount on a 3mo sponsorship plan. Hiding
+   it from this view would misrepresent a code that genuinely spends here. It
+   is labelled instead. */
+function cpCourses(c) {
+  if ((c.applies_product || 'course') === 'interview') return ['sponsorship'];
+  var s = c.kind === 'grant' ? c.scope : c.applies_scope;
+  if (s === 'sponsorship') return ['sponsorship'];
+  if (s === 'written' || s === 'oral' || s === 'both') return ['coc'];
+  return ['coc', 'sponsorship'];     // unscoped, or a lifetime grant: both
+}
+
 function renderCoupons() {
   var tbody = document.getElementById('cp-tbody');
-  var all = window._couponRows || [];
+  var all = (window._couponRows || []).filter(function (c) {
+    return cpCourses(c).indexOf(_adminCourse) !== -1;
+  });
   if (!all.length) {
-    tbody.innerHTML = '<tr><td colspan="7" class="empty">No coupons yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">No coupons for '
+      + (_adminCourse === 'sponsorship' ? 'Sponsorship' : 'CoC') + ' yet.</td></tr>';
     var c0 = document.getElementById('cp-count'); if (c0) c0.textContent = '';
     return;
   }
@@ -9275,6 +9347,11 @@ function renderCoupons() {
       if (c.applies_scope)    bits.push(TRACK_LABEL_ADMIN[c.applies_scope] || c.applies_scope);
       if (c.min_amount)       bits.push('min &#8377;' + (c.min_amount / 100).toFixed(0));
       var noneLabel = c.applies_product === 'interview' ? 'any booking' : 'any plan';
+      // A code with no applies_scope spends on EITHER course, so it shows in
+      // both views. Say so, or it reads as the other course's code leaking in.
+      if (!bits.length && c.applies_product !== 'interview') {
+        noneLabel += ' <span style="color:var(--orange);font-weight:600">&middot; any course</span>';
+      }
       target = '<div style="font-size:11px;color:var(--text3);margin-top:2px">' + (bits.length ? bits.join(' &middot; ') : noneLabel) + '</div>';
     }
 
@@ -9521,6 +9598,54 @@ function applyScopeOptionFilter() {
       try { sel.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
     }
   });
+
+  /* "Applies To" follows the same rule as the scopes above. Mock interviews
+     are a Sponsorship product - the Mock Interviews tab itself is in
+     COURSE_TABS.sponsorship and nowhere else - but this dropdown offered
+     "Mock interview" under COC too, which is an invitation to write a booking
+     code from a course view that has no bookings in it. Under COC the option
+     is hidden and disabled, and a form already sitting on it falls back to
+     Course access so nothing can be saved against a product this view does
+     not own. */
+  /* "Any scope" is the dangerous default, and the course filter above is what
+     makes it dangerous. Under Sponsorship the dropdown is left showing only
+     "Any scope" and "Sponsorship", so "Any" reads as "any sponsorship scope".
+     It is not: applies_scope null means NO restriction, and validate-coupon
+     will happily spend the code on a COC purchase. Someone making what they
+     believe is a Sponsorship code gets one that discounts everything.
+
+     So the option says what it does, naming the course it also covers. Same in
+     reverse under COC, where "Any" now silently includes Sponsorship - which
+     is how ADITH45RU and ELECTRICIAN25, both 99% off, ended up spendable on a
+     Sponsorship plan they were never written for. */
+  var anyScope = document.querySelector('#cp-applies-scope option[value=""]');
+  if (anyScope) {
+    anyScope.textContent = _adminCourse === 'sponsorship'
+      ? 'Any scope (CoC purchases too)'
+      : 'Any scope (Sponsorship too)';
+  }
+  var scopeHint = document.getElementById('cp-applies-scope-hint');
+  if (scopeHint) {
+    scopeHint.textContent = _adminCourse === 'sponsorship'
+      ? 'Pick Sponsorship to lock the code to this course. "Any scope" is not '
+        + 'limited to Sponsorship: it can also be spent on CoC plans.'
+      : 'Pick a section to lock the code to it. "Any scope" is not limited to '
+        + 'CoC: it can also be spent on Sponsorship plans.';
+  }
+
+  var prod = document.getElementById('cp-product');
+  if (prod) {
+    var interviewOpt = prod.querySelector('option[value="interview"]');
+    if (interviewOpt) {
+      var allowInterview = _adminCourse === 'sponsorship';
+      interviewOpt.hidden = !allowInterview;
+      interviewOpt.disabled = !allowInterview;
+      if (!allowInterview && prod.value === 'interview') {
+        prod.value = 'course';
+        if (typeof cpProductChanged === 'function') cpProductChanged();
+      }
+    }
+  }
 }
 var DURS_OF = [
   { key: '3mo',  name: '3 months' },
@@ -11572,6 +11697,10 @@ function setAdminCourse(course) {
   // for COC, Sponsorship module opens for Sponsorship), so it has to be
   // rebuilt on a switch or it keeps showing the course you just left.
   try { if (typeof loadUserActivity === 'function') loadUserActivity(); } catch (e) {}
+  // The coupon LIST is course-scoped too (cpCourses). This re-renders from the
+  // cached rows rather than refetching, so switching while sitting on the
+  // Coupons tab does not leave the other course's codes on screen.
+  try { if (typeof renderCoupons === 'function' && window._couponRows) renderCoupons(); } catch (e) {}
 
   applyCourseScope();
 }

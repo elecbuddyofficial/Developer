@@ -3897,6 +3897,28 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   // load" for people who have paid, in exchange for nothing.
   var _IDB_NAME = 'eb_secure', _IDB_STORE = 'keys', _REC = 'sk1';
 
+  /* Bump to invalidate every cached Sponsorship key on the next page load.
+     A stored record from a different epoch is discarded and refetched, which
+     sends the reader back through get-sponsorship-key and therefore back
+     through the paywall.
+
+     Epoch 2, 9 Sep 2026. Until that day the deployed get-sponsorship-key had
+     no paywall in it and handed out keys with KEY_TTL_FREE_MS, seven days.
+     Those keys sit in IndexedDB and _loadKey honours them until they lapse, so
+     turning the paywall on did not reach anyone already holding one: the
+     11 Sep cutoff would have leaked by up to a week per reader, depending on
+     when they last opened the course.
+
+     Rotating CONTENT_KEY_SPONSORSHIP would also have done it, but that means
+     re-encrypting the whole course and every stale cached key becomes a
+     decryption failure, which reads to the user as corrupt content rather than
+     a paywall. This costs one refetch instead.
+
+     After this, the only overrun left is KEY_TTL_PAID_MS itself: keys now live
+     six hours, so access ends within six hours of the entitlement lapsing,
+     which is what that constant is for. */
+  var _KEY_EPOCH = 2;
+
   // Version 1, matching app/index.html. Opening v2 from here would fire
   // onupgradeneeded, which BLOCKS while any COC tab holds a v1 connection, // the open would never settle and this page would hang with no error.
   function _openKeyDB() {
@@ -3916,7 +3938,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       var db = await _openKeyDB();
       await new Promise(function(resolve, reject) {
         var tx = db.transaction(_IDB_STORE, 'readwrite');
-        tx.objectStore(_IDB_STORE).put({ key: cryptoKey, expiresAt: expiresAt, userId: userId }, _REC);
+        tx.objectStore(_IDB_STORE).put({ key: cryptoKey, expiresAt: expiresAt, userId: userId, epoch: _KEY_EPOCH }, _REC);
         tx.oncomplete = resolve; tx.onerror = function(){ reject(tx.error); };
       });
     } catch (e) { /* cache is an optimisation; never fatal */ }
@@ -3933,6 +3955,10 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       });
       if (!stored || !stored.key) return null;
       if (stored.userId && stored.userId !== userId) return null;   // different account, same device
+      // Records written before epochs existed have no `epoch` at all, so an
+      // undefined value must fail this, not pass it. Those are exactly the
+      // seven-day free-mode keys this is here to throw away.
+      if (stored.epoch !== _KEY_EPOCH) return null;
       if (stored.expiresAt && Date.now() > stored.expiresAt) return null;
       return stored;
     } catch (e) { return null; }

@@ -4042,7 +4042,26 @@ var RZP_KEY_ID = 'rzp_live_TJ1Il25pLKcrEU';
 // ── Pricing data (admin-editable via the Plans tab, fetched live) ───────────
 var TRACK_ORDER = ['written', 'oral', 'both'];   // Written Paper, Oral & Viva, Full COC Preparation
 var TIER_ORDER  = ['3mo', '6mo', '12mo'];        // 3 / 6 / 12 Months
-var TRACK_FALLBACK_NAME = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation' };
+var TRACK_FALLBACK_NAME = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation', sponsorship: 'Sponsorship Programme' };
+
+// Sponsorship is a separate course, not a fourth COC track, so it is NOT in
+// TRACK_ORDER above: on a normal upgrade the buyer came for COC and a fourth
+// tab is only a way to buy the wrong thing. It earns a tab in exactly two
+// cases, both of which mean the buyer is already looking at Sponsorship:
+// they arrived from its paywall gate (?upgrade=sponsorship), or they already
+// hold it and are extending. Either way an active sponsorship plan has to
+// exist, since _pricingPlansCache only ever holds active rows.
+function upgradeTracks() {
+  var tracks = TRACK_ORDER.slice();
+  var onSale = (window._pricingPlansCache || []).some(function(r) { return r.scope === 'sponsorship'; });
+  // _upPreferredScope, not _upActiveTrack: the active track changes every time
+  // a tab is clicked, so keying off it made the Sponsorship tab disappear the
+  // moment the buyer looked at a COC tab, with no way back to it.
+  var relevant = window._upPreferredScope === 'sponsorship'
+    || !!(window._profileData || {}).sponsorship_expires_at;
+  if (onSale && relevant) tracks.push('sponsorship');
+  return tracks;
+}
 
 // What the tab LEADS with: the exam it prepares you for.
 //
@@ -4066,16 +4085,18 @@ var TRACK_FALLBACK_NAME = { written: 'Written Paper', oral: 'Oral & Viva', both:
 //
 // Both axes now say what they are. The track names the exam, the tier names
 // the months, and nothing needs a legend.
-var SCOPE_TAB_LABEL = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC' };
+var SCOPE_TAB_LABEL = { written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC', sponsorship: 'Sponsorship' };
 var SCOPE_SUBHEAD = {
   written: 'Written exam preparation',
   oral:    'Oral exam preparation, quizzes and Surveyor Q&A',
   both:    'Written and Oral together, everything in one plan',
+  sponsorship: 'Company sponsorship: aptitude, technical and interview preparation',
 };
 var SCOPE_FEATURES = {
   written: ['7 written exam topics with solved papers', 'Offline access via service worker cache'],
   oral:    ['All 23 oral exam topics with full study notes', '5,600+ quiz questions', 'Full Surveyor Q&A bank', 'Offline access via service worker cache'],
   both:    ['All 23 oral exam topics with full study notes', '7 written exam topics with solved papers', '5,600+ quiz questions', 'Full Surveyor Q&A bank', 'Offline access via service worker cache'],
+  sponsorship: ['All fundamentals, aptitude and data interpretation modules', 'Company-wise entrance test and interview preparation', 'Offline access via service worker cache'],
 };
 
 window._pricingPlansCache = [];
@@ -4197,9 +4218,24 @@ function bestValueDuration(scope) {
 // spend it. Stacking is invisible otherwise: someone holding Written who buys
 // Full COC cannot otherwise tell whether they are gaining 3 months or losing
 // the 10 they already paid for.
+/* The client mirror of scopesCovered() in _shared/entitlements.ts. It must
+   stay identical to it: this decides what the buyer is TOLD they are buying,
+   while the server decides what they actually get, and the two disagreeing is
+   a lie at the point of payment rather than a cosmetic bug.
+
+   It drifted exactly that way. 'sponsorship' fell through to the final else
+   and returned ['written','oral'], so a Sponsorship card read "Unlocks
+   Written and unlocks Oral" while charging the Sponsorship price and
+   correctly granting Sponsorship. Found 9 Sep 2026 by rendering the modal a
+   buyer arriving from the Sponsorship gate would actually see. */
 function _scopesCovered(scope) {
-  return scope === 'written' ? ['written'] : scope === 'oral' ? ['oral'] : ['written', 'oral'];
+  if (scope === 'written')     return ['written'];
+  if (scope === 'oral')        return ['oral'];
+  if (scope === 'sponsorship') return ['sponsorship'];
+  return ['written', 'oral'];        // 'both' = the two COC scopes
 }
+
+var SCOPE_DISPLAY_NAME = { written: 'Written', oral: 'Oral', sponsorship: 'Sponsorship' };
 
 function _addMonths(date, months) {
   var d = new Date(date);
@@ -4221,7 +4257,9 @@ function previewPurchase(duration, scope) {
     : null;
 
   return _scopesCovered(scope).map(function(s) {
-    var currentIso = s === 'written' ? p.written_expires_at : p.oral_expires_at;
+    var currentIso = s === 'written' ? p.written_expires_at
+                   : s === 'oral'    ? p.oral_expires_at
+                   :                   p.sponsorship_expires_at;
     var current = currentIso ? new Date(currentIso) : null;
 
     // Latest of: now, trial end, this scope's own existing expiry.
@@ -4245,7 +4283,7 @@ function _fmtShort(d) {
 /** One plain sentence describing what this purchase does for this buyer. */
 function purchaseEffectText(duration, scope) {
   var parts = previewPurchase(duration, scope).map(function(c) {
-    var name = c.scope === 'written' ? 'Written' : 'Oral';
+    var name = SCOPE_DISPLAY_NAME[c.scope] || c.scope;
     return c.extended
       ? 'extends ' + name + ' to ' + _fmtShort(c.to)
       : 'unlocks ' + name + ' until ' + _fmtShort(c.to);
@@ -4267,6 +4305,7 @@ var SCOPE_CARD_SUMMARY = {
   written: 'All 7 written topics, solved papers and 39 worked numericals',
   oral:    'All 23 oral topics, 5,600+ quiz questions and the Surveyor Q&A bank',
   both:    'Everything: all 23 oral topics, 7 written topics, quizzes, numericals and Surveyor Q&A',
+  sponsorship: 'The full sponsorship course: fundamentals, aptitude, data interpretation and company preparation',
 };
 
 var _upActiveTrack = 'both';
@@ -4274,7 +4313,7 @@ var _upActiveTrack = 'both';
 function renderUpgradeTrackTabs() {
   var wrap = document.getElementById('up-track-tabs');
   if (!wrap) return;
-  wrap.innerHTML = TRACK_ORDER.map(function(scope) {
+  wrap.innerHTML = upgradeTracks().map(function(scope) {
     var row = findPlanRow('3mo', scope);
     var brand = row ? row.track_name : TRACK_FALLBACK_NAME[scope];
     var what  = SCOPE_TAB_LABEL[scope] || scope;
@@ -5000,7 +5039,7 @@ function confirmPurchase(duration, scope, onConfirm) {
   if (!purchaseTouchesExisting(duration, scope)) { onConfirm(); return; }
 
   var rows = previewPurchase(duration, scope).map(function(c) {
-    var name = c.scope === 'written' ? 'Written' : 'Oral';
+    var name = SCOPE_DISPLAY_NAME[c.scope] || c.scope;
     var before = c.from ? _fmtShort(c.from) : 'none';
     var arrow = c.extended ? ' &rarr; ' : '';
     var after = c.extended ? _fmtShort(c.to) : _fmtShort(c.to);

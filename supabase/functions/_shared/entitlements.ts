@@ -324,3 +324,68 @@ export function applyGrant(
   }
   return out;
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  Reading and writing the columns, without hand-listing them
+//
+//  Every money path used to spell out its own select list and its own update
+//  object, both hardcoded to written and oral. When sponsorship became
+//  sellable, all four of them kept computing the right answer and then saved
+//  two thirds of it: applyPurchase returned sponsorship_expires_at and nobody
+//  persisted it, so the first buyer would have paid and stayed locked out.
+//
+//  The columns are already enumerated by ACCESS_SCOPES. These helpers make the
+//  call sites use that enumeration instead of a copy of it, so a fifth course
+//  is one entry in ACCESS_SCOPES rather than eight edits nobody remembers to
+//  make. purchase.e2e.mjs asserts the call sites actually name every column.
+// ═══════════════════════════════════════════════════════════════════════════
+
+/** Every per-scope expiry column, for a .select(). */
+export const SCOPE_COLUMNS = ACCESS_SCOPES.map(s => SCOPE_COLUMN[s]).join(', ');
+
+/** Every grant-ledger column, for a .select(). */
+export const GRANT_COLUMNS = ACCESS_SCOPES.map(s => GRANT_COLUMN[s]).join(', ');
+
+/** The profile columns any entitlement decision needs. */
+export const ENTITLEMENT_COLUMNS =
+  ['subscription_plan', 'trial_started_at', SCOPE_COLUMNS].join(', ');
+
+/** A PurchaseEffect as the profile patch that persists it, all scopes. */
+export function expiryUpdate(effect: PurchaseEffect): Record<string, string | null> {
+  const out: Record<string, string | null> = {};
+  for (const s of ACCESS_SCOPES) {
+    out[SCOPE_COLUMN[s]] =
+      (effect as unknown as Record<string, string | null>)[SCOPE_COLUMN[s]] ?? null;
+  }
+  return out;
+}
+
+/** Every per-scope expiry column set to null, for lifetime and for revocation. */
+export function clearedExpiries(): Record<string, null> {
+  const out: Record<string, null> = {};
+  for (const s of ACCESS_SCOPES) out[SCOPE_COLUMN[s]] = null;
+  return out;
+}
+
+/** Every grant-ledger column set to null. */
+export function clearedGrants(): Record<string, null> {
+  const out: Record<string, null> = {};
+  for (const s of ACCESS_SCOPES) out[GRANT_COLUMN[s]] = null;
+  return out;
+}
+
+/**
+ * The expiries from a PurchaseEffect that are still in the future.
+ *
+ * Refund logic asks "is anything left?" and used to ask it of written and oral
+ * only, so refunding an account whose only live access was sponsorship read as
+ * "nothing left" and reverted them to trial while quietly leaving the
+ * sponsorship column set.
+ */
+export function liveExpiries(effect: PurchaseEffect, now: Date = new Date()): number[] {
+  return ACCESS_SCOPES
+    .map(s => (effect as unknown as Record<string, string | null>)[SCOPE_COLUMN[s]])
+    .filter((iso): iso is string => !!iso)
+    .map(iso => new Date(iso).getTime())
+    .filter(t => t > now.getTime());
+}

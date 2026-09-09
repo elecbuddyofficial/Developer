@@ -2,7 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
-import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
+import { applyPurchase, PLAN_MONTHS, ENTITLEMENT_COLUMNS, expiryUpdate } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Razorpay webhook: the authoritative record of what actually got paid.
@@ -206,7 +206,9 @@ serve(async (req) => {
       if (payment.user_id) {
         const { data } = await sb
           .from('profiles')
-          .select('subscription_plan, trial_started_at, email, written_expires_at, oral_expires_at')
+          // ENTITLEMENT_COLUMNS covers every scope. Listing them by hand here
+          // is what let sponsorship fall out of the paid path unnoticed.
+          .select(ENTITLEMENT_COLUMNS + ', email')
           .eq('id', payment.user_id)
           .maybeSingle();
         profile = data ?? {};
@@ -245,8 +247,8 @@ serve(async (req) => {
           subscription_plan:       payment.plan,
           subscription_expires_at: expiresAt.toISOString(),
           plan_scope:               payment.scope || 'both',
-          written_expires_at:      effect.written_expires_at,
-          oral_expires_at:         effect.oral_expires_at,
+          // Every scope column, so this path cannot grant less than it charged.
+          ...expiryUpdate(effect),
         }).eq('id', payment.user_id);
       }
 

@@ -1,6 +1,8 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { recomputeFromPayments } from '../_shared/entitlements.ts';
+import {
+  recomputeFromPayments, expiryUpdate, clearedExpiries, liveExpiries, GRANT_COLUMNS,
+} from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin-triggered refund. Issues the refund through Razorpay, records it on
@@ -129,7 +131,7 @@ serve(async (req) => {
         // granted_* is what makes this replay safe: it is access that came from
         // a comp coupon or an admin grant, which leaves no payments row, so
         // rebuilding from payments alone used to destroy it.
-        .select('subscription_plan, trial_started_at, granted_written_expires_at, granted_oral_expires_at')
+        .select('subscription_plan, trial_started_at, ' + GRANT_COLUMNS)
         .eq('id', payment.user_id)
         .maybeSingle();
 
@@ -145,15 +147,14 @@ serve(async (req) => {
           .eq('status', 'paid');
 
         const effect = recomputeFromPayments(remaining ?? [], profile ?? {});
-        const live = [effect.written_expires_at, effect.oral_expires_at]
-          .filter(Boolean)
-          .map(iso => new Date(iso as string).getTime())
-          .filter(t => t > Date.now());
+        // Every scope. Asking only about written and oral meant an account
+        // whose sole live access was sponsorship read as "nothing left",
+        // dropped to trial, and kept the sponsorship column set anyway.
+        const live = liveExpiries(effect);
 
         if (live.length > 0) {
           await sb.from('profiles').update({
-            written_expires_at:      effect.written_expires_at,
-            oral_expires_at:         effect.oral_expires_at,
+            ...expiryUpdate(effect),
             // Legacy display columns kept roughly consistent.
             subscription_expires_at: new Date(Math.min(...live)).toISOString(),
           }).eq('id', payment.user_id);
@@ -163,8 +164,8 @@ serve(async (req) => {
             subscription_plan:       'trial',
             subscription_expires_at: null,
             plan_scope:               null,
-            written_expires_at:      null,
-            oral_expires_at:         null,
+            // All scopes revoked, or a refunded buyer keeps the course.
+            ...clearedExpiries(),
           }).eq('id', payment.user_id);
           accessResult = 'reverted_to_trial';
         }

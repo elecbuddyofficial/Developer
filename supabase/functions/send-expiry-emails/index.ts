@@ -180,10 +180,11 @@ function trialExpiredHtml(tpl?: EmailTemplate | null, name?: string | null): str
 // rather than the plan. Telling a cadet "your plan expires" when only half
 // their access is ending would be actively misleading - and the other half
 // staying live is exactly what the per-scope rewrite was for.
-const SCOPE_LABEL: Record<string, string> = { written: 'Written', oral: 'Oral' };
+const SCOPE_LABEL: Record<string, string> = { written: 'Written', oral: 'Oral', sponsorship: 'Sponsorship' };
 const SCOPE_CONTENT: Record<string, string> = {
   written: 'the Written exam section: theory notes and all 39 worked numericals',
   oral:    'the Oral exam section: all 23 topics, quizzes, and the Surveyor Q&amp;A bank',
+  sponsorship: 'the Sponsorship course: fundamentals, aptitude, data interpretation and company preparation',
 };
 
 /** Names whichever access survives, so the email never implies total loss. */
@@ -336,9 +337,16 @@ serve(async (req) => {
   // Each (scope, stage) pair is its own email_sends kind, so the same-day
   // dedupe guard covers them individually - losing Written and Oral on the
   // same day correctly produces two distinct emails, not one suppressed.
-  const SCOPES: { scope: 'written' | 'oral'; other: 'written' | 'oral'; col: string; otherCol: string }[] = [
-    { scope: 'written', other: 'oral',    col: 'written_expires_at', otherCol: 'oral_expires_at' },
-    { scope: 'oral',    other: 'written', col: 'oral_expires_at',    otherCol: 'written_expires_at' },
+  // Written and Oral are two halves of one course, so each email names the
+  // other. Sponsorship is a separate course: there is no companion scope to
+  // reassure the reader about, so otherCol is null and stillHaveLine renders
+  // nothing. Leaving Sponsorship out of this list entirely was the previous
+  // behaviour, and it meant paying sponsorship buyers were the only customers
+  // whose access lapsed with no warning at all.
+  const SCOPES: { scope: string; other: string | null; col: string; otherCol: string | null }[] = [
+    { scope: 'written',     other: 'oral',    col: 'written_expires_at',     otherCol: 'oral_expires_at' },
+    { scope: 'oral',        other: 'written', col: 'oral_expires_at',        otherCol: 'written_expires_at' },
+    { scope: 'sponsorship', other: null,      col: 'sponsorship_expires_at', otherCol: null },
   ];
 
   const STAGES = [
@@ -350,18 +358,20 @@ serve(async (req) => {
     for (const st of STAGES) {
       const { data: rows } = await sb
         .from('profiles')
-        .select(`id, email, full_name, ${s.col}, ${s.otherCol}`)
+        .select(`id, email, full_name, ${s.col}` + (s.otherCol ? `, ${s.otherCol}` : ''))
         .neq('subscription_plan', 'lifetime')
         .gte(s.col, st.day + 'T00:00:00Z')
         .lte(s.col, st.day + 'T23:59:59Z');
 
       for (const u of rows ?? []) {
-        const otherExpiry = (u as Record<string, string | null>)[s.otherCol] ?? null;
+        const otherExpiry = s.otherCol
+          ? ((u as Record<string, string | null>)[s.otherCol] ?? null)
+          : null;
         const name = (u as Record<string, string | null>).full_name ?? null;
         const tpl = st.stage === 'expiring' ? tplAccessExpiring : tplAccessExpired;
         const html = st.stage === 'expiring'
-          ? scopeExpiringHtml(s.scope, s.other, otherExpiry, tpl, name)
-          : scopeExpiredHtml(s.scope, s.other, otherExpiry, tpl, name);
+          ? scopeExpiringHtml(s.scope, s.other ?? '', otherExpiry, tpl, name)
+          : scopeExpiredHtml(s.scope, s.other ?? '', otherExpiry, tpl, name);
         // A template subject is shared by Written and Oral, so {{scope}} is
         // substituted here too. Without it one piece of wording could not name
         // which access is ending, which is the whole point of these emails.

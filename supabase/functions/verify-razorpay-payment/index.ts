@@ -2,7 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
-import { applyPurchase, PLAN_MONTHS } from '../_shared/entitlements.ts';
+import { applyPurchase, PLAN_MONTHS, ENTITLEMENT_COLUMNS, expiryUpdate } from '../_shared/entitlements.ts';
 
 const CORS = {
   'Access-Control-Allow-Origin': '*',
@@ -93,7 +93,10 @@ serve(async (req) => {
     // Written the buyer already paid for. See _shared/entitlements.ts.
     const { data: profile } = await sb
       .from('profiles')
-      .select('subscription_plan, trial_started_at, written_expires_at, oral_expires_at')
+      // ENTITLEMENT_COLUMNS, not a hand-written list: a scope column that is
+      // not selected reads back as null, which makes applyPurchase restart
+      // that scope from today and silently eat time the buyer already holds.
+      .select(ENTITLEMENT_COLUMNS)
       .eq('id', user.id)
       .single();
 
@@ -150,8 +153,10 @@ serve(async (req) => {
       subscription_plan:       payment.plan,
       subscription_expires_at: expiresAt.toISOString(),
       plan_scope:               payment.scope || 'both',
-      written_expires_at:      effect.written_expires_at,
-      oral_expires_at:         effect.oral_expires_at,
+      // expiryUpdate spreads EVERY scope column. This used to name
+      // written_expires_at and oral_expires_at only, so a sponsorship purchase
+      // charged the card and granted nothing.
+      ...expiryUpdate(effect),
     }).eq('id', user.id);
 
     // Payment confirmation email. The purchase is already applied above by
