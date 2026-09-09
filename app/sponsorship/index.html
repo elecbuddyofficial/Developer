@@ -254,6 +254,32 @@
   .cqa-qa-a { display:none;padding:0 16px 14px;font-size:13px;color:var(--text2);line-height:1.6 }
   .cqa-qa-item.open .cqa-qa-a { display:block }
   .cqa-topic-link { display:inline-flex;margin-top:10px;font-size:12px }
+  /* ── Sponsorship paywall ──────────────────────────────────────────────
+     Both sides of every colour pair are tokens, never a fixed colour against
+     a themed one: this course renders in all four themes and --blue is the
+     orange accent here, so anything hardcoded would invert in half of them. */
+  #spon-gate { position:fixed;inset:0;z-index:10500;display:none;
+    align-items:center;justify-content:center;padding:20px;overflow-y:auto;
+    background:rgba(0,0,0,.62);backdrop-filter:blur(3px) }
+  .sg-card { background:var(--surface);border:1px solid var(--border2);
+    border-radius:14px;padding:26px 24px;width:100%;max-width:430px;text-align:center }
+  .sg-eyebrow { font-size:10.5px;font-weight:800;letter-spacing:.9px;
+    text-transform:uppercase;color:var(--blue);margin-bottom:8px }
+  .sg-title { font-size:19px;font-weight:800;color:var(--text);margin-bottom:8px }
+  .sg-sub { font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:18px }
+  .sg-plans { display:flex;flex-direction:column;gap:9px;margin-bottom:16px }
+  .sg-loading { font-size:13px;color:var(--text3);padding:10px 0;line-height:1.6 }
+  .sg-plan { display:flex;align-items:center;justify-content:space-between;gap:12px;
+    width:100%;text-align:left;cursor:pointer;font-family:inherit;
+    background:var(--surface2);border:1px solid var(--border2);border-radius:10px;
+    padding:13px 15px;transition:border-color .15s,background .15s }
+  .sg-plan:hover { border-color:var(--blue);background:var(--blue-dim) }
+  .sg-plan-name { font-size:14px;font-weight:700;color:var(--text) }
+  .sg-plan-sub { font-size:11.5px;color:var(--text3);margin-top:2px;line-height:1.5 }
+  .sg-plan-price { font-size:16px;font-weight:800;color:var(--blue);white-space:nowrap }
+  .sg-close { background:none;border:0;color:var(--text3);font-family:inherit;
+    font-size:12.5px;cursor:pointer;padding:6px }
+  .sg-close:hover { color:var(--text) }
   .cqa-pager { display:flex;align-items:center;justify-content:center;gap:14px;margin-top:16px }
   .cqa-pager-info { font-size:12.5px;color:var(--text3);font-weight:600 }
   .cqa-pager .anc-btn[disabled] { opacity:.4;cursor:default;pointer-events:none }
@@ -833,14 +859,13 @@ window._authReady = (async () => {
     <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"/><path d="M3 7l9 6l9 -6"/></svg></span><span class="label">Feedback / Bug</span>
   </a>
   <div class="sb-divider"></div>
-  <!-- Only two courses exist, so from here this only ever means CoC - no
-       picker page needed, just the flag auth.html itself reads and the
-       corresponding page. -->
-  <a class="sb-item" href="../index.html" onclick="try{localStorage.setItem('eb_track','coc')}catch(e){}">
-    <span class="ic"><svg class="svg-ic" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></g></svg></span>
-    <span class="label">Switch to CoC</span>
-  </a>
-  <div class="sb-divider"></div>
+  <!-- The sidebar switch-to-CoC link that used to live here is gone as of
+       9 Sep 2026: the two courses are sold separately now that Sponsorship
+       is paid, and this was a persistent, always-visible invitation to
+       bounce between products regardless of what someone actually paid
+       for. What's left is the profile menu's own switch button
+       (pm-switch-btn), gated to admins and lifetime holders only, since
+       one privileged, findable-on-purpose entry point is enough. -->
   <div class="theme-switcher">
     <button class="theme-btn" data-t="dark"   onclick="setTheme('dark')"   title="Midnight Navy">🌙</button>
     <button class="theme-btn" data-t="amoled" onclick="setTheme('amoled')" title="AMOLED Black">⬛</button>
@@ -1270,6 +1295,25 @@ window._authReady = (async () => {
   </div>
 </div>
 
+<!-- Sponsorship paywall. Only ever shown when course_config.sponsorship_paid
+     is on AND this reader has no live access, so while the course is free it
+     is inert markup. Deliberately dismissible: the free topics stay readable
+     behind it, and trapping someone in a modal they cannot pay their way out
+     of is how a paywall turns into a bug report. -->
+<div id="spon-gate" style="display:none">
+  <div class="sg-card">
+    <div class="sg-eyebrow">Sponsorship Prep</div>
+    <div class="sg-title">Unlock the full course</div>
+    <div class="sg-sub">
+      All 77 modules: Fundamentals, Aptitude, Data Interpretation, Entrance
+      Test, Interview Prep, and the company question bank. The starter topic
+      in each section stays free, so you can keep reading those either way.
+    </div>
+    <div id="spon-gate-plans" class="sg-plans"></div>
+    <button type="button" class="sg-close" onclick="closeGate()">Maybe later</button>
+  </div>
+</div>
+
 <div id="profile-modal" onclick="closeProfile(event)" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.55);backdrop-filter:blur(3px)">
   <div id="profile-panel">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
@@ -1303,7 +1347,13 @@ window._authReady = (async () => {
       Settings
     </button>
     <button id="pm-admin-btn" onclick="window.location.href='../admin/index.html'" style="display:none;width:100%;background:rgba(200,164,74,.12);border:1px solid rgba(200,164,74,.35);border-radius:6px;padding:10px;font-size:13px;color:#C8A44A;font-weight:700;cursor:pointer;margin-bottom:8px">⚡ Admin Panel</button>
-    <button onclick="localStorage.setItem('eb_track','coc');window.location.href='../index.html'" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch to CoC</button>
+    <!-- Hidden by default, same pattern as pm-admin-btn above - shown only
+         to admins and lifetime holders by openProfile()'s isAdmin/isLifetime
+         check. The two courses are sold separately now that Sponsorship is
+         paid, so a regular subscriber bouncing between them in one click
+         undercuts that split; someone who's paid for everything, or who
+         works here, has no such boundary to respect. -->
+    <button id="pm-switch-btn" onclick="localStorage.setItem('eb_track','coc');window.location.href='../index.html'" style="display:none;width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer;margin-bottom:8px" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch to CoC</button>
     <div data-eb-contact></div>
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid #1A3050;border-radius:6px;padding:10px;font-size:13px;color:#8FA3B8;cursor:pointer" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
   </div>
@@ -3692,19 +3742,152 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
 <!-- ═══ GATE + ENCRYPTION + SESSION + PROFILE SCRIPTS ═══ -->
 <script>
 (function() {
-  // Sponsorship is still free to read once you are signed in, no purchase,
-  // no plan check. isLocked/showGate stay as no-ops because they are called
-  // from several places elsewhere in this file.
-  //
-  // What changed on 14 Aug 2026 is that the FILES are now encrypted at rest.
-  // The whole course used to sit in the public GitHub repo as readable
-  // plaintext, which meant a competitor could take months of work with one
-  // `git clone` and no account. Every logged-in user gets the key, so this is
-  // deterrence against scraping rather than an access gate, and it is not
-  // pretending to be more than that.
-  window.isLocked = function() { return false; };
-  window.showGate = function() {};
-  window.closeGate = function() {};
+  /* Sponsorship shipped free to any signed-in user, and stays that way until
+     course_config.sponsorship_paid is switched on in the admin console. These
+     three were no-ops for exactly that reason.
+
+     They are real as of 9 Sep 2026, because the switch existed with nothing
+     behind it on this side: get-sponsorship-key would start answering 403,
+     the encrypted files would fail to decrypt, and a reader would get a
+     content-load error on every topic with no padlock, no explanation and no
+     way to pay. A course that looks broken is worse than a course that is
+     honestly locked.
+
+     Two independent conditions, both read from the server, never from the
+     browser: is the course being sold at all, and does THIS reader have
+     access. The key function decides the same question for itself and does
+     not trust anything here; this only decides what is drawn. */
+  window._sponPaid   = false;   // course_config.sponsorship_paid
+  window._sponAccess = false;   // this reader holds live Sponsorship access
+
+  window._sponStateReady = (async function () {
+    try {
+      await window._authReady;
+      if (!window._sbClient || !window._sbUser) return;
+
+      // Both reads in parallel; neither is allowed to break the page. Failing
+      // OPEN is deliberate and matches get-sponsorship-key's own comment: if
+      // this read fails, treating the course as paid would lock everyone out
+      // of content that is currently free, turning a blip into an outage.
+      var res = await Promise.all([
+        window._sbClient.from('course_config').select('sponsorship_paid').single(),
+        window._sbClient.from('profiles')
+          .select('sponsorship_expires_at,granted_sponsorship_expires_at')
+          .eq('id', window._sbUser.id).single()
+      ]);
+      var cfg = res[0], prof = res[1];
+      if (!cfg.error && cfg.data) window._sponPaid = cfg.data.sponsorship_paid === true;
+      if (!prof.error && prof.data) {
+        var now = Date.now();
+        var live = function (t) { return !!t && new Date(t).getTime() > now; };
+        window._sponAccess = live(prof.data.sponsorship_expires_at)
+                          || live(prof.data.granted_sponsorship_expires_at);
+      }
+    } catch (e) { /* stay free, stay open */ }
+  })();
+
+  /* A topic marked free:true in SECTIONS stays readable whatever the switch
+     says - that is the sample of the course, and the reason to buy it. An id
+     this does not recognise (the '__section__' marker a section entry point
+     passes) is treated as not-free, so a locked reader is stopped at the door
+     rather than let in by a typo. */
+  function _sponFreeTopic(topicId) {
+    if (!topicId || typeof SECTIONS === 'undefined') return false;
+    for (var sid in SECTIONS) {
+      var list = SECTIONS[sid].topics || [];
+      for (var i = 0; i < list.length; i++) {
+        if (list[i].id === topicId) return !!list[i].free;
+      }
+    }
+    return false;
+  }
+
+  window.isLocked = function (topicId) {
+    if (!window._sponPaid) return false;      // still free to everyone
+    if (window._sponAccess) return false;     // paid, or granted
+    return !_sponFreeTopic(topicId);
+  };
+
+  /* The gate. Prices come from pricing_plans, the same rows the admin Plans
+     tab edits and the same rows create-razorpay-order validates against, so
+     what is shown here and what is charged cannot drift apart. Only active
+     rows are offered: an inactive plan is not for sale, and showing it would
+     be an offer we refuse at checkout.
+
+     Checkout itself lives in the COC app, which already has the Razorpay
+     flow, and create-razorpay-order has always taken (plan, scope) generically
+     rather than assuming COC. So Buy hands off to it with the scope named,
+     rather than growing a second payment integration here. */
+  var _sponPlansCache = null;
+
+  async function _sponLoadPlans() {
+    if (_sponPlansCache) return _sponPlansCache;
+    try {
+      var r = await window._sbClient.from('pricing_plans')
+        .select('duration,tier_name,base_amount,description,active')
+        .eq('scope', 'sponsorship').eq('active', true);
+      if (r.error) return [];
+      // Shortest first. Indexed rather than scored, because the obvious
+      // scoring version ({'3mo':0,...} with `|| 9`) put 3mo LAST: its rank is
+      // 0, and 0 || 9 is 9. Caught by the render test, not by reading it.
+      var order = ['3mo', '6mo', '12mo'];
+      var rank = function (d) {
+        var i = order.indexOf(d);
+        return i === -1 ? order.length : i;
+      };
+      _sponPlansCache = (r.data || []).sort(function (a, b) {
+        return rank(a.duration) - rank(b.duration);
+      });
+      return _sponPlansCache;
+    } catch (e) { return []; }
+  }
+
+  function _sponRupees(paise) {
+    return '₹' + Math.round((paise || 0) / 100).toLocaleString('en-IN');
+  }
+
+  window.showGate = async function () {
+    var el = document.getElementById('spon-gate');
+    if (!el) return;
+    el.style.display = 'flex';
+    document.documentElement.classList.add('_modal-open');
+
+    var body = document.getElementById('spon-gate-plans');
+    if (!body) return;
+    body.innerHTML = '<div class="sg-loading">Loading plans...</div>';
+    var plans = await _sponLoadPlans();
+
+    if (!plans.length) {
+      /* Switch on, nothing purchasable. Says so plainly instead of showing an
+         empty box: the reader is stopped either way, and "we are still setting
+         this up" is the truth, where silence reads as broken. */
+      body.innerHTML = '<div class="sg-loading">Plans are not open just yet. '
+        + 'Please check back shortly, or contact support@elec-buddy.com.</div>';
+      return;
+    }
+    body.innerHTML = plans.map(function (p) {
+      return '<button type="button" class="sg-plan" data-plan="' + _ntEsc(p.duration) + '">'
+        + '<div class="sg-plan-l"><div class="sg-plan-name">' + _ntEsc(p.tier_name || p.duration) + '</div>'
+        + (p.description ? '<div class="sg-plan-sub">' + _ntEsc(p.description) + '</div>' : '')
+        + '</div>'
+        + '<div class="sg-plan-price">' + _sponRupees(p.base_amount) + '</div>'
+        + '</button>';
+    }).join('');
+  };
+
+  window.closeGate = function () {
+    var el = document.getElementById('spon-gate');
+    if (el) el.style.display = 'none';
+    document.documentElement.classList.remove('_modal-open');
+  };
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('.sg-plan') : null;
+    if (!btn) return;
+    // Hands off to the COC app's existing Razorpay flow with the scope named.
+    window.location.href = '../index.html?upgrade=sponsorship&plan='
+      + encodeURIComponent(btn.dataset.plan);
+  });
 
   // ── Key cache ───────────────────────────────────────────────────────────
   // Own record key 'sk1', deliberately NOT merged into the COC page's 'ck2'.
@@ -3929,6 +4112,11 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       var isAdmin=res.data.is_admin===true;
       document.getElementById('pm-admin-badge').style.display=isAdmin?'inline-flex':'none';
       document.getElementById('pm-admin-btn').style.display=isAdmin?'block':'none';
+      // Switching courses in-app is an admin/lifetime privilege now, not a
+      // regular-user convenience - see the comment on pm-switch-btn itself.
+      var canSwitch=isAdmin||res.data.subscription_plan==='lifetime';
+      var switchBtn=document.getElementById('pm-switch-btn');
+      if(switchBtn) switchBtn.style.display=canSwitch?'block':'none';
     }
   };
   window.closeProfile=function(e){

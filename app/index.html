@@ -1184,10 +1184,13 @@
     <!-- Admin Panel (admins only) -->
     <button id="pm-admin-btn" onclick="window.location.href='./admin/index.html'" style="display:none;width:100%;background:var(--amber-dim);border:1px solid var(--amber-border);border-radius:6px;padding:10px;font-size:13px;color:var(--amber);font-weight:700;cursor:pointer;margin-bottom:8px;">⚡ Admin Panel</button>
 
-    <!-- Only two courses exist, so from here "switch" only ever means
-         Sponsorship - no picker page needed, just the flag auth.html
-         itself reads and the corresponding page. -->
-    <button onclick="localStorage.setItem('eb_track','sponsorship');window.location.href='./sponsorship/index.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch to Sponsorship</button>
+    <!-- Hidden by default, same pattern as pm-admin-btn above - shown only
+         to admins and lifetime holders by openProfile()'s isAdmin/
+         canSwitch check. The two courses are sold separately now that
+         Sponsorship is paid, so a regular subscriber bouncing between them
+         in one click undercuts that split; someone who's paid for
+         everything, or who works here, has no such boundary to respect. -->
+    <button id="pm-switch-btn" onclick="localStorage.setItem('eb_track','sponsorship');window.location.href='./sponsorship/index.html'" style="display:none;width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;margin-bottom:8px;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Switch to Sponsorship</button>
 
     <!-- Sign out -->
     <button onclick="signOut()" style="width:100%;background:none;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:13px;color:var(--text);cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor='#3A6898'" onmouseout="this.style.borderColor='#1A3050'">Sign Out</button>
@@ -2846,6 +2849,24 @@ function setTheme(t) {
         var wasAccess = window._access || { oral: false, written: false };
         window._access = window._deriveAccess(profile).access;
 
+        /* Arriving from the Sponsorship paywall: ?upgrade=<scope>&plan=<dur>.
+           Handled here rather than on first paint because openUpgradeModal
+           needs a session and the pricing rows, and both have just settled.
+           Sponsorship has no Razorpay flow of its own and does not need one -
+           create-razorpay-order has always taken (plan, scope) generically -
+           so the gate over there hands off to this modal instead of growing a
+           second payment integration. The query string is stripped either
+           way, so a reload does not reopen a modal the reader dismissed. */
+        try {
+          var _up = new URLSearchParams(window.location.search);
+          var _upScope = _up.get('upgrade');
+          if (_upScope && typeof openUpgradeModal === 'function') {
+            var _upPlan = _up.get('plan') || null;
+            history.replaceState(null, '', window.location.pathname + window.location.hash);
+            setTimeout(function () { openUpgradeModal(_upPlan, _upScope); }, 0);
+          }
+        } catch (e) {}
+
         // If access just got revoked mid-session, show a notice (don't hard-kick)
         if ((wasAccess.oral || wasAccess.written) && !window._access.oral && !window._access.written) {
           var banner = document.getElementById('_access-banner');
@@ -3031,6 +3052,11 @@ function setTheme(t) {
         const isAdmin = profile.is_admin === true;
         document.getElementById('pm-admin-badge').style.display = isAdmin ? 'inline-flex' : 'none';
         document.getElementById('pm-admin-btn').style.display   = isAdmin ? 'block' : 'none';
+        // Switching courses in-app is an admin/lifetime privilege now, not
+        // a regular-user convenience - see the comment on pm-switch-btn.
+        const canSwitch = isAdmin || profile.subscription_plan === 'lifetime';
+        const switchBtn = document.getElementById('pm-switch-btn');
+        if (switchBtn) switchBtn.style.display = canSwitch ? 'block' : 'none';
       }
     };
 
