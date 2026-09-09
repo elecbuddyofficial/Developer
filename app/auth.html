@@ -28,8 +28,8 @@
        --blue/--orange exactly; this page has no light theme to also match,
        being deliberately self-contained (see the .mailfix comment further
        down for why). */
-    :root { --acc: #5D98F8; --acc-glow: rgba(93,152,248,.5); }
-    :root[data-track="sponsorship"] { --acc: #f59e0b; --acc-glow: rgba(245,158,11,.5); }
+    :root { --acc: #5D98F8; --acc-glow: rgba(93,152,248,.5); --acc-tint: rgba(93,152,248,.14); }
+    :root[data-track="sponsorship"] { --acc: #f59e0b; --acc-glow: rgba(245,158,11,.5); --acc-tint: rgba(245,158,11,.14); }
     @media (prefers-reduced-motion: reduce) {
       .updates, .course-b, .feat-chip b { transition: none !important; }
       .feat-track { animation: none !important; }
@@ -521,6 +521,49 @@
       margin: -10px 0 18px; text-align: center;
     }
 
+    /* ── TRACK PROMPT ─────────────────────────────────────────────────────
+       Shown once, post-login, to any account whose default_track is still
+       NULL - every account that existed before this shipped. The course
+       itself is NOT a second choice here: it is whichever tab they were on
+       when they logged in (_track), already decided by the exact same
+       picker every other page reads. This only confirms it - "No" flips
+       _track to the other course and re-paints this same card in place,
+       rather than sending them anywhere to log in again, since they
+       already hold a valid session either way. */
+    .tp-overlay {
+      display: none; position: fixed; inset: 0; z-index: 50;
+      background: rgba(4, 10, 18, .82);
+      align-items: center; justify-content: center; padding: 24px;
+    }
+    .tp-card {
+      background: #0D1E33; border: 1px solid #1A3050; border-radius: 8px;
+      width: 100%; max-width: 380px; padding: 30px 28px; text-align: center;
+    }
+    .tp-name {
+      display: inline-block; padding: 5px 14px; border-radius: 20px;
+      background: var(--acc-tint); border: 1px solid var(--acc);
+      color: var(--acc); font-size: 12px; font-weight: 800;
+      letter-spacing: .2px; margin-bottom: 14px;
+      transition: color .15s, border-color .15s, background .15s;
+    }
+    .tp-title { font-size: 17px; font-weight: 800; color: #DDE5EF; margin-bottom: 6px; }
+    .tp-sub { font-size: 12.5px; color: #6E8AA6; line-height: 1.6; margin-bottom: 22px; }
+    .tp-yes {
+      display: block; width: 100%; border: 0; border-radius: 6px;
+      background: var(--acc); color: #071322; font-family: inherit;
+      font-size: 14px; font-weight: 800; padding: 12px; cursor: pointer;
+      margin-bottom: 10px; transition: opacity .15s;
+    }
+    .tp-yes:hover { opacity: .9; }
+    .tp-yes:disabled, .tp-no:disabled { opacity: .55; cursor: default; }
+    .tp-no {
+      display: block; width: 100%; border: 1px solid transparent; border-radius: 6px;
+      background: transparent; color: #8FA3B8; font-family: inherit;
+      font-size: 12.5px; font-weight: 600; padding: 8px; cursor: pointer;
+      transition: color .15s;
+    }
+    .tp-no:hover { color: #DDE5EF; }
+
     @media (max-width: 900px) {
       .split {
         grid-template-columns: 1fr; gap: 34px; padding: 26px 20px 34px;
@@ -842,6 +885,22 @@
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
 </button>
 
+<!-- Asked once, per account - see goAfterAuth()/showTrackPrompt() below. The
+     course is already decided (whichever tab they logged in on); this only
+     confirms it. "No" is a real step back to the login screen, not a
+     second independent choice buried in this card - picking the other
+     course happens through the same top switcher every other visitor
+     uses, not a button hidden inside a confirmation dialog. -->
+<div class="tp-overlay" id="track-prompt" role="dialog" aria-modal="true" aria-labelledby="tp-title">
+  <div class="tp-card">
+    <div class="tp-name" id="tp-name"></div>
+    <div class="tp-title" id="tp-title">Set as your default course?</div>
+    <div class="tp-sub">This is where you'll land every time you sign in. You can always switch later from your profile menu.</div>
+    <button type="button" class="tp-yes" id="tp-yes">Yes, continue</button>
+    <button type="button" class="tp-no" id="tp-no">&larr; Back to login</button>
+  </div>
+</div>
+
 <footer class="page-foot">
   <a href="./privacy.html">Privacy Policy</a>
   <a href="./terms.html">Terms of Use</a>
@@ -1144,15 +1203,90 @@
     if (list) list.addEventListener('scroll', syncUpdatesFade);
   })();
 
-  /* Deliberately just localStorage, matching every other page's eb_track
-     read/write - an account-based version (write AND read back
-     profiles.default_track) was built and tested here first, then dropped:
-     "we can avoid that logic... just moved the course selector outside" is
-     simpler, needs no backfill for existing accounts, and nothing about an
-     existing customer's routing silently changes. */
+  /* Just localStorage here, still - every other page keeps reading
+     eb_track exactly as before. What changed is who WRITES it: this used
+     to be the only writer, now goAfterAuth() below also writes it,
+     straight after reading the authoritative answer back from
+     profiles.default_track, so this function itself does not need to know
+     which source the caller used.
+
+     HISTORY, since the earlier version of this comment is worth keeping
+     rather than deleting outright: an account-based version was built and
+     tested here once before, then deliberately dropped on 14 Aug 2026 for
+     being simpler, needing no backfill, and not silently changing any
+     existing customer's routing. Reversed on 9 Sep 2026 because Sponsorship
+     is being monetised and there was, genuinely, no way to answer "how many
+     accounts use which course" without it - see
+     app/admin/default_track_activate_setup.sql. */
   function redirectAfterLogin() {
     if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
     else                          window.location.replace('./index.html');
+  }
+
+  /* ── DEFAULT TRACK, asked once ────────────────────────────────────────
+     Every one of the four places that used to call redirectAfterLogin()
+     directly now calls this first. A new signup already arrives with
+     default_track set - handleRegister() sends it as signup metadata,
+     handle_new_user() writes it server-side at the same moment the account
+     row is created, so this read sees it immediately regardless of whether
+     email confirmation delays the first real session. Every account that
+     existed before this shipped still has it NULL, and gets asked here,
+     once - the write goes to the account, not the browser, so it is not
+     asked again on another device. */
+  async function goAfterAuth(user) {
+    var track = null;
+    try {
+      var res = await sb.from('profiles').select('default_track').eq('id', user.id).single();
+      if (!res.error && res.data) track = res.data.default_track;
+    } catch (e) { /* fall through to the prompt - asking again costs nothing */ }
+
+    if (track === 'coc' || track === 'sponsorship') {
+      _track = track;
+      try { localStorage.setItem('eb_track', track); } catch (e) {}
+      redirectAfterLogin();
+      return;
+    }
+    showTrackPrompt(user.id);
+  }
+
+  var TRACK_LABEL = {
+    coc:          'CoC Preparation',
+    sponsorship:  'Sponsorship',
+  };
+
+  function showTrackPrompt(userId) {
+    document.getElementById('tabs').style.display = 'none';
+    document.querySelectorAll('.form').forEach(function (f) { f.classList.remove('active'); });
+    var note = document.getElementById('footer-note');
+    if (note) note.style.display = 'none';
+    document.getElementById('track-prompt').style.display = 'flex';
+
+    var yesBtn = document.getElementById('tp-yes');
+    var noBtn  = document.getElementById('tp-no');
+    document.getElementById('tp-name').textContent = TRACK_LABEL[_track];
+
+    // A real step back to the login screen, not a toggle. Picking the
+    // other course happens through the same top switcher every visitor
+    // uses before signing in - this card only ever confirms whichever one
+    // they already logged in on.
+    noBtn.onclick = function () {
+      document.getElementById('track-prompt').style.display = 'none';
+      document.getElementById('tabs').style.display = '';
+      if (note) note.style.display = '';
+      switchTab('login');
+    };
+
+    yesBtn.onclick = async function () {
+      yesBtn.disabled = true; noBtn.disabled = true;
+      yesBtn.textContent = 'Saving...';
+      var t = _track;
+      try { localStorage.setItem('eb_track', t); } catch (e) {}
+      // Best-effort: even if this write fails, routing still works for this
+      // visit, and a NULL default_track just means they are asked again
+      // next time rather than left stuck on this screen.
+      try { await sb.from('profiles').update({ default_track: t }).eq('id', userId); } catch (e) {}
+      redirectAfterLogin();
+    };
   }
 
   // Detect error in URL hash (e.g. expired confirmation link)
@@ -1185,7 +1319,7 @@
       showRecoveryForm();
     } else if (event === 'SIGNED_IN' && session && !_recoveryMode) {
       if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
-      redirectAfterLogin();
+      goAfterAuth(session.user);
     }
   });
 
@@ -1196,7 +1330,7 @@
   sb.auth.getSession().then(({ data: { session } }) => {
     if (session && !_recoveryMode) {
       if (isBrandNew(session.user)) sendWelcomeEmail(session.user.id);
-      redirectAfterLogin();
+      goAfterAuth(session.user);
     }
   });
 
@@ -1254,7 +1388,7 @@
       showMsg(msg, 'error');
       btn.disabled = false; btn.textContent = 'Sign In';
     } else {
-      redirectAfterLogin();
+      goAfterAuth(data.user);
     }
   }
 
@@ -1429,7 +1563,15 @@
     const { data, error } = await sb.auth.signUp({
       email, password,
       options: {
-        data: { full_name: name },
+        // default_track rides along as signup metadata rather than a
+        // second call after signUp() resolves, because the common path has
+        // no session yet at this point (email confirmation pending) - an
+        // authenticated profiles.update() is not possible until they
+        // confirm. handle_new_user() reads this out of the metadata at the
+        // moment the account row is created, whichever course tab they
+        // were on, so by the time they do get a session the value is
+        // already there and goAfterAuth() never has to ask.
+        data: { full_name: name, default_track: _track },
         emailRedirectTo: authReturnUrl()
       }
     });
@@ -1439,7 +1581,7 @@
     } else if (data.session) {
       // Email confirmation disabled - user is logged in immediately
       if (data.user) sendWelcomeEmail(data.user.id);
-      redirectAfterLogin();
+      goAfterAuth(data.user);
     } else if (willNeedReview) {
       // Account exists and is real; it is simply held until an admin looks at
       // it. Say so plainly, because "check your email then sign in" would be a
