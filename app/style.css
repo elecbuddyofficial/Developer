@@ -165,6 +165,39 @@ a.sb-item{text-decoration:none}
 .n-ok .body{font-size:15px;color:var(--text);line-height:1.75}
 .n-crit .body strong{color:var(--red);font-weight:700}
 .n-warn .body strong{color:var(--orange);font-weight:700}
+
+/* A callout class combined with .n-card is a TINTED CARD, not a callout.
+
+   .n-crit/.n-warn/.n-info/.n-ok are display:flex because a callout is an icon
+   beside a body. Writing class="n-card n-info" to get a tinted card inherits
+   that flex, and every block inside then becomes a flex item laid out in a
+   row: on T13 a nested .n-warn landed 179px wide at x=468 inside a 502px card
+   and hung 79px past the page, which made #content horizontally scrollable
+   (it sets overflow-y:auto and leaves overflow-x unset, and CSS resolves the
+   unset axis to auto). Only visible between 769px and ~900px, because below
+   769px .note-doc clips horizontally and above ~900px there is room to spare.
+
+   All six instances in the content hold block content and none uses the
+   icon/body structure, so restoring block display is the correct shape and
+   keeps the tint and border the author wanted. */
+.n-card.n-crit, .n-card.n-warn, .n-card.n-info, .n-card.n-ok { display: block; }
+
+/* A grid item's automatic minimum size is its min-content size, which is why a
+   wide table drags its whole track open even when the track is meant to be
+   1fr. min-width:0 opts out of that, so the cell takes the width it is given
+   and the table scrolls inside its own .n-table-wrap instead. Applied to the
+   children rather than only the track definition because several oral topics
+   set grid-template-columns inline, where a track-level fix cannot reach. */
+.n-grid > *, .n-grid-3 > *, .note-doc [style*="grid-template-columns"] > * { min-width: 0; }
+
+/* Same rule, flex instead of grid. .n-crit/.n-warn/.n-info/.n-ok are flex rows
+   (icon beside body), and .body is a flex item, so its automatic minimum size
+   is its min-content width: a wide table or a long unbreakable value inside a
+   callout drags the whole callout past the page. T22 did exactly that on every
+   phone in portrait, 165-248px past the edge depending on the handset, hidden
+   by .note-doc's clipping and reachable only by a stray sideways scroll.
+   The icon keeps flex-shrink:0 so it never squashes. */
+.n-crit > .body, .n-warn > .body, .n-info > .body, .n-ok > .body { min-width: 0; }
 .n-info .body strong{color:var(--blue);font-weight:700}
 .n-ok .body strong{color:var(--green);font-weight:700}
 [data-theme="light"] .n-crit,[data-theme="light"] .n-warn,[data-theme="light"] .n-info,[data-theme="light"] .n-ok{box-shadow:none}
@@ -177,8 +210,18 @@ a.sb-item{text-decoration:none}
 .n-list li em{color:var(--orange);font-style:normal;font-weight:600}
 
 /* Cards & Grid */
-.n-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
-.n-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:14px 0}
+/* minmax(0,1fr), not 1fr. A grid item defaults to min-width:auto, so a cell
+   whose content has a wide min-content size - a .n-table with three columns
+   is the usual one - pushes its track wider than the track is allowed to be,
+   and the whole grid then overhangs the page. Found on W07 at 820px, where a
+   Hyper Mist comparison table made a card 400px wide in a 383px track and hung
+   17px past the edge. Below 768px the grids collapse to one column so it never
+   showed on a phone, and above ~900px there is room to spare, which left the
+   tablet widths in between as the only place it was visible.
+   With the track free to shrink, the table scrolls inside its own
+   .n-table-wrap instead of moving the layout. */
+.n-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.n-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:14px 0}
 .n-card{background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r12);padding:18px;transition:border-color .2s,transform .2s,box-shadow .2s}
 .n-card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 10px 24px rgba(0,0,0,.2)}
 .n-card .card-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px}
@@ -546,8 +589,19 @@ a.sb-item{text-decoration:none}
   #topbar { padding: 0 16px; height: 56px; }
   
   /* Grids to 1 column - !important overrides inline style="grid-template-columns:..." on oral topic notes */
+  /* minmax(0,1fr), not 1fr. `1fr` is shorthand for `minmax(auto, 1fr)`, and
+     that `auto` minimum is the item's min-content size, so a single-column
+     grid still sizes its one track to the widest thing inside it. On W07 that
+     was a three-column table: the track resolved to 716px inside a 350px
+     column on an iPhone 13, and BOTH cards in the grid inherited that width.
+     .note-doc clips horizontally on mobile, so none of it was visible and no
+     scrollbar appeared - but the clipped box is still a scroll container, so
+     anything that moved scrollLeft (a focus, a scrollIntoView, the browser's
+     own anchor jump) left the page shifted sideways with no way for the
+     reader to put it back. That is the "page auto cropping to the left" a
+     reader reported on 11 Sep 2026, on this exact topic. */
   .welcome-grid, .n-grid, .n-grid-3, .qcat-grid, [style*="grid-template-columns"] {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) !important;
     gap: 10px;
   }
   /* Full-width reading on mobile */
@@ -1539,6 +1593,14 @@ a.sb-item{text-decoration:none}
   #sidebar-overlay { top: 0; }
   .note-title { padding: 14px 16px; }
   .welcome h1 { font-size: 22px; }
+  /* A phone on its side is 740-956px wide, so it is ABOVE the 768px
+     breakpoint and misses the mobile wrapping rules entirely, even though it
+     is still a phone. .n-val is white-space:nowrap by default, which makes a
+     long value like "500 V, 1000 V, 2500 V or 5000 V" one unbreakable run and
+     pushes the column wider than the screen. Same reasoning as the ≤768px
+     rule; short values are unaffected because they fit on one line anyway. */
+  .n-val { white-space: normal; }
+  .n-formula, pre, code { max-width: 100%; overflow-x: auto; overflow-wrap: anywhere; }
 }
 
 /* Very small phones (iPhone SE 1st gen / Galaxy Fold cover ≈320px) */
