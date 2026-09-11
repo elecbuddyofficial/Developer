@@ -1612,6 +1612,22 @@ a.sb-item{text-decoration:none}
   .n-table th, .n-table td { padding: 8px 9px; font-size: 12px; }
   .score-breakdown { grid-template-columns: 1fr; }
   #topbar { gap: 8px; padding: 0 12px; }
+  /* The logo is white-space:nowrap and flex-shrink:0, so on the narrowest
+     screens nothing in the topbar could give way and the row simply grew. The
+     Sponsorship topbar carries a notification bell the COC one does not, which
+     is enough to push it over: on a 280px Galaxy Fold cover the account button
+     ended 32px past the right edge, clipped by body's overflow-x:hidden and
+     therefore unreachable, with the page able to hold a sideways scroll the
+     reader could not undo. Letting the wordmark shrink and truncate keeps
+     every control on screen; the logo image and both buttons keep their size. */
+  /* Shrink the wordmark rather than truncate it: at 320px and 360px the full
+     "Elec-Buddy" still fits at this size, so nobody sees a clipped brand. The
+     flex-shrink/min-width/ellipsis below is the last resort for a 280px Fold
+     cover, where something has to give and a shortened wordmark is a better
+     loss than an account button that has left the screen. */
+  #topbar .logo { font-size: 16px; flex-shrink: 1; min-width: 0; overflow: hidden; }
+  #topbar .logo .logo-mark { height: 30px; }
+  #topbar .logo .logo-word { overflow: hidden; text-overflow: ellipsis; }
 }
 
 /* ── HANDWRITTEN SOLUTION SHEETS ────────────────────────────────
