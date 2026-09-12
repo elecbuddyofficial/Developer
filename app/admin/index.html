@@ -8607,18 +8607,88 @@ async function cpEnsurePlans() {
   cpPreview();
 }
 
+/* The interview price, for the same reason cpEnsurePlans exists.
+
+   mock_interview_config is otherwise only read when the Mock Interviews tab is
+   opened, so an admin who came straight to Coupons has no price to preview
+   against. Cached on window rather than in _miConfig so that opening that tab
+   later cannot leave the two disagreeing. */
+async function cpEnsureInterview() {
+  if (window._miPriceRow) return;
+  var res = await _sb.from('mock_interview_config')
+    .select('price_paise, is_enabled').limit(1).maybeSingle();
+  if (res.error || !res.data) return;          // handled in the preview
+  window._miPriceRow = res.data;
+  cpPreview();
+}
+
 function cpPreview() {
   var box  = document.getElementById('cp-preview');
   var kind = document.getElementById('cp-kind').value;
   if (kind === 'grant') { box.style.display = 'none'; return; }
 
   var value = parseInt(document.getElementById('cp-value').value, 10);
+  var minRupees = parseInt(document.getElementById('cp-min-amount').value, 10) || 0;
+  var product = (document.getElementById('cp-product') || {}).value || 'course';
+
+  /* An interview code prices the interview, not the course.
+
+     This preview used to ignore applies_product entirely and always list
+     course plans. So picking "Mock interview" showed three Sponsorship course
+     plans with the discount applied to them - plans this code will be REFUSED
+     on, by couponAppliesTo and by coupon_reserve, both of which have gated on
+     product all along. The money was never at risk; the screen was simply
+     describing a different coupon from the one being created.
+
+     Blesson's reaction was the correct one: if a code built for a mock
+     interview appears to discount course plans, the selector looks pointless.
+     It was not pointless, it was undisplayed. */
+  if (product === 'interview') {
+    if (!value || value < 1) { box.style.display = 'none'; return; }
+    if (!window._miPriceRow) { cpEnsureInterview(); box.style.display = 'none'; return; }
+
+    var mi = window._miPriceRow;
+    var miRow = {
+      base_amount: mi.price_paise,
+      discount_percent: 0,          // interviews carry no sale of their own
+      track_name: 'Mock Interview',
+      tier_name: ''
+    };
+    var mp = cpPriceWith(miRow, kind, kind === 'percent' ? value : value * 100);
+    var body;
+    if (minRupees && mi.price_paise < minRupees * 100) {
+      body = '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0;color:var(--text3)">'
+           + '<span>Mock Interview</span><span>below minimum, so this code would never apply</span></div>';
+    } else {
+      body = '<div style="display:flex;justify-content:space-between;gap:12px;padding:3px 0">'
+        + '<span style="color:var(--text2)">Mock Interview</span>'
+        + '<span style="font-variant-numeric:tabular-nums">'
+        +   '<s style="color:var(--text3)">&#8377;' + (mi.price_paise / 100).toFixed(0) + '</s> '
+        +   '<strong style="color:' + (mp.isFullGrant ? 'var(--orange)' : 'var(--green)') + '">&#8377;'
+        +   (mp.final / 100).toFixed(0) + '</strong>'
+        +   (mp.isFullGrant ? ' <span style="font-size:11px;color:var(--orange)">free</span>'
+                            : ' <span style="font-size:11px;color:var(--text3)">-'
+                              + Math.round(100 * (1 - mp.final / mi.price_paise)) + '%</span>')
+        + '</span></div>';
+    }
+    // Said plainly rather than left to be inferred from a one-line preview.
+    body += '<div style="margin-top:8px;font-size:12px;color:var(--text3)">'
+          + 'Bookings only. This code cannot be spent on any course plan.</div>';
+    if (!mi.is_enabled) {
+      body += '<div style="margin-top:6px;font-size:12px;color:var(--orange)">'
+            + 'Mock interviews are currently switched off, so nobody can book one yet.</div>';
+    }
+    box.style.display = 'block';
+    box.innerHTML = '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:8px">What buyers will be charged</div>'
+      + body;
+    return;
+  }
+
   var rows = window._plansRows || [];
   if (!value || value < 1 || !rows.length) { box.style.display = 'none'; return; }
 
   var wantDur   = document.getElementById('cp-applies-duration').value;
   var wantScope = document.getElementById('cp-applies-scope').value;
-  var minRupees = parseInt(document.getElementById('cp-min-amount').value, 10) || 0;
 
   /* One course, and only one.
 
