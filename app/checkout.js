@@ -269,6 +269,20 @@ function effectivePrice(row) {
 // again server-side by create-razorpay-order before a rupee is taken, so a
 // stale or tampered value here can misinform the buyer but can never
 // undercharge them.
+/* Which course a scope belongs to.
+
+   The third copy of this rule, and the last: public.coupon_course_of in SQL is
+   the authority, courseOfPurchase in _shared/coupons.ts quotes with it, and
+   this one decides what the OTHER cards in the modal show without re-quoting.
+   All three are held together by coupon_course.e2e.mjs.
+
+   Unrecognised answers 'coc' for the same reason the other two do: every scope
+   that predates Sponsorship was a COC scope, and guessing null here would make
+   the comparison pass for everything and silently switch the lock off. */
+function _courseOfScope(scope) {
+  return scope === 'sponsorship' ? 'sponsorship' : 'coc';
+}
+
 var RZP_FLOOR_PAISE = 100;
 function couponPrice(row, duration, scope) {
   var base = effectivePrice(row);
@@ -281,6 +295,7 @@ function couponPrice(row, duration, scope) {
   // rather than quietly showing them at full price next to a discounted one.
   if ((t.applies_duration && t.applies_duration !== duration)
    || (t.applies_scope && t.applies_scope !== scope)
+   || (t.applies_course && t.applies_course !== _courseOfScope(scope))
    || (t.min_amount && base.amount < t.min_amount)) {
     out.notEligible = true;
     return out;

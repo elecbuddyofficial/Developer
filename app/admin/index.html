@@ -8620,19 +8620,20 @@ function cpPreview() {
   var wantScope = document.getElementById('cp-applies-scope').value;
   var minRupees = parseInt(document.getElementById('cp-min-amount').value, 10) || 0;
 
-  /* Lead with the course being worked in, but do NOT hide the other one when
-     the code genuinely reaches it.
+  /* One course, and only one.
 
      This preview used to list every active plan in one flat block, so standing
      in the Sponsorship view you were shown Full COC Preparation and Oral &
-     Viva with no explanation. Filtering them out was the obvious fix and is
-     the wrong one: a code left on "Any scope" really is spendable on COC, and
-     a preview headed "what buyers will be charged" that quietly omits half of
-     what they will be charged is how ADITH45RU and ELECTRICIAN25 came to be
-     99%-off codes nobody realised reached Sponsorship.
+     Viva. Hiding them was refused at the time, and correctly: a code left on
+     "Any scope" really was spendable on COC, and a preview headed "what buyers
+     will be charged" that omits half of what they will be charged is exactly
+     how ADITH45RU and ELECTRICIAN25 became 99%-off codes nobody realised
+     reached Sponsorship.
 
-     So the other course appears only when the code can actually be spent
-     there, under a heading that says so. */
+     What changed is the code, not the display. Every new coupon now carries
+     applies_course, set from the course tab, and coupon_reserve refuses it
+     outside that course. So the other course is not hidden here - it is
+     genuinely unreachable, and showing it would be the lie. */
   /* COURSE_SCOPES is the one list of which scopes belong to which course, and
      is what the scope dropdowns above already filter by. Retyping it here as
      ['written','oral','both'] is precisely the habit that caused this month's
@@ -8642,11 +8643,7 @@ function cpPreview() {
   var here = scopesForCourse();
   var active = rows.filter(function (r) { return r.active; });
   var mine  = active.filter(function (r) { return here.indexOf(r.scope) !== -1; });
-  var other = active.filter(function (r) {
-    if (here.indexOf(r.scope) !== -1) return false;
-    // Only if the code is not locked to a scope, i.e. it can land here.
-    return !wantScope;
-  });
+  var other = [];
 
   var render = function(r) {
     var eligible = (!wantDur || wantDur === r.duration)
@@ -8782,6 +8779,21 @@ async function createCoupon() {
                           : (document.getElementById('cp-applies-scope').value || null);
     row.min_amount       = minR ? minR * 100 : null;
   }
+
+  /* Every new code is locked to the course it was written in.
+
+     This is the whole point of the course tabs: a code made under Sponsorship
+     is a Sponsorship code, and cannot be spent on CoC no matter what the scope
+     field says. Before this column existed, "any scope" silently meant "both
+     courses", which is how ADITH45RU and ELECTRICIAN25 - both written as CoC
+     promotions, both left on any scope - ended up spendable on Sponsorship at
+     99% off.
+
+     Set here rather than from a dropdown, because there is no case for making
+     a code in one course tab and aiming it at the other. Existing codes keep
+     applies_course NULL, which still means both, so nothing already issued
+     changes behaviour under anybody. */
+  row.applies_course = _adminCourse === 'sponsorship' ? 'sponsorship' : 'coc';
 
   var { error } = await _sb.from('coupons').insert(row);
 
@@ -9632,6 +9644,15 @@ var CP_SORTS = {
    it from this view would misrepresent a code that genuinely spends here. It
    is labelled instead. */
 function cpCourses(c) {
+  /* An explicit lock wins over any inference.
+
+     Every code created since the course lock carries applies_course, and
+     coupon_reserve refuses it outside that course, so there is nothing left to
+     guess. The inference below still runs for codes written before the column
+     existed, which are the only ones that can still land in both. */
+  if (c.applies_course === 'sponsorship') return ['sponsorship'];
+  if (c.applies_course === 'coc')         return ['coc'];
+
   if ((c.applies_product || 'course') === 'interview') return ['sponsorship'];
   var s = c.kind === 'grant' ? c.scope : c.applies_scope;
   if (s === 'sponsorship') return ['sponsorship'];
@@ -9954,30 +9975,31 @@ function applyScopeOptionFilter() {
      is hidden and disabled, and a form already sitting on it falls back to
      Course access so nothing can be saved against a product this view does
      not own. */
-  /* "Any scope" is the dangerous default, and the course filter above is what
-     makes it dangerous. Under Sponsorship the dropdown is left showing only
-     "Any scope" and "Sponsorship", so "Any" reads as "any sponsorship scope".
-     It is not: applies_scope null means NO restriction, and validate-coupon
-     will happily spend the code on a COC purchase. Someone making what they
-     believe is a Sponsorship code gets one that discounts everything.
+  /* "Any scope" used to mean "any scope in EITHER course", and the label had
+     to warn about it: applies_scope null meant no restriction at all, so
+     someone making what they believed was a Sponsorship code got one that
+     discounted everything. That is how ADITH45RU and ELECTRICIAN25, both 99%
+     off, became spendable on a Sponsorship plan they were never written for.
 
-     So the option says what it does, naming the course it also covers. Same in
-     reverse under COC, where "Any" now silently includes Sponsorship - which
-     is how ADITH45RU and ELECTRICIAN25, both 99% off, ended up spendable on a
-     Sponsorship plan they were never written for. */
+     Every new code now carries applies_course, set from the course tab, and
+     both coupon_reserve and couponAppliesTo refuse it outside that course. So
+     "Any scope" now means what an admin always read it as: any scope in THIS
+     course. The warning is gone because the danger is gone.
+
+     The old codes are still out there with applies_course NULL, still meaning
+     both courses. They are listed under both tabs and labelled, rather than
+     being rewritten underneath whoever is about to type one in. */
   var anyScope = document.querySelector('#cp-applies-scope option[value=""]');
   if (anyScope) {
     anyScope.textContent = _adminCourse === 'sponsorship'
-      ? 'Any scope (CoC purchases too)'
-      : 'Any scope (Sponsorship too)';
+      ? 'Any Sponsorship plan'
+      : 'Any CoC plan';
   }
   var scopeHint = document.getElementById('cp-applies-scope-hint');
   if (scopeHint) {
     scopeHint.textContent = _adminCourse === 'sponsorship'
-      ? 'Pick Sponsorship to lock the code to this course. "Any scope" is not '
-        + 'limited to Sponsorship: it can also be spent on CoC plans.'
-      : 'Pick a section to lock the code to it. "Any scope" is not limited to '
-        + 'CoC: it can also be spent on Sponsorship plans.';
+      ? 'This code will work on Sponsorship only. Pick a scope to narrow it further.'
+      : 'This code will work on CoC only. Pick a section to narrow it to Written, Oral or Full.';
   }
 
   var prod = document.getElementById('cp-product');

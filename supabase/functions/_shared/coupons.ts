@@ -43,6 +43,7 @@ export interface CouponRow {
   applies_duration?: string | null;     // null = any
   applies_scope?: string | null;        // null = any
   applies_product?: string | null;      // null or 'course' = course access, 'interview' = a booking
+  applies_course?: string | null;       // null = both courses, else 'coc' | 'sponsorship'
   min_amount?: number | null;           // paise, null = no minimum
   active?: boolean | null;
   expires_at?: string | null;
@@ -133,6 +134,31 @@ export function priceWithCoupon(
  * is the authority. This is the cheap pre-check, used by the quote endpoint so
  * an obviously wrong code fails without touching the reservation path.
  */
+/**
+ * Which course a purchase belongs to.
+ *
+ * A scope identifies the course everywhere except an interview, which has no
+ * scope and is a Sponsorship product. Anything unrecognised answers 'coc':
+ * every scope that existed before Sponsorship was a COC scope, and
+ * razorpay-webhook has always read a missing scope as 'both'. Answering null
+ * would make the comparison in couponAppliesTo vacuously pass and quietly
+ * disable the lock, which is the failure mode worth designing against.
+ *
+ * MIRRORS public.coupon_course_of(p_scope, p_product) in
+ * app/admin/coupon_course_lock_setup.sql. The two are checked against each
+ * other by coupon_course.e2e.mjs, because a coupon that quotes in one course
+ * and reserves in another fails the buyer at the payment step with no
+ * explanation.
+ */
+export function courseOfPurchase(
+  scope: string | null | undefined,
+  product: string | null | undefined = 'course',
+): 'coc' | 'sponsorship' {
+  if ((product ?? 'course') === 'interview') return 'sponsorship';
+  if (scope === 'sponsorship') return 'sponsorship';
+  return 'coc';
+}
+
 export function couponAppliesTo(
   coupon: CouponRow,
   duration: string | null,
@@ -148,6 +174,13 @@ export function couponAppliesTo(
   // is the one place in TypeScript that does, and it exists only because this
   // function quotes a price without ever calling the SQL authority.
   if ((coupon.applies_product ?? 'course') !== product) return { ok: false, reason: 'invalid' };
+  // The course gate. null still means both courses, so every code written
+  // before this column existed behaves exactly as it did. Mirrors the block of
+  // the same name in coupon_reserve.
+  if (coupon.applies_course
+      && coupon.applies_course !== courseOfPurchase(scope, product)) {
+    return { ok: false, reason: 'invalid' };
+  }
   if (coupon.applies_duration && coupon.applies_duration !== duration) return { ok: false, reason: 'invalid' };
   if (coupon.applies_scope && coupon.applies_scope !== scope) return { ok: false, reason: 'invalid' };
   // Distinguished from 'invalid' on purpose: this one is worth telling the

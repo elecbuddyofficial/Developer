@@ -219,6 +219,11 @@ serve(async (req) => {
         value: coupon.discount_value,
         applies_duration: coupon.applies_duration ?? null,
         applies_scope: coupon.applies_scope ?? null,
+        // Sent for the same reason as the two above: the client re-applies
+        // these terms to the other cards without re-quoting, so a term the
+        // client cannot see is a term it cannot honour. No modal shows both
+        // courses today, which is the only reason its absence was harmless.
+        applies_course: coupon.applies_course ?? null,
         min_amount: coupon.min_amount ?? null,
       },
     });
