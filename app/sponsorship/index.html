@@ -762,6 +762,19 @@
 <script src="../table-hints.js?v=1"></script>
 <script src="../progress.js?v=1"></script>
 <script src="../account.js?v=1"></script>
+<!-- Checkout, shared with the COC app. Sponsorship is paid for HERE now,
+     in this app, instead of bouncing the buyer over to ../index.html. The
+     same file both pages load, so the pricing, coupon and entitlement rules
+     cannot drift apart the way they did three times in one week. -->
+<script>
+  /* Pin checkout to this course. Without it the shared modal offers the
+     three COC tabs alongside Sponsorship, which inside the Sponsorship app
+     is exactly the "why is it selling me CoC" complaint this change exists
+     to remove. Set before checkout.js loads, so the first render already
+     honours it. */
+  window.EB_CHECKOUT_SCOPES = ['sponsorship'];
+</script>
+<script src="../checkout.js?v=1"></script>
 <script>
 /* Assigned to window._authReady rather than left as a bare IIFE, because
    content loading now has to wait for it. Until the content key exists,
@@ -3958,10 +3971,67 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   document.addEventListener('click', function (e) {
     var btn = e.target.closest ? e.target.closest('.sg-plan') : null;
     if (!btn) return;
-    // Hands off to the COC app's existing Razorpay flow with the scope named.
-    window.location.href = '../index.html?upgrade=sponsorship&plan='
-      + encodeURIComponent(btn.dataset.plan);
+    /* Opens the shared checkout modal right here, in this app.
+
+       This used to be window.location.href = '../index.html?upgrade=...',
+       which threw the buyer out of the Sponsorship app into the COC one to
+       pay: different colour, different branding, and three COC tabs beside
+       the one they actually wanted. Readers reported it as "it redirected me
+       to the CoC payment page", and that is precisely what it did.
+
+       app/checkout.js carries the modal markup with it and injects it, so
+       nothing about the payment flow is duplicated here. The only thing this
+       page decides is when to open it and with which plan. */
+    if (typeof openUpgradeModal !== 'function') {
+      // checkout.js did not load. Say so, rather than a button that does
+      // nothing when somebody is trying to give us money.
+      if (typeof appToast === 'function') {
+        appToast('Could not open checkout. Please reload the page.');
+      }
+      return;
+    }
+    closeGate();
+    openUpgradeModal(btn.dataset.plan, 'sponsorship');
   });
+
+  /* Arriving from a campaign QR or the paywall: ?upgrade=sponsorship, with an
+     optional &plan=, &coupon= and &campaign=.
+
+     auth.html routes a Sponsorship campaign HERE now rather than to the COC
+     app, because checkout lives in this app. Without this reader the whole
+     intent would be dropped on arrival - the reader would land on the course
+     with no modal, no preselected plan and no coupon, which is precisely the
+     silent failure the COC page had before it grew the same handler.
+
+     Mirrors app/index.html: the query string is stripped either way, so a
+     reload does not reopen a modal the reader dismissed. Nothing here is
+     trusted for money - the coupon is re-validated by validate-coupon and the
+     price comes from pricing_plans inside create-razorpay-order. */
+  (async function () {
+    var up;
+    try { up = new URLSearchParams(window.location.search); } catch (e) { return; }
+    if (!up.get('upgrade')) return;
+    var plan = up.get('plan') || null;
+    var camp = up.get('campaign') || null;
+    var code = up.get('coupon') || null;
+    if (camp) window._upCampaign = camp;
+    try {
+      history.replaceState(null, '', window.location.pathname + window.location.hash);
+    } catch (e) {}
+
+    // Wait for the session, or openUpgradeModal has no user to price against.
+    try { await window._authReady; } catch (e) {}
+    if (typeof openUpgradeModal !== 'function') return;
+    openUpgradeModal(plan, 'sponsorship');
+    if (camp && typeof trackFunnel === 'function') {
+      trackFunnel('campaign_arrived', plan, 'sponsorship', camp);
+    }
+    // After the modal, so the box it fills exists. Silent on failure: a dead
+    // code must not stop them buying at full price.
+    if (code && typeof applyCoupon === 'function') {
+      setTimeout(function () { applyCoupon(code); }, 80);
+    }
+  })();
 
   // ── Key cache ───────────────────────────────────────────────────────────
   // Own record key 'sk1', deliberately NOT merged into the COC page's 'ck2'.
@@ -4314,13 +4384,75 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   function renderPlan(profile){
     var lbl=document.getElementById('pm-plan-label'), exp=document.getElementById('pm-plan-expiry'), upg=document.getElementById('pm-upgrade-btn');
     var plan=profile.subscription_plan; upg.style.display='none';
+    /* A paid or granted expiry outranks the trial label.
+
+       subscription_plan is only rewritten by a purchase, so an account that an
+       admin comped keeps whatever it had - usually 'trial'. Reading the plan
+       first therefore told a comped reader "Trial Expired, upgrade to continue"
+       while the gate, which reads the expiry column, was letting them straight
+       in. The panel has to answer the same question the paywall answers, and
+       this is the order the gate asks it in. */
+    var _sx=profile.sponsorship_expires_at?new Date(profile.sponsorship_expires_at).getTime():0;
+    var _sponLive=_sx>Date.now();
     if(plan==='lifetime'){lbl.textContent='Lifetime';lbl.style.color='#C8A44A';exp.textContent='Never expires';}
-    else if(plan==='trial'){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000);var ms=te-Date.now();if(ms>0){lbl.textContent='Free Trial';lbl.style.color='#5DC87A';exp.textContent=Math.ceil(ms/864e5)+' days remaining';}else{lbl.textContent='Trial Expired';lbl.style.color='#E07070';exp.textContent='Upgrade to continue';}upg.style.display='block';}
-    else{var names={starter:'Starter',standard:'Standard',pro:'Pro','3mo':'3-Month','6mo':'6-Month','12mo':'12-Month'};lbl.textContent=names[plan]||plan;lbl.style.color='#C8A44A';if(profile.subscription_expires_at){var dl=Math.ceil((new Date(profile.subscription_expires_at)-Date.now())/864e5);if(dl>0){exp.textContent=dl+' days remaining';}else{exp.textContent='Expired';lbl.style.color='#E07070';upg.style.display='block';}}}
+    else if(plan==='trial'&&!_sponLive){var te=new Date(new Date(profile.trial_started_at).getTime()+3*24*60*60*1000);var ms=te-Date.now();if(ms>0){lbl.textContent='Free Trial';lbl.style.color='#5DC87A';exp.textContent=Math.ceil(ms/864e5)+' days remaining';}else{lbl.textContent='Trial Expired';lbl.style.color='#E07070';exp.textContent='Upgrade to continue';}upg.style.display='block';}
+    else{
+      /* Report THIS course's clock, from sponsorship_expires_at.
+
+         This used to read subscription_expires_at, which is a single mirror of
+         whichever purchase happened most recently, in any scope. So a reader
+         who bought COC Written last was shown their Written date, in the
+         Sponsorship app, labelled as their Sponsorship access - and a reader
+         who has only ever bought Sponsorship was shown no date at all, because
+         nothing had written that legacy column for them. Each course has run on
+         its own clock since the split; the COC panel was rebuilt to read its
+         own two columns and this one was left behind.
+
+         Same column the gate reads, so the panel and the paywall can never
+         disagree about whether this course is live. */
+      var names={starter:'Starter',standard:'Standard',pro:'Pro','3mo':'3-Month','6mo':'6-Month','12mo':'12-Month'};
+      var sx=profile.sponsorship_expires_at?new Date(profile.sponsorship_expires_at).getTime():0;
+      var dl=sx?Math.ceil((sx-Date.now())/864e5):0;
+      if(sx&&dl>0){
+        // A comped account keeps whatever subscription_plan it had, so naming
+        // it verbatim printed "trial" above a live 60-day expiry. Only a real
+        // duration gets named; anything else is simply access.
+        lbl.textContent=names[plan]||'Full Access';lbl.style.color='#C8A44A';
+        exp.textContent=dl+' days remaining';
+      }else if(sx){
+        lbl.textContent='Expired';lbl.style.color='#E07070';
+        exp.textContent='Renew to continue';
+        upg.style.display='block';
+      }else{
+        // Never bought this course. Their COC plan is not this panel's business.
+        lbl.textContent='No access';lbl.style.color='#8FA3B8';
+        exp.textContent='Upgrade to unlock';
+        upg.style.display='block';
+      }
+    }
   }
-  // Sponsorship itself is free, this button sends the user to the main app
-  // to manage their Oral/Written plan, since there's nothing to gate here.
-  document.getElementById('pm-upgrade-btn').addEventListener('click',function(){ window.location.href='../index.html?stay=1'; });
+  /* "Upgrade to Full Access" buys THIS course, in this app.
+
+     The comment that used to sit here said Sponsorship was free and so this
+     button may as well send the reader to the COC app to manage their
+     Oral/Written plan. That stopped being true when Sponsorship went on sale:
+     the course is gated now, this button is shown to people whose Sponsorship
+     access has lapsed, and it was walking every one of them into the blue app.
+     Sponsorship readers reported it as "the upgrade button routes me to CoC",
+     and it is the same fault the gate had - the only two places that sold this
+     course both sold it somewhere else.
+
+     Same call as the gate uses. No plan is pinned, so the modal opens on the
+     recommended tier rather than pre-selecting something nobody clicked. */
+  document.getElementById('pm-upgrade-btn').addEventListener('click', function () {
+    if (typeof openUpgradeModal !== 'function') {
+      if (typeof appToast === 'function') appToast('Could not open checkout. Please reload the page.');
+      return;
+    }
+    var pm = document.getElementById('profile-modal');
+    if (pm) pm.style.display = 'none';
+    openUpgradeModal(null, 'sponsorship');
+  });
   window.addEventListener('load',function(){ var user=window._sbUser; if(user){var n=user.user_metadata?.full_name||user.email; document.getElementById('profile-btn').textContent=n.charAt(0).toUpperCase();} });
 })();
 

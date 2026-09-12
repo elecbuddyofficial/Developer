@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { APP_URL, escapeHtml } from '../_shared/email-layout.ts';
 import { EmailTemplate, loadTemplate, renderBody, couponBlock, fillSubject, fillHeading } from '../_shared/templates.ts';
+import { scopesCovered } from '../_shared/entitlements.ts';
 
 const json = (data: unknown, status = 200) =>
   new Response(JSON.stringify(data), {
@@ -363,7 +364,41 @@ serve(async (req) => {
         .gte(s.col, st.day + 'T00:00:00Z')
         .lte(s.col, st.day + 'T23:59:59Z');
 
+      /* Only people who actually BOUGHT this scope get told it has expired.
+
+         On 12 Sep 2026 this sent 158 people "Your Sponsorship access has
+         expired... Renew and you pick up exactly where you left off", with a
+         Renew button. None of them had ever bought Sponsorship: the grace
+         backfill the day before had written the same date into
+         sponsorship_expires_at for 161 accounts, and to this query that looked
+         like 161 subscriptions lapsing at once.
+
+         An expiry notice is a message to a customer about their subscription.
+         Somebody whose free access ended is not that, and telling them to
+         "renew" something they never had is both wrong and embarrassing. So
+         the expiry column alone is no longer enough - there has to be a real
+         payment behind it.
+
+         scopesCovered comes from _shared/entitlements.ts rather than being
+         restated here, so a 'both' purchase keeps covering Written and Oral by
+         the same rule the money path uses. */
+      const ids = (rows ?? []).map((r) => r.id);
+      const paidFor = new Set<string>();
+      if (ids.length) {
+        const { data: pays } = await sb
+          .from('payments')
+          .select('user_id, scope')
+          .eq('status', 'paid')
+          .in('user_id', ids);
+        for (const p of pays ?? []) {
+          if (scopesCovered(p.scope).includes(s.scope as 'written' | 'oral' | 'sponsorship')) {
+            paidFor.add(p.user_id);
+          }
+        }
+      }
+
       for (const u of rows ?? []) {
+        if (!paidFor.has(u.id)) continue;   // free access ending is not a lapse
         const otherExpiry = s.otherCol
           ? ((u as Record<string, string | null>)[s.otherCol] ?? null)
           : null;

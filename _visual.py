@@ -258,6 +258,35 @@ SCREENS = {
               note:'Rolling intake, closing date not announced.' }
           ]);
         })()"""},
+    # The upgrade modal, on BOTH apps. It was never a registered screen, which
+    # is how its CSS could move from a <style> block in index.html into
+    # style.css on 12 Sep 2026 with nothing watching. It is injected by
+    # app/checkout.js now, so an unstyled or unreadable modal would show up
+    # here and nowhere else.
+    'upgrade':  {'file': 'index.html', 'view': 'view-welcome', 'open': """
+        (() => {
+          window._profileData = { subscription_plan: 'trial',
+                                  trial_started_at: new Date().toISOString() };
+          window._pricingPlansCache = [
+            {duration:'3mo', scope:'both', track_name:'Full COC Preparation', tier_name:'3 Months', base_amount:99900, discount_percent:0},
+            {duration:'6mo', scope:'both', track_name:'Full COC Preparation', tier_name:'6 Months', base_amount:149900, discount_percent:0},
+            {duration:'12mo',scope:'both', track_name:'Full COC Preparation', tier_name:'12 Months',base_amount:269900, discount_percent:0}
+          ];
+          window._pricingPlansPromise = Promise.resolve(window._pricingPlansCache);
+          openUpgradeModal('12mo', 'both');
+        })()"""},
+    'sponupgrade': {'file': 'sponsorship/index.html', 'view': None, 'open': """
+        (() => {
+          window._profileData = { subscription_plan: 'trial',
+                                  trial_started_at: new Date().toISOString() };
+          window._pricingPlansCache = [
+            {duration:'3mo', scope:'sponsorship', track_name:'Sponsorship', tier_name:'3 Months', base_amount:120000, discount_percent:0, description:'Company sponsorship and selection preparation'},
+            {duration:'6mo', scope:'sponsorship', track_name:'Sponsorship', tier_name:'6 Months', base_amount:190000, discount_percent:0, description:'Company sponsorship and selection preparation'},
+            {duration:'12mo',scope:'sponsorship', track_name:'Sponsorship', tier_name:'12 Months',base_amount:300000, discount_percent:0, description:'Company sponsorship and selection preparation'}
+          ];
+          window._pricingPlansPromise = Promise.resolve(window._pricingPlansCache);
+          openUpgradeModal('6mo', 'sponsorship');
+        })()"""},
     'auth':     {'file': 'auth.html',    'view': None},
 }
 

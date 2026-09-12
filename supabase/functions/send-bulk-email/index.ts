@@ -74,6 +74,14 @@ serve(async (req) => {
     const heading = String(body?.heading ?? '').trim();
     const message = String(body?.body ?? '').trim();
     const couponCode = body?.coupon_code ? String(body.coupon_code).trim() : null;
+    /* Which course this send is aimed at, or null for both.
+
+       Validated against the two real courses rather than passed through: an
+       unrecognised value makes email_segment match nobody, so a typo here
+       would send to zero people and look like a silent failure. Anything that
+       is not one of the two becomes null, which is the old behaviour. */
+    const rawCourse = body?.course ? String(body.course).trim() : null;
+    const course = (rawCourse === 'coc' || rawCourse === 'sponsorship') ? rawCourse : null;
 
     if (!segment) return json({ error: 'Pick who should receive this' }, 400);
     if (!subject) return json({ error: 'A subject is required' }, 400);
@@ -92,7 +100,10 @@ serve(async (req) => {
       else return json({ error: `Coupon ${couponCode} is not active, so nothing was sent.` }, 400);
     }
 
-    const { data: recipients, error: segErr } = await sb.rpc('email_segment', { p_segment: segment });
+    // p_course narrows the send to one course. The admin console counts through
+    // this same call with the same course, so the number confirmed on screen is
+    // the number that actually receives it.
+    const { data: recipients, error: segErr } = await sb.rpc('email_segment', { p_segment: segment, p_course: course });
     if (segErr) return json({ error: 'Could not resolve that group' }, 500);
     const list = (recipients ?? []) as { id: string; email: string; full_name: string | null; unsubscribe_token: string | null }[];
 

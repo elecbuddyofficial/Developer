@@ -1786,3 +1786,155 @@ body.hw-open { overflow: hidden; }
 .fb-file-row .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .fb-file-row .sz { color: var(--text3); flex-shrink: 0; font-variant-numeric: tabular-nums; }
 .fb-file-row.bad { border-color: var(--red-border); color: var(--red); }
+
+/* ── UPGRADE MODAL ───────────────────────────────────────────
+   Moved out of a <style> block inside app/index.html on 12 Sep 2026, when
+   checkout became shared. The modal is injected by app/checkout.js into
+   whichever page opens it, so its styling has to live somewhere both pages
+   already load - and both load this file. Left in index.html it would have
+   rendered the Sponsorship app an unstyled modal. */
+  .up-track-tab {
+    flex: 1; background: rgba(13,30,51,0.7); border: 1px solid #1A3050; border-radius: 8px;
+    padding: 9px 6px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--text3); cursor: pointer; transition: border-color .15s, background .15s, color .15s;
+    font-family: inherit;
+  }
+  .up-track-tab .utt-brand {
+    display: block; font-size: 9px; font-weight: 600;
+    letter-spacing: 0.04em; opacity: 0.7; margin-top: 2px;
+    text-transform: uppercase;
+  }
+  .up-track-tab:hover { background: rgba(20,42,68,0.8); }
+  .up-track-tab.active { background: #C8A44A; border-color: var(--amber); color: #070D1A; }
+
+  /* The modal was capped at 520px, which is right for one column of cards but
+     leaves three at about 160px each: too narrow for a price, a line of
+     description and a Pay button. It widens only where there is room to widen,
+     so the phone layout is untouched. */
+  .up-modal-inner { width: 100%; max-width: 520px; margin-top: 20px; }
+  @media (min-width: 900px) { .up-modal-inner { max-width: 880px; } }
+
+  /* Three plans, side by side on a wide screen.
+     Stacked, they cannot be compared without scrolling, which is the one job
+     a pricing table has. Auto-fit rather than a fixed three columns so it
+     collapses to two and then one on its own as the space runs out, with no
+     breakpoint to keep in step with the modal width. */
+  #up-tier-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+    align-items: stretch;
+  }
+  .up-plan-card {
+    background: rgba(13,30,51,0.7);
+    border: 1px solid #1A3050;
+    border-radius: 12px;
+    padding: 18px 18px 16px;
+    position: relative;
+    transition: border-color .15s, background .15s;
+    /* Column layout so the Pay button sits on the baseline in every card even
+       when the descriptions run to different lengths. */
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .up-plan-card .up-card-gets { flex: 1 0 auto; }
+  .up-plan-card:hover { background: rgba(20,42,68,0.8); }
+  .up-plan-card-best { border-color: var(--amber); }
+  .up-ribbon {
+    position: absolute; top: -11px; left: 50%; transform: translateX(-50%);
+    background: #C8A44A; color: #070D1A; font-size: 9.5px; font-weight: 700;
+    padding: 3px 12px; border-radius: 20px; white-space: nowrap;
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .up-ribbon-promo { background: #5DC87A; }
+  /* Offer banner. Said once above the cards rather than repeated on each,
+     which also frees the cards to keep their own Best Value badge. */
+  .up-offer {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    flex-wrap: wrap; text-align: center;
+    background: var(--green-dim); border: 1px solid var(--green-border);
+    border-radius: 10px; padding: 9px 14px; margin: 0 0 18px;
+  }
+  .up-offer-tag {
+    background: var(--green); color: var(--on-accent);
+    font-size: 9.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  }
+  .up-offer-desc { font-size: 13.5px; font-weight: 600; color: var(--text); line-height: 1.45; }
+  /* The deadline. Quiet when it is weeks away, loud in the last few days,
+     because that is when it is actually a reason to decide. */
+  .up-offer-ends {
+    font-size: 11.5px; font-weight: 700; letter-spacing: .03em;
+    color: var(--text); border: 1px solid var(--border2);
+    padding: 3px 9px; border-radius: 20px; white-space: nowrap;
+  }
+  .up-offer-ends.is-urgent {
+    color: var(--orange); border-color: var(--orange-border); background: var(--orange-dim);
+  }
+  .up-tier-name { font-size: 15px; font-weight: 700; color: var(--text); }
+  .up-tier-duration { font-size: 12px; color: var(--text3); margin-top: 3px; }
+  .up-price { font-size: 20px; font-weight: 700; color: var(--amber); letter-spacing: -0.5px; }
+  .up-price-strike { font-size: 13px; color: var(--text3); text-decoration: line-through; }
+  .up-card-desc { font-size: 11.5px; color: #5DC87A; margin-top: 6px; }
+  /* What the plan contains, on every card so a card stands alone. */
+  .up-card-gets { font-size: 11.5px; color: var(--text3); margin-top: 8px; line-height: 1.5; }
+  /* What it does to THIS buyer's dates. Sits under the buy button, quieter
+     than the price but always present, so stacking is never a surprise. */
+  .up-card-effect { font-size: 11px; color: var(--text3); margin-top: 8px; line-height: 1.5; }
+  .up-buy-btn {
+    margin-top: 14px; width: 100%; background: rgba(200,164,74,0.12);
+    border: 1px solid rgba(200,164,74,0.35); border-radius: 8px; padding: 10px;
+    font-size: 13px; font-weight: 700; color: var(--amber); cursor: pointer;
+    letter-spacing: 0.03em; transition: background .15s, border-color .15s;
+    font-family: inherit;
+  }
+  .up-buy-btn:hover { background: rgba(200,164,74,0.2); }
+  .up-plan-card-best .up-buy-btn { background: #C8A44A; border: none; color: #070D1A; }
+  .up-plan-card-best .up-buy-btn:hover { opacity: 0.88; background: #C8A44A; }
+  .up-feature {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; color: var(--text3); line-height: 1.4;
+  }
+  .up-feature::before {
+    content: ''; display: block; width: 5px; height: 5px;
+    border-radius: 50%; background: #C8A44A; flex-shrink: 0;
+  }
+  .up-buy-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* Upgrade modal - mobile */
+  @media (max-width: 600px) {
+    #upgrade-modal .up-plan-card { padding: 15px 15px 14px; }
+    .up-buy-btn { min-height: 46px; }
+    .up-feature { font-size: 12.5px; }
+    .up-track-tab { font-size: 10.5px; padding: 8px 4px; }
+  }
+  @media (max-width: 360px) {
+    #upgrade-modal .up-plan-card { padding: 13px; }
+    .up-feature { font-size: 12px; }
+  }
+  /* Landscape phone: modal must scroll, never trap content off-screen */
+  @media (max-height: 520px) and (orientation: landscape) {
+    #upgrade-modal > div { padding-top: 14px !important; padding-bottom: 28px !important; }
+    #upgrade-modal > div > div { margin-top: 0 !important; }
+  }
+
+  /* ── Touch targets ──────────────────────────────────────────────────────
+     Keyed to pointer:coarse, NOT to a width breakpoint. A phone held in
+     landscape is 640-950px wide - wider than any mobile breakpoint here -
+     but it is still a thumb, and the max-width:600px rule above silently
+     stopped applying there, dropping the pay buttons to ~37px. Measured
+     before this rule: track tabs 32px, close 36px, "Have a code?" 28px,
+     Apply 41px, all under the 44px minimum (WCAG 2.5.8 / Apple HIG).
+     Padding is used rather than fixed height so labels never clip. */
+  @media (pointer: coarse) {
+    .up-track-tab      { min-height: 44px; }
+    .up-buy-btn        { min-height: 46px; }
+    #up-coupon-toggle  { min-height: 44px; padding: 12px 16px !important; }
+    #up-coupon-btn     { min-height: 44px; }
+    #up-coupon-input   { min-height: 44px; }
+    /* Close buttons carry inline width/height, so they need the override. */
+    #upgrade-modal .up-close-btn,
+    #settings-modal .close-btn { width: 44px !important; height: 44px !important; }
+  }

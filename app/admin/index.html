@@ -3305,6 +3305,15 @@
           <label class="ad-label">Which email</label>
           <select class="ad-select" id="tpl-key" onchange="loadTemplate()"></select>
         </div>
+        <div class="ad-field" style="max-width:200px">
+          <label class="ad-label">Which course</label>
+          <select class="ad-select" id="bulk-course" onchange="bulkCount()">
+            <option value="">Both courses</option>
+            <option value="sponsorship">Sponsorship only</option>
+            <option value="coc">CoC only</option>
+          </select>
+          <div class="ad-hint">Narrows the audience to people who chose that course or bought it. Most accounts predate the course question and belong to neither, so a course-filtered send reaches far fewer people than "Both courses" - the count below is always the truth.</div>
+        </div>
         <div class="ad-field" style="max-width:220px">
           <label class="ad-label">Attach a coupon</label>
           <select class="ad-select" id="tpl-coupon"></select>
@@ -8611,7 +8620,35 @@ function cpPreview() {
   var wantScope = document.getElementById('cp-applies-scope').value;
   var minRupees = parseInt(document.getElementById('cp-min-amount').value, 10) || 0;
 
-  var lines = rows.filter(function(r) { return r.active; }).map(function(r) {
+  /* Lead with the course being worked in, but do NOT hide the other one when
+     the code genuinely reaches it.
+
+     This preview used to list every active plan in one flat block, so standing
+     in the Sponsorship view you were shown Full COC Preparation and Oral &
+     Viva with no explanation. Filtering them out was the obvious fix and is
+     the wrong one: a code left on "Any scope" really is spendable on COC, and
+     a preview headed "what buyers will be charged" that quietly omits half of
+     what they will be charged is how ADITH45RU and ELECTRICIAN25 came to be
+     99%-off codes nobody realised reached Sponsorship.
+
+     So the other course appears only when the code can actually be spent
+     there, under a heading that says so. */
+  /* COURSE_SCOPES is the one list of which scopes belong to which course, and
+     is what the scope dropdowns above already filter by. Retyping it here as
+     ['written','oral','both'] is precisely the habit that caused this month's
+     run of faults - a scope list written before Sponsorship existed, which a
+     new course then fell straight through. A scope added to COURSE_SCOPES
+     tomorrow lands in this preview with no edit here. */
+  var here = scopesForCourse();
+  var active = rows.filter(function (r) { return r.active; });
+  var mine  = active.filter(function (r) { return here.indexOf(r.scope) !== -1; });
+  var other = active.filter(function (r) {
+    if (here.indexOf(r.scope) !== -1) return false;
+    // Only if the code is not locked to a scope, i.e. it can land here.
+    return !wantScope;
+  });
+
+  var render = function(r) {
     var eligible = (!wantDur || wantDur === r.duration)
                 && (!wantScope || wantScope === r.scope);
     var label = r.track_name + ' ' + r.tier_name;
@@ -8643,7 +8680,19 @@ function cpPreview() {
       +   (p.isFullGrant ? ' <span style="font-size:11px;color:var(--orange)">free</span>'
                          : ' <span style="font-size:11px;color:var(--text3)">-' + off + '%</span>')
       + '</span></div>';
-  }).join('');
+  };
+
+  var head = function (text, colour) {
+    return '<div style="font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;'
+      + 'color:' + colour + ';margin:10px 0 4px">' + text + '</div>';
+  };
+
+  var lines = mine.map(render).join('');
+  if (other.length) {
+    lines += head('Also reaches ' + (_adminCourse === 'sponsorship' ? 'CoC' : 'Sponsorship')
+                  + ', because this code is not locked to a scope', 'var(--orange)')
+           + other.map(render).join('');
+  }
 
   var warn = (kind === 'percent' && value > 50)
     ? '<div style="margin-top:8px;font-size:12px;color:var(--orange)">This takes more than half off. Check the figure before saving.</div>'
@@ -11801,9 +11850,10 @@ var _bulkRecipients = 0;
 // the number that receives it.
 async function bulkCount() {
   var seg = document.getElementById('bulk-segment').value;
+  var course = (document.getElementById('bulk-course') || {}).value || null;
   var el = document.getElementById('bulk-count');
   el.textContent = 'Counting...';
-  var { data, error } = await _sb.rpc('email_segment', { p_segment: seg });
+  var { data, error } = await _sb.rpc('email_segment', { p_segment: seg, p_course: course });
   if (error) { el.textContent = 'Could not count recipients.'; _bulkRecipients = 0; bulkArm(); return; }
   _bulkRecipients = (data || []).length;
   el.innerHTML = '<strong style="color:var(--text)">' + _bulkRecipients + '</strong> '
@@ -11842,7 +11892,11 @@ async function sendBulk() {
   try {
     var res = await _sb.functions.invoke('send-bulk-email', {
       body: {
-        segment: seg, subject: subject,
+        // course rides along with segment: the count above is taken through
+        // the same function, so sending without it would mail a different set
+        // of people from the one that was confirmed.
+        segment: seg, course: (document.getElementById('bulk-course') || {}).value || null,
+        subject: subject,
         heading: document.getElementById('bulk-heading').value.trim(),
         body: document.getElementById('bulk-body').value.trim(),
         coupon_code: document.getElementById('bulk-coupon').value || null,

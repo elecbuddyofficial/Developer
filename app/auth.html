@@ -1364,9 +1364,13 @@
             + '&campaign=' + encodeURIComponent(camp.slug);
       if (camp.plan)        q += '&plan=' + encodeURIComponent(camp.plan);
       if (camp.coupon_code) q += '&coupon=' + encodeURIComponent(camp.coupon_code);
-      // Always the COC page: that is where the upgrade modal lives, for both
-      // courses. app/sponsorship/index.html sends people there to pay too.
-      window.location.replace('./index.html' + q);
+      /* Each course now pays for itself in its own app. Sponsorship checkout
+         moved into app/sponsorship/index.html on 12 Sep 2026 (see
+         app/checkout.js), so sending a Sponsorship campaign to the COC page
+         would drop the buyer into the wrong app to buy the right thing -
+         which is the complaint that change was made to fix. */
+      var page = camp.course === 'sponsorship' ? './sponsorship/index.html' : './index.html';
+      window.location.replace(page + q);
       return;
     }
     if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');

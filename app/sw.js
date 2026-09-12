@@ -1,6 +1,6 @@
 // ─── Elec-Buddy — Service Worker ──────────────────────────
 // Bump VERSION on every deploy to clear old cache for all users
-const VERSION = 'v275';
+const VERSION = 'v277';
 const CACHE = 'elec-buddy-' + VERSION;
 
 // App shell — always cached at install time
@@ -13,6 +13,7 @@ const PRECACHE = [
   './progress.js',
   './app.js',
   './account.js',
+  './checkout.js',
   './counts.js',
   './written.css',
 ];
