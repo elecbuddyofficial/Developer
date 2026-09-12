@@ -3760,7 +3760,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
   window._sponPaid   = false;   // course_config.sponsorship_paid
   window._sponAccess = false;   // this reader holds live Sponsorship access
 
-  window._sponStateReady = (async function () {
+  async function _sponReadState() {
     try {
       await window._authReady;
       if (!window._sbClient || !window._sbUser) return;
@@ -3772,7 +3772,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       var res = await Promise.all([
         window._sbClient.from('course_config').select('sponsorship_paid').single(),
         window._sbClient.from('profiles')
-          .select('sponsorship_expires_at,granted_sponsorship_expires_at')
+          .select('subscription_plan,trial_started_at,sponsorship_expires_at')
           .eq('id', window._sbUser.id).single()
       ]);
       var cfg = res[0], prof = res[1];
@@ -3780,11 +3780,85 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       if (!prof.error && prof.data) {
         var now = Date.now();
         var live = function (t) { return !!t && new Date(t).getTime() > now; };
-        window._sponAccess = live(prof.data.sponsorship_expires_at)
-                          || live(prof.data.granted_sponsorship_expires_at);
+
+        /* This has to answer the same question deriveAccess() answers in
+           _shared/entitlements.ts, because get-sponsorship-key asks THAT one
+           before handing over the content key. When the two disagree the
+           reader gets the worst of both: the server says yes and gives them
+           the key, and this says no and shows them a paywall for something
+           they already own.
+
+           It did disagree. This used to read the two expiry columns only,
+           and deriveAccess grants everything to a lifetime holder and to
+           anyone inside their trial, neither of which touches those columns.
+           So all 5 lifetime accounts and all 7 live trials were being shown
+           the payment gate on 12 Sep 2026. It looked intermittent because
+           _sponPaid starts false: the first paint answered "not locked"
+           before this read resolved, and every check after it answered
+           "locked", so a hard refresh appeared to fix it and navigating back
+           appeared to break it again.
+
+           TRIAL_DAYS is 3 in entitlements.ts. If it ever changes there, it
+           has to change here too - which is the cost of the client knowing
+           this at all, and the reason the server never trusts this answer. */
+        var TRIAL_MS = 3 * 24 * 60 * 60 * 1000;
+        var tStart = prof.data.trial_started_at
+          ? new Date(prof.data.trial_started_at).getTime() : 0;
+        var trialLive = tStart > 0 && now < tStart + TRIAL_MS;
+
+        /* granted_sponsorship_expires_at is deliberately NOT consulted.
+
+           It is a ledger of where access came from, not a grant of access:
+           deriveAccess reads SCOPE_COLUMN only, and every correct writer
+           (redeem-coupon, the admin Grant Access form, the grace control)
+           sets BOTH columns together. Reading it here made this screen more
+           generous than the server, so a reader in that state saw unlocked
+           content and then got no content key - which shows up as corrupt
+           content rather than as a paywall, and is the harder failure to
+           diagnose of the two. Verified 12 Sep 2026: 0 accounts are in that
+           state, so nothing loses access by this becoming honest. */
+        window._sponAccess = prof.data.subscription_plan === 'lifetime'
+                          || trialLive
+                          || live(prof.data.sponsorship_expires_at);
       }
     } catch (e) { /* stay free, stay open */ }
-  })();
+  }
+
+  window._sponStateReady = _sponReadState();
+
+  /* Re-check, the way the COC app does.
+
+     This used to run exactly once, at load. So an admin granting access, a
+     purchase completing in another tab, or an entitlement lapsing mid-session
+     all did nothing until a hard refresh - and a reader who had just been
+     given access sat looking at a payment gate for something they owned.
+
+     Ten minutes and on tab focus, matching checkSession() in app/index.html
+     so the two courses behave the same way. Repaints only when the answer
+     actually changed: re-rendering the grid on every focus would scroll the
+     reader's place away for nothing. */
+  async function _sponRefreshState() {
+    var wasPaid = window._sponPaid, wasAccess = window._sponAccess;
+    await _sponReadState();
+    if (window._sponPaid === wasPaid && window._sponAccess === wasAccess) return;
+
+    // Access just arrived: take the paywall off the screen they are looking at.
+    if (window._sponAccess && !wasAccess) {
+      try { if (typeof closeGate === 'function') closeGate(); } catch (e) {}
+    }
+    // Repaint whichever section grid is open, so padlocks appear or go.
+    try {
+      if (typeof ACTIVE_SECTION_ID !== 'undefined' && typeof SECTIONS !== 'undefined'
+          && SECTIONS[ACTIVE_SECTION_ID] && document.getElementById('sec-topic-grid')) {
+        buildSectionTopicGrid(SECTIONS[ACTIVE_SECTION_ID]);
+      }
+    } catch (e) {}
+  }
+
+  setInterval(_sponRefreshState, 10 * 60 * 1000);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') _sponRefreshState();
+  });
 
   /* A topic marked free:true in SECTIONS stays readable whatever the switch
      says - that is the sample of the course, and the reason to buy it. An id

@@ -2857,13 +2857,32 @@ function setTheme(t) {
            so the gate over there hands off to this modal instead of growing a
            second payment integration. The query string is stripped either
            way, so a reload does not reopen a modal the reader dismissed. */
+        /* &campaign=<slug>&coupon=<code> arrive the same way, from a webinar
+           QR: auth.html hands the whole intent over here after sign-in
+           because this is where the upgrade modal lives, for both courses.
+           Neither is trusted. The coupon goes through validate-coupon exactly
+           as if it had been typed, and the campaign is recorded on the
+           payment for attribution only - create-razorpay-order still derives
+           every amount from pricing_plans. */
         try {
           var _up = new URLSearchParams(window.location.search);
           var _upScope = _up.get('upgrade');
           if (_upScope && typeof openUpgradeModal === 'function') {
             var _upPlan = _up.get('plan') || null;
+            var _upCamp = _up.get('campaign') || null;
+            var _upCode = _up.get('coupon') || null;
+            window._upCampaign = _upCamp;
             history.replaceState(null, '', window.location.pathname + window.location.hash);
-            setTimeout(function () { openUpgradeModal(_upPlan, _upScope); }, 0);
+            setTimeout(function () {
+              openUpgradeModal(_upPlan, _upScope);
+              if (_upCamp) trackFunnel('campaign_arrived', _upPlan, _upScope, _upCamp);
+              // After the modal, so the box it types into exists. Failure is
+              // silent on purpose: a dead code must not stop them buying at
+              // full price, which is what the modal already shows.
+              if (_upCode && typeof applyCoupon === 'function') {
+                setTimeout(function () { applyCoupon(_upCode); }, 60);
+              }
+            }, 0);
           }
         } catch (e) {}
 
@@ -4716,10 +4735,26 @@ function toggleCouponBox() {
 // re-validates and re-prices from the database before charging anything.
 window._upCoupon = null;
 
-async function applyCoupon() {
+/* codeArg lets a campaign link pre-apply its coupon. It follows
+   redeemCoupon(code, token) below, which already takes its arguments rather
+   than reading the DOM, instead of inventing a second convention. Called with
+   nothing, it behaves exactly as before and reads the input.
+
+   When a code IS passed, the box is opened and filled first, so the reader
+   sees the code that was applied on their behalf and can remove it. A
+   discount applied invisibly is one the buyer cannot reason about. */
+async function applyCoupon(codeArg) {
   var input = document.getElementById('up-coupon-input');
   var btn   = document.getElementById('up-coupon-btn');
-  var code  = (input.value || '').trim().toUpperCase();
+  if (codeArg) {
+    if (typeof toggleCouponBox === 'function'
+        && document.getElementById('up-coupon-box')
+        && document.getElementById('up-coupon-box').style.display === 'none') {
+      toggleCouponBox();
+    }
+    input.value = String(codeArg).trim().toUpperCase();
+  }
+  var code = (input.value || '').trim().toUpperCase();
   if (!code) { input.focus(); return; }
 
   if (!window._sbClient || !window._sbUser) {
@@ -4917,6 +4952,9 @@ async function startPayment(plan, scope) {
     // caught before the buyer is charged.
     var orderBody = { plan: plan, scope: scope };
     if (window._upCoupon && window._upCoupon.code) orderBody.code = window._upCoupon.code;
+    // Attribution only. The server checks the campaign exists and is live,
+    // then stores the slug on the payment row; it never reaches the price.
+    if (window._upCampaign) orderBody.campaign = window._upCampaign;
 
     var orderRes = await fetch(SUPABASE_FN_URL + '/create-razorpay-order', {
       method: 'POST',

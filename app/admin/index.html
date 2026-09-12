@@ -1506,6 +1506,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>
       <span>Public Events</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('campaigns');closeMobNav()" data-tab="campaigns" title="Campaigns">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M17 20h4"/></svg>
+      <span>Campaigns</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('liveexam');closeMobNav()" data-tab="liveexam" title="Live Exam Feed">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M5.6 5.6a9 9 0 0 0 0 12.8M18.4 5.6a9 9 0 0 1 0 12.8M2.8 2.8a13 13 0 0 0 0 18.4M21.2 2.8a13 13 0 0 1 0 18.4"/></svg>
       <span>Live Exam Feed</span>
@@ -2382,6 +2386,126 @@
     </div>
 </div>
 
+  <!-- CAMPAIGNS ───────────────────────────────────────────────
+       One link, usually behind a QR on a webinar slide, that decides which
+       course a scanner lands in and which plan and coupon their checkout
+       opens with. The wording lives in the row, so the slide and the screen
+       can be changed together without a deploy.
+
+       It prices nothing. create-razorpay-order still derives every amount
+       from pricing_plans and re-validates the coupon, so a campaign can
+       never make something cheaper than it was set here. -->
+  <div class="ad-tab" id="tab-campaigns">
+    <div class="ad-ph">
+      <h1>Campaigns</h1>
+      <p>A QR or link that takes someone from a webinar slide to signing up and paying, in one go. Pick the course, optionally a plan and a coupon, and the wording they see on the way in.</p>
+    </div>
+
+    <div class="ad-course-switch ad-pane-switch" id="campaigns-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('campaigns','add')">New Campaign</button>
+      <button class="acs-btn" data-pane="all" onclick="showAdminPane('campaigns','all')">All Campaigns <span id="campaigns-c-all"></span></button>
+    </div>
+
+    <div class="adp" id="campaigns-pane-add">
+    <div class="ad-card">
+      <div class="ad-card-head" id="cm-form-head">New Campaign</div>
+      <div class="ad-card-sub" id="cm-form-sub">The link is built from the slug. Print the QR on the slide, and whatever you change here changes what the scanner sees, without a deploy.</div>
+
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Name</label>
+          <input class="ad-input" id="cm-name" placeholder="e.g. September sponsorship webinar">
+          <div class="ad-hint">Your own label for this campaign. Never shown to anyone else.</div>
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Slug</label>
+          <input class="ad-input" id="cm-slug" placeholder="e.g. webinar-sep" oninput="cmSlugTyped()">
+          <div class="ad-hint">Becomes the link. Lowercase letters, numbers and dashes, 3 to 40 characters. Cannot be changed once people have the QR, so keep it short and unambiguous.</div>
+        </div>
+      </div>
+
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Course</label>
+          <select class="ad-select" id="cm-course" onchange="cmPreview()">
+            <option value="sponsorship">Sponsorship</option>
+            <option value="coc">CoC Preparation</option>
+          </select>
+          <div class="ad-hint">Which course the scanner lands in. They never have to find the course switch themselves.</div>
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Plan</label>
+          <select class="ad-select" id="cm-plan" onchange="cmPreview()">
+            <option value="">Show all plans</option>
+            <option value="3mo">3 Months</option>
+            <option value="6mo">6 Months</option>
+            <option value="12mo">12 Months</option>
+          </select>
+          <div class="ad-hint">"Show all plans" opens the full modal and lets them choose, which is usually what a room full of people wants.</div>
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Coupon</label>
+          <select class="ad-select" id="cm-coupon" onchange="cmPreview()">
+            <option value="">No coupon</option>
+          </select>
+          <div class="ad-hint">Applied for them at checkout, and shown on screen so they can remove it. Only live codes are listed. Set the discount itself on the Coupons tab.</div>
+        </div>
+      </div>
+
+      <div class="ad-field">
+        <label class="ad-label">Headline</label>
+        <input class="ad-input" id="cm-headline" placeholder="e.g. Welcome, September webinar" oninput="cmPreview()">
+        <div class="ad-hint">The first line they see after scanning. Make it match the slide so they know the QR worked.</div>
+      </div>
+
+      <div class="ad-field">
+        <label class="ad-label">Sub-line (optional)</label>
+        <input class="ad-input" id="cm-subline" placeholder="e.g. Create your account below to claim the webinar price." oninput="cmPreview()">
+      </div>
+
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Opens (optional)</label>
+          <input class="ad-input" id="cm-starts" type="date">
+          <div class="ad-hint">Before this date the link behaves like an ordinary sign-in page. Leave blank to go live immediately.</div>
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label">Closes (optional)</label>
+          <input class="ad-input" id="cm-ends" type="date">
+          <div class="ad-hint">After this date the same. The QR keeps working as a plain sign-in link rather than breaking.</div>
+        </div>
+      </div>
+
+      <div class="ad-explain" id="cm-preview">Fill in a slug to see the link.</div>
+      <div class="msg" id="cm-msg" style="display:none"></div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="ad-btn btn-primary" id="cm-save" onclick="saveCampaign()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5v14"/></svg>
+          <span id="cm-save-label">Create Campaign</span>
+        </button>
+        <button class="ad-btn" id="cm-cancel" onclick="cancelCampaignEdit()" style="display:none">Cancel</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="adp" id="campaigns-pane-all" hidden>
+      <div class="ad-section-head">All Campaigns</div>
+      <div class="ad-table-wrap ad-scrollcap">
+        <table class="ad-table">
+          <thead><tr><th>Campaign</th><th>Course</th><th>Offer</th><th>Scans</th><th>Paid</th><th>Live</th><th></th></tr></thead>
+          <tbody id="cm-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
+        </table>
+      </div>
+
+      <div class="ad-card" id="cm-qr-card" style="display:none;margin-top:16px">
+        <div class="ad-card-head" id="cm-qr-head">QR code</div>
+        <div class="ad-card-sub" id="cm-qr-sub"></div>
+        <div id="cm-qr-box" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
   <!-- MOCK INTERVIEWS ─────────────────────────────────────────
        The first thing sold here that is not course access, so it has its own
        tables and its own order/verify functions and never touches
@@ -3025,24 +3149,6 @@
       </div>
     </div>
 
-    <!-- Grace is separate from the switch on purpose. Granting time changes
-         nothing on its own while the course is free, so it can be set safely
-         in advance and the switch flipped later; and flipping with no grace
-         is a real choice (a sudden switch), not a mistake, so the toggle says
-         out loud which one it is about to do. -->
-    <div class="ad-card" style="margin-bottom:18px">
-      <div class="ad-card-head">Grace period</div>
-      <div class="ad-card-sub" id="spgrace-sub">Loading...</div>
-      <div style="display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-top:12px">
-        <div class="ad-field" style="max-width:190px">
-          <label class="ad-label">Keep access until end of</label>
-          <input type="date" class="ad-input" id="spgrace-date">
-        </div>
-        <button type="button" class="ad-btn btn-sm" onclick="applySponsorshipGrace()">Give everyone until this date</button>
-        <button type="button" class="ad-btn btn-ghost btn-sm" onclick="clearSponsorshipGrace()">Clear all grace</button>
-      </div>
-      <div id="spgrace-warn" style="font-size:12.5px;color:var(--text2);margin-top:10px;line-height:1.6"></div>
-    </div>
     </div>
 
     <div class="adp" id="plans-pane-offer" hidden>
@@ -3546,7 +3652,7 @@ var _dashProfiles = [];
 /* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
    deep-linking and the hashchange handler, so #approvals silently did
    nothing and the tab could only be reached by clicking. */
-var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'events', 'mock', 'liveexam', 'status'];
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'events', 'mock', 'liveexam', 'status', 'campaigns'];
 
 /* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
    Elec-Buddy sells two separate courses: COC (Oral + Written) and
@@ -5708,183 +5814,28 @@ function renderSponsorshipPaid() {
                      + 'run shorter than Fundamentals because they are drill topics, '
                      + 'not because they are unfinished. Check the Content Status tab '
                      + 'before switching, and remember this reopens or closes the whole '
-                     + 'course to every signed-in user.'
-                     // Said here as well as on the switch itself, so the state is
-                     // visible before the decision rather than only inside the
-                     // confirm box that follows it.
-                     + (_spGrace
-                         ? (_spGrace.live > 0
-                             ? ' ' + _spGrace.live + ' accounts currently hold a grace grant.'
-                             : ' No grace grant is set, so switching now would cut everyone off at once.')
-                         : '');
+                     + 'course to every signed-in user.';
   }
-}
-
-/* ── Grace period ─────────────────────────────────────────────────────────
-   Writes profiles.granted_sponsorship_expires_at, which is exactly what that
-   column is for: "Sponsorship time given rather than bought (comp coupon or
-   admin grant)", per sponsorship_pricing_setup.sql.
-
-   It also writes profiles.sponsorship_expires_at, and MUST. An earlier version
-   of this comment claimed "deriveAccess reads it alongside the paid column, so
-   a grant and a purchase behave identically". That was simply wrong, and it is
-   the reason this was broken: deriveAccess consults SCOPE_COLUMN only, never
-   GRANT_COLUMN. The ledger records where access came from; it does not confer
-   access. Writing it alone gave 163 accounts a grace grant that this console
-   displayed as live and the server did not honour. The only reason nobody
-   noticed is that the deployed get-sponsorship-key had no paywall in it at
-   all, so it was handing out the key regardless.
-
-   No migration needed: profiles already carries an "Admin can update all
-   profiles" policy (qual is_admin()), and protect_privileged_fields skips
-   admins entirely, so these writes land rather than being silently reverted.
-   That last part is worth stating, because a write that looks like it worked
-   and did nothing is this table's speciality. */
-var _spGrace = null;   // { live, until, total }
-
-async function loadSponsorshipGrace() {
-  var sub = document.getElementById('spgrace-sub');
-  if (!sub) return;
-  try {
-    var nowIso = new Date().toISOString();
-    var live = await _sb.from('profiles')
-      .select('granted_sponsorship_expires_at', { count: 'exact' })
-      .gt('granted_sponsorship_expires_at', nowIso)
-      .order('granted_sponsorship_expires_at', { ascending: false })
-      .limit(1);
-    if (live.error) throw live.error;
-    var total = await _sb.from('profiles').select('id', { count: 'exact', head: true });
-    _spGrace = {
-      live:  live.count || 0,
-      until: (live.data && live.data[0]) ? live.data[0].granted_sponsorship_expires_at : null,
-      total: (total && total.count) || 0
-    };
-  } catch (e) {
-    sub.textContent = 'Could not read the grace state: ' + (e.message || e);
-    return;
-  }
-  var d = document.getElementById('spgrace-date');
-  if (d && !d.value) {
-    var t = new Date(Date.now() + 7 * 864e5);       // a week out, as a starting point
-    d.value = t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0')
-            + '-' + String(t.getDate()).padStart(2, '0');
-  }
-  renderSponsorshipGrace();
-  renderSponsorshipPaid();      // its warning depends on the grace state
-}
-
-function renderSponsorshipGrace() {
-  var sub  = document.getElementById('spgrace-sub');
-  var warn = document.getElementById('spgrace-warn');
-  if (!sub || !_spGrace) return;
-
-  if (_spGrace.live > 0) {
-    sub.textContent = _spGrace.live + ' of ' + _spGrace.total + ' accounts hold free '
-      + 'Sponsorship access until ' + fmtDateTime(_spGrace.until)
-      + ', whether or not the course is paid.';
-  } else {
-    sub.textContent = 'No account holds a grace grant. Switching to Paid right now '
-      + 'is a sudden switch: all ' + _spGrace.total + ' accounts lose the course '
-      + 'immediately, except the free preview topics.';
-  }
-  warn.textContent = 'Granting time changes nothing while the course is Free, so it is '
-    + 'safe to set in advance. Accounts that already hold a longer grant keep theirs: '
-    + 'this only ever extends, never shortens. Purchases are untouched either way.';
-}
-
-async function applySponsorshipGrace() {
-  var d = document.getElementById('spgrace-date');
-  if (!d || !d.value) { alert('Pick a date first.'); return; }
-  // End of the chosen day in local time: "until Friday" means through Friday,
-  // not from its first second.
-  var until = new Date(d.value + 'T23:59:59');
-  if (isNaN(until.getTime())) { alert('That date is not valid.'); return; }
-  if (until.getTime() < Date.now()) { alert('That date has already passed.'); return; }
-  var iso = until.toISOString();
-
-  if (!confirm('Give every account free Sponsorship access until ' + until.toLocaleString()
-      + '?\n\nAccounts already holding a longer grant keep theirs. This does not change '
-      + 'whether the course is paid, and it does not touch anyone\'s purchase.')) return;
-
-  /* Two statements rather than one .or() filter: the value is an ISO
-     timestamp full of characters PostgREST's or= grammar treats specially,
-     and a filter that silently fails to match would look exactly like a
-     successful no-op. Same reason the count is re-read afterwards rather
-     than assumed. */
-  /* BOTH columns, always. granted_* is the ledger a refund rebuilds from;
-     sponsorship_expires_at is the column that actually grants access, and it
-     is the ONLY one deriveAccess consults. Writing the ledger alone produced a
-     grace grant that the admin console reported as live, the client gate
-     believed (it reads both), and the server refused, because
-     get-sponsorship-key asks deriveAccess. redeem-coupon has always written
-     both for exactly this reason; this now matches it. */
-  var grant = { granted_sponsorship_expires_at: iso, sponsorship_expires_at: iso };
-  var a = await _sb.from('profiles').update(grant)
-            .is('granted_sponsorship_expires_at', null);
-  if (a.error) { alert('Failed: ' + a.error.message); return; }
-  var b = await _sb.from('profiles').update(grant)
-            .lt('granted_sponsorship_expires_at', iso);
-  if (b.error) { alert('Failed: ' + b.error.message); return; }
-
-  logAdminAction('sponsorship_grace_set', null, { until: iso });
-  await loadSponsorshipGrace();
-  toast('Grace period set to ' + fmtDateTime(iso));
-}
-
-async function clearSponsorshipGrace() {
-  if (!confirm('Clear the grace grant from every account?\n\nAnyone relying on it loses '
-      + 'Sponsorship the moment the course is paid. Purchases are not affected.')) return;
-  /* Clearing grace must not revoke a PURCHASE. Both columns hold the same
-     value while the only sponsorship access someone has is the grant, so those
-     rows get both cleared; a row where the two differ has bought something on
-     top, and only the ledger is cleared there. PostgREST cannot compare one
-     column to another in a filter, so the split is done here on the ids.
-
-     The naive version of this - clearing sponsorship_expires_at for everyone
-     with a grant - would refund nobody and revoke everybody. */
-  var rows = await _sb.from('profiles')
-      .select('id, sponsorship_expires_at, granted_sponsorship_expires_at')
-      .not('granted_sponsorship_expires_at', 'is', null);
-  if (rows.error) { alert('Failed: ' + rows.error.message); return; }
-
-  var graceOnly = [], alsoBought = [];
-  (rows.data || []).forEach(function (r) {
-    (r.sponsorship_expires_at === r.granted_sponsorship_expires_at ? graceOnly : alsoBought)
-      .push(r.id);
-  });
-
-  if (graceOnly.length) {
-    var g = await _sb.from('profiles')
-        .update({ granted_sponsorship_expires_at: null, sponsorship_expires_at: null })
-        .in('id', graceOnly);
-    if (g.error) { alert('Failed: ' + g.error.message); return; }
-  }
-  if (alsoBought.length) {
-    var k = await _sb.from('profiles')
-        .update({ granted_sponsorship_expires_at: null })
-        .in('id', alsoBought);
-    if (k.error) { alert('Failed: ' + k.error.message); return; }
-  }
-  logAdminAction('sponsorship_grace_cleared', null, null);
-  await loadSponsorshipGrace();
-  toast('Grace cleared');
 }
 
 async function toggleSponsorshipPaid() {
   var next = !_spaidState;
   // Says which of the two it is about to do. A sudden switch is a legitimate
   // choice; being unable to tell which one you picked is not.
-  var graceLine = '';
-  if (next) {
-    if (_spGrace && _spGrace.live > 0) {
-      graceLine = '\n\n' + _spGrace.live + ' of ' + _spGrace.total + ' accounts hold a grace '
-        + 'grant and keep the course until ' + fmtDateTime(_spGrace.until) + '. Everyone else '
-        + 'is cut off now.';
-    } else {
-      graceLine = '\n\nSUDDEN SWITCH: no account holds a grace grant, so every reader loses '
-        + 'the course immediately. Set a grace period below first if that is not what you want.';
-    }
-  }
+  /* The grace control was removed on 12 Sep 2026, once it had done the
+     one job it existed for: carrying 163 readers across the launch. The
+     switch has already been flipped, so there is nothing left for it to
+     carry, and a control that changes nothing is worse than no control.
+
+     The switch is immediate now and says so. Anyone who should keep
+     access past a switch is given it the ordinary way, on Grant Access,
+     which writes the same columns a purchase does. */
+  var graceLine = next
+    ? '\n\nThis takes effect immediately. Anyone without a purchase, a grant '
+      + 'or a live trial loses the course the moment you confirm, including '
+      + 'readers who are in it right now. To keep specific people in, give '
+      + 'them access on the Grant Access tab first.'
+    : '';
   var priceLine = next
     ? '\n\nThe three Sponsorship tiers go on sale at their current prices: '
       + _spPriceSummary() + '. Change them any time in Prices above.'
@@ -8934,11 +8885,358 @@ document.addEventListener('keydown', function (e) {
 
    The chosen pane is remembered per tab, so an admin who lives in Existing
    Coupons is not returned to the create form on every visit. */
+/* ── CAMPAIGNS ────────────────────────────────────────────────────────────
+   A campaign is one link: /app/auth.html?c=<slug>. It decides which course a
+   scanner lands in and which plan and coupon their checkout opens with.
+
+   Nothing here is a price. create-razorpay-order derives every amount from
+   pricing_plans and re-validates the coupon, exactly as if the buyer had
+   typed the code. A campaign can only ever choose which of the admin's own
+   prices and codes to put in front of somebody.
+
+   Needs app/admin/campaigns_setup.sql. */
+var _editingCampaignSlug = null;
+var _cmRows = [];
+var _cmPaid = {};          // slug -> count of paid purchases
+
+// The public origin, not the admin one, so a QR made on a laptop still points
+// at the real site rather than at 127.0.0.1.
+var CAMPAIGN_ORIGIN = 'https://elec-buddy.com';
+
+function campaignUrl(slug) {
+  return CAMPAIGN_ORIGIN + '/app/auth.html?c=' + encodeURIComponent(slug);
+}
+
+// Slugs are typed by hand and then printed on a slide, so silently correct
+// the two mistakes that are certain: capitals and spaces.
+function cmSlugTyped() {
+  var el = document.getElementById('cm-slug');
+  var cleaned = (el.value || '').toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+/, '');
+  if (cleaned !== el.value) {
+    var at = el.selectionStart;
+    el.value = cleaned;
+    try { el.setSelectionRange(at, at); } catch (e) {}
+  }
+  cmPreview();
+}
+
+function cmPreview() {
+  var box = document.getElementById('cm-preview');
+  if (!box) return;
+  var slug = (document.getElementById('cm-slug').value || '').trim();
+  if (!slug) { box.textContent = 'Fill in a slug to see the link.'; return; }
+
+  var course = document.getElementById('cm-course').value;
+  var plan   = document.getElementById('cm-plan').value;
+  var coupon = document.getElementById('cm-coupon').value;
+  var head   = (document.getElementById('cm-headline').value || '').trim();
+
+  var bits = ['lands in ' + (course === 'sponsorship' ? 'Sponsorship' : 'CoC Preparation')];
+  bits.push(plan ? tierLabel(plan) + ' preselected' : 'all plans shown');
+  if (coupon) bits.push(coupon + ' applied');
+
+  box.innerHTML = '<div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;'
+    + 'color:var(--text);word-break:break-all;margin-bottom:6px">' + esc(campaignUrl(slug)) + '</div>'
+    + '<div style="font-size:12px;color:var(--text2)">' + esc(bits.join(' · ')) + '</div>'
+    + (head ? '<div style="font-size:12px;color:var(--text3);margin-top:5px">They see: &ldquo;'
+              + esc(head) + '&rdquo;</div>' : '');
+}
+
+function cmMsg(text, ok) {
+  var el = document.getElementById('cm-msg');
+  if (!el) return;
+  el.style.display = text ? 'block' : 'none';
+  el.textContent = text || '';
+  el.style.background = ok ? 'var(--green-dim)' : 'var(--red-dim)';
+  el.style.color = ok ? 'var(--green)' : 'var(--red)';
+}
+
+async function initCampaignsTab() {
+  // Only codes that can still be redeemed, same rule and same reason as the
+  // mail tab's picker: offering a spent code is offering a dead discount.
+  try {
+    var cp = await _sb.from('coupons').select('code, active, expires_at').eq('active', true).order('code');
+    var live = (cp.data || []).filter(function (c) { return !c.expires_at || new Date(c.expires_at) > new Date(); });
+    document.getElementById('cm-coupon').innerHTML = '<option value="">No coupon</option>'
+      + live.map(function (c) { return '<option value="' + esc(c.code) + '">' + esc(c.code) + '</option>'; }).join('');
+  } catch (e) { /* the form still works without a coupon */ }
+  loadCampaigns();
+}
+
+async function loadCampaigns() {
+  var tb = document.getElementById('cm-tbody');
+  if (!tb) return;
+  var res = await _sb.from('campaigns').select('*').order('created_at', { ascending: false });
+  if (res.error) {
+    tb.innerHTML = '<tr><td colspan="7" class="empty">Run campaigns_setup.sql to enable Campaigns.</td></tr>';
+    return;
+  }
+  _cmRows = res.data || [];
+
+  // Purchases per campaign, counted from payments rather than kept as a
+  // counter on the row: a counter can drift, and this cannot.
+  _cmPaid = {};
+  try {
+    var pay = await _sb.from('payments').select('campaign').eq('status', 'paid').not('campaign', 'is', null);
+    (pay.data || []).forEach(function (p) { _cmPaid[p.campaign] = (_cmPaid[p.campaign] || 0) + 1; });
+  } catch (e) {}
+
+  renderCampaigns();
+}
+
+function cmIsLive(c) {
+  if (!c.active) return false;
+  var now = Date.now();
+  if (c.starts_at && new Date(c.starts_at).getTime() > now) return false;
+  if (c.ends_at   && new Date(c.ends_at).getTime()   < now) return false;
+  return true;
+}
+
+function renderCampaigns() {
+  var tb = document.getElementById('cm-tbody');
+  if (!tb) return;
+  // Course-scoped like Coupons and Plans, so the switcher means the same
+  // thing on every tab.
+  var rows = _cmRows.filter(function (c) { return c.course === _adminCourse; });
+
+  var cnt = document.getElementById('campaigns-c-all');
+  if (cnt) cnt.textContent = rows.length ? '(' + rows.length + ')' : '';
+
+  if (!rows.length) {
+    tb.innerHTML = '<tr><td colspan="7" class="empty">No campaigns for '
+      + (_adminCourse === 'sponsorship' ? 'Sponsorship' : 'CoC') + ' yet.</td></tr>';
+    return;
+  }
+
+  tb.innerHTML = rows.map(function (c) {
+    var live = cmIsLive(c);
+    var offer = [];
+    if (c.plan) offer.push(tierLabel(c.plan)); else offer.push('all plans');
+    if (c.coupon_code) offer.push(esc(c.coupon_code));
+    var when = (c.starts_at || c.ends_at)
+      ? (c.starts_at ? fmtDate(c.starts_at) : '-') + ' to ' + (c.ends_at ? fmtDate(c.ends_at) : 'open')
+      : 'always';
+    var paid = _cmPaid[c.slug] || 0;
+    return '<tr' + (live ? '' : ' style="opacity:.55"') + '>'
+      + '<td data-label="Campaign"><div style="font-weight:700">' + esc(c.name) + '</div>'
+      +   '<div style="font-size:11px;color:var(--text3);font-family:ui-monospace,monospace">' + esc(c.slug) + '</div></td>'
+      + '<td data-label="Course">' + esc(when) + '</td>'
+      + '<td data-label="Offer">' + offer.join(' · ') + '</td>'
+      + '<td data-label="Scans" style="font-variant-numeric:tabular-nums">' + (c.scans || 0) + '</td>'
+      + '<td data-label="Paid" style="font-variant-numeric:tabular-nums;font-weight:700">' + paid + '</td>'
+      + '<td data-label="Live">' + (live
+          ? '<span style="color:var(--green);font-weight:700">live</span>'
+          : '<span style="color:var(--text3)">off</span>') + '</td>'
+      + '<td style="white-space:nowrap">'
+      +   '<button class="ad-btn btn-sm" onclick="cmShowQr(' + attrJs(c.slug) + ')">QR</button> '
+      +   '<button class="ad-btn btn-sm" onclick="cmCopyLink(' + attrJs(c.slug) + ')">Copy link</button> '
+      +   '<button class="ad-btn btn-sm" onclick="editCampaign(' + attrJs(c.slug) + ')">Edit</button> '
+      +   '<button class="ad-btn btn-sm" onclick="setCampaignActive(' + attrJs(c.slug) + ',' + (c.active ? 'false' : 'true') + ')">'
+      +     (c.active ? 'Disable' : 'Enable') + '</button>'
+      + '</td></tr>';
+  }).join('');
+}
+
+function cmCopyLink(slug) {
+  var url = campaignUrl(slug);
+  try {
+    navigator.clipboard.writeText(url).then(
+      function () { toast('Link copied'); },
+      function () { window.prompt('Copy this link:', url); }
+    );
+  } catch (e) { window.prompt('Copy this link:', url); }
+}
+
+/* The QR is drawn here rather than fetched from a QR-image service on
+   purpose: sending the URL to a third party to get a picture back means the
+   link, and every campaign name in it, leaves the building for no reason. */
+function cmShowQr(slug) {
+  var row  = _cmRows.filter(function (c) { return c.slug === slug; })[0];
+  var card = document.getElementById('cm-qr-card');
+  var box  = document.getElementById('cm-qr-box');
+  var url  = campaignUrl(slug);
+  document.getElementById('cm-qr-head').textContent = 'QR code: ' + (row ? row.name : slug);
+  document.getElementById('cm-qr-sub').textContent = url;
+  card.style.display = '';
+  box.innerHTML = '<div class="ad-loading">Drawing...</div>';
+  card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+  cmEnsureQrLib().then(function () {
+    box.innerHTML = '';
+    var holder = document.createElement('div');
+    // White ground and padding around it. A QR rendered onto a dark card is
+    // the classic reason a phone will not read it off a projector.
+    holder.style.cssText = 'background:#fff;padding:14px;border-radius:10px;line-height:0';
+    box.appendChild(holder);
+    new window.QRCode(holder, {
+      text: url, width: 220, height: 220,
+      colorDark: '#000000', colorLight: '#ffffff',
+      correctLevel: window.QRCode.CorrectLevel.M
+    });
+    var side = document.createElement('div');
+    side.style.cssText = 'flex:1 1 240px;min-width:0';
+    side.innerHTML = '<div style="font-size:12px;color:var(--text2);line-height:1.6">'
+      + 'Print this on the slide. Test it from a phone before the session: scan it, '
+      + 'check the banner names the right campaign, and check the scan counter moves.'
+      + '</div>';
+    var dl = document.createElement('button');
+    dl.className = 'ad-btn btn-sm';
+    dl.style.marginTop = '10px';
+    dl.textContent = 'Download PNG';
+    dl.onclick = function () { cmDownloadQr(holder, slug); };
+    side.appendChild(dl);
+    box.appendChild(side);
+  }, function () {
+    box.innerHTML = '<div class="ad-loading">Could not load the QR library. '
+      + 'The link above still works if you paste it into any QR generator.</div>';
+  });
+}
+
+function cmDownloadQr(holder, slug) {
+  var canvas = holder.querySelector('canvas');
+  var img    = holder.querySelector('img');
+  var data   = canvas ? canvas.toDataURL('image/png') : (img ? img.src : null);
+  if (!data) { toast('Nothing to download', 'err'); return; }
+  var a = document.createElement('a');
+  a.href = data;
+  a.download = 'elec-buddy-' + slug + '.png';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+// Loaded on demand, not at boot: the console opens on the dashboard and most
+// sessions never touch this tab.
+var _qrLibPromise = null;
+function cmEnsureQrLib() {
+  if (window.QRCode) return Promise.resolve();
+  if (_qrLibPromise) return _qrLibPromise;
+  _qrLibPromise = new Promise(function (resolve, reject) {
+    var s = document.createElement('script');
+    s.src = 'https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js';
+    s.onload = resolve;
+    s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  return _qrLibPromise;
+}
+
+function campaignForm() {
+  var v = function (id) { return (document.getElementById(id).value || '').trim(); };
+  var starts = v('cm-starts'), ends = v('cm-ends');
+  return {
+    slug:        v('cm-slug'),
+    name:        v('cm-name'),
+    course:      v('cm-course'),
+    plan:        v('cm-plan') || null,
+    coupon_code: v('cm-coupon') || null,
+    headline:    v('cm-headline') || null,
+    subline:     v('cm-subline') || null,
+    // End of day, so "closes on the 14th" includes the 14th. Same convention
+    // as the sponsorship grace control.
+    starts_at:   starts ? new Date(starts + 'T00:00:00').toISOString() : null,
+    ends_at:     ends   ? new Date(ends   + 'T23:59:59').toISOString() : null
+  };
+}
+
+async function saveCampaign() {
+  var f = campaignForm();
+  if (!f.name) { cmMsg('Give it a name so you can find it later.', false); return; }
+  if (!/^[a-z0-9][a-z0-9-]{1,38}[a-z0-9]$/.test(f.slug)) {
+    cmMsg('The slug must be 3 to 40 characters, lowercase letters, numbers and dashes, and cannot start or end with a dash.', false);
+    return;
+  }
+  if (f.starts_at && f.ends_at && new Date(f.ends_at) <= new Date(f.starts_at)) {
+    cmMsg('The closing date has to be after the opening date.', false);
+    return;
+  }
+
+  var btn = document.getElementById('cm-save');
+  btn.disabled = true;
+  var res;
+  if (_editingCampaignSlug) {
+    // The slug is the URL and the QR is already printed, so it is never part
+    // of an update. Everything else about a campaign can change under a live
+    // QR, which is the point of the feature.
+    var patch = Object.assign({}, f);
+    delete patch.slug;
+    res = await _sb.from('campaigns').update(patch).eq('slug', _editingCampaignSlug);
+  } else {
+    f.created_by = _myId;
+    res = await _sb.from('campaigns').insert(f);
+  }
+  btn.disabled = false;
+
+  if (res.error) {
+    cmMsg(res.error.code === '23505'
+      ? 'That slug is already taken. Pick another, since the old one may already be printed somewhere.'
+      : 'Failed: ' + res.error.message, false);
+    return;
+  }
+
+  cmMsg(_editingCampaignSlug ? 'Campaign updated.' : 'Campaign created. Open the QR from the list.', true);
+  logAdminAction(_editingCampaignSlug ? 'edit_campaign' : 'create_campaign', f.slug, f);
+  cancelCampaignEdit();
+  loadCampaigns();
+}
+
+function editCampaign(slug) {
+  var c = _cmRows.filter(function (x) { return x.slug === slug; })[0];
+  if (!c) return;
+  _editingCampaignSlug = slug;
+  document.getElementById('cm-name').value     = c.name || '';
+  document.getElementById('cm-slug').value     = c.slug;
+  document.getElementById('cm-slug').disabled  = true;
+  document.getElementById('cm-course').value   = c.course;
+  document.getElementById('cm-plan').value     = c.plan || '';
+  document.getElementById('cm-coupon').value   = c.coupon_code || '';
+  document.getElementById('cm-headline').value = c.headline || '';
+  document.getElementById('cm-subline').value  = c.subline || '';
+  document.getElementById('cm-starts').value   = c.starts_at ? String(c.starts_at).slice(0, 10) : '';
+  document.getElementById('cm-ends').value     = c.ends_at   ? String(c.ends_at).slice(0, 10)   : '';
+  document.getElementById('cm-form-head').textContent = 'Edit Campaign';
+  document.getElementById('cm-form-sub').textContent =
+    'The slug cannot change: the QR for it may already be on a slide. Everything else takes effect immediately.';
+  document.getElementById('cm-save-label').textContent = 'Save Changes';
+  document.getElementById('cm-cancel').style.display = '';
+  showAdminPane('campaigns', 'add');
+  cmPreview();
+  document.getElementById('cm-name').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelCampaignEdit() {
+  _editingCampaignSlug = null;
+  ['cm-name', 'cm-slug', 'cm-headline', 'cm-subline', 'cm-starts', 'cm-ends'].forEach(function (id) {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('cm-slug').disabled = false;
+  document.getElementById('cm-plan').value = '';
+  document.getElementById('cm-coupon').value = '';
+  document.getElementById('cm-course').value = _adminCourse === 'coc' ? 'coc' : 'sponsorship';
+  document.getElementById('cm-form-head').textContent = 'New Campaign';
+  document.getElementById('cm-form-sub').textContent =
+    'The link is built from the slug. Print the QR on the slide, and whatever you change here changes what the scanner sees, without a deploy.';
+  document.getElementById('cm-save-label').textContent = 'Create Campaign';
+  document.getElementById('cm-cancel').style.display = 'none';
+  cmPreview();
+}
+
+async function setCampaignActive(slug, active) {
+  // Naming the consequence rather than asking "are you sure": the QR is the
+  // thing that keeps working or stops, and that is what is being decided.
+  if (!active && !confirm('Turn off "' + slug + '"?\n\nAnyone who scans the QR after this lands on an ordinary sign-in page: '
+      + 'no banner, no preselected plan and no coupon. The QR itself keeps working, so nothing printed becomes a dead link.')) return;
+  var res = await _sb.from('campaigns').update({ active: active }).eq('slug', slug);
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+  logAdminAction(active ? 'enable_campaign' : 'disable_campaign', slug, null);
+  toast(active ? 'Campaign live' : 'Campaign off');
+  loadCampaigns();
+}
+
 var ADMIN_PANES = {
   notifications: ['compose', 'sent'],
   admins:   ['add', 'current'],
   notices:  ['add', 'all'],
   events:   ['add', 'all'],
+  campaigns:['add', 'all'],
   coupons:  ['add', 'existing'],
   videos:   ['add', 'existing'],
   plans:    ['access', 'offer'],
@@ -11305,6 +11603,10 @@ var ACTION_LABELS = {
   refund_payment:     ['Refund issued',       'var(--purple)'],
   send_email:         ['Email sent',          'var(--blue)'],
   create_coupon:      ['Coupon created',      'var(--blue)'],
+  create_campaign:    ['Campaign created',    'var(--blue)'],
+  edit_campaign:      ['Campaign edited',     'var(--blue)'],
+  enable_campaign:    ['Campaign live',       'var(--green)'],
+  disable_campaign:   ['Campaign turned off', 'var(--orange)'],
   force_trial_expiry: ['Trial forced expired', 'var(--orange)'],
 };
 
@@ -11633,11 +11935,16 @@ window.showTab = function(name) {
     _tabLoaded.plans = true;
     loadPlansTab();
     loadSponsorshipPaid();
-    loadSponsorshipGrace();
   }
   if (name === 'videos' && !_tabLoaded.videos) {
     _tabLoaded.videos = true;
     initVideosTab();
+  }
+  // Lazy-once like coupons and plans: the coupon picker and the campaign list
+  // are two round trips nobody needs unless they open this tab.
+  if (name === 'campaigns' && !_tabLoaded.campaigns) {
+    _tabLoaded.campaigns = true;
+    initCampaignsTab();
   }
   if (name === 'activity') loadActivity();
   applyCourseScope();          // repaint any not-tracked notice for this tab
@@ -11701,6 +12008,10 @@ function setAdminCourse(course) {
   // cached rows rather than refetching, so switching while sitting on the
   // Coupons tab does not leave the other course's codes on screen.
   try { if (typeof renderCoupons === 'function' && window._couponRows) renderCoupons(); } catch (e) {}
+  // Campaigns are course-scoped too. Re-render from the cache rather than
+  // refetching, so switching while sitting on the tab does not leave the
+  // other course's campaigns on screen.
+  try { if (typeof renderCampaigns === 'function' && _cmRows.length) renderCampaigns(); } catch (e) {}
 
   applyCourseScope();
 }
@@ -11770,9 +12081,9 @@ var GLOBAL_TABS = ['dashboard', 'users', 'approvals', 'admins', 'mail', 'activit
 
 var COURSE_TABS = {
   sponsorship: ['online', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notifications',
-                'notices', 'events', 'mock', 'status'],
+                'notices', 'events', 'mock', 'status', 'campaigns'],
   coc:         ['funnel', 'online', 'grant', 'notifications', 'payments', 'coupons', 'plans',
-                'videos', 'liveexam'],
+                'videos', 'liveexam', 'campaigns'],
 };
 
 function tabsForCourse() { return COURSE_TABS[_adminCourse] || COURSE_TABS.coc; }

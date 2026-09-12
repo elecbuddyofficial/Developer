@@ -384,8 +384,11 @@ for (const fn of MONEY_PATHS) {
   const page = readFileSync(
     join(HERE, '..', '..', '..', 'app', 'sponsorship', 'index.html'), 'utf8');
 
+  // The resolver was an IIFE until 12 Sep 2026, when it became a named
+  // function so it could also be re-run on a timer and on tab focus. Matched
+  // by name now, and the await below calls it directly.
   const resolver = page.match(
-    /window\._sponStateReady = \(async function \(\) \{[\s\S]*?\}\)\(\);/);
+    /async function _sponReadState\(\) \{[\s\S]*?\n  \}\n/);
   const freeFn = page.match(/function _sponFreeTopic\(topicId\) \{[\s\S]*?\n  \}/);
   const lockFn = page.match(/window\.isLocked = function \(topicId\) \{[\s\S]*?\n  \};/);
 
@@ -424,7 +427,7 @@ for (const fn of MONEY_PATHS) {
           ${resolver[0].replace(/window\./g, 'w.')}
           ${freeFn[0]}
           ${lockFn[0].replace(/window\./g, 'w.')}
-          await w._sponStateReady;
+          await _sponReadState();
           return { paid: w._sponPaid, access: w._sponAccess,
                    lockedPaidTopic: w.isLocked('F05'),
                    lockedFreeTopic: w.isLocked('F01') };
@@ -450,12 +453,50 @@ for (const fn of MONEY_PATHS) {
       ['paid, grace lapsed, never bought: locked',
        { sponsorship_paid: true }, { sponsorship_expires_at: null, granted_sponsorship_expires_at: PAST },
        { lockedPaidTopic: true }],
+      /* Grace sets BOTH columns, which is what the admin control writes and
+         what the 11 Sep backfill put on all 163 accounts. This fixture used
+         to set granted_* alone and expect the gate to open on it: that was
+         the pre-backfill shape, the server never honoured it, and encoding it
+         here is what made the gate look correct while it disagreed with
+         deriveAccess. */
       ['paid, still inside grace: open',
-       { sponsorship_paid: true }, { sponsorship_expires_at: null, granted_sponsorship_expires_at: FUTURE },
+       { sponsorship_paid: true },
+       { sponsorship_expires_at: FUTURE, granted_sponsorship_expires_at: FUTURE },
        { lockedPaidTopic: false }],
       ['paid, and they just bought it: open',
        { sponsorship_paid: true }, { sponsorship_expires_at: FUTURE, granted_sponsorship_expires_at: PAST },
        { lockedPaidTopic: false }],
+
+      /* The three shapes that were showing a paywall to people who already
+         had access, found 12 Sep 2026. A lifetime holder and anyone inside
+         their trial are granted everything by deriveAccess, and neither of
+         those touches the expiry columns, so a gate that read only those
+         columns locked them out of a course the server would happily hand
+         them the key for. */
+      ['lifetime holder: open, with no sponsorship dates at all',
+       { sponsorship_paid: true },
+       { subscription_plan: 'lifetime', sponsorship_expires_at: null, granted_sponsorship_expires_at: null },
+       { lockedPaidTopic: false }],
+      ['inside the free trial: open',
+       { sponsorship_paid: true },
+       { subscription_plan: 'trial', trial_started_at: new Date(Date.now() - 86400000).toISOString(),
+         sponsorship_expires_at: null, granted_sponsorship_expires_at: null },
+       { lockedPaidTopic: false }],
+      ['trial is over and nothing was bought: locked',
+       { sponsorship_paid: true },
+       { subscription_plan: 'trial', trial_started_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+         sponsorship_expires_at: null, granted_sponsorship_expires_at: null },
+       { lockedPaidTopic: true }],
+
+      /* The grant ledger alone must NOT open the gate. deriveAccess never
+         reads it, so a screen that did was promising content the key server
+         would refuse - which surfaces as content that will not decrypt, not
+         as a paywall, and is the harder of the two to diagnose. */
+      ['grant ledger set but no real expiry: locked, same as the server',
+       { sponsorship_paid: true },
+       { subscription_plan: 'trial', trial_started_at: new Date(Date.now() - 30 * 86400000).toISOString(),
+         sponsorship_expires_at: null, granted_sponsorship_expires_at: FUTURE },
+       { lockedPaidTopic: true }],
     ];
 
     for (const [label, cfg, prof, want] of cases) {
@@ -478,6 +519,46 @@ for (const fn of MONEY_PATHS) {
     check('GATE opens on the profile a real purchase produces',
           afterBuy.lockedPaidTopic === false,
           'paid for sponsorship and the app stayed locked');
+
+    /* ── CONTINUITY ──────────────────────────────────────────────────────
+       Buying it once has to keep working, not just work on the afternoon of
+       the purchase. The gate is re-read on a timer and on every tab focus
+       now, so it is asked the same question repeatedly across the life of a
+       3 month subscription. Every one of those answers has to be "open"
+       until the day it actually expires, and "locked" the moment after.
+
+       This is the COC guarantee applied to Sponsorship: pay once, and it is
+       simply there every time you come back. */
+    const bought = payAndSave(BUYERS['never paid anything, grace expired'],
+                              'sponsorship', 3, NOW);
+    const expiry = new Date(bought.sponsorship_expires_at).getTime();
+    const DAY = 86400000;
+    let lockedWhileValid = [];
+    for (const day of [0, 1, 7, 30, 60, 85, 89]) {
+      // The gate reads the real clock, so the profile is dated relative to it
+      // rather than the clock being moved.
+      const r = await runGate({ sponsorship_paid: true }, {
+        subscription_plan: '3mo',
+        trial_started_at: new Date(Date.now() - 60 * DAY).toISOString(),
+        sponsorship_expires_at: new Date(Date.now() + (90 - day) * DAY).toISOString(),
+        granted_sponsorship_expires_at: null,
+      });
+      if (r.lockedPaidTopic) lockedWhileValid.push('day ' + day);
+    }
+    check('GATE stays open every day of a 3 month subscription',
+          lockedWhileValid.length === 0,
+          'locked on: ' + lockedWhileValid.join(', '));
+
+    const afterExpiry = await runGate({ sponsorship_paid: true }, {
+      subscription_plan: '3mo',
+      trial_started_at: new Date(Date.now() - 200 * DAY).toISOString(),
+      sponsorship_expires_at: new Date(Date.now() - DAY).toISOString(),
+      granted_sponsorship_expires_at: null,
+    });
+    check('GATE closes the day after it expires',
+          afterExpiry.lockedPaidTopic === true,
+          'access outlived its expiry date');
+    void expiry;
   }
 }
 

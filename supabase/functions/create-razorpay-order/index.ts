@@ -47,6 +47,16 @@ serve(async (req) => {
       return json({ error: 'That code is not valid for this plan' }, 400);
     }
 
+    // Where this purchase came from, e.g. a QR on a webinar slide. Shape-
+    // checked here and existence-checked below; it is written to the payment
+    // row for attribution and is NEVER allowed to reach the price. A bad or
+    // unknown slug is dropped silently rather than refused: losing one row of
+    // marketing attribution is not a reason to block somebody paying.
+    const rawCamp = body?.campaign as string | undefined;
+    const campaign = typeof rawCamp === 'string' && /^[a-z0-9][a-z0-9-]{1,38}[a-z0-9]$/.test(rawCamp.trim())
+      ? rawCamp.trim()
+      : null;
+
     const sb = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
 
     // ── Lifetime guard ───────────────────────────────────────────────────
@@ -80,6 +90,26 @@ serve(async (req) => {
       .maybeSingle();
 
     if (!planRow || !planRow.active) return json({ error: 'Invalid plan/scope' }, 400);
+
+    /* Confirm the campaign is real before writing it down, so the column
+       cannot be filled with anything a client felt like sending. The service
+       role bypasses RLS, so the date window has to be checked here rather
+       than relied upon from the policy. Anything that fails becomes NULL: an
+       unrecognised slug loses a row of attribution, which is a far smaller
+       harm than refusing a payment over it. */
+    let campaignSlug: string | null = null;
+    if (campaign) {
+      const { data: campRow } = await sb
+        .from('campaigns')
+        .select('slug, active, starts_at, ends_at')
+        .eq('slug', campaign)
+        .maybeSingle();
+      const nowIso = Date.now();
+      const started = !campRow?.starts_at || new Date(campRow.starts_at).getTime() <= nowIso;
+      const ended   = !!campRow?.ends_at   && new Date(campRow.ends_at).getTime()   <  nowIso;
+      if (campRow?.active && started && !ended) campaignSlug = campRow.slug;
+      else console.warn('campaign ignored, not live:', campaign);
+    }
 
     const now = new Date();
     // Price with no code. Same rule the quote endpoint used, from _shared so
@@ -198,6 +228,7 @@ serve(async (req) => {
       original_amount:   listAmount,   // what it would have been without a code
       discount_amount:   discountAmount,
       coupon_code:       couponCode,
+      campaign:          campaignSlug,
       currency:          'INR',
       status:            'created',
     });

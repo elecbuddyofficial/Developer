@@ -521,6 +521,38 @@
       margin: -10px 0 18px; text-align: center;
     }
 
+    /* ── CAMPAIGN BANNER ──────────────────────────────────────────────────
+       Shown only when the page was opened from a campaign link, i.e. someone
+       scanned a QR off a slide. It exists to tell them they are in the right
+       place: the wording comes from the campaigns row, so the slide and the
+       screen can be made to say the same thing without a deploy.
+
+       Literal hex, like the rest of this page: auth.html is deliberately
+       single-theme and does not load style.css (see the note at the top of
+       the file), so there are no tokens to reach for here. --acc IS defined
+       above and does flip per course, so the accent follows whichever course
+       the campaign puts the visitor in. */
+    .camp {
+      display: none;
+      background: var(--acc-tint); border: 1px solid var(--acc);
+      border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;
+    }
+    .camp.on { display: block; }
+    .camp-head {
+      font-size: 13.5px; font-weight: 800; color: var(--acc);
+      letter-spacing: .2px; line-height: 1.35;
+    }
+    .camp-sub {
+      font-size: 12px; color: #A8BACD; line-height: 1.55; margin-top: 5px;
+    }
+    .camp-off {
+      display: inline-block; margin-top: 9px; padding: 4px 9px;
+      background: #0A1828; border: 1px dashed var(--acc); border-radius: 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11.5px; font-weight: 700; color: var(--acc);
+      letter-spacing: .6px;
+    }
+
     /* ── TRACK PROMPT ─────────────────────────────────────────────────────
        Shown once, post-login, to any account whose default_track is still
        NULL - every account that existed before this shipped. The course
@@ -775,6 +807,14 @@
   <div class="brand">
     <div class="brand-name">Elec-Buddy</div>
     <div class="brand-sub">ETO CoC · STCW Reg. III/6</div>
+  </div>
+
+  <!-- Filled by initCampaign() when the page is opened as ?c=<slug>.
+       Stays hidden otherwise, so an ordinary visitor sees no trace of it. -->
+  <div class="camp" id="camp" aria-live="polite">
+    <div class="camp-head" id="camp-head"></div>
+    <div class="camp-sub" id="camp-sub"></div>
+    <div class="camp-off" id="camp-off" hidden></div>
   </div>
 
   <!-- Which course, chosen before signing in rather than on a page
@@ -1040,6 +1080,90 @@
   var _track = 'coc';
   try { _track = localStorage.getItem('eb_track') || 'coc'; } catch (e) {}
 
+  /* ── CAMPAIGNS ────────────────────────────────────────────────────────────
+     A campaign is a link, usually behind a QR on a webinar slide:
+     auth.html?c=<slug>. It decides which course the visitor lands in, what
+     the banner says, and which plan and coupon the checkout should open with.
+     Everything comes from the campaigns row, so the slide and the screen can
+     be changed together from the admin console without a deploy.
+
+     The slug is held in sessionStorage, not localStorage, and that is the
+     whole reason the flow survives the confirmation email: the visitor signs
+     up, leaves for their inbox, comes back through a link that also carries
+     ?c= (see authReturnUrl), and either source is enough to reconstruct the
+     intent. sessionStorage rather than localStorage because a campaign is a
+     one-visit intent - it should not still be waiting to fire next week on a
+     shared phone in an internet cafe.
+
+     Nothing here is trusted for money. The coupon is re-validated by
+     validate-coupon and the price is derived from pricing_plans inside
+     create-razorpay-order, exactly as if the code had been typed by hand. */
+  var CAMP_KEY = 'eb_campaign';
+  var _campaign = null;
+
+  function _campStash(c) {
+    try { sessionStorage.setItem(CAMP_KEY, JSON.stringify(c)); } catch (e) {}
+  }
+  function _campPending() {
+    if (_campaign) return _campaign;
+    try {
+      var raw = sessionStorage.getItem(CAMP_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function _campClear() {
+    _campaign = null;
+    try { sessionStorage.removeItem(CAMP_KEY); } catch (e) {}
+  }
+
+  async function initCampaign() {
+    var slug;
+    try {
+      slug = new URLSearchParams(window.location.search).get('c');
+    } catch (e) { return; }
+    if (!slug) return;
+
+    // Read it back rather than trusting the URL. RLS only returns rows that
+    // are active and inside their date window, so a slug that has been turned
+    // off or has expired simply reads as nothing and the page behaves as if
+    // the visitor had arrived normally - which is the right failure. Never
+    // show a banner for a campaign the server will not honour.
+    var row = null;
+    try {
+      var res = await sb.from('campaigns')
+        .select('slug,name,course,plan,coupon_code,headline,subline')
+        .eq('slug', slug).maybeSingle();
+      if (!res.error) row = res.data;
+    } catch (e) { /* offline or blocked: fall through to a normal page */ }
+    if (!row) return;
+
+    _campaign = row;
+    _campStash(row);
+
+    // Count the scan. Fire and forget: a counter must never be able to stop
+    // somebody signing up.
+    try { sb.rpc('campaign_hit', { p_slug: row.slug }).then(function () {}, function () {}); } catch (e) {}
+
+    // Put them in the campaign's course and open the tab they need. Someone
+    // who scanned a Sponsorship QR should not have to find the course switch.
+    pickTrack(row.course === 'sponsorship' ? 'sponsorship' : 'coc');
+    switchTab('register');
+
+    var box  = document.getElementById('camp');
+    var head = document.getElementById('camp-head');
+    var sub  = document.getElementById('camp-sub');
+    var off  = document.getElementById('camp-off');
+    if (!box) return;
+    head.textContent = row.headline || row.name;
+    if (row.subline) { sub.textContent = row.subline; }
+    else { sub.remove(); }
+    if (row.coupon_code) {
+      off.textContent = row.coupon_code + ' applied at checkout';
+      off.hidden = false;
+    }
+    box.classList.add('on');
+  }
+
   /* ── UPDATES PANEL ───────────────────────────────────────────────────────
      Renders app/updates.js, filtered to the selected course. track:null
      entries show for both; a track-scoped entry only shows under its own
@@ -1198,6 +1322,10 @@
   }
   window.pickTrack = pickTrack;
   pickTrack(_track, { init: true });
+  // After the default pick, so a campaign's course wins over the remembered
+  // one. Async and never awaited: a slow or failed campaign read must not
+  // hold up the sign-in form for everybody else.
+  initCampaign();
   (function () {
     var list = document.getElementById('updates-list');
     if (list) list.addEventListener('scroll', syncUpdatesFade);
@@ -1219,6 +1347,28 @@
      accounts use which course" without it - see
      app/admin/default_track_activate_setup.sql. */
   function redirectAfterLogin() {
+    /* A pending campaign overrides the normal landing page and carries the
+       checkout intent with it.
+
+       This is also the repair for a pre-existing hole. Every version of this
+       function has used window.location.replace() with a bare path, so ANY
+       intent in the URL was dropped at sign-in. The Sponsorship gate has been
+       losing ?upgrade=sponsorship&plan=... that way for signed-out readers
+       since it shipped: the gate sends them to index.html with the params,
+       index.html has no session so it kicks them here, and they arrive back at
+       a plain app with no memory of what they were trying to buy. */
+    var camp = _campPending();
+    if (camp) {
+      _campClear();
+      var q = '?upgrade=' + encodeURIComponent(camp.course === 'sponsorship' ? 'sponsorship' : 'both')
+            + '&campaign=' + encodeURIComponent(camp.slug);
+      if (camp.plan)        q += '&plan=' + encodeURIComponent(camp.plan);
+      if (camp.coupon_code) q += '&coupon=' + encodeURIComponent(camp.coupon_code);
+      // Always the COC page: that is where the upgrade modal lives, for both
+      // courses. app/sponsorship/index.html sends people there to pay too.
+      window.location.replace('./index.html' + q);
+      return;
+    }
     if (_track === 'sponsorship') window.location.replace('./sponsorship/index.html');
     else                          window.location.replace('./index.html');
   }
@@ -1304,7 +1454,11 @@
       _initError = code === 'otp_expired'
         ? 'That confirmation link has already been used. This is usually harmless: your email provider often opens the link to scan it. Try signing in below, your account is most likely ready. If sign in says your email is not confirmed, sign up again to get a fresh link.'
         : (params.get('error_description') || 'Something went wrong. Please try again.').replace(/\+/g, ' ');
-      history.replaceState(null, '', window.location.pathname);
+      // location.search is kept. This used to be pathname alone, which threw
+      // away ?c=<slug> whenever the confirmation link came back carrying an
+      // error hash - exactly the case where the visitor most needs the
+      // campaign to survive, because they are about to try again.
+      history.replaceState(null, '', window.location.pathname + window.location.search);
     }
   })();
 
@@ -1572,7 +1726,9 @@
         // were on, so by the time they do get a session the value is
         // already there and goAfterAuth() never has to ask.
         data: { full_name: name, default_track: _track },
-        emailRedirectTo: authReturnUrl()
+        // true: carry ?c=<slug> out to the inbox and back, so a campaign
+        // survives the confirmation round trip.
+        emailRedirectTo: authReturnUrl(true)
       }
     });
     if (error) {
@@ -1626,12 +1782,21 @@
   //
   // Every origin the app is served from has to be in Supabase's redirect
   // allowlist, or Supabase rejects the redirect and the email link dies.
-  function authReturnUrl() {
+  // carryCampaign: append ?c=<slug> so a campaign survives the round trip out
+  // to the inbox and back. Only signup asks for it. A password reset link
+  // deliberately does not carry one: someone resetting their password is not
+  // part way through a webinar checkout, and dropping them into a payment
+  // modal afterwards would be a non sequitur.
+  function authReturnUrl(carryCampaign) {
     var path = window.location.pathname;
     // Served as a directory index rather than the explicit file: normalise, so
     // the returned URL is always the page that can actually handle the token.
     if (!/auth\.html$/.test(path)) path = path.replace(/[^/]*$/, '') + 'auth.html';
-    return window.location.origin + path;
+    var url = window.location.origin + path;
+    if (carryCampaign && _campaign && _campaign.slug) {
+      url += '?c=' + encodeURIComponent(_campaign.slug);
+    }
+    return url;
   }
 
   async function handleReset(e) {
