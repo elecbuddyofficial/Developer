@@ -1737,7 +1737,7 @@
   <div class="ad-tab" id="tab-approvals">
     <div class="ad-ph">
       <h1>Signup Approvals</h1>
-      <p>Accounts on unrecognised mail providers, held until you look at them.</p>
+      <p>Accounts held until you look at them. Every row says why.</p>
     </div>
 
     <!-- Counts live on the labels so you can see where the work is without
@@ -1751,20 +1751,40 @@
     </div>
 
     <div class="apr-pane" id="apr-pane-queue">
+    <!-- This note used to describe the mail-provider check only, and the
+         heading above it said the queue WAS that check. There are two ways in,
+         so a Gmail address could sit here under a heading saying it was held
+         for not being a recognised provider, beside a badge confirming it was
+         one. Nothing on the page named the real reason, which is why the only
+         available reading was "this person is cheating". -->
     <p class="dom-note" style="margin-left:0;margin-right:0;">
-      Mainstream providers (Gmail, Yahoo, Outlook, Hotmail, iCloud, Proton,
-      Rediffmail, Zoho) sign up normally and never appear here. Anything else
-      lands in this queue: a real cadet on a college or shipping company address,
-      or a throwaway address farming another free trial. Their trial clock does
-      not run while they wait, so there is no rush and no cost to them.
+      Two things put an account here, and the <strong>Why</strong> column says
+      which.
+      <br><br>
+      <strong>Unrecognised mail provider.</strong> Mainstream providers (Gmail,
+      Yahoo, Outlook, Hotmail, iCloud, Proton, Rediffmail, Zoho) sign up
+      normally and never appear for this reason. Anything else does: a real
+      cadet on a college or shipping company address, or a throwaway address
+      farming another free trial.
+      <br><br>
+      <strong>Shared internet connection.</strong> A different person, on a
+      recognised provider, who signed up from the same connection as an earlier
+      account whose trial had already run out. Nobody can reuse an email
+      address, so this is never the same person signing up twice: it is two
+      accounts behind one router or one mobile network. A hostel, a college, a
+      ship's office and a phone network all look like this, so treat it as
+      something to glance at rather than evidence of anything.
+      <br><br>
+      Their trial clock does not run while they wait, so there is no rush and
+      no cost to them.
     </p>
 
     <div class="ad-table-wrap ad-scrollcap">
       <table class="ad-table">
         <thead><tr>
-          <th>Email</th><th>Name</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
+          <th>Email</th><th>Name</th><th>Why</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
         </tr></thead>
-        <tbody id="apr-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        <tbody id="apr-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
     </div><!-- /queue pane -->
@@ -1854,9 +1874,9 @@
       <div class="ad-table-wrap">
         <table class="ad-table">
           <thead><tr>
-            <th>Email</th><th>Name</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
+            <th>Email</th><th>Name</th><th>Why</th><th>Domain</th><th>Signed up</th><th>Status</th><th></th>
           </tr></thead>
-          <tbody id="apr-done-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+          <tbody id="apr-done-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
         </table>
       </div>
     </div><!-- /decided pane -->
@@ -9459,13 +9479,45 @@ async function loadApprovals() {
     .order('created_at', { ascending: false });
 
   if (error) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">Run signup_guard_setup.sql to enable signup approvals.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">Run signup_guard_setup.sql to enable signup approvals.</td></tr>';
     return;
   }
 
   var rows = data || [];
   var waiting = rows.filter(function(r) { return r.signup_status === 'pending'; });
   var decided = rows.filter(function(r) { return r.signup_status !== 'pending'; });
+
+  /* WHY each account is here.
+
+     pending_signups cannot answer this: it knows the domain check, and the
+     connection check lives in signup_ips. Without both, the page could only
+     offer one explanation for two different situations, and the row it got
+     wrong was a real prospective customer on Gmail.
+
+     A held row in signup_ips means the connection matched. Anything else in
+     this queue is here for its mail provider. */
+  window._aprHeld = {};
+  var held = [];
+  if (waiting.length) {
+    var ipRes = await _sb.from('signup_ips')
+      .select('user_id, ip, matched')
+      .in('user_id', waiting.map(function (r) { return r.id; }))
+      .eq('verdict', 'held');
+    held = ipRes.data || [];
+  }
+  if (held.length) {
+    // Name the other account rather than printing a user id. "Held because of
+    // <someone@example.com>" is checkable; a uuid is not.
+    var others = held.map(function (h) { return h.matched; }).filter(Boolean);
+    var byId = {};
+    if (others.length) {
+      var pr = await _sb.from('profiles').select('id, email, full_name').in('id', others);
+      (pr.data || []).forEach(function (p) { byId[p.id] = p; });
+    }
+    held.forEach(function (h) {
+      window._aprHeld[h.user_id] = { ip: h.ip, other: byId[h.matched] || null };
+    });
+  }
 
   var badge = document.getElementById('apr-nav-badge');
   if (badge) { badge.hidden = !waiting.length; badge.textContent = waiting.length || ''; }
@@ -9475,7 +9527,7 @@ async function loadApprovals() {
   /* An empty queue is the normal state, not a fault, so it says so rather
      than showing an empty table that reads as broken. */
   if (!waiting.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">Nothing waiting. '
+    tbody.innerHTML = '<tr><td colspan="7" class="empty">Nothing waiting. '
       + (decided.length ? 'Everything held so far has been dealt with.'
                         : 'Every signup so far used a recognised provider.') + '</td></tr>';
   } else {
@@ -9486,7 +9538,7 @@ async function loadApprovals() {
   if (doneBody) {
     doneBody.innerHTML = decided.length
       ? decided.map(aprRow).join('')
-      : '<tr><td colspan="6" class="empty">Nothing decided yet.</td></tr>';
+      : '<tr><td colspan="7" class="empty">Nothing decided yet.</td></tr>';
   }
 
   // Not awaited. The queue paints from our own database immediately and the
@@ -9504,9 +9556,31 @@ function aprRow(r) {
     // decision rather than after.
     var shared = r.domain_accounts > 1
       ? '<span class="dom-tag dom-tag-new">' + r.domain_accounts + ' accounts</span>' : '';
+
+    /* The reason, named. Without this the page asserted one reason for every
+       row, and for a connection match that assertion was simply false. */
+    var byIp = (window._aprHeld || {})[r.id];
+    var why;
+    if (byIp) {
+      var other = byIp.other
+        ? esc(byIp.other.email)
+        : 'an earlier account';
+      why = '<span class="dom-tag dom-tag-new">shared connection</span>'
+          + '<div style="font-size:11.5px;color:var(--text3);margin-top:4px;line-height:1.5">'
+          + 'Same internet connection as ' + other + ', whose trial had already '
+          + 'ended. A different person, not a second signup on this address.'
+          + '</div>';
+    } else {
+      why = '<span class="dom-tag dom-tag-new">mail provider</span>'
+          + '<div style="font-size:11.5px;color:var(--text3);margin-top:4px;line-height:1.5">'
+          + 'Not one of the recognised providers.'
+          + '</div>';
+    }
+
     return '<tr>'
       + '<td data-label="Email">' + esc(r.email) + '</td>'
       + '<td data-label="Name">' + esc(r.full_name || '-') + '</td>'
+      + '<td data-label="Why" style="max-width:280px">' + why + '</td>'
       + '<td data-label="Domain"><code>' + esc(r.domain) + '</code> ' + shared
         + ' <span class="dfy" data-disify="' + esc(r.domain) + '"></span></td>'
       + '<td data-label="Signed up">' + new Date(r.created_at).toLocaleDateString() + '</td>'
@@ -9522,7 +9596,12 @@ function aprRow(r) {
       + '<td data-label="">' + (pending
           ? '<div class="row-actions">'
             + '<button class="ad-btn btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,false)">Approve</button>'
-            + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,true)" title="Approve and stop queueing future signups from this domain">Approve + domain</button>'
+            /* Offered only when the domain is actually the reason. On a shared
+               connection the provider is already recognised, so this button
+               would do nothing while implying the domain was the problem, and
+               that implication is the whole confusion this column fixes. */
+            + (byIp ? ''
+                : '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',true,true)" title="Approve and stop queueing future signups from this domain">Approve + domain</button>')
             + '<button class="ad-btn btn-ghost btn-sm" onclick="reviewSignup(\'' + r.id + '\',false,false)">Reject</button>'
             + '</div>'
           // Only a rejection is worth reversing. An Approve button on an
