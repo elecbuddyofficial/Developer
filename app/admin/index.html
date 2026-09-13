@@ -155,6 +155,23 @@
        sideways, and a horizontal flick chaining to the page is how a trackpad
        triggers a browser back-navigation mid-edit. */
     .ad-scrollcap { max-height:56vh; overflow-y:auto; overscroll-behavior-x:contain; }
+
+    /* Icon-only row actions.
+       44px is the touch target these need on a phone, where the table becomes
+       stacked cards and these are the only controls on each one. The label
+       lives in title + aria-label rather than on screen, so the button is never
+       silent to a screen reader just because it is small. */
+    .ad-icon-btn {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:32px; height:32px; padding:0;
+      background:none; border:1px solid var(--border); border-radius:var(--r8);
+      color:var(--text3); cursor:pointer;
+      transition:color .12s, border-color .12s, background .12s;
+    }
+    .ad-icon-btn:hover { color:var(--text); border-color:var(--text3); background:var(--surface2); }
+    .ad-icon-btn:focus-visible { outline:2px solid var(--blue); outline-offset:2px; }
+    .ad-icon-btn.ad-icon-danger:hover { color:var(--red); border-color:var(--red); background:var(--red-dim); }
+    @media (max-width:600px) { .ad-icon-btn { width:44px; height:44px; } }
     @media (max-width:900px) { .ad-scrollcap { max-height:64vh; } }
     /* Column headers stay with the rows they label. The background is set here
        rather than relied upon: .ad-table th carries its own, but the payments
@@ -896,12 +913,12 @@
       #tab-dashboard .ad-table:last-of-type td:nth-child(3)::before { content: "Amount"; }
       /* Users Tab */
       .exp-cell { text-align: right; }
-      #users-tbody td:nth-child(1)::before { content: "Email"; }
-      #users-tbody td:nth-child(2)::before { content: "Name"; }
-      #users-tbody td:nth-child(3)::before { content: "Plan"; }
-      #users-tbody td:nth-child(4)::before { content: "Expires"; }
-      #users-tbody td:nth-child(5)::before { content: "Joined"; }
-      #users-tbody td:nth-child(6)::before { content: "Actions"; }
+      /* Captions come from each cell's own data-label rather than its position.
+         These were nth-child rules, so inserting the Course column silently
+         relabelled every cell after it: Plan became Course, Expires became
+         Plan, and so on down the card. That is the same fault the coupons
+         table had, fixed the same way. */
+      #users-tbody td::before { content: attr(data-label); }
       /* Admins Tab */
       #admins-tbody td:nth-child(1)::before { content: "Email"; }
       #admins-tbody td:nth-child(2)::before { content: "Name"; }
@@ -1715,9 +1732,9 @@
     <div class="ad-table-wrap ad-scrollcap">
       <table class="ad-table">
         <thead><tr>
-          <th>Email</th><th>Name</th><th>Plan</th><th>Expires</th><th>Joined</th><th></th>
+          <th>Email</th><th>Name</th><th>Course</th><th>Plan</th><th>Expires</th><th>Joined</th><th></th>
         </tr></thead>
-        <tbody id="users-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+        <tbody id="users-tbody"><tr><td colspan="7" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
     <div id="users-count" style="font-size:11.5px;color:var(--text3);margin-top:10px;text-align:right;"></div>
@@ -4131,8 +4148,20 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
      red "Sponsorship 11 Sep 2026", which reads as a subscription they never had.
      Measured before choosing: 0 trial accounts hold live scope access today, so
      this changes nothing on screen now and starts working the moment a grant
-     makes it true. */
-  var _hasLiveScope = user && adminLiveScopes(user).length > 0;
+     makes it true.
+
+     It must ask the COLUMNS, not adminLiveScopes. A running trial grants every
+     scope, so adminLiveScopes answers "yes" for any account inside its trial,
+     which sent every live trial straight past the branch that names it and out
+     to the legacy date at the bottom - where there is no date, so it printed a
+     bare "-". Shipped in v283 and spotted by Blesson on the Users screen: six
+     of the seven visible rows showed "-", and the only one that read correctly
+     was the account whose trial had already run out. The question here is
+     "does this account hold a granted or purchased course", and only a date in
+     one of these three columns answers it. */
+  var _now = new Date();
+  var _hasLiveScope = user && ['written_expires_at', 'oral_expires_at', 'sponsorship_expires_at']
+    .some(function (c) { return user[c] && new Date(user[c]) > _now; });
 
   if ((plan === 'trial' || !plan) && !_hasLiveScope) {
     if (!trialStartedAt) return expCell('<span class="date-cell">-</span>');
@@ -4983,7 +5012,7 @@ var _userFilter = 'all';
 /* Shared so loadUsers and the single-row fallback in openUserProfile cannot
    drift apart. They did once already: sponsorship_progress was added to one
    and the drawer read a column the other never fetched. */
-var USER_COLS = 'id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, sponsorship_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at';
+var USER_COLS = 'id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, sponsorship_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at, default_track';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
@@ -5060,24 +5089,78 @@ function applyUserFilters() {
   if (cnt) cnt.textContent = filtered.length + ' user' + (filtered.length !== 1 ? 's' : '');
 }
 
+/* Which course is this account's, for the Users list.
+
+   There was no way to tell a Sponsorship reader from a COC one on that screen,
+   which is what Blesson asked for. Three things can say so and they are ranked
+   by how much they prove:
+
+     a live or lapsed course date   they paid for it or were given it
+     default_track                  they chose it at sign-in
+     progress                       they have actually read some of it
+
+   Every chip is evidence, never a guess. An account with none gets nothing
+   rather than a default, because 148 of 174 accounts predate the course
+   question and inventing a course for them would be worse than a blank: the
+   list is what an admin trusts when deciding who to mail.
+
+   Both chips show when both are true. Somebody holding COC and reading
+   Sponsorship is a real and useful thing to be able to see. */
+/* Row action icons. Defined once: three copies of an inline SVG in a template
+   string is how one of them quietly ends up a different size. */
+var ICON_EYE = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+var ICON_PENCIL = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>';
+var ICON_BIN = '<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>';
+
+function courseChips(u) {
+  if (!u) return '';
+  var hasProgress = function (v) {
+    if (!v) return false;
+    try { return Object.keys(typeof v === 'string' ? JSON.parse(v) : v).length > 0; }
+    catch (e) { return false; }
+  };
+  var out = [];
+  [['coc', 'CoC', ['written_expires_at', 'oral_expires_at'], hasProgress(u.topic_progress)],
+   ['sponsorship', 'Sponsorship', ['sponsorship_expires_at'], hasProgress(u.sponsorship_progress)]
+  ].forEach(function (row) {
+    var key = row[0], label = row[1], cols = row[2], read = row[3];
+    var paid = cols.some(function (c) { return !!u[c]; });
+    var chose = u.default_track === key;
+    if (!paid && !chose && !read) return;
+    // Strongest evidence decides the colour, so the chip means something at a
+    // glance rather than only in the tooltip.
+    var cls = paid ? 'dom-tag-ok' : (chose ? 'dom-tag-new' : '');
+    var why = paid ? 'has bought or been granted this course'
+            : chose ? 'chose this course at sign-in'
+            : 'has read some of this course';
+    out.push('<span class="dom-tag ' + cls + '" title="' + esc(why) + '">' + label + '</span>');
+  });
+  return out.length ? out.join(' ') : '<span class="date-cell">-</span>';
+}
+
 function renderUsers(users) {
   document.getElementById('users-tbody').innerHTML = users.length
     ? users.map(function(u) {
         var idAttr = attrJs(u.id);
         return '<tr>'
-          + '<td class="email-cell"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '-') + '</button></td>'
-          + '<td>' + esc(u.full_name || '-') + '</td>'
-          + '<td>' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
-          + '<td>' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at, u) + '</td>'
-          + '<td class="date-cell">' + fmtDate(u.created_at) + '</td>'
-          + '<td><div class="row-actions">'
-          + '<button class="ad-btn btn-ghost btn-sm" onclick="openUserProfile(' + idAttr + ')">View</button>'
-          + '<button class="ad-btn btn-ghost btn-sm" onclick="prefillGrant(' + attrJs(u.email || '') + ')">Edit</button>'
-          + '<button class="ad-btn btn-danger btn-sm" onclick="deleteUser(' + idAttr + ',' + attrJs(u.email || '') + ')">Delete</button>'
+          + '<td class="email-cell" data-label="Email"><button class="user-email-link" onclick="openUserProfile(' + idAttr + ')">' + esc(u.email || '-') + '</button></td>'
+          + '<td data-label="Name">' + esc(u.full_name || '-') + '</td>'
+          + '<td data-label="Course">' + courseChips(u) + '</td>'
+          + '<td data-label="Plan">' + planBadge(u.subscription_plan, u.plan_scope) + '</td>'
+          + '<td data-label="Expires">' + expiryDisplay(u.subscription_expires_at, u.subscription_plan, u.trial_started_at, u) + '</td>'
+          + '<td class="date-cell" data-label="Joined">' + fmtDate(u.created_at) + '</td>'
+          /* Icons rather than words, to give the row back the width the new
+             Course column takes. Each keeps a title AND an aria-label: the
+             title is the hover explanation, the aria-label is what a screen
+             reader announces, and an icon button without one is silent. */
+          + '<td data-label="Actions"><div class="row-actions">'
+          + '<button class="ad-icon-btn" title="View profile" aria-label="View profile" onclick="openUserProfile(' + idAttr + ')">' + ICON_EYE + '</button>'
+          + '<button class="ad-icon-btn" title="Edit access" aria-label="Edit access" onclick="prefillGrant(' + attrJs(u.email || '') + ')">' + ICON_PENCIL + '</button>'
+          + '<button class="ad-icon-btn ad-icon-danger" title="Delete account" aria-label="Delete account" onclick="deleteUser(' + idAttr + ',' + attrJs(u.email || '') + ')">' + ICON_BIN + '</button>'
           + '</div></td>'
           + '</tr>';
       }).join('')
-    : '<tr><td colspan="6" class="empty">No users</td></tr>';
+    : '<tr><td colspan="7" class="empty">No users</td></tr>';
 }
 
 async function deleteUser(id, email) {
