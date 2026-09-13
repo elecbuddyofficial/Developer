@@ -58,7 +58,11 @@ ALTER TABLE public.coupons ADD CONSTRAINT coupons_applies_duration_check
 
 ALTER TABLE public.coupons DROP CONSTRAINT IF EXISTS coupons_applies_scope_check;
 ALTER TABLE public.coupons ADD CONSTRAINT coupons_applies_scope_check
-  CHECK (applies_scope IS NULL OR applies_scope IN ('written','oral','both'));
+  -- 'sponsorship' added 13 Sep 2026 to match production. It was widened
+  -- there when the course went on sale and this file was not, so a rebuild
+  -- from it would have produced a database that rejects every Sponsorship
+  -- payment while the real one accepts them.
+  CHECK (applies_scope IS NULL OR applies_scope IN ('written','oral','both','sponsorship'));
 
 -- ── 2. Redemptions gain a lifecycle ───────────────────────────────────────
 -- Defaulting to 'committed' is what keeps every existing grant redemption

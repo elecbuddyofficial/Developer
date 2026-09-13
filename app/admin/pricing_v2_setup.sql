@@ -26,13 +26,25 @@ ALTER TABLE public.coupons ADD CONSTRAINT coupons_plan_check
 
 -- ── 2. New scope columns (nullable — CHECK auto-permits NULL) ─────────────
 ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS plan_scope TEXT
-  CHECK (plan_scope IN ('written','oral','both'));
+  -- 'sponsorship' added 13 Sep 2026 to match production. It was widened
+  -- there when the course went on sale and this file was not, so a rebuild
+  -- from it would have produced a database that rejects every Sponsorship
+  -- payment while the real one accepts them.
+  CHECK (plan_scope IN ('written','oral','both','sponsorship'));
 
 ALTER TABLE public.payments ADD COLUMN IF NOT EXISTS scope TEXT
-  CHECK (scope IN ('written','oral','both'));
+  -- 'sponsorship' added 13 Sep 2026 to match production. It was widened
+  -- there when the course went on sale and this file was not, so a rebuild
+  -- from it would have produced a database that rejects every Sponsorship
+  -- payment while the real one accepts them.
+  CHECK (scope IN ('written','oral','both','sponsorship'));
 
 ALTER TABLE public.coupons ADD COLUMN IF NOT EXISTS scope TEXT
-  CHECK (scope IN ('written','oral','both'));
+  -- 'sponsorship' added 13 Sep 2026 to match production. It was widened
+  -- there when the course went on sale and this file was not, so a rebuild
+  -- from it would have produced a database that rejects every Sponsorship
+  -- payment while the real one accepts them.
+  CHECK (scope IN ('written','oral','both','sponsorship'));
 
 -- ── 3. Backfill: everyone who had full access under the old model keeps it ─
 UPDATE public.profiles
@@ -83,7 +95,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 CREATE TABLE IF NOT EXISTS public.pricing_plans (
   id                 UUID        DEFAULT gen_random_uuid() PRIMARY KEY,
   duration           TEXT        NOT NULL CHECK (duration IN ('3mo','6mo','12mo')),
-  scope              TEXT        NOT NULL CHECK (scope IN ('written','oral','both')),
+  -- 'sponsorship' added 13 Sep 2026 to match production; see the note above.
+  scope              TEXT        NOT NULL CHECK (scope IN ('written','oral','both','sponsorship')),
   track_name         TEXT        NOT NULL,
   tier_name          TEXT        NOT NULL,
   base_amount        INTEGER     NOT NULL,               -- paise, the sticker price

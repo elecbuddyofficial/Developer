@@ -896,7 +896,9 @@ function buildCatGrid(){
   var label = tObj.id + ' - ' + tObj.name;
   var qs=(window.QD&&window.QD[key])?window.QD[key]:[];
   var tcount=document.getElementById('total-q-count'); if(tcount)tcount.textContent=qs.length;
-  var sbcnt=document.getElementById('sb-qcnt'); if(sbcnt)sbcnt.textContent=qs.length;
+  // 'sb-qcnt' was a sidebar question counter that only ever existed on the old
+  // page, now app/index_backup.html. Nothing in the live app renders it, so the
+  // null guard beside it has been the whole of its behaviour for a long time.
   var qh=document.getElementById('quiz-topic-label');if(qh)qh.textContent=label+' Quiz';
   var cats={};qs.forEach(function(q){cats[q.cat]=(cats[q.cat]||0)+1});
   var grid=document.getElementById('qcat-grid');
