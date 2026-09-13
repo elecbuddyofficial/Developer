@@ -64,6 +64,7 @@ AUDITS = [
     ('the Sponsorship profile menu is correct', 'spon_profile.py', False, True),
     ('the CoC checkout is unchanged', 'coc_noop.py', False, True),
     ('the page can be scrolled past a table', 'scroll_chain.py', False, True),
+    ('every admin control, pressed one by one', 'admin_controls.py', False, True),
 ]
 
 want_prod = '--all' in sys.argv
