@@ -16,6 +16,13 @@ the change itself would have reported clean.
 
 ## What is checked
 
+**Duplicates.** Two paths grant access for one purchase, on purpose: the
+buyer's browser and Razorpay's webhook, so a closed tab cannot cost somebody
+their access. `applyPurchase` ADDS months, so the same payment applied twice
+grants twice the time. Both paths claim the order with a compare-and-swap and
+return without touching the profile when they lose, and the webhook keeps a
+ledger of event ids so a retry is answered 2xx without being applied again.
+
 **The money path.** That nothing deciding a charge or a grant is taken from the
 browser: the price comes from `pricing_plans`, the months from `PLAN_MONTHS`,
 the scope from the stored order, the discount from the `coupons` table, and the
@@ -45,9 +52,18 @@ is running and none has suddenly mailed far more people than usual.
 
 Three habits, each learned the hard way here:
 
-**Prove it can fail.** Break the rule deliberately, watch the audit go red,
-restore the file and verify the restore. An audit nobody has seen fail is an
-assumption. `mutate_mirrors.mjs` is the pattern.
+**Prove it can fail.** `python audits/mutate.py` breaks each rule on purpose and
+checks the audit notices. An audit nobody has seen fail is an assumption, and
+this has found real blind spots twice: a check for the word `safeEqual` passed
+while the call that uses it was replaced by `if (false)`, because the helper's
+own definition still contained the name. A check for a `return` passed the same
+way. Matching a NAME never proves the name is used.
+
+Two traps when adding a mutation, both of which cost a debugging detour here.
+Write bytes, not text: text mode normalises CRLF to LF on the way back and
+leaves every restored file showing as modified in git. And replace EVERY
+occurrence, not the first: a later mention of the same name kept two genuine
+mutations looking like misses.
 
 **Check the instrument before believing a negative.** Several of these lied
 before they worked. One reported 14 missing functions that were all method

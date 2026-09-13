@@ -25,6 +25,7 @@ AUDITS = [
     ('money: nothing trusted from the browser', 'audit_money_trust.mjs', False, False),
     ('money: a purchase grants the right thing', '../supabase/functions/_shared/purchase.e2e.mjs', False, False),
     ('money: one customer, cradle to grave', 'audit_lifecycle.mjs', False, False),
+    ('money: nothing can be granted twice', 'idempotency.mjs', False, False),
     ('grants stay inside their own course', 'grant_split.e2e.mjs', False, False),
     ('every access write names all three scopes', 'admin_writes.mjs', False, False),
     ('both consoles act only on their own course', 'split_audit.mjs', False, False),

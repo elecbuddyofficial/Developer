@@ -74,8 +74,12 @@ ok('the signature is verified',
     ...['applyPurchase(', "from('profiles')", 'expiryUpdate(']
       .map((t) => { const i = hook.indexOf(t); return i === -1 ? Infinity : i; }));
   const before = hook.slice(0, firstWrite === Infinity ? hook.length : firstWrite);
+  /* The comparison must be CALLED in the guard, not merely defined somewhere.
+     Matching the bare name passed while the call was replaced by `if (false)`,
+     because the helper's own definition still contains it - the same trap as
+     checking for a `return` that a gutted condition makes unreachable. */
   ok('a bad signature is rejected before anything is written',
-     /safeEqual|timingSafeEqual/.test(before)
+     /if\s*\(\s*!\s*(safeEqual|timingSafeEqual)\s*\(/.test(before)
      && /(json|new Response)\([^;]*(400|401|403)/.test(before));
   ok('the signature is computed over the raw bytes, before any parsing',
      hook.indexOf('hmacHex') < hook.indexOf('JSON.parse'));
