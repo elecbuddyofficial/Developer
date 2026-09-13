@@ -65,6 +65,7 @@ AUDITS = [
     ('the CoC checkout is unchanged', 'coc_noop.py', False, True),
     ('the page can be scrolled past a table', 'scroll_chain.py', False, True),
     ('every admin control, pressed one by one', 'admin_controls.py', False, True),
+    ('every control has room for its text', 'text_fits.py', False, True),
 ]
 
 want_prod = '--all' in sys.argv

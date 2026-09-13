@@ -555,8 +555,16 @@
        padding: the select's intrinsic line box differs. That 2px was enough to
        knock every mixed row out of line, because .ad-row aligns on flex-end, so
        the taller control's top sat higher than its neighbour's. Pinned here
-       rather than per row. Textareas opt out, they size themselves. */
-    .ad-input:not(.ad-textarea), .ad-select {
+       rather than per row.
+
+       Textareas are excluded by ELEMENT, not by class. This read
+       :not(.ad-textarea), and three textareas carry .ad-input without that
+       class - the Live Exam bulk paste box at rows="8", the interview blurb at
+       rows="3", and every model-answer box at rows="2". All three were being
+       forced to 39px, so rows was ignored, they rendered one line tall and the
+       text was cut off. A textarea sizes itself and must never be pinned to an
+       input's height, whatever classes it happens to carry. */
+    .ad-input:not(textarea), .ad-select {
       height:39px; line-height:1.35;
     }
     .ad-input:focus, .ad-select:focus { border-color:var(--blue); }
@@ -816,6 +824,24 @@
       #pay-filter-status, #pay-filter-plan {
         font-size: 16px !important;
         padding: 11px 12px;
+      }
+      /* The height has to move with them.
+
+         .ad-input:not(.ad-textarea), .ad-select pins height:39px so a text box
+         and a dropdown line up in a mixed row. This block then raised the font
+         from 13px to 16px and the padding from 9px to 11px and left that 39px
+         alone, which leaves 15px of room for a 21.6px line. Every dropdown and
+         text field on a phone was rendering with its text cut off across the
+         bottom, and it is arithmetic rather than an iOS quirk: 39 - 22 of
+         padding - 3 of border is 14.
+
+         min-height rather than a bigger fixed height, so a larger accessibility
+         font, a longer descender or a different platform font cannot bring the
+         clipping back. 48px also clears the 44px touch target these need. */
+      .ad-input:not(textarea), .ad-select,
+      #pay-filter-status, #pay-filter-plan {
+        height: auto;
+        min-height: 48px;
       }
       /* Touch targets */
       .ad-btn { min-height: 44px; padding: 11px 18px; }
