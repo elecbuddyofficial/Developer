@@ -106,3 +106,25 @@ _visual-shots/
 # have it. *.py above is for scratch scripts; this one is a checked-in tool.
 !_visual.py
 !_notes_visual.py
+
+# Supabase access token used by audits/. Never commit a credential.
+audits/.sb_token
+**/.sb_token
+
+# Rebuilt on demand by audits/coc_noop.py from git; never committed.
+audits/_coc_before/
+
+# A production snapshot of real accounts. This repo is PUBLIC (GitHub Pages
+# serves elec-buddy.com from it), so customer rows must never be committed.
+# audits/coc_regression.mjs regenerates it on demand.
+audits/all_profiles.json
+
+# *.py above is a blanket ignore, so the audit suite needs an exemption or it
+# is silently left out of every commit - which is how the first attempt at
+# committing it landed 20 of its 31 files. _visual.py and _notes_visual.py are
+# tracked the same way, by having been force-added.
+# The two lines above still win for .sb_token and the profile snapshot, because
+# a later rule beats an earlier one and both come after this.
+!audits/*.py
+audits/.sb_token
+audits/all_profiles.json
