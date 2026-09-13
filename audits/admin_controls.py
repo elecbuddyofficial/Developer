@@ -189,16 +189,54 @@ SETUP_DEF = r"""
     return out;
   };
 
-  window.__ebControls = function (tab) {
+  window.__EB_SEL = 'button, a[href], input, select, textarea, [onclick], [role=button]';
+
+  window.__ebVisible = function (n) {
+    const cs = getComputedStyle(n);
+    if (cs.display === 'none' || cs.visibility === 'hidden' || cs.pointerEvents === 'none') return false;
+    const r = n.getBoundingClientRect();
+    return r.width > 1 && r.height > 1;
+  };
+
+  /* EVERY control, hidden ones included, in document order.
+
+     The index into this list is the stable identity a press uses. The visible
+     subset changes as panels open and close - which is exactly why an earlier
+     version, indexing the visible list, lost 84 controls the moment something
+     collapsed a panel. */
+  window.__ebAll = function (tab) {
     const el = document.getElementById('tab-' + tab);
-    if (!el) return [];
-    const SEL = 'button, a[href], input, select, textarea, [onclick], [role=button]';
-    return [...el.querySelectorAll(SEL)].filter(n => {
-      const cs = getComputedStyle(n);
-      if (cs.display === 'none' || cs.visibility === 'hidden' || cs.pointerEvents === 'none') return false;
-      const r = n.getBoundingClientRect();
-      return r.width > 1 && r.height > 1;
-    });
+    return el ? [...el.querySelectorAll(window.__EB_SEL)] : [];
+  };
+
+  window.__ebControls = function (tab) {
+    return window.__ebAll(tab).filter(window.__ebVisible);
+  };
+
+  /* Open whatever a control is buried inside.
+
+     A collapsed panel, a closed modal, a details element: the control is in the
+     DOM and unreachable. Rather than guessing which toggle opens which panel,
+     the ancestors are revealed directly. Only the PRESS pass does this - the
+     geometry pass must see the page as a person does, or forcing things open
+     would invent overlaps that never happen. */
+  window.__ebReveal = function (n) {
+    let opened = 0;
+    for (let a = n; a && a !== document.body; a = a.parentElement) {
+      if (a.hasAttribute && a.hasAttribute('hidden')) { a.removeAttribute('hidden'); opened++; }
+      if (a.tagName === 'DETAILS' && !a.open) { a.open = true; opened++; }
+      const cs = getComputedStyle(a);
+      if (cs.display === 'none') { a.style.display = 'block'; opened++; }
+      if (cs.visibility === 'hidden') { a.style.visibility = 'visible'; opened++; }
+      // The console's own open/collapse classes.
+      if (a.classList) {
+        ['open', 'active', 'show'].forEach(c => {
+          if (a.className && /apr-pane|ad-tab|modal|overlay|panel|drawer/.test(a.className)
+              && !a.classList.contains(c)) { /* left alone unless hidden above */ }
+        });
+      }
+    }
+    return opened;
   };
   return true;
 }
@@ -233,13 +271,37 @@ GEOMETRY = r"""
     }
   }
 
+  /* What each control actually calls.
+
+     Reading the console control by control is how you learn what it does, so
+     the handler behind each one is recorded rather than just its label. It also
+     answers questions the press pass cannot: a control wired to a function that
+     does not exist does nothing and says nothing, and two controls calling the
+     same function from different tabs is either sharing or a copy that will
+     drift. */
+  const wiring = nodes.map(n => {
+    const src = n.getAttribute('onclick') || n.getAttribute('onchange')
+             || n.getAttribute('oninput') || '';
+    const calls = [...src.matchAll(/(?:^|[^.\w$])([A-Za-z_$][\w$]*)\s*\(/g)]
+      .map(m => m[1])
+      .filter(x => !['if', 'return', 'function', 'typeof', 'new'].includes(x));
+    return {
+      label: describe(n),
+      calls,
+      missing: calls.filter(c => typeof window[c] !== 'function'),
+      listeners: n.__ebClicks || 0
+    };
+  }).filter(w => w.calls.length || w.listeners);
+
   const doubled = nodes
     .filter(n => n.getAttribute('onclick') && (n.__ebClicks || 0) > 0)
     .map(n => describe(n) + '  (' + n.__ebClicks + ' added listener'
               + (n.__ebClicks > 1 ? 's' : '') + ' as well as its onclick)');
 
-  return { count: nodes.length, overlaps, doubled, populated,
-           controls: nodes.map((n, i) => ({ i, label: describe(n) })) };
+  const all = window.__ebAll(tab);
+  return { count: nodes.length, total: all.length, overlaps, doubled, populated, wiring,
+           controls: all.map((n, i) => ({ i, label: describe(n),
+                                          visible: window.__ebVisible(n) })) };
 }
 """
 
@@ -248,9 +310,11 @@ PRESS = r"""
   // Restore the tab before every press, so a control that re-renders the table
   // cannot hide the ones after it.
   window.__ebSetup(tab, course);
-  const nodes = window.__ebControls(tab);
+  const nodes = window.__ebAll(tab);
   const n = nodes[idx];
   if (!n) return { missing: true };
+  const revealed = window.__ebVisible(n) ? 0 : window.__ebReveal(n);
+  if (!window.__ebVisible(n)) return { unreachable: true, label: (n.id || n.tagName) };
   const before = window.__eb.net;
   try {
     if (n.tagName === 'SELECT') {
@@ -264,7 +328,7 @@ PRESS = r"""
   } catch (e) {
     return { threw: String(e).slice(0, 140) };
   }
-  return { net: window.__eb.net - before };
+  return { net: window.__eb.net - before, revealed };
 }
 """
 
@@ -288,6 +352,8 @@ TABS = [
 from playwright.sync_api import sync_playwright
 
 overlaps_total = doubled_total = errors_total = unreachable = 0
+pressed_total = [0]
+wiring = []
 checked = 0
 report = []
 
@@ -377,9 +443,11 @@ try:
             gone = 0
             for c in g['controls']:
                 r = pg.evaluate(PRESS, {'tab': tab, 'idx': c['i'], 'course': course})
-                if r.get('missing'):
+                if r.get('missing') or r.get('unreachable'):
                     gone += 1
                     unreachable += 1
+                    report.append(('unreachable', course + '/' + tab,
+                                   c['label'], 'still hidden after revealing its ancestors'))
                 if r.get('threw'):
                     errors_total += 1
                     report.append(('throw', course + '/' + tab, c['label'], r['threw']))
@@ -391,6 +459,13 @@ try:
                 errors_total += 1
                 report.append(('pageerror', course + '/' + tab, '', e))
 
+            for w in g.get('wiring', []):
+                wiring.append((course + '/' + tab, w['label'], w['calls'],
+                               w['missing'], w['listeners']))
+                for m in w['missing']:
+                    report.append(('deadwire', course + '/' + tab, w['label'],
+                                   'calls ' + m + '(), which is not a function'))
+
             for o in g['overlaps']:
                 overlaps_total += 1
                 report.append(('overlap', course + '/' + tab, o['a'] + '  vs  ' + o['b'],
@@ -401,8 +476,11 @@ try:
 
             note = '  rows rendered' if g.get('populated') else ''
             if gone:
-                note += '  (%d vanished mid-sweep)' % gone
-            print('   %-12s %-13s %3d controls%s' % (course, tab, g['count'], note))
+                note += '  (%d unreachable)' % gone
+            hidden = g.get('total', g['count']) - g['count']
+            shown = '%3d visible' % g['count'] + (', %d hidden' % hidden if hidden else '')
+            pressed_total[0] += g.get('total', g['count'])
+            print('   %-12s %-13s %-22s%s' % (course, tab, shown, note))
 
         net = pg.evaluate('() => window.__eb')
         net['escaped'] = escaped
@@ -413,11 +491,13 @@ finally:
         proc.kill()
 
 print('')
-print('  %d tab/course combinations swept' % checked)
+print('  %d tab/course combinations swept, %d controls pressed'
+      % (checked, pressed_total[0] - unreachable))
 if unreachable:
-    print('  %d control(s) could not be pressed: a press before them collapsed a' % unreachable)
-    print('  panel or closed a modal they live in. Named rather than hidden, because')
-    print('  a sweep that quietly skips is the failure this audit exists to avoid.')
+    print('  %d could not be reached even after revealing their containers, and each' % unreachable)
+    print('  is named below. A sweep that quietly skips is the failure this exists to catch.')
+else:
+    print('  every control, including those inside collapsed panels and closed modals')
 print('  calls intercepted by the stubs: %d' % net['net'])
 if net['escaped']:
     print('  *** %d REQUEST(S) ESCAPED THE STUBS:' % len(net['escaped']))
@@ -427,7 +507,9 @@ else:
     print('  requests that left the page: 0 (nothing reached any real service)')
 print('  confirm dialogs declined: %d' % net['confirms'])
 
-for kind, label in (('overlap', 'CONTROLS OVERLAPPING, so clicks land on the wrong one'),
+for kind, label in (('deadwire', 'CONTROLS WIRED TO A FUNCTION THAT DOES NOT EXIST'),
+                    ('unreachable', 'CONTROLS THAT COULD NOT BE PRESSED AT ALL'),
+                    ('overlap', 'CONTROLS OVERLAPPING, so clicks land on the wrong one'),
                     ('doubled', 'CONTROLS BOUND TWICE, so one press does two things'),
                     ('throw', 'CONTROLS THAT THREW WHEN PRESSED'),
                     ('pageerror', 'ERRORS RAISED WHILE PRESSING')):
@@ -445,6 +527,30 @@ for kind, label in (('overlap', 'CONTROLS OVERLAPPING, so clicks land on the wro
         seen.add(key)
         print('   %-12s %s' % (tab, what))
         print('                %s' % detail)
+
+if '--map' in sys.argv:
+    print('')
+    print('  WHAT EACH CONTROL DOES')
+    print('  ' + '-' * 68)
+    for tab, label, calls, missing, listeners in wiring:
+        how = ', '.join(calls) if calls else ('%d listener(s)' % listeners)
+        print('   %-24s %-34s %s' % (tab, label[:34], how))
+
+print('')
+print('  HANDLERS SHARED BY SEVERAL CONTROLS')
+print('  ' + '-' * 68)
+shared = {}
+for tab, label, calls, _m, _l in wiring:
+    for c in calls:
+        shared.setdefault(c, set()).add(tab)
+multi = {k: v for k, v in shared.items() if len(v) > 1}
+if not multi:
+    print('   none')
+for fn, tabs in sorted(multi.items(), key=lambda kv: -len(kv[1]))[:12]:
+    print('   %-26s used from %d tabs: %s' % (fn, len(tabs), ', '.join(sorted(tabs))[:60]))
+print('')
+print('   Sharing is usually right - one grant dialog serving both courses - but')
+print('   it is also where a change for one tab quietly changes another.')
 
 total = overlaps_total + doubled_total + errors_total
 print('')

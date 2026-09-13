@@ -39,6 +39,28 @@ languages. Each copy is parsed out of the real file and run against the
 server's own implementation. Never restate a rule inside a test: a test that
 restates it passes while both are wrong.
 
+**Every control in the admin console.** `admin_controls.py` presses all 330 of
+them across 25 tab-and-course combinations, including the ones inside collapsed
+panels and closed modals, and checks that none overlaps another, none is bound
+twice, and none throws.
+
+```
+python audits/admin_controls.py            press everything
+python audits/admin_controls.py --map      what each control calls
+python audits/admin_controls.py --selftest plant faults, require them found
+```
+
+`--map` is the fastest way to learn what the console does: every control beside
+the handler behind it, and the handlers shared across tabs. Sharing is usually
+right, one grant dialog serving both courses, but it is also where a change
+made for one tab quietly changes another.
+
+Nothing it presses can reach anything real. The page is served locally, the
+database client and `fetch` are replaced before any page script runs and the
+audit refuses to press anything unless it can verify that, a route gate aborts
+and records any request that is not the local server, and `confirm()` always
+declines. Production counts were taken either side of a run and are identical.
+
 **Structure.** Every precached file exists, because `cache.addAll` is atomic
 and one bad path breaks offline for everybody. Every script, stylesheet and
 content path resolves. No duplicate element ids. The Sponsorship course is
