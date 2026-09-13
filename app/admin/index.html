@@ -2050,6 +2050,11 @@
               <option value="oral">Oral &amp; Viva</option>
               <option value="both" selected>Full COC Preparation</option>
               <option value="sponsorship">Sponsorship</option>
+              <!-- Lifetime only. Shown by applyScopeOptionFilter, which hides it
+                   for every other plan, because "everything forever" is a real
+                   choice and "everything for 6 months" is not one this console
+                   has ever offered. -->
+              <option value="everything">Everything (both courses)</option>
             </select>
           </div>
           <div class="ad-field">
@@ -4104,7 +4109,32 @@ function adminHasAccess(u, now) { return adminLiveScopes(u, now).length > 0; }
 
 function expiryDisplay(iso, plan, trialStartedAt, user) {
   if (plan === 'lifetime') return expCell('<span class="active-tag">Lifetime</span>');
-  if (plan === 'trial' || !plan) {
+
+  /* A per-scope date outranks the trial label.
+
+     subscription_plan is only rewritten by a purchase or by a whole-account
+     action, so an account comped one course keeps whatever it had - usually
+     'trial'. Answering the plan first therefore printed "Trial expired" over a
+     customer holding a live, granted course, and the grant became invisible on
+     the one screen that exists to show it.
+
+     Same fault, and the same fix, as the Sponsorship profile panel on 12 Sep.
+     Only the ORDER changes here: a trial with no scope dates still reads
+     exactly as it did. */
+  var _hasScopeDates = user && (user.written_expires_at || user.oral_expires_at
+                                || user.sponsorship_expires_at);
+  /* LIVE, not merely present, and the difference is 141 rows.
+
+     The grace backfill on 11 Sep wrote sponsorship_expires_at into 161 accounts
+     that had never bought anything, and 141 of them are still on a trial. Letting
+     any stale date win would have replaced their honest "Trial expired" with a
+     red "Sponsorship 11 Sep 2026", which reads as a subscription they never had.
+     Measured before choosing: 0 trial accounts hold live scope access today, so
+     this changes nothing on screen now and starts working the moment a grant
+     makes it true. */
+  var _hasLiveScope = user && adminLiveScopes(user).length > 0;
+
+  if ((plan === 'trial' || !plan) && !_hasLiveScope) {
     if (!trialStartedAt) return expCell('<span class="date-cell">-</span>');
     var trialEnd = new Date(new Date(trialStartedAt).getTime() + TRIAL_DAYS * 24 * 60 * 60 * 1000);
     return isTrialExpired(trialStartedAt)
@@ -4112,7 +4142,7 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
       : expCell('<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>' + countdown(trialEnd));
   }
 
-  if (user && (user.written_expires_at || user.oral_expires_at || user.sponsorship_expires_at)) {
+  if (_hasScopeDates) {
     var now = new Date();
     // Each scope gets its own line and its own countdown. Written running to
     // December while Oral lapsed in September is a real state, and one shared
@@ -4122,6 +4152,12 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
     var line = function(label, val) {
       if (!val) return '';
       var live = new Date(val) > now;
+      // A course comped forever carries a sentinel date rather than a flag.
+      // Printing "31 Dec 2099" would be technically true and useless.
+      if (isForever(val)) {
+        return '<div class="exp-line"><span class="active-tag">'
+             + label + ' Lifetime</span></div>';
+      }
       return '<div class="exp-line"><span class="' + (live ? 'active-tag' : 'expired-tag') + '">'
            + label + ' ' + fmtDate(val) + '</span>' + (live ? countdown(val) : '') + '</div>';
     };
@@ -4967,7 +5003,7 @@ function updatePillCounts(users) {
   var now = new Date();
   function cat(u) {
     var p = u.subscription_plan || 'trial';
-    if (p === 'lifetime') return 'lifetime';
+    if (hasAnyLifetime(u)) return 'lifetime';
     var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
       && !adminHasAccess(u, now)
       && (u.written_expires_at || u.oral_expires_at || u.sponsorship_expires_at);
@@ -5011,7 +5047,7 @@ function userMatchesFilter(u, q, now) {
   if (_userFilter === 'active')   return isActive;
   if (_userFilter === 'trial')    return p === 'trial' && !trialExpired;
   if (_userFilter === 'expired')  return isExpired;
-  if (_userFilter === 'lifetime') return p === 'lifetime';
+  if (_userFilter === 'lifetime') return hasAnyLifetime(u);
   return true;
 }
 
@@ -5702,12 +5738,31 @@ function toggleProfEdit(show) {
   }
 }
 
-function requiresScope(plan) { return NEW_PAID_PLANS.indexOf(plan) !== -1; }
+/* Lifetime takes a scope now, so a single course can be comped without
+   handing over the other. Before this the field was hidden for lifetime and the
+   grant opened every course, which is how a "Sponsorship lifetime" turned into
+   full COC access as well. */
+function requiresScope(plan) {
+  return NEW_PAID_PLANS.indexOf(plan) !== -1 || plan === 'lifetime';
+}
 
 function _syncScopeField(planSelectId, fieldId, scopeSelectId) {
   var plan = document.getElementById(planSelectId).value;
   var field = document.getElementById(fieldId);
   var sel = document.getElementById(scopeSelectId);
+
+  /* "Everything (both courses)" exists for lifetime and nothing else. Comping
+     one person every course forever is a real decision; the same thing for six
+     months is not something this console has ever offered, and quietly allowing
+     it here would be a new product, not a fix. */
+  var everything = sel.querySelector('option[value="everything"]');
+  if (everything) {
+    var allow = plan === 'lifetime';
+    everything.hidden = !allow;
+    everything.disabled = !allow;
+    if (!allow && sel.value === 'everything') sel.value = 'both';
+  }
+
   if (requiresScope(plan)) {
     field.style.display = '';
     sel.disabled = false;
@@ -5717,7 +5772,8 @@ function _syncScopeField(planSelectId, fieldId, scopeSelectId) {
     sel.value = 'both';
     sel.disabled = true;
   } else {
-    // trial / lifetime - scope is meaningless.
+    // trial - scope is meaningless. Lifetime is no longer in this branch: it
+    // takes a scope now, so one course can be comped without the other.
     field.style.display = 'none';
   }
 }
@@ -5742,26 +5798,120 @@ function profEditPlanChanged() { _syncScopeField('prof-edit-plan', 'prof-edit-sc
 // This grant sets an absolute date rather than adding months, so the ledger
 // simply mirrors it. Scopes this grant does not cover are left out of the
 // object entirely, so an existing grant on the other scope is not disturbed.
-function scopeAccessUpdate(plan, scope, expiry) {
-  var upd = { subscription_plan: plan, subscription_expires_at: expiry, plan_scope: scope };
+/* A course-forever date.
 
-  // Keyed rather than branched, mirroring _shared/entitlements.ts. Both sides
-  // of this now have to agree about what a scope covers, and two hand-written
-  // ternaries are how they would quietly stop agreeing.
-  if (plan === 'lifetime' || plan === 'trial') {
-    // Lifetime is not date-based, and trial clears paid access outright.
-    // Either way, stale per-scope dates would later contradict the plan.
-    ACCESS_SCOPES_ADMIN.forEach(function (s) {
+   There is no per-course lifetime flag, and adding one would mean a new column
+   plus a matching change in deriveAccess, get-content-key and
+   get-sponsorship-key. A date far enough out does the same job through machinery
+   that already exists and is already tested: every reader asks "is this column
+   in the future", and this always is.
+
+   Displayed as "Lifetime" rather than as the year 2099, which is the only place
+   the sentinel is visible at all. */
+var ADMIN_FOREVER = '2099-12-31T00:00:00.000Z';
+function isForever(v) { return !!v && new Date(v).getUTCFullYear() >= 2090; }
+
+/* Does this account hold ANY course forever?
+
+   The Lifetime pill used to ask subscription_plan alone, which was the whole
+   story while lifetime was global. A course comped forever carries a sentinel
+   date instead and leaves the plan flag alone, so without this it would be
+   filed under Active and drop out of the pill that exists to list exactly
+   these people. */
+function hasAnyLifetime(u) {
+  if (!u) return false;
+  if (u.subscription_plan === 'lifetime') return true;
+  return ACCESS_SCOPES_ADMIN.some(function (sc) {
+    return isForever(u[sc + '_expires_at']);
+  });
+}
+
+/* Which scope columns an action taken from THIS console is allowed to write.
+
+   The console has a CoC / Sponsorship switch and the Grant tab appears under
+   both, but every grant used to write whatever the plan implied and ignore the
+   switch entirely. An audit on 13 Sep 2026 found nine faults from that, all of
+   them the same shape:
+
+     from Sponsorship, Trial or Lifetime WIPED the customer's paid COC dates
+     from Sponsorship, a legacy plan GRANTED COC, because 'both' means the two
+       COC scopes
+     from COC, Trial or Lifetime wiped Sponsorship the same way
+     Revoke cleared Written and Oral and left Sponsorship live, so a revoked
+       customer kept reading
+     the Users tab's Force Trial Expiry did the same
+     the Grant tab's Force Trial Expiry cleared no scope column at all, so a
+       paid customer kept everything: the server reads the dates and ignores
+       subscription_plan
+
+   'all' is for the Users tab, which is deliberately whole-account. Everything
+   else names its course and can touch nothing outside it. */
+function scopesOfCourse(course) {
+  if (course === 'all') return ACCESS_SCOPES_ADMIN.slice();
+  if (course === 'sponsorship') return ['sponsorship'];
+  return ['written', 'oral'];
+}
+
+/* What to write for a grant, confined to one course.
+
+   `course` is 'coc', 'sponsorship' or 'all'. A scope column outside it is never
+   named, so it keeps whatever value it had - which is the whole point: the
+   other course is somebody's paid access.
+
+   subscription_plan is only rewritten when the action covers the whole account.
+   A Sponsorship-only grant that set it to 'lifetime' would open COC as well,
+   because deriveAccess reads that flag globally. */
+function scopeAccessUpdate(plan, scope, expiry, course) {
+  course = course || 'all';
+  var mine = scopesOfCourse(course);
+  var whole = course === 'all';
+  var upd = {};
+
+  if (whole) {
+    upd.subscription_plan = plan;
+    upd.subscription_expires_at = plan === 'lifetime' ? null : expiry;
+    upd.plan_scope = scope;
+  }
+
+  if (plan === 'trial') {
+    // "Remove access", for this course only unless the caller owns all of it.
+    mine.forEach(function (s) {
       upd[s + '_expires_at'] = null;
       upd['granted_' + s + '_expires_at'] = null;
     });
     return upd;
   }
-  scopesCoveredAdmin(scope).forEach(function (s) {
+
+  if (plan === 'lifetime') {
+    if (whole || scope === 'everything') {
+      // The original behaviour: one global flag, and the per-scope dates
+      // cleared so a stale one cannot later contradict it.
+      upd.subscription_plan = 'lifetime';
+      upd.subscription_expires_at = null;
+      upd.plan_scope = null;
+      ACCESS_SCOPES_ADMIN.forEach(function (s) {
+        upd[s + '_expires_at'] = null;
+        upd['granted_' + s + '_expires_at'] = null;
+      });
+      return upd;
+    }
+    // One course, forever. subscription_plan is left alone on purpose.
+    intersect(scopesCoveredAdmin(scope), mine).forEach(function (s) {
+      upd[s + '_expires_at'] = ADMIN_FOREVER;
+      upd['granted_' + s + '_expires_at'] = ADMIN_FOREVER;
+    });
+    return upd;
+  }
+
+  intersect(scopesCoveredAdmin(scope), mine).forEach(function (s) {
     upd[s + '_expires_at'] = expiry;
     upd['granted_' + s + '_expires_at'] = expiry;
   });
   return upd;
+}
+
+function intersect(a, b) {
+  return a.filter(function (x) { return b.indexOf(x) !== -1; });
 }
 
 /* ── Orders that started and never finished ────────────────────────────────
@@ -6088,7 +6238,10 @@ async function profSaveAccess() {
     return;
   }
 
-  var _upd = scopeAccessUpdate(plan, scope, expiry);
+  /* The Users tab is whole-account, not per-course: it is one of the GLOBAL_TABS
+     and is reached the same way from either console. Passing 'all' keeps that
+     explicit rather than leaving it to the default. */
+  var _upd = scopeAccessUpdate(plan, scope, expiry, 'all');
   var { error } = await _sb.from('profiles')
     .update(_upd)
     .eq('id', _profUser.id);
@@ -6137,9 +6290,14 @@ async function profForceTrialExpiry() {
   // Clears the per-scope dates too - this is the one action that genuinely
   // means "remove all access", so leaving a live Written/Oral date behind
   // would silently keep the paywall open.
+  /* The Users tab is whole-account, so this really does mean every course.
+     It named written and oral and stopped, which left Sponsorship access live
+     after an action whose entire purpose is to remove access. Delegated now, so
+     a fourth course cannot be missed here the way the third was. */
+  var _fe = scopeAccessUpdate('trial', null, null, 'all');
+  _fe.trial_started_at = backdated;
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null,
-              plan_scope: null, written_expires_at: null, oral_expires_at: null })
+    .update(_fe)
     .eq('id', _profUser.id);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -6280,7 +6438,31 @@ async function grantAccess() {
     return;
   }
 
-  var _upd = scopeAccessUpdate(plan, scope, expiry);
+  /* The Grant tab sits under a course, so it grants that course and nothing
+     else. Before this it wrote whatever the plan implied: granting Trial or
+     Lifetime from the Sponsorship console destroyed the customer's paid COC
+     dates, and a legacy plan granted COC outright, because 'both' means the two
+     COC scopes. */
+  var _upd = scopeAccessUpdate(plan, scope, expiry, _adminCourse);
+
+  /* Refuse a grant that would write nothing.
+
+     Confining a grant to its course creates a combination that could not exist
+     before: a legacy COC bundle chosen from the Sponsorship console covers
+     written and oral, this console may touch neither, and the intersection is
+     empty. The update would succeed, the toast would say "Access updated", and
+     nothing would have changed. A silent success is worse than the cross-course
+     write it replaced, because at least that one was visible afterwards. */
+  var _touches = ACCESS_SCOPES_ADMIN.filter(function (sc) {
+    return Object.prototype.hasOwnProperty.call(_upd, sc + '_expires_at');
+  });
+  if (!_touches.length) {
+    toast('"' + (planLabel(plan) || plan) + '" covers no '
+          + (_adminCourse === 'sponsorship' ? 'Sponsorship' : 'CoC')
+          + ' section, so nothing would change. Switch course, or pick another plan.', 'err');
+    return;
+  }
+
   var { error } = await _sb.from('profiles')
     .update(_upd)
     .eq('id', _grantUserId);
@@ -6310,16 +6492,16 @@ async function revokeAccess() {
   // 'trial' on its own revoked nothing: the user kept everything. The grant
   // ledger is cleared alongside, or a later refund would replay the revoked
   // grant straight back in.
+  /* Revokes THIS course, through the same helper the grant uses.
+
+     It used to name written and oral by hand and stop there, so a revoked
+     customer kept their Sponsorship access and went on reading. Writing the
+     third column here would have been the obvious fix and the wrong one: from
+     the Sponsorship console this must not touch COC at all, and from the COC
+     console it must not touch Sponsorship. The course decides, once. */
+  var _rev = scopeAccessUpdate('trial', null, null, _adminCourse);
   var { error } = await _sb.from('profiles')
-    .update({
-      subscription_plan: 'trial',
-      subscription_expires_at: null,
-      plan_scope: null,
-      written_expires_at: null,
-      oral_expires_at: null,
-      granted_written_expires_at: null,
-      granted_oral_expires_at: null,
-    })
+    .update(_rev)
     .eq('id', _grantUserId);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -6346,8 +6528,15 @@ async function forceTrialExpiry() {
   if (!confirm(msg)) return;
 
   var backdated = new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString();
+  /* This cleared no scope column at all, so on a paid customer it did nothing:
+     deriveAccess reads the per-scope dates and ignores subscription_plan
+     entirely for paid access, so the plan flipped to 'trial' while every course
+     stayed open. Scoped to the console it was pressed in, like the revoke
+     beside it. */
+  var _fe = scopeAccessUpdate('trial', null, null, _adminCourse);
+  _fe.trial_started_at = backdated;
   var { error } = await _sb.from('profiles')
-    .update({ subscription_plan: 'trial', trial_started_at: backdated, subscription_expires_at: null, plan_scope: null })
+    .update(_fe)
     .eq('id', _grantUserId);
 
   if (error) { toast('Failed: ' + error.message, 'err'); return; }
@@ -10170,8 +10359,11 @@ function applyScopeOptionFilter() {
     if (!sel) return;
     var firstVisible = null, selectedHidden = false;
     Array.prototype.forEach.call(sel.options, function (opt) {
-      // '' is "Any scope" / "All scopes" and always belongs.
-      var show = opt.value === '' || allowed.indexOf(opt.value) !== -1;
+      // '' is "Any scope" / "All scopes" and always belongs. 'everything' is
+      // lifetime's both-courses choice and deliberately escapes the course
+      // filter, because it is the one grant that is not about one course.
+      var show = opt.value === '' || opt.value === 'everything'
+              || allowed.indexOf(opt.value) !== -1;
       opt.hidden = !show;
       opt.disabled = !show;
       if (show && firstVisible === null) firstVisible = opt.value;
