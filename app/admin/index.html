@@ -140,9 +140,21 @@
        result count - stays put and stays usable rather than scrolling away
        above 160 rows. One class rather than a rule per tab, because every one
        of these panes is the same shape: controls, then a long list.
-       overscroll-behavior stops a flick at the end of the list carrying on
-       into the page behind it. */
-    .ad-scrollcap { max-height:56vh; overflow-y:auto; overscroll-behavior:contain; }
+
+       overscroll-behavior WAS `contain` on both axes, to stop a flick at the
+       end of the list carrying on into the page. That stranded content. The
+       cap is 56vh of the WINDOW, but the list starts wherever the controls
+       above it end - on Payments that is four stat cards, a reconciliation
+       banner and a filter row, about 520px down - so the list's own box runs
+       past the bottom of the screen. Bringing its lower part into view needs
+       the PAGE to scroll, and the pointer is resting on the one element that
+       refused to pass the gesture on. Measured at 1341x896: 265px of the
+       Payments page could not be reached by scrolling at all.
+
+       Kept on the X axis, where it earns its place: these tables scroll
+       sideways, and a horizontal flick chaining to the page is how a trackpad
+       triggers a browser back-navigation mid-edit. */
+    .ad-scrollcap { max-height:56vh; overflow-y:auto; overscroll-behavior-x:contain; }
     @media (max-width:900px) { .ad-scrollcap { max-height:64vh; } }
     /* Column headers stay with the rows they label. The background is set here
        rather than relied upon: .ad-table th carries its own, but the payments
@@ -4036,11 +4048,59 @@ if (window.MutationObserver) {
   }).observe(document.documentElement, { childList: true, subtree: true });
 }
 
-// `user` is optional and carries the per-scope dates. When present, Written
-// and Oral are reported separately - a customer holding Written to March and
-// Oral to December has no single expiry date, and showing one would misreport
-// half their access.
+// `user` is optional and carries the per-scope dates. When present, Written,
+// Oral and Sponsorship are reported separately - a customer holding Written to
+// March and Oral to December has no single expiry date, and showing one would
+// misreport half their access.
 function expCell(inner) { return '<div class="exp-cell">' + inner + '</div>'; }
+
+/* Which courses this account can actually read right now.
+
+   The admin mirror of deriveAccess in supabase/functions/_shared/entitlements.ts,
+   and the console's only definition of "has access". It exists because the
+   console had no such definition: it asked subscription_expires_at, a single
+   mirror of whichever purchase happened most recently in ANY scope, which was
+   the right question only while Written and Oral were the only things sold.
+
+   The consequence was not visible yet and would have been the moment it
+   mattered. A Sponsorship customer got no Sponsorship line at all; one holding
+   Sponsorship alongside CoC had their Sponsorship hidden behind the two COC
+   lines; and the Active pill counted from the mirror, so a lapsed CoC plan
+   could hide live Sponsorship access behind the word "Expired".
+
+   Measured on production before writing this: 160 accounts carry a sponsorship
+   date and none is live, which is exactly why nothing looked wrong.
+
+   Kept in step with the server by coupon_course.e2e.mjs's sibling,
+   admin_scopes.e2e.mjs. */
+var ADMIN_SCOPE_COL = {
+  written: 'written_expires_at',
+  oral: 'oral_expires_at',
+  sponsorship: 'sponsorship_expires_at'
+};
+var ADMIN_SCOPE_LABEL = { written: 'Written', oral: 'Oral', sponsorship: 'Sponsorship' };
+
+function adminLiveScopes(u, now) {
+  now = now || new Date();
+  if (!u) return [];
+  // Lifetime and a running trial both open everything, exactly as the server
+  // has it. A grant never rewrites subscription_plan, so the plan alone can
+  // never be the whole answer.
+  if (u.subscription_plan === 'lifetime') return ['written', 'oral', 'sponsorship'];
+  if (u.trial_started_at
+      && new Date(new Date(u.trial_started_at).getTime() + TRIAL_DAYS * 864e5) > now) {
+    return ['written', 'oral', 'sponsorship'];
+  }
+  var out = [];
+  ['written', 'oral', 'sponsorship'].forEach(function (s) {
+    var v = u[ADMIN_SCOPE_COL[s]];
+    if (v && new Date(v) > now) out.push(s);
+  });
+  return out;
+}
+
+/** Does this account hold any paid or granted access at all? */
+function adminHasAccess(u, now) { return adminLiveScopes(u, now).length > 0; }
 
 function expiryDisplay(iso, plan, trialStartedAt, user) {
   if (plan === 'lifetime') return expCell('<span class="active-tag">Lifetime</span>');
@@ -4052,20 +4112,23 @@ function expiryDisplay(iso, plan, trialStartedAt, user) {
       : expCell('<span class="active-tag">Trial until ' + fmtDate(trialEnd) + '</span>' + countdown(trialEnd));
   }
 
-  if (user && (user.written_expires_at || user.oral_expires_at)) {
+  if (user && (user.written_expires_at || user.oral_expires_at || user.sponsorship_expires_at)) {
     var now = new Date();
     // Each scope gets its own line and its own countdown. Written running to
     // December while Oral lapsed in September is a real state, and one shared
-    // timer could only ever describe half of it.
+    // timer could only ever describe half of it. Sponsorship is a third such
+    // clock and was missing from this list, so a Sponsorship customer holding
+    // any COC scope had their Sponsorship silently omitted here.
     var line = function(label, val) {
       if (!val) return '';
       var live = new Date(val) > now;
       return '<div class="exp-line"><span class="' + (live ? 'active-tag' : 'expired-tag') + '">'
            + label + ' ' + fmtDate(val) + '</span>' + (live ? countdown(val) : '') + '</div>';
     };
-    var w = line('Written', user.written_expires_at);
-    var o = line('Oral', user.oral_expires_at);
-    if (w || o) return expCell(w + o);
+    var lines = ['written', 'oral', 'sponsorship'].map(function (s) {
+      return line(ADMIN_SCOPE_LABEL[s], user[ADMIN_SCOPE_COL[s]]);
+    }).join('');
+    if (lines) return expCell(lines);
   }
 
   if (!iso) return expCell('<span class="date-cell">-</span>');
@@ -4521,7 +4584,7 @@ async function loadFunnel() {
 async function loadDashboard() {
   var [profilesRes, paymentsRes] = await Promise.all([
     _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, granted_oral_expires_at, granted_written_expires_at, is_admin, trial_started_at, created_at, email, full_name, topic_progress, sponsorship_progress')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, sponsorship_expires_at, granted_oral_expires_at, granted_written_expires_at, is_admin, trial_started_at, created_at, email, full_name, topic_progress, sponsorship_progress')
       .order('created_at', { ascending: false }),
     _sb.from('payments')
       .select('amount, plan, scope, created_at, paid_at, user_id, razorpay_payment_id')
@@ -4536,7 +4599,7 @@ async function loadDashboard() {
   if (profilesRes.error) {
     console.warn('dashboard profile query failed, retrying without progress columns:', profilesRes.error.message);
     profilesRes = await _sb.from('profiles')
-      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, email, full_name')
+      .select('id, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, sponsorship_expires_at, trial_started_at, created_at, email, full_name')
       .order('created_at', { ascending: false });
   }
 
@@ -4547,11 +4610,23 @@ async function loadDashboard() {
   var now     = new Date();
   var weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
+  /* "Active" is now asked of the three scope columns rather than of
+     subscription_expires_at.
+
+     That column is a single mirror of the most recent purchase in any scope,
+     so a customer whose COC plan lapsed while their Sponsorship still ran was
+     counted as expired, and one who bought Sponsorship last was counted active
+     on a date that described a different course. The scope columns are what
+     the server actually reads, so they are what this should count.
+
+     The no-date case is preserved deliberately: a paid plan with no expiry
+     anywhere has always meant unlimited here, and dropping that would newly
+     mark those accounts expired. */
   var active = all.filter(function(u) {
     if (u.subscription_plan === 'lifetime') return true;
-    if (ALL_PAID_PLANS.indexOf(u.subscription_plan) !== -1)
-      return !u.subscription_expires_at || new Date(u.subscription_expires_at) > now;
-    return false;
+    if (ALL_PAID_PLANS.indexOf(u.subscription_plan) === -1) return false;
+    var noDates = !u.written_expires_at && !u.oral_expires_at && !u.sponsorship_expires_at;
+    return noDates || adminHasAccess(u, now);
   });
   var trial   = all.filter(function(u) {
     var isTrialPlan = !u.subscription_plan || u.subscription_plan === 'trial';
@@ -4559,7 +4634,8 @@ async function loadDashboard() {
   });
   var expired = all.filter(function(u) {
     var isPaidExpired = ALL_PAID_PLANS.indexOf(u.subscription_plan) !== -1
-      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+      && !adminHasAccess(u, now)
+      && (u.written_expires_at || u.oral_expires_at || u.sponsorship_expires_at);
     var isTrialLapsed = (!u.subscription_plan || u.subscription_plan === 'trial')
       && isTrialExpired(u.trial_started_at, now);
     return isPaidExpired || isTrialLapsed;
@@ -4842,7 +4918,8 @@ function drawPlanDist(all, now) {
   all.forEach(function(u) {
     var p = u.subscription_plan || 'trial';
     var isExpired = ALL_PAID_PLANS.indexOf(p) !== -1
-      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+      && !adminHasAccess(u, now)
+      && (u.written_expires_at || u.oral_expires_at || u.sponsorship_expires_at);
     if (isExpired) p = 'trial';
     if (!(p in counts)) p = 'trial'; // unrecognised value - don't drop the user silently
     counts[p] = (counts[p] || 0) + 1;
@@ -4870,7 +4947,7 @@ var _userFilter = 'all';
 /* Shared so loadUsers and the single-row fallback in openUserProfile cannot
    drift apart. They did once already: sponsorship_progress was added to one
    and the drawer read a column the other never fetched. */
-var USER_COLS = 'id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at';
+var USER_COLS = 'id, email, full_name, subscription_plan, plan_scope, subscription_expires_at, written_expires_at, oral_expires_at, sponsorship_expires_at, trial_started_at, created_at, topic_progress, sponsorship_progress, last_active_at';
 
 async function loadUsers() {
   var { data, error } = await _sb.from('profiles')
@@ -4892,7 +4969,8 @@ function updatePillCounts(users) {
     var p = u.subscription_plan || 'trial';
     if (p === 'lifetime') return 'lifetime';
     var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
-      && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+      && !adminHasAccess(u, now)
+      && (u.written_expires_at || u.oral_expires_at || u.sponsorship_expires_at);
     if (isPaidExpired) return 'expired';
     if (ALL_PAID_PLANS.indexOf(p) !== -1) return 'active';
     // Trial (or unset, which defaults to trial): an aged-out trial is just
@@ -4924,7 +5002,8 @@ function userMatchesFilter(u, q, now) {
   if (q && !(u.email || '').toLowerCase().includes(q) && !(u.full_name || '').toLowerCase().includes(q)) return false;
   var p = u.subscription_plan || 'trial';
   var isPaidExpired = ALL_PAID_PLANS.indexOf(p) !== -1
-    && u.subscription_expires_at && new Date(u.subscription_expires_at) <= now;
+    && !adminHasAccess(u, now)
+    && (u.written_expires_at || u.oral_expires_at || u.sponsorship_expires_at);
   var isActive = !isPaidExpired && ALL_PAID_PLANS.indexOf(p) !== -1;
   var trialExpired = (p === 'trial' || !u.subscription_plan) && isTrialExpired(u.trial_started_at, now);
   var isExpired = isPaidExpired || trialExpired;
@@ -8317,7 +8396,7 @@ async function exportUsersCsv() {
   try {
     data = await fetchAllRows(function() {
       return _sb.from('profiles')
-        .select('id,email,full_name,subscription_plan,plan_scope,subscription_expires_at,written_expires_at,oral_expires_at,trial_started_at,created_at')
+        .select('id,email,full_name,subscription_plan,plan_scope,subscription_expires_at,written_expires_at,oral_expires_at,sponsorship_expires_at,trial_started_at,created_at')
         .order('created_at', { ascending: false });
     }, 'users');
   } catch (e) { toast('Export failed: ' + e.message, 'err'); return; }
