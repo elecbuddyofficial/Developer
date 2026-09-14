@@ -61,6 +61,25 @@ audit refuses to press anything unless it can verify that, a route gate aborts
 and records any request that is not the local server, and `confirm()` always
 declines. Production counts were taken either side of a run and are identical.
 
+**Study notes on a phone.** `notes_layout.py` renders every notes file in all
+three courses at 360, 390 and 412px and fails on a grid that the phone layout
+forces to one column but still renders two, a card squeezed below half its
+grid, cards overlapping, or anything running past the reading column. It exists
+because a card written as `style="grid-column: span 2"` quietly creates a second
+column on a phone: a reader's recording of W01 Overcurrent Protection showed
+Method 1 collapsed behind Method 2 and a huge gap before Method 3.
+
+Width matters. The reader's phone is 360 CSS pixels wide, and on the fix-removed
+run the overlap appeared at 360px and not at 390 or 412. That is why some
+readers saw it and others never did, and why every run covers all three widths:
+a check at iPhone width alone would have passed.
+
+The notes are encrypted, so it takes directories of decrypted copies kept
+outside the repo. Its first version reported all 117 files clean while every
+one was invisible: notes arrive wrapped in `.view`, which is `display:none`
+until activated, so every rectangle measured zero. It now activates views and
+fails any file that renders under 200px tall rather than passing it.
+
 **Structure.** Every precached file exists, because `cache.addAll` is atomic
 and one bad path breaks offline for everybody. Every script, stylesheet and
 content path resolves. No duplicate element ids. The Sponsorship course is

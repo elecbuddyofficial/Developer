@@ -66,6 +66,9 @@ AUDITS = [
     ('the page can be scrolled past a table', 'scroll_chain.py', False, True),
     ('every admin control, pressed one by one', 'admin_controls.py', False, True),
     ('every control has room for its text', 'text_fits.py', False, True),
+    # Needs decrypted notes outside the repo, so it exits 2 and is reported as
+    # skipped when run bare. Run it directly: python audits/notes_layout.py <dirs>
+    ('notes grids stay one column on a phone', 'notes_layout.py', False, True),
 ]
 
 want_prod = '--all' in sys.argv

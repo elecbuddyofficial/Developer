@@ -604,6 +604,27 @@ a.sb-item{text-decoration:none}
     grid-template-columns: minmax(0, 1fr) !important;
     gap: 10px;
   }
+  /* Every child sits in that single column, whatever span it asked for.
+
+     A card written with style="grid-column: span 2" to run full width on a
+     desktop two-column grid does not fit a one-column grid. CSS does not clamp
+     it: it creates an IMPLICIT second column, and the siblings before it are
+     auto-placed side by side across the two. With min-width:0 on grid children
+     (added 11 Sep so wide tables stop dragging tracks open) the first column
+     can shrink to nothing, so the first card collapses to a sliver a character
+     wide and its text stacks into a column hundreds of pixels tall.
+
+     W01 "Overcurrent Protection - 3 Methods" on a phone: Method 1 vanished
+     behind Method 2, and the row it inflated left a huge empty gap before
+     Method 3. Reported by a reader with a screen recording on 14 Sep 2026.
+
+     !important because the span is an inline style, and 1 / -1 rather than
+     auto so a span of any size, on any of these grids, lands in the one
+     column the phone layout actually has. */
+  .welcome-grid > *, .n-grid > *, .n-grid-3 > *, .qcat-grid > *,
+  [style*="grid-template-columns"] > * {
+    grid-column: 1 / -1 !important;
+  }
   /* Full-width reading on mobile */
   .note-doc {
     max-width: 100% !important;
