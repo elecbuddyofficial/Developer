@@ -654,7 +654,12 @@ a.sb-item{text-decoration:none}
   
   .quiz-q-area { padding: 20px 16px 12px; }
   .quiz-opts { padding: 12px 16px 16px; }
-  .quiz-actions { padding: 12px 16px; }
+  /* Wraps. A hint beside three buttons does not fit a phone: at 280 and 320px
+     the Prev / Skip / Next group ran 72px past the card, which clips it, so
+     Next was half hidden after answering. Same markup in both apps. */
+  .quiz-actions { padding: 12px 16px; flex-wrap: wrap; gap: 8px; }
+  .quiz-actions .hint { flex: 1 1 auto; min-width: 0; }
+  .quiz-actions > div { flex-wrap: wrap; justify-content: flex-end; margin-left: auto; }
   
   /* Table scrolls horizontally on its own; page stays locked in portrait */
   .n-table {
@@ -703,7 +708,12 @@ a.sb-item{text-decoration:none}
   .sq-q { font-size: 14px; word-break: break-word; }
   .sq-a { padding: 12px; font-size: 13px; word-break: break-word; }
   .sq-bullet { flex-wrap: wrap; gap: 4px; }
-  .sq-label { font-size: 12px; }
+  /* The row already wraps the label onto its own line, but a label longer than
+     the screen ("Overload Relay (OLR) / Thermal Overload Relay:") still ran
+     37px off a 280px phone. white-space alone did not fix it: with
+     flex-shrink:0 a flex item keeps its one-line width even when allowed to
+     wrap. max-width caps that width at the row, so the text breaks. */
+  .sq-label { font-size: 12px; white-space: normal; flex-shrink: 1; max-width: 100%; }
   .sq-bullet-text { font-size: 13px; }
   .sq-para { font-size: 13px; }
   .sq-badge-surveyor, .sq-badge-topic { font-size: 10px; padding: 3px 8px; }
@@ -1009,7 +1019,10 @@ a.sb-item{text-decoration:none}
 .sq-surveyor-card:hover { border-color: var(--orange); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(245, 158, 11, 0.1); }
 .sq-surveyor-name { font-size: 18px; font-weight: 800; color: var(--text); display: flex; align-items: center; gap: 8px; }
 .sq-surveyor-stat { font-size: 13px; color: var(--text2); }
-.sq-topic-select { background: var(--surface); color: var(--text); border: 1px solid var(--border2); border-radius: var(--r8); padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+/* max-width: a select is as wide as its longest option, and "T01 - Alternators
+   & Generators (58)" made both Surveyor Q&A filters 83-98px wider than a 360px
+   phone, with the arrow and right edge cut off by .note-doc. */
+.sq-topic-select { background: var(--surface); color: var(--text); border: 1px solid var(--border2); border-radius: var(--r8); padding: 7px 12px; font-size: 13px; font-weight: 600; cursor: pointer; max-width: 100%; }
 .sq-topic-link { color: var(--blue); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
 .sq-topic-link:hover { color: var(--purple); }
 .sq-topic-select:focus { outline: 2px solid var(--purple); outline-offset: 1px; }

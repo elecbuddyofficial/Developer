@@ -69,6 +69,17 @@ AUDITS = [
     # Needs decrypted notes outside the repo, so it exits 2 and is reported as
     # skipped when run bare. Run it directly: python audits/notes_layout.py <dirs>
     ('notes grids stay one column on a phone', 'notes_layout.py', False, True),
+    # Every screen and modal of both apps, sign-in and the admin console, at
+    # eight phone and tablet sizes. The full 38-size matrix takes about half an
+    # hour: python audits/mobile_matrix.py --plain <dir>. Screens that need
+    # content are checked only when EB_PLAIN names a decrypted mirror of data/
+    # outside the repo; without it this reports skip, never a pass.
+    # Planted faults and undone fixes must all be caught before its pass means
+    # anything. Runs first so a broken instrument is named before its verdict.
+    ('the phone-size sweep can still fail', 'mobile_matrix.py', False, True,
+     {'args': ['--selftest', '--port', '8194'], 'timeout': 1200}),
+    ('every screen fits every phone size', 'mobile_matrix.py', False, True,
+     {'args': ['--quick'], 'timeout': 1800}),
 ]
 
 want_prod = '--all' in sys.argv
@@ -76,7 +87,8 @@ want_browser = '--browser' in sys.argv or '--all' in sys.argv
 
 print('')
 passed = failed = skipped = 0
-for label, path, needs_prod, is_browser in AUDITS:
+for label, path, needs_prod, is_browser, *extra in AUDITS:
+    opts = extra[0] if extra else {}
     full = os.path.join(HERE, path)
     if not os.path.exists(full):
         print('  skip  %-46s (not found: %s)' % (label, path))
@@ -94,7 +106,8 @@ for label, path, needs_prod, is_browser in AUDITS:
     runner = [sys.executable] if path.endswith('.py') else ['node']
     t0 = time.time()
     try:
-        r = subprocess.run(runner + [full], cwd=HERE, capture_output=True, timeout=600)
+        r = subprocess.run(runner + [full] + opts.get('args', []), cwd=HERE, capture_output=True,
+                           timeout=opts.get('timeout', 600))
         ok = r.returncode == 0
         # Exit 2 means "could not check", not "found a problem" - a missing
         # credential or a data snapshot that is deliberately not in the repo.

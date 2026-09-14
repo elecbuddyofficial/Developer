@@ -130,3 +130,62 @@ Gitignored.
 public**, because GitHub Pages serves elec-buddy.com from it, so account ids
 and subscription dates cannot live here. The query that rebuilds it is at the
 top of that file, and the audit exits 2 rather than passing without it.
+
+## Every screen at every phone size (`mobile_matrix.py`)
+
+Added 14 Sep 2026, after a reader's 360px Android phone showed W01 Overcurrent
+Protection collapsing into one squeezed column. It rendered wrong at 360px and
+right at 390 and 412, so every check that ran at iPhone width reported clean.
+
+It loads the real pages, walks about 120 screens and modals across both apps,
+sign-in and the admin console, and measures each at 38 sizes: 20 portrait
+phones and tablets from 280 to 900px, 8 landscape, and one pixel past each CSS
+breakpoint. Content comes from a decrypted mirror of `data/` kept OUTSIDE the
+repo; without one, the content screens are reported as not checked (exit 2),
+never passed. Every request to Supabase or Razorpay is answered locally with a
+503 and counted, so it cannot touch production.
+
+```
+python audits/mobile_matrix.py --selftest --plain <dir>   prove it can fail
+python audits/mobile_matrix.py --plain <dir> --quick      8 sizes, a few minutes
+python audits/mobile_matrix.py --plain <dir>              38 sizes, run as 4 shards:
+    --shard 0/4 --port 8201 ... --shard 3/4 --port 8204
+```
+
+`--shots <dir>` saves an outlined screenshot of each confirmed finding, scrolled
+into view. Look at them: several findings below were settled only by eye.
+
+Kinds: OVERFLOW, NOHINT, NARROW, IMPLICIT, OVERLAP, CUT, CONTROL, UNREACHABLE,
+TAP. Each is planted in `--selftest`, plus five fixes undone in a served copy
+(never the repo file) that must be caught undone and clean as shipped.
+
+What it found and what was fixed:
+
+| where | at | fix |
+|---|---|---|
+| Surveyor Q&A filter dropdowns 83-98px past the screen | 280-384px | `.sq-topic-select` max-width |
+| a long Surveyor Q&A label cut off | 280px | `.sq-label` may wrap and shrink |
+| quiz Prev / Skip / Next clipped by the card | 280, 320px | `.quiz-actions` wraps |
+| sign-in scroll button over the centre of Sign In | 280x653 | hidden while over a form control |
+| notes tables hiding columns with no scroll hint | 769-932px | `table-hints.js` measures the wrapper too |
+
+Every false alarm it raised was the same failure this file keeps recording,
+reporting over ground it had not understood:
+
+- A wrapped inline `<strong>` reports one rectangle around both its lines, so it
+  "overlapped" the next line. Inline elements are excluded from OVERLAP.
+- The admin rail scrolls at 768px; a button below its fold has its centre on
+  screen while the footer is drawn there. Controls scrolled out of their own box
+  are excluded from TAP.
+- An open menu or dialog covers the page by design. Only a small fixed layer (a
+  floating button) counts as covering; a panel does not.
+- Every view slides up once on arrival. Only a LOOPING animation marks a ticker,
+  or the check skipped a planted 640px block.
+- A table scrolling inside `.n-table-wrap` was blamed on the table's own
+  `overflow:hidden`. The holder is the first clipping box the element actually
+  sticks out of.
+- Six admin tabs were reported empty that are correctly hidden in the other
+  course. Admin screens are now read from `COURSE_TABS` in the console itself.
+- A mutation of the page file itself was silently served unmutated, because the
+  page branch answered first. Swaps are applied before the page is served, and
+  each undo is checked against the file before it runs.

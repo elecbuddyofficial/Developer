@@ -23,7 +23,13 @@ function _addTableScrollHints(container) {
     if (!tables.length) return;
 
     function checkOne(table, wrap) {
-        var overflowing = table.scrollWidth > table.clientWidth + 2;
+        // Both boxes. Up to 768px the table is display:block and scrolls
+        // itself; from 769px it is a real table scrolling inside the wrapper,
+        // where the table measures as exactly its own width. Checking only the
+        // table left T15, T04, T13, W07 and DI01 on tablets with columns out of
+        // sight and nothing to say so (audits/mobile_matrix.py, 14 Sep 2026).
+        var overflowing = table.scrollWidth > table.clientWidth + 2
+                       || wrap.scrollWidth > wrap.clientWidth + 2;
         wrap.classList.toggle('has-scroll-hint', overflowing && !wrap.classList.contains('hint-dismissed'));
     }
 
@@ -47,6 +53,7 @@ function _addTableScrollHints(container) {
         var dismiss = function() { wrap.classList.add('hint-dismissed'); wrap.classList.remove('has-scroll-hint'); };
         table.addEventListener('scroll', dismiss, { passive: true, once: true });
         table.addEventListener('touchstart', dismiss, { passive: true, once: true });
+        wrap.addEventListener('scroll', dismiss, { passive: true, once: true });
 
         window.addEventListener('resize', function() { checkOne(table, wrap); });
     });

@@ -983,10 +983,26 @@
     var fab = document.getElementById('scroll-fab');
     var target = document.getElementById('feat-ticker');
     if (!fab || !target) return;
+    /* Also hidden while it would sit over a form control. On a 280x653 Galaxy
+       Fold cover screen it landed on the centre of "Sign In" at first load, so
+       a tap meant to sign in scrolled the page instead. Measured against the
+       spot it occupies when shown, not its current box, which the .hide
+       transform moves. */
+    function coversControl() {
+      var H = window.innerHeight, cx = window.innerWidth / 2;
+      var top = H - 16 - 36 - 6, bottom = H - 16 + 6;
+      var ctrls = document.querySelectorAll('.form.active button, .form.active input, .form.active a');
+      for (var i = 0; i < ctrls.length; i++) {
+        var c = ctrls[i].getBoundingClientRect();
+        if (!c.width || !c.height) continue;
+        if (c.top < bottom && c.bottom > top && c.left < cx + 24 && c.right > cx - 24) return true;
+      }
+      return false;
+    }
     function sync() {
       var r = target.getBoundingClientRect();
       var targetVisible = r.top < window.innerHeight * 0.85;
-      fab.classList.toggle('hide', targetVisible);
+      fab.classList.toggle('hide', targetVisible || coversControl());
     }
     window.addEventListener('scroll', sync, { passive: true });
     window.addEventListener('resize', sync);
