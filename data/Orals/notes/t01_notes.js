@@ -225,7 +225,7 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
     <div class="n-card" style="border-color:var(--red-border)"><div class="card-title" style="color:var(--red)">Emergency DG - Passenger</div><div class="card-val" style="color:var(--orange)">30 s / 36 h</div><div class="card-desc">Must auto-start and supply ESB within <span class="n-val">30 seconds</span>. Fuel supply must last 36 hours. Requires transitional battery source for 30 minutes.</div></div>
   </div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>SOLAS II-1/Reg 41 - Emergency Source Location:</strong><br>
-  • Emergency DG must be located <strong>above the bulkhead deck</strong> (above the deepest load waterline), outside the machinery spaces, in a dedicated compartment.<br>
+  • Emergency DG must be located <strong>above the uppermost continuous deck</strong>, readily accessible from the open deck, outside the machinery spaces and not forward of the collision bulkhead (SOLAS II-1/42 and 43).<br>
   • Must be capable of operating independently of the main machinery space - separate fuel tank, separate cooling, separate starting system (batteries or hydraulic accumulator).<br>
   • Primary starting batteries must be capable of <strong>3 consecutive starts</strong> without recharging; a secondary independent source (pneumatic/hydraulic) must provide a further <strong>3 starts within 30 minutes</strong> (the "3 + 3" rule), unless effective hand-starting is provided. EG must be readily startable in cold conditions down to 0°C.<br>
   • Emergency switchboard (ESB) must be in the same compartment as the emergency DG or in an immediately adjacent space accessible without passing through the main machinery space.</div></div>
