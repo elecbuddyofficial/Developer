@@ -7,7 +7,7 @@ window.EB_COUNTS = {
   writtenTopics: 8,
   numericals: 39,
   quizQuestions: 5861,
-  surveyorQuestions: 1236,
+  surveyorQuestions: 1243,
   surveyors: 52,
   generatedOn: '2026-09-17'
 };
