@@ -50,7 +50,7 @@ serve(async (req) => {
       .eq('id', user_id)
       .is('welcome_email_sent_at', null)
       .gte('trial_started_at', recentCutoff)
-      .select('email, full_name')
+      .select('email, full_name, default_track')
       .maybeSingle();
 
     // Not an error: already sent, unknown id, or outside the signup window —
@@ -68,7 +68,7 @@ serve(async (req) => {
       from:      'Elec-Buddy <noreply@elec-buddy.com>',
       to:        claimed.email,
       subject:   welcomeEmailSubject(tpl, claimed.full_name),
-      html:      welcomeEmailHtml({ name: claimed.full_name, template: tpl }),
+      html:      welcomeEmailHtml({ name: claimed.full_name, template: tpl, track: claimed.default_track }),
     });
 
     // The stamp above is what makes this one-shot, but it is claimed BEFORE

@@ -3,6 +3,8 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import {
   recomputeFromPayments, expiryUpdate, clearedExpiries, liveExpiries, GRANT_COLUMNS,
 } from '../_shared/entitlements.ts';
+import { sendEmail } from '../_shared/email-layout.ts';
+import { refundIssuedHtml, refundIssuedSubject } from '../_shared/refund-email.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Admin-triggered refund. Issues the refund through Razorpay, records it on
@@ -36,6 +38,7 @@ serve(async (req) => {
     const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const RZP_KEY_ID       = Deno.env.get('RAZORPAY_KEY_ID')!;
     const RZP_KEY_SECRET   = Deno.env.get('RAZORPAY_KEY_SECRET')!;
+    const RESEND_API_KEY   = Deno.env.get('RESEND_API_KEY');
 
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) return json({ error: 'Unauthorized' }, 401);
@@ -106,12 +109,17 @@ serve(async (req) => {
 
     // ── Record it locally ────────────────────────────────────────────────
     const now = new Date().toISOString();
-    await sb.from('payments').update({
+    // neq + select is what keeps the customer's refund email to exactly one.
+    // The refund.processed webhook writes the same row and mails on the same
+    // condition, so whichever of the two marks it refunded first is the one
+    // that sends, even if Razorpay's webhook beats this function to it.
+    const { data: marked } = await sb.from('payments').update({
       status:             'refunded',
       razorpay_refund_id: rzpBody?.id ?? null,
       refund_amount:      rzpBody?.amount ?? payment.amount,
       refunded_at:        now,
-    }).eq('id', payment.id);
+    }).eq('id', payment.id).neq('status', 'refunded').select('id');
+    const weMarkedIt = !!(marked && marked.length);
 
     // ── Recompute the customer's access ──────────────────────────────────
     // Rebuilt by REPLAYING every remaining paid purchase in the order it was
@@ -174,7 +182,7 @@ serve(async (req) => {
 
     // ── Audit ────────────────────────────────────────────────────────────
     const { data: targetProfile } = await sb
-      .from('profiles').select('email').eq('id', payment.user_id).maybeSingle();
+      .from('profiles').select('email, full_name').eq('id', payment.user_id).maybeSingle();
 
     await sb.from('admin_actions').insert({
       admin_id:       caller.id,
@@ -191,6 +199,32 @@ serve(async (req) => {
         access:              accessResult,
       },
     });
+
+    // ── Tell the customer ────────────────────────────────────────────────
+    // Razorpay's own notification names a merchant and an amount and says
+    // nothing about access or timing, so people wrote in to ask whether the
+    // refund had gone through at all. Sent last, and never able to fail the
+    // refund: the money has already moved by this point.
+    if (RESEND_API_KEY && weMarkedIt && targetProfile?.email) {
+      const emailInput = {
+        name:        targetProfile.full_name,
+        amountPaise: rzpBody?.amount ?? payment.amount,
+        plan:        payment.plan,
+        scope:       payment.scope,
+        orderId:     payment.razorpay_order_id ?? null,
+        paymentId:   payment.razorpay_payment_id,
+        refundId:    rzpBody?.id ?? null,
+        access:      accessResult as 'recomputed_from_remaining_payments' | 'reverted_to_trial' | 'kept_lifetime' | 'skipped',
+      };
+      const sent = await sendEmail({
+        resendKey: RESEND_API_KEY,
+        from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
+        to:        targetProfile.email,
+        subject:   refundIssuedSubject(emailInput),
+        html:      refundIssuedHtml(emailInput),
+      });
+      if (!sent.ok) console.error('Refund email failed:', sent.error);
+    }
 
     return json({
       ok:        true,

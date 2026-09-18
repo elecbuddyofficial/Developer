@@ -38,6 +38,11 @@ AUDITS = [
     ('the gate matches deriveAccess', 'gate_agree.mjs', False, False),
     ('no hand-written scope list omits Sponsorship', 'audit_scopelists.mjs', False, False),
 
+    # What the customer actually reads. A Sponsorship receipt promised the Oral
+    # and Written sections and showed "undefined access" for three weeks: the
+    # purchase was right, and nothing had ever rendered the email.
+    ('every email names the right course', 'emails.py', False, False),
+
     # Structure.
     ('every file and handler referenced exists', 'audit_refs.mjs', False, False),
     ('no duplicate or missing element ids', 'audit_dom.mjs', False, False),

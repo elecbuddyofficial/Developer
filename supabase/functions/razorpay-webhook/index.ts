@@ -2,6 +2,7 @@ import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { sendEmail } from '../_shared/email-layout.ts';
 import { paymentConfirmedHtml, paymentConfirmedSubject } from '../_shared/payment-email.ts';
+import { refundIssuedHtml, refundIssuedSubject } from '../_shared/refund-email.ts';
 import { applyPurchase, PLAN_MONTHS, ENTITLEMENT_COLUMNS, expiryUpdate } from '../_shared/entitlements.ts';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -301,7 +302,7 @@ serve(async (req) => {
       const refund    = event?.payload?.refund?.entity;
       const paymentId = refund?.payment_id;
       if (paymentId) {
-        await sb.from('payments')
+        const { data: changed } = await sb.from('payments')
           .update({
             status:              'refunded',
             razorpay_refund_id:  refund?.id ?? null,
@@ -309,7 +310,38 @@ serve(async (req) => {
             refunded_at:         new Date().toISOString(),
           })
           .eq('razorpay_payment_id', paymentId)
-          .neq('status', 'refunded');
+          .neq('status', 'refunded')
+          .select('id, user_id, amount, plan, scope, razorpay_order_id');
+
+        // Only a refund that this handler marked gets an email, so an admin
+        // refund (which mails from refund-payment with the access outcome it
+        // knows) does not produce a second one. This branch does not recompute
+        // access, so its email does not claim to know what happened to it.
+        const row = changed?.[0];
+        if (RESEND_API_KEY && row?.user_id) {
+          const { data: prof } = await sb
+            .from('profiles').select('email, full_name').eq('id', row.user_id).maybeSingle();
+          if (prof?.email) {
+            const emailInput = {
+              name:        prof.full_name,
+              amountPaise: refund?.amount ?? row.amount,
+              plan:        row.plan,
+              scope:       row.scope,
+              orderId:     row.razorpay_order_id,
+              paymentId,
+              refundId:    refund?.id ?? null,
+              access:      null,
+            };
+            const sent = await sendEmail({
+              resendKey: RESEND_API_KEY,
+              from:      'Elec-Buddy Payments <payments@elec-buddy.com>',
+              to:        prof.email,
+              subject:   refundIssuedSubject(emailInput),
+              html:      refundIssuedHtml(emailInput),
+            });
+            if (!sent.ok) console.error('Refund email failed:', sent.error);
+          }
+        }
       }
       return finish({ handled: eventType });
     }

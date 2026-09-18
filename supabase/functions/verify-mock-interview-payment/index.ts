@@ -1,5 +1,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { sendEmail } from '../_shared/email-layout.ts';
+import { bookingConfirmedHtml, bookingConfirmedSubject } from '../_shared/booking-email.ts';
 
 /**
  * Confirms a mock interview booking after Razorpay reports success.
@@ -90,7 +92,7 @@ serve(async (req) => {
       .eq('razorpay_order_id', order_id)
       .eq('user_id', user.id)
       .eq('status', 'reserved')
-      .select('id, slot_id, amount_paise, email');
+      .select('id, slot_id, amount_paise, email, full_name');
 
     if (casErr) {
       console.error('Booking confirm failed:', casErr);
@@ -147,9 +149,37 @@ serve(async (req) => {
 
     const { data: slot } = await sb
       .from('mock_interview_slots')
-      .select('starts_at, duration_minutes')
+      .select('starts_at, duration_minutes, time_tbc')
       .eq('id', booking.slot_id)
       .maybeSingle();
+
+    // Booking confirmation. The booking screen tells the buyer we will email
+    // them, and until 18 Sep 2026 nothing did: this is the only paid thing on
+    // the site that sent no receipt. It runs after the compare-and-swap, so it
+    // sends once per booking (a replay updates no row and returns above), and
+    // a send failure is logged rather than thrown: the slot is already theirs.
+    const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
+    if (RESEND_API_KEY && booking.email) {
+      // time_tbc means the slot exists but its hour is not fixed yet, so the
+      // email must not print starts_at as if it were settled.
+      const emailInput = {
+        name:            booking.full_name,
+        startsAt:        slot?.time_tbc ? null : (slot?.starts_at ?? null),
+        durationMinutes: slot?.duration_minutes ?? null,
+        amountPaise:     booking.amount_paise,
+        orderId:         order_id,
+        paymentId:       payment_id,
+        bookingId:       booking.id,
+      };
+      const sent = await sendEmail({
+        resendKey: RESEND_API_KEY,
+        from:      'Elec-Buddy Bookings <payments@elec-buddy.com>',
+        to:        booking.email,
+        subject:   bookingConfirmedSubject(emailInput),
+        html:      bookingConfirmedHtml(emailInput),
+      });
+      if (!sent.ok) console.error('Booking confirmation email failed:', sent.error);
+    }
 
     return json({
       ok: true,

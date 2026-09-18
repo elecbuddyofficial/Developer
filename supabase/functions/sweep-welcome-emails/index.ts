@@ -86,6 +86,21 @@ serve(async (req) => {
     const tpl = await loadTemplate(sb, 'welcome');
     const due = list.slice(0, MAX_PER_RUN);
 
+    // welcome_email_backlog returns id, email and name only, so the course
+    // each account signed up for is read here in one query rather than one per
+    // recipient. Without it every sweep email is COC-flavoured, including the
+    // ones going to Sponsorship signups.
+    const trackById: Record<string, string | null> = {};
+    if (due.length) {
+      const { data: tracks } = await sb
+        .from('profiles')
+        .select('id, default_track')
+        .in('id', due.map(u => u.id));
+      (tracks ?? []).forEach((t: { id: string; default_track: string | null }) => {
+        trackById[t.id] = t.default_track;
+      });
+    }
+
     for (let i = 0; i < due.length; i += BATCH) {
       const chunk = due.slice(i, i + BATCH);
       await Promise.all(chunk.map(async (u) => {
@@ -108,7 +123,7 @@ serve(async (req) => {
           from:      'Elec-Buddy <noreply@elec-buddy.com>',
           to:        u.email,
           subject:   welcomeEmailSubject(tpl, u.full_name),
-          html:      welcomeEmailHtml({ name: u.full_name, template: tpl }),
+          html:      welcomeEmailHtml({ name: u.full_name, template: tpl, track: trackById[u.id] ?? null }),
         });
 
         if (sent.ok) {

@@ -5,7 +5,7 @@
 // wins the race is what keeps this to one email per payment, never zero,
 // never two.
 
-import { emailLayout, escapeHtml, APP_URL } from './email-layout.ts';
+import { emailLayout, escapeHtml, APP_URL, SPONSORSHIP_URL } from './email-layout.ts';
 
 const DURATION_LABELS: Record<string, string> = {
   '3mo': '3-Month', '6mo': '6-Month', '12mo': '12-Month',
@@ -19,12 +19,14 @@ const DURATION_LABELS: Record<string, string> = {
 // receipt reads the same way the purchase screen did.
 const TRACK_NAME: Record<string, string> = {
   written: 'Written Paper', oral: 'Oral & Viva', both: 'Full COC Preparation',
+  sponsorship: 'Sponsorship',
 };
 
 const SCOPE_ACCESS_DESCRIPTION: Record<string, string> = {
   written: 'the full Written exam prep section: theory notes and all 39 numericals',
   oral: 'the full Oral exam prep section: all 23 topics, quizzes, and Surveyor Q&amp;A',
   both: 'the full Oral <em>and</em> Written exam prep sections: every topic, every numerical, quizzes, and Surveyor Q&amp;A',
+  sponsorship: 'the full Sponsorship course: fundamentals, aptitude, data interpretation, entrance test practice and company interview preparation',
 };
 
 function planLabel(plan: string, scope: string | null | undefined): string {
@@ -42,7 +44,7 @@ function fmtDate(iso: string): string {
 }
 
 export interface ScopeChange {
-  scope: 'written' | 'oral';
+  scope: 'written' | 'oral' | 'sponsorship';
   from: string | null;   // ISO, or null if they never had this scope
   to: string;            // ISO
   extended: boolean;     // true = they already held live access and it grew
@@ -77,9 +79,15 @@ export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
   // access or EXTENDED what was already there. A buyer who holds Written and
   // buys Oral must be able to see at a glance that their Written date did not
   // move - that ambiguity is what made the old overwrite bug survivable.
-  const SCOPE_NAME = { written: 'Written', oral: 'Oral' } as const;
+  // Every scope, and a fallback. Sponsorship was missing here, so a
+  // Sponsorship receipt carried a row reading "undefined access" (reported
+  // 18 Sep 2026). The fallback means a scope added later reads as itself
+  // rather than as "undefined".
+  const SCOPE_NAME: Record<string, string> = {
+    written: 'Written', oral: 'Oral', sponsorship: 'Sponsorship',
+  };
   const changeRows = (input.changes || []).map(c => {
-    const name = SCOPE_NAME[c.scope];
+    const name = SCOPE_NAME[c.scope] || (c.scope.charAt(0).toUpperCase() + c.scope.slice(1));
     const value = c.extended && c.from
       ? `${fmtDate(c.from)} &rarr; ${fmtDate(c.to)}`
       : fmtDate(c.to);
@@ -129,8 +137,8 @@ export function paymentConfirmedHtml(input: PaymentConfirmedInput): string {
       : `Your ${label} plan is active.`,
     heading: 'Payment Confirmed',
     bodyHtml: body,
-    ctaUrl: APP_URL,
-    ctaLabel: 'Start Studying',
+    ctaUrl: scope === 'sponsorship' ? SPONSORSHIP_URL : APP_URL,
+    ctaLabel: scope === 'sponsorship' ? 'Open Sponsorship' : 'Start Studying',
     footNote: 'Keep this email as your receipt. Questions about your purchase? Just reply, this inbox is monitored.',
   });
 }

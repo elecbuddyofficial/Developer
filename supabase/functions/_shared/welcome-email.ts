@@ -3,7 +3,7 @@
 // server-side access gate) and razorpay-webhook/send-expiry-emails, which
 // each keep their own copy of the same constant for the same reason.
 
-import { emailLayout, escapeHtml, APP_URL } from './email-layout.ts';
+import { emailLayout, escapeHtml, appUrlFor } from './email-layout.ts';
 import { EmailTemplate, renderBody, couponBlock, fillSubject, fillHeading } from './templates.ts';
 
 export const TRIAL_DAYS = 3;
@@ -23,6 +23,8 @@ export interface WelcomeEmailInput {
   name?: string | null;
   /** An admin's override, or null/absent to send the built-in wording. */
   template?: EmailTemplate | null;
+  /** The course this account signed up for: 'coc' (default) or 'sponsorship'. */
+  track?: string | null;
 }
 
 export function welcomeEmailHtml(input: WelcomeEmailInput): string {
@@ -31,7 +33,18 @@ export function welcomeEmailHtml(input: WelcomeEmailInput): string {
 
   const tpl = input.template;
 
-  const defaultBody = `
+  // The reader chose a course when they signed up. Telling a Sponsorship
+  // signup about MMD oral panels, and sending them to the COC app, reads as a
+  // mistake to them, so the built-in wording follows their track.
+  const sponsorship = input.track === 'sponsorship';
+
+  const defaultBody = sponsorship
+    ? `
+    <p style="margin:0 0 16px 0;">Your ${TRIAL_DAYS}-day free trial just started. You have the Sponsorship course: fundamentals, aptitude, data interpretation, entrance test practice and company interview preparation, plus the company question bank. No card required.</p>
+    <p style="margin:0 0 16px 0;">The trial also opens the CoC exam prep sections, so you can look at the Oral and Written material while it runs.</p>
+    <p style="margin:0;">When your trial ends, everything you've already read and answered stays saved. Upgrade anytime to keep going without a gap.</p>
+  `
+    : `
     <p style="margin:0 0 16px 0;">Your ${TRIAL_DAYS}-day free trial just started, with full access to every Oral topic, every Written numerical, quizzes, and the Surveyor Q&amp;A bank. No card required.</p>
     <p style="margin:0 0 16px 0;">Work through a topic, quiz yourself, then check your numericals against worked solutions, the same way a real MMD oral panel will push you.</p>
     <p style="margin:0;">When your trial ends, everything you've already read and answered stays saved. Upgrade anytime to keep going without a gap.</p>
@@ -62,8 +75,8 @@ export function welcomeEmailHtml(input: WelcomeEmailInput): string {
         })
       : greeting,
     bodyHtml: body + (tpl?.coupon ? couponBlock(tpl.coupon) : ''),
-    ctaUrl: APP_URL,
-    ctaLabel: tpl?.ctaLabel || 'Start Studying',
+    ctaUrl: appUrlFor(input.track),
+    ctaLabel: tpl?.ctaLabel || (sponsorship ? 'Open Sponsorship' : 'Start Studying'),
     footNote: 'Questions while you get started? Reply to support@elec-buddy.com and we\'ll help.',
   });
 }

@@ -122,7 +122,7 @@ serve(async (req) => {
     const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY);
     const { data: profile } = await admin
       .from('profiles')
-      .select('email, full_name, subscription_plan, plan_scope, written_expires_at, oral_expires_at')
+      .select('email, full_name, subscription_plan, plan_scope, written_expires_at, oral_expires_at, sponsorship_expires_at')
       .eq('id', user.id)
       .maybeSingle();
 
@@ -143,6 +143,7 @@ serve(async (req) => {
     ${row('Plan', esc(profile?.subscription_plan || 'trial') + (profile?.plan_scope ? ' / ' + esc(profile.plan_scope) : ''))}
     ${row('Written until', profile?.written_expires_at ? esc(String(profile.written_expires_at).slice(0, 10)) : '-')}
     ${row('Oral until', profile?.oral_expires_at ? esc(String(profile.oral_expires_at).slice(0, 10)) : '-')}
+    ${row('Sponsorship until', profile?.sponsorship_expires_at ? esc(String(profile.sponsorship_expires_at).slice(0, 10)) : '-')}
     ${row('Attachments', attachments.length ? String(attachments.length) : 'none')}
     ${row('User ID', esc(user.id))}
   </table>

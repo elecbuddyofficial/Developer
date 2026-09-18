@@ -23,6 +23,17 @@ export function escapeHtml(s: string): string {
 // paying.
 export const APP_URL = 'https://elec-buddy.com/app/';
 
+// The Sponsorship course is a second app on the same origin. A receipt for a
+// Sponsorship purchase that sends the buyer to the COC app drops them on a
+// paywalled page for a course they did not buy, which is how the 18 Sep 2026
+// report started ("it says we'll unlock written and oral").
+export const SPONSORSHIP_URL = 'https://elec-buddy.com/app/sponsorship/';
+
+/** Where a reader of this email should land, by course. */
+export function appUrlFor(course?: string | null): string {
+  return course === 'sponsorship' ? SPONSORSHIP_URL : APP_URL;
+}
+
 export interface EmailLayoutOptions {
   preheader?: string;   // hidden preview text shown in inbox lists, before the email is opened
   heading: string;

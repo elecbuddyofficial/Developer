@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { emailLayout, sendEmail, escapeHtml, APP_URL } from '../_shared/email-layout.ts';
+import { emailLayout, sendEmail, escapeHtml, appUrlFor } from '../_shared/email-layout.ts';
 
 // ─────────────────────────────────────────────────────────────────────────
 // One message to a group of users. Admin only.
@@ -143,8 +143,10 @@ serve(async (req) => {
             + (coupon
               ? `<p style="margin:0 0 16px 0;">Use code <strong style="font-size:16px;letter-spacing:1px">${escapeHtml(coupon)}</strong> at checkout.</p>`
               : ''),
-          ctaUrl: APP_URL,
-          ctaLabel: 'Open Elec-Buddy',
+          // A send aimed at one course opens that course. A Sponsorship
+          // campaign that lands on the COC app reads as the wrong email.
+          ctaUrl: appUrlFor(course),
+          ctaLabel: course === 'sponsorship' ? 'Open Sponsorship' : 'Open Elec-Buddy',
           footNote: `You are receiving this because you have an Elec-Buddy account. <a href="${unsub}" style="color:#8FA3B8">Unsubscribe from updates like this</a>. Receipts and account emails are unaffected.`,
         });
 
