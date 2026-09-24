@@ -51,9 +51,9 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <tr><td>Diesel Electric Propulsion System</td><td class="hl">2019/JUL, 2019/OCT, 2019/DEC, 2022/APR, 2023/NOV, 2024/JUN, 2025/JUN, 2025/DEC</td><td>I</td><td>16 (8+8)</td></tr>
       <tr><td>Emergency Source of Electrical Power</td><td class="hl">2019/JUL, 2019/DEC, 2021/MAR, 2023/NOV, 2024/JUN, 2025/JUN, 2025/DEC</td><td>I</td><td>16 (8+8)</td></tr>
       <tr><td>Alternators - True Power, Apparent Power, Power Factor</td><td>2018/FEB, 2018/DEC, 2019/FEB, 2025/AUG, 2025/JAN</td><td>II</td><td>8+8</td></tr>
-      <tr><td>Brushless Alternator - Operation &amp; Rotating Diode Failure</td><td class="hl">2018/FEB-2025/AUG</td><td>II</td><td>16</td></tr>
+      <tr><td>Brushless Alternator - Operation, Static AVR &amp; Rotating Diode Failure</td><td class="hl">2018/FEB-2025/AUG, 2026/SEP</td><td>II</td><td>16</td></tr>
       <tr><td>Alternators in Parallel - Synchronising, Excitation</td><td>2023/SEP, 2025/NOV</td><td>I</td><td>8+8</td></tr>
-      <tr><td>Reverse Power Protection for Alternators</td><td class="hl">2021/JAN, 2022/FEB, 2024/MAR, 2024/JUL</td><td>I</td><td>16 (6+5+5)</td></tr>
+      <tr><td>Reverse Power Protection for Alternators</td><td class="hl">2021/JAN, 2022/FEB, 2024/MAR, 2024/JUL, 2026/SEP</td><td>I</td><td>16 (6+5+5)</td></tr>
       <tr><td>Overcurrent Protection - 3 Methods + Inverse Time</td><td class="hl">2018/FEB-2025/AUG (very frequent)</td><td>II</td><td>8+8</td></tr>
       <tr><td>Short Circuit Protection</td><td>2023/NOV, 2025/DEC</td><td>II</td><td>6</td></tr>
       <tr><td>Circuit Breakers vs HRC Fuse</td><td>2019/JUL, 2021/JAN, 2024/JUN, 2025/JUN, 2025/OCT</td><td>II</td><td>6+10</td></tr>
@@ -69,14 +69,14 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
       <tr><td>Induction Motor Speed Control</td><td>2023/SEP, 2023/DEC, 2024/FEB</td><td>I</td><td>16</td></tr>
       <tr><td>Synchronous Motors - Application, Capacitor</td><td>2019/AUG, 2019/OCT2, 2019/DEC, 2024/SEP, 2025/JAN</td><td>I</td><td>16</td></tr>
       <tr><td>DC Motors - Characteristics, Max Torque, Back EMF</td><td>2024/OCT, 2024/MAR, 2025/JUL</td><td>II</td><td>4+4+8</td></tr>
-      <tr><td>DC Generator - Preventing Motorisation</td><td class="hl">2023/JAN, 2024/MAR, 2024/NOV</td><td>I</td><td>16</td></tr>
+      <tr><td>DC Generator - Preventing Motorisation</td><td class="hl">2023/JAN, 2024/MAR, 2024/NOV, 2026/SEP</td><td>I</td><td>16</td></tr>
       <tr><td>Transformers - Losses, Efficiency, Liquid Cooled Hazards</td><td class="hl">2023/FEB-2025/DEC (very frequent)</td><td>II</td><td>3+3+10</td></tr>
       <tr><td>3-Phase Transformers - Parallel Operation, Bank vs Unit</td><td>2018/FEB, 2019/AUG, 2025/JAN, 2025/AUG</td><td>II</td><td>5+5+6</td></tr>
       <tr><td>Transformer - Open/Short Circuit Tests</td><td>2023/AUG, 2024/AUG</td><td>II</td><td>12+4</td></tr>
       <tr><td>Rectifiers - Half Wave, Full Wave, Bridge, Peak</td><td>2024/OCT, 2025/FEB, 2025/JUL</td><td>I</td><td>16</td></tr>
       <tr><td>Semiconductor Devices - Detailed (Zener, BJT, Photocell, SCR)</td><td class="hl">2019-2025 (very frequent)</td><td>I</td><td>16</td></tr>
       <tr><td>PLC - Block Diagram, Applications, Advantages</td><td>2020/FEB, 2021/JAN, 2021/FEB, 2022/FEB, 2025/MAR</td><td>I</td><td>8+4+4</td></tr>
-      <tr><td>UMS - False Alarms, Safe Operation, Fault Location</td><td>2023/APR, 2025/SEP</td><td>III</td><td>7+7+6</td></tr>
+      <tr><td>UMS - False Alarms, Safe Operation, Fault Location, HP Fuel Pipe Leaks</td><td>2023/APR, 2025/SEP, 2026/SEP</td><td>III</td><td>7+7+6</td></tr>
       <tr><td>Electrical Propulsion Systems</td><td>2025/AUG</td><td>I</td><td>16</td></tr>
       <tr><td>Marine Electrical Surveys</td><td>2025/AUG</td><td>I</td><td>16</td></tr>
       <tr><td>Batteries - Lead Acid vs Alkaline, Testing</td><td>2023/AUG, 2024/SEP</td><td>I</td><td>6+6+4</td></tr>
@@ -276,7 +276,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        4. ALTERNATORS
        ========================================== -->
   <div class="n-h1" id="t4-alt">⚙️ 4. ALTERNATORS - POWER FACTOR, TRUE/APPARENT POWER, PARALLEL OPERATION</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> True/Apparent Power: 2018/FEB, 2018/DEC, 2019/FEB, 2025/JAN, 2025/AUG | Parallel: 2023/SEP, 2025/NOV | Reverse Power: 2021/JAN, 2022/FEB, 2024/MAR, 2024/JUL</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> True/Apparent Power: 2018/FEB, 2018/DEC, 2019/FEB, 2025/JAN, 2025/AUG | Parallel: 2023/SEP, 2025/NOV | Reverse Power: 2021/JAN, 2022/FEB, 2024/MAR, 2024/JUL, 2026/SEP</div></div>
 
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Briefly explain true power, apparent power and power factor. 2025/AUG/Q4, 2025/JAN/Q4 - 8 marks</div></div>
 
@@ -350,7 +350,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   </div>
 
   <div class="n-crit" style="margin-top:16px;"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Explain with neat diagram operation of a brushless alternator. What would likely happen if one rotating diode fails and becomes: a) An open circuit, b) A short circuit. - 16 marks<br>
-  <em>Asked in: 2018/FEB-2025/AUG - very frequently asked - 16 marks</em></div></div>
+  <em>Asked in: 2018/FEB-2025/AUG - very frequently asked - 16 marks | 2026/SEP/Q2, asked as "with a.c. exciter and static A.V.R." plus the output voltage characteristics: see D and E below</em></div></div>
 
 
   <div class="n-card">
@@ -420,11 +420,50 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>MEMORY AID: Brushless Alternator</strong><br>
   AVR → Exciter field (stator) → Exciter armature (rotor) → Rotating diodes → Main field (rotor) → Main output (stator)</div></div>
 
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION (2026/SEP/Q2):</strong> a) Describe a brushless alternator with a.c. exciter and static A.V.R. (8) b) State the output voltage characteristics for this type of machine. (8)</div></div>
+
+  <div class="n-card">
+    <p class="n-p"><strong>D) The Static A.V.R. in a Brushless Machine (8 marks)</strong></p>
+    <p class="n-p">Part C already covers the a.c. exciter and the rotating diodes. This version of the question adds the regulator. "Static" means it has no moving parts at all: no carbon pile, no rotating amplifier, only semiconductors. It reaches the rotor solely through the exciter field, which is what lets the whole machine stay brushless.</p>
+    <ol class="n-steps">
+      <li><strong>Sensing:</strong> a sensing transformer samples the terminal voltage, usually on two or three phases, and a rectifier turns it into a d.c. signal proportional to the voltage actually being delivered.</li>
+      <li><strong>Reference:</strong> a stable reference, trimmed by the voltage-adjust potentiometer on the switchboard, sets the voltage the machine should hold.</li>
+      <li><strong>Comparison:</strong> an error amplifier compares the two. Output below the set value produces a positive error, output above it a negative one.</li>
+      <li><strong>Power stage:</strong> thyristors or power transistors turn that error into exciter field current, more when the voltage sags and less when it rises. Only this small current is controlled. The exciter multiplies it into the much larger main-field current.</li>
+      <li><strong>Supply:</strong> either from the generator's own terminals through a transformer, building up from residual magnetism when the machine starts, or from a small permanent-magnet pilot exciter on the same shaft, which keeps the A.V.R. supplied even when the terminal voltage collapses.</li>
+      <li><strong>Stabilising and droop circuits:</strong> a feedback network stops the regulator hunting, and a quadrature (reactive) droop circuit fed from a CT makes paralleled machines share kVAr instead of pushing reactive current round between them.</li>
+    </ol>
+    <p class="n-p"><strong>Why the supply matters on a short circuit:</strong> a regulator fed only from the terminals loses its supply the moment a fault pulls the voltage down. The excitation collapses, the fault current collapses with it, and it can fall away before the protection has had time to discriminate. Designs therefore keep the excitation up during a fault, either with a permanent-magnet pilot exciter or with current-transformer compounding that feeds the exciter from the load current itself.</p>
+  </div>
+
+  <div class="n-card">
+    <p class="n-p"><strong>E) Output Voltage Characteristics (8 marks)</strong></p>
+    <p class="n-p">Answer in two halves: what the machine would do on its own, then what the A.V.R. makes it do.</p>
+    <p class="n-p"><strong>Without regulation (the natural characteristic).</strong> At constant speed and excitation the terminal voltage changes with load, because of the voltage drop in the synchronous reactance and because of armature reaction. Which way it moves depends on the power factor of the load. Sketch terminal voltage against load current, three curves starting from the same no-load point:</p>
+    <table class="n-table">
+      <tr><th>Load power factor</th><th>As load increases</th><th>Why</th></tr>
+      <tr><td class="hl">Lagging (motors: most of a ship's load)</td><td class="bad">Voltage falls steeply</td><td>Armature reaction opposes the main field, and the reactance drop adds almost directly to it</td></tr>
+      <tr><td class="hl">Unity</td><td>Voltage falls gently</td><td>Armature reaction is mainly cross-magnetising, so the drop is small</td></tr>
+      <tr><td class="hl">Leading (capacitive)</td><td class="ok">Voltage rises</td><td>Armature reaction now aids the main field</td></tr>
+    </table>
+    <p class="n-p" style="margin-top:12px;"><strong>With the A.V.R. (what the question is really after).</strong> The regulator raises the excitation as lagging load rises, so the characteristic becomes almost flat. IACS UR E13 (section 4.4) gives the limits the class societies apply:</p>
+    <table class="n-table">
+      <tr><th>Condition</th><th>Main generator</th><th>Emergency generator</th></tr>
+      <tr><td>Steady state, no load to full load at rated power factor</td><td class="hl">Within <span class="n-val">±2.5%</span> of rated voltage</td><td class="hl">Within <span class="n-val">±3.5%</span></td></tr>
+      <tr><td>Sudden load change: voltage must stay between</td><td class="hl"><span class="n-val">85%</span> and <span class="n-val">120%</span> of rated</td><td class="hl">Same</td></tr>
+      <tr><td>Recovery after the sudden change</td><td class="hl">To within <span class="n-val">±3%</span> in not more than <span class="n-val">1.5 s</span></td><td class="hl">To within <span class="n-val">±4%</span> in not more than <span class="n-val">5 s</span></td></tr>
+    </table>
+    <p class="n-p" style="margin-top:12px;">Where the real sudden loads aren't known, the test assumes <span class="n-val">60%</span> of rated current at a power factor between <span class="n-val">0.4 lagging</span> and zero, switched on with the machine at no load and switched off again once it has settled. That is close to what starting a big motor direct-on-line looks like to the generator. Sketch it as a sharp dip and a recovery back into the band.</p>
+    <p class="n-p"><strong>On a short circuit</strong> the current is highest in the first few cycles (subtransient), falls through the transient period, and settles at a sustained value only if the excitation is held up, which is the job of the pilot exciter or the compounding described in D.</p>
+  </div>
+
+  <div class="n-info"><div class="icon">💡</div><div class="body"><strong>Answering (b):</strong> draw the three natural curves first (lagging falls, unity droops, leading rises), then the flat regulated line across them with the ±2.5% band marked, and finish with the transient dip and recovery. The paper says sketches carry weightage, and here they carry most of the marks.</div></div>
+
   <!-- ==========================================
        5. REVERSE POWER PROTECTION
        ========================================== -->
   <div class="n-h1" id="t4-revpower">🔄 5. REVERSE POWER PROTECTION FOR ALTERNATORS</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/JAN/Q2, 2022/FEB/Q3, 2022/NOV/Q1, 2024/MAR/Q1, 2024/JUL/Q2, 2026/MAR/Q1 </div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2021/JAN/Q2, 2022/FEB/Q3, 2022/NOV/Q1, 2024/MAR/Q1, 2024/JUL/Q2, 2026/MAR/Q1, 2026/SEP/Q1 </div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> a) Explain why it is necessary to have reverse power protection for alternators intended for parallel operation (6). b)(i) Sketch a reverse power trip (5). b)(ii) Briefly explain the principle and how tripping is activated (5). - 16 marks</div></div>
 
   <div class="n-card">
@@ -776,7 +815,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        10. INDUCTION MOTORS
        ========================================== -->
   <div class="n-h1" id="t4-indmotor">⚙️ 10. INDUCTION MOTORS - PRINCIPLE, SLIP, STAR-DELTA, CRAWLING &amp; COGGING</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/FEB-2025/OCT - very frequently asked across multiple papers, 2026/FEB/Q5, 2026/JUN/Q1, 2026/JUN/Q3, 2026/JUN/Q5 </div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2018/FEB-2025/OCT - very frequently asked across multiple papers, 2026/FEB/Q5, 2026/JUN/Q1, 2026/JUN/Q3, 2026/JUN/Q5, 2026/SEP/Q5 </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Principle of Operation of Induction Motor (4 marks)</strong></p>
@@ -1017,7 +1056,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        13. DC MOTORS
        ========================================== -->
   <div class="n-h1" id="t4-dcmotor">🔋 13. DC MOTORS - CHARACTERISTICS, BACK EMF, DC GENERATOR MOTORISATION</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DC motor characteristics: 2024/OCT/Q2 | DC generator motorisation: 2023/JAN, 2024/MAR, 2024/NOV, 2026/JAN/Q5, 2026/MAR/Q5, 2026/APR/Q6, 2026/JUL/Q4 - 16 marks </div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> DC motor characteristics: 2024/OCT/Q2, 2026/SEP/Q6 | DC generator motorisation: 2023/JAN, 2024/MAR, 2024/NOV, 2026/JAN/Q5, 2026/MAR/Q5, 2026/APR/Q6, 2026/JUL/Q4, 2026/SEP/Q3 - 16 marks </div></div>
 
   <div class="n-card">
     <p class="n-p"><strong>A) Characteristics of DC Motor (4 marks)</strong></p>
@@ -1332,7 +1371,7 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
        17. UMS
        ========================================== -->
   <div class="n-h1" id="t4-ums">🚨 17. UMS - UNATTENDED MACHINERY SPACES</div>
-  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2023/APR/Q7, 2025/SEP/Q7 - 7+7+6 marks (20 marks in some papers)</div></div>
+  <div class="n-info"><div class="icon">ℹ️</div><div class="body"><strong>Asked in:</strong> 2023/APR/Q7, 2025/SEP/Q7 - 7+7+6 marks (20 marks in some papers) | 2026/SEP/Q8, HP fuel pipe leak monitoring, 8+8 marks: see E and F below</div></div>
   <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> UMS monitoring and control system giving false alarms and incorrect data printouts. State possible causes if: i) Localised to a particular area of engine operation ii) General to the engine room. State action as Electrical Engineer. Explain procedure to locate and rectify a general fault in the UMS system. - 2023/APR, 2025/SEP</div></div>
 
   <div class="n-card">
@@ -1397,6 +1436,40 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
 
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>MEMORY AID: UMS Fault Investigation</strong><br>
   P-C-I-S-E-S: Power supply check, Communication bus, Input card test, Sensor verification, Earth check, Software restart if needed</div></div>
+
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION (2026/SEP/Q8):</strong> In engine rooms operated under UMS conditions, describe with the aid of sketches how the following are monitored: a) the perforation of a high-pressure fuel pipe (8). b) Periodical maintenance, checks and tests required to verify the effectiveness of the above system (8).</div></div>
+
+  <div class="n-card">
+    <p class="n-p"><strong>E) High-Pressure Fuel Pipe Leak Monitoring (8 marks)</strong></p>
+    <p class="n-p"><strong>Why it has to be monitored.</strong> The pipe from the fuel pump to the injector runs at hundreds of bar. A pinhole there doesn't drip, it sprays a fine mist, and fuel mist on an exhaust manifold or turbocharger casing is the classic engine room fire. SOLAS II-2 already requires surfaces above <span class="n-val">220°C</span> that a fuel leak could reach to be insulated, but insulation is not relied on alone. In a manned engine room someone might see the spray. Under UMS nobody is there, so the leak has to raise the alarm by itself.</p>
+    <p class="n-p"><strong>The rule.</strong> SOLAS II-2/4.2.2.5.2 requires external high-pressure fuel delivery lines between the high-pressure pumps and the injectors to be protected by a <strong>jacketed piping system</strong> able to contain fuel from a high-pressure line failure, with a means of collecting leakage and an <strong>alarm</strong> on fuel line failure.</p>
+    <p class="n-p"><strong>Sketch and how it works:</strong></p>
+    <ol class="n-steps">
+      <li><strong>Double-walled pipe:</strong> draw the high-pressure pipe inside an outer jacket (a steel sleeve or armoured hose) from pump to injector, with a small annular space between the two.</li>
+      <li><strong>If the inner pipe cracks,</strong> the fuel escapes into that annular space instead of the engine room. The jacket contains the spray.</li>
+      <li><strong>Drain line:</strong> a drain from the jacket leads the leaked fuel away by gravity to a small <strong>leak collecting tank</strong>.</li>
+      <li><strong>Level switch:</strong> a float switch or level sensor in the tank operates as fuel collects.</li>
+      <li><strong>Alarm:</strong> the switch is wired into the machinery alarm system as "HP fuel pipe leakage". Under UMS the alarm is relayed to the bridge, and through the selector switch to the duty engineer's cabin and the engineers' public rooms, so someone is called even though the control room is empty.</li>
+      <li><strong>Finding the pipe:</strong> where several cylinders drain to one tank, the alarm says there is a leak but not where. The individual drain points (many engines have one per cylinder, often with a sight glass) are then checked to find the failed pipe.</li>
+    </ol>
+  </div>
+
+  <div class="n-card">
+    <p class="n-p"><strong>F) Periodical Maintenance, Checks and Tests (8 marks)</strong></p>
+    <ul class="n-list">
+      <li><strong>Test the alarm end to end:</strong> lift the float or work the test lever on the level switch, or run a little fuel into the collecting tank. Confirm the alarm reaches the control room with the right text and channel, and is relayed to the bridge and the duty engineer's cabin. Reset and log it.</li>
+      <li><strong>Check the drains are open and clear:</strong> with a closed drain valve, or a drain choked with sludge, a leak fills the jacket and never reaches the switch. The protection is fitted and it does nothing, with no warning that it has stopped working. Look for this first.</li>
+      <li><strong>Empty and inspect the collecting tank:</strong> oil or water already sitting in it, from an old leak or from condensate, can hold the alarm in or leave the switch at the wrong level.</li>
+      <li><strong>Inspect the jackets:</strong> cracks, chafing, loose end connections and damaged hose armour. A jacket that leaks contains nothing.</li>
+      <li><strong>Check the clamps and supports:</strong> loose clamps let the pipe vibrate, and vibration fatigue is how high-pressure pipes crack in the first place.</li>
+      <li><strong>After any work on the fuel system,</strong> confirm every jacket has been refitted and every drain reconnected. A jacket left off after an injector overhaul is the commonest way this protection is lost.</li>
+      <li><strong>Check the insulation and spray shields</strong> on the hot surfaces nearby, the second line of defence if a leak does get out.</li>
+      <li><strong>Make it part of the UMS routine:</strong> no standing leakage alarm and an empty collecting tank are checked in the rounds before the engine room is left unattended. Every test is recorded in the planned maintenance system.</li>
+    </ul>
+  </div>
+
+  <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>MEMORY AID: HP fuel leak monitoring</strong><br>
+  The pipe sits in a jacket, the jacket drains to a tank, the tank has a float, and the float calls the engineer. Test the float, and make sure the drain between the jacket and the tank is open.</div></div>
 
   <!-- ==========================================
        18. PROPORTIONAL + INTEGRAL CONTROL
