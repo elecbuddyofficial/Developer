@@ -467,6 +467,23 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
   <!-- ═══════════════════════════════════════════════════════════
        SECTION 12 - SLIP RING PITTING
   ════════════════════════════════════════════════════════════ -->
+  <div class="n-h2">Overload Testing After a Repair - What You Can and Cannot Do</div>
+  <div class="n-p">Asked straight after the rewind checks above, and it catches people who answer "I would overload it and see". You do not prove a repaired machine by abusing it. You prove it by loading it in steps, watching temperature settle at each one, and by confirming that the protection still lets a genuine short-term overload pass instead of tripping the ship into a blackout.</div>
+  <div class="n-card">
+    <p class="n-p"><strong>The figure behind the question:</strong> a synchronous machine under IEC 60034-1 must withstand an occasional excess current of <span class="n-val">1.5 times rated current for not less than 30 seconds</span>. That is what the overcurrent protection has to be graded around: the machine can survive it, so the relay must not trip instantly on it. The exact figures for your own machine come off its data sheet and the class rules the ship is built to, not from memory.</p>
+  </div>
+  <ol class="n-steps">
+    <li><strong>Before any load:</strong> IR and polarisation index, winding resistance balance between phases, air gap, bearing insulation where fitted, and rotation checked by hand. Those are the checks in the list above and they come first, because a machine with a winding fault must never see load.</li>
+    <li><strong>Run up off load:</strong> check voltage build-up, AVR stability, and the voltage at no load against the rated figure. Listen and feel for vibration and check bearing temperatures as they settle.</li>
+    <li><strong>Load in steps:</strong> 25, 50, 75 then 100 percent, using ship load or a shore load bank. Hold each step until temperatures stop climbing rather than moving on when the numbers look acceptable. Record current, voltage, frequency, power factor and winding and bearing temperatures at every step.</li>
+    <li><strong>Watch the temperature rise, not the temperature:</strong> what matters is the rise above ambient and whether it has stabilised. A machine still climbing after an hour at full load has a cooling or a winding problem, whatever the absolute number reads.</li>
+    <li><strong>Check regulation:</strong> voltage should hold within its stated band from no load to full load, and recover after a step change. Poor regulation after a repair usually points at the AVR sensing or at the excitation chain, not at the stator you just had rewound.</li>
+    <li><strong>In parallel:</strong> prove load sharing in kW with the governor droop and in kVAr with the AVR, take the machine up and down through its range, and confirm it neither hogs nor sheds reactive load.</li>
+    <li><strong>Prove the protection, not the machine:</strong> secondary inject the overcurrent relay to confirm the IDMT curve and settings, and test reverse power, under voltage and under frequency. This is the part that answers "overload testing" honestly: the overload capability is demonstrated at the works with class attending, while what you verify on board is that the relay grading still matches the machine.</li>
+    <li><strong>Thermal survey:</strong> a thermal camera over terminations, the terminal box and the cable glands at full load finds a loose connection that every electrical test has just passed.</li>
+    <li><strong>Log it:</strong> readings at each step, into the machinery history. The next person to megger this machine needs your numbers to know whether it has drifted.</li>
+  </ol>
+
   <div class="n-h2" id="s-pitting">⚡ Slip Ring Pitting Marks - Causes &amp; Actions</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Pitting on slip rings (for brush-type alternators/motors) is a critical wear sign that must be addressed immediately.</strong></div></div>
   <table class="n-table">
