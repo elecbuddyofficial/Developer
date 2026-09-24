@@ -3383,6 +3383,21 @@ function numYearsBadges(years, tab) {
   </div>`;
 }
 
+// A numerical's frequency is how many papers it appeared in, and its tier
+// follows from that. Both are worked out from the `years` list rather than read
+// from the stored `frequency` and `tier` fields: those were typed by hand
+// beside the list they summarise, and by September 2026 16 of 40 disagreed with
+// it (n19's badge said 3x while it listed six papers). The list is the record;
+// the badge is only a count of it.
+function numFrequency(n) {
+  var count = (n.years || '').split(',').map(function (s) { return s.trim(); })
+    .filter(Boolean).length;
+  return count || n.frequency || 0;
+}
+function numTier(freq) {
+  return freq >= 10 ? 1 : freq >= 6 ? 2 : freq >= 3 ? 3 : 4;
+}
+
 function renderNumericalList() {
   if (!window.NUMERICALS) return;
   var container = document.getElementById('numerical-list-container');
@@ -3396,7 +3411,16 @@ function renderNumericalList() {
   };
 
   window.NUMERICALS.forEach(n => {
-    if (tiers[n.tier]) tiers[n.tier].items.push(n);
+    var tier = numTier(numFrequency(n));
+    if (tiers[tier]) tiers[tier].items.push(n);
+  });
+  // The view is titled "Ranked by Past Paper Appearances", so rank inside each
+  // tier too: most-asked first, ties kept in their original order.
+  Object.keys(tiers).forEach(k => {
+    tiers[k].items = tiers[k].items
+      .map((n, i) => ({ n: n, i: i }))
+      .sort((a, b) => (numFrequency(b.n) - numFrequency(a.n)) || (a.i - b.i))
+      .map(x => x.n);
   });
 
   var order = [];
@@ -3409,7 +3433,7 @@ function renderNumericalList() {
       <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">${t.title}</h3>
       <div style="display: flex; flex-direction: column; gap: 12px;">`;
 
-    t.items.forEach(n => { html += numCard(n, 'freq', n.frequency + '×'); order.push(n.id); });
+    t.items.forEach(n => { html += numCard(n, 'freq', numFrequency(n) + '×'); order.push(n.id); });
 
     html += `</div></div>`;
   });
@@ -3468,7 +3492,7 @@ function showNumericalCategoryDetail(catId) {
   var html = `<button class="anc-btn" onclick="backToCategoryTopics()" style="margin-bottom: 20px;">← Back to Topics</button>
     <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 15px; color: var(--text); padding-bottom: 8px; border-bottom: 1px solid var(--border2);">${cat.icon} ${cat.label} (${items.length})</h3>
     <div style="display: flex; flex-direction: column; gap: 12px;">`;
-  items.forEach(n => { html += numCard(n, 'cat', n.frequency + '×'); order.push(n.id); });
+  items.forEach(n => { html += numCard(n, 'cat', numFrequency(n) + '×'); order.push(n.id); });
   html += `</div>`;
 
   NUM_TAB_ORDER.cat = order;
