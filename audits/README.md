@@ -61,6 +61,20 @@ audit refuses to press anything unless it can verify that, a route gate aborts
 and records any request that is not the local server, and `confirm()` always
 declines. Production counts were taken either side of a run and are identical.
 
+**The plaintext notes mirror.** `backup_fresh.py` decrypts each live Oral
+notes file and compares it with the copy in `data/Orals/Backup/notes/`, the
+plaintext set that exists so the notes can be searched without a key. Nothing
+kept that copy up to date. On 24 Sep 2026 every one of the 23 files was stale,
+T15 by 68,905 characters, and T22 there still gave 1000 V as the megger test
+voltage for a 440 V circuit after it had been corrected to 500 V weeks before.
+
+That is worse than having no mirror. A coverage check run against it reports
+gaps that are already filled, hides ones that are real, and invites a
+"correction" back to the wrong figure. `--fix` rewrites the stale copies from
+the live files. It exits 2 rather than 1 where there is no mirror or no
+`CONTENT_KEY_ORAL`, since most clones have neither and that is unchecked
+rather than broken.
+
 **Study notes on a phone.** `notes_layout.py` renders every notes file in all
 three courses at 360, 390 and 412px and fails on a grid that the phone layout
 forces to one column but still renders two, a card squeezed below half its

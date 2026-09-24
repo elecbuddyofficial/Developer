@@ -43,6 +43,13 @@ AUDITS = [
     # purchase was right, and nothing had ever rendered the email.
     ('every email names the right course', 'emails.py', False, False),
 
+    # The local plaintext mirror of the Oral notes. Nothing kept it up to date,
+    # and on 24 Sep 2026 all 23 files were stale, one of them by 68,905
+    # characters, still carrying a megger figure corrected weeks earlier. It is
+    # the copy people grep because it needs no key, so it has to be trustworthy
+    # or gone. Skips itself where there is no mirror or no key.
+    ('the plaintext notes mirror matches live', 'backup_fresh.py', False, False),
+
     # Structure.
     ('every file and handler referenced exists', 'audit_refs.mjs', False, False),
     ('no duplicate or missing element ids', 'audit_dom.mjs', False, False),
