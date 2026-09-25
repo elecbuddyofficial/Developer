@@ -1130,6 +1130,22 @@ window.loadWrittenNotes("W01", `<div class="view" id="view-notes-w01">
   <div class="n-ok"><div class="icon">💡</div><div class="body"><strong>MEMORY AID: DC Generator Protection</strong><br>
   Reverse CURRENT relay (DC) = detects current direction reversal | Reverse POWER relay (AC) = detects power flow reversal</div></div>
 
+  <div class="n-crit"><div class="icon">🔴</div><div class="body"><strong>EXAM QUESTION:</strong> Explain over-, flat- and under-compounding of a d.c. compound generator, with the characteristics. What is the purpose of a diverter?</div></div>
+
+  <div class="n-card">
+    <p class="n-p"><strong>G) Compound Generator Characteristics and the Diverter</strong></p>
+    <p class="n-p"><strong>Why compound at all:</strong> a shunt generator's terminal voltage falls as it is loaded, for three reasons that add up. There is the I<sub>a</sub>R<sub>a</sub> drop in the armature. Armature reaction weakens the flux. And because the shunt field is fed from the terminal voltage, a falling voltage means less field current, which lowers the voltage again. A <strong>series field</strong>, carrying the load current, adds flux in proportion to the load and makes up for all three. When it aids the shunt field the machine is <strong>cumulatively compounded</strong>.</p>
+    <table class="n-table">
+      <tr><th>Degree of compounding</th><th>Full-load voltage against no-load</th><th>Where it is used</th></tr>
+      <tr><td class="hl">Over-compounded</td><td class="ok">Higher</td><td>Where the generator feeds a long line, so the voltage at the far end, after the line drop, is right</td></tr>
+      <tr><td class="hl">Flat (level) compounded</td><td>The same</td><td>A generator feeding a switchboard close by: steady voltage from no load to full load</td></tr>
+      <tr><td class="hl">Under-compounded</td><td class="bad">Lower, but falls less than a plain shunt machine</td><td>Where some droop is acceptable</td></tr>
+    </table>
+    <p class="n-p" style="margin-top:10px;"><strong>The sketch:</strong> terminal voltage against load current, all four curves starting from the same no-load voltage. Over-compounded rises, flat-compounded bows slightly and comes back to the same value at full load, under-compounded droops a little, and plain shunt droops the most. If the series field is connected to <em>oppose</em> the shunt field the machine is <strong>differentially compounded</strong>, and its voltage falls steeply with load, which is what a welding generator wants.</p>
+    <p class="n-p"><strong>The diverter:</strong> a low-value adjustable resistor connected in parallel with the series field. It carries part of the load current around the series winding, so the series ampere-turns, and with them the degree of compounding, can be set on site without rewinding anything. Lower the diverter's resistance and more current bypasses the series field, so compounding is reduced. Raise it and more current goes through the series field, so compounding increases.</p>
+    <p class="n-p"><strong>Why it matters in parallel operation:</strong> compound generators running in parallel have an <strong>equaliser</strong> connection joining their series fields, so a machine that momentarily picks up more load cannot strengthen its own field and grab even more. The diverters are how the machines' compounding is matched, so they share load in proportion to their ratings.</p>
+  </div>
+
   <!-- ==========================================
        14. TRANSFORMERS
        ========================================== -->
