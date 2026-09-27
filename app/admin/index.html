@@ -356,6 +356,15 @@
     .nt-closed   { background:var(--surface3); color:var(--text3); border:1px solid var(--border2); }
     .nt-draft    { background:var(--surface3); color:var(--text2); border:1px dashed var(--border2); }
     .nt-row-dead td { opacity:.55; }
+    /* Hall of Fame. Thumb and preview are circles because that is how the
+       cadet-side popup shows them; the admin should see what readers see. */
+    .hof-thumb { width:40px; height:40px; border-radius:50%; object-fit:cover; display:block;
+      border:1px solid var(--border2); box-sizing:border-box; }
+    .hof-thumb-init { display:flex; align-items:center; justify-content:center; font-size:13px;
+      font-weight:700; color:var(--text2); background:var(--surface3); }
+    .hof-photo-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+    .hof-photo-prev { width:72px; height:72px; border-radius:50%; object-fit:cover;
+      border:1px solid var(--border2); background:var(--surface3); }
     /* Company name over its host. Wrapped in one element rather than left as
        two children of the cell, because on a phone the cell becomes a flex
        row with space-between and any loose sibling is pushed to the far edge:
@@ -1561,6 +1570,10 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><circle cx="12" cy="15" r="1.6" fill="currentColor" stroke="none"/></svg>
       <span>Public Events</span>
     </button>
+    <button class="ad-nav-btn" onclick="showTab('fame');closeMobNav()" data-tab="fame" title="Hall of Fame">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+      <span>Hall of Fame</span>
+    </button>
     <button class="ad-nav-btn" onclick="showTab('campaigns');closeMobNav()" data-tab="campaigns" title="Campaigns">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v3M17 20h4"/></svg>
       <span>Campaigns</span>
@@ -2461,6 +2474,97 @@
           <th>Title</th><th>Shown to</th><th>When</th><th>Status</th><th>Register</th><th></th>
         </tr></thead>
         <tbody id="ev-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
+      </table>
+    </div>
+    </div>
+</div>
+
+  <!-- HALL OF FAME ────────────────────────────────────────────
+       Real cadets who passed CoC or were selected for sponsorship, with
+       their consent. Listed under both courses, and each console only ever
+       sees and writes its own course's entries. A published entry is shown
+       once to every cadet of that course in a popup after sign-in, and all of
+       them are browsable from the profile menu (app/fame.js). Writes go
+       through hof_save(), which records consent in the same transaction; the
+       database refuses to publish an entry without it.
+       See app/admin/hall_of_fame_setup.sql. -->
+  <div class="ad-tab" id="tab-fame">
+    <div class="ad-ph">
+      <h1>Hall of Fame</h1>
+      <p id="hof-intro">Cadets who made it. Each published entry is shown once to every cadet of this course, in a popup the next time they open the app, and stays listed under Hall of Fame in their profile menu.</p>
+    </div>
+
+    <div class="ad-course-switch ad-pane-switch" id="fame-switch" style="max-width:400px;margin-bottom:18px">
+      <button class="acs-btn active" data-pane="add" onclick="showAdminPane('fame','add')">Add Entry <span id="fame-c-add"></span></button>
+      <button class="acs-btn" data-pane="all" onclick="showAdminPane('fame','all')">All Entries <span id="fame-c-all"></span></button>
+    </div>
+
+    <div class="adp" id="fame-pane-add">
+    <div class="ad-card">
+      <div class="ad-card-head" id="hof-form-head">Add Entry</div>
+      <div class="ad-card-sub" id="hof-form-sub">Only real people, and only with their permission. Write the achievement the way they would say it.</div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label" for="hof-name">Name, as they want it shown</label>
+          <input class="ad-input" id="hof-name" maxlength="80" placeholder="e.g. Arjun Nair">
+        </div>
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label" for="hof-month">Month</label>
+          <input class="ad-input" id="hof-month" type="month">
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label" for="hof-what">Achievement</label>
+          <input class="ad-input" id="hof-what" maxlength="140" placeholder="e.g. Passed Class I ETO Oral, Mumbai MMD">
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label" for="hof-quote">In their words <span style="color:var(--text3);font-weight:400">(optional)</span></label>
+          <textarea class="ad-input" id="hof-quote" rows="3" maxlength="400" placeholder="A line from them about the exam or the preparation. Their words, not ours."></textarea>
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label">Photo <span style="color:var(--text3);font-weight:400">(optional, cropped to a circle)</span></label>
+        <div class="hof-photo-row">
+          <img class="hof-photo-prev" id="hof-photo-prev" alt="" hidden>
+          <input type="file" id="hof-photo-file" accept="image/*" onchange="hofPickPhoto(this)">
+          <button class="ad-btn btn-sm" id="hof-photo-clear" type="button" onclick="hofClearPhoto()" style="display:none">Remove photo</button>
+        </div>
+      </div>
+      <div class="ad-row">
+        <div class="ad-field" style="flex:1">
+          <label class="ad-label" for="hof-consent">How they gave permission</label>
+          <input class="ad-input" id="hof-consent" placeholder="e.g. WhatsApp to Blesson, 27 Sep 2026, name and photo">
+          <div class="ad-hint">Admins only. Required before the entry can go live: the database refuses to publish without it.</div>
+        </div>
+      </div>
+      <div class="ad-field">
+        <label class="ad-label" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+          <input type="checkbox" id="hof-published">
+          <span style="font-weight:400;text-transform:none;letter-spacing:0">Publish. Every cadet of this course sees it once, in a popup after they sign in. Leave unticked to keep it as a draft.</span>
+        </label>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="ad-btn btn-primary" id="hof-save" onclick="saveFame()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span id="hof-save-label">Add Entry</span>
+        </button>
+        <button class="ad-btn" id="hof-cancel" onclick="cancelFameEdit()" style="display:none">Cancel</button>
+      </div>
+    </div>
+    </div>
+
+    <div class="adp" id="fame-pane-all" hidden>
+    <div class="ad-section-head">All Entries</div>
+    <div class="ad-table-wrap">
+      <table class="ad-table">
+        <thead><tr>
+          <th></th><th>Name</th><th>Month</th><th>Status</th><th>Seen by</th><th></th>
+        </tr></thead>
+        <tbody id="hof-tbody"><tr><td colspan="6" class="empty">Loading...</td></tr></tbody>
       </table>
     </div>
     </div>
@@ -3741,7 +3845,7 @@ var _dashProfiles = [];
 /* 'approvals' was missing here: 14 entries for 15 tabs. The list drives
    deep-linking and the hashchange handler, so #approvals silently did
    nothing and the tab could only be reached by clicking. */
-var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'events', 'mock', 'liveexam', 'status', 'campaigns'];
+var TAB_NAMES = ['dashboard', 'users', 'approvals', 'funnel', 'online', 'grant', 'notifications', 'admins', 'payments', 'coupons', 'plans', 'videos', 'mail', 'activity', 'notices', 'events', 'fame', 'mock', 'liveexam', 'status', 'campaigns'];
 
 /* ── WHICH COURSE THE CONSOLE IS SHOWING ──────────────────────────────
    Elec-Buddy sells two separate courses: COC (Oral + Written) and
@@ -3952,6 +4056,7 @@ function showTab(name) {
   // not to render it once and leave it sitting.
   if (name === 'notices' && typeof loadNotices === 'function') loadNotices();
   if (name === 'events' && typeof loadEvents === 'function') loadEvents();
+  if (name === 'fame' && typeof loadFame === 'function') { loadFame(); hofCourseCopy(); }
   document.querySelectorAll('.ad-tab').forEach(function(t) { t.classList.remove('active'); });
   document.querySelectorAll('.ad-nav-btn').forEach(function(b) { b.classList.remove('active'); });
   document.getElementById('tab-' + name).classList.add('active');
@@ -7566,6 +7671,205 @@ async function deleteEvent(id, title) {
   loadEvents();
 }
 
+/* ── HALL OF FAME ─────────────────────────────────────────────────────
+   Reads public.hall_of_fame and writes it only through hof_save(), which
+   stores the consent note in the same transaction. Every read and write is
+   scoped to _adminCourse: this tab is listed under both consoles, and each
+   one owns only its own course's entries. See hall_of_fame_setup.sql. */
+
+var _editingFameId = null;
+var _famePhoto = null;   // data: URL, or null
+
+function hofCourseCopy() {
+  var spon = _adminCourse === 'sponsorship';
+  var what = document.getElementById('hof-what');
+  if (what) what.placeholder = spon ? 'e.g. Selected by Anglo-Eastern, ETO cadet 2026'
+                                    : 'e.g. Passed Class I ETO Oral, Mumbai MMD';
+  var intro = document.getElementById('hof-intro');
+  if (intro) intro.textContent = (spon ? 'Cadets selected for sponsorship.' : 'Cadets who cleared their CoC.')
+    + ' Each published entry is shown once to every cadet of this course, in a popup the next time they open the app,'
+    + ' and stays listed under Hall of Fame in their profile menu.';
+}
+
+function hofMonthLabel(d) {
+  var m = /^(\d{4})-(\d{2})/.exec(d || '');
+  if (!m) return '-';
+  return new Date(Date.UTC(+m[1], +m[2] - 1, 1)).toLocaleString('en-IN', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
+
+function hofInitials(n) {
+  return String(n || '').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
+}
+
+async function loadFame() {
+  var body = document.getElementById('hof-tbody');
+  if (!body) return;
+  var course = _adminCourse;
+  var res = await _sb.from('hall_of_fame')
+    .select('id,display_name,achievement,achieved_on,quote,photo,is_published,published_at')
+    .eq('track', course).order('achieved_on', { ascending: false });
+  if (course !== _adminCourse) return;   // switched while loading
+  if (res.error) {
+    body.innerHTML = '<tr><td colspan="6" class="empty">Could not load entries: ' + esc(res.error.message) + '</td></tr>';
+    return;
+  }
+  var rows = res.data || [];
+  var cnt = document.getElementById('fame-c-all');
+  if (cnt) cnt.textContent = rows.length ? '(' + rows.length + ')' : '';
+  if (!rows.length) {
+    body.innerHTML = '<tr><td colspan="6" class="empty">No entries yet for this course. Add the first one.</td></tr>';
+    return;
+  }
+  // How many readers have dismissed each popup. Admin-only by RLS.
+  var seen = {};
+  var sres = await _sb.from('hall_of_fame_seen').select('entry_id')
+    .in('entry_id', rows.map(function (r) { return r.id; }));
+  (sres.data || []).forEach(function (r) { seen[r.entry_id] = (seen[r.entry_id] || 0) + 1; });
+
+  body.innerHTML = rows.map(function (e) {
+    var face = e.photo ? '<img class="hof-thumb" src="' + esc(e.photo) + '" alt="">'
+                       : '<div class="hof-thumb hof-thumb-init">' + esc(hofInitials(e.display_name)) + '</div>';
+    var st = e.is_published ? '<span class="pbadge nt-open">Live</span>' : '<span class="pbadge nt-draft">Draft</span>';
+    return '<tr>'
+      + '<td data-label="Photo">' + face + '</td>'
+      + '<td data-label="Name"><div class="nt-co"><span class="nt-co-name">' + esc(e.display_name) + '</span>'
+        + '<span style="font-size:11.5px;color:var(--text3)">' + esc(e.achievement) + '</span></div></td>'
+      + '<td data-label="Month">' + esc(hofMonthLabel(e.achieved_on)) + '</td>'
+      + '<td data-label="Status">' + st + '</td>'
+      + '<td data-label="Seen by">' + (e.is_published ? (seen[e.id] || 0) : '-') + '</td>'
+      + '<td style="white-space:nowrap">'
+        + '<button class="ad-btn btn-sm" onclick="editFame(' + attrJs(e.id) + ')">Edit</button> '
+        + '<button class="ad-btn btn-sm btn-danger" onclick="deleteFame(' + attrJs(e.id) + ',' + attrJs(e.display_name) + ')">Delete</button>'
+      + '</td></tr>';
+  }).join('');
+}
+
+/* Resize in the browser: centre-crop to a square, 320 px, webp. A phone photo
+   is 3-5 MB and the database caps this column at about 90 KB of image, so
+   sending the original would fail anyway, and slowly. */
+function hofPickPhoto(input) {
+  var f = input.files && input.files[0];
+  if (!f) return;
+  if (!/^image\//.test(f.type)) { toast('That is not an image', 'err'); input.value = ''; return; }
+  var rd = new FileReader();
+  rd.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var side = Math.min(img.width, img.height), N = 320;
+      var c = document.createElement('canvas'); c.width = N; c.height = N;
+      c.getContext('2d').drawImage(img, (img.width - side) / 2, (img.height - side) / 2, side, side, 0, 0, N, N);
+      var url = c.toDataURL('image/webp', 0.82);
+      if (!/^data:image\/webp/.test(url)) url = c.toDataURL('image/jpeg', 0.82);   // Safari without webp encode
+      if (url.length > 120000) { toast('Photo still too large after resizing. Try a simpler one.', 'err'); return; }
+      _famePhoto = url;
+      hofShowPhoto();
+    };
+    img.onerror = function () { toast('Could not read that image', 'err'); };
+    img.src = rd.result;
+  };
+  rd.readAsDataURL(f);
+}
+
+function hofShowPhoto() {
+  var prev = document.getElementById('hof-photo-prev');
+  var clr = document.getElementById('hof-photo-clear');
+  // style.display, not hidden: .ad-btn sets display and would win over [hidden].
+  if (_famePhoto) { prev.src = _famePhoto; prev.hidden = false; clr.style.display = ''; }
+  else { prev.removeAttribute('src'); prev.hidden = true; clr.style.display = 'none'; }
+}
+
+function hofClearPhoto() {
+  _famePhoto = null;
+  document.getElementById('hof-photo-file').value = '';
+  hofShowPhoto();
+}
+
+async function saveFame() {
+  var v = function (id) { return (document.getElementById(id).value || '').trim(); };
+  var month = v('hof-month');
+  var p = {
+    id:           _editingFameId || '',
+    track:        _adminCourse,
+    display_name: v('hof-name'),
+    achievement:  v('hof-what'),
+    achieved_on:  /^\d{4}-\d{2}$/.test(month) ? month + '-01' : '',
+    quote:        v('hof-quote'),
+    photo:        _famePhoto || '',
+    consent:      v('hof-consent'),
+    is_published: document.getElementById('hof-published').checked,
+  };
+  if (p.display_name.length < 2) { toast('Name required', 'err'); return; }
+  if (p.achievement.length < 3)  { toast('Achievement required', 'err'); return; }
+  if (!p.achieved_on)            { toast('Month required', 'err'); return; }
+  if (p.is_published && p.consent.length < 5) {
+    toast('Record how they gave permission before publishing', 'err'); return;
+  }
+
+  var btn = document.getElementById('hof-save');
+  btn.disabled = true;
+  var res = await _sb.rpc('hof_save', { p: p });
+  btn.disabled = false;
+  if (res.error) { toast('Failed: ' + res.error.message, 'err'); return; }
+
+  logAdminAction(_editingFameId ? 'fame_update' : 'fame_add', p.display_name,
+                 { track: p.track, published: p.is_published });
+  toast((_editingFameId ? 'Entry updated' : 'Entry added') + (p.is_published ? '' : ', saved as a draft'));
+  cancelFameEdit();
+  loadFame();
+}
+
+async function editFame(id) {
+  var got = await Promise.all([
+    _sb.from('hall_of_fame').select('*').eq('id', id).single(),
+    _sb.from('hall_of_fame_consent').select('how_given').eq('entry_id', id).maybeSingle(),
+  ]);
+  var e = got[0].data;
+  if (got[0].error || !e) { toast('Could not open that entry', 'err'); return; }
+  document.getElementById('hof-name').value    = e.display_name || '';
+  document.getElementById('hof-what').value    = e.achievement || '';
+  document.getElementById('hof-month').value   = (e.achieved_on || '').slice(0, 7);
+  document.getElementById('hof-quote').value   = e.quote || '';
+  document.getElementById('hof-consent').value = (got[1].data && got[1].data.how_given) || '';
+  document.getElementById('hof-published').checked = !!e.is_published;
+  _famePhoto = e.photo || null;
+  document.getElementById('hof-photo-file').value = '';
+  hofShowPhoto();
+
+  _editingFameId = id;
+  document.getElementById('hof-form-head').textContent = 'Edit Entry';
+  document.getElementById('hof-form-sub').textContent  = 'Editing ' + e.display_name + '. Cancel to go back to adding a new one.';
+  document.getElementById('hof-save-label').textContent = 'Save Changes';
+  document.getElementById('hof-cancel').style.display = '';
+  showAdminPane('fame', 'add');
+  document.getElementById('hof-form-head').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function cancelFameEdit() {
+  _editingFameId = null;
+  ['hof-name', 'hof-what', 'hof-month', 'hof-quote', 'hof-consent'].forEach(function (id) {
+    var el = document.getElementById(id); if (el) el.value = '';
+  });
+  var pub = document.getElementById('hof-published'); if (pub) pub.checked = false;
+  if (document.getElementById('hof-photo-file')) hofClearPhoto();
+  var h = document.getElementById('hof-form-head'); if (!h) return;
+  h.textContent = 'Add Entry';
+  document.getElementById('hof-form-sub').textContent =
+    'Only real people, and only with their permission. Write the achievement the way they would say it.';
+  document.getElementById('hof-save-label').textContent = 'Add Entry';
+  document.getElementById('hof-cancel').style.display = 'none';
+  hofCourseCopy();
+}
+
+async function deleteFame(id, name) {
+  if (!confirm('Delete ' + name + ' from the Hall of Fame?\n\nIf they have only asked to be taken down, unticking Publish does that and keeps the record.')) return;
+  var { error } = await _sb.from('hall_of_fame').delete().eq('id', id);
+  if (error) { toast('Failed: ' + error.message, 'err'); return; }
+  logAdminAction('fame_delete', name, { track: _adminCourse });
+  toast('Deleted');
+  if (_editingFameId === id) cancelFameEdit();
+  loadFame();
+}
+
 /* ── MOCK INTERVIEWS ──────────────────────────────────────────────────
    Reads and writes public.mock_interview_config / _slots / _bookings. No
    booking is ever created here: those come from the cadet through
@@ -9753,6 +10057,7 @@ var ADMIN_PANES = {
   admins:   ['add', 'current'],
   notices:  ['add', 'all'],
   events:   ['add', 'all'],
+  fame:     ['add', 'all'],
   campaigns:['add', 'all'],
   coupons:  ['add', 'existing'],
   videos:   ['add', 'existing'],
@@ -12606,6 +12911,11 @@ function setAdminCourse(course) {
   // refetching, so switching while sitting on the tab does not leave the
   // other course's campaigns on screen.
   try { if (typeof renderCampaigns === 'function' && _cmRows.length) renderCampaigns(); } catch (e) {}
+  // Hall of Fame entries belong to one course each. Reload, and drop any
+  // half-finished edit, so an entry can never be saved into the course the
+  // admin just switched away from.
+  try { if (typeof cancelFameEdit === 'function') cancelFameEdit(); } catch (e) {}
+  try { if (typeof loadFame === 'function') loadFame(); } catch (e) {}
 
   applyCourseScope();
 }
@@ -12675,9 +12985,9 @@ var GLOBAL_TABS = ['dashboard', 'users', 'approvals', 'admins', 'mail', 'activit
 
 var COURSE_TABS = {
   sponsorship: ['online', 'grant', 'payments', 'coupons', 'plans', 'videos', 'notifications',
-                'notices', 'events', 'mock', 'status', 'campaigns'],
+                'notices', 'events', 'mock', 'status', 'campaigns', 'fame'],
   coc:         ['funnel', 'online', 'grant', 'notifications', 'payments', 'coupons', 'plans',
-                'videos', 'liveexam', 'campaigns'],
+                'videos', 'liveexam', 'campaigns', 'fame'],
 };
 
 function tabsForCourse() { return COURSE_TABS[_adminCourse] || COURSE_TABS.coc; }

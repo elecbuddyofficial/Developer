@@ -141,7 +141,10 @@ const PAGES = process.env.THEME_AUDIT_PAGES
      // course choice moving onto auth.html itself) held white text on a
      // filled --blue at 2.87:1, the exact pair named in CLAUDE.md, for as
      // long as the rule has been written down.
-     'app/auth.html'];
+     'app/auth.html',
+     // Hall of Fame, 27 Sep 2026. A new page is a page nobody audits until
+     // it is listed here.
+     'app/hall-of-fame.html'];
 const findings = [];
 
 /* Scoped palettes. #gate-overlay redefines --text, --surface and the rest

@@ -104,6 +104,27 @@ SCREENS = {
     # The notification toast. Two bugs have shipped in it unseen: a hardcoded
     # navy background under themed text, and a top offset that put it across
     # the topbar. Neither was visible to any check, because nothing rendered it.
+    # The Hall of Fame popup (fame.js). Built in JS on first use, so it never
+    # exists in the parsed DOM and theme-audit cannot see it. Seeded through a
+    # stubbed client on the same path the real login uses.
+    'fame':     {'file': 'index.html',   'view': 'view-welcome', 'open': """
+        (() => {
+          const rows = [{ id:'f1', display_name:'Sample Cadet', achievement:'Passed Class I ETO Oral, Mumbai MMD',
+                          achieved_on:'2026-09-01', quote:'Drew the emergency generator circuit a dozen times.', photo:null }];
+          const q = (t) => { const b = { select:()=>b, eq:()=>b, gte:()=>b, order:()=>b, limit:()=>b,
+            then:(ok)=>Promise.resolve({ data: t === 'hall_of_fame' ? rows : [], error:null }).then(ok) }; return b; };
+          // Only the data calls are swapped. Replacing the whole client broke
+          // the page's own rpc() calls and reported that as a page error.
+          const real = window._sbClient || {};
+          window._sbClient = Object.assign(Object.create(real), { from: q, rpc: () => Promise.resolve({ data: null, error: null }) });
+          // A fake user only for the synchronous part of maybeShow, which is
+          // where it is read. Left set, the page's device registration saw a
+          // signed-in user and sent register-device to production (401).
+          const prevUser = window._sbUser;
+          window._sbUser = { id: 'preview' };
+          EBFame.maybeShow('coc', { after: true });
+          window._sbUser = prevUser;
+        })()"""},
     'toast':    {'file': 'index.html',   'view': 'view-welcome', 'open': """
         EBNotify.showToast({ type:'update', title:'Feature Update' })"""},
     # The notification DETAIL dialog, with a coupon. Its markup is built in JS

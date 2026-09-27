@@ -347,6 +347,7 @@ TABS = [
     ('sponsorship', 'mock'), ('sponsorship', 'notices'), ('sponsorship', 'events'),
     ('sponsorship', 'status'), ('sponsorship', 'coupons'), ('sponsorship', 'grant'),
     ('sponsorship', 'payments'), ('sponsorship', 'users'), ('sponsorship', 'campaigns'),
+    ('coc', 'fame'), ('sponsorship', 'fame'),
 ]
 
 from playwright.sync_api import sync_playwright

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hall of Fame · Elec-Buddy</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="stylesheet" href="style.css">
+<script>
+  (function(){
+    var t = 'dark';
+    try { t = localStorage.getItem('eb_theme') || 'dark'; } catch (e) {}
+    if (t === 'system') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!--
+  Hall of Fame. Every published entry for a course, read by any signed-in
+  cadet. Reached from the profile menu in both apps, and from the popup that
+  announces a new entry (fame.js).
+
+  The look is a ship's honour board: gilt names on a dark board, grouped by
+  year under a rule. Gilt is --amber and the flame takes the course accent, so
+  every colour here is a theme token and all four themes resolve on their own.
+  Nothing is hardcoded on one side of a text/background pair.
+
+  Entries are real people who agreed to be here. Consent is enforced by the
+  database (app/admin/hall_of_fame_setup.sql), which is why this page has no
+  way to show a draft even if asked.
+-->
+<style>
+  /* style.css locks the app shell to one screen; this page scrolls. */
+  html, body { height:auto; }
+  body { display:block; overflow-x:hidden; overflow-y:auto; min-height:100vh; min-height:100dvh; }
+
+  .hf { --acc:var(--blue); --acc-dim:var(--blue-dim); --acc-border:var(--blue-border); }
+  .hf[data-track="sponsorship"] { --acc:var(--orange); --acc-dim:var(--orange-dim); --acc-border:var(--orange-border); }
+
+  .hf-serif { font-family:Georgia, 'Times New Roman', serif; }
+
+  /* ── top bar ─────────────────────────────── */
+  .hf-bar { max-width:1080px; margin:0 auto; padding:16px 16px 0; display:flex; align-items:center;
+    justify-content:space-between; gap:12px; }
+  .hf-back { display:inline-flex; align-items:center; gap:6px; min-height:40px; padding:0 12px 0 8px;
+    border:1px solid var(--border); border-radius:8px; color:var(--text2); text-decoration:none;
+    font-size:13.5px; background:var(--surface); }
+  .hf-back:hover { color:var(--text); border-color:var(--acc-border); }
+  .hf-back svg { width:16px; height:16px; }
+  .hf-tabs { display:inline-flex; padding:3px; gap:3px; border:1px solid var(--border);
+    border-radius:10px; background:var(--surface); }
+  .hf-tab { min-height:34px; padding:0 14px; border:0; border-radius:7px; background:none; cursor:pointer;
+    color:var(--text3); font-size:13px; font-weight:600; font-family:inherit; }
+  .hf-tab[aria-selected="true"] { background:var(--acc-dim); color:var(--acc); box-shadow:inset 0 0 0 1px var(--acc-border); }
+  .hf-back:focus-visible, .hf-tab:focus-visible { outline:2px solid var(--acc); outline-offset:2px; }
+
+  /* ── hero ────────────────────────────────── */
+  .hf-hero { position:relative; text-align:center; padding:56px 16px 40px; max-width:760px; margin:0 auto; }
+  .hf-flame { position:relative; width:84px; height:84px; margin:0 auto 22px; color:var(--acc); }
+  .hf-flame::before { content:''; position:absolute; inset:-18px; border-radius:50%;
+    background:radial-gradient(circle, var(--acc-dim) 0%, transparent 70%); animation:hf-glow 3.6s ease-in-out infinite; }
+  .hf-flame svg { position:relative; width:100%; height:100%; transform-origin:50% 85%;
+    animation:hf-breathe 3.6s ease-in-out infinite; }
+  .hf-flame path { stroke-dasharray:90; stroke-dashoffset:90; animation:hf-draw 1.4s .15s ease-out forwards; }
+  @keyframes hf-draw { to { stroke-dashoffset:0; } }
+  @keyframes hf-breathe { 0%,100% { transform:scale(1) rotate(0deg); } 35% { transform:scale(1.035) rotate(-1.2deg); } 70% { transform:scale(.985) rotate(.8deg); } }
+  @keyframes hf-glow { 0%,100% { opacity:.65; transform:scale(1); } 50% { opacity:1; transform:scale(1.12); } }
+
+  .hf-eyebrow { font-size:11.5px; letter-spacing:.32em; text-transform:uppercase; color:var(--text3); }
+  .hf-title { margin-top:10px; font-size:clamp(40px, 8vw, 68px); line-height:1.02; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--amber); text-wrap:balance; position:relative;
+    display:inline-block; }
+  /* One gilt glint across the title on arrival, masked to the letters. */
+  .hf-title::after { content:attr(data-text); position:absolute; inset:0; color:transparent;
+    background:linear-gradient(100deg, transparent 35%, rgba(255,255,255,.55) 50%, transparent 65%) no-repeat;
+    background-size:250% 100%; background-position:150% 0; -webkit-background-clip:text; background-clip:text;
+    animation:hf-glint 1.6s 1s ease-in-out forwards; pointer-events:none; }
+  [data-theme="light"] .hf-title::after { background-image:linear-gradient(100deg, transparent 35%, rgba(255,255,255,.8) 50%, transparent 65%); }
+  @keyframes hf-glint { to { background-position:-50% 0; } }
+  .hf-rule { display:flex; align-items:center; gap:14px; justify-content:center; margin:20px auto 0; max-width:340px; color:var(--amber); }
+  .hf-rule::before, .hf-rule::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, transparent, var(--amber-border)); }
+  .hf-rule::after { transform:scaleX(-1); }
+  .hf-rule svg { width:14px; height:14px; flex:0 0 auto; }
+  .hf-lede { margin:18px auto 0; max-width:52ch; color:var(--text2); font-size:15.5px; line-height:1.65; text-wrap:pretty; }
+  .hf-count { margin-top:22px; display:inline-flex; align-items:baseline; gap:8px; color:var(--text3); font-size:13px; }
+  .hf-count b { font-size:26px; color:var(--text); font-variant-numeric:tabular-nums; }
+
+  /* ── the board ───────────────────────────── */
+  .hf-board { max-width:1080px; margin:0 auto; padding:8px 16px 72px; }
+  .hf-year { display:flex; align-items:center; gap:16px; margin:34px 0 18px; }
+  .hf-year span { font-size:22px; letter-spacing:.2em; color:var(--amber); font-variant-numeric:lining-nums; }
+  .hf-year::after { content:''; flex:1; height:1px; background:linear-gradient(90deg, var(--amber-border), transparent); }
+  .hf-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(290px, 1fr)); gap:16px; }
+
+  .hf-card { position:relative; background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:22px 20px 20px; display:flex; flex-direction:column; align-items:center; text-align:center;
+    transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+  .hf-card:hover { transform:translateY(-3px); border-color:var(--amber-border);
+    box-shadow:0 14px 34px -18px rgba(0,0,0,.55); }
+  .hf-face { width:96px; height:96px; border-radius:50%; object-fit:cover; display:block;
+    box-shadow:0 0 0 3px var(--surface), 0 0 0 4px var(--amber-border); }
+  .hf-init { display:flex; align-items:center; justify-content:center; font-size:32px; color:var(--amber);
+    background:var(--amber-dim); }
+  .hf-name { margin-top:16px; font-size:19px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--text); overflow-wrap:anywhere; }
+  .hf-what { margin-top:6px; font-size:14px; color:var(--text2); line-height:1.5; }
+  .hf-when { margin-top:10px; font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--acc); }
+  .hf-quote { position:relative; margin:16px 0 0; padding-top:14px; border-top:1px solid var(--border);
+    width:100%; font-size:14px; font-style:italic; color:var(--text2); line-height:1.65; }
+  .hf-quote::before { content:'\201C'; display:block; font-size:34px; line-height:.6; color:var(--amber); font-style:normal; margin-bottom:6px; }
+
+  /* Rise in as they scroll into view, a few at a time. */
+  .hf-js .hf-card { opacity:0; transform:translateY(18px); }
+  .hf-js .hf-card.in { opacity:1; transform:none;
+    transition:opacity .6s ease var(--d, 0s), transform .6s cubic-bezier(.2,.7,.2,1) var(--d, 0s), border-color .25s, box-shadow .25s; }
+  .hf-js .hf-card.in:hover { transform:translateY(-3px); transition-delay:0s; }
+
+  /* Empty board and errors. */
+  .hf-empty { max-width:520px; margin:24px auto 0; text-align:center; border:1px dashed var(--amber-border);
+    border-radius:14px; padding:34px 22px; background:var(--surface); }
+  .hf-empty h2 { font-size:20px; color:var(--text); letter-spacing:.04em; }
+  .hf-empty p { margin-top:10px; font-size:14.5px; color:var(--text2); line-height:1.65; }
+  .hf-skel { height:250px; border-radius:14px; background:var(--surface); border:1px solid var(--border);
+    animation:hf-pulse 1.4s ease-in-out infinite; }
+  @keyframes hf-pulse { 50% { opacity:.55; } }
+
+  @media (max-width:560px) {
+    .hf-hero { padding-top:36px; }
+    .hf-flame { width:66px; height:66px; }
+    .hf-bar { flex-wrap:wrap; }
+    .hf-grid { grid-template-columns:1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hf-flame::before, .hf-flame svg, .hf-title::after, .hf-skel { animation:none !important; }
+    .hf-flame path { animation:none; stroke-dashoffset:0; }
+    .hf-js .hf-card, .hf-js .hf-card.in { opacity:1; transform:none; transition:none; }
+  }
+</style>
+</head>
+<body>
+<div class="hf" id="hf" data-track="coc">
+  <div class="hf-bar">
+    <a class="hf-back" id="hf-back" href="./index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      Back to the course
+    </a>
+    <div class="hf-tabs" role="tablist" aria-label="Course">
+      <button class="hf-tab" role="tab" data-track="coc" aria-selected="true">CoC</button>
+      <button class="hf-tab" role="tab" data-track="sponsorship" aria-selected="false">Sponsorship</button>
+    </div>
+  </div>
+
+  <header class="hf-hero">
+    <div class="hf-flame" aria-hidden="true">
+      <!-- Lucide "flame", ISC licence -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+    </div>
+    <div class="hf-eyebrow" id="hf-eyebrow">Elec-Buddy · Certificate of Competency</div>
+    <h1 class="hf-title hf-serif" data-text="Hall of Fame">Hall of Fame</h1>
+    <div class="hf-rule" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>
+    </div>
+    <p class="hf-lede" id="hf-lede">Cadets who prepared here, sat in front of the surveyor, and came out with their ticket.</p>
+    <div class="hf-count" id="hf-count" hidden><b id="hf-n">0</b><span id="hf-n-label">on the board</span></div>
+  </header>
+
+  <main class="hf-board" id="hf-board" aria-live="polite">
+    <div class="hf-grid"><div class="hf-skel"></div><div class="hf-skel"></div><div class="hf-skel"></div></div>
+  </main>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var COPY = {
+    coc: {
+      eyebrow: 'Elec-Buddy · Certificate of Competency',
+      lede: 'Cadets who prepared here, sat in front of the surveyor, and came out with their ticket.',
+      emptyH: 'The first name goes here',
+      emptyP: 'When a cadet from this course clears their CoC and agrees to be listed, their name goes up on this board.',
+      back: './index.html', one: 'cadet on the board', many: 'cadets on the board',
+    },
+    sponsorship: {
+      eyebrow: 'Elec-Buddy · Sponsorship',
+      lede: 'Cadets who prepared here and were picked by a shipping company for sponsorship.',
+      emptyH: 'The first name goes here',
+      emptyP: 'When a cadet from this course is selected for sponsorship and agrees to be listed, their name goes up on this board.',
+      back: './sponsorship/index.html', one: 'cadet selected', many: 'cadets selected',
+    },
+  };
+  var MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  document.documentElement.classList.add('hf-js');
+  var root = document.getElementById('hf');
+  var board = document.getElementById('hf-board');
+  var client = null, cache = {}, observer = null;
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function initials(n) {
+    return String(n || '').trim().split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0).toUpperCase(); }).join('');
+  }
+
+  function card(e, i) {
+    var m = /^(\d{4})-(\d{2})/.exec(e.achieved_on || '');
+    var face = e.photo
+      ? '<img class="hf-face" src="' + esc(e.photo) + '" alt="' + esc(e.display_name) + '" loading="lazy">'
+      : '<div class="hf-face hf-init hf-serif" aria-hidden="true">' + esc(initials(e.display_name)) + '</div>';
+    return '<article class="hf-card" style="--d:' + ((i % 3) * 0.09).toFixed(2) + 's">'
+      + face
+      + '<h3 class="hf-name hf-serif">' + esc(e.display_name) + '</h3>'
+      + '<div class="hf-what">' + esc(e.achievement) + '</div>'
+      + (m ? '<div class="hf-when">' + MONTHS[+m[2] - 1] + ' ' + m[1] + '</div>' : '')
+      + (e.quote ? '<blockquote class="hf-quote">' + esc(e.quote) + '</blockquote>' : '')
+      + '</article>';
+  }
+
+  function reveal() {
+    var cards = board.querySelectorAll('.hf-card');
+    if (!('IntersectionObserver' in window)) { cards.forEach(function (c) { c.classList.add('in'); }); return; }
+    if (observer) observer.disconnect();
+    observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); observer.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -40px 0px', threshold: 0.08 });
+    cards.forEach(function (c) { observer.observe(c); });
+  }
+
+  function render(track, rows) {
+    var c = COPY[track];
+    var cnt = document.getElementById('hf-count');
+    if (!rows.length) {
+      cnt.hidden = true;
+      board.innerHTML = '<div class="hf-empty"><h2 class="hf-serif">' + c.emptyH + '</h2><p>' + c.emptyP + '</p></div>';
+      return;
+    }
+    // Counted from the list itself, so the number cannot drift from the names.
+    document.getElementById('hf-n').textContent = rows.length;
+    document.getElementById('hf-n-label').textContent = rows.length === 1 ? c.one : c.many;
+    cnt.hidden = false;
+
+    var years = [], byYear = {};
+    rows.forEach(function (e) {
+      var y = (e.achieved_on || '').slice(0, 4) || '';
+      if (!byYear[y]) { byYear[y] = []; years.push(y); }
+      byYear[y].push(e);
+    });
+    board.innerHTML = years.map(function (y) {
+      return '<section aria-label="' + esc(y) + '"><div class="hf-year"><span class="hf-serif">' + esc(y) + '</span></div>'
+        + '<div class="hf-grid">' + byYear[y].map(card).join('') + '</div></section>';
+    }).join('');
+    reveal();
+  }
+
+  async function show(track) {
+    if (!COPY[track]) track = 'coc';
+    root.setAttribute('data-track', track);
+    document.querySelectorAll('.hf-tab').forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.track === track ? 'true' : 'false');
+    });
+    var c = COPY[track];
+    document.getElementById('hf-eyebrow').textContent = c.eyebrow;
+    document.getElementById('hf-lede').textContent = c.lede;
+    document.getElementById('hf-back').href = c.back;
+    try { history.replaceState(null, '', '?track=' + track); } catch (e) {}
+
+    if (cache[track]) { render(track, cache[track]); return; }
+    board.innerHTML = '<div class="hf-grid"><div class="hf-skel"></div><div class="hf-skel"></div><div class="hf-skel"></div></div>';
+    var res = await client.from('hall_of_fame')
+      .select('id,display_name,achievement,achieved_on,quote,photo')
+      .eq('track', track).eq('is_published', true)
+      .order('achieved_on', { ascending: false }).order('published_at', { ascending: false });
+    if (root.getAttribute('data-track') !== track) return;   // switched while loading
+    if (res.error) {
+      board.innerHTML = '<div class="hf-empty"><h2 class="hf-serif">Could not load the board</h2>'
+        + '<p>Check your connection and reload the page.</p></div>';
+      return;
+    }
+    cache[track] = res.data || [];
+    render(track, cache[track]);
+  }
+
+  document.querySelectorAll('.hf-tab').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.dataset.track); });
+  });
+
+  (async function start() {
+    try {
+      if (typeof supabase === 'undefined') throw new Error('Supabase unavailable');
+      client = supabase.createClient('https://vcofgjuwprylojgyfbtr.supabase.co', 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW');
+      var s = await client.auth.getSession();
+      if (!s.data.session) { window.location.replace('./auth.html'); return; }
+    } catch (e) {
+      board.innerHTML = '<div class="hf-empty"><h2 class="hf-serif">Could not load the board</h2><p>Check your connection and reload the page.</p></div>';
+      return;
+    }
+    var q = new URLSearchParams(location.search).get('track');
+    var stored = null;
+    try { stored = localStorage.getItem('eb_track'); } catch (e) {}
+    show(q || stored || 'coc');
+  })();
+})();
+</script>
+</body>
+</html>
