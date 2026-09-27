@@ -29,7 +29,11 @@
   var BLOCKERS = ['upd-modal', 'wel-modal', 'spf-back', 'dev-block', 'upgrade-modal'];
 
   // Lucide "flame" (ISC licence), stroked to match every other icon here.
-  var FLAME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
+  // Sized in the markup, not only in style.css. On the first load after a
+  // deploy the old service worker can hand back the previous style.css
+  // alongside this new file; an SVG with no size then fills the screen until
+  // the update reloads the page. Blesson saw exactly that on 27 Sep 2026.
+  var FLAME = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" '
     + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
     + '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 '
     + '2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>';
@@ -87,6 +91,9 @@
     if (el) return el;
     el = document.createElement('div');
     el.id = 'hof-modal';
+    // Hidden inline from birth, not by the stylesheet: if style.css is stale
+    // the stylesheet rule does not exist, and the markup would show as raw.
+    el.style.display = 'none';
     el.setAttribute('role', 'dialog');
     el.setAttribute('aria-modal', 'true');
     el.setAttribute('aria-labelledby', 'hof-title');
@@ -202,6 +209,11 @@
       if (BLOCKERS.some(isOpen)) { _ran = false; return; }
 
       var el = modal();
+      // Our styles must be the ones on the page. If style.css is still the
+      // pre-deploy copy, #hof-modal has no rules at all and would render as
+      // raw markup. Do nothing and leave it unseen: the service worker update
+      // reloads the page moments later, and it shows properly then.
+      if (getComputedStyle(el).position !== 'fixed') { _ran = false; return; }
       el.classList.toggle('hof-spon', track === 'sponsorship');
       // The Sponsorship app lives one folder down.
       var up = /\/sponsorship\//.test(location.pathname) ? '../' : './';
