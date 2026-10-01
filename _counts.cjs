@@ -104,8 +104,10 @@ let surveyorQuestions = 0, surveyors = 0;
       surveyorQuestions = D.questions.length;
       // Named surveyors only. The monthly-mock entries are sittings, not
       // people, and counting them would overstate who a cadet might face.
+      // 'unnamed' holds recollections where the surveyor was not named
+      // (grouped by MMD instead, since 1 Oct 2026): not a person either.
       surveyors = Object.keys(D.surveyors || {})
-        .filter(n => (D.surveyors[n] || {}).role !== 'monthly-mock').length;
+        .filter(n => !['monthly-mock', 'unnamed'].includes((D.surveyors[n] || {}).role)).length;
     } else {
       failures.push('data/Orals/SurveyorQA/sq_data.js: no SQ_DATA.questions array');
     }

@@ -2561,6 +2561,7 @@ let sqCurrentPage = 0;
 const sqPageSize = 20;
 window._sqAllFilter = window._sqAllFilter || '';
 window._sqAllSurveyorFilter = window._sqAllSurveyorFilter || '';
+window._sqAllMmdFilter = window._sqAllMmdFilter || '';
 window._sqDetailFilter = window._sqDetailFilter || '';
 
 function _waitForAccessGate() {
@@ -2640,11 +2641,15 @@ function formatSqAnswer(text) {
 }
 
 function renderSqCard(q) {
-    var ans = formatSqAnswer(q.answer);
+    // A line-tracing question is asked on the ship's own drawings, so it is
+    // stored with no answer on purpose. Say so, rather than show an empty box.
+    var ans = q.answer ? formatSqAnswer(q.answer)
+        : '<div class="sq-a-none">Practical question, asked on the actual drawings of the ship, so there is no model answer.</div>';
     return '<div class="sq-card">'
         + '<div class="sq-header"><div class="sq-badges">'
         + '<span class="sq-badge-surveyor">' + esc(q.surveyor) + '</span>'
         + '<span class="sq-badge-topic">' + esc(q.topic) + '</span>'
+        + (q.mmd ? '<span class="sq-badge-mmd">' + esc(q.mmd) + ' MMD</span>' : '')
         + '</div></div>'
         + '<div class="sq-q">Q: ' + esc(q.question) + '</div>'
         + '<div class="sq-a">' + ans + '</div>'
@@ -2693,10 +2698,25 @@ function _sqSurveyorOptionsHTML(questions, selected) {
     return html;
 }
 
+/* MMD centre filter. Only questions whose recollection named the centre carry
+   q.mmd, so the list is built from the data: a centre appears the moment it
+   has a question, and nothing untagged is ever guessed into one. */
+function _sqMmdOptionsHTML(questions, selected) {
+    let counts = {};
+    questions.forEach(function(q) { if (q.mmd) counts[q.mmd] = (counts[q.mmd] || 0) + 1; });
+    let names = Object.keys(counts).sort();
+    let html = '<option value="">All MMDs (' + questions.length + ')</option>';
+    names.forEach(function(name) {
+        html += '<option value="' + esc(name) + '"' + (name === selected ? ' selected' : '') + '>' + esc(name) + ' MMD (' + counts[name] + ')</option>';
+    });
+    return html;
+}
+
 function _sqAllKey() {
     var parts = [];
     if (window._sqAllFilter) parts.push('t:' + window._sqAllFilter);
     if (window._sqAllSurveyorFilter) parts.push('s:' + window._sqAllSurveyorFilter);
+    if (window._sqAllMmdFilter) parts.push('m:' + window._sqAllMmdFilter);
     return 'sq-all' + (parts.length ? ':' + parts.join(',') : '');
 }
 
@@ -2704,6 +2724,7 @@ function _sqAllFiltered() {
     let all = window.SQ_DATA.questions;
     if (window._sqAllFilter) all = all.filter(function(q) { return q.topic === window._sqAllFilter; });
     if (window._sqAllSurveyorFilter) all = all.filter(function(q) { return q.surveyor === window._sqAllSurveyorFilter; });
+    if (window._sqAllMmdFilter) all = all.filter(function(q) { return q.mmd === window._sqAllMmdFilter; });
     return all;
 }
 
@@ -2713,12 +2734,16 @@ function renderSqAll() {
 
     document.getElementById('sq-all-topic-filter').innerHTML = _sqTopicOptionsHTML(window.SQ_DATA.questions, window._sqAllFilter);
     document.getElementById('sq-all-surveyor-filter').innerHTML = _sqSurveyorOptionsHTML(window.SQ_DATA.questions, window._sqAllSurveyorFilter);
+    var mmdSel = document.getElementById('sq-all-mmd-filter');
+    if (mmdSel) mmdSel.innerHTML = _sqMmdOptionsHTML(window.SQ_DATA.questions, window._sqAllMmdFilter);
     _sqAllRenderFromScratch();
 }
 
 function sqAllFilterChanged() {
     window._sqAllFilter = document.getElementById('sq-all-topic-filter').value;
     window._sqAllSurveyorFilter = document.getElementById('sq-all-surveyor-filter').value;
+    var mmdSel = document.getElementById('sq-all-mmd-filter');
+    window._sqAllMmdFilter = mmdSel ? mmdSel.value : '';
     _sqAllRenderFromScratch();
 }
 

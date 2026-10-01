@@ -346,6 +346,17 @@ window.loadNotes("T01", `<div class="view" id="view-notes-t01">
     <tr><td>Both machines hunting (oscillating load)</td><td class="hl">Governor droop set to zero (isochronous in parallel) or stability trimmer incorrect</td><td>Add droop to governor. Adjust AVR stability trimmer.</td></tr>
   </table>
 
+  <div class="n-h2">Governor Checks Before Calling It a Mechanical Fault (asked Chennai MMD)</div>
+  <div class="n-p">An alternator that will not hold frequency, hunts, or will not take its share of kW is a governor problem until you have shown it is not. The surveyor wants to hear that you clear everything the governor depends on before you tell the Chief Engineer the engine is at fault.</div>
+  <ol class="n-steps">
+    <li><strong>Settings:</strong> compare the speed setting and droop with the other sets and with the commissioning record. Operate raise and lower from the switchboard and watch the frequency respond. A speed-setting motor that has stopped, or a raise/lower signal that never arrives, looks exactly like an engine that will not take load.</li>
+    <li><strong>Electronic governor:</strong> the 24 V DC supply to the controller, its fuses and terminals; any fault code or LED on the controller; the magnetic pick-up (speed sensor), its gap, cleanliness and the AC signal it gives at running speed; the actuator output signal and the actuator coil resistance against the maker's figures; and the load-sharing lines between sets.</li>
+    <li><strong>Hydraulic governor (UG or PGA type):</strong> oil level and condition in the governor, the compensation needle valve setting if the set is hunting, and the drive from the engine.</li>
+    <li><strong>Linkage:</strong> from the governor output to the fuel rack, it must move through full travel with no slack, binding or bent rods. With the engine stopped and the linkage disconnected, move the fuel rack by hand. If the rack itself is stiff, you have found the boundary: from here it is a fuel pump or engine problem.</li>
+    <li><strong>Only then the engine:</strong> fuel supply and filters, injection pumps, and the engine itself.</li>
+  </ol>
+  <div class="n-warn"><div class="icon">⚠️</div><div class="body"><strong>Precautions:</strong> take the set off load first, with another generator carrying the bus, and put PMS in manual so it does not start, stop or shed load while you work. Write down every setting before changing it. Never block the fuel rack or defeat the overspeed trip, and keep someone at the local stop while the engine runs. Lock out the actuator supply before disconnecting anything, and run the set off load before putting it back in parallel.</div></div>
+
   <div class="n-h2" id="s-procedures">Load Transfer &amp; Shutdown Procedure</div>
   <div class="n-info"><div class="icon">📖</div><div class="body"><strong>Taking a Generator Off-Load (Handover Procedure):</strong><br>
   1. Confirm a second generator is already running in parallel and bearing load.<br>

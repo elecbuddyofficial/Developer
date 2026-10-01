@@ -757,7 +757,12 @@ def selftest(br):
     # Each fix made from this sweep, undone in the served copy only. The repo
     # files are never written.
     MUTATIONS = [
-        ('Surveyor Q&A filters fit a 360px phone', 'coc:sq-all', ('x', 360, 740), 'OVERFLOW', 'sq-all-topic-filter',
+        # Any of the filter selects, not one named one. The widest select is
+        # whichever has the longest option text, and that moves as the bank
+        # grows: on 1 Oct 2026 the topic select's overflow fell to 1px (under
+        # the 2px tolerance) while the surveyor select overflowed by 18px, and
+        # a needle pinned to the topic select reported the undone fix as missed.
+        ('Surveyor Q&A filters fit a 360px phone', 'coc:sq-all', ('x', 360, 740), 'OVERFLOW', 'sq-all-',
          {'app/style.css': [('cursor: pointer; max-width: 100%; }', 'cursor: pointer; }')]}, True),
         ('a long Surveyor Q&A label wraps at 280px', 'coc:sq-all', ('x', 280, 653), 'OVERFLOW', 'sq-label',
          {'app/style.css': [('.sq-label { font-size: 12px; white-space: normal; flex-shrink: 1; max-width: 100%; }', '.sq-label { font-size: 12px; }')]}, True),
