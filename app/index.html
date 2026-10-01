@@ -19,6 +19,8 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Startup sign-in guard: never a blank page on a slow token refresh. -->
+<script src="boot-net.js?v=1"></script>
 <!-- Content figures, generated from the content itself by _counts.cjs. Loaded
      here rather than at the bottom so EB_COUNTS exists before anything reads
      it. Regenerate after adding content, or the numbers below start drifting
@@ -55,7 +57,12 @@
         'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW'
       );
       window._sbClient = _sb;
-      const { data: { session } } = await _sb.auth.getSession();
+      // EBBoot bounds the wait and tells a network failure apart from being
+      // signed out (boot-net.js). Without it, today's plain call.
+      const boot = window.EBBoot ? await window.EBBoot.session(_sb)
+                                 : { session: (await _sb.auth.getSession()).data.session, offline: false };
+      if (boot.offline) return;
+      const session = boot.session;
       if (!session) {
         window.location.replace('./auth.html');
       } else {
@@ -75,6 +82,9 @@
       }
     } catch(e) {
       console.error('Auth check failed:', e);
+      // The library never loaded: the sign-in page needs it too, so sending
+      // them there would just be a second broken page.
+      if (window.EBBoot && /CDN unavailable/.test(String(e && e.message))) { window.EBBoot.cdnDown(); return; }
       window.location.replace('./auth.html');
     }
   })();

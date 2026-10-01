@@ -125,6 +125,10 @@ SCREENS = {
           EBFame.maybeShow('coc', { after: true });
           window._sbUser = prevUser;
         })()"""},
+    # The startup connection card (boot-net.js). Shown over a still-hidden
+    # page when the sign-in refresh is slow or the network is down, so it has
+    # to read correctly in every theme with nothing else on screen.
+    'netcard':  {'file': 'index.html',   'view': 'view-welcome', 'open': "EBBoot.cdnDown()"},
     'toast':    {'file': 'index.html',   'view': 'view-welcome', 'open': """
         EBNotify.showToast({ type:'update', title:'Feature Update' })"""},
     # The notification DETAIL dialog, with a coupon. Its markup is built in JS

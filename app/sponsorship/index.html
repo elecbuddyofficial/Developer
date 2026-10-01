@@ -759,6 +759,8 @@
   })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Startup sign-in guard: never a blank page on a slow token refresh. -->
+<script src="../boot-net.js?v=1"></script>
 <script src="../table-hints.js?v=1"></script>
 <script src="../progress.js?v=1"></script>
 <script src="../account.js?v=1"></script>
@@ -786,11 +788,16 @@ window._authReady = (async () => {
     if (typeof supabase === 'undefined') throw new Error('CDN unavailable');
     const _sb = supabase.createClient('https://vcofgjuwprylojgyfbtr.supabase.co','sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW');
     window._sbClient = _sb;
-    const { data:{ session } } = await _sb.auth.getSession();
+    // Bounded, and a network failure is not a sign-out (boot-net.js).
+    const boot = window.EBBoot ? await window.EBBoot.session(_sb)
+                               : { session: (await _sb.auth.getSession()).data.session, offline: false };
+    if (boot.offline) return;
+    const session = boot.session;
     if (!session) { window.location.replace('../auth.html'); return; }
     window._sbUser = session.user;
     document.documentElement.style.visibility = 'visible';
   } catch(e) {
+    if (window.EBBoot && /CDN unavailable/.test(String(e && e.message))) { window.EBBoot.cdnDown(); return; }
     window.location.replace('../auth.html');
   }
 })();
