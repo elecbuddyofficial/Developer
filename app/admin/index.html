@@ -17,6 +17,21 @@
   <!-- Same formatter the apps use, so the preview is what readers get. -->
   <script src="../nf-format.js?v=1"></script>
   <style>
+    /* Notification formatting toolbar. Kept HERE, not in style.css: the admin
+       page always arrives fresh (navigation is network-first), but style.css
+       can be the previous deploy's copy from the service worker cache on the
+       first load after a deploy, and the toolbar shipped unstyled that way on
+       2 Oct 2026. The icons also carry width/height in their markup. */
+    .nf-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px; margin-bottom: 6px;
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
+    .nf-tb { min-width: 34px; height: 32px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center;
+      background: transparent; color: var(--text2); border: 1px solid transparent; border-radius: 6px; cursor: pointer;
+      font: inherit; font-size: 14px; }
+    .nf-tb:hover { background: var(--surface3); color: var(--text); border-color: var(--border); }
+    .nf-tb:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+    .nf-tb svg { width: 17px; height: 17px; }
+    .nf-tb b, .nf-tb i, .nf-tb u { color: inherit; }
+    .nf-tb-sep { width: 1px; height: 20px; background: var(--border); margin: 0 3px; }
     /* ── OVERRIDE body for two-column layout ── */
     body { flex-direction:row; }
 
@@ -2237,9 +2252,9 @@
           <button type="button" class="nf-tb" onclick="nfFmt('italic')" title="Italic (Ctrl+I)" aria-label="Italic"><i>I</i></button>
           <button type="button" class="nf-tb" onclick="nfFmt('underline')" title="Underline (Ctrl+U)" aria-label="Underline"><u>U</u></button>
           <span class="nf-tb-sep" aria-hidden="true"></span>
-          <button type="button" class="nf-tb" onclick="nfFmt('bullet')" title="Bulleted list" aria-label="Bulleted list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg></button>
-          <button type="button" class="nf-tb" onclick="nfFmt('number')" title="Numbered list" aria-label="Numbered list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
-          <button type="button" class="nf-tb" onclick="nfFmt('link')" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('bullet')" title="Bulleted list" aria-label="Bulleted list"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('number')" title="Numbered list" aria-label="Numbered list"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('link')" title="Link" aria-label="Link"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
         </div>
         <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..." oninput="notifPreview()" onkeydown="nfKey(event)"></textarea>
         <div class="ad-hint">Select text and press a button to format it, or use Ctrl+B, Ctrl+I, Ctrl+U. Press again to remove it. The preview below shows exactly what cadets will see.</div>
