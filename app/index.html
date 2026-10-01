@@ -2061,6 +2061,17 @@ function escUpSafe(v) {
 })();
 </script>
 <script src="account.js?v=1"></script>
+<script src="nf-format.js?v=1"></script>
+<script>
+  /* Notification body text, formatted by nf-format.js (bold, italic, lists,
+     links). If that file did not load, today's behaviour, so a notice still
+     shows: escaped text with its links made tappable. */
+  function fmtNf(text, oneLine) {
+    if (window.EBFormat) return window.EBFormat.render(text, oneLine ? { inline: true } : null);
+    if (typeof linkifyNf === 'function') return linkifyNf(text);
+    return String(text == null ? '' : text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+</script>
 <script src="fame.js?v=1"></script>
 <script src="table-hints.js?v=1"></script>
 <!-- Checkout, shared with the Sponsorship app. Before app.js, which calls
@@ -3148,7 +3159,7 @@ function setTheme(t) {
           +   '<span style="font-size:11px;color:var(--text3);">' + nfTimeAgo(n.created_at) + '</span>'
           + '</div>'
           + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">' + escNf(n.title) + '</div>'
-          + '<div style="font-size:13px;color:var(--text3);line-height:1.6;white-space:pre-wrap;">' + linkifyNf(n.body) + '</div>'
+          + '<div style="font-size:13px;color:var(--text3);line-height:1.6;white-space:pre-wrap;">' + fmtNf(n.body) + '</div>'
           + '</div>';
       }).join('');
 
@@ -3726,7 +3737,7 @@ function setTheme(t) {
       return '<div class="nf-item' + (u?' unread':'') + '" onclick="openNotifDetail(\'' + n.id + '\')" role="button" tabindex="0">'
         + '<div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content">'
         + '<div class="nf-item-title">' + escNf(n.title) + '</div>'
-        + '<div class="nf-item-body">' + linkifyNf(n.body) + '</div>'
+        + '<div class="nf-item-body">' + fmtNf(n.body, true) + '</div>'
         + '<div class="nf-more">' + hint + ' &rsaquo;</div>'
         + '<div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div>'
         + '</div></div>';
@@ -3742,7 +3753,7 @@ function setTheme(t) {
     document.getElementById('nfd-title').textContent = n.title || '';
     document.getElementById('nfd-meta').innerHTML =
       '<span class="nf-chip nf-chip-' + t + '">' + escNf(t) + '</span>' + nfTimeAgo(n.created_at);
-    document.getElementById('nfd-body').innerHTML = linkifyNf(n.body || '');
+    document.getElementById('nfd-body').innerHTML = fmtNf(n.body || '');
 
     var extra = '';
     if (n.template === 'coupon' && meta.code) {

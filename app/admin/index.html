@@ -14,6 +14,8 @@
     })();
   </script>
   <link rel="stylesheet" href="../style.css">
+  <!-- Same formatter the apps use, so the preview is what readers get. -->
+  <script src="../nf-format.js?v=1"></script>
   <style>
     /* ── OVERRIDE body for two-column layout ── */
     body { flex-direction:row; }
@@ -2228,7 +2230,19 @@
 
       <div class="ad-field">
         <label class="ad-label">Message</label>
-        <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..." oninput="notifPreview()"></textarea>
+        <!-- Formatting is stored as plain markers (**bold**), never HTML; the
+             apps turn them into formatting on display. See app/nf-format.js. -->
+        <div class="nf-toolbar" role="toolbar" aria-label="Formatting">
+          <button type="button" class="nf-tb" onclick="nfFmt('bold')" title="Bold (Ctrl+B)" aria-label="Bold"><b>B</b></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('italic')" title="Italic (Ctrl+I)" aria-label="Italic"><i>I</i></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('underline')" title="Underline (Ctrl+U)" aria-label="Underline"><u>U</u></button>
+          <span class="nf-tb-sep" aria-hidden="true"></span>
+          <button type="button" class="nf-tb" onclick="nfFmt('bullet')" title="Bulleted list" aria-label="Bulleted list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4.5" cy="6" r="1" fill="currentColor"/><circle cx="4.5" cy="12" r="1" fill="currentColor"/><circle cx="4.5" cy="18" r="1" fill="currentColor"/></svg></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('number')" title="Numbered list" aria-label="Numbered list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><path d="M4 6h1v4"/><path d="M4 10h2"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></button>
+          <button type="button" class="nf-tb" onclick="nfFmt('link')" title="Link" aria-label="Link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></button>
+        </div>
+        <textarea class="ad-input ad-textarea" id="notif-body" placeholder="Full notification text..." oninput="notifPreview()" onkeydown="nfKey(event)"></textarea>
+        <div class="ad-hint">Select text and press a button to format it, or use Ctrl+B, Ctrl+I, Ctrl+U. Press again to remove it. The preview below shows exactly what cadets will see.</div>
       </div>
 
       <!-- Shows what the reader will actually see. A coupon that reads wrong is
@@ -6816,7 +6830,7 @@ async function loadNotifications() {
       + '<div class="notif-dot nd-' + (n.type || 'info') + '"></div>'
       + '<div class="notif-body">'
       + '<div class="notif-title">' + esc(n.title) + '</div>'
-      + '<div class="notif-text">' + esc(n.body) + '</div>'
+      + '<div class="notif-text">' + (window.EBFormat ? EBFormat.render(n.body) : esc(n.body)) + '</div>'
       + '<div class="notif-meta">' + (n.type || 'info').toUpperCase()
         + (n.target_plan ? ' · ' + esc(n.target_plan).toUpperCase() + ' ONLY' : ' · EVERYONE')
         + tmpl
@@ -6884,6 +6898,72 @@ function notifMeta() {
   return {};
 }
 
+/* ── Notification formatting toolbar ───────────────────────────────────
+   Wraps the selection in the markers app/nf-format.js understands. Pressing
+   a button on text that already carries that marker removes it, the way a
+   mail editor toggles. Lists act on every line the selection touches. */
+var NF_WRAP = { bold: '**', italic: '*', underline: '__' };
+
+function nfFmt(kind) {
+  var ta = document.getElementById('notif-body');
+  if (!ta) return;
+  var v = ta.value, s = ta.selectionStart, e = ta.selectionEnd;
+
+  if (NF_WRAP[kind]) {
+    var w = NF_WRAP[kind], sel = v.slice(s, e);
+    // Already wrapped, inside or just outside the selection: unwrap.
+    if (sel.length > 2 * w.length && sel.slice(0, w.length) === w && sel.slice(-w.length) === w
+        && !(w === '*' && sel.slice(0, 2) === '**')) {
+      var inner = sel.slice(w.length, -w.length);
+      ta.setRangeText(inner, s, e, 'select');
+    } else if (v.slice(s - w.length, s) === w && v.slice(e, e + w.length) === w
+               && !(w === '*' && (v.charAt(s - 2) === '*' || v.charAt(e + 1) === '*'))) {
+      ta.setRangeText(sel, s - w.length, e + w.length, 'select');
+    } else {
+      var text = sel || ({ bold: 'bold text', italic: 'italic text', underline: 'underlined text' })[kind];
+      // Spaces stay outside the markers: "**word **" would not format.
+      var lead = text.match(/^\s*/)[0], trail = text.match(/\s*$/)[0], core = text.trim() || text;
+      ta.setRangeText(lead + w + core + w + trail, s, e, 'end');
+      var a = s + lead.length + w.length;
+      ta.setSelectionRange(a, a + core.length);
+    }
+  } else if (kind === 'bullet' || kind === 'number') {
+    var ls = v.lastIndexOf('\n', s - 1) + 1;
+    var le = v.indexOf('\n', e > s && v.charAt(e - 1) === '\n' ? e - 1 : e);
+    if (le < 0) le = v.length;
+    var lines = v.slice(ls, le).split('\n');
+    var marker = kind === 'bullet' ? /^\s*[-\u2022]\s+/ : /^\s*\d{1,3}[.)]\s+/;
+    var all = lines.filter(function (l) { return l.trim(); }).every(function (l) { return marker.test(l); });
+    var n = 0;
+    var out = lines.map(function (l) {
+      if (!l.trim()) return l;
+      var bare = l.replace(/^\s*(?:[-\u2022]|\d{1,3}[.)])\s+/, '');
+      if (all) return bare;                       // pressed again: back to plain lines
+      n++;
+      return (kind === 'bullet' ? '- ' : n + '. ') + bare;
+    }).join('\n');
+    ta.setRangeText(out, ls, le, 'select');
+  } else if (kind === 'link') {
+    var url = prompt('Link address', 'https://');
+    if (!url) return;
+    url = url.trim();
+    if (!/^https?:\/\/\S+$/i.test(url)) { toast('Link must start with http:// or https://', 'err'); return; }
+    var label = v.slice(s, e).trim().replace(/[\[\]]/g, '') || 'link text';
+    ta.setRangeText('[' + label + '](' + url + ')', s, e, 'end');
+  }
+  ta.focus();
+  notifPreview();
+}
+
+function nfKey(ev) {
+  if (!(ev.ctrlKey || ev.metaKey) || ev.altKey) return;
+  var k = (ev.key || '').toLowerCase();
+  var kind = k === 'b' ? 'bold' : k === 'i' ? 'italic' : k === 'u' ? 'underline' : null;
+  if (!kind) return;
+  ev.preventDefault();
+  nfFmt(kind);
+}
+
 function notifPreview() {
   var el = document.getElementById('notif-preview');
   if (!el) return;
@@ -6908,7 +6988,7 @@ function notifPreview() {
   el.innerHTML = '<div class="nfp-card">'
     + '<div class="nfp-chip nfp-' + esc(type) + '">' + esc(type) + '</div>'
     + '<div class="nfp-title">' + (esc(title) || '<span style="color:var(--text3)">Title…</span>') + '</div>'
-    + '<div class="nfp-body">' + (esc(body) || '<span style="color:var(--text3)">Message…</span>') + '</div>'
+    + '<div class="nfp-body">' + ((body && window.EBFormat ? EBFormat.render(body) : esc(body)) || '<span style="color:var(--text3)">Message…</span>') + '</div>'
     + extra + '</div>';
 }
 

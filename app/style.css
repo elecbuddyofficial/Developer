@@ -2017,3 +2017,19 @@ body.hw-open { overflow: hidden; }
 .hof-all:hover { color:var(--text); }
 .hof-intro { font-size:14px; color:var(--text2); line-height:1.65; margin:10px auto 4px; max-width:38ch; text-wrap:pretty; }
 .hof-intro[hidden] { display:none; }
+
+/* ── Notification formatting (nf-format.js) ─────────────────────────────
+   Theme tokens only. The links used to carry a fixed #7AB8E0, which is a
+   light-on-light pair in the light theme; --blue is solved per theme. */
+.nf-list { margin: 6px 0 6px 20px; padding: 0; }
+.nf-list li { margin: 2px 0; padding-left: 2px; }
+.nf-link { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; word-break: break-all; }
+.nf-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 5px; margin-bottom: 6px;
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; }
+.nf-tb { min-width: 34px; height: 32px; padding: 0 8px; display: inline-flex; align-items: center; justify-content: center;
+  background: transparent; color: var(--text2); border: 1px solid transparent; border-radius: 6px; cursor: pointer;
+  font: inherit; font-size: 14px; }
+.nf-tb:hover { background: var(--surface3); color: var(--text); border-color: var(--border); }
+.nf-tb:focus-visible { outline: 2px solid var(--blue); outline-offset: 1px; }
+.nf-tb svg { width: 17px; height: 17px; }
+.nf-tb-sep { width: 1px; height: 20px; background: var(--border); margin: 0 3px; }

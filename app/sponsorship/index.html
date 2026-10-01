@@ -764,6 +764,17 @@
 <script src="../table-hints.js?v=1"></script>
 <script src="../progress.js?v=1"></script>
 <script src="../account.js?v=1"></script>
+<script src="../nf-format.js?v=1"></script>
+<script>
+  /* Notification body text, formatted by nf-format.js (bold, italic, lists,
+     links). If that file did not load, today's behaviour, so a notice still
+     shows: escaped text with its links made tappable. */
+  function fmtNf(text, oneLine) {
+    if (window.EBFormat) return window.EBFormat.render(text, oneLine ? { inline: true } : null);
+    if (typeof linkifyNf === 'function') return linkifyNf(text);
+    return String(text == null ? '' : text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+</script>
 <script src="../fame.js?v=1"></script>
 <!-- Checkout, shared with the COC app. Sponsorship is paid for HERE now,
      in this app, instead of bouncing the buyer over to ../index.html. The
@@ -4663,7 +4674,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
       if (notices.length) html += '<div class="nf-group">Announcements</div>';
       html += data.map(function(n) {
         var u = !seen || new Date(n.created_at) > new Date(seen), t = n.type || 'info';
-        return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + escNf(n.body) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
+        return '<div class="nf-item' + (u?' unread':'') + '"><div class="nf-type-dot nf-dot-' + t + '"></div><div class="nf-content"><div class="nf-item-title">' + escNf(n.title) + '</div><div class="nf-item-body">' + fmtNf(n.body, true) + '</div><div class="nf-item-meta"><span class="nf-chip nf-chip-' + t + '">' + t + '</span>' + nfTimeAgo(n.created_at) + '</div></div></div>';
       }).join('');
     }
 
@@ -4740,7 +4751,7 @@ document.addEventListener('click', function(e){ if(e.target.matches('.note-diagr
         +   '<span style="font-size:11px;color:var(--text3);">' + nfTimeAgo(n.created_at) + '</span>'
         + '</div>'
         + '<div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">' + escNf(n.title) + '</div>'
-        + '<div style="font-size:13px;color:var(--text3);line-height:1.6;white-space:pre-wrap;">' + escNf(n.body) + '</div>'
+        + '<div style="font-size:13px;color:var(--text3);line-height:1.6;white-space:pre-wrap;">' + fmtNf(n.body) + '</div>'
         + '</div>';
     }).join('');
 
