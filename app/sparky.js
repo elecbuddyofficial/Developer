@@ -107,6 +107,19 @@
   function key(t) { return 'eb_sparky_' + t; }
   function load(t) { try { return JSON.parse(sessionStorage.getItem(key(t)) || '[]'); } catch (e) { return []; } }
   function save(t, m) { try { sessionStorage.setItem(key(t), JSON.stringify(m)); } catch (e) {} }
+  // The part of the topic Sparky is working on (a section title), or '' for
+  // the most asked questions / free questions. The server sends that part's
+  // notes; Sparky moves it on, and the reply says where it moved to.
+  function getPart(t) { try { return sessionStorage.getItem(key(t) + '_part') || ''; } catch (e) { return ''; } }
+  function setPart(t, v) {
+    try { sessionStorage.setItem(key(t) + '_part', v || ''); } catch (e) {}
+    subtitle();
+  }
+  function subtitle() {
+    var el = document.getElementById('sp-sub'); if (!el || !topic) return;
+    var part = getPart(topic);
+    el.textContent = topicName(topic) + (part ? ' \u00b7 ' + part : '');
+  }
 
   function build() {
     if (document.getElementById('sparky-fab')) return;
@@ -142,12 +155,13 @@
     });
     p.querySelector('#sp-new').addEventListener('click', function () {
       if (!topic || busy) return;
-      save(topic, []); render();
+      save(topic, []); setPart(topic, ''); render();
     });
     p.querySelector('#sp-log').addEventListener('click', function (e) {
       var b = e.target.closest && e.target.closest('[data-pick]');
       if (!b || busy || !topic || load(topic).length) return;
       var pick = b.getAttribute('data-pick');
+      setPart(topic, pick === '__most' ? '' : pick);
       sendText(pick === '__most' ? 'Ask me the questions surveyors ask most on this topic.' : 'I want to work on: ' + pick);
     });
     p.querySelector('#sp-form').addEventListener('submit', function (e) { e.preventDefault(); sendTyped(); });
@@ -235,12 +249,16 @@
       var res = await fetch(FN, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok, 'apikey': APIKEY },
-        body: JSON.stringify({ topic: t, messages: msgs }),
+        body: JSON.stringify({ topic: t, topic_name: topicName(t).replace(/^T\d\d\s*/, ''), part: getPart(t), messages: msgs }),
       });
       var data = await res.json().catch(function () { return {}; });
       if (!res.ok || !data.reply) throw new Error(data.error || 'Sparky could not answer just now. Try again.');
       msgs.push({ role: 'assistant', content: data.reply });
       save(t, msgs);
+      if (typeof data.part === 'string' && data.part !== getPart(t)) {
+        try { sessionStorage.setItem(key(t) + '_part', data.part); } catch (e) {}
+        if (t === topic) subtitle();
+      }
     } catch (e) {
       // Drop the unanswered message so the conversation stays valid to resend.
       msgs.pop(); save(t, msgs);
@@ -273,7 +291,7 @@
   function open() {
     var t = currentTopic(); if (!t) return;
     topic = t;
-    document.getElementById('sp-sub').textContent = topicName(t);
+    subtitle();
     document.getElementById('sparky-panel').style.display = 'flex';
     document.getElementById('sparky-fab').style.display = 'none';
     applyFull(wantFull());
