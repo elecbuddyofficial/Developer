@@ -19,6 +19,7 @@
 
   var FN = 'https://vcofgjuwprylojgyfbtr.supabase.co/functions/v1/tutor-chat';
   var APIKEY = 'sb_publishable_DrsdBaf18Ypt1dGdvM14LA_lW_d4aHW';
+  // Chats begun before 8 Oct 2026 opened with this hidden line; still hidden.
   var START = 'Start the session. Ask me your first question on this topic.';
   var allowed = null;          // null until known, then true/false
   var topic = null;            // the topic the panel is showing
@@ -74,6 +75,11 @@
     + '#sparky-panel .sp-msg ul,#sparky-panel .sp-msg ol{margin:4px 0 4px 18px;padding:0}'
     + '#sparky-panel .sp-msg a{color:var(--blue,#5D98F8)}'
     + '#sparky-panel .sp-note{align-self:center;font-size:12px;color:var(--text3,#94A3B8);text-align:center;max-width:90%}'
+    + '#sparky-panel .sp-chips{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start;max-width:100%}'
+    + '#sparky-panel .sp-chip{border:1px solid var(--blue-border,rgba(59,130,246,.4));background:var(--blue-dim,rgba(59,130,246,.14));'
+    + 'color:var(--text,#F8FAFC);border-radius:16px;padding:6px 11px;font:600 12.5px/1.3 inherit;cursor:pointer;text-align:left}'
+    + '#sparky-panel .sp-chip:hover{border-color:var(--blue,#5D98F8)}'
+    + '#sparky-panel .sp-chip.sp-chip-main{background:var(--blue,#5D98F8);color:var(--on-accent,#0B1220);border-color:transparent}'
     + '#sparky-panel .sp-typing{align-self:flex-start;color:var(--text3,#94A3B8);font-size:13px;font-style:italic}'
     + '#sparky-panel .sp-form{display:flex;gap:8px;padding:10px;border-top:1px solid var(--border,#26324A)}'
     + '#sparky-panel textarea{flex:1;resize:none;min-height:42px;max-height:120px;padding:10px 12px;border-radius:10px;'
@@ -136,7 +142,13 @@
     });
     p.querySelector('#sp-new').addEventListener('click', function () {
       if (!topic || busy) return;
-      save(topic, []); render(); begin();
+      save(topic, []); render();
+    });
+    p.querySelector('#sp-log').addEventListener('click', function (e) {
+      var b = e.target.closest && e.target.closest('[data-pick]');
+      if (!b || busy || !topic || load(topic).length) return;
+      var pick = b.getAttribute('data-pick');
+      sendText(pick === '__most' ? 'Ask me the questions surveyors ask most on this topic.' : 'I want to work on: ' + pick);
     });
     p.querySelector('#sp-form').addEventListener('submit', function (e) { e.preventDefault(); sendTyped(); });
     var ta = p.querySelector('#sp-in');
@@ -166,6 +178,20 @@
   }
   function wantFull() { try { return localStorage.getItem(FULL_KEY) === '1'; } catch (e) { return false; } }
 
+  // The topic's own section headings, read from the notes on screen, so the
+  // choices match what the cadet is looking at. Emoji and numbering dropped.
+  function sections() {
+    var hs = document.querySelectorAll('#notes-container .n-h1');
+    var seen = {}, out = [];
+    for (var i = 0; i < hs.length; i++) {
+      var t = (hs[i].textContent || '').replace(/[^ -~À-ɏ–’]/g, ' ')
+        .replace(/^\s*\d+[.)]\s*/, '').replace(/\s+/g, ' ').trim();
+      if (t.length < 3 || /surveyor q&a|quick revision|^quiz|jump to/i.test(t) || seen[t.toLowerCase()]) continue;
+      seen[t.toLowerCase()] = 1; out.push(t);
+    }
+    return out;
+  }
+
   function topicName(t) {
     var x = (window.TOPICS || []).find && (window.TOPICS || []).find(function (o) { return o.id === t; });
     return x ? t + ' ' + x.name : t;
@@ -181,6 +207,13 @@
       html += '<div class="sp-msg ' + (m.role === 'user' ? 'sp-me' : 'sp-bot') + '">'
         + (m.role === 'user' ? esc(m.content).replace(/\n/g, '<br>') : fmt(m.content)) + '</div>';
     });
+    if (!msgs.length && !busy) {
+      html += '<div class="sp-msg sp-bot">Hi, I’m Sparky. What would you like to work on in '
+        + esc(topicName(topic)) + '? Pick a part below, ask for the most asked questions, or type anything from this topic.</div>'
+        + '<div class="sp-chips"><button type="button" class="sp-chip sp-chip-main" data-pick="__most">Most asked questions</button>'
+        + sections().map(function (t) { return '<button type="button" class="sp-chip" data-pick="' + esc(t) + '">' + esc(t) + '</button>'; }).join('')
+        + '</div>';
+    }
     if (busy) html += '<div class="sp-typing">Sparky is thinking...</div>';
     log.innerHTML = html;
     log.scrollTop = log.scrollHeight;
@@ -220,21 +253,20 @@
     if (t === topic) render();
   }
 
-  function begin() {
-    var m = load(topic);
-    if (!m.length) { m.push({ role: 'user', content: START }); save(topic, m); ask(m); }
-  }
-
   function sendTyped() {
-    if (busy || !topic) return;
     var ta = document.getElementById('sp-in');
     var text = (ta.value || '').trim();
     if (!text) return;
+    ta.value = ''; ta.style.height = 'auto';
+    sendText(text);
+  }
+
+  function sendText(text) {
+    if (busy || !topic) return;
     var m = load(topic);
     if (m.length && m[m.length - 1].role === 'user') m.pop();   // a failed send left one behind
     m.push({ role: 'user', content: text.slice(0, 2000) });
     save(topic, m);
-    ta.value = ''; ta.style.height = 'auto';
     ask(m);
   }
 
@@ -245,7 +277,7 @@
     document.getElementById('sparky-panel').style.display = 'flex';
     document.getElementById('sparky-fab').style.display = 'none';
     applyFull(wantFull());
-    render(); begin();
+    render();
     setTimeout(function () { var ta = document.getElementById('sp-in'); if (ta) ta.focus(); }, 50);
   }
   function close() {
